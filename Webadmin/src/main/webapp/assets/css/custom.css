@@ -127,6 +127,7 @@ ul.checkList li
 .hiddenCheckList
 {
     position: relative;
+    line-height: 25px !important;
 }
 .CheckListBx
 {
@@ -138,11 +139,45 @@ ul.checkList li
     min-height: 60px;
     border-radius: 5px;
     background: #ffffff;
+    z-index: 1000;
 }
-.hiddenCheckList:hover .CheckListBx
+.CheckListNewBx {
+    display: none;
+    position: absolute;
+    width: 300px;
+    top: -29px;
+    right: 37px;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    background: #ffffff;
+    z-index: 1000;
+    padding: 10px;
+    border-radius: 5px;
+}
+.CheckListNewBx div span {
+	 border-radius: 0px !important;
+}
+.infoIcon:hover .CheckListBx
 {
     display: block;
 }
+
+.infoIcon:hover .CheckListNewBx
+{
+    display: block;
+}
+
+.hiddenCheckList .leftTxt
+{
+    float: left;
+}
+.hiddenCheckList .infoIcon
+{
+    float: right;
+    padding-left: 5px;
+    color: #00bcd4;
+}
+
 .orng-1
 {
     background: #ff7b00 !important;
@@ -240,6 +275,19 @@ ul.checkList li
 {
     color:#000;
 }
+/*  UI Select */
+.ui-select-bootstrap .ui-select-toggle > a.btn
+{
+	height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: normal;
+    font-size:14px;
+    padding-right: 0;
+}
+
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {
     background-color: #ff9800;
@@ -343,6 +391,12 @@ li ul.nav.SubNav li a p
 {
   padding-right:5px;
 }
+.dropdown select.form-control option:hover
+{
+    background: #ccc !important;
+    color: #000 !important;
+    box-shadow: inset 20px 20px #00f !important;
+}
 .form-control-feedback
 {
   opacity: 1;
@@ -351,14 +405,7 @@ li ul.nav.SubNav li a p
 {
   margin-top:0;
 }
-.TableListinput table .form-group
-{
-    padding-bottom: 0 !important;
-}
-.min-hgt100
-{
-  min-height:100px;
-}
+
 h2.title
 {
   margin: 5px 0;
@@ -442,7 +489,9 @@ span.calender-big-icon
 }
 .modal-content .modal-header button.close
 {
-    padding: 5px 3px 0 0;
+    padding: 0 10px;
+    font-size: 26px;
+    color: #686868;
 }
 span.d-sm-arrow-icon
 {
@@ -462,6 +511,9 @@ span.d-arrow-icon
 }
 span.d-big-arrow-icon {
     padding-top: 38px;
+}
+.DownArrowCon span.d-arrow-icon {
+    padding-top: 28px;
 }
 .download-btn
 {
@@ -574,14 +626,15 @@ textarea.form-control {
     position: absolute;
     top: 3px;
     right: 10px;
-    padding: 8px;
-    background: #fff;
+    padding: 10px 8px;
+    background: #f5f5f5;
     border-radius: 3px;
     min-width: 200px;
 }
 .HoverBx.TicketActBx
 {
     min-width: 390px;
+    top: 0;
     /*top: 12px;*/
 }
 .AppliedFilterCon
@@ -668,16 +721,13 @@ span.filterdTxt
     padding: 5px;
     margin: 5px;
 }
+
 h3.HeadingTxt
 {
     background: #f9f9f9;
     padding: 5px;
     font-size: 20px;
     font-weight: 400;
-    border: 1px solid #efefef;
-    border-left: 4px solid #7b7c7b;
-    border-right: 4px solid #7b7c7b;
-    border-radius: 5px;
 }
 .titleCon
 {
@@ -691,16 +741,22 @@ h3.HeadingTxt
     box-shadow: 1px 0px 5px 0px #ffdeae;
     border-left: 4px solid #ff9800;
     border-right: 4px solid #ff9800;
-}
-.disableInput
-{
-    background: #f9f9f9 !important;
+    min-height: 35px;
+
 }
 .titleCon h3
 {
     font-weight: 400;
     font-size: 19px;
     margin: 0;
+}
+.modal-body .titleCon
+{
+    width: 70%;
+}
+.modal-body .titleCon h3
+{
+    font-size: 16px;
 }
 
  .docsRow
@@ -758,6 +814,27 @@ input.InputTxtCapsAll
 {
     text-transform: uppercase;
 }
+.selectTxtCaps option
+{
+    text-transform: uppercase;
+}
+
+textarea.InputTxtCaps
+{
+    text-transform: capitalize;
+}
+
+
+
+
+.caps
+{
+    text-transform: capitalize;
+}
+.TxtFirstCaps
+{
+    text-transform: capitalize ;
+}
 
 /*End Checklist css */
 
@@ -810,11 +887,51 @@ a.add-btn,button.add-btn
 .panel-body .table-responsive table tr:first-child td {
     border-top: none !important;
 }
+.table-responsive table tr th
+{
+    font-weight: 400;
+}
+.EmpProfilePicCon
+{
+    text-align: center;
+    min-height: 120px;
+}
+.EmpPic
+{
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+img.EmpProfilePic
+{
+    width: 100%;
+    height: 100%;
+    border-radius: 50% ;
+    box-shadow: 1px 2px 7px 2px #ccc;
+}
+/* View page Css */
 
+.ViewContentPageCon .panel-body .table-responsive table tr td:nth-child(odd)
+{
+    color: #7b7c7b;
+}
+.ViewContentPageCon  .panel-body .table-responsive table tr td:nth-child(even)
+{
+    font-weight: 400;
+}
+
+
+
+.table-scroll-x .table
+{
+    width: 150%;
+    max-width: 150%;
+}
 
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
 {
     border-top: 1px solid #f9f9f9;
+    /*text-transform: capitalize;*/
 }
 th span.sortingIcons
 {
@@ -874,9 +991,13 @@ span.red-star
     padding:0 5px;
     color:red;
 }
+.error-msg
+{
+    color: red;
+}
 .SelectWithAddbtnCon span.d-arrow-icon
 {
-    padding-right: 16%;
+    padding-right: 20px;
 }
 .SelectWithAddbtnCon .btn.btn-fab.btn-fab-mini
 {
@@ -955,6 +1076,7 @@ span.red-star
 .blocksListCon li a
 {
   color:#333;
+  padding: 35px 5px;
 }
 .clear
 {
@@ -986,18 +1108,21 @@ ul.blocksListCon
     padding: 0;
 }
 .blocksListCon li {
-    width: 16%;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     float: left;
-    border: 1px solid #dfdfdf;
+    border: 2px solid #b9b9b9;
     margin: 3px;
-    padding: 30px 15px 15px 15px;
+    padding-top: 35px;
+    /*padding: 30px 15px 15px 15px;*/
     text-align: center;
     cursor: pointer;
+    border-left: 6px solid #b9b9b9;
+    border-radius: 5px;
 }
 .blocksListCon li:hover
 {
-    border: 1px solid #545454;
+    border: 2px solid #b9b9b9;
 }
 .jobcards .card [data-background-color] .card-title {
     /*color:#ff9800;*/
@@ -1153,7 +1278,37 @@ button.btn.btn-outline {
       border-radius: 2px;
       background: none !important;
       padding-left:10px;
+
 }
+.form-control, .form-group .form-control::first-letter
+{
+    /*text-transform: uppercase;*/
+}
+.tablecard table tr td::first-letter
+{
+    text-transform: uppercase
+}
+.tablecard table tr td.lowercase::first-letter
+{
+    text-transform: lowercase;
+}
+.tablecard table tr td.lowercase
+{
+    text-transform: lowercase !important;
+}
+.inputLowerCase
+{
+    text-transform: lowercase !important;
+}
+input.InputFirstCaps::first-letter
+{
+    text-transform: uppercase;
+}
+
+
+
+
+
 .form-group label.control-label
 {
    color:#444;
@@ -1199,6 +1354,18 @@ button.btn.btn-outline {
   border-radius: 0;
   /*margin: 8px 0;*/
 }
+.ListingPageCon .card-content
+{
+    min-height: 500px;
+}
+
+.navbar-toggle
+{
+    color: #fff;
+}
+
+
+
 .TableCard
 {
    margin: 8px 0;
@@ -1246,6 +1413,7 @@ button.btn.btn-outline {
   background-color: #f5f5f5;
   border-bottom: 1px solid #ddd;
   padding:10px;
+  font-weight: 400;
 }
 
 /* wizard triangle */
@@ -1374,7 +1542,11 @@ button.btn.btn-outline {
   padding-top: 10px;
   margin-top: 12px;
 }
-
+.inputDescBox
+{
+    width: 79%;
+    padding: 8px;
+}
 .table>thead>tr>th, .table>tbody>tr>th
 {
   font-size: 15px;
@@ -1398,7 +1570,14 @@ button.btn.btn-outline {
 }
 
 
-
+.modal
+{
+    z-index: 99999;
+}
+.modal-title
+{
+    font-weight: 400;
+}
 
 /* left right modal css*/
 
@@ -1505,6 +1684,14 @@ a.cal-btn i
 }
   .pageCenter{
       top: calc(200% / 5);
+      left: calc(100% / 2.3);
+      z-index: 100000;
+      position: absolute;
+      display: none;
+      width:4%;
+  }
+  .pageTopCenter{
+      top: calc(100% / 8);
       left: calc(100% / 2.3);
       z-index: 100000;
       position: absolute;
@@ -1710,6 +1897,10 @@ span.flotingIcons.icon-13 {
 {
     width: 900px;
 }
+.modal.BasicFilterModal .modal-dialog
+{
+    width: 750px;
+}
 
 
 
@@ -1806,7 +1997,7 @@ a.sort-by:after {
   margin-top: 1px;
 }
 .form-group {
-    padding-bottom: 18px !important;
+    padding-bottom: 21px !important;
 }
 p.help-block{
   line-height: 15px;
@@ -1945,7 +2136,121 @@ div.bouncing-container .arrow-down {
 
 
 }
-.highlight-text {
-    background-color:#8BCB8D;
-    font-weight:bold;
+
+.btn.btn-danger.btn-simple:hover,.btn.btn-danger.btn-simple:focus{
+    box-shadow: 0 14px 26px -12px rgba(244, 67, 54, 0.42),
+                0 4px 23px 0px rgba(0, 0, 0, 0.12),
+                0 8px 10px -5px rgba(244, 67, 54, 0.2) !important;
+
 }
+.btn.btn-success.btn-simple:hover, .btn.btn-success.btn-simple:focus{
+      box-shadow: 0 14px 26px -12px rgba(76, 175, 80, 0.42),
+                  0 4px 23px 0px rgba(0, 0, 0, 0.12),
+                  0 8px 10px -5px rgba(76, 175, 80, 0)!important;
+}
+
+a.clsBtn {
+    height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: normal;
+    font-size: 14px !important;
+    padding-right: 0 !important;
+    position: absolute;
+    margin-top: -2px;
+    z-index: 100000;
+}
+a.clsBtn:hover , a.clsBtn:active , a.clsBtn:focus {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+
+}
+ul.ckLstDot {
+	position: relative;
+	list-style: none;
+	margin-left: 0;
+	padding-left: 1.2em;
+}
+ul.ckLstDot li:before {
+	content: "";
+	position: absolute;
+	display:inline-block;
+	width:5px;
+	height:5px;
+	background:#00bcd4;
+	bottom:0;
+	top:11px;
+	left:8px;
+
+}
+
+ /* Material Switch css start */
+
+.switch label input[type=checkbox]:checked+.lever {
+    background-color: #dccfe2;
+}
+.switch label .lever {
+    content: "";
+    display: inline-block;
+    position: relative;
+    background-color: #818181;
+    -webkit-border-radius: .9375rem;
+    border-radius: .9375rem;
+    margin-right: .625rem;
+    vertical-align: middle;
+    margin: 0 1rem;
+    width: 2.5rem;
+    height: .9375rem;
+    -webkit-transition: background .3s ease;
+    -o-transition: background .3s ease;
+    transition: background .3s ease;
+}
+.switch label {
+    cursor: pointer;
+}
+.switch label input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.switch label input[type=checkbox], input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: #a6c;
+    left: 1.5rem;
+}
+
+.switch label .lever:after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 1.3125rem;
+    border-radius: 1.3125rem;
+    left: -.3125rem;
+    top: -.1875rem;
+    -webkit-box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,.4);
+    box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,.4);
+    width: 1.3125rem;
+    height: 1.3125rem;
+    -webkit-transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+    -o-transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,box-shadow 1s ease,-webkit-box-shadow 1s ease;
+}
+
+ /* Material Switch css end */
+
+

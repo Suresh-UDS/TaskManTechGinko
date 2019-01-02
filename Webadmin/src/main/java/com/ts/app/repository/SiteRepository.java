@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +18,14 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 	@Override
 	void delete(Site t);
 
-	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name")
+	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name ASC ")
 	List<Site> findAll();
 
 	@Query("SELECT s FROM Site s join s.employeeProjSites e WHERE e.employee.id = :empId and s.active='Y' order by s.name")
 	List<Site> findAll(@Param("empId") long empId);
 
 	@Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id in (:empIds) and s.active='Y' order by s.name")
-	List<Site> findAll(@Param("empIds") List<Long> empIds);
+	List<Site> findAll(@Param("empIds") Set<Long> empIds);
 
     @Query("SELECT distinct s FROM Site s join s.employeeProjSites e WHERE e.employee.id=:empId")
     List<Site> findSiteByEmployeeId(@Param("empId") Long empId);
@@ -65,8 +66,21 @@ public interface SiteRepository extends JpaRepository<Site, Long> {
 
     @Query("SELECT s FROM Site s WHERE s.name like %:name% and s.active='Y'")
     List<Site> findSitesByName(@Param("name") String name);
-    
+
+    @Query("SELECT s.id FROM Site s WHERE s.project.id=:projectId and s.region =:region and s.active='Y'")
+    List<Long> findByRegion(@Param("projectId") long projectId, @Param("region") String region);
+
+    @Query("SELECT s.id FROM Site s WHERE s.project.id=:projectId and s.region =:region and s.branch =:branch and s.active='Y'")
+    List<Long> findByRegionAndBranch(@Param("projectId") long projectId, @Param("region") String region, @Param("branch") String branch);
+
     @Query("SELECT s FROM Shift s where s.site.id = :siteId order by CAST(substring(s.startTime,1,locate(':',s.startTime)-1)  as int)")
     List<Shift> findShiftsBySite(@Param("siteId") long siteId);
+
+    @Query("SELECT s FROM Site s WHERE s.project.id=:projectId and s.region =:region and s.active='Y'")
+    List<Site> findSitesByRegion(@Param("projectId") long projectId, @Param("region") String region);
+
+    @Query("SELECT s FROM Site s WHERE s.project.id=:projectId and s.region =:region and s.branch =:branch and s.active='Y'")
+    List<Site> findSitesByRegionAndBranch(@Param("projectId") long projectId, @Param("region") String region, @Param("branch") String branch);
+
 
 }

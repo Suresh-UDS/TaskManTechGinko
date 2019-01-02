@@ -87,6 +87,10 @@
 {
   font-weight: 400;
 }
+.magn-feedback
+{
+    margin: 9px 36px 9px 40px;
+}
 p.siteName {
     font-size: 11px !important;
     color: #000 !important;
@@ -754,6 +758,9 @@ span.EmpNameTxt
 {
     max-width: 100% !important;
 }
+.padding-right0{
+    padding-right:0px !important;
+}
 .camera-btn
 {
   background-color: orange;
@@ -1114,10 +1121,15 @@ ion-fab-list
 .view-img ion-backdrop
 {
   opacity: 0.7 !important;
+    transform: rotate(90deg) !important;
 }
 .job-img
 {
   transform: rotate(90deg);
+}
+.checklist-img
+{
+    transform: rotate(90deg);
 }
 .paddding-top20
 {
@@ -1575,6 +1587,10 @@ ion-grid .row:before
     /*padding: 6px 0 !important;*/
 /*}*/
 @media only screen and (min-width: 600px ){
+
+    .logo-img{
+        width:15% !important;
+    }
     h2
     {
         font-size: 4.4rem !important;
@@ -1743,6 +1759,15 @@ ion-grid .row:before
 .p-r-30{
     padding-right:30px !important;
 }
+<<<<<<< HEAD
+    .fab[mini] {
+        width: 32px !important;
+        height: 32px;
+        text-align: center !important;
+        margin-left: 4px !important;
+    }
+
+=======
 .mrgn-auto
 {
     margin:auto !important;
@@ -1751,6 +1776,7 @@ ion-grid .row:before
 {
     width:30% !important;
 }
+>>>>>>> Release-2.0-Inventory
 }
 
 

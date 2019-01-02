@@ -26,7 +26,8 @@
             <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
             <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
             <ion-segment-button value="readings" (ionSelect)="getReading(readingSearchCriteria)">Reading</ion-segment-button>
-            <ion-segment-button value="jobs" (ionSelect)="getJobs(jobSearchCriteria)">Jobs</ion-segment-button>
+            <ion-segment-button value="ppmjobs" (ionSelect)="getPpmJobs(jobSearchCriteria)">PPMJobs</ion-segment-button>
+            <ion-segment-button value="amcJobs" (ionSelect)="getAmcJobs(jobSearchCriteria)">AMC jobs</ion-segment-button>
             <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
             <ion-segment-button value="statusHistory" (ionSelect)="statusHistory(assetDetails.id)">Status History</ion-segment-button>
             <ion-segment-button value="siteHistory" (ionSelect)="siteHistory(assetDetails.id)" >Site-Transfer History</ion-segment-button>
@@ -394,12 +395,11 @@
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div text-center="" *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && !spinner">
-            <ion-card text-center="" style="border-radius: 6px" class="assetview-padding2">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+        <div text-center="" *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && !spinner" class="no-data">
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
 
         <div  class="card cardWithRadius" *ngFor="let amc of assetDetails.amcs;let k=index" >
@@ -457,12 +457,11 @@
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div text-center="" *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && !spinner">
-            <ion-card text-center="" style="border-radius: 6px" class="assetview-padding">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+        <div text-center="" *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && !spinner" class="no-data">
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
 
         <div class="card cardWithRadius border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
@@ -532,7 +531,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'jobs'"  class="assetview-padding" style="margin-top: 90px !important">
+    <ion-list *ngSwitchCase="'ppmjobs'"  class="assetview-padding" style="margin-top: 90px !important">
 
 
         <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
@@ -541,24 +540,23 @@
                 <!--<ion-icon name="add"></ion-icon>-->
             <!--</button>-->
         <!--</ion-fab>-->
-        <div  *ngIf="(!assetDetails.jobs || assetDetails.jobs.length < 0) && spinner" text-center class="margin-top25">
+        <div  *ngIf="(!assetDetails.ppmJobs || assetDetails.ppmJobs.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
 
-        <div text-center="" *ngIf="(!assetDetails.jobs || assetDetails.jobs?.length<0) && !spinner" margin-top>
-            <ion-card text-center="" style="border-radius: 6px" class="assetview-padding">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+        <div text-center="" *ngIf="(!assetDetails.jobs || assetDetails.jobs?.length<0) && !spinner" class="no-data" margin-top>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
 
-        <ion-refresher (ionRefresh)="doRefresh($event,'jobs')">
+        <ion-refresher (ionRefresh)="doRefresh($event,'ppmJobs')">
             <ion-refresher-content></ion-refresher-content>
         </ion-refresher>
 
-        <div  class="white-bg" *ngFor="let job of assetDetails.jobs" >
+        <div  class="white-bg" *ngFor="let job of PPMJobs" >
 
             <div class="padding-left16 padding-top5">
                 <ion-row class="margin0">
@@ -578,7 +576,7 @@
                             <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
                                 <span>
                                     <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
-                                    <p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>
+                                    <!--<p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>-->
 
                                 </span>
                             </p>
@@ -629,13 +627,132 @@
 
                 <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
                     <div>
+                        <!--<button has-permission="JobsView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>-->
                         <button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
                     </div>
                     <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
                     <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                     <!--</div>-->
                     <div >
-                        <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                        <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                    <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
+                        <button  ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                </ion-item-options>
+            </ion-item-sliding>
+
+        </div>
+
+        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="jobPpmScroll($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'amcJobs'"  padding-left="" padding-right="" style="margin-top: 56px">
+
+
+        <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
+        <!--<ion-label color="light" class="margin0 bg-orange" padding-left=" " padding-right="">Job</ion-label>-->
+        <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+        <!--<ion-icon name="add"></ion-icon>-->
+        <!--</button>-->
+        <!--</ion-fab>-->
+        <div  *ngIf="(!AMCJobs || AMCJobs.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+
+        <div text-center="" *ngIf="(!AMCJobs || AMCJobs?.length<0) && !spinner" class="no-data" margin-top>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+        <ion-refresher (ionRefresh)="doRefresh($event,'jobs')">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <div  class="white-bg" *ngFor="let job of AMCJobs" >
+
+            <div class="padding-left16 padding-top5">
+                <ion-row class="margin0">
+
+                    <ion-col col-2 class="ver-center">
+                        <button ion-button clear color="primary" class="icon-round ion-circle-icons"
+                                [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                        </button>
+                    </ion-col>
+                    <ion-col col-6 class="padding-left5">
+                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{job.title}}</p>
+                            <p text-left class="margin0">{{job.employeeName}}</p>
+                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
+                                <span>
+                                    <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
+                            <!--<p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>-->
+
+                            </span>
+                            </p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2 class="padding-left0 ver-center">
+                        <div class="padding-bottom5">
+                            <button ion-button clear color="primary" (tap)="open(slidingItem, item ,count)">
+                                <i class="material-icons">more_horiz</i>
+                            </button>
+                        </div>
+                    </ion-col>
+                    <!--
+                    <ion-col col-1>
+                        <p (click)="open(ItemSliding,Item)">f</p>
+                    </ion-col>
+                    -->
+
+                </ion-row>
+            </div>
+            <ion-item-sliding #slidingItem>
+
+                <ion-item #item class="item-fnt padding-left0" >
+                    <!--<div class="padding-left16">-->
+
+                    <div text-capitalize >
+                        <ion-row class="margin0">
+                            <ion-col col-6 class="padding-right5">
+                                <div *ngIf="job.status =='COMPLETED'">
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                                <div *ngIf="job.status !='COMPLETED'">
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                            <ion-col col-6>
+                                <div *ngIf="job.status =='COMPLETED'">
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                                <div *ngIf="job.status !='COMPLETED'">
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                    </div>
+                    <!--</div>-->
+                </ion-item>
+
+                <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
+                    <div>
+                        <button has-permission="JobsView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                    <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
+                    <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                    <!--</div>-->
+                    <div >
+                        <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                     </div>
                     <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
                         <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
@@ -645,7 +762,7 @@
 
         </div>
 
-        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="jobScroll($event)">
+        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="jobAmcScroll($event)">
             <ion-infinite-scroll-content></ion-infinite-scroll-content>
         </ion-infinite-scroll>
 
@@ -653,16 +770,15 @@
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 90px !important;" class="assetview-padding ticket-card">
 
-        <div  *ngIf="(assetDetails.tickets?.length == 0) && spinner" text-center class="margin-top25">
+        <div   *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
 
-        <div text-center *ngIf="(assetDetails.tickets?.length == 0) && !spinner">
-            <ion-card text-center="" style="border-radius: 6px" class="assetview-padding">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+        <div text-center *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && !spinner" class="no-data">
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
 
         <ion-refresher (ionRefresh)="doRefresh($event,'tickets')">
@@ -734,12 +850,11 @@
         <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
-        <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner"  text-center>
-            <ion-card text-center style="border-radius: 6px" class="assetview-padding">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+        <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner" class="no-data" text-center>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
 
       <!--<div *ngIf="assetDetails.reading">
@@ -824,16 +939,16 @@
         </ion-infinite-scroll>
     </ion-list>
 
+
     <ion-list *ngSwitchCase="'statusHistory'" class="assetview-padding" >
         <div  *ngIf="(!status||status.length < 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
-        <div *ngIf="(!status || status.length < 0) && !spinner"  text-center>
-            <ion-card text-center style="border-radius: 6px" class="assetview-padding">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+        <div *ngIf="(!status || status.length < 0) && !spinner" class="no-data" text-center>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
       <div>
         <p style="text-align: center">Status History</p>
@@ -866,16 +981,17 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="'siteHistory'" class="assetview-padding">
-        <div  *ngIf="(!site||site.length < 0) && spinner" text-center class="margin-top25">
+        <div  *ngIf="(!assetDetails.site || assetDetails.site.length == 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
-        <div *ngIf="(!site || site.length < 0) && !spinner"  text-center>
-            <ion-card text-center style="border-radius: 6px">
-                <ion-card-content>
-                    No Data found
-                </ion-card-content>
-            </ion-card>
+
+        <div *ngIf="(!site || site.length< 0) && !spinner" class="no-data"  text-center>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
         </div>
+
       <div>
         <p style="text-align: center">Site Transfer History</p>
       </div>
@@ -960,6 +1076,8 @@
             </div>
         </div>
     </ion-list>
+
+
 
 </div>
 </ion-content>

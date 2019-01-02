@@ -1,4 +1,4 @@
-<div class="" ng-controller="LocationController" ng-init="qrcodePage()">
+<div class=""  ng-init="qrcodePage()">
 
 
     <div class="card PrintQrcodecard">
@@ -12,12 +12,21 @@
                 <div class="col-md-12 txt-align-center" id="printable">
                     <h3>Qr Code Image</h3>
 
-                    <img id="qrImage" width="250" height="250" src="#"
+                    <img ng-src="{{qr_img}}" width="250" height="250" 
                          class="img-responsive">
 
                     <div class="QrcodeInfo">
-                        <p>{{qrInfoDetails.siteName}} - {{qrInfoDetails.block}} - {{qrInfoDetails.floor}} - {{qrInfoDetails.zone}}</p>
+                        <p>{{qrInfoDetails.siteName | uppercase}} - {{qrInfoDetails.block | uppercase}} - {{qrInfoDetails.floor | uppercase }} - {{qrInfoDetails.zone | uppercase}}</p>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12 txt-align-rgt">
+                    <button class="btn btn-default" type="button"
+                            ng-click="back('cancel')" id="close-button-right">
+                        Back
+                    </button>
                 </div>
             </div>
         </div>

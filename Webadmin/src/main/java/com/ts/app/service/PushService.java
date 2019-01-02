@@ -15,6 +15,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.ts.app.web.rest.dto.PushRequestDTO;
 
 @Service
+@EnableAsync
 public class PushService {
 
 	private final Logger log = LoggerFactory.getLogger(PushService.class);

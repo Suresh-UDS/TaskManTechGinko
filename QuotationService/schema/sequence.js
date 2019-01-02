@@ -26,13 +26,7 @@ SequenceSchema.statics.getNext = function(type,callback){
           }
       }
   ,function(err,result){
-	if(err){
-
-    }else{
-	    console.log("Result in sequence");
-	    console.log(result);
-        callback(result.value.toFixed(0));
-    }
+  	callback(result.value.toFixed(0));
   });
 	/*this.findOne({id:id},function(err,result){
 		if(err || !result){

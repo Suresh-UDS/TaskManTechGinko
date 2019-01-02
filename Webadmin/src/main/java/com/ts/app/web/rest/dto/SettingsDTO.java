@@ -7,129 +7,169 @@ import java.util.List;
 public class SettingsDTO extends BaseDTO implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
     private long siteId;
-    
+
     private String siteName;
 
     private long projectId;
-    
-    private String projectName; 
-    
+
+    private String projectName;
+
     private long shiftWiseAttendanceEmailAlertId;
-    
+
     private boolean shiftWiseAttendanceEmailAlert;
 
     private long dayWiseAttendanceEmailAlertId;
-    
+
     private boolean dayWiseAttendanceEmailAlert;
 
     private long overdueEmailAlertId;
-    
+
     private boolean overdueEmailAlert;
-    
+
     private long eodJobEmailAlertId;
-    
+
     private boolean eodJobEmailAlert;
-    
+
     private long feedbackEmailAlertId;
-    
+
     private boolean feedbackEmailAlert;
 
+    private long feedbackReportEmailAlertId;
+
+    private boolean feedbackReportEmailAlert;
+
     private long quotationEmailAlertId;
-    
+
     private boolean quotationEmailAlert;
 
     private long ticketEmailAlertId;
-    
+
     private boolean ticketEmailAlert;
 
     private long shiftWiseAttendanceEmailsId;
-    
+
     private List<String> shiftWiseAttendanceEmailIds;
-    
+
     private long dayWiseAttendanceAlertTimeId;
-    
+
     private Date dayWiseAttendanceAlertTime;
-	
+
     private long lateAttendanceGraceTimeId;
-	
+
     private int lateAttendanceGraceTime;
 
     private long dayWiseAttendanceEmailsId;
-    
+
     private List<String> dayWiseAttendanceEmailIds;
 
     private long overdueEmailsId;
-    
+
     private List<String> overdueEmailIds;
-    
+
     private long eodJobEmailsId;
-    
+
     private List<String> eodJobEmailIds;
 
     private long feedbackEmailsId;
-    
+
     private List<String> feedbackEmailIds;
 
+    private long feedbackReportEmailsId;
+
+    private List<String> feedbackReportEmailIds;
+
+    private long feedbackReportTimeId;
+
+    private Date feedbackReportTime;
+
     private long quotationEmailsId;
-    
+
     private List<String> quotationEmailIds;
-    
+
     private long ticketEmailsId;
-    
+
     private List<String> ticketEmailIds;
-    
+
     private long readingEmailsId;
-    
+
     private long readingEmailAlertId;
-    
+
     private boolean readingEmailAlert;
-    
+
     private List<String> readingEmailIds;
-    
+
     private long assetEmailsId;
-    
+
     private long assetEmailAlertId;
-    
+
     private boolean assetEmailAlert;
-    
+
     private List<String> assetEmailIds;
-    
+
     private long ppmEmailsId;
-    
+
     private long ppmEmailAlertId;
-    
+
     private boolean ppmEmailAlert;
-    
+
     private List<String> ppmEmailIds;
-    
+
     private long amcEmailsId;
-    
+
     private long amcEmailAlertId;
-    
+
     private boolean amcEmailAlert;
-    
+
     private List<String> amcEmailIds;
-    
+
     private long warrantyEmailsId;
-    
+
     private long warrantyEmailAlertId;
-    
+
     private boolean warrantyEmailAlert;
-    
+
     private List<String> warrantyEmailIds;
-    
+
     private long purchaseReqEmailsId;
-    
+
     private long purchaseReqEmailAlertId;
-    
+
     private boolean purchaseReqEmailAlert;
-    
+
     private List<String> purchaseReqEmailIds;
+
+    private long dayWiseReportEmailsId;
+
+    private long dayWiseReportEmailAlertId;
+
+    private long dayWiseReportClientGroupEmailAlertId;
+
+    private long dayWiseReportAlertTimeId;
+
+    private Date dayWiseReportAlertTime;
+
+    private List<String> dayWiseReportEmailIds;
+
+    private boolean dayWiseReportEmailAlert;
+
+    private boolean clientGroupEmailAlert;
+
+    private long musterRollEmailsId;
+
+    private long musterRollEmailAlertId;
+
+    private boolean musterRollEmailAlert;
+
+    private List<String> musterRollEmailIds;
+
+    private String key;
+
+    private String value;
 
     public long getSiteId() {
 		return siteId;
@@ -450,7 +490,7 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 	public void setDayWiseAttendanceEmailIds(List<String> dayWiseAttendanceEmailIds) {
 		this.dayWiseAttendanceEmailIds = dayWiseAttendanceEmailIds;
 	}
-	
+
 	public long getDayWiseAttendanceAlertTimeId() {
 		return dayWiseAttendanceAlertTimeId;
 	}
@@ -608,8 +648,167 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 	}
 
 	public void setPurchaseReqEmailIds(List<String> purchaseReqEmailIds) {
-		this.purchaseReqEmailIds = purchaseReqEmailIds;
+        this.purchaseReqEmailIds = purchaseReqEmailIds;
+    }
+	public long getFeedbackReportEmailAlertId() {
+		return feedbackReportEmailAlertId;
 	}
 
-	
+	public void setFeedbackReportEmailAlertId(long feedbackReportEmailAlertId) {
+		this.feedbackReportEmailAlertId = feedbackReportEmailAlertId;
+	}
+
+	public boolean isFeedbackReportEmailAlert() {
+		return feedbackReportEmailAlert;
+	}
+
+	public void setFeedbackReportEmailAlert(boolean feedbackReportEmailAlert) {
+		this.feedbackReportEmailAlert = feedbackReportEmailAlert;
+	}
+
+	public long getFeedbackReportEmailsId() {
+		return feedbackReportEmailsId;
+	}
+
+	public void setFeedbackReportEmailsId(long feedbackReportEmailsId) {
+		this.feedbackReportEmailsId = feedbackReportEmailsId;
+	}
+
+	public List<String> getFeedbackReportEmailIds() {
+		return feedbackReportEmailIds;
+	}
+
+	public void setFeedbackReportEmailIds(List<String> feedbackReportEmailIds) {
+		this.feedbackReportEmailIds = feedbackReportEmailIds;
+	}
+
+	public long getFeedbackReportTimeId() {
+		return feedbackReportTimeId;
+	}
+
+	public void setFeedbackReportTimeId(long feedbackReportTimeId) {
+		this.feedbackReportTimeId = feedbackReportTimeId;
+	}
+
+	public Date getFeedbackReportTime() {
+		return feedbackReportTime;
+	}
+
+	public void setFeedbackReportTime(Date feedbackReportTime) {
+		this.feedbackReportTime = feedbackReportTime;
+	}
+
+	public long getDayWiseReportAlertTimeId() {
+		return dayWiseReportAlertTimeId;
+	}
+
+	public void setDayWiseReportAlertTimeId(long dayWiseReportAlertTimeId) {
+		this.dayWiseReportAlertTimeId = dayWiseReportAlertTimeId;
+	}
+
+	public Date getDayWiseReportAlertTime() {
+		return dayWiseReportAlertTime;
+	}
+
+	public void setDayWiseReportAlertTime(Date dayWiseReportAlertTime) {
+		this.dayWiseReportAlertTime = dayWiseReportAlertTime;
+	}
+
+	public List<String> getDayWiseReportEmailIds() {
+		return dayWiseReportEmailIds;
+	}
+
+	public void setDayWiseReportEmailIds(List<String> dayWiseReportEmailIds) {
+		this.dayWiseReportEmailIds = dayWiseReportEmailIds;
+	}
+
+	public boolean isDayWiseReportEmailAlert() {
+		return dayWiseReportEmailAlert;
+	}
+
+	public void setDayWiseReportEmailAlert(boolean dayWiseReportEmailAlert) {
+		this.dayWiseReportEmailAlert = dayWiseReportEmailAlert;
+	}
+
+	public long getDayWiseReportEmailsId() {
+		return dayWiseReportEmailsId;
+	}
+
+	public void setDayWiseReportEmailsId(long dayWiseReportEmailsId) {
+		this.dayWiseReportEmailsId = dayWiseReportEmailsId;
+	}
+
+	public long getDayWiseReportEmailAlertId() {
+		return dayWiseReportEmailAlertId;
+	}
+
+	public void setDayWiseReportEmailAlertId(long dayWiseReportEmailAlertId) {
+		this.dayWiseReportEmailAlertId = dayWiseReportEmailAlertId;
+	}
+
+	public boolean isClientGroupEmailAlert() {
+		return clientGroupEmailAlert;
+	}
+
+	public void setClientGroupEmailAlert(boolean clientGroupEmailAlert) {
+		this.clientGroupEmailAlert = clientGroupEmailAlert;
+	}
+
+	public long getDayWiseReportClientGroupEmailAlertId() {
+		return dayWiseReportClientGroupEmailAlertId;
+	}
+
+	public void setDayWiseReportClientGroupEmailAlertId(long dayWiseReportClientGroupEmailAlertId) {
+		this.dayWiseReportClientGroupEmailAlertId = dayWiseReportClientGroupEmailAlertId;
+	}
+
+	public long getMusterRollEmailsId() {
+		return musterRollEmailsId;
+	}
+
+	public void setMusterRollEmailsId(long musterRollEmailsId) {
+		this.musterRollEmailsId = musterRollEmailsId;
+	}
+
+	public long getMusterRollEmailAlertId() {
+		return musterRollEmailAlertId;
+	}
+
+	public void setMusterRollEmailAlertId(long musterRollEmailAlertId) {
+		this.musterRollEmailAlertId = musterRollEmailAlertId;
+	}
+
+	public boolean isMusterRollEmailAlert() {
+		return musterRollEmailAlert;
+	}
+
+	public void setMusterRollEmailAlert(boolean musterRollEmailAlert) {
+		this.musterRollEmailAlert = musterRollEmailAlert;
+	}
+
+	public List<String> getMusterRollEmailIds() {
+		return musterRollEmailIds;
+	}
+
+	public void setMusterRollEmailIds(List<String> musterRollEmailIds) {
+		this.musterRollEmailIds = musterRollEmailIds;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+
 }

@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-usergroup', {
 		parent : 'admin',
 		url : '/add-usergroup',
-		controller : 'UserGroupController',
+		//controller : 'UserGroupController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add UserGroup'
@@ -21,7 +21,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('edit-usergroup', {
 		parent : 'admin',
 		url : '/edit-usergroup/:id',
-		controller : 'UserGroupController',
+		//controller : 'UserGroupController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit UserGroup'
@@ -38,7 +38,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-usergroup', {
 		parent : 'admin',
 		url : '/view-usergroup/:id',
-		controller : 'UserGroupController',
+		//controller : 'UserGroupController',
 		data : {
 			authorities : [],
 			pageTitle : 'View UserGroup'

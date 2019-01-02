@@ -6,6 +6,7 @@ import com.ts.app.domain.Ticket;
 import com.ts.app.domain.TicketStatus;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.PushService;
+import com.ts.app.service.SchedulerHelperService;
 import com.ts.app.service.TicketManagementService;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.MapperUtil;
@@ -14,6 +15,7 @@ import com.ts.app.web.rest.dto.*;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -45,6 +48,9 @@ public class TicketManagementResource {
 
 	@Inject
 	private TicketManagementService ticketService;
+	
+	@Inject
+	private SchedulerHelperService schedulerHelperService;
 
 	@RequestMapping(path = "/ticket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
@@ -94,7 +100,7 @@ public class TicketManagementResource {
 
 	@RequestMapping(value = "/ticket/export", method = RequestMethod.POST)
 	public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
-		// log.debug("JOB EXPORT STARTS HERE **********");
+		log.debug("TICKET EXPORT STARTS HERE **********");
 		ExportResponse resp = new ExportResponse();
 		if (searchCriteria != null) {
 			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
@@ -173,5 +179,20 @@ public class TicketManagementResource {
 	public String findQuotationImage(@PathVariable("id") long ticketId, @PathVariable("imageId") String imageId) {
 		return ticketService.getTicketImage(ticketId, imageId);
 	}
+	
+	@RequestMapping(value = "/ticket/uploadExistingFile", method = RequestMethod.POST)
+	public String uploadExistingTicketImages() {
+		log.debug("Upload existing ticket image S3");
+		return ticketService.uploadExistingTicketImg();
+	}
+	
+	@RequestMapping(value = "/checkDailyReports", method = RequestMethod.GET)
+	public String checkdailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date date, @RequestParam("onDemand") boolean onDemand, @RequestParam(value="siteId", required=false) long siteId) {
+		log.debug("check daily report called...");
+		schedulerHelperService.sendDaywiseReportEmail(date, onDemand, siteId);
+		return "successfully send reports!";
+	}
+	
+	
 
 }

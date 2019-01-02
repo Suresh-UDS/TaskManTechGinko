@@ -1,31 +1,84 @@
 
 
-<div class="row" ng-init="initLoad();loadProjectsList();">
+<div class="row" ng-init="initLoad();">
     <div class="col-md-6 txt-align-lft">
 
-        <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
-            <i class="material-icons">filter_list</i> Basic Filter
+        <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
+            <!--<i class="material-icons">filter_list</i> Basic Filter-->
+            <!--<div class="ripple-container"></div>-->
+        <!--</button>-->
+        <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">-->
+            <!--<i class="material-icons">filter_list</i> Advanced Filter-->
+            <!--<div class="ripple-container"></div>-->
+        <!--</button>-->
+
+        <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#Filter" tabindex="0">
+            <i class="material-icons">filter_list</i>Filter
             <div class="ripple-container"></div>
         </button>
-        <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
-            <i class="material-icons">filter_list</i> Advanced Filter
+        <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+            <i class="material-icons">refresh</i> Clear filter
             <div class="ripple-container"></div>
         </button>
 
     </div>
     <div class="col-md-6 txt-align-rgt">
 
+
+
         <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-quotation" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
             <i class="material-icons">add</i> Add
             <div class="ripple-container"></div>
         </button>
 
-        <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-            <i class="material-icons">refresh</i> Reload
-            <div class="ripple-container"></div>
-        </button>
 
     </div>
+</div>
+<div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+			    </span>
+			    
+			    <span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+					Region: {{searchCriteras.region}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+				    Branch: {{searchCriteras.branch}}
+				</span>
+
+                <span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+					Site: {{searchCriteras.siteName}}
+			    </span>
+			    
+			    <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationCreatedDate">
+                    Created From Date: {{searchCriteras.quotationCreatedDate | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.toDate">
+                    Created To Date: {{searchCriteras.toDate | date:'dd/MM/yyyy'}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationTitle">
+                    Title: {{searchCriteras.quotationTitle}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationCreatedBy">
+                    Created by: {{searchCriteras.quotationCreatedBy}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationApprovedBy">
+                    Approved By: {{searchCriteras.quotationApprovedBy}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.quotationStatus">
+                    Status: {{searchCriteras.quotationStatus}}
+                </span>
+            </span>
 </div>
 
 <div class="row">
@@ -39,17 +92,17 @@
                     <table class="table table-hover withSortingIcons">
                         <thead>
                         <tr>
-                            <th>Id
+                            <th width="7%">Id
                                 <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('serialId')" ng-class="isActiveAsc == 'serialId' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('serialId')" ng-class="isActiveDesc == 'serialId' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
                                 </span>
                             </th>
-                            <th>Title
+                            <th width="15%">Title
                                 <span class="sortingIcons">
                                     <span ng-click="columnAscOrder('title')" ng-class="isActiveAsc == 'title' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
@@ -59,68 +112,68 @@
                                     </span>
                                 </span>
                             </th>
-                            <th>Client
-                               <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('client')" ng-class="isActiveAsc == 'client' ? 'active' : ''" >
-                                        <i  class="fa fa-caret-up"></i>
-                                    </span>
-                                    <span ng-click="columnDescOrder('client')" ng-class="isActiveDesc == 'client' ? 'active' : ''">
-                                         <i  ng-class="class" class="fa fa-caret-down"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>Site
-                                 <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('site')" ng-class="isActiveAsc == 'site' ? 'active' : ''" >
-                                        <i  class="fa fa-caret-up"></i>
-                                    </span>
-                                    <span ng-click="columnDescOrder('site')" ng-class="isActiveDesc == 'site' ? 'active' : ''">
-                                         <i  ng-class="class" class="fa fa-caret-down"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>Created By
+                            <th width="15%">Client
                                 <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('createdBy')" ng-class="isActiveAsc == 'createdBy' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('projectName')" ng-class="isActiveAsc == 'projectName' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('createdBy')" ng-class="isActiveDesc == 'createdBy' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('projectName')" ng-class="isActiveDesc == 'projectName' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span> 
+                            </th>
+                            <th width="13%">Site
+                                 <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('siteName')" ng-class="isActiveAsc == 'siteName' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('siteName')" ng-class="isActiveDesc == 'siteName' ? 'active' : ''">
+                                         <i  ng-class="class" class="fa fa-caret-down"></i>
+                                    </span>
+                                </span> 
+                            </th>
+                            <th width="10%">Created By
+                                <span class="sortingIcons">
+                                    <span ng-click="columnAscOrder('createdByUserName')" ng-class="isActiveAsc == 'createdByUserName' ? 'active' : ''" >
+                                        <i  class="fa fa-caret-up"></i>
+                                    </span>
+                                    <span ng-click="columnDescOrder('createdByUserName')" ng-class="isActiveDesc == 'createdByUserName' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
                                 </span>
                             </th>
                             <!-- <th>Submitted By</th>
                             <th>Approved By</th> -->
-                            <th>Created On
+                            <th width="15%">Created Date
                               <span class="sortingIcons">
-                                    <span ng-click="columnAscOrder('createdOn')" ng-class="isActiveAsc == 'createdOn' ? 'active' : ''" >
+                                    <span ng-click="columnAscOrder('createdDate')" ng-class="isActiveAsc == 'createdDate' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
-                                    <span ng-click="columnDescOrder('createdOn')" ng-class="isActiveDesc == 'createdOn' ? 'active' : ''">
+                                    <span ng-click="columnDescOrder('createdDate')" ng-class="isActiveDesc == 'createdDate' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
                                 </span>
                             </th>
                             <!-- <th>Submitted On</th>
                             <th>Approved On</th> -->
-                            <th>Status
-                                <span class="sortingIcons">
+                            <th width="10%">Status
+                                <!-- <span class="sortingIcons">
                                     <span ng-click="columnAscOrder('status')" ng-class="isActiveAsc == 'status' ? 'active' : ''" >
                                         <i  class="fa fa-caret-up"></i>
                                     </span>
                                     <span ng-click="columnDescOrder('status')" ng-class="isActiveDesc == 'status' ? 'active' : ''">
                                          <i  ng-class="class" class="fa fa-caret-down"></i>
                                     </span>
-                                </span>
+                                </span> -->
                             </th>
-                            <th>Amount</th>
-                            <th class="text-right">Actions</th>
+                            <th width="10%">Amount</th>
+                            <th width="5%" class="text-right">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="quotation in quotations">
                             <td>{{quotation.serialId}}</td>
-                            <td>{{quotation.title}}</td>
+                            <td>{{quotation.title | uppercase}}</td>
                             <td>{{quotation.projectName}}</td>
                             <td>{{quotation.siteName}}</td>
                             <td>{{quotation.createdByUserName}}</td>
@@ -143,7 +196,7 @@
 
                                 <div class="HoverBx">
 
-                                    <a name="View" ng-class="{active: $state.includes('admin')}"  ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                    <a name="View" ng-class="{active: $state.includes('admin')}"  has-permission="Quotation:View" ui-sref="view-quotation({ id: quotation._id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
                                     <a name="Edit" ng-if="!quotation.isSubmitted && !quotation.isApproved" has-permission="Quotation:Edit"  ng-class="{active: $state.includes('admin')}"  ui-sref="edit-quotation({ id: quotation._id })"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>
 
@@ -154,7 +207,7 @@
                                     <button  title="Reject" ng-if="quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"    data-toggle="modal" data-target="#rejectQuotationModal" data-dismiss="#rejectQuotationModal" ng-click="selectQuotation(quotation)"  class="btn btn-simple btn-info btn-icon like">
                                         <i class="material-icons">highlight_off</i> </button>
 
-                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                    <a name="Delete" ng-if="quotation.isApproved || quotation.isDrafted" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:Delete"  ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                 </div>
 
@@ -230,159 +283,433 @@
 
 
 <!-- BasicFilterModal -->
-<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form name="searchForm"   novalidate >
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title">Basic Filter</h4>
-                </div>
-                <div class="modal-body">
+<!--<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+    <!--<div class="modal-dialog">-->
+        <!--<div class="modal-content">-->
+            <!--<form name="searchForm"   novalidate >-->
+                <!--<div class="modal-header">-->
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+                        <!--<i class="material-icons">clear</i>-->
+                    <!--</button>-->
+                    <!--<h4 class="modal-title">Basic Filter</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
 
-                    <div class="row">
+                    <!--<div class="row">-->
 
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <label class="label-control">Client</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects">
-                                        <option value="">Select Client...</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="dropdown">
-                                <div class="form-group">
-                                    <label class="label-control">Site</label>
-                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList">
-                                        <option value="">Select Site...</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="form-group" >-->
+                                <!--<div class="dropdown">-->
+                                    <!--<label class="label-control">Client</label>-->
+                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects">-->
+                                        <!--<option value="">Select Client...</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="dropdown">-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="label-control">Site</label>-->
+                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList">-->
+                                        <!--<option value="">Select Site...</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
 
 
-                    </div>
+                    <!--</div>-->
 
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
-                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter1()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>-->
+                    <!--&lt;!&ndash;<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>&ndash;&gt;-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 <!--  End Modal -->
 
 <!-- AdvancedFilterModal -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+    <!--<div class="modal-dialog">-->
+        <!--<div class="modal-content">-->
+            <!--<form name="searchForm1"   novalidate >-->
+
+                <!--<div class="modal-header">-->
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+                        <!--<i class="material-icons">clear</i>-->
+                    <!--</button>-->
+                    <!--<h4 class="modal-title">Advanced Filter</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
+
+                    <!--<div class="row">-->
+
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="form-group" >-->
+                                <!--<div class="dropdown">-->
+                                    <!--<input type="text"-->
+                                           <!--class="form-control border-bottom-input"-->
+                                           <!--name="searchId"-->
+                                           <!--placeholder="Id"-->
+                                           <!--ng-pattern="/^[0-9]*$/"-->
+                                           <!--ng-model="searchId"-->
+
+                                    <!--/>-->
+
+                                    <!--<div ng-show="searchForm1.$submitted || searchForm1.searchId.$touched">-->
+                                        <!--<div ng-show="searchForm1.searchId.$dirty || searchForm1.searchId.$invalid">-->
+
+                                            <!--<p class="help-block" style="color:maroon;"-->
+                                               <!--ng-show="searchForm1.searchId.$error.pattern">-->
+                                                <!--Quotation id only contain numbers.-->
+                                            <!--</p>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="form-group" >-->
+                                <!--<div class="dropdown">-->
+                                    <!--<input type="text"-->
+                                           <!--class="form-control border-bottom-input"-->
+                                           <!--placeholder="Title"-->
+                                           <!--ng-model="searchTitle"-->
+
+                                    <!--/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="form-group" >-->
+                                <!--<div class="dropdown">-->
+                                    <!--<input type="text"-->
+                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
+                                           <!--placeholder="Created By"-->
+                                           <!--ng-model="searchCreatedBy"-->
+                                    <!--/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                    <!--</div>-->
+                    <!--<div class="row">-->
+
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="form-group" >-->
+                                <!--<div class="dropdown">-->
+                                    <!--<input type="text"-->
+                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
+                                           <!--placeholder="Approved By"-->
+                                           <!--ng-model="searchApprovedBy"-->
+
+                                    <!--/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-12 col-md-4">-->
+                            <!--<div class="form-group" >-->
+                                <!--<div class="dropdown">-->
+                                    <!--<input type="text"-->
+                                           <!--class="form-control searchable-input floatL border-bottom-input"-->
+                                           <!--placeholder="Status"-->
+                                           <!--ng-model="searchStatus"-->
+                                    <!--/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                    <!--</div>-->
+
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm1.$invalid">Apply Filter</button>-->
+                    <!--&lt;!&ndash;<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>&ndash;&gt;-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--  End Modal -->
+<!-- Filter New -->
+
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm1"   novalidate >
+            <form name="searchForm" role="form" ng-submit ="searchFilter()"  novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
                     </button>
-                    <h4 class="modal-title">Advanced Filter</h4>
+                    <h4 class="modal-title">Filter</h4>
                 </div>
                 <div class="modal-body">
 
-                    <div class="row">
 
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <input type="text"
-                                           class="form-control border-bottom-input"
-                                           name="searchId"
-                                           placeholder="Id"
-                                           ng-pattern="/^[0-9]*$/"
-                                           ng-model="searchId"
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
-                                    />
+                       <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                   data-target="#collapseOne" aria-expanded="true"
+                                   aria-controls="collapseOne" class="collapsed">
+                                    <h4 class="panel-title">
+                                        Basic Filter <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="collapseOne"
+                                 class="panel-collapse collapse collapseOne in" role="tabpanel"
+                                 aria-labelledby="headingOne" aria-expanded="true"
+                                 style="height: 210px;">
+                                <div class="panel-body">
 
-                                    <div ng-show="searchForm1.$submitted || searchForm1.searchId.$touched">
-                                        <div ng-show="searchForm1.searchId.$dirty || searchForm1.searchId.$invalid">
+                                    <div class="row">
 
-                                            <p class="help-block" style="color:maroon;"
-                                               ng-show="searchForm1.searchId.$error.pattern">
-                                                Quotation id only contain numbers.
-                                            </p>
+                                        <div class="col-xs-12 col-md-6 col-lg-6" >
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Client</label>
+                                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+													  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
+															<a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
+													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+
+													    <span ng-bind-html="client.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+				                            <div class="form-group" >
+
+				                                    <div class="dropdown">
+				                                        <label class="label-control">Region</label>
+				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+														  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
+														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+														  </ui-select-match>
+														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+														<span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
+				                                    </div>
+				                            </div>
+				                        </div>
+                                   </div>
+
+                                   <div class="row">
+                                   		<div class="col-xs-12 col-md-6 col-lg-6">
+                                   		   <div class="form-group" >
+				                            <div class="dropdown">
+				                                <label class="label-control">Branch</label>
+				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
+													           <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
+													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+													<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
+											 </div>
+				                            </div>
+				                        </div>
+
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="label-control">Site</label>
+                                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search"  null-option="allSites" loose-null>
+													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+													<span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <h4 class="panel-title">
+                                        Advanced Filter
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+                                        <!-- <div class="col-xs-12 col-md-4">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <input type="text"
+                                                           class="form-control border-bottom-input"
+                                                           name="searchId"
+                                                           placeholder="Id"
+                                                           ng-pattern="/^[0-9]*$/"
+                                                           ng-model="searchId"
+
+                                                    />
+
+                                                    <div ng-show="searchForm1.$submitted || searchForm1.searchId.$touched">
+                                                        <div ng-show="searchForm1.searchId.$dirty || searchForm1.searchId.$invalid">
+
+                                                            <p class="help-block" style="color:maroon;"
+                                                               ng-show="searchForm1.searchId.$error.pattern">
+                                                                Quotation id only contain numbers.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <div class="col-xs-12 col-md-4">
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Created From Date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4">
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Created To Date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datepicker"  id="searchToDate" placeholder="DD/MM/YYYY"  ng-model="searchToDate" autocomplete="off" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <!-- <input type="text"
+                                                           class="form-control searchable-input floatL border-bottom-input"
+                                                           placeholder="Status"
+                                                           ng-model="searchStatus"
+                                                    /> -->
+                                                    <label class="label-control">Select Status</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control"  ng-model="searchStatus">
+                                                    <option value="">SELECT STATUS</option>
+                                                    <option value="Waiting for approval">WAITING FOR APPROVAL</option>
+                                                    <option value="Pending">PENDING</option>
+                                                    <option value="Approved">APPROVED</option>
+                                                    <option value="Rejected">REJECTED</option>
+                                                    <option value="Archived">ARCHIVED</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row"> 
+                                    <div class="col-xs-12 col-md-4">
+                                            <div class="dropdown">
+                                                 <div class="form-group" >
+                                                    <input type="text"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Title"
+                                                           ng-model="searchTitle"
+
+                                                    />
+                                                </div>
+                                            </div>
+                                     </div>
+                                     <div class="col-xs-12 col-md-4">
+                                             <div class="dropdown">
+                                                 <div class="form-group" >
+                                                   <input type="text"
+                                                           class="form-control searchable-input floatL border-bottom-input"
+                                                           placeholder="Created By"
+                                                           ng-model="searchCreatedBy"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+	                                    <div class="col-xs-12 col-md-4">
+	                                             <div class="dropdown">
+	                                                <div class="form-group" >
+	                                                     
+	                                                    <input type="text"
+	                                                           class="form-control searchable-input floatL border-bottom-input"
+	                                                           placeholder="Approved By"
+	                                                           ng-model="searchApprovedBy"
+	
+	                                                    />
+	                                                </div>
+	                                           </div>
+	                                     </div>
+                                        
+
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <input type="text"
-                                           class="form-control border-bottom-input"
-                                           placeholder="Title"
-                                           ng-model="searchTitle"
-
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <input type="text"
-                                           class="form-control searchable-input floatL border-bottom-input"
-                                           placeholder="Created By"
-                                           ng-model="searchCreatedBy"
-                                    />
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
-                    <div class="row">
 
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <input type="text"
-                                           class="form-control searchable-input floatL border-bottom-input"
-                                           placeholder="Approved By"
-                                           ng-model="searchApprovedBy"
 
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <input type="text"
-                                           class="form-control searchable-input floatL border-bottom-input"
-                                           placeholder="Status"
-                                           ng-model="searchStatus"
-                                    />
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm1.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"  >Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!--  End Modal -->
+
+
+<!-- -->

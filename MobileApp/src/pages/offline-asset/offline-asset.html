@@ -16,6 +16,12 @@
           <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10" ></ion-icon>-->
         <!--</button>-->
       <!--</div>-->
+
+        <button ion-fab mini color="primary" class="margin0" *ngSwitchCase=" categories === 'readings'" (click)="getReadings()">
+            <ion-icon name="speedometer" class="fnt-35"></ion-icon>
+        </button>
+
+
     </ion-buttons>
 
   </ion-navbar>
@@ -26,8 +32,9 @@
       <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
       <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
       <ion-segment-button value="readings" (ionSelect)="getReading(readingSearchCriteria)">Reading</ion-segment-button>
-      <ion-segment-button value="jobs" (ionSelect)="getJobs(jobSearchCriteria)">Jobs</ion-segment-button>
-      <!--<ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>-->
+      <ion-segment-button value="PPMJobs" (ionSelect)="getPPMJobs(jobSearchCriteria)">PPMJobs</ion-segment-button>
+      <ion-segment-button value="AMCJobs" (ionSelect)="getAMCJobs(jobSearchCriteria)">AMCJobs</ion-segment-button>
+      <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
       <!--<ion-segment-button value="history">History</ion-segment-button>-->
     </ion-segment>
   </ion-toolbar>
@@ -68,34 +75,6 @@
 
 <ion-content>
 
-  <ion-fab right bottom mini  margin-bottom="" #fab>
-    <button ion-fab color="dark">
-      <ion-icon name="md-add" class="clr-orange"></ion-icon>
-    </button>
-    <ion-fab-list side="top" fab-list-margin class="margin-left-right0" [ngSwitch]="categories">
-
-      <ion-label color="dark" class="margin0 bg-orange"  >Reading</ion-label>
-      <button ion-fab color="primary" (click)="getReadings()" >
-        <ion-icon name="speedometer" class="fnt-35"></ion-icon>
-      </button>
-
-      <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>-->
-      <!--<button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">-->
-      <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
-      <!--</button>-->
-
-      <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'details' ">Image</ion-label>-->
-      <!--<button ion-fab color="primary" (click)="addAssetImage()" *ngSwitchCase =" 'details'" >-->
-        <!--<ion-icon name="camera" class="fnt-24"></ion-icon>-->
-      <!--</button>-->
-
-      <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'tickets' ">Ticket</ion-label>-->
-      <!--<button ion-fab color="primary" (click)="createTicket()" *ngSwitchCase =" 'tickets' ">-->
-        <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
-      <!--</button>-->
-
-    </ion-fab-list>
-  </ion-fab>
 
 
 
@@ -476,7 +455,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'jobs'"  padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'PPMJobs'"  padding-left="" padding-right="">
 
 
       <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
@@ -485,12 +464,12 @@
       <!--<ion-icon name="add"></ion-icon>-->
       <!--</button>-->
       <!--</ion-fab>-->
-      <div  *ngIf="(!assetDetails.jobs || assetDetails.jobs.length == 0) && spinner" text-center>
+      <div  *ngIf="(!assetDetails.PPMJobs || assetDetails.PPMJobs.length == 0) && spinner" text-center>
         <ion-spinner name="circles"></ion-spinner>
       </div>
 
 
-      <div text-center="" *ngIf="(!assetDetails.jobs || assetDetails.jobs?.length == 0) && !spinner" margin-top>
+      <div text-center="" *ngIf="(!assetDetails.PPMJobs || assetDetails.PPMJobs.length == 0) && !spinner" margin-top>
         <ion-card text-center="">
           <ion-card-content>
             No Data found
@@ -502,7 +481,7 @@
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
 
-      <div  class="white-bg" *ngFor="let job of assetDetails.jobs" >
+      <div  class="white-bg" *ngFor="let job of assetDetails.PPMJobs" >
 
         <div class="padding-left16 padding-top5">
           <ion-row class="margin0">
@@ -522,7 +501,7 @@
                 <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
                   <span>
                                     <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
-                <p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>
+                <!--<p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>-->
 
                 </span>
                 </p>
@@ -552,7 +531,7 @@
               <ion-row class="margin0">
                 <ion-col col-6 class="padding-right5">
                   <div *ngIf="job.status =='COMPLETED'">
-                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.checkInDateTimeFrom | date:'MMM d, y, h:mm a' }} </p>
                   </div>
                   <div *ngIf="job.status !='COMPLETED'">
                     <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
@@ -560,7 +539,7 @@
                 </ion-col>
                 <ion-col col-6>
                   <div *ngIf="job.status =='COMPLETED'">
-                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.checkInDateTimeTo | date:'MMM d, y, h:mm a' }} </p>
                   </div>
                   <div *ngIf="job.status !='COMPLETED'">
                     <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
@@ -594,6 +573,124 @@
       </ion-infinite-scroll>
 
     </ion-list>
+      <ion-list *ngSwitchCase="'AMCJobs'"  padding-left="" padding-right="">
+
+
+          <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
+          <!--<ion-label color="light" class="margin0 bg-orange" padding-left=" " padding-right="">Job</ion-label>-->
+          <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+          <!--<ion-icon name="add"></ion-icon>-->
+          <!--</button>-->
+          <!--</ion-fab>-->
+          <div  *ngIf="(!assetDetails.AMCJobs || assetDetails.AMCJobs.length == 0) && spinner" text-center>
+              <ion-spinner name="circles"></ion-spinner>
+          </div>
+
+
+          <div text-center="" *ngIf="(!assetDetails.AMCJobs || assetDetails.AMCJobs.length == 0) && !spinner" margin-top>
+              <ion-card text-center="">
+                  <ion-card-content>
+                      No Data found
+                  </ion-card-content>
+              </ion-card>
+          </div>
+
+          <ion-refresher (ionRefresh)="doRefresh($event,'jobs')">
+              <ion-refresher-content></ion-refresher-content>
+          </ion-refresher>
+
+          <div  class="white-bg" *ngFor="let job of assetDetails.AMCJobs" >
+
+              <div class="padding-left16 padding-top5">
+                  <ion-row class="margin0">
+
+                      <ion-col col-2 class="ver-center">
+                          <button ion-button clear color="primary" class="icon-round ion-circle-icons"
+                                  [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                              <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                          </button>
+                      </ion-col>
+                      <ion-col col-6 class="padding-left5">
+                          <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                              <p text-left class="margin0">{{job.title}}</p>
+                              <p text-left class="margin0">{{job.employeeName}}</p>
+                              <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
+                                  <span>
+                                    <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
+                              <!--<p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>-->
+
+                              </span>
+                              </p>
+                          </div>
+                      </ion-col>
+                      <ion-col col-2 class="padding-left0 ver-center">
+                          <div class="padding-bottom5">
+                              <button ion-button clear color="primary" (tap)="open(slidingItem, item ,count)">
+                                  <i class="material-icons">more_horiz</i>
+                              </button>
+                          </div>
+                      </ion-col>
+                      <!--
+                      <ion-col col-1>
+                          <p (click)="open(ItemSliding,Item)">f</p>
+                      </ion-col>
+                      -->
+
+                  </ion-row>
+              </div>
+              <ion-item-sliding #slidingItem>
+
+                  <ion-item #item class="item-fnt padding-left0" >
+                      <!--<div class="padding-left16">-->
+
+                      <div text-capitalize >
+                          <ion-row class="margin0">
+                              <ion-col col-6 class="padding-right5">
+                                  <div *ngIf="job.status =='COMPLETED'">
+                                      <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.checkInDateTimeFrom | date:'MMM d, y, h:mm a' }} </p>
+                                  </div>
+                                  <div *ngIf="job.status !='COMPLETED'">
+                                      <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                  </div>
+                              </ion-col>
+                              <ion-col col-6>
+                                  <div *ngIf="job.status =='COMPLETED'">
+                                      <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.checkInDateTimeTo | date:'MMM d, y, h:mm a' }} </p>
+                                  </div>
+                                  <div *ngIf="job.status !='COMPLETED'">
+                                      <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                  </div>
+                              </ion-col>
+                          </ion-row>
+                      </div>
+                      <!--</div>-->
+                  </ion-item>
+
+                  <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
+                      <div>
+                          <button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
+                      </div>
+                      <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
+                      <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                      <!--</div>-->
+                      <div >
+                      <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                      </div>
+                      <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
+                          <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                      </div>
+                  </ion-item-options>
+              </ion-item-sliding>
+
+          </div>
+
+          <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="jobScroll($event)">
+              <ion-infinite-scroll-content></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+
+      </ion-list>
 
     <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
 

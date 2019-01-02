@@ -101,7 +101,7 @@ public class ChecklistService extends AbstractService {
 	public void updateChecklist(ChecklistDTO checklist) {
 		log.debug("Inside Update");
 		Checklist checklistUpdate = checklistRepository.findOne(checklist.getId());
-		//checklistUpdate.getItems().clear();
+		checklistUpdate.setName(checklist.getName());
 		//checklistUpdate = checklistRepository.save(checklistUpdate);
 		List<ChecklistItemDTO> itemDtos = checklist.getItems();
 		List<ChecklistItem> items = new ArrayList<ChecklistItem>();
@@ -192,12 +192,12 @@ public class ChecklistService extends AbstractService {
 	}
 	
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		//fileId += ".csv";
 		if(!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}

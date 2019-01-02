@@ -2,6 +2,8 @@ package com.ts.app.web.rest.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AssetPPMScheduleEventDTO extends BaseDTO {
 
 	private long id;
@@ -82,6 +84,7 @@ public class AssetPPMScheduleEventDTO extends BaseDTO {
 		this.assetId = assetId;
 	}
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getStart() {
 		return start;
 	}

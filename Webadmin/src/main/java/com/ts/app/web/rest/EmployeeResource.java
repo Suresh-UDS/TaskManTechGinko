@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.EmployeeService;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
@@ -36,6 +38,7 @@ import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.DesignationDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
+import com.ts.app.web.rest.dto.EmployeeRelieverDTO;
 import com.ts.app.web.rest.dto.EmployeeShiftDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
@@ -57,10 +60,10 @@ import com.ts.app.web.rest.util.TokenUtils;
 @RequestMapping("/api")
 public class EmployeeResource {
 
-	private final Logger log = LoggerFactory.getLogger(EmployeeResource.class);
+    private final Logger log = LoggerFactory.getLogger(EmployeeResource.class);
 
-	@Inject
-	private EmployeeService employeeService;
+    @Inject
+    private EmployeeService employeeService;
 
     @Inject
     private JobManagementService jobService;
@@ -74,37 +77,40 @@ public class EmployeeResource {
     @Inject
     private NotificationService notificationService;
 
-	@Inject
-	private ImportUtil importUtil;
+    @Inject
+    private ImportUtil importUtil;
 
     @Inject
     private UserService userService;
+    
+    @Inject
+    private ImportService importService;
 
-	@Inject
-	public EmployeeResource(EmployeeService employeeService) {
-		this.employeeService = employeeService;
-	}
+    @Inject
+    public EmployeeResource(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
-	/**
-	 * POST /saveEmployee -> saveEmployee the Employee.
-	 */
-	@RequestMapping(value = "/employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public ResponseEntity<?> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, HttpServletRequest request) {
-		log.info("Inside the saveEmployee -" + employeeDTO);
-		log.info("Inside Save employee"+employeeDTO.getManagerId());
-		long userId = SecurityUtils.getCurrentUserId();
-		log.info("save Employee call - userId "+userId);
-		employeeDTO.setUserId(userId);
-		try {
-			if(!employeeService.isDuplicate(employeeDTO)) {
-				log.debug(">>> going to create <<<");
-				employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
-			}else {
-				log.debug(">>> duplicate <<<");
-				employeeDTO.setMessage("error.duplicateRecordError");
-				return new ResponseEntity<>(employeeDTO,HttpStatus.BAD_REQUEST);
-			}
+    /**
+     * POST /saveEmployee -> saveEmployee the Employee.
+     */
+    @RequestMapping(value = "/employee", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, HttpServletRequest request) {
+        log.info("Inside the saveEmployee -" + employeeDTO);
+        log.info("Inside Save employee"+employeeDTO.getManagerId());
+        long userId = SecurityUtils.getCurrentUserId();
+        log.info("save Employee call - userId "+userId);
+        employeeDTO.setUserId(userId);
+        try {
+            if(!employeeService.isDuplicate(employeeDTO)) {
+                log.debug(">>> going to create <<<");
+                employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
+            }else {
+                log.debug(">>> duplicate <<<");
+                employeeDTO.setMessage("error.duplicateRecordError");
+                return new ResponseEntity<>(employeeDTO,HttpStatus.BAD_REQUEST);
+            }
 			/*
 			if(employeeDto.isCreateUser()) {
 				UserDTO userDto = new UserDTO();
@@ -117,59 +123,59 @@ public class EmployeeResource {
 			}
 			*/
 
-		}catch(Exception e) {
-			throw new TimesheetException(e, employeeDTO);
-		}
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
+        }catch(Exception e) {
+            throw new TimesheetException(e, employeeDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
-	@RequestMapping(value = "/employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
-		log.info("Inside Update" + employee.getName() + " , "+ employee.getProjectId()+ " , "+ employee.isLeft());
-		try {
-			employeeService.updateEmployee(employee,false);
-		}catch(Exception e) {
-			throw new TimesheetException(e, employee);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
+        log.info("Inside Update" + employee.getName() + " , "+ employee.getProjectId()+ " , "+ employee.isLeft());
+        try {
+            employeeService.updateEmployee(employee,false);
+        }catch(Exception e) {
+            throw new TimesheetException(e, employee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-	@RequestMapping(value = "/employee/shift", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public ResponseEntity<?> updateEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
-		log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.getEmployeeFullName());
-		try {
-			employeeService.updateEmployeeShift(employeeShift);
-		}catch(Exception e) {
-			throw new TimesheetException(e, employeeShift);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/shift", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> updateEmployeeShift(@Valid @RequestBody EmployeeShiftDTO employeeShift, HttpServletRequest request) {
+        log.info("Inside Update" + employeeShift.getSiteName() + " , "+ employeeShift.getEmployeeFullName());
+        try {
+            employeeService.updateEmployeeShift(employeeShift);
+        }catch(Exception e) {
+            throw new TimesheetException(e, employeeShift);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-	@RequestMapping(value = "/employee/shifts", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public ResponseEntity<?> updateEmployeeShifts(@Valid @RequestBody List<EmployeeShiftDTO> employeeShifts, HttpServletRequest request) {
-		log.info("Inside Update of multiple shifts");
-		try {
-			employeeService.updateEmployeeShifts(employeeShifts);
-		}catch(Exception e) {
-			throw new TimesheetException(e);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/shifts", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> updateEmployeeShifts(@Valid @RequestBody List<EmployeeShiftDTO> employeeShifts, HttpServletRequest request) {
+        log.info("Inside Update of multiple shifts");
+        try {
+            employeeService.updateEmployeeShifts(employeeShifts);
+        }catch(Exception e) {
+            throw new TimesheetException(e);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-	@RequestMapping(value = "/employee/shift/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
-	public ResponseEntity<?> deleteEmployeeShift(@PathVariable("id") long id, HttpServletRequest request) {
-		log.info("Inside Shif Delete -" + id);
-		try {
-			employeeService.deleteEmployeeShift(id);
-		}catch(Exception e) {
-			throw new TimesheetException(e);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/shift/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> deleteEmployeeShift(@PathVariable("id") long id, HttpServletRequest request) {
+        log.info("Inside Shif Delete -" + id);
+        try {
+            employeeService.deleteEmployeeShift(id);
+        }catch(Exception e) {
+            throw new TimesheetException(e);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/employee/out", method = RequestMethod.POST)
     public ResponseEntity<?> employeeOut(@RequestBody CheckInOutDTO checkInOut) {
@@ -182,6 +188,9 @@ public class EmployeeResource {
     public ResponseEntity<?> employeeJobUpdate(@RequestBody CheckInOutDTO checkInOut) {
         checkInOut.setUserId(SecurityUtils.getCurrentUserId());
         employeeService.saveCheckOutInfo(checkInOut);
+        if(StringUtils.isNotEmpty(checkInOut.getErrorMessage())) {
+            return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"failure\", \"transactionId\" : \"" + checkInOut.getId() +"\" , \"errorMessage\" : \"" + checkInOut.getErrorMessage() +"\" }", HttpStatus.OK);
+        }
         return new ResponseEntity<String>("{ \"empId\" : "+'"'+checkInOut.getEmployeeEmpId() + '"'+", \"status\" : \"success\", \"transactionId\" : \"" + checkInOut.getId() +"\" }", HttpStatus.OK);
     }
 
@@ -234,12 +243,36 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/enroll", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
+    public EmployeeDTO enrollEmployeeFace(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {
         log.info("Inside Enroll" + employee.getName() + " , "+ employee.getProjectId());
+        EmployeeDTO employeeDTO = null;
         try {
-            employeeService.enrollFace(employee);
+             employeeDTO = employeeService.enrollFace(employee);
         }catch(Exception e) {
             throw new TimesheetException(e, employee);
+        }
+        return employeeDTO  ;
+    }
+
+    @RequestMapping(value = "/microsoft/employee/enroll/{employeeId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public EmployeeDTO enrollEmployeeFaceMicrosoft(@PathVariable("employeeId") long employeeId, HttpServletRequest request) {
+        log.info("Inside Enroll" +employeeId);
+        EmployeeDTO employeeDTO = null;
+        try {
+            employeeDTO = employeeService.enrollEmployeeToMicroSoft(employeeId);
+        }catch(Exception e) {
+//            throw new TimesheetException(e, employeeId);
+        }
+        return employeeDTO  ;
+    }
+
+    @RequestMapping(value = "/all/enroll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> enrollAllEmployeeFace(HttpServletRequest request) {
+        log.info("Inside Enroll" );
+        try {
+            employeeService.enrollAllEmplloyee();
+        }catch(Exception e) {
+//            throw new TimesheetException();
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -255,39 +288,39 @@ public class EmployeeResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-		log.info("Inside Delete" + id);
-		employeeService.deleteEmployee(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        log.info("Inside Delete" + id);
+        employeeService.deleteEmployee(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-	@RequestMapping(value = "/employee/{id}/site/{siteId}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteSite(@PathVariable Long id, @PathVariable Long siteId) {
-		log.info("Inside Delete" + id + ", siteId -"+siteId);
-		List<SiteDTO> sites = employeeService.deleteEmployeeSite(id,siteId);
-		return new ResponseEntity<>(sites, HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/{id}/site/{siteId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteSite(@PathVariable Long id, @PathVariable Long siteId) {
+        log.info("Inside Delete" + id + ", siteId -"+siteId);
+        List<SiteDTO> sites = employeeService.deleteEmployeeSite(id,siteId);
+        return new ResponseEntity<>(sites, HttpStatus.OK);
+    }
 
-	@RequestMapping(value = "/employee/{id}/project/{projectId}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteProject(@PathVariable Long id, @PathVariable Long projectId) {
-		log.info("Inside Delete" + id + ", projectId -"+projectId);
-		List<ProjectDTO> projects = employeeService.deleteEmployeeProject(id,projectId);
-		return new ResponseEntity<>(projects, HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/{id}/project/{projectId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteProject(@PathVariable Long id, @PathVariable Long projectId) {
+        log.info("Inside Delete" + id + ", projectId -"+projectId);
+        List<ProjectDTO> projects = employeeService.deleteEmployeeProject(id,projectId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
-	@RequestMapping(value = "/employee/dupcheck/{empId}", method = RequestMethod.GET)
-	public EmployeeDTO findEmployee(@PathVariable String empId) {
-		log.info("--Invoked EmployeeResource.findEmployee --");
-		return employeeService.findByEmpId(empId);
-	}
+    @RequestMapping(value = "/employee/dupcheck/{empId}", method = RequestMethod.GET)
+    public EmployeeDTO findEmployee(@PathVariable String empId) {
+        log.info("--Invoked EmployeeResource.findEmployee --");
+        return employeeService.findByEmpId(empId);
+    }
 
 
-	@RequestMapping(value = "/employee", method = RequestMethod.GET)
-	public List<EmployeeDTO> findAll() {
-		log.info("--Invoked EmployeeResource.findAll --");
-		return employeeService.findAll(SecurityUtils.getCurrentUserId());
-	}
+    @RequestMapping(value = "/employee", method = RequestMethod.GET)
+    public List<EmployeeDTO> findAll() {
+        log.info("--Invoked EmployeeResource.findAll --");
+        return employeeService.findAll(SecurityUtils.getCurrentUserId());
+    }
 
     @RequestMapping(value = "/employee/site/{siteId}", method = RequestMethod.GET)
     public List<EmployeeDTO> findBySiteId(@PathVariable Long siteId) {
@@ -303,54 +336,54 @@ public class EmployeeResource {
         return employeeService.findWithAttendanceBySiteId(searchCriteria);
     }
 
-	@RequestMapping(value = "/employee/{id}/managers", method = RequestMethod.GET)
-	public List<EmployeeDTO> findAllEligibleManagers(@PathVariable Long id) {
-		List<EmployeeDTO> managers = employeeService.findAllEligibleManagers(id);
-		log.debug("Get managers -"+ managers);
-		return managers;
-	}
+    @RequestMapping(value = "/employee/{id}/managers", method = RequestMethod.GET)
+    public List<EmployeeDTO> findAllEligibleManagers(@PathVariable Long id) {
+        List<EmployeeDTO> managers = employeeService.findAllEligibleManagers(id);
+        log.debug("Get managers -"+ managers);
+        return managers;
+    }
 
-	@RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)
-	public EmployeeDTO get(@PathVariable Long id) {
-		EmployeeDTO employeeDto = employeeService.findOne(id);
-		log.debug("Get employee details -"+ employeeDto);
-		return employeeDto;
-		// .map((entity) -> new ResponseEntity<>(entity, HttpStatus.OK))
-		// .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-	}
+    @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)
+    public EmployeeDTO get(@PathVariable Long id) {
+        EmployeeDTO employeeDto = employeeService.findOne(id);
+        log.debug("Get employee details -"+ employeeDto);
+        return employeeDto;
+        // .map((entity) -> new ResponseEntity<>(entity, HttpStatus.OK))
+        // .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
-	@RequestMapping(value = "/employee/validate/{code}", method = RequestMethod.GET)
-	public ResponseEntity<?> validateCode(@PathVariable Long code, HttpServletRequest request) {
-		EmployeeDTO empModel = employeeService.validateCode(code);
-		if(empModel != null) {
-			String token = request.getHeader("X-Auth-Token");
-			TokenUtils.setObject(token, empModel);
-			return new ResponseEntity<EmployeeDTO>(empModel, HttpStatus.OK);
-		}else {
-			return new ResponseEntity<String>("invalid", HttpStatus.NOT_FOUND);
-		}
-	}
+    @RequestMapping(value = "/employee/validate/{code}", method = RequestMethod.GET)
+    public ResponseEntity<?> validateCode(@PathVariable Long code, HttpServletRequest request) {
+        EmployeeDTO empModel = employeeService.validateCode(code);
+        if(empModel != null) {
+            String token = request.getHeader("X-Auth-Token");
+            TokenUtils.setObject(token, empModel);
+            return new ResponseEntity<EmployeeDTO>(empModel, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<String>("invalid", HttpStatus.NOT_FOUND);
+        }
+    }
 
-	@RequestMapping(value = "/employee/{id}/history", method = RequestMethod.GET)
-	public List<EmployeeHistoryDTO> getHistory(@PathVariable Long id) {
-		return employeeService.getHistory(id);
-	}
+    @RequestMapping(value = "/employee/{id}/history", method = RequestMethod.GET)
+    public List<EmployeeHistoryDTO> getHistory(@PathVariable Long id) {
+        return employeeService.getHistory(id);
+    }
 
 
-	@RequestMapping(value = "/employee/{id}/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public String generateQRCode(@PathVariable("id") long empId) {
-		return employeeService.generateQRCode(empId);
-	}
+    @RequestMapping(value = "/employee/{id}/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public String generateQRCode(@PathVariable("id") long empId) {
+        return employeeService.generateQRCode(empId);
+    }
 
-	@RequestMapping(value = "/employee/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	public ResponseEntity<?> generateQRCodeForAll() {
-		long userId = SecurityUtils.getCurrentUserId();
-		List<EmployeeDTO> employees = employeeService.findAll(userId);
-		for(EmployeeDTO emp : employees) {
-			employeeService.generateQRCode(emp.getId());
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @RequestMapping(value = "/employee/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<?> generateQRCodeForAll() {
+        long userId = SecurityUtils.getCurrentUserId();
+        List<EmployeeDTO> employees = employeeService.findAll(userId);
+        for(EmployeeDTO emp : employees) {
+            employeeService.generateQRCode(emp.getId());
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/employee/search",method = RequestMethod.POST)
     public SearchResult<EmployeeDTO> searchEmployees(@RequestBody SearchCriteria searchCriteria) {
@@ -379,64 +412,71 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.GET)
-    public List<EmployeeDTO> findAllRelievers() {
+    public List<EmployeeDTO> findAllRelievers(@RequestParam("siteId") long siteId) {
         log.info("--Invoked EmployeeResource.findAll Relievers--");
-        return employeeService.findAllRelievers(SecurityUtils.getCurrentUserId());
+        List<EmployeeDTO> relievers = employeeService.findAllRelievers(SecurityUtils.getCurrentUserId(), siteId);
+        return relievers;
+    }
+    
+    @RequestMapping(value = "/employee/relievers", method = RequestMethod.POST)
+    public List<EmployeeRelieverDTO> findRelievers(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked EmployeeResource.findRelievers--");
+        return employeeService.findRelievers(searchCriteria);
     }
 
     @RequestMapping(value = "/employee/export",method = RequestMethod.POST)
-	public ExportResponse exportEmployee(@RequestBody SearchCriteria searchCriteria) {
-	    ExportResponse resp = new ExportResponse();
-		if(searchCriteria != null) {
-		    log.debug("Emp - control comes here....");
-			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-			SearchResult<EmployeeDTO> result = employeeService.findBySearchCrieria(searchCriteria);
-			log.debug("Everything is FINE------->");
-			List<EmployeeDTO> results = result.getTransactions();
-			log.debug("VALUES OF RESULTS --------->"+results);
+    public ExportResponse exportEmployee(@RequestBody SearchCriteria searchCriteria) {
+        ExportResponse resp = new ExportResponse();
+        if(searchCriteria != null) {
+            log.debug("Emp - control comes here....");
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            SearchResult<EmployeeDTO> result = employeeService.findBySearchCrieria(searchCriteria);
+            log.debug("Everything is FINE------->");
+            List<EmployeeDTO> results = result.getTransactions();
+            log.debug("VALUES OF RESULTS --------->"+results);
             resp.addResult(employeeService.export(results));
-		}
-    	return resp;
-	}
+        }
+        return resp;
+    }
 
     @RequestMapping(value = "/employee/export/{fileId}/status",method = RequestMethod.GET)
-	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
-		//log.debug("ExportStatus -  fileId -"+ fileId);
-		ExportResult result = employeeService.getExportStatus(fileId);
-		if(result!=null && result.getStatus() != null) {
-		    //log.info("result.getSTATUS----------"+result.getStatus());
-			switch(result.getStatus()) {
-				case "PROCESSING" :
-					result.setMsg("Exporting...");
-					break;
-				case "COMPLETED" :
-					result.setMsg("Download");
-					//log.info("FILE-ID--------"+fileId);
-					result.setFile("/api/employee/export/"+fileId);
-					//log.info("FILE-ID AFTER RESULT--------"+result);
-					break;
-				case "FAILED" :
-					result.setMsg("Failed to export. Please try again");
-					break;
-				default :
-					result.setMsg("Failed to export. Please try again");
-					break;
-			}
-		}
-		return result;
-	}
+    public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
+        //log.debug("ExportStatus -  fileId -"+ fileId);
+        ExportResult result = employeeService.getExportStatus(fileId);
+        if(result!=null && result.getStatus() != null) {
+            //log.info("result.getSTATUS----------"+result.getStatus());
+            switch(result.getStatus()) {
+                case "PROCESSING" :
+                    result.setMsg("Exporting...");
+                    break;
+                case "COMPLETED" :
+                    result.setMsg("Download");
+                    //log.info("FILE-ID--------"+fileId);
+                    result.setFile("/api/employee/export/"+fileId);
+                    //log.info("FILE-ID AFTER RESULT--------"+result);
+                    break;
+                case "FAILED" :
+                    result.setMsg("Failed to export. Please try again");
+                    break;
+                default :
+                    result.setMsg("Failed to export. Please try again");
+                    break;
+            }
+        }
+        return result;
+    }
 
-	@RequestMapping(value = "/employee/export/{fileId}",method = RequestMethod.GET)
-	public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
-	   // log.debug("FILE-ID++++++++++++"+fileId);
-		byte[] content = employeeService.getExportFile(fileId);
-		//log.debug("GET EXPORT FILE FILE-ID----"+content);
-		response.setContentType("Application/x-msexcel");
-		response.setContentLength(content.length);
-		response.setHeader("Content-Transfer-Encoding", "binary");
-		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
-		return content;
-	}
+    @RequestMapping(value = "/employee/export/{fileId}",method = RequestMethod.GET)
+    public byte[] getExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+        // log.debug("FILE-ID++++++++++++"+fileId);
+        byte[] content = employeeService.getExportFile(fileId);
+        //log.debug("GET EXPORT FILE FILE-ID----"+content);
+        response.setContentType("Application/x-msexcel");
+        response.setContentLength(content.length);
+        response.setHeader("Content-Transfer-Encoding", "binary");
+        response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
+        return content;
+    }
 
     @RequestMapping(value = "/employee/assignReliever", method = RequestMethod.POST)
     public ResponseEntity<?> assignReliever(@RequestBody RelieverDTO reliever) {
@@ -444,11 +484,17 @@ public class EmployeeResource {
         log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
 
         EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
-        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        EmployeeDTO selectedReliever = null;
+        if(StringUtils.isNotEmpty(reliever.getRelieverEmpId())) {
+        		selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        }
         selectedEmployee.setRelieved(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
-            jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate());
+            if(selectedReliever != null) {
+            		jobService.assignReliever(selectedEmployee,selectedReliever, reliever.getRelievedFromDate(), reliever.getRelievedToDate(), reliever.getSiteId());
+            }
+            employeeService.updateReliever(selectedEmployee, selectedReliever, reliever);
         }catch(Exception e) {
             throw new TimesheetException(e, selectedEmployee);
         }
@@ -525,79 +571,85 @@ public class EmployeeResource {
     }
 
     @RequestMapping(path="/employee/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ImportResult> importJobData(@RequestParam("employeeFile") MultipartFile file){
-    	log.info("Employee Import Status********************");
-		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importEmployeeData(file, cal.getTimeInMillis());
-		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
-	}
+    public ResponseEntity<ImportResult> importJobData(@RequestParam("employeeFile") MultipartFile file){
+        log.info("Employee Import Status********************");
+        Calendar cal = Calendar.getInstance();
+        ImportResult result = importService.importEmployeeData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+        		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/employee/import/{fileId}/status",method = RequestMethod.GET)
-	public ImportResult importStatus(@PathVariable("fileId") String fileId) {
-		log.debug("ImportStatus -  fileId -"+ fileId);
-		ImportResult result = jobService.getImportStatus(fileId);
-		if(result!=null && result.getStatus() != null) {
-			switch(result.getStatus()) {
-				case "PROCESSING" :
-					result.setMsg("Importing data...");
-					break;
-				case "COMPLETED" :
-					result.setMsg("Completed importing");
-					break;
-				case "FAILED" :
-					result.setMsg("Failed to import. Please try again");
-					break;
-				default :
-					result.setMsg("Completed importing");
-					break;
-			}
-		}
-		return result;
-	}
+    public ImportResult importStatus(@PathVariable("fileId") String fileId) {
+        log.debug("ImportStatus -  fileId -"+ fileId);
+        ImportResult result = jobService.getImportStatus(fileId);
+        if(result!=null && result.getStatus() != null) {
+            switch(result.getStatus()) {
+                case "PROCESSING" :
+                    result.setMsg("Importing data...");
+                    break;
+                case "COMPLETED" :
+                    result.setMsg("Completed importing");
+                    break;
+                case "FAILED" :
+                    result.setMsg("Failed to import. Please try again");
+                    break;
+                default :
+                    result.setMsg("Completed importing");
+                    break;
+            }
+        }
+        return result;
+    }
 
     @RequestMapping(path="/employee/shift/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ImportResult> importShiftData(@RequestParam("employeeShiftFile") MultipartFile file){
-    	log.info("Employee Shift Import Status********************");
-		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importEmployeeShiftData(file, cal.getTimeInMillis());
-		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
-	}
+    public ResponseEntity<ImportResult> importShiftData(@RequestParam("employeeShiftFile") MultipartFile file){
+        log.info("Employee Shift Import Status********************");
+        Calendar cal = Calendar.getInstance();
+        ImportResult result = importService.importEmployeeShiftData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
+        return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/employee/shift/importstatus/{fileId}/status",method = RequestMethod.GET)
-	public ImportResult importShiftStatus(@PathVariable("fileId") String fileId) {
-		log.debug("ImportShiftStatus -  fileId -"+ fileId);
-		ImportResult result = jobService.getImportStatus(fileId);
-		if(result!=null && result.getStatus() != null) {
-			switch(result.getStatus()) {
-				case "PROCESSING" :
-					result.setMsg("Importing shift information...");
-					break;
-				case "COMPLETED" :
-					result.setMsg("Completed importing");
-					break;
-				case "FAILED" :
-					result.setMsg("Failed to import employee shift . Please try again");
-					break;
-				default :
-					result.setMsg("Completed importing");
-					break;
-			}
-		}
-		return result;
-	}
-    
-    @RequestMapping(value="/employee/uploadExistingImage", method = RequestMethod.POST)
-    public ResponseEntity<?> uploadExistingImg() { 
-    	log.debug("Upload Existing Employee enroll image");
-    	String result = "";
-    	try {
-    		result = employeeService.uploadEmpExistingImage();
-    	}catch(Exception e) {
-    		throw new TimesheetException("Error while upload existing enroll image" + e);
-    	}
-    	return new ResponseEntity<>(result, HttpStatus.CREATED);
+    public ImportResult importShiftStatus(@PathVariable("fileId") String fileId) {
+        log.debug("ImportShiftStatus -  fileId -"+ fileId);
+        ImportResult result = jobService.getImportStatus(fileId);
+        if(result!=null && result.getStatus() != null) {
+            switch(result.getStatus()) {
+                case "PROCESSING" :
+                    result.setMsg("Importing shift information...");
+                    break;
+                case "COMPLETED" :
+                    result.setMsg("Completed importing");
+                    break;
+                case "FAILED" :
+                    result.setMsg("Failed to import employee shift . Please try again");
+                    break;
+                default :
+                    result.setMsg("Completed importing");
+                    break;
+            }
+        }
+        return result;
     }
-    
+
+    @RequestMapping(value="/employee/uploadExistingImage", method = RequestMethod.POST)
+    public ResponseEntity<?> uploadExistingImg() {
+        log.debug("Upload Existing Employee enroll image");
+        String result = "";
+        try {
+            result = employeeService.uploadEmpExistingImage();
+        }catch(Exception e) {
+            throw new TimesheetException("Error while upload existing enroll image" + e);
+        }
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
 
 
 }

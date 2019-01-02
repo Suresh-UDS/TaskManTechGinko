@@ -5,7 +5,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	.state('managePhoto', {
 		parent : 'manage',
 		url : '/managePhoto',
-		controller : 'PhotoManagementController',
+		//controller : 'PhotoManagementController',
 		data : {
 			authorities : [],
 			pageTitle : 'Manage Photos'
@@ -23,7 +23,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	.state('manageEmployeePhoto', {
 		parent : 'manage',
 		url : '/managePhoto/:empId/:empCode',
-		controller : 'PhotoManagementController',
+		//controller : 'PhotoManagementController',
 		data : {
 			authorities : [],
 			pageTitle : 'Manage Photos'

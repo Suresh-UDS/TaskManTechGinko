@@ -88,9 +88,6 @@ public class AssetResource {
 	private ServletContext servletContext;
 
 	@Inject
-	private ImportUtil importUtil;
-
-	@Inject
 	private Environment env;
 
 	// Asset
@@ -272,13 +269,13 @@ public class AssetResource {
 			HttpServletRequest request) {
 		log.info(">>> Inside the save assetgroup -");
 		log.info(">>> Inside Save assetgroup <<< " + assetgroupDTO.getAssetgroup());
-		long userId = SecurityUtils.getCurrentUserId();
 		try {
-			AssetgroupDTO assetgroup = assetService.createAssetGroup(assetgroupDTO);
+			assetgroupDTO.setUserId(SecurityUtils.getCurrentUserId());
+			assetgroupDTO = assetService.createAssetGroup(assetgroupDTO);
 		} catch (Exception e) {
 			throw new TimesheetException(e, assetgroupDTO);
 		}
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(assetgroupDTO, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/assetgroup", method = RequestMethod.GET)
@@ -589,6 +586,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -619,6 +619,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetPPMData(@RequestParam("assetPPMFile") MultipartFile file) {
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importPPMFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -649,6 +652,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetAMCData(@RequestParam("assetAMCFile") MultipartFile file) {
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importAMCFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 

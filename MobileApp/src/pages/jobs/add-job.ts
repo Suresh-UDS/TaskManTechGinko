@@ -9,6 +9,8 @@ import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 
+declare var demo;
+
 @Component({
   selector: 'page-job',
   templateUrl: 'add-job.html'
@@ -43,16 +45,22 @@ export class CreateJobPage {
     msg:any;
     ticket:any;
     assetDetails:any;
+    category:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) {
         this.jobDetails=this.navParams.get('job');
         this.assetDetails = this.navParams.get('assetDetails')
         console.log(this.navParams.get('ticketDetails'));
         if(this.navParams.get('ticketDetails')){
             this.ticket = this.navParams.get('ticketDetails');
+            this.getEmployee(this.ticket.siteId)
         }
         this.jobService.loadCheckLists().subscribe(
             response=>{
-                console.log(response);
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                }
 
             }
         )
@@ -66,20 +74,26 @@ export class CreateJobPage {
         if(this.ticket){
             this.title = this.ticket.title;
             this.description = this.ticket.description;
+            this.siteName = this.ticket.siteId;
         }
 
         this.component.showLoader('Getting All Sites');
         this.siteService.searchSite().subscribe(
             response=>{
-                console.log('ionViewDidLoad Add jobs');
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log('ionViewDidLoad Add jobs');
+                    console.log(response);
+                    this.sites=response;
+                    this.component.closeAll();
+                }
 
-                console.log(response.json());
-                this.sites=response.json();
-                this.component.closeLoader();
             },
             error=>{
                 console.log('ionViewDidLoad SitePage:'+error);
-                this.component.closeLoader();
+                this.component.closeAll();
                 if(error.type==3)
                 {
                     this.msg='Server Unreachable'
@@ -92,12 +106,13 @@ export class CreateJobPage {
     }
     addJob()
     {
+
         if(this.title && this.description && this.siteName && this.employ && this.startDate && this.endDate)
         {
+            this.component.showLoader("Creating job");
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
-           var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
-           var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
+            var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
             var EDate = new Date(this.endDate);
 
             this.startTime = moment(this.startDate).subtract(5,'hours').toDate();
@@ -107,7 +122,13 @@ export class CreateJobPage {
             this.plannedStartTime =moment(this.startTime).subtract(30,'minutes').toDate();
             this.plannedEndTime= moment(this.endTime).subtract(30,'minutes').toDate();
 
-            this.plannedHours = 2;
+
+            var momentStartTime = moment(this.plannedStartTime);
+            var momentEndTime = moment(this.plannedEndTime);
+            var duration = moment.duration(momentStartTime.diff(momentEndTime));
+            var hours = duration.asHours();
+            this.plannedHours = Math.abs(hours);
+
             this.userId=localStorage.getItem('employeeUserId');
             this.newJob={
                 "title":this.title,
@@ -121,6 +142,9 @@ export class CreateJobPage {
                 "employeeId":this.employ,
                 "userId":this.userId,
                 "locationId":1,
+                "active":'Y',
+                "jobType":this.category,
+
 
             };
 
@@ -137,7 +161,9 @@ export class CreateJobPage {
                     "employeeId":this.employ,
                     "userId":this.userId,
                     "locationId":1,
-                    "ticketId":this.ticket.id
+                    "ticketId":this.ticket.id,
+                    "active":'Y',
+                    "jobType":this.category,
                 }
             }
             else if(this.assetDetails)
@@ -154,7 +180,9 @@ export class CreateJobPage {
                     "employeeId":this.employ,
                     "userId":this.userId,
                     "locationId":1,
-                    "assetId":this.assetDetails.id
+                    "assetId":this.assetDetails.id,
+                    "active":'Y',
+                    "jobType":this.category,
                 }
             }
 
@@ -163,10 +191,19 @@ export class CreateJobPage {
 
             this.jobService.createJob(this.newJob).subscribe(
                 response=> {
-                console.log(response);
-                this.navCtrl.setRoot(JobsPage);
+                    if(response.errorStatus){
+                        console.log("errorstatus",response.errorMessage);
+                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                      this.component.closeAll();
+                    }else{
+                        this.component.closeAll();
+                        console.log(response);
+                        this.navCtrl.setRoot(JobsPage);
+                    }
+
                 },
                 error=>{
+                    this.component.closeAll();
                     console.log(error);
                     if(error.type==3)
                     {
@@ -243,6 +280,8 @@ export class CreateJobPage {
         if(id)
         {
         console.log('ionViewDidLoad Add jobs employee');
+
+        console.log(this.siteName);
 
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);

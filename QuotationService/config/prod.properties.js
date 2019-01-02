@@ -1,10 +1,10 @@
 module.exports = {
 
 	db:{
-		url : "mongodb://10.1.2.132:27017,10.1.2.187:27017/quotation_svc?replicaSet=rs0",
+		url:'mongodb://10.1.2.132:27017,10.1.2.187:27017/quotation_svc?replicaSet=rs0',
 		schema : '/../app/schema',
-		user : "nodedbuser",
-        password : "T#nC0s"
+        user:'nodedbuser',
+        password:'T#nC0s'
 	},
 
 	server:{
@@ -15,15 +15,16 @@ module.exports = {
     	},
 
     	mailer : {
-    		service : 'gmail',
+    		service : 'outlook365',
     		smtp: {
-    			host: "smtp.gmail.com",
-    			secureConnection: true,
-    			port: 465
+    			host: "smtp.office365.com",
+    			secureConnection: false,
+    			port: 587
     		},
-    		username :'timesheettestuser1@gmail.com',
-    		password :'Test123#',
-            from:'UDS <no-reply@uds.com>'
+tls:{ciphers:'SSLv3'},
+    		username :'taskmanfms@uds.in',
+    		password :'Task@2018',
+            from:'taskmanfms@uds.in'
     	},
 
     	pushService : {
@@ -37,7 +38,7 @@ module.exports = {
 
     	},
 		url : {
-			quotation_view: 'https://taskmanadmin.uds.in/#/view-quotation'
+			quotation_view: 'https://taskmanadmin.uds.in/#/view-quotation/'
 		}
 
 };

@@ -55,6 +55,8 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
 
     @Size(min = 1, max = 2500)
     private String description;
+    
+    private boolean clientGroupAlert;
 
     public long getId() {
         return id;
@@ -108,6 +110,12 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
+	}
+	public boolean isClientGroupAlert() {
+		return clientGroupAlert;
+	}
+	public void setClientGroupAlert(boolean clientGroupAlert) {
+		this.clientGroupAlert = clientGroupAlert;
 	}
 	
 }

@@ -113,8 +113,8 @@ public class JobDTO extends BaseDTO {
 	public String getDescription() {
 		return description;
 	}
-	public void setDescription(String desc) {
-		this.description = desc;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public Date getPlannedStartTime() {
 		return plannedStartTime;
@@ -198,12 +198,7 @@ public class JobDTO extends BaseDTO {
 	public void setSiteProjectName(String siteProjectName) {
 		this.siteProjectName = siteProjectName;
 	}
-	public String getDesc() {
-		return description;
-	}
-	public void setDesc(String desc) {
-		this.description = desc;
-	}
+
 	public Date getActualStartTime() {
 		return actualStartTime;
 	}

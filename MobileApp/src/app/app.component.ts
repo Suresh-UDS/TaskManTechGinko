@@ -59,57 +59,50 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,active:any,icon:any,permission:any}>;
 
-  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode, public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController, public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus, private appVersion:AppVersion, private authService:authService) {
+  constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode,
+              public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController,
+              public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus,
+              private appVersion:AppVersion, private authService:authService) {
     this.initializeApp();
-      this.events.subscribe('permissions:set',(permission)=>{
-          console.log("Event permission in component");
-          console.log(permission);
-      })
 
-
-      this.backgroundMode.enable();
-      let subscription = this.batteryStatus.onChange().subscribe(
-          (status:BatteryStatusResponse)=>{
-              console.log("Battery level");
-              console.log(status.level,status.isPlugged);
-          }
-      );
-
-
-          this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
-          this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
-          this.oneSignal.handleNotificationReceived().subscribe(response=>{
-              console.log("Notification received");
-              console.log(JSON.stringify(response))
-
-
-          });
-          this.oneSignal.handleNotificationOpened().subscribe(response=> {
-              console.log("Notification Opened")
-              console.log(JSON.stringify(response))
-              this.pushEvent=response.notification.payload.additionalData.event;
-              if(this.pushEvent=='assign_driver')
-              {
-                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
-              }
-              else if(this.pushEvent=='cancel_booking')
-              {
-                  this.nav.setRoot(TabsPage,{event:this.pushEvent})
-              }
-          });
-
-          this.oneSignal.getIds().then(
-              response=>{
-                  console.log("Push Subscription response - get Ids");
-                  console.log(response);
-                      this.registerForPush("android",response.pushToken,response.userId);
-              }
-          );
-
-
-          this.oneSignal.endInit();
-
-
+          //
+          //
+          //
+          //
+          // this.oneSignal.startInit('be468c76-586a-4de1-bd19-fc6d9512e5ca','1088177211637');
+          // this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+          // this.oneSignal.handleNotificationReceived().subscribe(response=>{
+          //     console.log("Notification received");
+          //     console.log(JSON.stringify(response))
+          //
+          //
+          // });
+          // this.oneSignal.handleNotificationOpened().subscribe(response=> {
+          //     console.log("Notification Opened")
+          //     console.log(JSON.stringify(response))
+          //     this.pushEvent=response.notification.payload.additionalData.event;
+          //     if(this.pushEvent=='assign_driver')
+          //     {
+          //         this.nav.setRoot(TabsPage,{event:this.pushEvent})
+          //     }
+          //     else if(this.pushEvent=='cancel_booking')
+          //     {
+          //         this.nav.setRoot(TabsPage,{event:this.pushEvent})
+          //     }
+          // });
+          //
+          // this.oneSignal.getIds().then(
+          //     response=>{
+          //         console.log("Push Subscription response - get Ids");
+          //         console.log(response);
+          //             this.registerForPush("android",response.pushToken,response.userId);
+          //     }
+          // );
+          //
+          //
+          // this.oneSignal.endInit();
+          //
+          //
 
 
 
@@ -147,21 +140,21 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Dashboard', component: TabsPage,active:true,icon:'dashboard',permission:'DashboardList'},
-      { title: 'Site', component: SitePage,active:false,icon:'dns',permission:'SiteList'},
+      { title: 'Site', component: SitePage,active:false,icon:'device_hub',permission:'SiteList'},
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
-      { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
+      // { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
       { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobsList'},
-      { title: 'Assets', component: AssetList,active:false,icon:'build',permission:'AssetsList'},
-      { title: 'Tickets', component: Ticket,active:false,icon:'description',permission:'TicketsList'},
+      { title: 'Assets', component: AssetList,active:false,icon:'assessment',permission:'AssetsList'},
+      { title: 'Tickets', component: Ticket,active:false,icon:'tab',permission:'TicketsList'},
       { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
       // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
-      { title: 'Expense', component: ExpensePage,active:false,icon:'receipt',permission:'AttendanceList'},
-      { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'feedback',permission:'FeedbackList'},
+      // { title: 'Expense', component: ExpensePage,active:false,icon:'pie_chart',permission:'AttendanceList'},
+      // { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'widgets',permission:'FeedbackList'},
       // {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
-      { title:'IndentList',component:IndentList,active:false,icon:'receipt',permission:'AttendanceList'},
+      // { title:'IndentList',component:IndentList,active:false,icon:'shopping_cart',permission:'AttendanceList'},
       { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
-      { title: 'ChangePassword', component:ChangePassword,active:false,icon:'feedback',permission:'FeedbackList'}
+      { title: 'ChangePassword', component:ChangePassword,active:false,icon:'lock',permission:'FeedbackList'}
       // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
       // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
       // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
@@ -189,6 +182,17 @@ export class MyApp {
         console.log(this.appVersion.getVersionNumber());
       // this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+        this.backgroundMode.enable();
+        let subscription = this.batteryStatus.onChange().subscribe(
+            (status:BatteryStatusResponse)=>{
+                console.log("Battery level");
+                console.log(status.level,status.isPlugged);
+            }
+        );
+
+     // this.statusBar.overlaysWebView(true);
+     // this.statusBar.backgroundColorByHexString("#25312C");
       this.statusBar.overlaysWebView(false);
       this.statusBar.backgroundColorByHexString("#e67817");
 
@@ -196,11 +200,21 @@ export class MyApp {
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
         this.oneSignal.handleNotificationReceived().subscribe(response =>{
             console.log(response);
-        })
+        });
+
+
 
         this.oneSignal.handleNotificationOpened().subscribe(response=>{
             console.log(response);
-        })
+        });
+
+        this.oneSignal.getIds().then(
+            response=>{
+                console.log("Push Subscription response - get Ids");
+                console.log(response);
+                    this.registerForPush("android",response.pushToken,response.userId);
+            }
+        );
 
         this.oneSignal.endInit();
     });

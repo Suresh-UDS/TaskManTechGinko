@@ -20,6 +20,8 @@ var Notification = mongoose.model('Notification');
 var Sequence = mongoose.model('Sequence');
 var fs = require('fs');
 var path = require('path');
+var config = require('./'+ process.argv[2] + '.properties');
+var database = require('./config/db');
 
 var cors = require('cors');
 
@@ -27,8 +29,8 @@ var cors = require('cors');
 function startup(){
 
   // Bootstrap mongoose and load dummy data
-  mongoose.connect('mongodb://localhost:27017/quotation_svc', function(err) {
-    if (err) throw err;
+  // mongoose.connect('mongodb://nodedbuser:T#nC0s@10.1.2.132:27017,10.1.2.187:27017/quotation_svc?replicaSet=rs0', function(err) {
+  //   if (err) throw err;
 
     /*
     // load data from file and transform it to Object
@@ -46,7 +48,12 @@ function startup(){
 
     */
 
-  });
+  // });
+
+    // Init Database
+    console.log('Environment -' + process.argv[2]);
+    console.log('DB config  -' + config.db);
+    database.init(config.db);
 
   // Configure Express
 
@@ -82,7 +89,7 @@ function startup(){
 
   app.get('/api/quotation/id/:id',quotationController.getQuotation);
   app.get('/api/quotation/:id',quotationController.getQuotationById);
-  app.post('/api/quotation',quotationController.searchQuotations);
+  app.post('/api/quotation',quotationController.newSearchQuotation);
   app.post('/api/quotation/search', quotationController.getQuotations);
   app.get('/api/rateCard', quotationController.getRateCards);
   app.post('/api/rateCard', quotationController.getRateCards);
@@ -90,6 +97,7 @@ function startup(){
   app.get('/api/rateCardTypes',quotationController.getRateCardTypes);
   app.post('/api/rateCard/delete',quotationController.deleteRateCard);
   app.post('/api/quotation/uploadImage',quotationController.updateImages);
+  app.post('/api/quotation/summary', quotationController.getSummary);
 
   // app.post('/api/oneSignal/send',notificationService.sendNotification);
   // app.post('/api/oneSignal/subscribe', notificationService.subscribe);

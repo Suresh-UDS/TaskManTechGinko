@@ -4,33 +4,40 @@
     <div class="row" >
         <div class="col-md-6 txt-align-lft">
 
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Basic Filter
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
             </button>
 
         </div>
         <div class="col-md-6 txt-align-rgt">
-
-            <button class="btn btn-success add-btn margn-tb0"   ui-sref="add-vendor" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"   ui-sref="add-vendor" has-permission="Vendor:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
-            
-            <button class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+
+            <button class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"  title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
+
 
             <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
             <div class="downloaderMd" ng-show="downloader"></div>
-
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
-
         </div>
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.vendorId !=0 && searchCriteras.vendorId !=null">
+                    Vendor: {{searchCriteras.vendorName}}
+                </span>
+
+            </span>
     </div>
 
 
@@ -96,7 +103,7 @@
 
                             <tbody>
 								<tr ng-repeat="vendor in vendors" repeat-done="initDataTables()">
-									<td>{{vendor.name}}</td>
+									<td>{{vendor.name | uppercase}}</td>
 	                                <td>{{vendor.contactFirstName}} </td>
                                     <td>{{vendor.contactLastName}}</td>
 								   	<td>{{vendor.phone}}</td>
@@ -106,10 +113,10 @@
                                          <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                          <div class="HoverBx">
-                                             <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                             <a data-toggle="modal" title="View Vendor"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
                                              <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
-                                             <a  ui-sref="edit-vendor({ id: vendor.id })"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                             <a  has-permission="Vendor:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                             <a  ui-sref="edit-vendor({ id: vendor.id })"  title="Edit Vendor" has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a  has-permission="Vendor:Delete" title="Delete Vendor" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
 
                                          </div>
 
@@ -478,17 +485,20 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">View Vendor  Details - {{vendor.name}} ({{vendor.id}}) </h4>
+                <h4 class="modal-title" id="">View Vendor  Details - {{vendor.name | uppercase}} ({{vendor.id}}) </h4>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body ViewContentPageCon">
+
+                <div class="titleCon margn-btm-12">
+                    <h3>{{vendor.name | uppercase}}</h3>
+                </div>
 
                 <div class="row">
                     <div class="col-md-6">
-
                         <div class="panel panel-default">
                             <div class="panel-heading">Vendor  Details</div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 350px;">
 
 
                                 <div class="table-responsive">
@@ -496,7 +506,7 @@
                                         <tbody>
                                         <tr>
                                             <td>Vendor  Name</td>
-                                            <td>{{vendor.name}}</td>
+                                            <td>{{vendor.name | uppercase}}</td>
                                         </tr>
                                         <tr>
                                             <td>Contact First Name</td>
@@ -528,14 +538,11 @@
 
                             </div>
                         </div>
-
-
                     </div>
                     <div class="col-md-6">
-
                         <div class="panel panel-default">
                             <div class="panel-heading">Address Details</div>
-                            <div class="panel-body">
+                            <div class="panel-body" style="min-height: 350px;">
 
 
                                 <div class="table-responsive">
@@ -543,21 +550,21 @@
                                         <tbody>
                                         <tr>
                                             <td>Line 1 </td>
-                                            <td>{{vendor.addressLine1}}</td>
+                                            <td class="caps">{{vendor.addressLine1}}</td>
                                         </tr>
                                         <tr>
                                             <td>Line 2</td>
-                                            <td>{{vendor.addressLine2}}</td>
+                                            <td class="caps">{{vendor.addressLine2}}</td>
 
                                         </tr>
                                         <tr>
                                             <td>City</td>
-                                            <td>{{vendor.city}}</td>
+                                            <td class="caps">{{vendor.city}}</td>
 
                                         </tr>
                                         <tr>
                                             <td>State</td>
-                                            <td>{{vendor.state}}</td>
+                                            <td class="caps">{{vendor.state}}</td>
                                         </tr>
                                         <tr>
                                             <td>Pin Code</td>
@@ -565,7 +572,7 @@
                                         </tr>
                                         <tr>
                                             <td>Country</td>
-                                            <td>{{vendor.country}}</td>
+                                            <td class="caps">{{vendor.country}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -573,8 +580,12 @@
 
                             </div>
                         </div>
-
-
+                    </div>
+                    <div class="col-md-12 txt-align-rgt">
+                        <button class="btn btn-default" type="button"
+                                data-dismiss="modal" id="close-button-right">
+                            Close
+                        </button>
                     </div>
                 </div>
 
@@ -608,10 +619,10 @@
 
 
 <!-- BasicFilterModal -->
-<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm" role="form" ng-submit = "searchFilter()"  novalidate >
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
@@ -622,18 +633,21 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-8">
                             <div class="form-group no-padding" >
                                 <div class="dropdown">
                                     <div class="form-group">
-                                        <label class="control-label">Search Vendor Name</label>
-                                        <input id='name'
-                                               class='form-control'
-                                               name='name'
-                                               ng-model="searchName"
-                                               type='text' value=""
-                                               required
-                                        />
+                                        <label class="label-control">Search Vendor Name</label>
+                                        
+                                        <span ng-show="vendorFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!vendorFilterDisable && !vendorsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                               
+	                                    <ui-select ng-model="vendorsListOne.selected"  ng-disabled="vendorFilterDisable">
+										  <ui-select-match placeholder="Select Vendor..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+										  <ui-select-choices repeat="vendorsListOne in vendorsLists | filter: $select.search"  null-option="allVendors" loose-null>
+										    <span ng-bind-html="vendorsListOne.name | highlight: $select.search"></span>
+										  </ui-select-choices>
+										</ui-select>
                                     </div>
                                 </div>
                             </div>
@@ -643,7 +657,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="1">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"    tabindex="2">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

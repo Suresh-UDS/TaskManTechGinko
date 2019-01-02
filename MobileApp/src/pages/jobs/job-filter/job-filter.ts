@@ -93,9 +93,9 @@ export class JobFilter{
             }
         )
 
-      this.fromDate = new Date();
+      /*this.fromDate = new Date();
         this.toDate = new Date();
-        console.log("current date",this.fromDate);
+        console.log("current date",this.fromDate);*/
 
     }
 
@@ -268,9 +268,13 @@ export class JobFilter{
 
     filterJob(){
         this.searchCriteria = {
-            siteId:this.selectedSite.id,
-            projectId:this.selectedProject.id,
+            fromDate:this.fromDate,
+            toDate:this.toDate,
+            selectedSite:this.selectedSite.id,
+            selectedProject:this.selectedProject.id,
+            selectedEmployee:this.employ
         };
+        console.log("searchCriteria",this.searchCriteria);
         this.viewCtrl.dismiss(this.searchCriteria);
     }
 

@@ -22,6 +22,6 @@ public class FaceRecognitionServiceTest {
 	public void testDetect() {
 		FaceRecognitionRequest request = new FaceRecognitionRequest();
 		request.setImageUrl("https://media.kairos.com/liz.jpg");
-		faceRecognitionService.detect(request);
+		//faceRecognitionService.detect(request);
 	}
 }

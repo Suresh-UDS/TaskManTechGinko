@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('timeSheetApp', ['LocalStorageModule','storageService',
+angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.filter',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
-     'angular-star-rating-new','paginations','excelGrid'])
+     'angular-star-rating-new','paginations','excelGrid','spring-security-csrf-token-interceptor'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
+
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
@@ -15,23 +16,28 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $rootScope.stateValue ="";
         $rootScope.resLoader=false;
         $rootScope.searchCriterias={};
+        $rootScope.searchFilterCriteria = {};
+
         /** @reatin - retaining scope value.**/
+
         $rootScope.retain=0;
 
        /* Principal.identity().then(function(response)
              {
-                 console.log('current user' +JSON.stringify(response.login));
+               //console.log('current user' +JSON.stringify(response.login));
                  $rootScope.accountName = response.login;
              });*/
+
         $rootScope.logout = function () {
             Auth.logout();
             $state.go('login');
             $rootScope.resLoader=false;
         };
+
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
-            console.log("state change start")
+          //console.log("state change start")
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
 
@@ -39,11 +45,13 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
             }
 
         });
-        console.log('current state - ' +JSON.stringify($state));
+
+      //console.log('current state - ' +JSON.stringify($state));
         $rootScope.isLoggedIn = true;
 
         $rootScope.stateDetails = $state;
         $rootScope.pageTile;
+
         $rootScope.logoutUser = function () {
             Auth.logout();
             $rootScope.isLoggedIn = false;
@@ -68,28 +76,28 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
             }
             $window.document.title = titleKey;
             $rootScope.pageTitle = titleKey;
-            console.log(toState.name)
+          //console.log(toState.name)
             if(toState.name == 'login'){
                 $rootScope.isLoggedIn = false;
             }
             if(toState.name !='dashboard'){
-                console.log("Not Dashboard");
+              //console.log("Not Dashboard");
                 $rootScope.isChartsDisplayed = true;
-                console.log($rootScope.isChartsDisplayed);
+              //console.log($rootScope.isChartsDisplayed);
             }else{
-                console.log("Not Dashboard");
+              //console.log("Not Dashboard");
                 $rootScope.isChartsDisplayed = false;
-                console.log($rootScope.isChartsDisplayed);
+              //console.log($rootScope.isChartsDisplayed);
 
             }
 
 
         });
 
-        $rootScope.back = function() {
+        $rootScope.retainUrl = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
-
+                $rootScope.inits();
                 if($rootScope.stateValue != ""){
                     $rootScope.stateValue;
                     $(".content").removeClass("remove-mr");
@@ -106,6 +114,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
+
         $rootScope.noscroll = false;
 
         // Page Loader Function
@@ -142,7 +151,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         $rootScope.loadingStop = function(){
 
-            console.log("Calling loader");
+          //console.log("Calling loader");
 
             $('.pageCenter').hide();
             $('.overlay').hide();
@@ -161,13 +170,15 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
 
         //Perfect scroll bar INIT
 
-        // $rootScope.initScrollBar = function(){
-        //
-        //     console.log("-- Calling scrollbar -- ");
-        //
-        //     $('.sidebar .sidebar-wrapper').perfectScrollbar();
-        // }
-        //
+         $rootScope.initScrollBar = function(){
+
+          //console.log("-- Calling scrollbar -- ");
+
+             $('.sidebar .sidebar-wrapper').perfectScrollbar();
+         }
+
+
+
         // $rootScope.initScrollBar();
 
     })
@@ -224,6 +235,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
         $httpProvider.defaults.cache = false;
 
     })
+
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
@@ -234,6 +246,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService',
             pattern: /bool|true|0|1/
         });
     }])
+
     .filter('trusted', ['$sce', function ($sce) {
 	    return function(url) {
 	        return $sce.trustAsResourceUrl(url);

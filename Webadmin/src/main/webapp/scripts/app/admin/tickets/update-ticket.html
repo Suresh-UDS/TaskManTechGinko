@@ -1,13 +1,16 @@
 
 
 <div class="crud-form"
-     data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();loadingStart();">
-    <div class="col-md-8">
-        <!--<h3 class="title">Edit ticket</h3>-->
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadPageTop();loadingStart();editTicket();">
+     <div class="row">
+	    <div class="col-md-12">
+	        <div class="titleCon">
+	             <h3>{{title}}</h3>
+	         </div>
+	    </div>
     </div>
-
-    <div ng-controller="TicketController" ng-init="editTicket();loadSites();loadEmployees();">
-            <div class="cardsCon editTicketCon" ng-init="loadTicket()">
+    <div  >
+            <div class="cardsCon editTicketCon">
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="conform('update')"  >
 
@@ -26,9 +29,9 @@
                                            <div class="form-group">
                                                <label class="control-label">Title<span class="red-star">*</span> </label>
 
-                                               <input type="text" class="form-control"   name='title'
+                                               <input type="text" class="form-control InputTxtCapsAll"   name='title'
                                                       ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
-                                                      autofocus  required autocomplete="off"/>
+                                                      autofocus  required autocomplete="off" tabindex="1" />
                                                <div ng-show="form.$submitted || form.title.$touched">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -45,9 +48,9 @@
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
-                                               <input id='description' ng-model="tickets.description" class='form-control'
+                                               <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value=""
-                                                       autofocus required/>
+                                                       autofocus required tabindex="4" />
                                                <div ng-show="form.$submitted || form.description.$touched">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -62,7 +65,7 @@
                                        <div class="col-md-5">
                                            <div class="form-group">
                                                <label class="control-label">Category<span class="red-star">*</span> </label>
-                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons" tabindex="5">keyboard_arrow_down</i></span>
                                                <select
                                                    required
                                                    name="category"
@@ -101,7 +104,7 @@
                                                 required
                                                 name="severity"
                                                 ng-model="tickets.severity"
-                                                class="form-control searchable-input floatL">
+                                                class="form-control searchable-input floatL" tabindex="6">
                                                 <option value=''>Select severity</option>
                                                 <option value='Low' selected>Low</option>
                                                 <option value='Medium'>Medium</option>
@@ -128,7 +131,7 @@
                                        <div class="col-md-4">
                                            <div class="radio">
                                                <label>
-                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtUDS" ng-checked="tickets.pendingAtUDS" > Pending At UDS
+                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtUDS" ng-checked="tickets.pendingAtUDS" tabindex="7"> Pending At UDS
                                                </label>
                                            </div>
                                        </div>
@@ -136,7 +139,7 @@
                                        <div class="col-md-4">
                                            <div class="radio">
                                                <label>
-                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtClient" > Pending At {{tickets.siteProjectName}}
+                                                   <input type="radio" name="optionsRadios" ng-model="tickets.pendingStatus" value="pendingAtClient" tabindex="8"> Pending At {{tickets.siteProjectName}}
                                                </label>
                                            </div>
                                        </div>
@@ -149,21 +152,20 @@
 
 
                        </div>
-                       <div class="col-md-6">
+                       <div class="col-md-6" >
                         <div class="panel panel-default">
                               <div class="panel-heading">Site & Employee</div>
                           <div class="panel-body">
                            <div class="row">
-                           <div class="col-md-6">
+                           <div class="col-md-6" ng-init="loadSites();">
                                     <div class="form-group">
                                         <label class="control-label">Site<span class="red-star">*</span> </label>
                                         <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
-                                            required
                                             ng-model="selectedSite"
                                             name="site"
                                             ng-change="loadEmployees();loadAssets()"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id">
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id" required tabindex="2">
                                             <option value="">Select Site</option>
 
 
@@ -188,7 +190,7 @@
                                         <select
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.fullName group by emp.designation for emp in employees track by emp.name">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.name + ' ' + emp.lastName group by emp.designation for emp in employees track by emp.id" tabindex="3">
                                             <option value="">Select Employee</option>
 
                                         </select>
@@ -210,7 +212,7 @@
                          </div>
                        </div>
 
-                       <div class="col-md-6">
+                       <div class="col-md-6" has-permission="Assets:List">
                         <div class="panel panel-default">
                               <div class="panel-heading">Assets</div>
                           <div class="panel-body">
@@ -218,12 +220,13 @@
                            <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">Name of Asset</label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span class="form-control-feedback d-md-arrow-icon" ng-hide="siteAssetList"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="siteAssetList"><i class="ld ld-ring ld-spin" ></i></span>
                                         <select
                                             required
                                             name="asset"
-                                            ng-model="selectedAsset"
-                                            class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id">
+                                            ng-model="selectedAsset" ng-disabled="siteAssetList"
+                                            class="form-control searchable-input floatL" ng-options="asset as asset.title for asset in assets | orderBy:'title' track by asset.id" tabindex="9">
                                             <option value="">Select Asset</option>
                                         </select>
                                        <!--  <input id='assetId' ng-model="assetObj.title" class='form-control' ng-show="assetObj"
@@ -251,7 +254,7 @@
                              <div class="col-md-6">
                                  <div class="form-group">
                                      <label class="control-label">Comments</label>
-                                     <input type="text" ng-model="tickets.comments" class="form-control">
+                                     <input type="text" ng-model="tickets.comments" class="form-control" tabindex="10">
                                  </div>
                              </div>
                            </div>
@@ -263,7 +266,7 @@
                      <div class="col-md-6">
                         <div class="panel panel-default">
 
-                          <div class="panel-heading">Upload Image</div>
+                          <div class="panel-heading">Upload Document/Image</div>
                           <div class="panel-body">
                             <div class="row">
 
@@ -273,12 +276,16 @@
 			                          <input type="file"
 			                                 class="form-control" style="opacity:100;position:relative" file-model
 			                                 ng-model="selectedImageFile"
-			                                 name="ImageFile"
+			                                 name="ImageFile" tabindex="11"
 			                          />
 
 
-              							<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
-                 							<img  src={{ticketImage}} width="100px" height="100px" />
+              							<a id="images" href="#" onClick="$('#myModalNew').modal()" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                 							<img src={{ticketImage}} width="100px" style="margin-top: 15px;" height="100px"/>
+             							</a>
+
+             							<a id="images" href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
+                 							<img ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
              							</a>
 
 
@@ -297,7 +304,7 @@
 
 
                             <button type="button" ng-click="conform('cancel')"
-                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Discard</button>
+                                    id="cancel-button"   class="btn btn-danger pull-right" ng-disabled="btnDisable" tabindex="12"> <i class="material-icons">close</i> Cancel</button>
 
                             <!--<button type="submit" type="submit"-->
                                     <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
@@ -305,7 +312,7 @@
                                     <!--</span>Update ticket</button>-->
 
                             <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                    type="submit" id="form-button-save" ng-disabled="form.$invalid">
+                                    type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="13">
                                 <span class="btn-label"><i class="material-icons">check</i></span> Update ticket
                                 <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                             </button>
@@ -346,7 +353,7 @@
 </div>
 
 
-<div id="myModalNew" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+<div id="myModalNew" class="modal fade" data-backdrop="false"  role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true" >
         <div class="modal-dialog">
             <div class="modal-content">

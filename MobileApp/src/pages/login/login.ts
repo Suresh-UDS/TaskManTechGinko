@@ -9,9 +9,10 @@ import {componentService} from "../service/componentService";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
 import {EmployeeService} from "../service/employeeService";
-import{SQLite} from "@ionic-native/sqlite";
+import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
 
-// import{SQLite,SQLitePorter} from "@ionic-native/sqlite-porter";
+declare var demo;
+
 /**
  * Generated class for the LoginPage page.
  *
@@ -56,62 +57,67 @@ export class LoginPage {
       if(this.username && this.password) {
         this.component.showLoader('Login');
         this.myService.login(this.username, this.password).subscribe(response => {
-              console.log(response);
-              console.log(response.json());
-              console.log("user role");
-              console.log(response.json().user.userRoleName.toUpperCase());
-              if(response.json().user){
-                  console.log("user role found");
-                  window.localStorage.setItem('userRole',response.json().user.userRoleName.toUpperCase());
-                  if(response.json().user.userRole.rolePermissions){
-                      var rolePermissions = [];
-                      for (let rp of response.json().user.userRole.rolePermissions){
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+            }else{
+                console.log(response);
+                console.log(response);
+                console.log("user role");
+                console.log(response.user.userRoleName.toUpperCase());
+                if(response.user){
+                    console.log("user role found");
+                    window.localStorage.setItem('userRole',response.user.userRoleName.toUpperCase());
+                    if(response.user.userRole.rolePermissions){
+                        var rolePermissions = [];
+                        for (let rp of response.user.userRole.rolePermissions){
                             rolePermissions.push(rp.moduleName+rp.actionName)
-                      }
-                      this.events.publish('permissions:set',rolePermissions);
-                      window.localStorage.setItem('rolePermissions',JSON.stringify(response.json().user.userRole.rolePermissions));
-                  }
-                  this.events.publish('userType',response.json().user.userRole.rolePermissions);
-              }else{
-                  console.log("User role not found, marking as admin");
-                  this.events.publish('userType','ADMIN');
-                  window.localStorage.setItem('userRole','ADMIN');
-              }
-              this.events.publish('user:logedin',response.json().employee.fullName);
-              window.localStorage.setItem('session', response.json().token);
-              window.localStorage.setItem('userGroup', response.json().employee.userUserGroupName);
-              window.localStorage.setItem('employeeId', response.json().employee.id);
-              window.localStorage.setItem('employeeFullName', response.json().employee.fullName);
-              window.localStorage.setItem('employeeEmpId', response.json().employee.empId);
-              window.localStorage.setItem('employeeUserId', response.json().employee.userId);
-              window.localStorage.setItem('employeeDetails', JSON.stringify(response.json()));
+                        }
+                        this.events.publish('permissions:set',rolePermissions);
+                        window.localStorage.setItem('rolePermissions',JSON.stringify(response.user.userRole.rolePermissions));
+                    }
+                    this.events.publish('userType',response.user.userRole.rolePermissions);
+                }else{
+                    console.log("User role not found, marking as admin");
+                    this.events.publish('userType','ADMIN');
+                    window.localStorage.setItem('userRole','ADMIN');
+                }
+                this.events.publish('user:logedin',response.employee.fullName);
+                window.localStorage.setItem('session', response.token);
+                window.localStorage.setItem('userGroup', response.employee.userUserGroupName);
+                window.localStorage.setItem('employeeId', response.employee.id);
+                window.localStorage.setItem('employeeFullName', response.employee.fullName);
+                window.localStorage.setItem('employeeEmpId', response.employee.empId);
+                window.localStorage.setItem('employeeUserId', response.employee.userId);
+                window.localStorage.setItem('employeeDetails', JSON.stringify(response));
 
-              var employee = response.json().employee;
+                var employee = response.employee;
 
-              if (response.status == 200) {
-                  window.location.reload();
-                  this.navCtrl.setRoot(TabsPage);
-                  this.component.closeLoader();
-              }
+                if (response) {
+                    window.location.reload();
+                    this.navCtrl.setRoot(TabsPage);
+                    this.component.closeLoader();
+                }
 
                 else {
-                  this.component.closeLoader();
-                  this.component.showToastMessage(this.msg,'center');
-               }
+                    this.component.closeLoader();
+                    // this.component.showToastMessage(this.msg,'center');
+                }
 
-              /*if(employee.userUserGroupName == "Admin"){
-               console.log("Admin user ");
-               this.navCtrl.setRoot(SiteListPage);
-               }else if(employee.userUserGroupName == "Client"){
-               console.log("Client User");
-               }else if(employee.userUserGroupName == "Employee"){
-               console.log("Employee user")
-               this.navCtrl.setRoot(EmployeeSiteListPage);
-               }else {
-               this.navCtrl.setRoot(SiteListPage);
+                /*if(employee.userUserGroupName == "Admin"){
+                 console.log("Admin user ");
+                 this.navCtrl.setRoot(SiteListPage);
+                 }else if(employee.userUserGroupName == "Client"){
+                 console.log("Client User");
+                 }else if(employee.userUserGroupName == "Employee"){
+                 console.log("Employee user")
+                 this.navCtrl.setRoot(EmployeeSiteListPage);
+                 }else {
+                 this.navCtrl.setRoot(SiteListPage);
 
-               }
-               */
+                 }
+                 */
+            }
+
             },
             error => {
 

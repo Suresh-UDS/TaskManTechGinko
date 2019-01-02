@@ -4,27 +4,42 @@
     <div class="row" ng-init="loadManufacturers();loadAllAssetTypes()">
         <div class="col-md-6 txt-align-lft">
 
-            <button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Basic Filter
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
             </button>
 
         </div>
         <div class="col-md-6 txt-align-rgt">
 
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-manufacturer" ng-class="{active: $state.includes('admin')}" tabindex="0">
+
+
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-manufacturer" has-permission="Manufacturer:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
+
 
         </div>
-    </div>
 
+
+
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.assetTypeId !=0 && searchCriteras.assetTypeId !=null">
+                    Asset Type: {{searchCriteras.assetTypeName}}
+                </span>
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.manufacturerName">
+                    Manufacturer: {{searchCriteras.manufacturerName}}
+                </span>
+            </span>
+    </div>
 
     <div class="row">
         <div class="col-md-12">
@@ -129,7 +144,7 @@
                                     </span>
                                 </th>
 
-                                <th width="20%">Phone
+                                <th width="15%">Phone
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
                                              <i  class="fa fa-caret-up"></i>
@@ -139,27 +154,38 @@
                                          </span>
                                     </span>
                                 </th>
-                                <th class="disabled-sorting text-right" width="20%">Actions</th>
+                                <th width="15%">Email
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('email')" ng-class="isActiveAsc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('email')" ng-class="isActiveDesc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                </th>
+                                <th class="disabled-sorting text-right" width="10%">Actions</th>
                             </tr>
                             </thead>
 
                             <tbody>
 							<tr ng-repeat="manufacturer in manufacturers" repeat-done="initDataTables()">
 								<td>{{manufacturer.assetType}}</td>
-								<td>{{manufacturer.name}}</td>
+								<td>{{manufacturer.name | uppercase}}</td>
                                 	<td>{{manufacturer.contactFirstName}} {{manufacturer.contactLastName}}</td>
 							   	<td>{{manufacturer.phone}}</td>
+							   	<td>{{manufacturer.email}}</td>
                                  <td class="text-right hoverMe">
 
                                      <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                      <div class="HoverBx">
 
-                                         <a data-toggle="modal"  data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                         <a data-toggle="modal"  title="View" data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
                                          <!-- data-target="#RightModal-Edit"  ng-click="getManufacturerDetails(manufacturer.id, 'edit')"-->
-                                         <a data-toggle="modal"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                         <a data-toggle="modal" title="Edit"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                         <a  has-permission="Manufacturer:Delete" ui-sref="" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                         <a  has-permission="Manufacturer:Delete" title="Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
 
                                      </div>
 
@@ -593,19 +619,19 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name}} ({{manufacturer.id}})</h4>
+                <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name | uppercase}}</h4>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body ViewContentPageCon">
+                <div class="titleCon margn-btm-12">
+                    <h3>{{manufacturer.name | uppercase}}</h3>
+                </div>
 
               <div class="row">
                   <div class="col-md-6">
-
                       <div class="panel panel-default">
                           <div class="panel-heading">Manufacturer Details</div>
-                          <div class="panel-body">
-
-
+                          <div class="panel-body" style="min-height:350px;">
                               <div class="table-responsive">
                                   <table class="table">
                                       <tbody>
@@ -615,7 +641,7 @@
                                       </tr>
                                       <tr>
                                           <td>Manufacturer Name</td>
-                                          <td>{{manufacturer.name}}</td>
+                                          <td>{{manufacturer.name | uppercase}}</td>
                                       </tr>
                                       <tr>
                                           <td>Contact First Name</td>
@@ -640,42 +666,34 @@
                                       </tbody>
                                   </table>
                               </div>
-
-
-
                           </div>
                       </div>
-
-
                   </div>
                   <div class="col-md-6">
-
                       <div class="panel panel-default">
                           <div class="panel-heading">Address Details</div>
-                          <div class="panel-body">
-
-
+                          <div class="panel-body" style="min-height:350px;">
                               <div class="table-responsive">
                                   <table class="table">
                                       <tbody>
                                       <tr>
                                           <td>Line 1 </td>
-                                          <td>{{manufacturer.addressLine1}}</td>
+                                          <td class="caps">{{manufacturer.addressLine1}}</td>
                                       </tr>
                                       <tr>
                                           <td>Line 2</td>
-                                          <td>{{manufacturer.addressLine2}}</td>
+                                          <td class="caps">{{manufacturer.addressLine2}}</td>
 
                                       </tr>
                                       <tr>
                                           <td>City</td>
-                                          <td>{{manufacturer.city}}</td>
+                                          <td class="caps">{{manufacturer.city}}</td>
 
                                       </tr>
                                       <tr>
 
                                           <td>State</td>
-                                          <td>{{manufacturer.state}}</td>
+                                          <td class="caps">{{manufacturer.state}}</td>
 
                                       </tr>
                                       <tr>
@@ -687,7 +705,7 @@
                                       <tr>
 
                                           <td>Country</td>
-                                          <td>{{manufacturer.country}}</td>
+                                          <td class="caps">{{manufacturer.country}}</td>
 
                                       </tr>
                                       </tbody>
@@ -696,8 +714,12 @@
 
                           </div>
                       </div>
-
-
+                  </div>
+                  <div class="col-md-12 txt-align-rgt">
+                      <button class="btn btn-default" type="button"
+                              data-dismiss="modal" id="close-button-right">
+                          Close
+                      </button>
                   </div>
               </div>
 
@@ -730,10 +752,10 @@
 </div>
 
 <!-- BasicFilterModal -->
-<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm" role="form" ng-submit = "searchFilter()"  novalidate >
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
@@ -744,20 +766,26 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-6">
                             <div class="form-group no-padding" >
                                 <div class="dropdown">
                                     <div class="form-group">
                                         <label class="control-label">Select Asset Type</label>
-                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" required>
-                                            <option value="">Select Asset Type...</option>
-                                        </select>
+                                       
+                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                               
+	                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
+										  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+										  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>
+										    <span ng-bind-html="assetTypesListOne.name | highlight: $select.search"></span>
+										  </ui-select-choices>
+										</ui-select>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-6">
                             <div class="form-group no-padding" >
                                 <div class="dropdown">
                                     <div class="form-group">
@@ -767,7 +795,7 @@
                                                name='name'
                                                ng-model="searchName"
                                                type='text' value=""
-                                        />
+                                        tabindex="1" />
                                     </div>
                                 </div>
                             </div>
@@ -777,7 +805,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" >Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="2">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"   tabindex="3">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

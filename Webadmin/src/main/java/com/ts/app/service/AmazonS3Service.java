@@ -401,25 +401,33 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
-	public String uploadEmployeeFileToS3bucket(String fileName, File multipartFile) {
+	public String uploadEmployeeFileToS3bucket(String fileName, byte[] file) {
 		log.debug("upload employee checkInOut image to S3 bucket");
     	String prefixUrl = "";
     	try {
 
-    		String folder = bucketEnv + checkInOutPath + fileName;
+
+    		String key = bucketEnv + checkInOutPath + fileName;
     		String ext = FilenameUtils.getExtension(fileName);
+
+            InputStream fis = new ByteArrayInputStream(file);
 
     		ObjectMetadata metadata = new ObjectMetadata();
     		metadata.setContentType("application/"+ ext);
 
-    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
-    				.withMetadata(metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-    		log.info("===================== Upload File - Done! =====================");
-    		URL url = s3client.getUrl(bucketName, folder);
-    		log.debug("S3 uploaded url" +url);
-    		prefixUrl = cloudFrontUrl + folder;
-    		log.debug("Result from S3 -" +result);
+//    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
+//    				.withMetadata(metadata)
+//                    .withCannedAcl(CannedAccessControlList.PublicRead));
+//    		log.info("===================== Upload File - Done! =====================");
+//    		URL url = s3client.getUrl(bucketName, folder);
+//    		log.debug("S3 uploaded url" +url);
+//    		prefixUrl = cloudFrontUrl + folder;
+//    		log.debug("Result from S3 -" +result);
+
+            PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+            s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+            log.debug("result of object request -" + result);
+            prefixUrl = cloudFrontUrl + key;
 
     	}catch(AmazonS3Exception e) {
     		log.debug("Error while upload employee checkInOut to S3 bucket " + e.getMessage());
@@ -435,8 +443,10 @@ public class AmazonS3Service {
 		String prefixUrl = "";
 		try {
 
+			log.debug(checkListImg);
 			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((checkListImg.substring(checkListImg.indexOf(",")+1)).getBytes());
 			log.debug("Image Strings -" +bI);
+
 			InputStream fis = new ByteArrayInputStream(bI);
 
 			ObjectMetadata metadata = new ObjectMetadata();
@@ -513,6 +523,90 @@ public class AmazonS3Service {
 			e.printStackTrace();
 		}
 
+	}
+
+
+	public String uploadExistingTicketToS3(String fileName, String image) {
+		String key = bucketEnv + ticketPath + fileName;
+		String prefixUrl = "";
+		try {
+
+			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((image.substring(image.indexOf(",")+1)).getBytes());
+			log.debug("Image Strings -" +bI);
+			InputStream fis = new ByteArrayInputStream(bI);
+
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(bI.length);
+			metadata.setContentType("image/png");
+			metadata.setCacheControl("public, max-age=31536000");
+
+			PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+			s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+			log.debug("result of object request -" + result);
+			prefixUrl = cloudFrontUrl + key;
+
+		} catch(AmazonS3Exception e) {
+			log.info("Error while upload a Ticket File -" + e);
+			e.printStackTrace();
+		}
+		 return prefixUrl;
+	}
+
+	public void getAllFiles() {
+		log.debug("===================== Calling a AWS S3 for get files =====================");
+		try {
+			String key = "prod/checkListImages/";
+//			String checkListKey = "prod/checkListImages/";
+			List<S3ObjectSummary> fileList = s3client.listObjects(bucketName, key).getObjectSummaries();
+			log.debug("===================== Checklist File length =====================" + fileList.size());
+//			List<S3ObjectSummary> checkLists = s3client.listObjects(bucketName, checkListKey).getObjectSummaries();
+//			log.debug("===================== Checklist File length =====================" + checkLists.size());
+			int i = 1;
+			for (S3ObjectSummary file : fileList) {
+				log.debug("===================== Get Files - Done! =====================" + file.getKey());
+				String filename = file.getKey();
+				if(filename.contains("${AWS.s3-checklist-path")) {
+					log.debug("===================== Before Rename File =====================" + filename);
+					String sourceKey = filename;
+					String renamedFile = filename.substring(filename.indexOf("}")+1);
+					log.debug("===================== After Rename File =====================" + renamedFile);
+					log.debug("===================== File length =====================" + i);
+//					if(renamedFile.contains("/")) {
+//						String slashFile = renamedFile.replace("/", "-");
+//						log.debug("===================== After Slash Removed File =====================" + slashFile);
+//						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + checkListPath + slashFile)
+//																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+//						s3client.copyObject(copyObjRequest);
+//					}else {
+
+//					for(S3ObjectSummary checkList : checkLists) {
+//						String checkListFile = checkList.getKey();
+//						String subString[] = checkListFile.split("/", 3);
+//					    log.debug("Checklist Images Sub String file:" +  subString[0]);
+//					    log.debug("Checklist Images Sub String file:" +  subString[2]);
+//					    String checkListRenamed = subString[2];
+//						if(!checkListRenamed.equalsIgnoreCase(renamedFile)) {
+//							log.debug("===================== File length =====================" + i);
+//							log.debug("===================== Non duplicate images =====================" + i);
+//						}
+//					}
+//
+						log.debug("=====================Source Key  =====================" + sourceKey);
+						CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, sourceKey, bucketName, key + renamedFile)
+																	.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+		                s3client.copyObject(copyObjRequest);
+//					}
+
+				}
+				i++;
+
+			}
+
+
+
+        } catch(AmazonServiceException e) {
+            e.printStackTrace();
+        }
 	}
 
 

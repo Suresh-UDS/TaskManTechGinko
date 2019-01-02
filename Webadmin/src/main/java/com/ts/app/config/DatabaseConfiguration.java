@@ -87,6 +87,8 @@ public class DatabaseConfiguration {
 					jHipsterProperties.getDatasource().getPrepStmtCacheSize());
 			config.addDataSourceProperty("prepStmtCacheSqlLimit",
 					jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
+			config.setMaximumPoolSize(90);
+			config.setMinimumIdle(3);
 		}
 		if (metricRegistry != null) {
 			config.setMetricRegistry(metricRegistry);
@@ -143,7 +145,7 @@ public class DatabaseConfiguration {
 
 	private Properties hibProperties() {
 		Properties properties = new Properties();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
+		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		properties.put("hibernate.show_sql", true);
 		properties.put("hibernate.hbm2ddl.auto", "update");
 		properties.put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");

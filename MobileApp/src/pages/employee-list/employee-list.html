@@ -28,8 +28,26 @@
 
   <ion-list class="emp-list">
 
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
+            Client: {{clientFilter.name}}
+        </span>
+      <span class="tag label label-info"   *ngIf="siteFilter">
+           Site: {{siteFilter.name}}
+        </span>
+    </div>
+
+    <div *ngIf=" (!employees || employees.length < 0) && !spinner " class="no-data">
+      <ion-card>
+        <ion-card-content>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
     <div *ngFor="let emp of employees;let i of index">
-    <ion-item-sliding #slidingItem (ionDrag)="drag(menu,$event)">
+    <ion-item #slidingItem (ionDrag)="drag(menu,$event)">
       <ion-item #item  class="bottom-border emp padding-left0"  >
         <ion-row class="margin0">
           <ion-col col-2>
@@ -44,23 +62,23 @@
           <ion-col col-8 class="ver-center" (click)="viewEmployee(emp)">
               <p style="white-space:normal" text-left class="fnt-wt" text-capitalize>{{emp.name}} {{emp.lastName}}</p>
           </ion-col>
-          <ion-col col-1 class="ver-center">
+          <!--<ion-col col-1 class="ver-center">
               <button #menu ion-button icon-left icon-only clear class="pop-icon" (click)="open(slidingItem, item ,count,menu)">
                 <ion-icon name="md-more" class="fnt-18 padding0"></ion-icon>
               </button>
-          </ion-col>
+          </ion-col>-->
         </ion-row>
         <ion-row col-8 offset-2>
             <p text-left class="fnt-wt" text-capitalize>{{emp.empId}}</p>
         </ion-row>
       </ion-item>
 
-      <ion-item-options side="right" (click)="close(slidingItem,menu)">
+      <!--<ion-item-options side="right" (click)="close(slidingItem,menu)">
         <button ion-button clear color="danger" (click)="markLeft(emp)"><ion-icon name="close" class="fnt-24 padding-bottom0"></ion-icon></button>
         <button ion-button clear color="primary" (click)="transferEmployee(emp)"><i class="material-icons fnt-24">transfer_within_a_station</i></button>
         <button ion-button clear color="clr-blue" (click)="relieveEmployee(emp)"><i class="material-icons fnt-24">assignment_ind</i></button>
-      </ion-item-options>
-    </ion-item-sliding>
+      </ion-item-options>-->
+    </ion-item>
     </div>
   </ion-list>
 

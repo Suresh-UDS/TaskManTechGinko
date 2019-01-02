@@ -70,12 +70,12 @@
                                                 <div class="form-group">
 
                                                     <button class="btn btn-success" type="submit"
-                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                            id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Update
                                                     </button>
 
                                                     <button class="btn btn-danger" type="button"
-                                                            ng-click="cancelQuotation()" id="cancel-button">
+                                                            ng-click="cancelQuotation()" id="cancel-button" ng-disabled="btnDisable">
                                                         <i class="material-icons">close</i> Cancel
                                                     </button>
 

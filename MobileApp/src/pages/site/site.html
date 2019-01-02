@@ -9,6 +9,7 @@
 
 <ion-content>
   <ion-list *ngIf="sites">
+
     <ion-item *ngFor="let site of sites;let i of index" class="border-btm-dotted emp" (click)="viewSite(site)">
       <ion-icon name="ios-podium-outline" item-start class="icon-color CircleIcon"></ion-icon>
       <p text-left  class="fnt-wt-400" text-capitalize>{{site.name}}</p>
@@ -22,6 +23,7 @@
       <p></p>
     </ion-item>
   </ion-list>
+
 
     <ion-card *ngIf="!sites && !isLoading">
         <ion-card-content>

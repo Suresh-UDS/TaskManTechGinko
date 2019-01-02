@@ -31,41 +31,72 @@
         <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
-    <div *ngIf="(tickets && tickets.length <= 0) && !spinner" >
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
+            Client: {{clientFilter.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="siteFilter">
+           Site: {{siteFilter.name}}
+        </span>
+    </div>
+
+    <div >
+      <div *ngIf="(tickets && tickets.length <= 0) && !spinner" >
         <ion-card>
-            <ion-card-content>
-                <img src="assets/imgs/warning.svg">
-                <span><p text-center>No Data Found</p></span>
-            </ion-card-content>
+          <ion-card-content>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card-content>
         </ion-card>
-    </div>
+      </div>
 
-    <div  *ngIf="(!tickets || tickets.length < 0) && spinner" text-center class="margin-top25">
+      <div  *ngIf="(!tickets || tickets.length < 0) && spinner" text-center class="margin-top25">
         <ion-spinner name="circles"></ion-spinner>
-    </div>
+      </div>
 
 
 
-<div *ngIf="tickets">
+      <div *ngIf="tickets">
 
-    <div class="TicketsListCon">
+        <div class="TicketsListCon">
 
-        <ion-list>
-            <ion-item  *ngFor="let ticket of tickets" (click)="viewTicket(ticket)" text-capitalize>
-                <ion-icon *ngIf="ticket.status=='Open'"  class="sky-blue"  name="ios-alert-outline" item-start></ion-icon>
-                <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" name="ios-checkmark-circle-outline" item-start></ion-icon>
-                <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" name="ios-help-circle-outline" item-start></ion-icon>
+          <ion-list *ngFor="let ticket of tickets" >
+            <ion-item  (click)="viewTicket(ticket)" text-capitalize>
+              <ion-icon *ngIf="ticket.status=='Open'"  class="sky-blue"  name="ios-alert-outline" item-start></ion-icon>
+              <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" name="ios-checkmark-circle-outline" item-start></ion-icon>
+              <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" name="ios-help-circle-outline" item-start></ion-icon>
 
-                <h2 text-left>{{ticket.title}}</h2>
-                <p text-left class="TicketPara">{{ticket.createdDate | date:'MMM d, y, h:mm a' }}  <br> Created by <strong>{{ticket.createdBy}} </strong> </p>
-                <ion-note item-end>
-                    {{ticket.status}}
-                </ion-note>
+              <h2 text-left>{{ticket.title}}</h2>
+              <p text-left class="TicketPara">{{ticket.createdDate | date:'MMM d, y, h:mm a' }}  <br> Created by <strong>{{ticket.createdBy}} </strong> </p>
+              <ion-note item-end>
+                {{ticket.status}}
+              </ion-note>
             </ion-item>
-        </ion-list>
 
-    </div>
 
+              <ion-item #item class="item-fnt padding-left0" >
+                <!--<div class="padding-left16">-->
+
+                <div text-capitalize >
+                    <ion-row class="margin0">
+                        <ion-col col-6 class="padding-right5">
+                            <div>
+                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ticket.createdDate | date:'MMM d, y, h:mm a' }} </p>
+                            </div>
+                        </ion-col>
+                        <ion-col col-6 class="padding-right5">
+                            <div >
+                                <p text-right class="fnt-12"><ion-icon ios="ios-contact" md="md-contact" class="green padding-right10"></ion-icon>{{ticket.createdBy}} </p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+
+                </div>
+                <!--</div>-->
+            </ion-item>
+          </ion-list>
+
+         </div>
 
 </div>
 
@@ -76,5 +107,5 @@
                     <span><p text-center>No Data Found</p></span>
             </ion-card>
     </ion-list>
-
+    </div>
 </ion-content>

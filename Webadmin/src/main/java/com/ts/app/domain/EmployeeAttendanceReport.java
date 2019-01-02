@@ -28,6 +28,10 @@ public class EmployeeAttendanceReport implements Serializable {
     private String name;
 
     private String lastName;
+    
+    private boolean reliever;
+    
+    private String designation;
 
     private String siteName;
 
@@ -58,13 +62,15 @@ public class EmployeeAttendanceReport implements Serializable {
     private String differenceText;
 
     private String remarks;
+    
+    private String shiftKey;
 
     public EmployeeAttendanceReport() {
 
     }
 
 
-    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String siteName,
+    public EmployeeAttendanceReport(long empId, String employeeId, String name, String lastName, String designation, String siteName,
     								String projectName, Date checkInTime, Date checkOutTime, String shiftStartTime, String shiftEndTime,
     								Long continuedAttendance, boolean isLate, String remarks) {
        // this.Image = image;
@@ -72,6 +78,7 @@ public class EmployeeAttendanceReport implements Serializable {
         this.employeeId = employeeId;
         this.name = name;
         this.lastName = lastName;
+        this.designation = designation;
         this.siteName = siteName;
         this.projectName = projectName;
         this.checkInTime = checkInTime;
@@ -281,4 +288,33 @@ public class EmployeeAttendanceReport implements Serializable {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+
+
+	public String getShiftKey() {
+		return shiftKey;
+	}
+
+
+	public void setShiftKey(String shiftKey) {
+		this.shiftKey = shiftKey;
+	}
+
+
+	public boolean isReliever() {
+		return reliever;
+	}
+
+
+	public void setReliever(boolean reliever) {
+		this.reliever = reliever;
+	}
+    
 }

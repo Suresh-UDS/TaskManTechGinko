@@ -21,6 +21,10 @@ import {ScanQR} from "../jobs/scanQR";
 import {OfflineAsset} from "../offline-asset/offline-asset";
 import {ScanQRAsset} from "./scanQR-asset";
 import{AlertController} from "ionic-angular";
+import{JobService} from "../service/jobService";
+
+
+declare  var demo;
 
 /**
  * Generated class for the AssetList page.
@@ -48,14 +52,17 @@ export class AssetList {
     asset:any;
     db:any;
     fileTransfer: FileTransferObject = this.transfer.create();
+    clientFilter:any;
+    siteFilter:any;
+    assetGroup:any;
+    assetType:any;
 
-    spinner:any;
 
     constructor(@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,private transfer: FileTransfer,
                 public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
                 public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
                 public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
-                public dbService:DBService,private network:Network,private alertCtrl:AlertController) {
+                public dbService:DBService,private network:Network,private alertCtrl:AlertController,private jobService:JobService) {
     this.assetList = [];
     this.test = [];
     this.searchCriteria = {};
@@ -66,40 +73,45 @@ export class AssetList {
 
   ionViewWillEnter()
   {
-      console.log("Check Network Connection");
-      this.spinner =true;
-      // this.componentService.showLoader("Loading Assets");
-      var searchCriteria ={
-          currPage:this.page+1
-      };
-      if(this.network.type!='none'){
 
-          this.getAsset(searchCriteria)
+      if(this.navParams.get('text'))
+      {
+
 
       }else{
 
-          //     //offline
-          // setTimeout(() => {
-          //     this.dbService.getAsset().then(
-          //         (res)=>{
-          //             this.componentService.closeLoader();
-          //             console.log(res);
-          //             this.assetList = res;
-          //         },
-          //         (err)=>{
-          //             this.assetList = [];
-          //             this.componentService.closeLoader()
-          //         })
-          // },3000);
+          console.log("Check Network Connection");
+          // this.componentService.showLoader("Loading Assets");
+
+          var searchCriteria ={
+              currPage:this.page+1
+          };
+
+          this.getAsset(searchCriteria)
+
+              //     //offline
+              // setTimeout(() => {
+              //     this.dbService.getAsset().then(
+              //         (res)=>{
+              //             this.componentService.closeLoader();
+              //             console.log(res);
+              //             this.assetList = res;
+              //         },
+              //         (err)=>{
+              //             this.assetList = [];
+              //             this.componentService.closeLoader()
+              //         })
+              // },3000);
 
       }
+
 
   }
 
   ionViewDidLoad() {
 
       console.log('ionViewDidLoad AssetList');
-      this.componentService.showLoader("Loading Assets");
+      // this.componentService.showLoader("Loading Assets");
          this.open = true;
       // After Set Pagination
       // var searchCriteria={}
@@ -108,15 +120,26 @@ export class AssetList {
       {
           // this.componentService.closeLoader();
           var text = this.navParams.get('text');
+
+          var searchCriteria ={
+              currPage:this.page+1
+          };
+
+          this.getAsset(searchCriteria)
+
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
-                  this.componentService.showToastMessage('Asset found, navigating..','bottom')
-                  console.log("Search by asset code response");
-                  console.log(response);
-                  window.document.querySelector('ion-app').classList.add('transparentBody')
-                  // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
-                  this.navCtrl.push(AssetView,{assetDetails:response}); //online
-                  // this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+                  if(response.errorStatus){
+                      demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                  }else{
+                      this.componentService.showToastMessage('Asset found, navigating..','bottom')
+                      console.log("Search by asset code response");
+                      console.log(response);
+                      window.document.querySelector('ion-app').classList.add('transparentBody')
+                      // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
+                      this.navCtrl.push(AssetView,{assetDetails:response}); //online
+                      // this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
+                  }
 
               },
               err=>{
@@ -140,9 +163,14 @@ export class AssetList {
             {
                 this.assetService.saveReading({name:readings[i].name,uom:readings[i].uom,initialValue:readings[i].initialValue,finalValue:readings[i].finalValue,consumption:readings[i].consumption,assetId:readings[i].assetId,assetParameterConfigId:readings[i].assetParameterConfigId}).subscribe(
                     response => {
-                        console.log("save reading sync to server");
-                        console.log(response);
-                        resolve("s")
+                        if(response.errorStatus){
+                            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                        }else{
+                            console.log("save reading sync to server");
+                            console.log(response);
+                            resolve("s")
+                        }
+
                     },
                     error => {
                         console.log("save readings error sync to server");
@@ -156,29 +184,37 @@ export class AssetList {
 
     setDataSync()
     {
-      this.spinner = true;
-        // this.componentService.showLoader("Data Sync");
+        this.componentService.showLoader("Data Sync");
         this.dbService.getReading().then(
             response=> {
-              this.spinner = false;
                 console.log(response)
                     this.saveReadingToServer(response).then(
                         response=>{
                             this.dbService.dropReadingTable().then(
                                 response=>{
-                                            console.log(response)
-                                                this.setData().then(
-                                                    response=>{
-                                                        console.log(response);
-                                                    },
-                                                    error=>{
-                                                        console.log(error)
-                                                    })
-                                                })
+                                            console.log(response);
+                                            this.dbService.dropPPMJobTable().then(
+                                                response=>{
+                                                    console.log(response);
+                                                    this.dbService.dropAMCJobTable().then(
+                                                        response=>{
+                                                            console.log(response);
+                                                            this.setData().then(
+                                                                response=>{
+                                                                    console.log(response);
+                                                                },
+                                                                error=>{
+                                                                    console.log(error)
+                                                                })
+                                                            })
+                                                        }
+                                                    )
+                                                }
+                                            );
+
                          },
                          error=>{
-                          this.spinner = false;
-                            // this.componentService.closeLoader();
+                            this.componentService.closeLoader();
                              this.componentService.showToastMessage("Error server sync","bottom")
                          })
             },error=>{
@@ -211,37 +247,46 @@ export class AssetList {
                                                             this.dbService.setConfig().then(
                                                                 response=>{
                                                                     console.log(response)
-                                                                    this.dbService.setJobs().then(
-                                                                        response=>{
-                                                                            console.log(response)
-                                                                            this.dbService.setTickets().then(
-                                                                                response=> {
+                                                                  this.dbService.setJobs().then(
+                                                                    response=>{
+                                                                     console.log(response);
+                                                                    })
+                                                                    // this.dbService.setPPMJobs().then(
+                                                                    //     response=>{
+                                                                    //         console.log(response)
+                                                                    //         this.dbService.setAMCJobs().then(
+                                                                    //             response=> {
                                                                                     console.log(response)
-                                                                                    // this.dbService.setSites().then(
-                                                                                    //     response=> {
-                                                                                    //         console.log(response)
+                                                                                    this.dbService.setTickets().then(
+                                                                                        response => {
+                                                                                            console.log(response)
+                                                                                            // this.dbService.setSites().then(
+                                                                                            //     response=> {
+                                                                                            //         console.log(response)
                                                                                             // this.dbService.setEmployee().then(
                                                                                             //     response=> {
                                                                                             //         console.log(response)
-                                                                                                        this.dbService.setViewReading().then(
-                                                                                                            response=>{
-                                                                                                                console.log(response)
-                                                                                                                this.dbService.setAssetPreviousReading().then(
-                                                                                                                    response=> {
-                                                                                                                        console.log(response)
-                                                                                                                        resolve("data s")
-                                                                                                                        this.componentService.closeLoader();
-                                                                                                                    })
-                                                                                                            })
-                                                                                                // })
-                                                                                        // })
+                                                                                            this.dbService.setViewReading().then(
+                                                                                                response => {
+                                                                                                    console.log(response)
+                                                                                                    this.dbService.setAssetPreviousReading().then(
+                                                                                                        response => {
+                                                                                                            console.log(response)
+                                                                                                            resolve("data s")
+                                                                                                            this.componentService.closeLoader();
+                                                                                                        })
+                                                                                                })
+                                                                                            // })
+                                                                                            // })
+                                                                                        })
                                                                                 })
                                                                         })
                                                                 })
-                                                        })
-                                                })
+                                                        // })
+                                                // })
                                 })
                         })
+
 
             },3000)
         })
@@ -252,54 +297,99 @@ export class AssetList {
 
   getAsset(searchCriteria)
   {
-    this.spinner = true;
-    this.assetService.searchAssets(searchCriteria).subscribe(
+      this.componentService.showLoader("Loading Assets");
+      this.assetService.searchAssets(searchCriteria).subscribe(
           response=>{
-            // this.spinner= false;
-              this.componentService.closeLoader()
+              this.componentService.closeAll();
               console.log("Asset search filters response");
-              console.log(response)
+              console.log(response);
               this.assetList=response.transactions;
               this.page = response.currPage;
               this.totalPages = response.totalPages;
           },err=>{
-            // this.spinner = false;
-              this.componentService.closeLoader();
+              this.componentService.closeAll();
               console.log("Error in filtering assets");
               console.log(err);
           }
       )
   }
 
-  openFilters(){
-      this.open = false;
-      console.log("Opening filter modal");
-      let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
-      modal.onDidDismiss(data=>{
-          console.log("Modal dismissed");
-          this.open = true;
-          console.log(data);
-          var searchCriteria = {
-              siteId:data.siteId,
-              projectId:data.projectId,
-          };
-          this.assetService.searchAssets(searchCriteria).subscribe(
-              response=>{
-                  this.componentService.closeLoader()
-                  console.log("Asset search filters response");
-                  console.log(response)
-              },err=>{
-                  this.componentService.closeLoader();
-                  console.log("Error in filtering assets");
-                  console.log(err);
-              }
-          )
-          // this.getAsset(searchCriteria);
+  // openFilters(){
+  //     this.open = false;
+  //     console.log("Opening filter modal");
+  //     let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
+  //     modal.onDidDismiss(data=>{
+  //         console.log("Modal dismissed");
+  //         this.open = true;
+  //         console.log(data);
+  //         var searchCriteria = {
+  //             siteId:data.siteId,
+  //             projectId:data.projectId,
+  //         };
+  //         this.assetService.searchAssets(searchCriteria).subscribe(
+  //             response=>{
+  //                 this.componentService.closeAll();
+  //                 console.log("Asset Search Filter Response");
+  //                 console.log(response);
+  //                 // if(response.errorStatus){
+  //                 //       this.componentService.closeAll();
+  //                 //     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+  //                 // }else{
+  //                 //     this.componentService.closeLoader();
+  //                 //     console.log("Asset search filters response");
+  //                 //     console.log(response);
+  //                 // }
+  //             },err=>{
+  //                 this.componentService.closeLoader();
+  //                 console.log("Error in filtering assets");
+  //                 console.log(err);
+  //             }
+  //         )
+  //         // this.getAsset(searchCriteria);
+  //
+  //     });
+  //     modal.present();
+  //
+  // }
 
-      });
-      modal.present();
+    openFilters() {
+        let modal = this.modalCtrl.create(AssetFilter,{},{cssClass:'asset-filter',showBackdrop:true});
+        modal.onDidDismiss(data=>{
+            console.log("Modal Dismiss Asset");
+            console.log(data);
+            this.clientFilter=data.projectId;
+            this.siteFilter=data.siteId;
+            this.assetGroup=data.assetGroup;
+            this.assetType=data.assetType;
+            this.applyFilter(data.projectId,data.siteId,data.assetGroup,data.assetType);
+        });
+        modal.present();
+    }
 
-  }
+
+    applyFilter(project,site,group,type){
+        this.componentService.showLoader("");
+        var searchCriteria={
+            siteId:site.id,
+            projectId:project.id,
+            assetGroupName:group,
+            assetTypeName:type,
+        };
+
+        this.assetService.searchAssets(searchCriteria).subscribe(
+            response=>{
+                this.componentService.closeAll();
+                console.log("Filtering Assets");
+                console.log(response);
+                this.assetList=response.transactions;
+            },error=>{
+                this.componentService.closeAll();
+                console.log("Error in filtering Assets");
+                console.log(error);
+            }
+        )
+
+    }
 
   scanQRCode(){
       window.document.querySelector('ion-app').classList.add('transparentBody')
@@ -351,14 +441,14 @@ export class AssetList {
     // Pull to refresh
     doRefresh(refresher)
     {
-        // this.componentService.showLoader("");
+        this.componentService.showLoader("");
         var searchCriteria={};
         this.getAsset(searchCriteria);
         refresher.complete()
     }
 
     // Scroll
-    doInfiniteAssets(infiniteScroll){
+    doInfiniteAsset(infiniteScroll){
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);
@@ -378,7 +468,7 @@ export class AssetList {
             setTimeout(()=>{
                 this.assetService.searchAssets(searchCriteria).subscribe(
                     response=>{
-                        console.log('ionViewDidLoad jobs list:');
+                        console.log('ionViewDidLoad Asset list:');
                         console.log(response);
                         console.log(response.transactions);
                         for(var i=0;i<response.transactions.length;i++){
@@ -389,7 +479,7 @@ export class AssetList {
                         this.componentService.closeLoader();
                     },
                     error=>{
-                        console.log('ionViewDidLoad Jobs Page:'+error);
+                        console.log('ionViewDidLoad Asset-list Page:'+error);
                     }
                 );
                 infiniteScroll.complete();

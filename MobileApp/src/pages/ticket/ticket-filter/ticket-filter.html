@@ -10,7 +10,7 @@
     <ion-title>Ticket Filter</ion-title>
 
       <ion-buttons end>
-          <button ion-button (click)="dismiss()">
+          <button ion-button (click)=" dismissFilter()">
               <ion-icon name="md-close"></ion-icon>
           </button>
       </ion-buttons>
@@ -22,7 +22,7 @@
 
 <ion-content class="CreateTicketPage FormPage">
     <ion-fab right bottom>
-        <button  (click)=" dismissFilter()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
+        <button  (click)=" dismiss()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
     </ion-fab>
 
 
@@ -171,31 +171,31 @@
                             <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
                         </ion-select>
                     </ion-item>-->
-
-                <!--<ion-col col-12>
+  <!--
+                 <ion-col col-12>
 
                 <ion-row no-margin class="" no-padding="" >
-                    <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
-                        <ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">
-                            <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
-                        </ion-col>
-                        <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
-                            <ion-label *ngIf="!fromDate" class="bg-grey" no-margin="">From date</ion-label>
-                            <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
-                        </ion-col>
-                    </ion-col>
-                    <ion-col col-5 (click)="selectToDate()" class="ver-center">
-                        <ion-col col-2 class="ver-center padding-bottom1 primary-border-bottom">
-                            <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
-                        </ion-col>
-                        <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
-                            <ion-label *ngIf="!toDate" class="bg-grey" no-margin="">To date</ion-label>
-                            <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
-                        </ion-col>
-                    </ion-col>
-                </ion-row>
+                     <ion-col col-5 class="ver-center  margin-right15" (click)="selectFromDate()">
+                         <ion-col col-2  class="ver-center padding-bottom1 primary-border-bottom">
+                             <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 clr-orange"></ion-icon>
+                         </ion-col>
+                         <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
+                             <ion-label *ngIf="!fromDate" class="bg-grey" no-margin="">From date</ion-label>
+                             <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                         </ion-col>
+                     </ion-col>
+                     <ion-col col-5 (click)="selectToDate()" class="ver-center">
+                         <ion-col col-2 class="ver-center padding-bottom1 primary-border-bottom">
+                             <ion-icon ios="ios-calendar" md="md-calendar" class="fnt-24 clr-orange"></ion-icon>
+                         </ion-col>
+                         <ion-col col-10 class="ver-center padding-top-bottom0 primary-border-bottom">
+                             <ion-label *ngIf="!toDate" class="bg-grey" no-margin="">To date</ion-label>
+                             <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                         </ion-col>
+                     </ion-col>
+                 </ion-row>
 
-               </ion-col>-->
+                </ion-col>-->
           <div class="clearfix"></div>
             <!--<ion-item *ngFor="let ag of assetGroup">-->
             <!--<ion-label>{{ag.name}}</ion-label>-->

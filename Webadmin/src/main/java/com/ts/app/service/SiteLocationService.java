@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -34,6 +35,7 @@ SiteLocationService {
 
 //	private static final String locSvcEndpoint = exportPath;
 
+    @Async
 	public void save(long userId, long siteId, double lat, double lng, double radius) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();

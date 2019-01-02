@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-user', {
 		parent : 'admin',
 		url : '/add-user',
-		controller : 'UserController',
+		//controller : 'UserController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add User'
@@ -21,7 +21,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('edit-user', {
 		parent : 'admin',
 		url : '/edit-user/:id',
-		controller : 'UserController',
+		//controller : 'UserController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit User'
@@ -38,7 +38,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-user', {
 		parent : 'admin',
 		url : '/view-user/:id',
-		controller : 'UserController',
+		//controller : 'UserController',
 		data : {
 			authorities : [],
 			pageTitle : 'View User'
@@ -49,6 +49,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 				controller : 'UserController'
 			}
 		},
+		params:{checkStatus:':checkStatus'},
 		resolve : {
 
 		}

@@ -9,8 +9,8 @@ import {LoginPage} from "../login/login";
 
 
 @Component({
-  selector: 'page-changepassword',
-  templateUrl: 'change-password.html'
+    selector: 'page-changepassword',
+    templateUrl: 'change-password.html'
 })
 export class ChangePassword {
     username:any;
@@ -25,9 +25,9 @@ export class ChangePassword {
     module:any;
     permission:any;
 
-  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService, public events:Events) {
+    constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,public navParams: NavParams,public myService:authService, public events:Events) {
         this.username = window.localStorage.getItem('employeeUserId')
-  }
+    }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad Reset password page');

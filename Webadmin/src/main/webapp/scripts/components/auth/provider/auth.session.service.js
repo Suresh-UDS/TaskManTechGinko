@@ -20,7 +20,7 @@ angular.module('timeSheetApp')
                 $http.post('api/logout').success(function (response) {
                     localStorageService.clearAll();
                     // to get a new csrf token call the api
-                    $http.get('api/account');
+                    //$http.get('api/account');
                     return response;
                 });
             },

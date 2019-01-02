@@ -1,3 +1,4 @@
+
 package com.ts.app.web.rest;
 
 import java.util.Calendar;
@@ -7,37 +8,33 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import org.hibernate.exception.ConstraintViolationException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.ProjectService;
 import com.ts.app.service.SiteService;
 import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.ClientgroupDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ProjectDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
-import com.ts.app.web.rest.errors.ErrorConstants;
-import com.ts.app.web.rest.errors.ErrorDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 
 /**
@@ -56,7 +53,7 @@ public class ProjectResource {
 	private SiteService siteService;
 	
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 
 	@Inject
@@ -147,7 +144,10 @@ public class ProjectResource {
     @RequestMapping(path="/clients/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("clientFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importClientData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importClientData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 	
@@ -172,6 +172,27 @@ public class ProjectResource {
 			}
 		}
 		return result;
+	}
+    
+	@RequestMapping(value = "/clientgroup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Timed
+	public ResponseEntity<?> saveAssetGroup(@Valid @RequestBody ClientgroupDTO clientgroupDTO,
+			HttpServletRequest request) {
+		log.info(">>> Inside the save clientgroup -");
+		log.info(">>> Inside Save clientgroup <<< " + clientgroupDTO.getClientgroup());
+		try {
+			clientgroupDTO.setUserId(SecurityUtils.getCurrentUserId());
+			clientgroupDTO = projectService.createClientGroup(clientgroupDTO);
+		} catch (Exception e) {
+			throw new TimesheetException(e, clientgroupDTO);
+		}
+		return new ResponseEntity<>(clientgroupDTO, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/clientgroup/findAll", method = RequestMethod.GET)
+	public List<ClientgroupDTO> findAllClientGroups() {
+		log.info("--Invoked ClientResource.findAllClientGroups --");
+		return projectService.findAllClientGroups();
 	}
 
 

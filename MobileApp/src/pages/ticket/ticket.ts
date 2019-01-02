@@ -21,29 +21,30 @@ import{TicketFilter} from "./ticket-filter/ticket-filter";
 export class Ticket {
 
     tickets:any;
-    spinner:boolean;
+    clientFilter:any;
+    siteFilter:any;
+  fromDate:any;
+  toDate:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService, public modalCtrl:ModalController) {
       this.tickets = [];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Ticket');
-    this.spinner=true;
-    // this.cs.showLoader('Loading Tickets..');
+    this.cs.showLoader('Loading Tickets..');
     var searchCriteria={
         currPage:1
-    }
+    };
     this.jobService.searchTickets(searchCriteria).subscribe(
         response=>{
-            this.spinner=false;
+            this.cs.closeLoader();
             console.log("Getting tickets");
             console.log(response);
             this.tickets=response.transactions;
-            // this.cs.closeLoader();
+
         },error=>{
-            this.spinner=false;
+            this.cs.closeLoader();
             console.log(error);
-            // this.cs.closeLoader();
         }
     )
   }
@@ -57,8 +58,46 @@ export class Ticket {
     }
 
     presentModal() {
-        const modal = this.modalCtrl.create(TicketFilter);
+        let modal = this.modalCtrl.create(TicketFilter,{},{cssClass:'asset-filter',showBackdrop:true});
+        modal.onDidDismiss(data=>{
+            console.log("Modal Dismiss");
+            console.log(data);
+            this.clientFilter=data.project;
+            this.siteFilter=data.site;
+            this.fromDate = data.fromDate;
+            this.toDate = data.toDate;
+            this.applyFilter(data.project,data.site,data.fromDate,data.toDate);
+        });
         modal.present();
+    }
+
+
+    applyFilter(project,site,fromDate,toDate){
+        this.cs.showLoader("");
+        var searchCriteria={
+            siteId:site.id,
+            projectId:project.id,
+          fromDate:fromDate,
+          toDate:toDate
+        };
+
+        console.log("filter",searchCriteria);
+
+        this.jobService.searchTickets(searchCriteria).subscribe(
+            response=>{
+                this.cs.closeAll();
+                this.cs.closeLoader();
+                console.log("Filtering Tickets");
+                console.log(response);
+                this.tickets=response.transactions;
+            },error=>{
+              this.cs.closeLoader();
+                this.cs.closeAll();
+                console.log("Error in filtering tickets");
+                console.log(error);
+            }
+        )
+
     }
 
 }

@@ -39,6 +39,16 @@
             <p text-right>{{quotation.siteName}}</p>
         </ion-col>
 
+        <ion-col col-6 *ngIf="quotation.createdDate" class="label-on-left">Created Date</ion-col>
+        <ion-col col-6 *ngIf="quotation.createdDate">
+            <p text-right>{{quotation.createdDate| date:'dd/MM/yyyy'}}</p>
+        </ion-col>
+
+        <ion-col col-6 *ngIf="quotation.createdByUserName" class="label-on-left">Created By</ion-col>
+        <ion-col col-6 *ngIf="quotation.createdByUserName">
+            <p text-right>{{quotation.createdByUserName}}</p>
+        </ion-col>
+
 
 
     </ion-row>
@@ -48,9 +58,9 @@
                 <thead>
                 <tr>
                     <th class="text-center">Type</th>
-                    <th class="text-center">Name</th>
+                    <th class="text-center">Title</th>
                     <th class="text-center">Rate</th>
-                    <th class="text-center">No</th>
+                    <th class="text-center">Qty</th>
                     <th class="text-center">Uom</th>
                     <th class="text-center">Total</th>
                     <th class="text-center">&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -59,14 +69,14 @@
                 <tbody *ngIf="quotation.rateCardDetails.length>0">
                 <tr *ngFor="let rate of quotation.rateCardDetails;let i = index ">
                     <td class="text-center">{{rate.type}}</td>
-                    <td class="text-center table-data padding-left0 padding-right0">{{rate.name}}</td>
-                    <td class="text-center">{{rate.cost}}</td>
+                    <td class="text-center table-data padding-left0 padding-right0">{{rate.title}}</td>
+                    <td class="text-center">{{rate.unitPrice}}</td>
                     <td class="text-center">
                         <!--<input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)">-->
-                        {{rate.no}}
+                        {{rate.qty}}
                     </td>
                     <td class="text-center">{{rate.uom}}</td>
-                    <td class="text-center">{{rate.total}}</td>
+                    <td class="text-center">{{rate.cost}}</td>
                     <!--<td class="td-actions text-center">-->
                     <!--<i class="material-icons clr-red" (click)="remove(i)">close</i>-->
                     <!--</td>-->

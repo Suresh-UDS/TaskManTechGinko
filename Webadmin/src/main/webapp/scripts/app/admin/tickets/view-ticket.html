@@ -5,7 +5,7 @@
         	<div class="col-md-12">
 
                 <div class="titleCon">
-                    <!--<h3>View Job</h3>-->
+                    <h3>{{tickets.title | uppercase}}</h3>
                 </div>
 
 				<div class="form-container table-container">
@@ -13,15 +13,13 @@
 						class="form-horizontal">
 
 
-
-
-                        <div class="row">
+                        <div class="row ViewContentPageCon">
 
                             <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Ticket Details</div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
 
                                         <div class="table-responsive">
@@ -29,11 +27,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Issue</td>
-                                                    <td>{{tickets.title}}</td>
+                                                    <td ng-if="tickets.title">{{tickets.title | uppercase}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Description</td>
-                                                    <td>{{tickets.description}}</td>
+                                                    <td ng-if="tickets.description">{{tickets.description | capitalize}}</td>
 
                                                 </tr>
                                                 <tr>
@@ -89,7 +87,7 @@
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Site & Employee</div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
 
                                         <div class="table-responsive">
@@ -101,7 +99,10 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Employee</td>
-                                                    <td>{{selectedEmployee.name}}</td>
+                                                    <td>
+                                                        <span ng-if="selectedEmployee.name">{{selectedEmployee.name}}</span>
+                                                        <span ng-if="!selectedEmployee.name">-</span>
+                                                    </td>
 
                                                 </tr>
 
@@ -113,11 +114,11 @@
                                 </div>
 
                             </div>
-                             <div class="col-md-4">
+                            <div class="col-md-4">
 
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Assets</div>
-                                    <div class="panel-body">
+                                    <div class="panel-body" style="min-height: 265px;">
 
 
                                         <div class="table-responsive">
@@ -125,9 +126,11 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Name of Asset</td>
-                                                    <td>{{selectedAsset.title}}</td>
+                                                    <td><span ng-if="selectedAsset.title">{{selectedAsset.title}}</span>
+                                                    <span ng-if="!selectedAsset.title">No Assets</span>
+                                                    </td>
                                                 </tr>
-                                               
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -139,7 +142,7 @@
                             <div class="col-md-4">
 	                            <div class="panel panel-default">
 	                                    <div class="panel-heading">Image</div>
-	                                    <div class="panel-body">
+	                                    <div class="panel-body" style="min-height: 265px;">
 
 
 	                                        <div class="table-responsive">
@@ -147,10 +150,13 @@
 	                                                <tbody>
 	                                                <tr>
 	                                                    <td>Image</td>
-	                                                    <td>
-	                                    						<a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
-                                        							<img  src={{ticketImage}} width="100px" height="100px" />
-                                    							</a>
+	                                                    <td><span ng-if="ticketImage">
+                                                                <a id="images" href="#" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                                                                    <img  src={{ticketImage}} width="100px" height="100px" />
+                                                                </a>
+                                                        </span>
+                                                        <span ng-if="!ticketImage">No Images</span>
+
 	                                                    </td>
 	                                                </tr>
 	                                                </tbody>
@@ -160,19 +166,22 @@
 	                                    </div>
 	                                </div>
                             </div>
-
                             <div class="col-md-4">
 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Comments </div>
-                                    <div class="panel-body">
+                                    <div class="panel-heading">Comments & Remarks </div>
+                                    <div class="panel-body" style="min-height: 265px;">
 
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <tbody>
                                                 <tr>
                                                     <td>Comments</td>
-                                                    <td>{{tickets.Comments}}</td>
+                                                    <td><span ng-if="tickets.comments">{{tickets.comments}}</span><span ng-if="!tickets.comments">No comments</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Remarks</td>
+                                                    <td><span ng-if="tickets.remarks">{{tickets.remarks}}</span><span ng-if="!tickets.remarks">No remarks</span></td>
                                                 </tr>
 
 
@@ -189,18 +198,6 @@
                         </div>
 
 
-
-
-
-                        <!--<div class="titleCon">-->
-                            <!--<h5>Actual Start and End</h5>-->
-                        <!--</div>-->
-
-
-
-
-
-
 						<!-- Start of hidden inputs -->
 						<!-- End of hidden inputs -->
 
@@ -213,17 +210,23 @@
 							<div id='report-success' class='report-div success bg-success'
 								style="display: none"></div>
 						</div>
-						<div class="form-group">
-							<div class="col-sm-12 txt-align-rgt">
 
-								<button class="btn btn-default " type="button"
-									ui-sref="tickets" id="cancel-button">
-									<i class=""></i> Back
-								</button>
-								<a ng-if="(tickets.status != 'Closed')" ng-class="{active: $state.includes('admin')}"   ng-click="closeTicket(tickets.id)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
-                                 <a ng-if="tickets.status == 'Closed'"class="btn btn-simple btn-info">Reopen ticket</a>
-							</div>
-						</div>
+
+                        <div class="txt-align-rgt">
+                            <button class="btn btn-default " type="button"
+                                    ng-click="back('cancel')" id="cancel-button">
+                                <i class=""></i> Back
+                            </button>
+                            <button class="btn btn-info" type="button" ng-if="(tickets.status != 'Closed')"ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Close"   ng-click="closeTicket(tickets.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"
+                                     >
+                                <i class=""></i> close ticket
+                            </button>
+                            <button class="btn btn-sucess" type="button" has-permission="Tickets:Reopen" ng-if="tickets.status == 'Closed'"  ng-click="reopenTicket(tickets.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal"
+                                     >
+                                <i class=""></i> Reopen ticket
+                            </button>
+                        </div>
+
 					</form>
 					<script type="text/javascript">
 					$('.form-control').attr('readonly',true)
@@ -236,7 +239,7 @@
 </div>
 
 <!-- Ticket Close confirmation dialog -->
-<div id="deleteModalNew" class="delete-confirmation modal fade">
+<div id="closeTicket" class="delete-confirmation modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -245,12 +248,37 @@
                 <h4 class="modal-title">Close Ticket</h4>
             </div>
             <div class="modal-body">
-                <p>Are you sure that you want to close ticket?</p>
+               <p>Are you sure you want to close the ticket?</p>
+               <br/>
+               <input class="form-control border-bottom-input" ng-model="cTicket.remarks" placeholder="Enter Remarks..">
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button"
-                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)"   >Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->
+
+<!-- Ticket Reopen confirmation dialog -->
+<div id="reopenModalNew" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Reopen Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to reopen the ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="reopenTicketConfirm(cTicket)">Reopen Ticket</button>
             </div>
         </div>
     </div>
@@ -284,3 +312,6 @@
             </div>
         </div>
     </div>
+
+
+

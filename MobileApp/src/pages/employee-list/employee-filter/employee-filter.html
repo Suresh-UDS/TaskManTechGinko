@@ -7,9 +7,9 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Employe Filter</ion-title>
+    <ion-title>employee-filter</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="dismiss()">
+      <button ion-button (click)="  dismiss()()">
         <ion-icon name="md-close"></ion-icon>
       </button>
     </ion-buttons>
@@ -23,52 +23,48 @@
     <button  (click)=" dismissFilter()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
   </ion-fab>
 
-      <div class="card scroll-card">
-        <div class="card-content">
-          <ion-row>
-            <ion-col col-12>
-              <p class="scroll-heading" text-center>Choose Client</p>
-              <div class="SitesScrollCon">
-                <ion-scroll scrollX="true">
-                  <button class="scroll-item" ion-button round *ngFor="let p of clientList; let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
-                    <p class="siteName">{{p.name}}</p>
-                  </button>
-                </ion-scroll>
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
+        <ion-col col-12>
+          <p class="scroll-heading" text-center>Choose Client</p>
+          <div class="SitesScrollCon">
+            <ion-scroll scrollX="true">
+              <button class="scroll-item" ion-button round *ngFor="let p of clientList; let i of index" (click)="selectSite(p,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                <p class="siteName">{{p.name}}</p>
+              </button>
+            </ion-scroll>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
+  <div class="card scroll-card">
+    <div class="card-content">
+      <ion-row>
+        <ion-col col-12>
+          <p class="scroll-heading" text-center>Choose Site</p>
+          <div padding text-center *ngIf="siteSpinner">
+            <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+          </div>
+          <div padding text-center *ngIf="chooseClient">
+            <p class="selece-client">Please Select Client</p>
+          </div>
+          <div class="SitesScrollCon" *ngIf="showSites">
+            <ion-scroll scrollX="true">
+              <div *ngIf="siteList?.length==0" class="padding-top15">
+                <h4 text-center class="clr-blk">No Data Found</h4>
               </div>
-            </ion-col>
-          </ion-row>
-        </div>
-      </div>
-
-      <div class="card scroll-card">
-        <div class="card-content">
-          <ion-row>
-                <ion-col col-12>
-                  <p class="scroll-heading" text-center>Choose Site</p>
-                  <div padding text-center *ngIf="siteSpinner">
-                    <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
-                  </div>
-                  <div padding text-center *ngIf="chooseClient">
-                    <strong>Please Select Client</strong>
-                  </div>
-                  <div class="SitesScrollCon" *ngIf="showSites">
-                    <ion-scroll scrollX="true">
-                      <div *ngIf="siteList?.length==0" class="padding-top15">
-                        <h4 text-center class="clr-blk">No Data Found</h4>
-                      </div>
-                      <button class="scroll-item" ion-button round  *ngFor="let site of siteList;let i of index" (click)="highLightSite(site,i)" [color]="i==activeSite ? 'primary' : 'light'">
-                        <p class="siteName">{{site.name}}</p>
-                      </button>
-                    </ion-scroll>
-                  </div>
-                </ion-col>
-          </ion-row>
-        </div>
-      </div>
-
-
-
-
+              <button class="scroll-item" ion-button round  *ngFor="let site of siteList;let i of index" (click)="highLightSite(i,site)" [color]="i==activeSite ? 'primary' : 'light'">
+                <p class="siteName">{{site.name}}</p>
+              </button>
+            </ion-scroll>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
 
   <!--<div class="InitFeedbackCon">
     <div class="InputCon">
@@ -89,7 +85,7 @@
                     <div *ngIf="siteList?.length==0" class="padding-top15">
                       <h4 text-center class="clr-blk">No Data Found</h4>
                     </div>
-                    <button class="siteBtn scroll-item" ion-button round  *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
+                    <button  class="siteBtn scroll-item" ion-button round  *ngFor="let s of siteList;let i of index" (click)="highLightSite(i,s)" [color]="i==activeSite ? 'primary' : 'light'">
                       <p class="siteName">{{s.name}}</p>
                     </button>
                   </ion-scroll>

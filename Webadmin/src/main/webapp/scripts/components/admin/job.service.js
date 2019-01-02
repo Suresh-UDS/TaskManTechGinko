@@ -32,11 +32,11 @@ angular.module('timeSheetApp')
         	    var cb = callback || angular.noop;
                 return $http.post('api/job',job).then(
                     function (response) {
-                        return cb(response);
+                        return cb(response,null);
                     }).catch(
                     function (err) {
-                        console.log(JSON.stringify(err));
-                        return cb(err);
+                        console.log(' Error response ' + JSON.stringify(err));
+                        return cb(null,err);
                     })
 
         	},
@@ -44,11 +44,11 @@ angular.module('timeSheetApp')
         	    var cb = callback || angular.noop;
                 return $http.put('api/job/'+job.id,job).then(
                     function (response) {
-                        return cb(response);
+                        return cb(response, null);
                     }).catch(
                     function (err) {
                         console.log(JSON.stringify(err));
-                        return cb(err);
+                        return cb(null,err);
                     })
 
         	},
@@ -72,8 +72,9 @@ angular.module('timeSheetApp')
 		          });
 		    },
             search: function(searchCriteria,uid) {
-            		console.log('uid in search call - ' + uid);
+            		
 	            	if(uid) {
+	            		console.log('uid in search call - ' + uid);
 		            	return $http.post('api/jobs/report/'+uid).then(function (response) {
 		            		return response.data;
 		            	});
@@ -180,7 +181,7 @@ angular.module('timeSheetApp')
                 })
             }
 
-     
+
 
         };
     });

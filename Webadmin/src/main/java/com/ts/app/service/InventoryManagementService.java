@@ -203,7 +203,7 @@ public class InventoryManagementService extends AbstractService{
 		return materialModelList;
 	}
 
-	public ImportResult importFile(MultipartFile file, long dateTime) {
+	public ImportResult importFile(MultipartFile file, long dateTime) throws Exception {
 		return importUtil.importInventoryMaster(file, dateTime, false, false);
 	}
 

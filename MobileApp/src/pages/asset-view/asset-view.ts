@@ -18,9 +18,6 @@ import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{AlertController} from "ionic-angular";
-import{AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
-import {InventoryFilter} from "../inventory-filter/inventory-filter";
-import{InventoryService} from "../service/inventoryService";
 
 
 declare var demo ;
@@ -46,7 +43,9 @@ export class AssetView {
 
     totalPages:0;
     page:1;
-    // open:any;
+
+    PPMJobs:any;
+    AMCJobs:any;
 
 
     fromDate:any;
@@ -60,27 +59,16 @@ export class AssetView {
     fileTransfer: FileTransferObject = this.transfer.create();
 
 
-    qr:any;
-    pageSort:15;
-
-
-
-    database:any;
-    db:any;
-    material:any;
-    assetMaterial:any;
-
-
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
                 private componentService:componentService,public navCtrl: NavController, public navParams: NavParams,
-                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController,
-                private inventoryService:InventoryService
-                ) {
+                public jobService:JobService, public assetService:AssetService,public alertCtrl: AlertController) {
 
     this.assetDetails = this.navParams.data.assetDetails;
     this.categories = 'details';
     this.spinner=true;
+    this.PPMJobs=[];
+    this.AMCJobs=[];
 
   }
     showCalendar()
@@ -93,7 +81,7 @@ export class AssetView {
   ionViewDidLoad() {
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
-    this.componentService.showLoader("");
+    // this.componentService.showLoader("");
 
       this.searchCriteria={
           assetId:this.assetDetails.id
@@ -111,14 +99,6 @@ export class AssetView {
           assetId:this.assetDetails.id
       };
       this.getAssetById();
-
-      var searchCriteria={
-          currPage:this.page,
-          pageSort: this.pageSort
-      };
-
-
-
   }
 
     getReadings(){
@@ -193,12 +173,12 @@ export class AssetView {
     //             .then((data) => {
     //                 console.log(data.response);
     //                 console.log("image upload");
-    //                 this.componentService.closeAll();
+    //                 this.componentService.closeLoader();
     //                 this.navCtrl.pop();
     //             }, (err) => {
     //                 console.log(err);
     //                 console.log("image upload fail");
-    //                 this.componentService.closeAll();
+    //                 this.componentService.closeLoader();
     //             })
     //
     //
@@ -212,11 +192,16 @@ export class AssetView {
     doRefresh(refresher,segment)
     {
         this.componentService.showLoader("");
-        if(segment=='jobs')
+        if(segment=='ppmjobs')
         {
-            this.getJobs(this.jobSearchCriteria);
+            this.getPpmJobs(this.jobSearchCriteria);
             refresher.complete();
             // this.componentService.showLoader("");
+        }
+        else if(segment=='amcJobs')
+        {
+            this.getAmcJobs(this.jobSearchCriteria);
+            refresher.complete();
         }
         else if(segment=='tickets')
         {
@@ -227,17 +212,44 @@ export class AssetView {
     }
 
 
-    //job
-    getJobs(searchCriteria)
+    //ppmjob
+    getPpmJobs(searchCriteria)
     {
-        // var searchCriteria={
-        //     assetId:this.assetDetails.id
+        var searchPPM = {};
+
+        if(this.fromDate !=null){
+            searchPPM = {
+                currPage: 1,
+                checkInDateTimeFrom:this.fromDate,
+                checkInDateTimeTo:this.toDate,
+                assetId:this.assetDetails.id,
+                maintenanceType:'PPM',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            };
+        }else{
+            searchPPM = {
+                currPage: 1,
+                assetId:this.assetDetails.id,
+                maintenanceType:'PPM',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            };
+        }
+        // var searchAMC={
+        //     assetId:searchCriteria.assetId,
+        //     maintenanceType:'AMC'
+        // }
+        // var search={
+        //     assetId:searchCriteria.assetId,
         // }
         this.spinner = true;
         //offline
         // this.dbService.getJobs(this.assetDetails.id).then(
         //     (res)=>{
-        //         this.componentService.closeAll()
+        //         this.componentService.closeLoader()
         //         console.log(res)
         //         this.assetDetails.jobs = res;
         //     },
@@ -248,13 +260,13 @@ export class AssetView {
 
 
         //Online
-        this.jobService.getJobs(searchCriteria).subscribe(
+        this.jobService.getJobs(searchPPM).subscribe(
             response=>{
                 this.spinner = false;
                 this.componentService.closeAll();
                 console.log("Getting Jobs response");
                 console.log(response);
-                this.assetDetails.jobs = response.transactions;
+                this.PPMJobs = response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
                 console.log(this.assetDetails.jobs)
@@ -267,15 +279,105 @@ export class AssetView {
             })
     }
 
-    jobScroll(infiniteScroll) {
+    // amcjobs
+    getAmcJobs(searchCriteria)
+    {
+        // var searchPPM={
+        //     assetId:searchCriteria.assetId,
+        //     maintenanceType:'PPM'
+        // }
+        var searchAMC = {};
+
+        if(this.fromDate){
+            searchAMC={
+                currPage: 1,
+                assetId:this.assetDetails.id,
+                checkInDateTimeFrom:this.fromDate,
+                checkInDateTimeTo:this.toDate,
+                maintenanceType:'AMC',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }else{
+            searchAMC={
+                currPage: 1,
+                assetId:this.assetDetails.id,
+                maintenanceType:'AMC',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }
+        // var search={
+        //     assetId:searchCriteria.assetId,
+        // }
+        this.spinner = true;
+        //offline
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
+
+
+        //Online
+        this.jobService.getJobs(searchAMC).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log("Getting Jobs response");
+                console.log(response);
+                this.AMCJobs = response.transactions;
+                this.page = response.currPage;
+                this.totalPages = response.totalPages;
+                console.log(this.assetDetails.jobs)
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log(error)
+                console.log("Getting Jobs errors")
+            })
+    }
+
+    // ppmscroll
+
+    jobPpmScroll(infiniteScroll) {
         console.log('Begin async operation');
         console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-        var searchCriteria = {
-            currPage: this.page + 1,
-            assetId:this.assetDetails.id
-        };
+        var searchPPM = {};
+
+        if(this.fromDate !=null){
+            searchPPM = {
+                currPage: this.page + 1,
+                checkInDateTimeFrom:this.fromDate,
+                checkInDateTimeTo:this.toDate,
+                assetId:this.assetDetails.id,
+                maintenanceType:'PPM',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            };
+        }else{
+            searchPPM = {
+                currPage: this.page + 1,
+                assetId:this.assetDetails.id,
+                maintenanceType:'PPM',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            };
+        }
+
+
         if (this.page > this.totalPages) {
             console.log("End of all pages");
             infiniteScroll.complete();
@@ -286,13 +388,74 @@ export class AssetView {
             console.log(this.totalPages);
             console.log(this.page);
             setTimeout(() => {
-                this.jobService.getJobs(searchCriteria).subscribe(
+                this.jobService.getJobs(searchPPM).subscribe(
                     response => {
                         console.log('ionViewDidLoad jobs list:');
                         console.log(response);
                         console.log(response.transactions);
                         for (var i = 0; i < response.transactions.length; i++) {
-                            this.assetDetails.jobs.push(response.transactions[i]);
+                           this.PPMJobs.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.componentService.closeAll();
+                    },
+                    error => {
+                        console.log('ionViewDidLoad Jobs Page:' + error);
+                    }
+                )
+                infiniteScroll.complete();
+            }, 1000);
+        }
+    }
+
+     // amcscroll
+    jobAmcScroll(infiniteScroll) {
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchAMC = {};
+
+        if(this.fromDate){
+            searchAMC={
+                currPage: this.page + 1,
+                assetId:this.assetDetails.id,
+                checkInDateTimeFrom:this.fromDate,
+                checkInDateTimeTo:this.toDate,
+                maintenanceType:'AMC',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }else{
+            searchAMC={
+                currPage: this.page + 1,
+                assetId:this.assetDetails.id,
+                maintenanceType:'AMC',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }
+
+        if (this.page > this.totalPages) {
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.componentService.showToastMessage('Todays jobs Loaded', 'bottom');
+
+        } else {
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(() => {
+                this.jobService.getJobs(searchAMC).subscribe(
+                    response => {
+                        console.log('ionViewDidLoad jobs list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for (var i = 0; i < response.transactions.length; i++) {
+                            this.AMCJobs.push(response.transactions[i]);
                         }
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
@@ -450,7 +613,7 @@ export class AssetView {
         console.log("From Date:" + fromDate.toISOString());
         console.log("To Date:" + toDate.toISOString());
 
-        if(categories == 'jobs')
+        if(categories == 'ppmjobs')
         {
             this.jobSearchCriteria={
                 checkInDateTimeFrom:fromDate.toISOString(),
@@ -458,7 +621,16 @@ export class AssetView {
                 assetId:this.assetDetails.id
             };
 
-            this.getJobs(this.jobSearchCriteria)
+            this.getPpmJobs(this.jobSearchCriteria)
+        }
+        else if(this.categories == 'amcJobs')
+        {
+            this.jobSearchCriteria={
+                checkInDateTimeFrom:fromDate.toISOString(),
+                checkInDateTimeTo:toDate.toISOString(),
+                assetId:this.assetDetails.id
+            };
+
         }
         else if(this.categories == 'tickets')
         {
@@ -495,10 +667,17 @@ export class AssetView {
         // Online
         this.assetService.getAssetById(this.assetDetails.id).subscribe(
             response=>{
-                this.componentService.closeAll();
-                console.log("Asset by id");
-                console.log(response);
-                this.assetDetails = response;
+                if(response.errorStatus){
+                    this.componentService.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+
+                }else{
+                    this.componentService.closeAll();
+                    console.log("Asset by id");
+                    console.log(response);
+                    this.assetDetails = response;
+                }
+
             },err=>{
                 this.componentService.closeAll();
                 console.log("Error in getting asset by id");
@@ -528,11 +707,16 @@ export class AssetView {
         //Online
         this.assetService.getAssetPPMSchedule(this.assetDetails.id).subscribe(
             response=>{
-                this.spinner = false;
-                this.componentService.closeAll();
-                console.log("Get asset PPM response");
-                console.log(response);
-                this.assetDetails.ppms = response;
+                if(response.errorStatus){
+                    this.spinner=false;
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.spinner = false;
+                    console.log("Get asset PPM response");
+                    console.log(response);
+                    this.assetDetails.ppms = response;
+                }
+
             },
             error=>{
                 this.spinner = false;
@@ -564,11 +748,16 @@ export class AssetView {
         //Online
         this.assetService.getAssetAMCSchedule(this.assetDetails.id).subscribe(
             response=>{
-                this.spinner = false;
-                this.componentService.closeAll()
-                console.log("Get asset AMC response");
-                this.assetDetails.amcs = response;
-                console.log(this.assetDetails.amcs);
+                if(response.errorStatus){
+                    this.spinner=false;
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.spinner = false;
+                    this.componentService.closeAll()
+                    console.log("Get asset AMC response");
+                    this.assetDetails.amcs = response;
+                    console.log(this.assetDetails.amcs);
+                }
             },
             error=>{
                 this.spinner = false;
@@ -601,11 +790,17 @@ export class AssetView {
         console.log(this.assetDetails.config);
         this.assetService.getAssetConfig(this.assetDetails.assetType,this.assetDetails.id).subscribe(
             response=>{
-                this.spinner = false;
-                this.componentService.closeAll()
-                console.log("Asset config");
-                console.log(response);
-                this.assetDetails.config = response;
+                if(response.errorStatus){
+                    this.spinner=false;
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    this.spinner = false;
+                    this.componentService.closeAll();
+                    console.log("Asset config");
+                    console.log(response);
+                    this.assetDetails.config = response;
+                }
+
             },err=>{
                 this.spinner = false;
                 this.componentService.closeAll();
@@ -652,13 +847,15 @@ export class AssetView {
                 this.componentService.closeAll();
                 console.log("Getting tickets response");
                 console.log(response);
+                this.spinner = false;
                 this.assetDetails.tickets = response.transactions;
-                console.log(this.assetDetails.tickets)
+                console.log(this.assetDetails.tickets);
             },
             error=>{
                 this.spinner = false;
                 this.componentService.closeAll();
                 console.log(error);
+                this.spinner = false;
                 console.log("Getting Ticket errors")
             })
     }
@@ -686,10 +883,15 @@ export class AssetView {
                     handler: () => {
                         this.assetService.markBreakDown(asset).subscribe(
                             response=>{
-                                console.log("Updated successfully");
-                                console.log(response);
-                                // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
-                                this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                                if(response.errorStatus){
+                                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                                }else{
+                                    console.log("Updated successfully");
+                                    console.log(response);
+                                    // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
+                                    this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                                }
+
                             }
                         )
                     }
@@ -711,10 +913,10 @@ export class AssetView {
                 console.log("Status History");
                 console.log(response);
                 this.status=response.transactions;
-            },error=>{
+            },err=>{
                 this.spinner=false;
-                console.log("Error in getting status History");
-                console.log(error);
+                console.log("Error in Status History");
+                console.log(err);
             }
         )
     }
@@ -730,81 +932,13 @@ export class AssetView {
                 console.log("Site Transfer History");
                 console.log(response);
                 this.site=response.transactions;
-            },error=>{
+            },err=>{
                 this.spinner=false;
-                console.log('Error in getting Site History');
-                console.log(error);
+                console.log("Error in Site Transfer History");
+                console.log(err);
             }
         )
     }
-
-    openFilter()
-    {
-        // this.open = false;
-        console.log("Opening filter modal");
-        let modal = this. modalCtrl.create(InventoryFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
-        modal.onDidDismiss(data=>{
-            console.log("Modal dismissed");
-            // this.open = true;
-            console.log(data);
-            var searchCriteria = {
-                siteId:data.siteId,
-                projectId:data.projectId,
-            };
-            this.assetService.searchAssets(searchCriteria).subscribe(
-                response=>{
-                    this.componentService.closeLoader();
-                    console.log("Asset search filters response");
-                    console.log(response)
-                },err=>{
-                    this.componentService.closeLoader();
-                    console.log("Error in filtering assets");
-                    console.log(err);
-                }
-            )
-            // this.getAsset(searchCriteria);
-
-        });
-        modal.present();
-
-    }
-
-
-    openTransaction()
-    {
-        let modal = this.modalCtrl.create(AddInventoryTransaction, {});
-        modal.present();
-
-    }
-
-    getMaterials(assetId){
-        this.spinner=true;
-        var search={
-            assetId:this.assetDetails.id,
-            siteId:this.assetDetails.siteId,
-        };
-
-        this.assetService.getAssetMaterial(search).subscribe(
-            response=>{
-                this.spinner=false;
-                console.log("Getting Job Materials");
-                console.log(response);
-                this.assetMaterial=response;
-            },error=>{
-                this.spinner=false;
-                console.log("Error in Getting Job material");
-                console.log(error);
-            }
-        )
-
-    }
-
-  viewTicket(ticket){
-    this.navCtrl.push(ViewTicket,{ticket:ticket});
-  }
-
-
-
 
 
 

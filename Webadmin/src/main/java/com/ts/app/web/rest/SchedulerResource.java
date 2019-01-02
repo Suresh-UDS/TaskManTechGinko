@@ -2,7 +2,7 @@ package com.ts.app.web.rest;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -11,17 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ts.app.domain.Frequency;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerHelperService;
 import com.ts.app.service.SchedulerService;
-import com.ts.app.web.rest.dto.ReportResult;
 
 /**
  * REST controller for invoking scheduler operations using API endpoint.
@@ -34,6 +31,9 @@ public class SchedulerResource {
 
 	@Inject
 	private SchedulerService schedulerService;
+	
+	@Inject
+	private SchedulerHelperService schedulerHelperService;
 
 	
 	@RequestMapping(value = "/scheduler/attendance/consolidated", method = RequestMethod.GET)
@@ -94,9 +94,13 @@ public class SchedulerResource {
 
 	
 	@RequestMapping(value = "/scheduler/job/daily", method = RequestMethod.GET)
-	public ResponseEntity<?> runDailyJobSchedule() {
-		schedulerService.createDailyTask();
+	public ResponseEntity<?> runDailyJobSchedule(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date jobDate, @RequestParam(value="siteIds", required = false) List<Long> siteIds) {
+		if(jobDate == null) {
+			jobDate = new Date();
+		}
+		schedulerHelperService.createDailyTask(jobDate, siteIds);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 	
 }

@@ -67,7 +67,7 @@ export class DashboardPage {
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
-      this.rateCard=CreateRateCardPage;
+      this.rateCard=CreateQuotationPage;
       this.addJob=CreateJobPage;
       this.addQuotation=CreateQuotationPage;
       this.addEmployee=CreateEmployeePage;
@@ -112,54 +112,8 @@ export class DashboardPage {
           console.log("=====Platform=====:"+this.platform);
       }
 
-
-      this.events.subscribe('userType',(userType)=>{
-          console.log("user type in dashboard");
-          console.log(userType);
-          this.userType = userType;
-      })
-   // demo.initFullCalendar();
-   //  this.siteService.searchSite().subscribe(response=>
-   //  {
-   //    console.log(response);
-   //  },
-   //  error=>
-   //  {
-   //    console.log(error);
-   //  });
-
-
-    // this.employeeService.getAllEmployees().subscribe(
-    //     response=>{
-    //       console.log('ionViewDidLoad Employee list:');
-    //       console.log(response);
-    //       this.employee=response;
-    //       this.empSpinner=false;
-    //       this.component.closeLoader();
-    //     },
-    //     error=>{
-    //       console.log('ionViewDidLoad SitePage:'+error);
-    //         this.component.closeLoader();
-    //     }
-    // )
-
-    this.siteService.searchSite().subscribe(
-        response=>{
-          console.log('ionViewDidLoad SitePage:');
-          console.log(response.json()
-          );
-          this.sites=response.json();
-          this.spinner=false;
-          // this.empSpinner=true;
-          this.component.closeLoader();
-        },
-        error=>{
-          console.log('ionViewDidLoad SitePage:'+error);
-            this.component.closeLoader();
-            // this.navCtrl.push(LoginPage);
-
-        }
-    );
+    this.searchSites();
+      
     this.searchCriteria={
         checkInDateTimeFrom:new Date()
     }
@@ -229,6 +183,50 @@ export class DashboardPage {
               this.component.closeLoader();
           }
       )
+  }
+  
+  searchSite(){
+      this.siteService.searchSite().subscribe(
+          response=>{
+              console.log('ionViewDidLoad SitePage:');
+              console.log(response);
+              this.sites=response.json();
+              this.spinner=false;
+              // this.empSpinner=true;
+              this.component.closeLoader();
+          },
+          error=>{
+              console.log('ionViewDidLoad SitePage:'+error);
+              this.component.closeLoader();
+              // this.navCtrl.push(LoginPage);
+
+          }
+      );
+
+
+  }
+
+  searchSites(){
+      var searchCriteria = {
+          findAll:true,
+          currPage:1,
+          sort:10,
+          sortByAsc:true,
+          report:true
+      }
+
+      this.siteService.searchSites(searchCriteria).subscribe(
+          response=>{
+              this.sites=response.transactions;
+              this.spinner=false;
+              this.component.closeLoader();
+          },
+          error=> {
+              console.log('ionViewDidLoad SitePage:' + error);
+              this.component.closeLoader();
+
+          }
+          );
   }
 
 
@@ -301,12 +299,13 @@ export class DashboardPage {
         };
         this.searchJobs(this.searchCriteria);
         this.empSpinner=true;
-        var  searchCriteria={currentPage:1,pageSort:15};
-        // this.siteService.searchSiteEmployee(id).subscribe(
-        this.employeeService.searchEmployees(this.searchCriteria).subscribe(
-            response=> {
-                console.log(response.transactions);
-                if(response.transactions.length !==0)
+        var searchCriteria = {
+
+            siteId:id,
+            list:true
+        };
+        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                if(response.transactions && response.transactions.length !==0)
                 {
                     this.employee=response.transactions;
                     this.empSpinner=false;
@@ -530,7 +529,7 @@ export class DashboardPage {
                                 })
                         }
                         else {
-                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
                                 response => {
                                     resolve("ssss")
                                     console.log("Offline attendance data synced to server");
@@ -564,7 +563,7 @@ export class DashboardPage {
                     error2 => {
                         console.log("Error in syncing attendance to server");
                         this.componentService.closeLoader()
-                        this.componentService.showToastMessage("Error in syncing attendance to server","")
+                        this.componentService.showToastMessage("Error in syncing attendance to server","bottom")
                     })
             },3000)
 

@@ -1,10 +1,6 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import javax.inject.Inject;
 
@@ -21,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
-import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.SiteLedger;
 import com.ts.app.domain.User;
@@ -29,13 +24,10 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SiteLedgerRepository;
 import com.ts.app.repository.SiteRepository;
 import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.ShiftDTO;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.dto.SiteLedgerDTO;
 
@@ -74,7 +66,7 @@ public class SiteLedgerService extends AbstractService {
 
 	private SiteLedgerDTO mapToModel(SiteLedger siteLedger, boolean includeShifts) {
 		SiteLedgerDTO siteLedgerDTO = new SiteLedgerDTO();
-		
+
 		return siteLedgerDTO;
 	}
 
@@ -90,7 +82,7 @@ public class SiteLedgerService extends AbstractService {
 		}
 		return mapperUtil.toModel(entity, SiteLedgerDTO.class);
 	}
-	
+
 	public SearchResult<SiteLedgerDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		Hibernate.initialize(user.getEmployee());
@@ -150,12 +142,13 @@ public class SiteLedgerService extends AbstractService {
 		return;
 	}
 
-	private List<Long> findSubOrdinates(Employee employee, long empId) {
-		List<Long> subEmpIds = new ArrayList<Long>();
+	private Set<Long> findSubOrdinates(Employee employee, long empId) {
+        Set<Long> subEmpIds = null;
+        int levelCnt = 1;
 		subEmpIds.add(empId);
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
-			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds,levelCnt));
 			log.debug("List of subordinate ids -"+ subEmpIds);
 
 		}

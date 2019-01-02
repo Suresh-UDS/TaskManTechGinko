@@ -29,7 +29,7 @@ export class authService
         return this.http.kairosPost('https://api.kairos.com/enroll',{image:base64Image, subject_id:employeeName, gallery_name:'Employee'}).map(
             (response)=>{
                 console.log(response);
-                return response
+                return response.json();
             }
         )
     }
@@ -38,7 +38,7 @@ export class authService
         return this.http.kairosPost('https://api.kairos.com/verify',{image:base64Image, subject_id:employeeName, gallery_name:'Employee'}).map(
             (response)=>{
                 console.log(response);
-                return response
+                return response.json();
             }
         )
     }
@@ -47,7 +47,7 @@ export class authService
         return this.http.kairosPost('https://api.kairos.com/detect',{image:base64Image, selector:'ROLL'}).map(
             (response)=>{
                 console.log(response);
-                return response
+                return response.json();
             },(error)=>{
                 console.log(error);
             }
@@ -60,7 +60,7 @@ export class authService
             {
                 this.isUserLoggedIn = true;
 
-                return response;
+                return response.json();
             });
     }
 
@@ -68,7 +68,7 @@ export class authService
         return this.http.get(this.config.Url+'api/project/'+id).map(
             response=>{
                 console.log(response);
-                return response;
+                return response.json();
             }
         )
     }
@@ -85,7 +85,7 @@ export class authService
     pushSubscription(userDetails):Observable<any>{
         return this.http.post(this.config.Url+'api/push/subscribe',userDetails).map(
             response=>{
-                return response.json();
+                return response;
             })
     }
 
@@ -94,7 +94,7 @@ export class authService
             response=>{
                 console.log("Reset password response");
                 console.log(response);
-                return response;
+                return response.json();
             },err=>{
                 console.log(err);
                 return err
@@ -109,7 +109,7 @@ export class authService
             response=>{
                 console.log("application version response");
                 console.log(response);
-                return response;
+                return response.json();
             },err=>{
                 console.log(err);
                 return err;

@@ -325,7 +325,7 @@ public class UserService extends AbstractService {
 		});
 	}
 
-    public User changeNewPassword(long userId,String password) {
+    public UserDTO changeNewPassword(long userId,String password) {
 	    log.debug("change password user Service userId: "+userId);
 	    log.debug("change password user Service password: "+password);
         User user = userRepository.findOne(userId);
@@ -334,7 +334,8 @@ public class UserService extends AbstractService {
         user.setPassword(encryptedPassword);
         userRepository.save(user);
         log.debug("password changed for user"+user.getClearPassword());
-        return user;
+        UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
+        return userDto;
 
     }
 

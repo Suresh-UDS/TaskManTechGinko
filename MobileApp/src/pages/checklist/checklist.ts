@@ -5,6 +5,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import {componentService} from "../service/componentService";
 import {JobService} from "../service/jobService";
 
+
 /**
  * Generated class for the Checklist page.
  *
@@ -24,6 +25,7 @@ export class Checklist {
     index:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
                 private camera:Camera,private component:componentService, private jobService: JobService) {
+
         this.checkListItems=[];
         this.takenImages=[];
         this.jobDetails=[];
@@ -32,7 +34,7 @@ export class Checklist {
   ionViewDidLoad() {
     console.log('ionViewDidLoad Checklist');
       this.component.showLoader('Loading Checklist Details');
-      this.jobDetails= this.navParams.data.jobDetails;
+      this.jobDetails= this.navParams.data.jobDetails
       console.log(this.jobDetails);
       this.jobService.getJobDetails(this.jobDetails.id).subscribe(
           response=> {

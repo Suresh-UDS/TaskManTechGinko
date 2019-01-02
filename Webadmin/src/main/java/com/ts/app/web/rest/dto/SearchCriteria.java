@@ -130,6 +130,10 @@ public class SearchCriteria extends Paginator {
 
 	private String ticketStatus;
 
+	private String ticketTitle;
+
+	private String ticketDescription;
+
 	private boolean admin;
 
 	private boolean list;
@@ -194,8 +198,6 @@ public class SearchCriteria extends Paginator {
 
 	private MaterialTransactionType transactionType;
 
-	private int roleLevel;
-
 	private long materialId;
 
 	private Timestamp transactionFromDate;
@@ -211,8 +213,6 @@ public class SearchCriteria extends Paginator {
 	private String purchaseRefNumber;
 
 	private Timestamp approvedDate;
-
-	private long jobId;
 
 	private PurchaseRequestStatus requestStatus;
 
@@ -231,6 +231,48 @@ public class SearchCriteria extends Paginator {
 	private Timestamp creditedFromDate;
 
 	private Timestamp creditedToDate;
+
+	private int roleLevel;
+
+	private String module;
+
+	private String action;
+
+	private String branch;
+
+	private String region;
+
+	private long branchId;
+
+	private long regionId;
+
+	private long jobId;
+
+	private boolean quotationIsSubmitted;
+
+	private boolean quotationIsArchived;
+
+	private boolean quotationIsRejected;
+
+	private boolean quotationIsDrafted;
+
+	private boolean quotationIsApproved;
+
+	public String getModule() {
+		return module;
+	}
+
+	public void setModule(String module) {
+		this.module = module;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
 
 	public String getWarrantyTypeName() {
 		return warrantyTypeName;
@@ -505,6 +547,7 @@ public class SearchCriteria extends Paginator {
     public String toString() {
         final StringBuilder sb = new StringBuilder("SearchCriteria{");
         sb.append("id=").append(id);
+        sb.append(", currPage='").append(getCurrPage()).append('\'');
         sb.append(", jobTitle='").append(jobTitle).append('\'');
         sb.append(", assetTitle='").append(assetTitle).append('\'');
         sb.append(", assetType=").append(assetType);
@@ -1184,5 +1227,94 @@ public class SearchCriteria extends Paginator {
 
     public void setCreditedToDate(Timestamp creditedToDate) {
         this.creditedToDate = creditedToDate;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public long getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(long branchId) {
+        this.branchId = branchId;
+    }
+
+    public long getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(long regionId) {
+        this.regionId = regionId;
+    }
+
+	public boolean isQuotationIsSubmitted() {
+		return quotationIsSubmitted;
+	}
+
+	public void setQuotationIsSubmitted(boolean quotationIsSubmitted) {
+		this.quotationIsSubmitted = quotationIsSubmitted;
+	}
+
+	public boolean isQuotationIsArchived() {
+		return quotationIsArchived;
+	}
+
+	public void setQuotationIsArchived(boolean quotationIsArchived) {
+		this.quotationIsArchived = quotationIsArchived;
+	}
+
+	public boolean isQuotationIsRejected() {
+		return quotationIsRejected;
+	}
+
+	public void setQuotationIsRejected(boolean quotationIsRejected) {
+		this.quotationIsRejected = quotationIsRejected;
+	}
+
+	public boolean isQuotationIsDrafted() {
+		return quotationIsDrafted;
+	}
+
+	public void setQuotationIsDrafted(boolean quotationIsDrafted) {
+		this.quotationIsDrafted = quotationIsDrafted;
+	}
+
+	public boolean isQuotationIsApproved() {
+		return quotationIsApproved;
+	}
+
+	public void setQuotationIsApproved(boolean quotationIsApproved) {
+		this.quotationIsApproved = quotationIsApproved;
+	}
+
+
+    public String getTicketTitle() {
+        return ticketTitle;
+    }
+
+    public void setTicketTitle(String ticketTitle) {
+        this.ticketTitle = ticketTitle;
+    }
+
+    public String getTicketDescription() {
+        return ticketDescription;
+    }
+
+    public void setTicketDescription(String ticketDescription) {
+        this.ticketDescription = ticketDescription;
     }
 }

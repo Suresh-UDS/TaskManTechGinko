@@ -61,12 +61,8 @@ import { File } from '@ionic-native/file';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import{ExpenseDetails} from"../pages/expense-details/expense-details";
-
-import {SQLitePorter} from "@ionic-native/sqlite-porter";
-
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
-// import {GoogleMaps} from "@ionic-native/google-maps";
 import {Toast} from "@ionic-native/toast";
 import {AppConfig, MY_CONFIG_TOKEN} from "../pages/service/app-config";
 import {AttendanceService} from "../pages/service/attendanceService";
@@ -106,8 +102,8 @@ import {DatePicker} from "@ionic-native/date-picker";
 import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
 import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
 import{CalenderPage} from "../pages/calender-page/calender-page";
+import{UpdateApp} from "../pages/update-app/update-app";
 import{AddExpense} from "../pages/expense/add-expense/add-expense";
-
 import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
 import {JobFilter} from "../pages/jobs/job-filter/job-filter";
 import{SQLite} from "@ionic-native/sqlite";
@@ -124,7 +120,10 @@ import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-
 import {OfflineAttendance} from "../pages/employee/offline-attendance";
 import{ChangePassword} from "../pages/change-password/change-password";
 import{LocationAccuracy} from "@ionic-native/location-accuracy";
-import{UpdateApp} from "../pages/update-app/update-app";
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import {LocationProvider} from "../providers/location-provider";
+import {OfflineCompleteJob} from "../pages/offline-complete-job/offline-complete-job";
+import {OfflineJobs} from "../pages/offline-jobs/offline-jobs";
 import{ForgotPassword} from "../pages/forgot-password/forgot-password";
 import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
 import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
@@ -141,6 +140,10 @@ import{IndentList} from "../pages/indent-list/indent-list";
 import{IndentIssue} from "../pages/indent-issue/indent-issue";
 import{AddMaterial} from "../pages/add-material/add-material";
 import{SelectSearchableModule} from "ionic-select-searchable";
+import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-finish";
+// import { PhotoViewer } from '@ionic-native/photo-viewer';
+
+// import{IonicImageViewerModule} from "ionic-img-viewer";
 
 @NgModule({
   declarations: [
@@ -225,6 +228,10 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       InventoryMaster,
       UpdateApp,
       ForgotPassword,
+    OfflineCompleteJob,
+    OfflineJobs,
+    FeedbackGridFinish,
+      // PhotoViewer
       InventoryFilter,
       AddInventoryTransaction,
     ExpensePage,
@@ -253,6 +260,7 @@ import{SelectSearchableModule} from "ionic-select-searchable";
         iconMode: 'md'
     }),
     IonicImageViewerModule,
+      // PhotoViewer,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -336,6 +344,8 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       InventoryMaster,
       UpdateApp,
       ForgotPassword,
+    OfflineCompleteJob,
+    OfflineJobs,
       InventoryFilter,
       AddInventoryTransaction,
     ExpensePage,
@@ -347,10 +357,9 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       IndentIssue,
       ExpenseDetails,
       AddExpense,
-    AddMaterial
-
+    AddMaterial,
     // WheelSelector
-
+    FeedbackGridFinish
 
   ],
   providers: [
@@ -389,6 +398,8 @@ import{SelectSearchableModule} from "ionic-select-searchable";
       Network,
       Market,
       LocationAccuracy,
+      BackgroundGeolocation,
+      LocationProvider,
       InventoryService,
     ExpenseService,
       PurchaseRequisitionService,

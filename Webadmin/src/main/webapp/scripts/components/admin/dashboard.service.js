@@ -9,8 +9,19 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            loadAttendanceReportByRegion: function (projectId, region, selectedDate, endDate) {
+                return $http.get('api/reports/attendance/region/'+region+'/project/'+projectId+'/selectedDate/'+selectedDate).then(function (response) {
+                    return response.data;
+                });
+            },
 
-        		loadAttendanceReport: function (siteId,selectedDate,endDate) {
+            loadAttendanceReportByBranch: function (projectId, region,branch, selectedDate, endDate) {
+                return $http.get('api/reports/attendance/branch/'+branch+'/region/'+region+'/project/'+projectId+'/selectedDate/'+selectedDate).then(function (response) {
+                    return response.data;
+                });
+            },
+
+            loadAttendanceReport: function (siteId,selectedDate,endDate) {
                 return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
                     return response.data;
                 });
@@ -32,8 +43,26 @@ angular.module('timeSheetApp')
                 })
             },
 
+            loadTicketChartDataByProject: function(projectId,fromDate,toDate){
+                return $http.get('api/reports/ticket/project/'+projectId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
+                    return response.data;
+                })
+            },
+
             loadTicketChartData: function(siteId,fromDate,toDate){
                 return $http.get('api/reports/ticket/site/'+siteId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            loadTicketChartDataByRegion: function(projectId,region,fromDate,toDate){
+                return $http.get('api/reports/ticket/region/'+region+'/project/'+projectId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            loadTicketChartDataByBranch: function(projectId,region,branch,fromDate,toDate){
+                return $http.get('api/reports/ticket/branch/'+branch+'/region/'+region+'/project/'+projectId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
                     return response.data;
                 })
             }

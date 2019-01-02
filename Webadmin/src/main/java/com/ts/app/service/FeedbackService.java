@@ -233,23 +233,31 @@ public class FeedbackService extends AbstractService {
 		if(feedbackMappingDto.getId() > 0) {
 			updateFeedbackMapping(feedbackMappingDto);
 		}else {
-			FeedbackMapping feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
-
-			if(feedbackMappingDto.getProjectId() > 0) {
-				Project project = projectRepository.findOne(feedbackMappingDto.getProjectId());
-				feedbackMapping.setProject(project);
+			List<FeedbackMapping> feedbackMappings = feedbackMappingRepository.findOneByLocation(feedbackMappingDto.getSiteId(), feedbackMappingDto.getBlock(), feedbackMappingDto.getFloor(), feedbackMappingDto.getZone()); 
+			FeedbackMapping feedbackMapping = CollectionUtils.isNotEmpty(feedbackMappings)  ? feedbackMappings.get(0) : null;
+			if(feedbackMapping == null) {
+				feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
+	
+				if(feedbackMappingDto.getProjectId() > 0) {
+					Project project = projectRepository.findOne(feedbackMappingDto.getProjectId());
+					feedbackMapping.setProject(project);
+				}else {
+					feedbackMapping.setProject(null);
+				}
+				if(feedbackMappingDto.getSiteId() > 0) {
+					Site site = siteRepository.findOne(feedbackMappingDto.getSiteId());
+					feedbackMapping.setSite(site);
+				}else {
+					feedbackMapping.setSite(null);
+				}
+				Feedback feedback = feedbackRepository.findOne(feedbackMappingDto.getFeedback().getId());
+				feedbackMapping.setFeedback(feedback);
+				feedbackMapping.setActive(Feedback.ACTIVE_YES);
 			}else {
-				feedbackMapping.setProject(null);
+				Feedback feedback = feedbackRepository.findOne(feedbackMappingDto.getFeedback().getId());
+				feedbackMapping.setFeedback(feedback);
+				feedbackMapping.setActive(Feedback.ACTIVE_YES);
 			}
-			if(feedbackMappingDto.getSiteId() > 0) {
-				Site site = siteRepository.findOne(feedbackMappingDto.getSiteId());
-				feedbackMapping.setSite(site);
-			}else {
-				feedbackMapping.setSite(null);
-			}
-			Feedback feedback = feedbackRepository.findOne(feedbackMappingDto.getFeedback().getId());
-			feedbackMapping.setFeedback(feedback);
-			feedbackMapping.setActive(Feedback.ACTIVE_YES);
 	        feedbackMapping = feedbackMappingRepository.save(feedbackMapping);
 			log.debug("Created Information for Feedback: {}", feedbackMapping);
 			feedbackMappingDto = mapperUtil.toModel(feedbackMapping, FeedbackMappingDTO.class);

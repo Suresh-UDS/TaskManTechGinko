@@ -26,7 +26,7 @@
 
                             <div class="form-group">
                                 <label class="control-label">Module Name</label>
-                                <input type="text" class="form-control InputTxtCaps" ng-model="moduleName">
+                                <input type="text" class="form-control InputTxtCapsAll" ng-model="moduleName">
                             </div>
 
                         </div>
@@ -137,7 +137,7 @@
                             <tbody>
                             <tr ng-repeat=" moduleAction in moduleActions">
                                <td>{{moduleAction.id}}</td>
-                                <td>{{moduleAction.name}}</td>
+                                <td>{{moduleAction.name | uppercase}}</td>
                                 <td>
                                 	<label  ng-repeat=" action in moduleAction.moduleActions">{{action.name}}</label>
 

@@ -17,6 +17,7 @@ import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{OfflineGetassetreadings} from "../offline-getassetreadings/offline-getassetreadings";
+import {OfflineCompleteJob} from "../offline-complete-job/offline-complete-job";
 
 /**
  * Generated class for the OfflineAsset page.
@@ -96,20 +97,45 @@ export class OfflineAsset {
 
     //
 
-    getJobs(searchCriteria) {
+    getPPMJobs(searchCriteria) {
         // var searchCriteria={
         //     assetId:this.assetDetails.id
         // }
+      this.assetDetails.PPMJobs = null;
         this.spinner = true;
         //offline
-        this.dbService.getJobs(this.assetDetails.id).then(
+        this.dbService.getPPMJobs(this.assetDetails.id,"ppm").then(
             (res) => {
                 this.spinner=false;
-                // this.componentService.closeLoader()
+                this.componentService.closeLoader()
                 console.log(res)
-                this.assetDetails.jobs = res;
+                this.assetDetails.PPMJobs = res;
             },
             (err) => {
+                this.spinner=false;
+
+            }
+        )
+
+
+
+    }
+    getAMCJobs(searchCriteria) {
+        // var searchCriteria={
+        //     assetId:this.assetDetails.id
+        // }
+      this.assetDetails.AMCJobs = null;
+        this.spinner = true;
+        //offline
+        this.dbService.getAMCJobs(this.assetDetails.id,"amc").then(
+            (res) => {
+                this.spinner=false;
+                this.componentService.closeLoader()
+                console.log(res)
+                this.assetDetails.AMCJobs= res;
+            },
+            (err) => {
+                this.spinner=false;
 
             }
         )
@@ -125,7 +151,7 @@ export class OfflineAsset {
     }
 
     compeleteJob(job) {
-        this.navCtrl.push(CompleteJobPage, {job: job})
+        this.navCtrl.push(OfflineCompleteJob, {job: job})
     }
 
     open(itemSlide: ItemSliding, item: Item, c) {
@@ -254,7 +280,7 @@ export class OfflineAsset {
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.spinner = false;
-                // this.componentService.closeLoader();
+                this.componentService.closeLoader();
                 console.log("Getting tickets response");
                 console.log(response);
                 this.assetDetails.tickets = response.transactions;
@@ -262,7 +288,7 @@ export class OfflineAsset {
             },
             error=>{
                 this.spinner = false;
-                // this.componentService.closeLoader();
+                this.componentService.closeLoader();
                 console.log(error);
                 console.log("Getting Ticket errors")
             })

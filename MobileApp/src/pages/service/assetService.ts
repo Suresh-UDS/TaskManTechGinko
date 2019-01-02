@@ -22,8 +22,11 @@ export class AssetService {
                 console.log("Asset details service");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in asset details service");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     searchAssets(searchCriteria): Observable<any>{
@@ -32,8 +35,11 @@ export class AssetService {
                 console.log("Asset search");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Search Asset");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetByCode(code): Observable<any>{
@@ -42,8 +48,11 @@ export class AssetService {
                 console.log("Get asset by code service");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in getting asset by code");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetConfig(assetType,assetId):Observable<any>{
@@ -53,8 +62,11 @@ export class AssetService {
                 console.log("Get asset config");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in getting config");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetById(assetId):Observable<any>{
@@ -63,8 +75,11 @@ export class AssetService {
                 // console.log("Get asset by Id");
                 // console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in get asset by id");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetPPMSchedule(assetId):Observable<any>{
@@ -73,9 +88,11 @@ export class AssetService {
                 console.log("Get asset PPM Schedule by Id");
                 console.log(response);
                 return response.json();
-            },error=>{
-               console.log(error)
-            })
+            }).catch(error=>{
+                console.log("Error in get asset PPM by Id");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
     getAssetAMCSchedule(assetId):Observable<any>{
         return this.http.get(this.config.Url+'api/assets/'+assetId+'/amcschedule').map(
@@ -83,7 +100,11 @@ export class AssetService {
                 console.log("Get asset AMC Schedule by Id");
                 console.log(response);
                 return response.json();
-            })
+            }).catch(error=>{
+                console.log("Error in getting AMC schedule by Id");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
     saveReading(assetReadings):Observable<any>{
         return this.http.post(this.config.Url+'api/assets/saveReadings',assetReadings).map(
@@ -91,8 +112,11 @@ export class AssetService {
                 console.log("Save Reading");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in save reading");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     viewReading(searchCriteria):Observable<any>{
@@ -102,8 +126,11 @@ export class AssetService {
                 console.log("View Reading");
                 console.log(response.json());
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in View Reading");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetType():Observable<any>{
@@ -111,8 +138,11 @@ export class AssetService {
             response=>{
                 console.log("Get Asset Type");
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Getting Asset Type");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetGroup():Observable<any>{
@@ -120,22 +150,30 @@ export class AssetService {
             response=>{
                 console.log("Get Asset Group");
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in getting Asset group");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetPreviousReadings(assetId,assetParamId):Observable<any>{
         return this.http.get(this.config.Url+'api/assets/'+assetId+'/getLatestReading/'+assetParamId).map(
             response=>{
                 console.log('Get Previous Reading');
+                console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error getting previous reading");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getPPMScheduleCalendar(assetId,searchCriteria):Observable<any>{
         return this.http.post(this.config.Url+'api/assets/'+assetId+'/ppmschedule/calendar',searchCriteria).map(
             response=>{
+                console.log(response);
                 console.log("Response for ppm schedule calendar");
                 if(response.json()){
                     return response.json();
@@ -143,44 +181,63 @@ export class AssetService {
                     var msg='No Data Found';
                     return msg;
                 }
-            }
-        )
+            }).catch(error=>{
+                console.log("Error response for ppm schedule calendar");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     markBreakDown(asset):Observable<any>{
         return this.http.post(this.config.Url+'api/asset/breakDown',asset).map(
             response=>{
+                console.log("Mark Breakdown");
                 console.log(response);
-                return response
-            }
-        )
+                return response.json();
+            }).catch(error=>{
+                console.log("Error in asset Breakdown");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     siteHistory(assetId):Observable<any>{
         return this.http.post(this.config.Url+'api/assets/siteHistory',assetId).map(
             response=>{
+                console.log("Site History");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Site History");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     statusHistory(search):Observable<any>{
         return this.http.post(this.config.Url+'api/assets/statusHistory',search).map(
             response=>{
+                console.log("Status History");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in status History");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     assetTicket(search):Observable<any>{
         return this.http.post(this.config.Url+'api/assets/tickets',search).map(
             response=>{
+                console.log("Asset ticket");
                 console.log(response);
                 return response.json();
-            }
-        )
+            }).catch(error=>{
+                console.log("Error in Asset ticket");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
     }
 
     getAssetMaterial(search):Observable<any>{

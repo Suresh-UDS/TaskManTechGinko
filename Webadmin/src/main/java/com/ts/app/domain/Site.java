@@ -45,7 +45,7 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "projectId", nullable = false)
 	private Project project;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
@@ -65,6 +65,12 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	private String country;
 	private String state;
 	private String address;
+	private String city;
+	private String pinCode;
+
+	private String region;
+
+	private String branch;
 
 	private double addressLat;
 	private double addressLng;
@@ -159,6 +165,8 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	
 
 //	public List<Employee> getEmployees() {
 //		return employees;
@@ -169,7 +177,23 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 //	}
 
 
-    public double getRadius() {
+    public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPinCode() {
+		return pinCode;
+	}
+
+	public void setPinCode(String pinCode) {
+		this.pinCode = pinCode;
+	}
+
+	public double getRadius() {
         return radius;
     }
 
@@ -193,4 +217,19 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 		this.shifts = shifts;
 	}
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
 }

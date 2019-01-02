@@ -3,6 +3,7 @@ package com.ts.app.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 
@@ -19,15 +20,20 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.Project;
 import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.UserRepository;
+import com.ts.app.repository.ClientGroupRepository;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ClientgroupDTO;
 import com.ts.app.web.rest.dto.ImportResult;
 import com.ts.app.web.rest.dto.ProjectDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -52,6 +58,9 @@ public class ProjectService extends AbstractService {
 	private SiteService siteService;
 
 	@Inject
+	private ClientGroupRepository clientGroupRepository;
+
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	@Inject
@@ -59,12 +68,13 @@ public class ProjectService extends AbstractService {
 
 	public boolean isDuplicate(ProjectDTO projectDto) {
 	    log.debug("Project duplicate get"+projectDto.getUserId());
+	    List<Project> projects = projectRepository.findNames(projectDto.getName());
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setProjectName(projectDto.getName());
 		criteria.setUserId(projectDto.getUserId());
 		SearchResult<ProjectDTO> searchResults = findBySearchCrieria(criteria);
 		criteria.setUserId(projectDto.getUserId());
-		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+		if(projects !=null && CollectionUtils.isNotEmpty(projects)) {
 			return true;
 		}
 		return false;
@@ -76,6 +86,18 @@ public class ProjectService extends AbstractService {
         log.debug("Create user information"+projectDto.getUserId());
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
+
+		//create client group if does not exist
+		if(!StringUtils.isEmpty(project.getClientGroup())) {
+			Clientgroup clientGroup = clientGroupRepository.findByName(project.getClientGroup());
+			if(clientGroup == null) {
+				clientGroup = new Clientgroup();
+				clientGroup.setClientgroup(project.getClientGroup());
+				clientGroup.setActive("Y");
+				clientGroupRepository.save(clientGroup);
+			}
+		}
+
 		project = projectRepository.save(project);
 		log.debug("Created Information for Project: {}", project);
 		projectDto = mapperUtil.toModel(project, ProjectDTO.class);
@@ -97,7 +119,7 @@ public class ProjectService extends AbstractService {
 		 */
 
 	}
-	
+
 	private void mapToModel(Project project , ProjectDTO projectDTO) {
 		projectDTO.setId(project.getId());
 		projectDTO.setName(org.apache.commons.lang3.StringUtils.upperCase(project.getName()));
@@ -110,7 +132,7 @@ public class ProjectService extends AbstractService {
 		projectDTO.setStartDate(project.getStartDate());
 		projectDTO.setEndDate(project.getEndDate());
 		projectDTO.setContactFirstName(project.getContactFirstName());
-		projectDTO.setContactLastName(project.getContactLastName());	
+		projectDTO.setContactLastName(project.getContactLastName());
 	}
 
 	private void mapToEntity(ProjectDTO projectDTO, Project project) {
@@ -123,6 +145,7 @@ public class ProjectService extends AbstractService {
 		project.setEmail(projectDTO.getEmail());
 		project.setPhone(projectDTO.getPhone());
 		project.setStartDate(projectDTO.getStartDate());
+		project.setClientGroup(projectDTO.getClientGroup());
 		project.setEndDate(projectDTO.getEndDate());
 		project.setContactFirstName(projectDTO.getContactFirstName());
 		project.setContactLastName(projectDTO.getContactLastName());
@@ -161,17 +184,22 @@ public class ProjectService extends AbstractService {
 			//long userGroupId = user.getUserGroup().getId();
 			//entities = projectRepository.findAllByUserGroupId(empId);
 			Employee employee = user.getEmployee();
-			List<Long> subEmpIds = new ArrayList<Long>();
+			Set<Long> subEmpIds = new TreeSet<Long>();
 			subEmpIds.add(empId);
+			List<Long> subEmpList = new ArrayList<Long>();
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
-				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds));
-				log.debug("List of subordinate ids -"+ subEmpIds);
+				int levelCnt = 1;
+				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds, levelCnt));
+
+	        		subEmpList.addAll(subEmpIds);
+
+				log.debug("List of subordinate ids -"+ subEmpList);
 
 			}
-			entities = projectRepository.findAll(subEmpIds);
+			entities = projectRepository.findAll(subEmpList);
 		}else {
-			entities = projectRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+			entities = projectRepository.findAll();
 		}
 		List<ProjectDTO> values = new ArrayList<ProjectDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {
@@ -272,15 +300,18 @@ public class ProjectService extends AbstractService {
     }
 
     private List<Long> findSubOrdinates(Employee employee, long empId) {
-		List<Long> subEmpIds = new ArrayList<Long>();
+		Set<Long> subEmpIds = new TreeSet<Long>();
 		subEmpIds.add(empId);
+		List<Long> subEmpList = new ArrayList<Long>();
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
-			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			int levelCnt = 1;
+			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+			subEmpList.addAll(subEmpIds);
 			log.debug("List of subordinate ids -"+ subEmpIds);
 
 		}
-		return subEmpIds;
+		return subEmpList;
 	}
 
 	public ImportResult importFile(MultipartFile file, long dateTime) {
@@ -288,14 +319,35 @@ public class ProjectService extends AbstractService {
 	}
 
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		//fileId += ".csv";
 		if(!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
+	}
+
+	public ClientgroupDTO createClientGroup(ClientgroupDTO clientGroupDTO) {
+		Clientgroup clientgroup = mapperUtil.toEntity(clientGroupDTO, Clientgroup.class);
+		Clientgroup existingGroup = clientGroupRepository.findByName(clientGroupDTO.getClientgroup());
+		if(existingGroup == null) {
+			clientgroup.setActive(Clientgroup.ACTIVE_YES);
+			clientGroupRepository.save(clientgroup);
+			clientGroupDTO = mapperUtil.toModel(clientgroup, ClientgroupDTO.class);
+		}else {
+			clientGroupDTO.setErrorMessage("Already same asset group exists.");
+			clientGroupDTO.setStatus("400");
+			clientGroupDTO.setErrorStatus(true);
+		}
+		return clientGroupDTO;
+
+	}
+
+	public List<ClientgroupDTO> findAllClientGroups() {
+		List<Clientgroup> clientgroup = clientGroupRepository.findAll();
+		return mapperUtil.toModelList(clientgroup, ClientgroupDTO.class);
 	}
 
 }

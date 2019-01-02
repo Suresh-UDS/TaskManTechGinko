@@ -31,10 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AmazonS3Service;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
@@ -50,6 +52,7 @@ import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.GraphResponse;
 import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.NotificationLogDTO;
@@ -85,16 +88,19 @@ public class JobManagementResource {
 	private SchedulerService schedulerService;
 
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 	@Inject
 	private CacheUtil cacheUtil;
 
 	@Inject
 	private ReportUtil reportUtil;
-	
+
 	@Inject
 	private AmazonS3Service amazonSerivce;
+
+	@Inject
+	private AmazonS3Service amazonService;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -115,12 +121,12 @@ public class JobManagementResource {
 		log.debug("Job request parameter - "+ request.getParameter("sendNotification"));
 		log.debug("Job save response - "+ response);
 
-		if(response != null) {
+		if(response != null && response.getId() > 0) {
 			String sendNotification = request.getParameter("sendNotification");
-			if(StringUtils.isNotBlank(sendNotification)) {
+//			if(StringUtils.isNotBlank(sendNotification)) {
 				boolean isNotification = Boolean.parseBoolean(sendNotification);
 				log.debug("Job save isNotification - "+ isNotification);
-				if(isNotification) { //SEND PUSH notification for the users connected to the site.
+//				if(isNotification) { //SEND PUSH notification for the users connected to the site.
 					long siteId = jobDTO.getSiteId();
 					log.debug("Job save siteId - "+ siteId);
 					List<User> users = userService.findUsers(siteId);
@@ -136,10 +142,14 @@ public class JobManagementResource {
 						pushService.send(userIds, message);
 						//jobService.saveNotificationLog(response.getId(), SecurityUtils.getCurrentUserId(), users, siteId, message);
 					}
-				}
-			}
+//				}
+//			}
 		}
-		return new ResponseEntity<>(response,HttpStatus.CREATED);
+		if(response != null && response.getId() > 0) {
+			return new ResponseEntity<>(response,HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@RequestMapping(path="/job/{id}",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -150,23 +160,26 @@ public class JobManagementResource {
 		long userId = SecurityUtils.getCurrentUserId();
 		JobDTO response = jobService.updateJob(jobDTO, userId);
         if(response != null) {
-
-            long siteId = response.getSiteId();
-            List<User> users = userService.findUsers(siteId);
-            if(CollectionUtils.isNotEmpty(users)) {
-                if (StringUtils.isNotEmpty(response.getStatus())
-                		&& response.getStatus().equalsIgnoreCase("OUTOFSCOPE")) {
-                    long userIds[] = new long[users.size()];
-                    int ind = 0;
-                    for (User user : users) {
-                        userIds[ind] = user.getId();
-                        ind++;
-                    }
-                    String message = "Job -" + response.getTitle() + "of site-" + response.getSiteName() + "is marked as Out of Scope";
-                    pushService.send(userIds, message);
-                    jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
-                }
-            }
+        		if(StringUtils.isEmpty(response.getErrorMessage())) {
+	            long siteId = response.getSiteId();
+	            List<User> users = userService.findUsers(siteId);
+	            if(CollectionUtils.isNotEmpty(users)) {
+	                if (StringUtils.isNotEmpty(response.getStatus())
+	                		&& response.getStatus().equalsIgnoreCase("OUTOFSCOPE")) {
+	                    long userIds[] = new long[users.size()];
+	                    int ind = 0;
+	                    for (User user : users) {
+	                        userIds[ind] = user.getId();
+	                        ind++;
+	                    }
+	                    String message = "Job -" + response.getTitle() + "of site-" + response.getSiteName() + "is marked as Out of Scope";
+	                    pushService.send(userIds, message);
+	                    jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
+	                }
+	            }
+        		}else {
+        			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        		}
         }
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
@@ -198,7 +211,7 @@ public class JobManagementResource {
     public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
 		long userId = SecurityUtils.getCurrentUserId();
         JobDTO response = jobService.completeJob(id, userId);
-        if(response != null) {
+        if(response != null && !response.isErrorStatus()) {
             long siteId = response.getSiteId();
             List<User> users = userService.findUsers(siteId);
             if(CollectionUtils.isNotEmpty(users)) {
@@ -212,6 +225,8 @@ public class JobManagementResource {
                 pushService.send(userIds, message);
                 jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
             }
+        }else {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -220,9 +235,23 @@ public class JobManagementResource {
     public ResponseEntity<?> saveJobAndCheckList(@RequestBody JobDTO jobDTO, HttpServletRequest request){
     		long userId = SecurityUtils.getCurrentUserId();
         JobDTO response = jobService.saveJobAndCheckList(jobDTO, userId);
+        if(response.isErrorStatus()) {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/checklist/update",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateChecklist(@RequestBody JobChecklistDTO jobChecklistDTO){
+        long userId = SecurityUtils.getCurrentUserId();
+        JobChecklist response = jobService.updateCheckList(jobChecklistDTO);
+        if(response.getId()<=0){
+            jobChecklistDTO.setErrorStatus(true);
+            jobChecklistDTO.setErrorMessage("Error in saving Checklist..");
+            return new ResponseEntity<Object>(jobChecklistDTO,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 	@RequestMapping(value = "/jobs/search",method = RequestMethod.POST)
@@ -353,12 +382,15 @@ public class JobManagementResource {
 	}
 
 
-    
+
 
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importJobData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
@@ -375,7 +407,7 @@ public class JobManagementResource {
 					result.setMsg("Completed importing");
 					break;
 				case "FAILED" :
-					result.setMsg("Failed to import. Please try again");
+					//result.setMsg("Failed to import. Please try again");
 					break;
 				default :
 					result.setMsg("Completed importing");
@@ -407,6 +439,13 @@ public class JobManagementResource {
             searchCriteria.setReport(true);
             SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
             List<JobDTO> results = result.getTransactions();
+            for (JobDTO job:result.getTransactions()){
+                    log.debug("Location from search result ------- "+job.getBlock());
+            }
+
+            for (JobDTO job: results){
+                log.debug("Location from list result ------- "+job.getBlock());
+            }
             resp.addResult(jobService.generateReport(results, searchCriteria));
 
            // log.debug("RESPONSE FOR OBJECT resp *************"+resp);
@@ -460,12 +499,23 @@ public class JobManagementResource {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
     }
-    
-    @RequestMapping(value="/uploadAttendanceCheckIn", method= RequestMethod.GET) 
-    public void uploadAttendance() { 
+
+    @RequestMapping(value="/uploadAttendanceCheckIn", method= RequestMethod.GET)
+    public void uploadAttendance() {
     	amazonSerivce.uploadExistingCheckin();
     }
 
+    @RequestMapping(value = "/job/uploadExisting/checklistImg", method = RequestMethod.POST)
+    public String uploadExistingChecklist() {
+    	log.debug("Existing checklist image upload to AWS s3");
+    	return jobService.uploadExistingChecklistImg();
+    }
+
+    @RequestMapping(value = "/getFilesFromAws", method = RequestMethod.GET)
+    public void getFilesFromS3() {
+    	log.debug("Get All Files from AWS S3");
+    	amazonService.getAllFiles();
+    }
 
 
 

@@ -3,7 +3,7 @@
 	<div class="">
 
 		<div class="row">
-			<div class="col-mod-12">
+			<!-- <div class="col-mod-12">
 				<div class="alert alert-success" ng-show="success">
 					<strong>Quotation saved!</strong>
 				</div>
@@ -15,7 +15,7 @@
 					<strong>Quotation already registered!</strong> Please choose
 					another one.
 				</div>
-			</div>
+			</div> -->
 			<div class="col-md-12">
 				<!--<div class="titleCon">-->
 				<!--<h3>Add Quotation</h3>-->
@@ -37,7 +37,7 @@
 												<div class="form-group">
 													<label class="control-label">Title</label> <input
 														id='quotationTitle' ng-model="quotation.title"
-														class='form-control' name='quotationTitle' type='text'
+														class='form-control InputTxtCapsAll' name='quotationTitle' type='text'
 														value="" ng-minlength='2' ng-maxlength='50'
 														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
 													<div
@@ -97,7 +97,7 @@
                                                                <!--ng-blur="loadSites()"-->
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
                                                         <select class=" form-control " id="project" ng-model="selectedProject" ng-change="loadSites()"   ng-options="project as project.name for project in projects track by project.id" required>
-                                                            <option value="">Please select Client...</option>
+                                                            <option value=""></option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
@@ -131,7 +131,7 @@
                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
 
                                                         <select class="form-control " id="site" ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>
-                                                            <option value="">Please select Site...</option>
+                                                            <option value=""></option>
                                                         </select>
 
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
@@ -159,9 +159,9 @@
                                             </div>
 
                                             <div class="col-md-4 ">
-                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0)" ui-sref="view-ticket({id : quotation.ticketId})">
+                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0)" ui-sref="view-ticket({id:quotation.ticketId,qid:quotation._id,status:2})">
                                                     <i class="material-icons">remove_red_eye</i>View Ticket</button>
-                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0) && ticketStatus != 'Closed'" ng-click="closeTicket(quotation.ticketId)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal" >
+                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0) && ticketStatus != 'Closed'"  has-permission="Tickets:Close" ng-click="closeTicket(quotation.ticketId)"   onClick="$('#closeTicket').modal()" data-target="#myModal" >
                                                     <i class="material-icons">remove_red_eye</i>Close Ticket</button>
                                                 <a ng-if="(quotation.ticketId > 0) && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{quotation.ticketId}} Closed </a>
                                             </div>
@@ -494,11 +494,11 @@
 
 
                                                         <button class="btn btn-success" ng-click="saveQuotation('submit')" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"
-															id="form-button-save" ng-disabled="form.$invalid">
+															id="form-button-save" ng-disabled="form.$invalid || btnDisable">
 															<span class="btn-label"><i class="material-icons">check</i></span>
 															Send
 														</button>
-														<button class="btn btn-warning" ng-click="saveQuotation('edit')" ng-disabled="form.$invalid" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected">
+														<button class="btn btn-warning" ng-click="saveQuotation('edit')" ng-disabled="form.$invalid || btnDisable" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected">
 															<span class="btn-label"><i class="material-icons">save</i></span>
 															Save Draft
 														</button>
@@ -658,3 +658,30 @@
             </div>
         </div>
     </div>
+
+
+
+
+<!-- Ticket Close confirmation dialog -->
+<div id="closeTicket" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to close the ticket?</p>
+                <br/>
+                <input class="form-control border-bottom-input" ng-model="cTicket.comments" placeholder="Enter Remarks..">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->

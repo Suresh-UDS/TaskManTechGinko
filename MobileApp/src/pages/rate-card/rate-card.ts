@@ -5,6 +5,8 @@ import {componentService} from "../service/componentService";
 import {CreateRateCardPage} from "./create-rate-card";
 import {QuotationService} from "../service/quotationService";
 
+declare var demo;
+
 @Component({
   selector: 'page-rate-card',
   templateUrl: 'rate-card.html'
@@ -30,8 +32,13 @@ export class RateCardPage {
     ionViewWillEnter(){
         this.quotationService.getRateCards().subscribe(
             response=>{
-                console.log(response);
-                this.rateCards = response;
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                }else{
+                    console.log(response);
+                    this.rateCards = response;
+                }
+
             }
         )
     }

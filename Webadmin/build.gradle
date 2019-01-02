@@ -74,6 +74,8 @@ if (project.hasProperty('prod')) {
   apply from: 'profile_it.gradle'
 } else if (project.hasProperty('dev')) {
   apply from: 'profile_dev.gradle'
+} else if (project.hasProperty('uat')) {
+  apply from: 'profile_uat.gradle'
 } else {
   apply from: 'profile_dev-local.gradle'
 }

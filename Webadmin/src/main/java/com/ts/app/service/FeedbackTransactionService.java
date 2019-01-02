@@ -30,19 +30,28 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.FeedbackAnswerType;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.FeedbackTransaction;
 import com.ts.app.domain.FeedbackTransactionResult;
+import com.ts.app.domain.Location;
+import com.ts.app.domain.Project;
 import com.ts.app.domain.Setting;
+import com.ts.app.domain.User;
 import com.ts.app.repository.FeedbackMappingRepository;
 import com.ts.app.repository.FeedbackTransactionRepository;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.ManufacturerRepository;
 import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.FeedbackQuestionRating;
 import com.ts.app.web.rest.dto.FeedbackReportResult;
 import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
@@ -89,6 +98,18 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private Environment env;
+	
+	@Inject
+	private UserRepository userRepository;
+
+	@Inject
+	private ExportUtil exportUtil;
+
+    @Inject
+    private ReportUtil reportUtil;
+    
+    @Inject
+    private LocationRepository locationRepository;
 
 	public FeedbackTransactionDTO saveFeebdackInformation(FeedbackTransactionDTO feedbackTransDto) {
 	    log.debug("user code- "+feedbackTransDto.getReviewerCode());
@@ -113,7 +134,7 @@ public class FeedbackTransactionService extends AbstractService {
 				if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("true")) {
 				    log.debug("answer type yes ");
 
-				    if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("yes:1") || item.getScoreType().equalsIgnoreCase("no:0"))){
+				    if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("yes:1"))){
 				        log.debug("answer score type yes:1");
 	                    cumRating += 5;
 	                }else{
@@ -122,7 +143,7 @@ public class FeedbackTransactionService extends AbstractService {
 	                }
 				}else if(item.getAnswerType().equals(FeedbackAnswerType.YESNO) && item.getAnswer().equalsIgnoreCase("false")){
 	                log.debug("answer score type no");
-	                if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("no:1") || item.getScoreType().equalsIgnoreCase("yes:1"))){
+	                if(StringUtils.isNotEmpty(item.getScoreType()) && (item.getScoreType().equalsIgnoreCase("no:1"))){
 	                    log.debug("answer score type no:1");
 	                    cumRating += 5;
 	                }else{
@@ -141,60 +162,40 @@ public class FeedbackTransactionService extends AbstractService {
 				items.add(item);
 			}
 			rating = (cumRating / items.size()); //calculate the overall rating.
-			//send notifications
-			Setting feedbackAlertSetting = null;
-			Setting feedbackEmails = null;
-			String alertEmailIds = "";
-			List<Setting> settings = null;
-			if(feedbackTransDto.getSiteId() > 0) {
-				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackAlertSetting = settings.get(0);
-				}
-				settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackEmails = settings.get(0);
-				}
-				if(feedbackEmails != null) {
-					alertEmailIds = feedbackEmails.getSettingValue();
-				}
-			}else if(feedbackTransDto.getProjectId() > 0) {
-				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackAlertSetting = settings.get(0);
-				}
-				settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
-				if(CollectionUtils.isNotEmpty(settings)) {
-					feedbackEmails = settings.get(0);
-				}
-				if(feedbackEmails != null) {
-					alertEmailIds = feedbackEmails.getSettingValue();
-				}
-			}
-			if(feedbackAlertSetting != null && feedbackAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
-				StringBuilder feedbackLocation = new StringBuilder();
-				feedbackLocation.append(feedbackTransDto.getSiteName());
-				feedbackLocation.append("-");
-				feedbackLocation.append(feedbackTransDto.getBlock());
-				feedbackLocation.append("-");
-				feedbackLocation.append(feedbackTransDto.getFloor());
+			
 
-				String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
-				mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), new Date(), feedbackAlertItems, feedbackReportUrl);
-			}
 		}else {
 			rating = 5;
 		}
+		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);	
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
-        feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
+		Pageable pageRequest = createPageRequest(1,1);
+		Page<FeedbackMapping> feedbackMappingPage = feedbackMappingRepository.findOneByLocation(feedbackTransDto.getFeedbackId(), feedbackTransDto.getSiteId(), feedbackTransDto.getBlock(), feedbackTransDto.getFloor(), feedbackTransDto.getZone(), pageRequest);
+        List<FeedbackMapping> fbMappings = feedbackMappingPage.getContent();
+		feedbackTrans.setFeedback(fbMappings.get(0));
+		feedbackTrans = feedbackTransactionRepository.save(feedbackTrans);
         if(log.isDebugEnabled()) {
         		log.debug("Rating received for this feedback - "+ rating);
         }
         if(rating < 5 ) { //create a ticket
         		TicketDTO ticketDTO = new TicketDTO();
         		ticketDTO.setUserId(feedbackTransDto.getUserId());
-        		ticketDTO.setTitle("Feedback received for " +feedbackTransDto.getSiteName() + " - " +feedbackTransDto.getBlock() + "-" + feedbackTransDto.getFloor() + "-" + feedbackTransDto.getZone());
+        		StringBuilder title = new StringBuilder();
+        		title.append("Feedback received for ");
+        		title.append(feedbackTransDto.getSiteName());
+        		title.append(" - " +feedbackTransDto.getBlock());
+        		title.append("-" + feedbackTransDto.getFloor());
+        		title.append("-" + feedbackTransDto.getZone());
+        		if(StringUtils.isNotBlank(feedbackTransDto.getReviewerName())) {
+        			title.append(" given by " + feedbackTransDto.getReviewerName());
+        			title.append(" - " + feedbackTransDto.getReviewerCode());
+        		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
+        			title.append(" given by " + feedbackTransDto.getReviewerCode());
+        		}
+        		
+        		
+        		ticketDTO.setTitle(title.toString());
         		if(CollectionUtils.isNotEmpty(feedbackAlertItems)) {
         			StringBuffer sb = new StringBuffer();
         			for(String item : feedbackAlertItems) {
@@ -213,6 +214,89 @@ public class FeedbackTransactionService extends AbstractService {
 		log.debug("Created Information for FeedbackTransaction: {}", feedbackTrans);
 		feedbackTransDto = mapperUtil.toModel(feedbackTrans, FeedbackTransactionDTO.class);
 		return feedbackTransDto;
+	}
+	
+	private void sendFeedbackNotification(FeedbackTransactionDTO feedbackTransDto,List<String> feedbackAlertItems) {
+		//send notifications
+		Setting feedbackAlertSetting = null;
+		Setting feedbackEmails = null;
+		String alertEmailIds = "";
+		List<Setting> settings = null;
+		if(feedbackTransDto.getSiteId() > 0) {
+			settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK, feedbackTransDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackAlertSetting = settings.get(0);
+			}
+			settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_FEEDBACK_EMAILS, feedbackTransDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackEmails = settings.get(0);
+			}
+			if(feedbackEmails != null) {
+				alertEmailIds = feedbackEmails.getSettingValue();
+			}
+		}else if(feedbackTransDto.getProjectId() > 0) {
+			settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, feedbackTransDto.getProjectId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackAlertSetting = settings.get(0);
+			}
+			settings = settingsRepository.findSettingByKeyAndProjectId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, feedbackTransDto.getProjectId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				feedbackEmails = settings.get(0);
+			}
+			if(feedbackEmails != null) {
+				alertEmailIds = feedbackEmails.getSettingValue();
+			}
+		}
+		if(feedbackAlertSetting != null && feedbackAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+			StringBuilder feedbackLocation = new StringBuilder();
+			feedbackLocation.append(feedbackTransDto.getSiteName());
+			feedbackLocation.append("-");
+			feedbackLocation.append(feedbackTransDto.getBlock());
+			feedbackLocation.append("-");
+			feedbackLocation.append(feedbackTransDto.getFloor());
+			StringBuilder givenBy = new StringBuilder();
+       		if(StringUtils.isNotBlank(feedbackTransDto.getReviewerName())) {
+       			givenBy.append(feedbackTransDto.getReviewerName());
+       			givenBy.append(" - " + feedbackTransDto.getReviewerCode());
+        		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
+        			givenBy.append(feedbackTransDto.getReviewerCode());
+        		}
+       		StringBuilder remarks = new StringBuilder();
+       		if(StringUtils.isNotBlank(feedbackTransDto.getRemarks())) {
+       			remarks.append(feedbackTransDto.getRemarks());
+       		}
+       		
+       		String pattern = "MM-dd-yyyy";
+       		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+       		String date = simpleDateFormat.format(new Date());
+       		
+       		String block = feedbackTransDto.getBlock();
+       		String floor = feedbackTransDto.getFloor();
+       		String zone = feedbackTransDto.getZone();
+       		String projectName = feedbackTransDto.getProjectName();
+       		String siteName = feedbackTransDto.getSiteName();
+       		if(feedbackTransDto.getBlock().contains(" ")) {
+       			block = feedbackTransDto.getBlock().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getFloor().contains(" ")) {
+       			floor = feedbackTransDto.getFloor().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getZone().contains(" ")) {
+       			zone = feedbackTransDto.getZone().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getProjectName().contains(" ")) {
+       			projectName = feedbackTransDto.getProjectName().replaceAll(" ", "%20");
+       		}
+       		if(feedbackTransDto.getSiteName().contains(" ")) {
+       			siteName = feedbackTransDto.getSiteName().replaceAll(" ", "%20");
+       		}
+       		
+       		
+       		
+			String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
+			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"/"+projectName+"/"+feedbackTransDto.getSiteId()+"/"+siteName+"/"+block+"/"+floor+"/"+zone+"/"+date;
+			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackUrl);
+		}	
 	}
 
 	public List<FeedbackTransactionDTO> findAll(int currPage) {
@@ -239,22 +323,54 @@ public class FeedbackTransactionService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            		if(searchCriteria.isReport() || searchCriteria.isFindAll()) {
+            			pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+            		}else {
+            			pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            		}
             }
 
+			Calendar startCal = Calendar.getInstance();
 
+			if (searchCriteria.getCheckInDateTimeFrom() != null) {
+				startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
+			}
+			startCal.set(Calendar.HOUR_OF_DAY, 0);
+			startCal.set(Calendar.MINUTE, 0);
+			startCal.set(Calendar.SECOND, 0);
+			searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
+			Calendar endCal = Calendar.getInstance();
+			if (searchCriteria.getCheckInDateTimeTo() != null) {
+				endCal.setTime(searchCriteria.getCheckInDateTimeTo());
+			}
+			endCal.set(Calendar.HOUR_OF_DAY, 23);
+			endCal.set(Calendar.MINUTE, 59);
+			endCal.set(Calendar.SECOND, 0);
+			searchCriteria.setCheckInDateTimeTo(endCal.getTime());            
+	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
+	        	ZonedDateTime fromTime = fromDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
+	        	fromTime = fromTime.withHour(0);
+	        	fromTime = fromTime.withMinute(0);
+	        	fromTime = fromTime.withSecond(0);
+	        	java.sql.Date toDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
+	        	ZonedDateTime toTime = toDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
+	        	toTime = toTime.withHour(23);
+	        	toTime = toTime.withMinute(59);
+	        	toTime = toTime.withSecond(59);
 
 			Page<FeedbackTransaction> page = null;
 			List<FeedbackTransactionDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
-					page = feedbackTransactionRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+					page = feedbackTransactionRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), fromTime, toTime, pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getFloor())) {
-					page = feedbackTransactionRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
+					page = feedbackTransactionRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), fromTime, toTime, pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
-					page = feedbackTransactionRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+					page = feedbackTransactionRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), fromTime, toTime, pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
-					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), pageRequest);
+					page = feedbackTransactionRepository.findBySite(searchCriteria.getSiteId(), fromTime,toTime, pageRequest);
+				}else if(searchCriteria.getProjectId() > 0) {
+					page = feedbackTransactionRepository.findByProject(searchCriteria.getProjectId(), fromTime, toTime, pageRequest);
 				}
 			}else {
 				page = feedbackTransactionRepository.findAll(pageRequest);
@@ -328,10 +444,9 @@ public class FeedbackTransactionService extends AbstractService {
 		        weeklyFromDate = ZonedDateTime.parse(fromdate, parser);
 	        }
 		        // end
-			if(searchCriteria.getProjectId() > 0) {
+			if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
 				log.debug("***************"+searchCriteria.getSiteId()+"\t block: "+ searchCriteria.getBlock()+"\t floor : "+ searchCriteria.getFloor()+"\t zone : " +searchCriteria.getZone()+"fromTime: \t"+fromTime+"toTime \t"+toTime);
 
-				FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
 
 				//if(feedbackMapping != null) {
 					long feedbackCount = getFeedbackCount(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
@@ -348,12 +463,13 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setBlock(searchCriteria.getBlock());
 					reportResult.setFloor(searchCriteria.getFloor());
 					reportResult.setZone(searchCriteria.getZone());
-					List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
 
 					// weekly
-					List<Object[]> weeklySite = feedbackTransactionRepository.getWeeklySite(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-					List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
-
+					List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+					List<Object[]> weeklySite = null;
+					if(StringUtils.isEmpty(searchCriteria.getZone()))  {
+						weeklySite = feedbackTransactionRepository.getWeeklySite(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
+					}
 					List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
 					if(CollectionUtils.isNotEmpty(weeklySite)){
 						for(Object[] row: weeklySite){
@@ -378,49 +494,89 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setWeeklyZone(weeklyZoneList);
 					reportResult.setWeeklySite(weeklySiteList);
 					// end
-
+					
+					List<Location> locs = locationRepository.findBySite(searchCriteria.getSiteId());
 					Map<String, FeedbackQuestionRating> qratings = new HashMap<String,FeedbackQuestionRating>();
-					if(CollectionUtils.isNotEmpty(questionRatings)) {
-						for(Object[] row : questionRatings) {
-							FeedbackQuestionRating qrating = null;
-							String question = String.valueOf(row[0]);
-							if(qratings.containsKey(question)) {
-								qrating = qratings.get(question);
-							}else {
-								qrating = new FeedbackQuestionRating();
-							}
-							qrating.setQuestion(question);
-							if(row[1] != null && ((String)row[1]).equalsIgnoreCase("true")) {
-								qrating.setYesCount((Long)row[2]);
-							}else {
-								qrating.setNoCount((Long)row[2]);
-							}
-							qratings.put(qrating.getQuestion(), qrating);
-						}
-					}
-					//log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
-					questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
-					if(CollectionUtils.isNotEmpty(questionRatings)) {
-						for(Object[] row : questionRatings) {
-							FeedbackQuestionRating qrating = null;
-							String question = String.valueOf(row[0]);
-							if(qratings.containsKey(question)) {
-								qrating = qratings.get(question);
-							}else {
-								qrating = new FeedbackQuestionRating();
-							}
-							qrating.setQuestion(String.valueOf(row[0]));
-							if(row[2] != null) {
-								Map<String,Long> ratingsMap = null;
-								if(qrating.getRating() != null ) {
-									ratingsMap = qrating.getRating();
-								}else {
-									ratingsMap = new HashMap<String,Long>();
+					
+					String block = searchCriteria.getBlock();
+					String floor = searchCriteria.getFloor();
+					String zone = searchCriteria.getZone();
+					
+					if(CollectionUtils.isNotEmpty(locs)) {
+						for(Location loc : locs) {
+							boolean locMatch = false;
+							if(StringUtils.isNotBlank(block) 
+									&& StringUtils.isNotBlank(floor) 
+									&& StringUtils.isNotBlank(zone) ) {
+								if(block.equalsIgnoreCase(loc.getBlock())
+										&& floor.equalsIgnoreCase(loc.getFloor())
+										&& zone.equalsIgnoreCase(loc.getZone()) ) {
+									locMatch = true;
 								}
-								ratingsMap.put(String.valueOf(row[1]), (long)row[2]);
-								qrating.setRating(ratingsMap);
+							}else {
+								locMatch = true;
 							}
-							qratings.put(question, qrating);
+							if(locMatch) {
+								searchCriteria.setBlock(loc.getBlock());
+								searchCriteria.setFloor(loc.getFloor());
+								searchCriteria.setZone(loc.getZone());
+								FeedbackMapping feedbackMapping = getFeedbackMappingByLocation(searchCriteria);
+								if(log.isDebugEnabled()) {
+									log.debug("Location - Block- " +searchCriteria.getBlock() + ", Floor -" + searchCriteria.getFloor() + ", Zone-" + searchCriteria.getZone());
+									log.debug("FeedbackMapping - " + (feedbackMapping != null ? feedbackMapping.getId() : null ));
+								}
+								if(feedbackMapping != null) {
+								
+									List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
+									log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
+									if(CollectionUtils.isNotEmpty(questionRatings)) {
+										for(Object[] row : questionRatings) {
+											FeedbackQuestionRating qrating = null;
+											String question = String.valueOf(row[0]);
+											if(qratings.containsKey(question)) {
+												qrating = qratings.get(question);
+											}else {
+												qrating = new FeedbackQuestionRating();
+											}
+											qrating.setLocation(getLocationFromSearchCriteria(searchCriteria));
+											qrating.setQuestion(question);
+											if(row[1] != null && ((String)row[1]).equalsIgnoreCase("true")) {
+												qrating.setYesCount((Long)row[2]);
+											}else {
+												qrating.setNoCount((Long)row[2]);
+											}
+											qratings.put(qrating.getQuestion(), qrating);
+										}
+									}
+									//log.debug("feedbackMapping.getFeedback().getId(): \t"+feedbackMapping.getFeedback().getId());
+									questionRatings = getquestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
+									log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
+									if(CollectionUtils.isNotEmpty(questionRatings)) {
+										for(Object[] row : questionRatings) {
+											FeedbackQuestionRating qrating = null;
+											String question = String.valueOf(row[0]);
+											if(qratings.containsKey(question)) {
+												qrating = qratings.get(question);
+											}else {
+												qrating = new FeedbackQuestionRating();
+											}
+											qrating.setLocation(getLocationFromSearchCriteria(searchCriteria));
+											qrating.setQuestion(String.valueOf(row[0]));
+											if(row[2] != null) {
+												Map<String,Long> ratingsMap = null;
+												if(qrating.getRating() != null ) {
+													ratingsMap = qrating.getRating();
+												}else {
+													ratingsMap = new HashMap<String,Long>();
+												}
+												ratingsMap.put(String.valueOf(row[1]), (long)row[2]);
+												qrating.setRating(ratingsMap);
+											}
+											qratings.put(question, qrating);
+										}
+									}
+								}
+							}
 						}
 					}
 					List<FeedbackQuestionRating> asList = new ArrayList<FeedbackQuestionRating>();
@@ -428,11 +584,66 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setQuestionRatings(asList);
 
 				//}
+			}else if(searchCriteria.getProjectId() > 0) {
+				long feedbackCount = getFeedbackCount(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
+				Float overallRating = getOverallRating(searchCriteria,fromTime,toTime,weeklyFromDate,weeklyToDate);
+				log.debug("feedback count : \t"+ feedbackCount);
+				log.debug("overallRating: \t"+overallRating);
+				reportResult.setFeedbackCount(feedbackCount);
+				reportResult.setOverallRating(overallRating == null ? "0" : df.format(overallRating));
+				//reportResult.setFeedbackName(feedbackMapping.getFeedback().getName());
+				//reportResult.setSiteId(searchCriteria.getSiteId());
+				//reportResult.setSiteName(searchCriteria.getSiteName());
+				reportResult.setProjectId(searchCriteria.getProjectId());
+				reportResult.setProjectName(searchCriteria.getProjectName());
+				//reportResult.setBlock(searchCriteria.getBlock());
+				//reportResult.setFloor(searchCriteria.getFloor());
+				//reportResult.setZone(searchCriteria.getZone());
+
+				// weekly
+				List<Object[]> weeklySite = feedbackTransactionRepository.getSitewiseAverageRating(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+				List<Object[]> weeklyZone = feedbackTransactionRepository.getWeeklyZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(),weeklyFromDate,weeklyToDate);
+
+				List<WeeklySite> weeklySiteList = new ArrayList<WeeklySite>();
+				if(CollectionUtils.isNotEmpty(weeklySite)){
+					for(Object[] row: weeklySite){
+						WeeklySite site= new WeeklySite();
+						site.setRating((Double)row[0]);
+						site.setZoneName((String)row[1]);
+						weeklySiteList.add(site);
+					}
+				}
+
+				List<WeeklyZone> weeklyZoneList = new ArrayList<WeeklyZone>();
+				if(CollectionUtils.isNotEmpty(weeklyZone)){
+					for(Object[] row: weeklyZone){
+						WeeklyZone zone = new WeeklyZone();
+						zone.setRating((Double)row[0]);
+						//zone.setDay(Long.valueOf(String.valueOf(row[1])));
+						//zone.setDate(DateUtil.convertToDateTime(String.valueOf(row[1]), ""));
+						zone.setDate(String.valueOf(row[1]));
+						weeklyZoneList.add(zone);
+					}
+				}
+				reportResult.setWeeklyZone(weeklyZoneList);
+				reportResult.setWeeklySite(weeklySiteList);
 			}
 		}
 		return reportResult;
 
 
+	}
+	
+	private String getLocationFromSearchCriteria(SearchCriteria searchCriteria) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(searchCriteria.getSiteName());
+		sb.append("_");
+		sb.append(searchCriteria.getBlock());
+		sb.append("_");
+		sb.append(searchCriteria.getFloor());
+		sb.append("_");
+		sb.append(searchCriteria.getZone());
+		return sb.toString();
 	}
 
 	private List<Object[]> getquestionRatings(SearchCriteria searchCriteria, FeedbackMapping feedbackMapping,
@@ -441,7 +652,7 @@ public class FeedbackTransactionService extends AbstractService {
 		List<Object[]> questionsRating = null;
 
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
-			questionsRating = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getFeedback().getId(), weeklyFromDate, weeklyToDate);
+			questionsRating = feedbackTransactionRepository.getFeedbackAnswersCountForRating(feedbackMapping.getId(), weeklyFromDate, weeklyToDate);
 		} else {
 			questionsRating = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForRating(searchCriteria.getSiteId(), weeklyFromDate, weeklyToDate);
 		}
@@ -454,7 +665,7 @@ public class FeedbackTransactionService extends AbstractService {
 		List<Object[]> questionRatings = null;
 
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
-			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(feedbackMapping.getFeedback().getId(), weeklyFromDate, weeklyToDate);
+			questionRatings = feedbackTransactionRepository.getFeedbackAnswersCountForYesNo(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), feedbackMapping.getId(), weeklyFromDate, weeklyToDate);
 		} else {
 			questionRatings = feedbackTransactionRepository.getWeeklyFeedbackAnswersCountForYesNo(searchCriteria.getSiteId(), weeklyFromDate, weeklyToDate);
 		}
@@ -465,12 +676,14 @@ public class FeedbackTransactionService extends AbstractService {
 	private Float getOverallRating(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
 			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
-		Float overallRating;
+		Float overallRating = 0f;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
 			overallRating = feedbackTransactionRepository.getFeedbackOverallRating(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), weeklyFromDate, weeklyToDate);
-		} else {
+		} else if(searchCriteria.getSiteId() > 0){
 			overallRating = feedbackTransactionRepository.getWeeklyOverallRating(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-		}
+		} else if(searchCriteria.getProjectId() > 0){
+			overallRating = feedbackTransactionRepository.getWeeklyOverallRatingByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+		} 
 		return overallRating;
 	}
 
@@ -480,9 +693,11 @@ public class FeedbackTransactionService extends AbstractService {
 		long feedbackCount=0;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
 			feedbackCount = feedbackTransactionRepository.getFeedbackCount(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), weeklyFromDate, weeklyToDate);
-		} else {
+		} else if(searchCriteria.getSiteId() > 0){
 			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCount(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
-		}
+		} else if(searchCriteria.getProjectId() > 0){
+			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCountByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
+		} 
 
 		return feedbackCount;
 	}
@@ -492,7 +707,10 @@ public class FeedbackTransactionService extends AbstractService {
 		FeedbackMapping feedbackMapping=null;
 		/*if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){*/
 			log.debug("***************zone***********");
-			feedbackMapping = feedbackMappingRepository.findOneByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone());
+			List<FeedbackMapping> feedbackMappings = feedbackMappingRepository.findOneByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone());
+			if(CollectionUtils.isNotEmpty(feedbackMappings)) {
+				feedbackMapping = feedbackMappings.get(0);
+			}
 		/*} else{
 			log.debug("***************feedback site***********");
 			feedbackMapping = feedbackMappingRepository.findSiteByLocation(searchCriteria.getSiteId());
@@ -500,5 +718,38 @@ public class FeedbackTransactionService extends AbstractService {
 		return feedbackMapping;
 	}
 
+    public ExportResult generateReport(List<FeedbackTransactionDTO> transactions, SearchCriteria criteria) {
+    		User user = userRepository.findOne(criteria.getUserId());
+		Employee emp = null;
+		if(user != null) {
+			emp = user.getEmployee();
+		}
+		long projId = criteria.getProjectId();
+		Project proj = null;
+		if(projId > 0) {
+			proj = projectRepository.findOne(projId);
+			criteria.setProjectName(proj.getName());
+		}
+        return reportUtil.generateFeedbackReports(transactions, user, emp, null, criteria);
+    }
+
+
+	public ExportResult getExportStatus(String fileId) {
+		ExportResult er = new ExportResult();
+
+		fileId += ".xlsx";
+        //log.debug("FILE ID INSIDE OF getExportStatus CALL ***********"+fileId);
+
+		if(!StringUtils.isEmpty(fileId)) {
+			String status = exportUtil.getExportStatus(fileId);
+			er.setFile(fileId);
+			er.setStatus(status);
+		}
+		return er;
+	}
+
+	public byte[] getExportFile(String fileName) {
+		return exportUtil.readFeedbackExportFile(null,fileName);
+	}
 
 }

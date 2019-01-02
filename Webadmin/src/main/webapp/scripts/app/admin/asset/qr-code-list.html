@@ -20,7 +20,7 @@
                     <div id="printable">
 
                         <div class="row qrcodeList" ng-repeat="qr in assetQrList">
-                            
+
                             <div class="col-md-4">
                                 <div class="QrcodeCon">
 
@@ -31,22 +31,22 @@
                             </div>
                             <div class="col-md-4">
 
-                                <p><span class="txtBold">Asset</span>  : {{qr.title}}</p>
-                                <p><span class="txtBold">Type </span> : {{qr.assetType}}</p>
-                                <p><span class="txtBold">Group</span>  : {{qr.assetGroup}}</p>
+                                <p><span class="txtBold">Asset</span>  : {{qr.title | uppercase}}</p>
+                                <p><span class="txtBold">Type </span> : {{qr.assetType | uppercase}}</p>
+                                <p><span class="txtBold">Group</span>  : {{qr.assetGroup | uppercase}}</p>
 
 
                             </div>
                             <div class="col-md-4">
 
-                                <p><span class="txtBold">Site</span> : {{qr.siteName}}</p>
-                                <p><span class="txtBold">Manufacturer</span>  : {{qr.manufacturerName}}</p>
-                                <p><span class="txtBold">Vendor</span>  : {{qr.amcVendorName}}</p>
+                                <p><span class="txtBold">Site</span> : {{qr.siteName | uppercase}}</p>
+                                <p><span class="txtBold">Manufacturer</span>  : {{qr.manufacturerName | uppercase}}</p>
+                                <p><span class="txtBold">Vendor</span>  : {{qr.amcVendorName | uppercase}}</p>
 
                             </div>
 
                         </div>
-                        
+
 
                     </div>
 
@@ -60,13 +60,13 @@
                     <h3 class="txt-align-center">-- No data --</h3>
                 </div>
                 <!-- end content-->
-                 
+
             </div>
             <div class="row">
                <div class="col-md-12 txt-align-rgt">
                    <div class="form-group">
                        <button class="btn" type="button"
-                               ui-sref="assets" id="cancel-button">
+                                ng-click="conform('back')"  id="cancel-button">
                             Back
                        </button>
                    </div>

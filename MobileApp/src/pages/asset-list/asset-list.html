@@ -31,17 +31,38 @@
         <button ion-fab color="primary"> <i class="fa fa-qrcode clr-white fnt-24"></i></button>
     </ion-fab>
 
+    <div class="margin-top5">
+        <span class="tag label label-info" style="margin-right: 5px"  *ngIf="clientFilter">
+            Client: {{clientFilter.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="siteFilter">
+           Site: {{siteFilter.name}}
+        </span>
+        <span class="tag label label-info"   *ngIf="assetGroup" style="margin-right: 5px">
+           Group: {{assetGroup}}
+        </span>
+        <span class="tag label label-info"   *ngIf="assetType">
+           Type: {{assetType}}
+        </span>
+    </div>
+
+
+
+
+      <!--<ion-refresher (ionRefresh)="doRefresh($event)">-->
+          <!--<ion-refresher-content></ion-refresher-content>-->
+      <!--</ion-refresher>-->
   <ion-list class="asset-padding">
 
 
 
-      <ion-refresher (ionRefresh)="doRefresh($event)">
+     <!-- <ion-refresher (ionRefresh)="doRefresh($event)">
           <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
+      </ion-refresher>-->
 
 
 
-      <div *ngIf="(!assetList.length<0 || assetList != null) && !spinner">
+      <div *ngIf="(!assetList || assetList.length<0 ) && !spinner" class="no-data">
           <ion-card>
               <ion-card-content>
                   <img src="assets/imgs/warning.svg">
@@ -80,7 +101,7 @@
       <!--</button>-->
     </ion-item>
   </ion-list>
-    <ion-infinite-scroll distance="5%" class="asset-padding" *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAssets($event)">
+    <ion-infinite-scroll distance="5%" class="asset-padding" *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAsset($event)">
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 

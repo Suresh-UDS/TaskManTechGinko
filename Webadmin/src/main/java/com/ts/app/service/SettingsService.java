@@ -37,9 +37,9 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE = "email.notification.daywise.attendance";
 
 	public static final String EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_EMAILS = "email.notification.daywise.attendance.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_DAYWISE_ATTENDANCE_ALERT_TIME = "email.notification.daywise.attendance.alert.time";
-	
+
 	public static final String EMAIL_NOTIFICATION_ATTENDANCE_GRACE_TIME = "email.notification.attendance.grace.time";
 
 	public static final String EMAIL_NOTIFICATION_OVERDUE = "email.notification.overdue";
@@ -54,6 +54,12 @@ public class SettingsService extends AbstractService {
 
 	public static final String EMAIL_NOTIFICATION_FEEDBACK_EMAILS = "email.notification.feedback.emails";
 
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_REPORT = "email.notification.feedback.report";
+
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS = "email.notification.feedback.report.emails";
+
+	public static final String EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME = "email.notification.feedback.report.time";
+
 	public static final String EMAIL_NOTIFICATION_QUOTATION = "email.notification.quotation";
 
 	public static final String EMAIL_NOTIFICATION_QUOTATION_EMAILS = "email.notification.quotation.emails";
@@ -61,30 +67,44 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_TICKET = "email.notification.ticket";
 
 	public static final String EMAIL_NOTIFICATION_TICKET_EMAILS = "email.notification.ticket.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
-	
+
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_ASSET = "email.notification.asset";
-	
+
 	public static final String EMAIL_NOTIFICATION_ASSET_EMAILS = "email.notification.asset.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_PPM = "email.notification.ppm";
-	
+
 	public static final String EMAIL_NOTIFICATION_PPM_EMAILS = "email.notification.ppm.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_AMC = "email.notification.amc";
-	
+
 	public static final String EMAIL_NOTIFICATION_AMC_EMAILS = "email.notification.amc.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_WARRANTY = "email.notification.warranty";
-	
+
 	public static final String EMAIL_NOTIFICATION_WARRANTY_EMAILS = "email.notification.warranty.emails";
-	
+
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
-	
+
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
+
+	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT = "email.notification.daywiseReports";
+
+	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_CLIENT_GROUP_ALERT = "email.notification.daywiseReports.client.group.alert";
+
+	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS = "email.notification.daywiseReports.emails";
+
+	public static final String EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME = "email.notification.dayWiseReportAlertTime";
+
+	public static final String EMAIL_NOTIFICATION_MUSTER_ROLL = "email.notification.attendance.musterRoll";
+
+	public static final String EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS = "email.notification.attendance.musterRoll.emails";
+
+	public static final String JOB_SCHEDULER_ERROR_EMAILS = "JOB_SCHEDULER_ERROR_EMAILS";
 
 	@Inject
 	private SettingsRepository settingsRepository;
@@ -122,7 +142,7 @@ public class SettingsService extends AbstractService {
 		shiftWiseAttendanceEmailsSetting.setSiteId(settingsDto.getSiteId());
 		shiftWiseAttendanceEmailsSetting.setSiteName(settingsDto.getSiteName());
 		shiftWiseAttendanceEmailsSetting.setActive("Y");
-		
+
 		Setting dayWiseAttendanceAlertSetting = null;
 		if(settingsDto.getDayWiseAttendanceEmailAlertId() > 0) {
 			dayWiseAttendanceAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceEmailAlertId());
@@ -152,7 +172,7 @@ public class SettingsService extends AbstractService {
 		dayWiseAttendanceEmailsSetting.setSiteId(settingsDto.getSiteId());
 		dayWiseAttendanceEmailsSetting.setSiteName(settingsDto.getSiteName());
 		dayWiseAttendanceEmailsSetting.setActive("Y");
-		
+
 		Setting attendanceGraceTimeSetting = null;
 		if(settingsDto.getLateAttendanceGraceTimeId() > 0) {
 			attendanceGraceTimeSetting = settingsRepository.findOne(settingsDto.getLateAttendanceGraceTimeId());
@@ -170,8 +190,8 @@ public class SettingsService extends AbstractService {
 		attendanceGraceTimeSetting.setActive("Y");
 
 		Setting dayWiseAttendanceAlertTimeSetting = null;
-		if(settingsDto.getDayWiseAttendanceEmailAlertId() > 0) {
-			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceEmailAlertId());
+		if(settingsDto.getDayWiseAttendanceAlertTimeId() > 0) {
+			dayWiseAttendanceAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseAttendanceAlertTimeId());
 		}else {
 			dayWiseAttendanceAlertTimeSetting = new Setting();
 		}
@@ -277,6 +297,53 @@ public class SettingsService extends AbstractService {
 		feedbackEmailsSetting.setSiteName(settingsDto.getSiteName());
 		feedbackEmailsSetting.setActive("Y");
 
+		//feedback report setting
+		Setting feedbackReportSetting = null;
+		if(settingsDto.getFeedbackReportEmailAlertId() > 0) {
+			feedbackReportSetting = settingsRepository.findOne(settingsDto.getFeedbackReportEmailAlertId());
+		}else {
+			feedbackReportSetting = new Setting();
+		}
+		feedbackReportSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_REPORT);
+		feedbackReportSetting.setSettingValue(String.valueOf(settingsDto.isFeedbackReportEmailAlert()));
+		feedbackReportSetting.setProjectId(settingsDto.getProjectId());
+		feedbackReportSetting.setProjectName(settingsDto.getProjectName());
+		feedbackReportSetting.setSiteId(settingsDto.getSiteId());
+		feedbackReportSetting.setSiteName(settingsDto.getSiteName());
+		feedbackReportSetting.setActive("Y");
+
+		Setting feedbackReportEmailsSetting = null;
+		if(settingsDto.getFeedbackReportEmailsId() > 0) {
+			feedbackReportEmailsSetting = settingsRepository.findOne(settingsDto.getFeedbackReportEmailsId());
+		}else {
+			feedbackReportEmailsSetting = new Setting();
+		}
+		feedbackReportEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getFeedbackReportEmailIds())) {
+			feedbackReportEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getFeedbackReportEmailIds()));
+		}
+		feedbackReportEmailsSetting.setProjectId(settingsDto.getProjectId());
+		feedbackReportEmailsSetting.setProjectName(settingsDto.getProjectName());
+		feedbackReportEmailsSetting.setSiteId(settingsDto.getSiteId());
+		feedbackReportEmailsSetting.setSiteName(settingsDto.getSiteName());
+		feedbackReportEmailsSetting.setActive("Y");
+
+		Setting feedbackReportTimeSetting = null;
+		if(settingsDto.getFeedbackReportTimeId() > 0) {
+			feedbackReportTimeSetting = settingsRepository.findOne(settingsDto.getFeedbackReportTimeId());
+		}else {
+			feedbackReportTimeSetting = new Setting();
+		}
+		feedbackReportTimeSetting.setSettingKey(EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME);
+		if(settingsDto.getFeedbackReportTime() != null) {
+			feedbackReportTimeSetting.setSettingValue(String.valueOf(settingsDto.getFeedbackReportTime()));
+		}
+		feedbackReportTimeSetting.setProjectId(settingsDto.getProjectId());
+		feedbackReportTimeSetting.setProjectName(settingsDto.getProjectName());
+		feedbackReportTimeSetting.setSiteId(settingsDto.getSiteId());
+		feedbackReportTimeSetting.setSiteName(settingsDto.getSiteName());
+		feedbackReportTimeSetting.setActive("Y");
+
 		//quotation notification setting
 		Setting quotationAlertSetting = null;
 		if(settingsDto.getQuotationEmailAlertId() > 0) {
@@ -338,7 +405,7 @@ public class SettingsService extends AbstractService {
 		ticketEmailsSetting.setSiteId(settingsDto.getSiteId());
 		ticketEmailsSetting.setSiteName(settingsDto.getSiteName());
 		ticketEmailsSetting.setActive("Y");
-		
+
 		Setting readingAlertSetting = null;
 		if(settingsDto.getReadingEmailAlertId() > 0) {
 			readingAlertSetting = settingsRepository.findOne(settingsDto.getReadingEmailAlertId());
@@ -368,7 +435,7 @@ public class SettingsService extends AbstractService {
 		readingEmailsSetting.setSiteId(settingsDto.getSiteId());
 		readingEmailsSetting.setSiteName(settingsDto.getSiteName());
 		readingEmailsSetting.setActive("Y");
-		
+
 		Setting assetAlertSetting = null;
 		if(settingsDto.getAssetEmailAlertId() > 0) {
 			assetAlertSetting = settingsRepository.findOne(settingsDto.getAssetEmailAlertId());
@@ -382,7 +449,7 @@ public class SettingsService extends AbstractService {
 		assetAlertSetting.setSiteId(settingsDto.getSiteId());
 		assetAlertSetting.setSiteName(settingsDto.getSiteName());
 		assetAlertSetting.setActive("Y");
-		
+
 		Setting assetEmailsSetting = null;
 		if(settingsDto.getAssetEmailsId() > 0) {
 			assetEmailsSetting = settingsRepository.findOne(settingsDto.getAssetEmailsId());
@@ -398,7 +465,7 @@ public class SettingsService extends AbstractService {
 		assetEmailsSetting.setSiteId(settingsDto.getSiteId());
 		assetEmailsSetting.setSiteName(settingsDto.getSiteName());
 		assetEmailsSetting.setActive("Y");
-		
+
 		Setting ppmAlertSetting = null;
 		if(settingsDto.getPpmEmailAlertId() > 0) {
 			ppmAlertSetting = settingsRepository.findOne(settingsDto.getPpmEmailAlertId());
@@ -412,7 +479,7 @@ public class SettingsService extends AbstractService {
 		ppmAlertSetting.setSiteId(settingsDto.getSiteId());
 		ppmAlertSetting.setSiteName(settingsDto.getSiteName());
 		ppmAlertSetting.setActive("Y");
-		
+
 		Setting ppmEmailsSetting = null;
 		if(settingsDto.getPpmEmailsId() > 0) {
 			ppmEmailsSetting = settingsRepository.findOne(settingsDto.getPpmEmailsId());
@@ -428,7 +495,7 @@ public class SettingsService extends AbstractService {
 		ppmEmailsSetting.setSiteId(settingsDto.getSiteId());
 		ppmEmailsSetting.setSiteName(settingsDto.getSiteName());
 		ppmEmailsSetting.setActive("Y");
-		
+
 		Setting amcAlertSetting = null;
 		if(settingsDto.getAmcEmailAlertId() > 0) {
 			amcAlertSetting = settingsRepository.findOne(settingsDto.getAmcEmailAlertId());
@@ -442,7 +509,7 @@ public class SettingsService extends AbstractService {
 		amcAlertSetting.setSiteId(settingsDto.getSiteId());
 		amcAlertSetting.setSiteName(settingsDto.getSiteName());
 		amcAlertSetting.setActive("Y");
-		
+
 		Setting amcEmailsSetting = null;
 		if(settingsDto.getAmcEmailsId() > 0) {
 			amcEmailsSetting = settingsRepository.findOne(settingsDto.getAmcEmailsId());
@@ -458,7 +525,7 @@ public class SettingsService extends AbstractService {
 		amcEmailsSetting.setSiteId(settingsDto.getSiteId());
 		amcEmailsSetting.setSiteName(settingsDto.getSiteName());
 		amcEmailsSetting.setActive("Y");
-		
+
 		Setting warrantyAlertSetting = null;
 		if(settingsDto.getWarrantyEmailAlertId() > 0) {
 			warrantyAlertSetting = settingsRepository.findOne(settingsDto.getWarrantyEmailAlertId());
@@ -472,7 +539,7 @@ public class SettingsService extends AbstractService {
 		warrantyAlertSetting.setSiteId(settingsDto.getSiteId());
 		warrantyAlertSetting.setSiteName(settingsDto.getSiteName());
 		warrantyAlertSetting.setActive("Y");
-		
+
 		Setting warrantyEmailsSetting = null;
 		if(settingsDto.getWarrantyEmailsId() > 0) {
 			warrantyEmailsSetting = settingsRepository.findOne(settingsDto.getWarrantyEmailsId());
@@ -488,7 +555,7 @@ public class SettingsService extends AbstractService {
 		warrantyEmailsSetting.setSiteId(settingsDto.getSiteId());
 		warrantyEmailsSetting.setSiteName(settingsDto.getSiteName());
 		warrantyEmailsSetting.setActive("Y");
-		
+
 		Setting purchaseAlertSetting = null;
 		if(settingsDto.getPurchaseReqEmailAlertId() > 0) {
 			purchaseAlertSetting = settingsRepository.findOne(settingsDto.getPurchaseReqEmailAlertId());
@@ -502,7 +569,7 @@ public class SettingsService extends AbstractService {
 		purchaseAlertSetting.setSiteId(settingsDto.getSiteId());
 		purchaseAlertSetting.setSiteName(settingsDto.getSiteName());
 		purchaseAlertSetting.setActive("Y");
-		
+
 		Setting purchaseEmailsSetting = null;
 		if(settingsDto.getPurchaseReqEmailsId() > 0) {
 			purchaseEmailsSetting = settingsRepository.findOne(settingsDto.getPurchaseReqEmailsId());
@@ -518,7 +585,99 @@ public class SettingsService extends AbstractService {
 		purchaseEmailsSetting.setSiteId(settingsDto.getSiteId());
 		purchaseEmailsSetting.setSiteName(settingsDto.getSiteName());
 		purchaseEmailsSetting.setActive("Y");
-		
+		Setting dayWiseReportAlertSetting = null;
+		if(settingsDto.getDayWiseReportEmailAlertId() > 0) {
+			dayWiseReportAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportEmailAlertId());
+		}else {
+			dayWiseReportAlertSetting = new Setting();
+		}
+		dayWiseReportAlertSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT);
+		dayWiseReportAlertSetting.setSettingValue(String.valueOf(settingsDto.isDayWiseReportEmailAlert()));
+		dayWiseReportAlertSetting.setClientGroupAlert(settingsDto.isClientGroupEmailAlert());
+		dayWiseReportAlertSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseReportAlertSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseReportAlertSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseReportAlertSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseReportAlertSetting.setActive("Y");
+
+		Setting dayWiseReportClientGroupAlertSetting = null;
+		if(settingsDto.getDayWiseReportClientGroupEmailAlertId() > 0) {
+			dayWiseReportClientGroupAlertSetting = settingsRepository.findOne(settingsDto.getDayWiseReportClientGroupEmailAlertId());
+		}else {
+			dayWiseReportClientGroupAlertSetting = new Setting();
+		}
+		dayWiseReportClientGroupAlertSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT_CLIENT_GROUP_ALERT);
+		dayWiseReportClientGroupAlertSetting.setSettingValue(String.valueOf(settingsDto.isClientGroupEmailAlert()));
+		dayWiseReportClientGroupAlertSetting.setClientGroupAlert(settingsDto.isClientGroupEmailAlert());
+		dayWiseReportClientGroupAlertSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseReportClientGroupAlertSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseReportClientGroupAlertSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseReportClientGroupAlertSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseReportClientGroupAlertSetting.setActive("Y");
+
+		Setting dayWiseReportEmailsSetting = null;
+		if(settingsDto.getDayWiseReportEmailsId() > 0) {
+			dayWiseReportEmailsSetting = settingsRepository.findOne(settingsDto.getDayWiseReportEmailsId());
+		}else {
+			dayWiseReportEmailsSetting = new Setting();
+		}
+		dayWiseReportEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getDayWiseReportEmailIds())) {
+			dayWiseReportEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getDayWiseReportEmailIds()));
+		}
+		dayWiseReportEmailsSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseReportEmailsSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseReportEmailsSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseReportEmailsSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseReportEmailsSetting.setActive("Y");
+
+		Setting dayWiseReportAlertTimeSetting = null;
+		if(settingsDto.getDayWiseReportAlertTimeId() > 0) {
+			dayWiseReportAlertTimeSetting = settingsRepository.findOne(settingsDto.getDayWiseReportAlertTimeId());
+		}else {
+			dayWiseReportAlertTimeSetting = new Setting();
+		}
+		dayWiseReportAlertTimeSetting.setSettingKey(EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME);
+		if(settingsDto.getDayWiseReportAlertTime() != null) {
+			dayWiseReportAlertTimeSetting.setSettingValue(String.valueOf(settingsDto.getDayWiseReportAlertTime()));
+		}
+		dayWiseReportAlertTimeSetting.setProjectId(settingsDto.getProjectId());
+		dayWiseReportAlertTimeSetting.setProjectName(settingsDto.getProjectName());
+		dayWiseReportAlertTimeSetting.setSiteId(settingsDto.getSiteId());
+		dayWiseReportAlertTimeSetting.setSiteName(settingsDto.getSiteName());
+		dayWiseReportAlertTimeSetting.setActive("Y");
+
+		Setting musterAlertSetting = null;
+		if(settingsDto.getMusterRollEmailAlertId() > 0) {
+			musterAlertSetting = settingsRepository.findOne(settingsDto.getMusterRollEmailAlertId());
+		}else {
+			musterAlertSetting = new Setting();
+		}
+		musterAlertSetting.setSettingKey(EMAIL_NOTIFICATION_MUSTER_ROLL);
+		musterAlertSetting.setSettingValue(String.valueOf(settingsDto.isMusterRollEmailAlert()));
+		musterAlertSetting.setProjectId(settingsDto.getProjectId());
+		musterAlertSetting.setProjectName(settingsDto.getProjectName());
+		musterAlertSetting.setSiteId(settingsDto.getSiteId());
+		musterAlertSetting.setSiteName(settingsDto.getSiteName());
+		musterAlertSetting.setActive("Y");
+
+		Setting musterEmailsSetting = null;
+		if(settingsDto.getMusterRollEmailsId() > 0) {
+			musterEmailsSetting = settingsRepository.findOne(settingsDto.getMusterRollEmailsId());
+		}else {
+			musterEmailsSetting = new Setting();
+		}
+		musterEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getMusterRollEmailIds())) {
+			musterEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getMusterRollEmailIds()));
+		}
+		musterEmailsSetting.setProjectId(settingsDto.getProjectId());
+		musterEmailsSetting.setProjectName(settingsDto.getProjectName());
+		musterEmailsSetting.setSiteId(settingsDto.getSiteId());
+		musterEmailsSetting.setSiteName(settingsDto.getSiteName());
+		musterEmailsSetting.setActive("Y");
+
+
 		List<Setting> settingList = new ArrayList<Setting>();
 		if(StringUtils.isNotEmpty(shiftWiseAttendanceAlertSetting.getSettingValue())) {
 			settingList.add(shiftWiseAttendanceAlertSetting);
@@ -550,11 +709,20 @@ public class SettingsService extends AbstractService {
 		if(StringUtils.isNotEmpty(eodJobEmailsSetting.getSettingValue())) {
 			settingList.add(eodJobEmailsSetting);
 		}
+		if(StringUtils.isNotEmpty(feedbackEmailsSetting.getSettingValue())) {
+			settingList.add(feedbackEmailsSetting);
+		}
 		if(StringUtils.isNotEmpty(feedbackAlertSetting.getSettingValue())) {
 			settingList.add(feedbackAlertSetting);
 		}
-		if(StringUtils.isNotEmpty(feedbackEmailsSetting.getSettingValue())) {
-			settingList.add(feedbackEmailsSetting);
+		if(StringUtils.isNotEmpty(feedbackReportSetting.getSettingValue())) {
+			settingList.add(feedbackReportSetting);
+		}
+		if(StringUtils.isNotEmpty(feedbackReportEmailsSetting.getSettingValue())) {
+			settingList.add(feedbackReportEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(feedbackReportTimeSetting.getSettingValue())) {
+			settingList.add(feedbackReportTimeSetting);
 		}
 		if(StringUtils.isNotEmpty(quotationAlertSetting.getSettingValue())) {
 			settingList.add(quotationAlertSetting);
@@ -602,9 +770,28 @@ public class SettingsService extends AbstractService {
 			settingList.add(purchaseAlertSetting);
 		}
 		if(StringUtils.isNotEmpty(purchaseEmailsSetting.getSettingValue())) {
-			settingList.add(purchaseEmailsSetting);
+            settingList.add(purchaseEmailsSetting);
+        }
+		if(StringUtils.isNotEmpty(dayWiseReportAlertSetting.getSettingValue())) {
+			settingList.add(dayWiseReportAlertSetting);
 		}
-		
+
+		if(StringUtils.isNotEmpty(dayWiseReportClientGroupAlertSetting.getSettingValue())) {
+			settingList.add(dayWiseReportClientGroupAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(dayWiseReportEmailsSetting.getSettingValue())) {
+			settingList.add(dayWiseReportEmailsSetting);
+		}
+		if(StringUtils.isNotEmpty(dayWiseReportAlertTimeSetting.getSettingValue())) {
+			settingList.add(dayWiseReportAlertTimeSetting);
+		}
+		if(StringUtils.isNotEmpty(musterAlertSetting.getSettingValue())) {
+			settingList.add(musterAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(musterEmailsSetting.getSettingValue())) {
+			settingList.add(musterEmailsSetting);
+		}
+
 		settingsRepository.save(settingList);
 
 		return settingsDto;
@@ -663,6 +850,15 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_EMAILS)) {
 					settingDto.setFeedbackEmailsId(setting.getId());
 					settingDto.setFeedbackEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT)) {
+					settingDto.setFeedbackReportEmailAlertId(setting.getId());
+					settingDto.setFeedbackReportEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT_EMAILS)) {
+					settingDto.setFeedbackReportEmailsId(setting.getId());
+					settingDto.setFeedbackReportEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_FEEDBACK_REPORT_TIME)) {
+					settingDto.setFeedbackReportTimeId(setting.getId());
+					settingDto.setFeedbackReportTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_QUOTATION)) {
 					settingDto.setQuotationEmailAlertId(setting.getId());
 					settingDto.setQuotationEmailAlert(Boolean.valueOf(setting.getSettingValue()));
@@ -711,6 +907,24 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS)) {
 					settingDto.setPurchaseReqEmailsId(setting.getId());
 					settingDto.setPurchaseReqEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT)) {
+					settingDto.setDayWiseReportEmailAlertId(setting.getId());
+					settingDto.setDayWiseReportEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_CLIENT_GROUP_ALERT)) {
+					settingDto.setDayWiseReportClientGroupEmailAlertId(setting.getId());
+					settingDto.setClientGroupEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_EMAILS)) {
+					settingDto.setDayWiseReportEmailsId(setting.getId());
+					settingDto.setDayWiseReportEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_DAYWISE_REPORT_ALERT_TIME)) {
+					settingDto.setDayWiseReportAlertTimeId(setting.getId());
+					settingDto.setDayWiseReportAlertTime(StringUtils.isNotEmpty(setting.getSettingValue()) ? DateUtil.parseToDateTime(setting.getSettingValue()) : null);
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_MUSTER_ROLL)) {
+					settingDto.setMusterRollEmailAlertId(setting.getId());
+					settingDto.setMusterRollEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_MUSTER_ROLL_EMAILS)) {
+					settingDto.setMusterRollEmailsId(setting.getId());
+					settingDto.setMusterRollEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
 				}
 
 				//settings.add(settingDto);
@@ -723,6 +937,17 @@ public class SettingsService extends AbstractService {
     public List<ApplicationVersionControl>  findApplicationVersionCode() {
         List<ApplicationVersionControl> applicationVersionControl = applicationVersionControlRepository.findAll();
         return applicationVersionControl;
+    }
+
+    public SettingsDTO findSetting(String key) {
+    		SettingsDTO settingDto = null;
+    		if(StringUtils.isNotEmpty(key)) {
+	    		Setting setting = settingsRepository.findSettingByKey(key);
+	    		settingDto = new SettingsDTO();
+	    		settingDto.setKey(key);
+	    		settingDto.setValue(setting.getSettingValue());
+    		}
+    		return settingDto;
     }
 
 }

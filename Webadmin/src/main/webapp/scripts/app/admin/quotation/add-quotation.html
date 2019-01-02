@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="initLoad();loadingAuto();" >
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f"  ng-init="loadPageTop();init();loadingAuto();" >
 	<div class="">
 
 		<div class="row">
@@ -37,16 +37,15 @@
 												<div class="form-group">
 													<label class="control-label">Title<span class="red-star">*</span></label> <input
 														id='quotationTitle' ng-model="quotation.title"
-														class='form-control InputTxtCaps' name='quotationTitle' type='text'
+														class='form-control InputTxtCapsAll' name='quotationTitle' type='text'
 														value="" ng-minlength='2' ng-maxlength='250'
-														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
+														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" ng-disabled="ticketQuot" autofocus required />
 													<div
 														ng-show="form.$submitted || form.quotationTitle.$touched">
 														<div
 															ng-show="form.quotationTitle.$dirty || form.quotationTitle.$invalid">
 															<p class="help-block" style="color: maroon"
-																ng-show="form.quotationTitle.$error.required">Enter
-																a valid Title.</p>
+																ng-show="form.quotationTitle.$error.required">Title is required.</p>
 															<p class="help-block" style="color: maroon"
 																ng-show="form.quotationTitle.$error.minlength">
 																Title should be atleast 2 Characters.</p>
@@ -66,7 +65,7 @@
 														id='quotationDescription' ng-model="quotation.description"
 														class='form-control InputTxtCaps' name='quotationDescription'
 														type='text' value="" ng-maxlength=250
-														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" />
+														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" ng-disabled="ticketQuot" />
 													<div
 														ng-show="form.$submitted || form.quotationDescription.$touched">
 														<div
@@ -89,72 +88,49 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
 
-                                                    <!--<label class="control-label">Client</label>-->
+                                                    <label class="control-label">Client</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown">
 
-                                                        <!--<input type="text" class="form-control" ng-model="selectedProject" name="projectName" ng-value="selectedProject.name"-->
-                                                               <!--uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"-->
-                                                               <!--ng-blur="loadSites()"-->
-                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control" ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.id" required>
-                                                            <option value="">Select client...</option>
-                                                        </select>
+                                                        <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                              
+		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="!ticketQuot">
+														  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
+														    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched">
                                                             <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.required">
                                                                     Client name is required.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.minlength">
-                                                                    Client name is required to be at least 2 character.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.maxlength">
-                                                                    Client name cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.projectName.$error.pattern">
-                                                                    Client name can only contain letters, digits and space.
-                                                                </p>
+                                                                </p>    
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="form-group label-floating">
-                                                    <!--<label class="control-label">Site</label>-->
+                                                <div class="form-group">
+                                                    <label class="control-label">Site</label>
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown" >
-                                                        <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
-                                                               <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                               <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" required>
-                                                            <option value="">Select site...</option>
-                                                        </select>
-
+                                                        <span ng-show="!siteDisable && !SelectSite.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                              
+		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="!ticketQuot">
+														  <ui-select-match placeholder="Select sites..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="SelectSite in SelectSites | filter: $select.search" >
+														    <span ng-bind-html="SelectSite.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+                                                        <span ng-if="SelectSites.length == 0 && !ticketQuot"><p class="error-msg margin0">No sites</p></span>
                                                         <div ng-show="form.$submitted || form.siteName.$touched">
                                                             <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.siteName.$error.required">
                                                                     Site name is required.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.minlength">
-                                                                    Site name is required to be at least 2 character.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.maxlength">
-                                                                    Site name cannot be longer than 50 characters.
-                                                                </p>
-                                                                <p class="help-block" style="color:maroon"
-                                                                   ng-show="form.siteName.$error.pattern">
-                                                                    Site name can only contain letters, digits and space.
-                                                                </p>
+                                                                </p> 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -162,16 +138,17 @@
                                             </div>
 
                                             <div class="col-md-4">
-                                            	<div class="form-group label-floating" >
-						                                <div class="pdng-top13" >
-						                                    <input type="file"
-						                                           class="form-control" style="opacity:100;position:relative" file-model
-						                                           ng-model="selectedImageFile"
-						                                           name="ImageFile"
-						                                    />
-						                                </div>
+                                            	<div class="form-group" >
+
+                                                    <label class="control-label">File</label>
+                                                    <input type="file"
+                                                           class="form-control" style="opacity:100;position:relative" file-model
+                                                           ng-model="selectedImageFile"
+                                                           name="ImageFile"
+                                                    />
+
+                                                </div>
                                             </div>
-                                      		  </div>
 
 
 
@@ -182,6 +159,10 @@
 
 							</div>
 							<div class="col-md-12">
+								<p class="help-block" style="color:maroon"
+                                   ng-show="quoteStatus">
+                                    <span class="red-star">*</span>Required Service/Material/Labour.
+                                </p>
 								<div class="panel panel-default TabsContainer">
 									<!--<div class="panel-heading">Panel Heading</div>-->
 									<div class="panel-body">
@@ -204,45 +185,75 @@
 
 											<div class="tab-pane fade in active pill2" id="pill2">
 												<div class="row">
+	                                                 <form name="serviceForm" role="form" novalidate>
+														<div class="col-md-5">
+															<div class="form-group">
+																<label class="control-label">Service Name</label>
+																<input ng-model="serviceName"
+																	class='form-control' name='serviceName' type='text' value=""
+																	ng-maxlength='100'
+																	 autofocus  />
+																<div ng-show="serviceForm.$submitted || serviceForm.serviceName.$touched || serviceForm.serviceName.$dirty">
+			                                                        <div ng-show="serviceForm.serviceName.$dirty || serviceForm.serviceName.$invalid">
+			                                                            <!-- <p class="help-block" style="color:maroon"
+			                                                               ng-show="serviceForm.serviceName.$error.required">
+			                                                                Service name is required.
+			                                                            </p> -->
+			                                                            <p class="help-block" style="color:maroon"
+			                                                               ng-show="serviceForm.serviceName.$error.maxlength">
+			                                                                Service name is cannot be longer than 100 characters.
+			                                                            </p>
 
-													<div class="col-md-5">
-														<div class="form-group">
-															<label class="control-label">Service Name</label>
-															<input ng-model="serviceName"
-																class='form-control' name='serviceName' type='text' value=""
-																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+			                                                        </div>
+		                                                        </div>
+
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Quantity</label>
+																<input id='serviceQty' ng-model="serviceQty"
+																		class='form-control' name='serviceQty' type='number'
+																		value="" min='1' max='100'
+																		 ng-pattern="/[0-9]*/" autofocus  />
+																		<div ng-show="serviceForm.$submitted || serviceForm.serviceQty.$touched || serviceForm.serviceQty.$dirty">
+			                                                             <div ng-show="serviceForm.serviceQty.$dirty || serviceForm.serviceQty.$invalid">
+			                                                            <!-- <p class="help-block" style="color:maroon"
+			                                                               ng-show="serviceForm.serviceQty.$error.required">
+			                                                                Quantity is required.
+			                                                            </p> -->
+			                                                        </div>
+		                                                        </div>
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Cost(Fixed)</label>
+																<input ng-model="serviceUnitPrice"
+																	class='form-control' name='serviceUnitPrice' type='number' value=""
+																	min='1'
+																	max='100000' ng-pattern="/[0-9]*/"
+																	 autofocus />
+																	 <div ng-show="serviceForm.$submitted || serviceForm.serviceUnitPrice.$touched || serviceForm.serviceUnitPrice.$dirty">
+			                                                             <div ng-show="serviceForm.serviceUnitPrice.$dirty || serviceForm.serviceUnitPrice.$invalid">
+			                                                            <!-- <p class="help-block" style="color:maroon"
+			                                                               ng-show="serviceForm.serviceUnitPrice.$error.required">
+			                                                                Cost is required.
+			                                                            </p> -->
+			                                                        </div>
+		                                                        </div>
+
+															</div>
+														</div>
+														<div class="col-md-3 margn-top10">
+															<button class="btn btn-success" ng-click="addService()" ng-disabled="serviceForm.$invalid">
+																<span class="btn-label"><i class="material-icons">check</i></span>
+															</button>
 
 														</div>
-													</div>
-													<div class="col-md-2">
-														<div class="form-group">
-															<label class="control-label">Quantity</label>
-															<input id='serviceQty' ng-model="serviceQty"
-																	class='form-control' name='serviceQty' type='text'
-																	value="" ng-minlength='1' ng-maxlength='6'
-																	ng-pattern="/[0-9]*/" autofocus />
-														</div>
-													</div>
-													<div class="col-md-2">
-														<div class="form-group">
-															<label class="control-label">Cost(Fixed)</label>
-															<input ng-model="serviceUnitPrice"
-																class='form-control' name='serviceUnitPrice' type='text' value=""
-																ng-minlength='1' ng-maxlength='5'
-																ng-pattern="/[0-9]*/" autofocus />
-
-														</div>
-													</div>
-													<div class="col-md-3 margn-top10">
-														<button class="btn btn-success" ng-click="addService()">
-															<span class="btn-label"><i class="material-icons">check</i></span>
-														</button>
-
-													</div>
 
 
-
+	                                                </form>
 												</div>
 												<div class="table-responsive tablecard">
 													<table class="table table-striped">
@@ -291,45 +302,59 @@
 											</div>
 											<div class="tab-pane fade pill3" id="pill3">
 												<div class="row">
+	                                                  <form name="labourForm" role="form" novalidate>
 
-													<div class="col-md-5">
-														<div class="form-group">
-															<label class="control-label">Labour Category</label>
-															<input ng-model="labourCategory"
-																class='form-control' name='labourCategory' type='text' value=""
-																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
+														<div class="col-md-5">
+															<div class="form-group">
+																<label class="control-label">Labour Category</label>
+																<input ng-model="labourCategory"
+																	class='form-control' name='labourCategory' type='text' value=""
+																	ng-maxlength='100'
+																	 autofocus  />
+																	<div ng-show="labourForm.$submitted || labourForm.labourCategory.$touched || labourForm.labourCategory.$dirty">
+			                                                        <div ng-show="labourForm.labourCategory.$dirty || labourForm.labourCategory.$invalid">
+			                                                            <!-- <p class="help-block" style="color:maroon"
+			                                                               ng-show="labourForm.labourCategory.$error.required">
+			                                                                Labour Category is required.
+			                                                            </p> -->
+			                                                            <p class="help-block" style="color:maroon"
+			                                                               ng-show="labourForm.labourCategory.$error.maxlength">
+			                                                                Labour Category is cannot be longer than 100 characters.
+			                                                            </p>
 
+			                                                        </div>
+		                                                        </div>
+
+															</div>
 														</div>
-													</div>
-													<div class="col-md-2">
-														<div class="form-group">
-															<label class="control-label">Hours</label>
-															<input id='labourQty' ng-model="labourQty"
-																	class='form-control' name='labourQty' type='text'
-																	value="" ng-minlength='1' ng-maxlength='6'
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Hours</label>
+																<input id='labourQty' ng-model="labourQty"
+																		class='form-control' name='labourQty' type='number'
+																		value="" min='1' max='12'
+																		ng-pattern="/[0-9]*/" autofocus  />
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Cost(Per Hr)</label>
+																<input ng-model="labourUnitPrice"
+																	class='form-control' name='labourUnitPrice' type='number' value="" min="1"
+																	 max='100000'
 																	ng-pattern="/[0-9]*/" autofocus  />
+
+															</div>
 														</div>
-													</div>
-													<div class="col-md-2">
-														<div class="form-group">
-															<label class="control-label">Cost(Per Hr)</label>
-															<input ng-model="labourUnitPrice"
-																class='form-control' name='labourUnitPrice' type='text' value=""
-																ng-minlength='1' ng-maxlength='5'
-																ng-pattern="/[0-9]*/" autofocus  />
+														<div class="col-md-3 margn-top10">
+															<button class="btn btn-success" ng-click="addLabour()" ng-disabled="labourForm.$invalid">
+																<span class="btn-label"><i class="material-icons">check</i></span>
+															</button>
 
 														</div>
-													</div>
-													<div class="col-md-3 margn-top10">
-														<button class="btn btn-success" ng-click="addLabour()">
-															<span class="btn-label"><i class="material-icons">check</i></span>
-														</button>
-
-													</div>
 
 
-
+	                                                </form>
 												</div>
 
 												<div class="table-responsive tablecard">
@@ -339,7 +364,7 @@
 																<th>Type</th>
 																<th>Name</th>
 																<th>UOM</th>
-																<th>Quantity</th>
+																<th>Hours</th>
 																<th>Unit Price</th>
 																<th>Cost</th>
 																<th class="text-right">Actions</th>
@@ -378,45 +403,59 @@
 											</div>
 											<div class="tab-pane fade pill1" id="pill1">
 												<div class="row">
+	                                                <form name="materialForm" role="form" novalidate>
+														<div class="col-md-5">
+															<div class="form-group">
+																<label class="control-label">Material Name</label>
+																<input ng-model="materialName"
+																	class='form-control' name='materialName' type='text' value=""
+																	ng-maxlength='100'
+																	autofocus  />
 
-													<div class="col-md-5">
-														<div class="form-group">
-															<label class="control-label">Material Name</label>
-															<input ng-model="materialName"
-																class='form-control' name='materialName' type='text' value=""
-																ng-minlength='1' ng-maxlength='100'
-																ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus  />
+																	<div ng-show="materialForm.$submitted || materialForm.materialName.$touched || materialForm.materialName.$dirty">
+			                                                        <div ng-show="materialForm.materialName.$dirty || materialForm.materialName.$invalid">
+			                                                           <!--  <p class="help-block" style="color:maroon"
+			                                                               ng-show="materialForm.materialName.$error.required">
+			                                                               Material Name is required.
+			                                                            </p> -->
+			                                                            <p class="help-block" style="color:maroon"
+			                                                               ng-show="materialForm.materialName.$error.maxlength">
+			                                                                Material Name is cannot be longer than 100 characters.
+			                                                            </p>
 
+			                                                        </div>
+		                                                        </div>
+
+															</div>
 														</div>
-													</div>
-													<div class="col-md-2">
-														<div class="form-group">
-															<label class="control-label">Quantity</label>
-															<input id='materialQty' ng-model="materialQty"
-																	class='form-control' name='materialQty' type='text'
-																	value="" ng-minlength='1' ng-maxlength='6'
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Quantity</label>
+																<input id='materialQty' ng-model="materialQty"
+																		class='form-control' name='materialQty' type='text'
+																		value="" min='1' max='100'
+																		ng-pattern="/[0-9]*/" autofocus  />
+															</div>
+														</div>
+														<div class="col-md-2">
+															<div class="form-group">
+																<label class="control-label">Cost</label>
+																<input ng-model="materialUnitPrice"
+																	class='form-control' name='materialUnitPrice' type='text' value=""
+																	min='1' max='100000'
 																	ng-pattern="/[0-9]*/" autofocus  />
+
+															</div>
 														</div>
-													</div>
-													<div class="col-md-2">
-														<div class="form-group">
-															<label class="control-label">Cost</label>
-															<input ng-model="materialUnitPrice"
-																class='form-control' name='materialUnitPrice' type='text' value=""
-																ng-minlength='1' ng-maxlength='5'
-																ng-pattern="/[0-9]*/" autofocus  />
+														<div class="col-md-3 margn-top10">
+															<button class="btn btn-success" ng-click="addMaterial()" ng-disabled="materialForm.$invalid">
+																<span class="btn-label"><i class="material-icons">check</i></span>
+															</button>
 
 														</div>
-													</div>
-													<div class="col-md-3 margn-top10">
-														<button class="btn btn-success" ng-click="addMaterial()">
-															<span class="btn-label"><i class="material-icons">check</i></span>
-														</button>
-
-													</div>
 
 
-
+	                                                </form>
 												</div>
 
 												<div class="table-responsive tablecard">
@@ -510,22 +549,36 @@
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
 
-														<button class="btn btn-success" ng-click="saveQuotation('submit')"
-															id="form-button-save"
-															ng-disabled="form.$invalid">
-															<span class="btn-label"><i class="material-icons">check</i></span>
-															Send
-														</button>
-														<button class="btn btn-warning" ng-click="saveQuotation('create')" ng-disabled="form.$invalid">
-															<span class="btn-label"><i class="material-icons">save</i></span>
-															Save Draft
-														</button>
-														<button class="btn btn-danger" type="button"
-															ng-click="cancelQuotation()" id="cancel-button">
-															<i class="material-icons">close</i> Cancel
-														</button>
-
-													</div>
+														<!--<button class="btn btn-success" ng-click="saveQuotation('submit')"-->
+															<!--id="form-button-save"-->
+															<!--ng-disabled="form.$invalid">-->
+															<!--<span class="btn-label"><i class="material-icons">check</i></span>-->
+															<!--Send-->
+														<!--</button>-->
+                                                        <button type="submit"  ng-click="conform('send','submit')"
+                                                                ng-disabled="form.$invalid || quoteStatus || btnDisable"  class="btn btn-success ld ld-over-inverse pull-right"
+                                                                ng-class="{'running':saveLoad}">
+                                                            <span class="btn-label"><i class="material-icons">save</i></span> Send
+                                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                        </button>
+														<!--<button class="btn btn-warning" ng-click="saveQuotation('create')" ng-disabled="form.$invalid">-->
+															<!--<span class="btn-label"><i class="material-icons">save</i></span>-->
+															<!--Save Draft-->
+														<!--</button>-->
+                                                        <button type="submit"  ng-click="conform('save','create')"
+                                                                ng-disabled="form.$invalid || quoteStatus || btnDisable"  class="btn btn-warning ld ld-over-inverse pull-right"
+                                                                ng-class="{'running':saveLoad}">
+                                                            <span class="btn-label"><i class="material-icons">save</i></span> Save Draft
+                                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                                        </button>
+														<!--<button class="btn btn-danger" type="button"-->
+															<!--ng-click="cancelQuotation()" id="cancel-button">-->
+															<!--<i class="material-icons">close</i> Cancel-->
+														<!--</button>-->
+                                                        <button type="submit" ng-disabled="btnDisable" ng-click="conform('cancel','')" id="cancel-button"   class="btn btn-danger pull-right">
+                                                            <i class="material-icons">close</i> Cancel
+                                                        </button>
+                                                    </div>
 												</div>
 											</div>
 										</div>
@@ -541,10 +594,6 @@
 
 
 						</div>
-
-
-
-
 
 						<div class='small-loading hidden' id='FormLoading'>Loading,
 							saving data...</div>

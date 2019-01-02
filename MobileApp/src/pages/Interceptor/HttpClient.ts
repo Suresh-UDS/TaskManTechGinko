@@ -33,7 +33,11 @@ export class HttpClient
       {
         console.log('returning from interceptor');
         return response;
-      });
+      }).catch(err=>{
+        console.log('Returning from interceptor with error');
+        console.log(err);
+        return Observable.throw(err);
+        });
   }
 
   get(url) : Observable<any>
@@ -52,7 +56,11 @@ export class HttpClient
       {
         console.log('returning from interceptor');
         return Response;
-      });
+      }).catch(err=>{
+        console.log('Returning from interceptor with error');
+        console.log(err);
+        return Observable.throw(err);
+    });
   }
 
   put(url):Observable<any>

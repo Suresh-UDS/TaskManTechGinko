@@ -8,10 +8,12 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -171,8 +173,9 @@ public class SlaConfigService extends AbstractService {
 	public void deleteSlaConfig(Long id) {
 		log.debug(">>> Inside SlaConfig Delete Service");
 		SlaConfig sladel= slaconfigrepository.findOne(id);
-		sladel.setActive(Asset.ACTIVE_NO);
-		slaconfigrepository.save(sladel);
+		//sladel.setActive(Asset.ACTIVE_NO);
+		//slaconfigrepository.save(sladel);
+		slaconfigrepository.delete(sladel);
 	}
 	
 	public List<SlaConfigDTO> findAll() {
@@ -200,14 +203,14 @@ public class SlaConfigService extends AbstractService {
 		SearchResult<SlaConfigDTO> result = new SearchResult<SlaConfigDTO>();
 		if(searchCriteria != null) {
             Pageable pageRequest = null;
-            /*if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+           if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
-            }else{*/
+            }else{ 
                 pageRequest = createPageRequest(searchCriteria.getCurrPage());
-            //}
+            }
             Page<SlaConfig> page = null;
 			List<SlaConfigDTO> transactions = null;
 			log.debug("Site id = "+ searchCriteria.getSiteId());
@@ -217,7 +220,7 @@ public class SlaConfigService extends AbstractService {
 					page = slaconfigrepository.findSlaBySiteId(searchCriteria.getSiteId(), pageRequest);
 					log.debug("page content " + page);
 				}else {
-					page = slaconfigrepository.findActiveAllSlaConfig(pageRequest);
+					page = slaconfigrepository.findSlaBySiteName(pageRequest);
 				}
 			}
 			if(page != null) {

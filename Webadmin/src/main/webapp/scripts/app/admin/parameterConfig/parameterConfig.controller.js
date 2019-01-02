@@ -41,7 +41,7 @@ angular.module('timeSheetApp')
 
                     $scope.conform = function(text)
                     {
-                        console.log($scope.selectedProject)
+                      //console.log($scope.selectedProject)
                         $rootScope.conformText = text;
                         $('#conformationModal').modal();
                     }
@@ -55,7 +55,7 @@ angular.module('timeSheetApp')
                             $scope.saveParameterConfig();
                         }
                     };
-        console.log($stateParams)
+      //console.log($stateParams)
                     var that =  $scope;
 
         $scope.calendar = {
@@ -99,7 +99,7 @@ angular.module('timeSheetApp')
                 $scope.selectedAssetType = null;
                 $scope.assetTypes = data;
 
-                console.log('Asset type list',$scope.assetTypes);
+              //console.log('Asset type list',$scope.assetTypes);
 
                 $scope.loadingStop();
             });
@@ -107,12 +107,12 @@ angular.module('timeSheetApp')
 
         $scope.addAssetType = function () {
 
-            console.log($scope.assetType);
+          //console.log($scope.assetType);
             $scope.loadingStart();
             if($scope.assetType){
-                console.log("Asset Type entered");
+              //console.log("Asset Type entered");
                 AssetTypeComponent.create($scope.assetType).then(function (response) {
-                    console.log(response);
+                  //console.log(response);
                     $scope.assetType = {};
                     $scope.showNotifications('top','center','success','Asset Type Added Successfully');
                     $scope.loadAssetTypes();
@@ -122,7 +122,7 @@ angular.module('timeSheetApp')
                    $scope.loadingStop();
                 });
             }else{
-                console.log("Asset Type not entered");
+              //console.log("Asset Type not entered");
             }
 
 
@@ -139,12 +139,12 @@ angular.module('timeSheetApp')
 	    }
 
 	    $scope.addAssetParam = function () {
-	        console.log($scope.assetParam.name);
+	      //console.log($scope.assetParam.name);
              $scope.loadingStart();
 	        if($scope.assetParam){
-	            console.log("Parameter entered");
+	          //console.log("Parameter entered");
 	            ParameterComponent.create($scope.assetParam).then(function (response) {
-	                console.log(response);
+	              //console.log(response);
 	                $scope.parameter = null;
 	                $scope.showNotifications('top','center','success','Parameter Added Successfully');
 	                $scope.loadAssetParams();
@@ -153,7 +153,7 @@ angular.module('timeSheetApp')
                     $scope.loadingStop();
                 });
 	        }else{
-	            console.log("Parameter not entered");
+	          //console.log("Parameter not entered");
 	        }
 	    }
 
@@ -166,12 +166,12 @@ angular.module('timeSheetApp')
 	    }
 
 	    $scope.addParameterUOM = function () {
-	        console.log($scope.parameterUOM.name);
+	      //console.log($scope.parameterUOM.name);
              $scope.loadingStart();
 	        if($scope.parameterUOM){
-	            console.log("ParameterUOM entered");
+	          //console.log("ParameterUOM entered");
 	            ParameterUOMComponent.create($scope.parameterUOM).then(function (response) {
-	                console.log(response);
+	              //console.log(response);
 	                $scope.parameterUOM = null;
 	                $scope.showNotifications('top','center','success','Parameter UOM Added Successfully');
 	                $scope.loadAssetParamUoms();
@@ -180,7 +180,7 @@ angular.module('timeSheetApp')
                     $scope.loadingStop();
                 });
 	        }else{
-	            console.log("Parameter UOM not entered");
+	          //console.log("Parameter UOM not entered");
 	        }
 	    };
 
@@ -190,7 +190,7 @@ angular.module('timeSheetApp')
         		$scope.isEdit = (mode == 'edit' ? true : false)
             ParameterConfigComponent.findById(id).then(function (data) {
                 $scope.parameterConfig = data;
-                console.log('Parameter by id',$scope.parameterConfig);
+              //console.log('Parameter by id',$scope.parameterConfig);
                 $scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
                 $scope.selectedParameter = {name:$scope.parameterConfig.name};
                 $scope.selectedParameterUOM = {uom:$scope.parameterConfig.uom};
@@ -227,7 +227,7 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.findAll = true;
 
 
-            console.log("search criteria",$scope.searchCriteria);
+          //console.log("search criteria",$scope.searchCriteria);
                      $scope.parameterConfigs = '';
                      $scope.parameterConfigsLoader = false;
                      $scope.loadPageTop();
@@ -243,8 +243,8 @@ angular.module('timeSheetApp')
                  $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
                  $scope.totalCountPages = data.totalCount;
 
-                console.log("Pagination",$scope.pager);
-                console.log('Parameter Configs search result list -' + JSON.stringify($scope.parameterConfigs));
+              //console.log("Pagination",$scope.pager);
+              //console.log('Parameter Configs search result list -' + JSON.stringify($scope.parameterConfigs));
                 $scope.pages.currPage = data.currPage;
                 $scope.pages.totalPages = data.totalPages;
 
@@ -338,7 +338,7 @@ angular.module('timeSheetApp')
                     $scope.saveLoad = false;
                     $scope.btnDisabled = false;
 	                $scope.success = null;
-	                console.log('Error - '+ response.data);
+	              //console.log('Error - '+ response.data);
 	                if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.showNotifications('top','center','danger','Parameter already  exists');
 	                    $scope.errorProjectExists = 'ERROR';
@@ -393,7 +393,7 @@ angular.module('timeSheetApp')
         }
 
          $scope.cancel = function() {
-                $scope.selectedAssetType = {};
+                $scope.selectedAssetType = "";
                 $scope.selectedParameter = {};
                 $scope.selectedParameterUOM = {};
                 $scope.selectedRule = "";

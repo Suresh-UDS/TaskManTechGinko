@@ -17,7 +17,7 @@
 
                 <div class="row" ng-init="init()">
 
-                    <div class="col-md-3">
+                    <div class="col-md-4">
 
                         <!--<div class="form-group label-floating">-->
                         <!--<label class="control-label">Date</label>-->
@@ -28,35 +28,57 @@
                         <div class="form-group">
                             <label class="label-control">From date</label>
                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
+                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off"/>
 
                         </div>
 
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
 
                         <div class="form-group">
                             <label class="label-control">To date</label>
                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                            <input type="text" class="form-control datepicker"  id="dateFilterTo"  placeholder="{{dateFilterTo | date:'dd-MMM-yyyy'}}"/>
+                            <input type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedToDate"  autocomplete="off"/>
 
                         </div>
 
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="dropdown">
                             <label class="label-control">Select Client</label>
                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedProject" ng-change="changeProject()" ng-options="project as project.name for project in projects" >
+                            <select class="form-control " ng-model="selectedProject" ng-change="LoadFilterProjects()" ng-options="project as project.name for project in projects" >
                                 <option value="">Please select Client...</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="dropdown ">
+                            <label class="label-control">Select Region</label>
+                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                            <select class="form-control " ng-model="selectedRegion" ng-change="LoadFilterRegions()" ng-options="region as region.name for region in regionList">
+                                <option value="">Please select Region...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="dropdown ">
+                            <label class="label-control">Select Branch</label>
+                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                            <select class="form-control " ng-model="selectedBranch" ng-change="LoadFilterBranches()" ng-options="branch as branch.name for branch in branchList">
+                                <option value="">Please select Branch...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
                         <div class="dropdown ">
                             <label class="label-control">Select Site</label>
                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedSite" ng-change="refreshReport()" ng-options="site as site.name for site in sites">
+                            <select class="form-control " ng-model="selectedSite" ng-change="LoadFilterSites()" ng-options="site as site.name for site in sites">
                                 <option value="">Please select Site...</option>
                             </select>
                         </div>
@@ -73,37 +95,42 @@
                   <div class="panel-body">
 
                       <div class="row">
-                          <div class="col-lg-3 col-md-6 col-sm-6">
-                              <div class="card card-stats">
-                                  <div class="card-header" data-background-color="orange">
-                                      <i class="material-icons">domain</i>
-                                  </div>
-                                  <div class="card-content">
-                                      <p class="category">Clients</p>
-                                      <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="stats">
-                                      </div>
-                                  </div>
-                              </div>
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                              <a  ui-sref="projects" ng-click="dbdFilter();">
+	                              <div class="card card-stats">
+	                                  <div class="card-header" data-background-color="orange">
+	                                      <i class="material-icons">domain</i>
+	                                  </div>
+	                                  <div class="card-content">
+	                                      <p class="category">Clients</p>
+	                                      <h3 class="card-title">{{projectCount ? projectCount : 0}}</h3>
+	                                  </div>
+	                                  <div class="card-footer">
+	                                      <div class="stats">
+	                                      </div>
+	                                  </div>
+	                              </div>
+                              </a>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-6">
-                              <div class="card card-stats">
-                                  <div class="card-header" data-background-color="rose">
-                                      <i class="material-icons">location_city</i>
-                                  </div>
-                                  <div class="card-content">
-                                      <p class="category">Sites</p>
-                                      <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="stats">
-                                      </div>
-                                  </div>
-                              </div>
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                             <a  ui-sref="sites" ng-click="dbdFilter();">
+	                              <div class="card card-stats">
+	                                  <div class="card-header" data-background-color="rose">
+	                                      <i class="material-icons">location_city</i>
+	                                  </div>
+	                                  <div class="card-content">
+	                                      <p class="category">Sites</p>
+	                                      <h3 class="card-title">{{siteCount ? siteCount : 0}}</h3>
+	                                  </div>
+	                                  <div class="card-footer">
+	                                      <div class="stats">
+	                                      </div>
+	                                  </div>
+	                              </div>
+                              </a>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-6">
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                          <a  ui-sref="employees" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">people</i>
@@ -117,35 +144,37 @@
                                           <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
                                       </div>
                                   </div>
-                              </div>
+                               </div>
+                           </a>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-6">
-                              <div class="card card-stats">
-                                  <div class="card-header" data-background-color="blue">
-                                      <i class="material-icons">content_copy</i>
-                                  </div>
-                                  <div class="card-content">
-                                      <p class="category">Quotations</p>
-                                      <h3 class="card-title">{{quotationCount}}</h3>
-                                  </div>
-                                  <div class="card-footer">
-                                      <div class="stats">
-                                          <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                          <!--<div class="col-lg-3 col-md-6 col-sm-6" has-permission="Quotation:List">-->
+                              <!--<div class="card card-stats">-->
+                                  <!--<div class="card-header" data-background-color="blue">-->
+                                      <!--<i class="material-icons">content_copy</i>-->
+                                  <!--</div>-->
+                                  <!--<div class="card-content">-->
+                                      <!--<p class="category">Quotations</p>-->
+                                      <!--<h3 class="card-title">{{quotationCount}}</h3>-->
+                                  <!--</div>-->
+                                  <!--<div class="card-footer">-->
+                                      <!--<div class="stats">-->
+                                          <!--&lt;!&ndash; <i class="material-icons">date_range</i> Last 24 Hours &ndash;&gt;-->
+                                      <!--</div>-->
+                                  <!--</div>-->
+                              <!--</div>-->
+                          <!--</div>-->
                       </div>
 
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="Jobs:List">
+              <div class="panel panel-default" ng-if="selectedProject.id && selectedProject.id>0" has-permission="DashboardJobs:View">
                   <div class="panel-heading">Jobs</div>
                   <div class="panel-body">
 
                       <div class="row">
 
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="jobs" ng-click="dbdStatusFilter('');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="orange">
                                       <i class="material-icons">work</i>
@@ -158,9 +187,12 @@
                                       <div class="stats">
                                       </div>
                                   </div>
-                              </div>
+                               </div>
+                            </a>
+                              
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                             <a ui-sref="jobs" ng-click="dbdStatusFilter('ASSIGNED');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="blue">
                                       <i class="material-icons">work</i>
@@ -174,8 +206,10 @@
                                       </div>
                                   </div>
                               </div>
+                             </a> 
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                             <a ui-sref="jobs" ng-click="dbdStatusFilter('COMPLETED');">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">work</i>
@@ -190,9 +224,11 @@
                                       </div>
                                   </div>
                               </div>
+                             </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
-                              <div class="card card-stats">
+                            <a ui-sref="jobs" ng-click="dbdStatusFilter('OVERDUE');">
+                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="rose">
                                       <i class="material-icons">work</i>
                                   </div>
@@ -205,20 +241,22 @@
                                           <!-- <i class="material-icons">date_range</i> Last 24 Hours -->
                                       </div>
                                   </div>
-                              </div>
+                               </div>
+                              </a>
                           </div>
                       </div>
 
                   </div>
               </div>
 
-              <div class="panel panel-default" has-permission="Attendance:List">
+              <div class="panel panel-default" ng-if="selectedProject.id && selectedProject.id>0" has-permission="DashboardAttendance:View">
                   <div class="panel-heading">Attendance</div>
                   <div class="panel-body">
 
                       <div class="row">
 
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="orange">
                                       <i class="material-icons">schedule</i>
@@ -232,8 +270,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="green">
                                       <i class="material-icons">schedule</i>
@@ -247,8 +287,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="rose">
                                       <i class="material-icons">schedule</i>
@@ -263,8 +305,10 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-6">
+                            <a ui-sref="attendances" ng-click="dbdFilter();">
                               <div class="card card-stats">
                                   <div class="card-header" data-background-color="blue">
                                       <i class="material-icons">schedule</i>
@@ -279,18 +323,82 @@
                                       </div>
                                   </div>
                               </div>
+                            </a>
                           </div>
                       </div>
 
                   </div>
               </div>
 
-              <div class="panel panel-default" has-permission="TicketCharts:View">
+              <div class="panel panel-default" ng-if="selectedProject.id && selectedProject.id>0" has-permission="DashboardTickets:View">
+                  <div class="panel-heading">Tickets</div>
+                  <div class="panel-body">
+
+                      <div class="row">
+
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                            <a ui-sref="tickets" ng-click="dbdTStatusFilter('');">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="orange">
+                                      <i class="material-icons">tab</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Total Tickets</p>
+                                      <h3 class="card-title">{{overAllTicketsTotalCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                            </a>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                            <a ui-sref="tickets" ng-click="dbdTStatusFilter('OPEN');">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="red">
+                                      <i class="material-icons">tab</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Open Tickets</p>
+                                      <h3 class="card-title">{{openTicketsTotalCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                      </div>
+                                  </div>
+                              </div>
+                            </a>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-6">
+                            <a ui-sref="tickets" ng-click="dbdTStatusFilter('CLOSED');">
+                              <div class="card card-stats">
+                                  <div class="card-header" data-background-color="green">
+                                      <i class="material-icons">tab</i>
+                                  </div>
+                                  <div class="card-content">
+                                      <p class="category">Closed Tickets</p>
+                                      <h3 class="card-title">{{closedTicketsTotalCount}}</h3>
+                                  </div>
+                                  <div class="card-footer">
+                                      <div class="stats">
+                                          <!-- <i class="material-icons">local_offer</i> Tracked from Google Analytics -->
+                                      </div>
+                                  </div>
+                              </div>
+                            </a>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+
+              <div id="openTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading">Open Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
                           <div class="col-md-8">
-                              <canvas id="bar" class="chart chart-bar">
+                              <canvas id="bar1" class="chart chart-bar" >
                               </canvas>
                           </div>
 
@@ -341,7 +449,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="TicketCharts:View">
+              <div id="closedTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading"> Closed Call Tickets</div>
                   <div class="panel-body">
                       <div class="row">
@@ -401,7 +509,7 @@
                       </div>
                   </div>
               </div>
-              <div class="panel panel-default" has-permission="TicketCharts:View">
+              <div id="overallTicketPanel" class="panel panel-default" has-permission="DashboardTicketsChart:View" >
                   <div class="panel-heading">Overall Tickets</div>
                   <div class="panel-body">
                       <div class="row">

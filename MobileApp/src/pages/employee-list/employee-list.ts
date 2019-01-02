@@ -15,7 +15,6 @@ import {CreateEmployeePage} from "./create-employee";
 import {EmployeeService} from "../service/employeeService";
 import {Toast} from "@ionic-native/toast";
 import{EmployeeFilter} from "./employee-filter/employee-filter";
-import {ImageViewerController} from "ionic-img-viewer";
 
 /**
  * Generated class for the EmployeeList page.
@@ -36,20 +35,20 @@ export class EmployeeListPage {
     totalPages:0;
     pageSort:15;
     count=0;
-
-  constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,public imageViewerCtrl: ImageViewerController,
+    project:any;
+    site:any;
+    searchCriteria:any;
+clientFilter:any;
+siteFilter:any;
+  constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toast: Toast,
               private geoFence:Geofence, private employeeService: EmployeeService, private actionSheetCtrl: ActionSheetController,
               private modalCtrl:ModalController) {
 
       this.employees = [];
+      this.searchCriteria ={};
 
   }
-
-    onClick(imageToView) {
-        const viewer = this.imageViewerCtrl.create(imageToView)
-        viewer.present();
-    }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Employee list');
@@ -96,9 +95,21 @@ export class EmployeeListPage {
       console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-      var searchCriteria ={
-          currPage:this.page+1
-      };
+
+
+
+        if(this.project && this.project.id>0){
+            this.searchCriteria.currPage = this.page+1;
+            this.searchCriteria.projectId=this.project.id;
+          if(this.site && this.site.id>0){
+            this.searchCriteria.siteId = this.site.id;
+          }
+
+        }else{
+          this.searchCriteria.currPage = this.page+1;
+        }
+        console.log("Search criteira - ");
+        console.log(this.searchCriteria);
       if(this.page>this.totalPages){
           console.log("End of all pages");
           infiniteScroll.complete();
@@ -109,7 +120,7 @@ export class EmployeeListPage {
           console.log(this.totalPages);
           console.log(this.page);
           setTimeout(()=>{
-              this.employeeService.searchEmployees(searchCriteria).subscribe(
+              this.employeeService.searchEmployees(this.searchCriteria).subscribe(
                   response=>{
                       console.log('ionViewDidLoad Employee list:');
                       console.log(response);
@@ -229,7 +240,52 @@ export class EmployeeListPage {
     }
 
     presentModal() {
-        const modal = this.modalCtrl.create(EmployeeFilter);
+        let modal = this.modalCtrl.create(EmployeeFilter,{},{cssClass:'asset-filter',showBackdrop:true});
+       modal.onDidDismiss(data=>{
+           console.log("Modal Dismiss");
+           console.log(data);
+           this.clientFilter=data.project;
+           this.siteFilter=data.site;
+           this.applyFilter(data.project,data.site);
+       });
         modal.present();
     }
+
+
+    applyFilter(project,site)
+    {
+
+      if(project.id>0){
+        this.project = project;
+      }
+
+      if(site.id>0){
+        this.site = site;
+      }
+        this.component.showLoader("");
+        var searchCriteria = {
+            siteId:site.id,
+            projectId:project.id
+        };
+
+
+        this.employeeService.searchEmployees(searchCriteria).subscribe(
+            response=>{
+                this.component.closeAll();
+                console.log("successfully applied filter");
+                console.log(response);
+                this.employees=response.transactions;
+            },error=>{
+                this.component.closeAll();
+                console.log("error in applying filter");
+                console.log(error);
+            }
+        )
+
+
+
+    }
+
+
+
 }

@@ -1,20 +1,79 @@
 <div ng-init="initLoad()">
 
-    <!--<div class="row TopButtonsCon" >-->
-    <!--&lt;!&ndash;<div class="col-md-4">&ndash;&gt;-->
-    <!--&lt;!&ndash;<h2 class="title" style="margin-bottom: 0px">Attendance</h2>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--<div class="col-md-12 txt-align-rgt">-->
-    <!--<a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>-->
-    <!--<button ng-click="refreshPage()" type="submit" class="btn btn-warning">-->
-    <!--<i class="material-icons padding-right5">refresh</i>Reload-->
-    <!--</button>-->
-    <!--<button ng-show="attendancesData.length" type="button" class="btn btn-success" ng-click=exportAllData()>-->
-    <!--<i class="material-icons">file_upload</i> Export</button>-->
+    <!-- New changes Start -->
 
-    <!--</div>-->
+    <div class="row">
 
-    <!--</div>-->
+
+        <div class="col-md-6 txt-align-lft">
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#AdvancedFilterModal" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning  add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i>Clear filter
+                <div class="ripple-container"></div>
+            </button>
+        </div>
+
+        <div class="col-md-6 txt-align-rgt">
+            <button ng-show="feedbackCount > 0" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>
+            <span ng-if="exportMsg =='Download'">
+                 <a class="download-btn" href="{{exportFile}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg}}</a>
+                 <div class="downloader" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg !='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg}}</a>
+            </span>
+        </div>
+
+    </div>
+    <div class="AppliedFilterCon" >
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
+                    From: {{searchCriteras.checkInDateTimeFrom | date:'dd/MM/yyyy'}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
+                </span>
+                <span
+	            class="tag label label-info" style="margin-right: 10px"
+	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+				</span>
+                <span
+		            class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+					Region: {{searchCriteras.region}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+				    Branch: {{searchCriteras.branch}}
+				</span>
+                <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+						Site: {{searchCriteras.siteName}}
+				</span>
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.block">
+                    Block: {{searchCriteras.block}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.floor">
+                    Floor: {{searchCriteras.floor}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.zone">
+                    Zone: {{searchCriteras.zone}}
+                </span>
+
+            </span>
+
+    </div>
+    <!-- New changes End -->
 
    <form name="searchForm"  novalidate >
 
@@ -23,117 +82,114 @@
             <div class="col-md-12">
 
 
-                <div class="card"  >
+                <!--<div class="card"  >-->
 
-                    <div class="card-content">
+                    <!--<div class="card-content">-->
 
-                        <div class="SearchTable">
+                        <!--<div class="SearchTable">-->
 
-                                <table class=" no-padding-tblCon" border="0">
-                                    <tr class="filter-row gc-search-row">
-                                        <td width="15%">
-                                            <div class="form-group pdng-top20" >
-                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                <input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   />
-                                            </div>
-                                        </td>
+                                <!--<table class=" no-padding-tblCon" border="0">-->
+                                    <!--<tr class="filter-row gc-search-row">-->
+                                        <!--<td width="15%">-->
+                                            <!--<div class="form-group pdng-top20" >-->
+                                                <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+                                                <!--<input ng-model="selectedFromDate" id="dateFilterFrom" type="text" class="form-control datepicker border-bottom-input"   />-->
+                                            <!--</div>-->
+                                        <!--</td>-->
 
-                                        <td width="15%">
-                                            <div class="form-group pdng-top20"  >
-                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                <input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   />
-                                            </div>
-                                        </td>
-                                        <td width="25%">
-                                            <div class="form-group pad10px">
-                                                <label class="control-label">Client</label>
-                                                <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">
-                                                    <option value="">Select Client...</option>
-                                                </select>
+                                        <!--<td width="15%">-->
+                                            <!--<div class="form-group pdng-top20"  >-->
+                                                <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
+                                                <!--<input ng-model="selectedToDate" id="dateFilterTo" type="text" class="form-control datepicker border-bottom-input"   />-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td width="25%">-->
+                                            <!--<div class="form-group pad10px">-->
+                                                <!--<label class="control-label">Client</label>-->
+                                                <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                <!--<select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects">-->
+                                                    <!--<option value="">Select Client...</option>-->
+                                                <!--</select>-->
 
-                                            </div>
-                                        </td>
+                                            <!--</div>-->
+                                        <!--</td>-->
 
-                                        <td width="20%">
-                                            <div class="form-group pad10px">
-                                                <label class="control-label">Site</label>
-                                                <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">
-                                                    <option value="">Select Site...</option>
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td align="right" width="15%">
-                                            <div class="floatR form-group">
-                                                <button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid" ng-click="search()">
-                                                    <i class="material-icons">search</i>
-                                                </button>
-                                                <button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">
-                                                    <i class="material-icons">file_upload</i>
-                                                </button>
-                                                <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                    <i class="material-icons">refresh</i>
-                                                </button>
-                                                <!--<button ng-click="printDiv('printable')" class="btn btn-circle orange-clr">-->
-                                                    <!--<i class="material-icons">print</i>-->
+                                        <!--<td width="20%">-->
+                                            <!--<div class="form-group pad10px">-->
+                                                <!--<label class="control-label">Site</label>-->
+                                                <!--<span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                <!--<select class="form-control " ng-model="selectedSite"  ng-change="searchLocations();loadFeedbackMasters();" ng-options="site as site.name for site in sites">-->
+                                                    <!--<option value="">Select Site...</option>-->
+                                                <!--</select>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td align="right" width="15%">-->
+                                            <!--<div class="floatR form-group">-->
+                                                <!--<button type="submit" class="btn btn-circle blue-clr" ng-disabled="searchForm.$invalid" ng-click="search()">-->
+                                                    <!--<i class="material-icons">search</i>-->
                                                 <!--</button>-->
-                                                <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+                                                <!--<button ng-show="attendancesData.length" type="button"  ng-click=exportAllData() class="btn btn-circle green-clr">-->
+                                                    <!--<i class="material-icons">file_upload</i>-->
+                                                <!--</button>-->
+                                                <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                                                    <!--<i class="material-icons">refresh</i>-->
+                                                <!--</button>-->
+                                                <!--&lt;!&ndash;<button ng-click="printDiv('printable')" class="btn btn-circle orange-clr">&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<i class="material-icons">print</i>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                                <!--<a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>-->
 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="filter-row gc-search-row">
-
-
-                                        <!-- td>
-                                            <div class="form-group">
-                                                 <label class="control-label">Block<span class="red-star">*</span> </label>
-                                                 <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">
-                                                     <option value="">Please select Block...</option>
-                                                 </select>
-                                             </div>
-                                        </td>
-                                         <td>
-                                            <div class="form-group">
-                                                 <label class="control-label">Floor<span class="red-star">*</span> </label>
-                                                 <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">
-                                                      <option value="">Please select Floor...</option>
-                                                  </select>
-                                             </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                 <label class="control-label">Zone<span class="red-star">*</span> </label>
-                                                  <select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">
-                                                     <option value="">Please select Zone...</option>
-                                                 </select>
-                                             </div>
-                                        </td-->
-
-                                    </tr>
-                                </table>
-
-                                <div class="TailsCon">
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+                                    <!--<tr class="filter-row gc-search-row">-->
 
 
-                                    <div class="TailsContent">
-                                        <ul class="blocksListCon">
-                                           <li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
-                                        </ul>
+                                        <!--&lt;!&ndash; td>-->
+                                            <!--<div class="form-group">-->
+                                                 <!--<label class="control-label">Block<span class="red-star">*</span> </label>-->
+                                                 <!--<select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks">-->
+                                                     <!--<option value="">Please select Block...</option>-->
+                                                 <!--</select>-->
+                                             <!--</div>-->
+                                        <!--</td>-->
+                                         <!--<td>-->
+                                            <!--<div class="form-group">-->
+                                                 <!--<label class="control-label">Floor<span class="red-star">*</span> </label>-->
+                                                 <!--<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors">-->
+                                                      <!--<option value="">Please select Floor...</option>-->
+                                                  <!--</select>-->
+                                             <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<div class="form-group">-->
+                                                 <!--<label class="control-label">Zone<span class="red-star">*</span> </label>-->
+                                                  <!--<select class="form-control " ng-model="selectedZone"  ng-options="zone as zone for zone in zones">-->
+                                                     <!--<option value="">Please select Zone...</option>-->
+                                                 <!--</select>-->
+                                             <!--</div>-->
+                                        <!--</td&ndash;&gt;-->
 
-                                        <div class="clear"></div>
-                                        <!--<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>-->
-                                        <!--<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>-->
-                                    </div>
+                                    <!--</tr>-->
+                                <!--</table>-->
 
-                                </div>
+                                <!--<div class="TailsCon">-->
+                                    <!--<div class="TailsContent">-->
+                                        <!--<ul class="blocksListCon">-->
+                                           <!--<li ng-repeat="item in filteredLocations" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit" ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)"  ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>-->
+                                        <!--</ul>-->
 
-                        </div>
+                                        <!--<div class="clear"></div>-->
+                                        <!--&lt;!&ndash;<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>&ndash;&gt;-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                        <!--</div>-->
 
 
-                    </div>
-                </div>
+                    <!--</div>-->
+                <!--</div>-->
 
 
                 <div class="card">
@@ -150,7 +206,7 @@
                                         <h3>No of Feedbacks</h3>
                                     </div>
                                     <div class="col-md-6">
-                                        <h3>{{feedbackReport.feedbackCount}}</h3>
+                                        <h3>{{feedbackCount}}</h3>
                                     </div>
 
                                 </div>
@@ -171,7 +227,6 @@
 
                                             <!-- <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
                                             </jk-rating-stars> -->
-
                                             <average-star-rating ng-model="averageRating" max="5"></average-star-rating>
 
 
@@ -225,53 +280,207 @@
                     </div>
 
                 </div>
+                <!-- Feedbacks tab view start -->
+                <div class="panel panel-default TabsContainer">
+					<!--<div class="panel-heading">Panel Heading</div>-->
+					<div class="panel-body">
+						<ul class="nav nav-pills nav-pills-warning">
+							<li class="active"><a href=".pill2" data-toggle="tab">Feedbacks</a></li>
+							<li class=""><a href=".pill3" data-toggle="tab">Feedbacks Details</a></li>
+						</ul>
+						<div class="tab-content TabsContent" style="">
+
+							<div class="tab-pane fade in active pill2" id="pill2">
+
+								<div class="table-responsive tablecard">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th>Location</th>
+			                                    <th>Question</th>
+			                                    <th>Yes</th>
+			                                    <th>No</th>
+			                                    <th>Rating</th>
+
+											</tr>
+										</thead>
+										<tbody>
+										    <tr ng-repeat="questionRating in feedbackReport.questionRatings">
+			                                    <td>{{questionRating.location}}</td>
+			                                    <td>{{questionRating.question}}</td>
+			                                    <td><span ng-if="!questionRating.rating">{{questionRating.yesCount}}</span>
+			                                        <span ng-if="questionRating.rating">NA</span></td>
+			                                    <td><span ng-if="!questionRating.rating">{{questionRating.noCount}}</span>
+			                                        <span ng-if="questionRating.rating">NA</span></td>
+			                                    <td>
+			                                        <div  ng-if="questionRating.rating" ng-repeat ="(key, value) in questionRating.rating">
+			                                            ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
+			                                        </div>
+			                                        <span ng-if="!questionRating.rating">NA</span>
+			                                    </td>
+			                                    <td class="text-right"><a
+													ng-class="{active: $state.includes('admin')}"
+
+													ng-click="removeService($index)"
+													onClick="$('#deleteModal').modal()"
+													data-target="#myModal"
+													class="btn btn-simple btn-danger"><i
+														class="material-icons">close</i></a></td>
+			                                </tr>
 
 
-                <div class="card margin-TB-5 TableCard">
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="6">
+													<!-- <div class="txt-align-center" ng-hide="feedbackListData">
 
-                    <!--<div class="card-header card-header-icon" data-background-color="purple">-->
-                    <!--<i class="material-icons">assignment</i>-->
-                    <!--</div>-->
-                    <div class="card-content">
-                        <!--<h4 class="card-title">DataTables.net</h4>-->
+												        <div class="card-content">
 
+												            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackListLoader">
+												                <div loader-css="ball-pulse"></div>
+												            </div>
 
-                        <div class="table-responsive tablecard">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
+												            <h3>No feedbacks</h3>
 
-                                    <th>Question</th>
-                                    <th>Yes</th>
-                                    <th>No</th>
-                                    <th>Rating</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="questionRating in feedbackReport.questionRatings">
-                                    <td>{{questionRating.question}}</td>
-                                    <td>{{questionRating.yesCount}}</td>
-                                    <td>{{questionRating.noCount}}</td>
-                                    <td>
-                                        <div ng-repeat ="(key, value) in questionRating.rating">
-                                            ({{value}}) <jk-rating-stars max-rating="5" rating="key" read-only="readOnly" ></jk-rating-stars>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </thead>
-                                <tbody>
+												        </div>
 
-                                </tbody>
-                            </table>
+												    </div> -->
+												    <div class="txt-align-center LoaderCon"  ng-hide="feedbackListLoader">
 
+								                        <div class="pad-TB-30">
+								                            <div loader-css="ball-pulse"></div>
+								                            <h3 >Loading, please wait...</h3>
+								                        </div>
+								
+								                    </div>
+								
+								                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="feedbackListData">
+								
+								                        <h3>No data Found</h3>
+								
+								                    </div>
+											    </td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane fade pill3" id="pill3">
 
+								<div class="table-responsive tablecard">
+									<table class="table table-striped">
+										<thead>
+											<tr>
+												<th width="25%">Client</th>
+												<th width="25%">Site</th>
+												<th width="25%">Feedback Name</th>
+												<th width="25%">Questions</th>
 
-                        </div>
+											</tr>
+										</thead>
+										<tbody ng-repeat="feedbackDetail in feedbackReportDetail">
+											<tr>
+												<td>{{feedbackDetail.projectName}}</td>
+					                            <td>{{feedbackDetail.siteName}}</td>
+					                            <td>{{feedbackDetail.feedbackName}}</td>
+					                            <td>
+						                            <a class="accordion-toggle collapsed" data-toggle="collapse"
+											        data-parent="#accordion2" href=".collapseThree{{$index}}">
+											         View Questions
+											         </a>
 
-                    </div>
-                    <!-- end content-->
-                </div>
-                <!--  end card  -->
+											    </td>
+											</tr>
+											<tr>
+											    <td colspan="4">
+											         <div class="row">
+											            <div class="col-md-10 col-md-offset-1">
+												           <div id="collapseThree" class="accordion-body collapseThree{{$index}} collapse">
+														        <div class="table-responsive tablecard">
+																	<table class="table table-striped table-bordered">
+																		<thead>
+																			<tr>
+																				<th width="40%">Questions</th>
+																				<th width="5%">Yes</th>
+																				<th width="5%">No</th>
+																				<th width="25%">Rating</th>
+																				<th width="25%">Comments</th>
+
+																			</tr>
+																		</thead>
+																		<tbody>
+																		   <tr ng-repeat="feedbackDetailResult in feedbackDetail.results"> 
+																			
+																				<td>{{feedbackDetailResult.question}}</td>
+																				<td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'true'"><i class="material-icons">done</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'true'"><i class="material-icons">close</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">NA</span>
+											                                    </td>
+											                                    <td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'false'"><i class="material-icons">done</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'false'"><i class="material-icons">close</i></span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">NA</span>
+											                                    <td> 
+											                                        <!-- <span ng-if="feedbackDetailResult.answerType =='RATING'">{{feedbackDetailResult.answer}}</span>
+											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">-</span> -->
+											                                         <div  ng-if="feedbackDetailResult.answerType =='RATING'" >
+											                                            <jk-rating-stars max-rating="5" rating="feedbackDetailResult.answer" read-only="readOnly" ></jk-rating-stars>
+											                                        </div>
+											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">NA</span>
+											                                    </td>
+													                            
+													                            <td><span ng-if="feedbackDetailResult.remarks">{{feedbackDetailResult.remarks}}</span>
+													                                <span ng-if="!feedbackDetailResult.remarks">-</span> 
+													                            </td>
+																			</tr>
+
+																		</tbody>
+																	
+
+																	</table>
+																</div>
+													       </div>
+											           </div>
+											           
+											                
+											       </div>
+											    </td>
+											</tr>
+										</tbody>
+									    <tfoot>
+											<tr>
+												<td colspan="6">
+								
+												    <div class="txt-align-center LoaderCon"  ng-hide="feedbackListDetailLoader">
+
+								                        <div class="pad-TB-30">
+								                            <div loader-css="ball-pulse"></div>
+								                            <h3 >Loading, please wait...</h3>
+								                        </div>
+								
+								                    </div>
+								
+								                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+								
+								                        <h3>No data Found</h3>
+								
+								                    </div>
+											    </td>
+											</tr>
+										</tfoot>
+				
+									</table>
+									<!-- Pagination directive start -->
+
+								    <pagination-new></pagination-new>
+								
+								    <!-- Pagination directive end -->
+								</div>
+							</div>
+						</div>
+					 </div>
+				</div>
+              <!-- Feedbacks tab view end -->
             </div>
             <!-- end col-md-12 -->
         </div>
@@ -280,19 +489,7 @@
   </form>
 
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackListData">
 
-        <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackListLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No feedbacks</h3>
-
-        </div>
-
-    </div>
 
 
     <!-- Pagination directive start -->
@@ -306,3 +503,160 @@
 </div>
 
 
+<!-- BasicFilterModal -->
+
+
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="AdvancedFilterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm" role="form"  ng-submit="searchFilter();"  novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                   <div class="row dateFilterCon">
+                        <div class="col-xs-12 col-md-3">
+                            <div class="dropdown" >
+
+                                <div class="form-group">
+                                    <label class="label-control">From date</label>
+                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off" tabindex="1" />
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <div class="dropdown" >
+
+                                <div class="form-group">
+                                    <label class="label-control">To date</label>
+                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedToDate" autocomplete="off" tabindex="2" />
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                          <div class="form-group">
+                              <div class="dropdown">
+                                     <label class="label-control">Client</label>
+                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                     <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+				                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+									  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
+									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+									  </ui-select-match>
+									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+
+									    <span ng-bind-html="client.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row dateFilterCon">
+
+                        <div class="col-xs-12 col-md-3">
+                            <div class="form-group" >
+			                    <div class="dropdown">
+                                       <label class="label-control">Region</label>
+                                       <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                       <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+	                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+									  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
+									       <a ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+									  </ui-select-match>
+									  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+									    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
+                                </div>
+                           </div>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <div class="form-group" >
+                               <div class="dropdown">
+		                              <label class="label-control">Branch</label>
+		                               <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+		                               <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+		                               <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+									  <ui-select-match placeholder="Select branch..."  >{{$select.selected.name}}
+									  <a ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+										 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+									  </ui-select-match>
+									  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+									    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
+					           </div>
+                          </div>
+                        </div>
+
+                        <div class="col-xs-12 col-md-6">
+                            <div class="dropdown">
+                              <div class="form-group">
+                                   <label class="label-control">Site</label>
+                                   <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+	                               <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+	                               <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+									  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
+									  <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+									  
+									  </ui-select-match>
+									  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" ng-click="searchLocations();loadFeedbackMasters();" loose-null>
+									    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+									<span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
+                             </div>
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="TailsCon">
+                        <div class="TailsContent">
+                            <ul class="blocksListCon">
+                                <li ng-repeat="item in filteredLocations"   ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit"   ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
+                            </ul>
+
+                            <div class="clear"></div>
+                            <!--<div class="pos-abs next"><button ng-click="vm.next()"><i class="material-icons">keyboard_arrow_right</i></button></div>-->
+                            <!--<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>-->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="5">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"  tabindex="6">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--  End Modal -->

@@ -48,7 +48,30 @@
 
                         </ion-col>
 
-                      <ion-col col-12>
+
+                        <ion-col col-12>
+
+                            <div class="form-group label-floating">
+                                <!--<label class="control-label">Category</label>-->
+                                <ion-select [(ngModel)]="category" class="select-box  padding-left0  popover-con" interface="popover"  placeholder="Choose category">
+                                    <ion-option  class="popover-con" value="HOUSEKEEPING">HOUSEKEEPING</ion-option>
+                                    <ion-option class="popover-con" value="ELECTRICAL">ELECTRICAL</ion-option>
+                                    <ion-option class="popover-con" value="PLUMPING">PLUMPING</ion-option>
+                                    <ion-option class="popover-con" value="HVAC">HVAC</ion-option>
+                                    <ion-option class="popover-con" value="CARPENTRY">CARPENTRY</ion-option>
+                                    <ion-option class="popover-con" value="PESTCONTROL">PESTCONTROL</ion-option>
+                                    <ion-option class="popover-con" value="MAINTENANCE">MAINTENANCE</ion-option>
+                                    <ion-option class="popover-con" value="CIVIL">CIVIL</ion-option>
+                                    <ion-option class="popover-con" value="GENERAL">GENERAL</ion-option>
+                                    <ion-option class="popover-con" value="PANTRYSERVICES">PANTRYSERVICES</ion-option>
+                                    <ion-option class="popover-con" value="ADMIN">ADMIN</ion-option>
+                                </ion-select>
+
+                            </div>
+
+                        </ion-col>
+
+                      <ion-col col-12 *ngIf="siteName == null">
                         <p text-center>Choose Client</p>
                         <div class="SitesScrollCon">
                           <ion-scroll scrollX="true">
@@ -59,7 +82,9 @@
                         </div>
                       </ion-col>
 
-                        <ion-col col-12>
+
+
+                        <ion-col col-12 *ngIf="siteName == null">
 
                           <p text-center>Choose Site</p>
 
@@ -80,6 +105,16 @@
                             </div>
 
                         </ion-col>
+
+                      <ion-col col-12 *ngIf="assetDetails">
+                        <div class="SitesScrollCon">
+                          <ion-scroll scrollX="true">
+                            <button class="scroll-item" ion-button round (click)="getEmployeewithAsset(assetDetails)" [color]=" 'primary' ">
+                              <p class="siteName">{{assetDetails.siteName}}</p>
+                            </button>
+                          </ion-scroll>
+                        </div>
+                      </ion-col>
 
                         <ion-col col-12>
                             <p text-center>Choose Employee</p>
@@ -223,7 +258,7 @@
 
 <!--<ion-footer>
     <ion-toolbar class="align-center" >
-        <button class="btn btn-warning center margin-auto" type="submit" (click)="createTicket()">
+        <button has-permission="TicketsCreate" class="btn btn-warning center margin-auto" type="submit" (click)="createTicket()">
             Add
         </button>
     </ion-toolbar>

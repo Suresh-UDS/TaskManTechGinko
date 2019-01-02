@@ -33,7 +33,8 @@ import {ScanQRAsset} from "../asset-list/scanQR-asset";
   selector: 'page-offline-assetList',
   templateUrl: 'offline-assetList.html',
 })
-export class OfflineAssetList {
+export class
+OfflineAssetList {
     assetList:any;
     searchCriteria:any;
     page:1;

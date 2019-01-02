@@ -35,12 +35,19 @@ page-asset-list {
   }
   ion-card img {
     width: 100% !important;
+
     height:100px !important;
   }
   ion-card-content {
     padding: 0px 32px !important;
     position: relative !important;
     vertical-align: center !important;
+  }
+  .label {
+    border-radius: 12px;
+    padding: 3px 12px !important;
+    text-transform: uppercase;
+    font-size: 10px;
   }
   .card-md
   {

@@ -10,8 +10,9 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Employee List</ion-title>
+
     <!--<ion-buttons right>-->
-      <!--<button color="primary" ion-button clear (click)="getEmployeeAttendance()" class="add-btn">-->
+      <!--<button color="primary" ion-button clear (click)="enrollAllFaces()" class="add-btn">-->
           <!--<i class="material-icons">-->
               <!--list_alt-->
           <!--</i>-->
@@ -26,10 +27,10 @@
 
       <p><span class="EmpNameTxt" style="float:left" (click)="getEmployeeAttendance(employee.empId)" >{{employee.name}} {{employee.lastName}}</span>
         <span style="float: right">
-          <button ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>
+          <button has-permission="AttendanceCreate" ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>
           <span *ngIf="employee.faceAuthorised">
-            <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="!employee.checkedIn || employee.notCheckedOut" >Check - In</button>
-            <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn && !employee.notCheckedOut">Check - Out</button>
+            <button has-permission="AttendanceEdit" ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="!employee.checkedIn || employee.notCheckedOut" >Check - In</button>
+            <button has-permission="AttendanceEdit" ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn && !employee.notCheckedOut">Check - Out</button>
           </span>
 
         </span></p>

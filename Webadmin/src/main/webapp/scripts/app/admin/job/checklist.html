@@ -15,97 +15,112 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
-            <div class="card margin-TB-5" >
+        <form name="form" novalidate>
+            <div class="col-md-12">
+                <div class="card margin-TB-5" >
 
-                <div class="card-content">
+                    <div class="card-content">
 
-                    <div class="row">
+                        <div class="row">
 
-                        <div class="col-md-4">
+                            <div class="col-md-4">
 
-                            <div class="form-group pdng-top15">
-                                <label class="control-label">Name</label>
-                                <input type="text" class="form-control InputTxtCaps" ng-model="checklist.name">
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Name<span class="red-star">*</span></label>
+                                    <input type="text" name="checklistName" class="form-control InputTxtCapsAll" ng-model="checklist.name" ng-required="true">
+                                    <div ng-show="form.$submitted || form.checklistName.$touched || form.addChecklist.$touched">
+                                       <div ng-show="form.checklistName.$dirty || form.checklistName.$invalid">
+                                           <p class="help-block" style="color:maroon"
+                                              ng-show="form.checklistName.$error.required">
+                                               Checklist name is required.
+                                           </p>
+
+                                       </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Item</label>
+                                    <input type="text" class="form-control" ng-model="newChecklistItem.name">
+                                    <div ng-show="checklistError">
+                                      <p class="help-block" style="color: maroon">Item is required</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" name="addChecklist" ng-click="addChecklistItem()">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                    Add
+                                </button>
+
                             </div>
 
                         </div>
-                        <div class="col-md-4">
 
-                            <div class="form-group pdng-top15">
-                                <label class="control-label">Item</label>
-                                <input type="text" class="form-control" ng-model="newChecklistItem.name">
+
+
+
+                        <div class="row col-md-10 addedActionList pdng-top15" ng-hide="!(checklistItems.length > 0)">
+
+
+                            <div class="form-group">
+
+                                <label class="">Items</label>
+
+                                <ul class="listOfActions list-group">
+
+                                    <li class="list-group-item justify-content-between" ng-repeat=" item in checklistItems" ng-bind-html-unsafe="item.text">
+                                        {{item.name}}
+                                        <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
+                                    </li>
+
+                                </ul>
+
                             </div>
 
-                        </div>
-                        <div class="col-md-3">
 
-                            <button class="btn btn-success margn-top30" ng-click="addChecklistItem()">
-                                <span class="btn-label">
-                                    <i class="material-icons">add</i>
-                                </span>
-                                Add
-                            </button>
+    						<div class="row">
 
-                        </div>
+    	                       <div class="col-md-10">
+    	                           <div class="form-group">
+    	                               <!--<button class="btn btn-success" type="submit" ng-click="saveChecklist()"-->
+    	                                       <!--id="form-button-save">-->
+    	                                  <!--<span class="btn-label">-->
+    	                        <!--<i class="material-icons">check</i>-->
+    	                   		 <!--</span> Save-->
+    	                               <!--</button>-->
 
-                    </div>
+                                       <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
+                                               type="submit" id="form-button-save" ng-disabled="form.$invalid ">
+                                           <span class="btn-label"><i class="material-icons">check</i></span>
+                                           <span ng-show ="!isEdit">Save</span><span ng-show ="isEdit">Update</span>
+                                           <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                       </button>
 
 
+    	                               <button class="btn btn-danger" type="button"
+    	                                       ng-click="conform('cancel')" id="cancel-button">
+    	                                   <i class="material-icons">close</i>Cancel
+    	                               </button>
+    	                           </div>
+    	                       </div>
 
-
-                    <div class="row col-md-10 addedActionList pdng-top15" ng-hide="!(checklistItems.length > 0)">
-
-
-                        <div class="form-group">
-
-                            <label class="">Items</label>
-
-                            <ul class="listOfActions list-group">
-
-                                <li class="list-group-item justify-content-between" ng-repeat=" item in checklistItems" ng-bind-html-unsafe="item.text">
-                                    {{item.name}}
-                                    <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
-                                </li>
-
-                            </ul>
+    	                   </div>
 
                         </div>
-
-
-						<div class="row">
-
-	                       <div class="col-md-10">
-	                           <div class="form-group">
-	                               <!--<button class="btn btn-success" type="submit" ng-click="saveChecklist()"-->
-	                                       <!--id="form-button-save">-->
-	                                  <!--<span class="btn-label">-->
-	                        <!--<i class="material-icons">check</i>-->
-	                   		 <!--</span> Save-->
-	                               <!--</button>-->
-
-                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"
-                                           type="submit" id="form-button-save" ng-disabled="form.$invalid ">
-                                       <span class="btn-label"><i class="material-icons">check</i></span> Save
-                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
-                                   </button>
-
-
-	                               <button class="btn btn-danger" type="button"
-	                                       ng-click="conform('cancel')" id="cancel-button">
-	                                   <i class="material-icons">close</i>Cancel
-	                               </button>
-	                           </div>
-	                       </div>
-
-	                   </div>
 
                     </div>
 
                 </div>
-
             </div>
-        </div>
+        </form>
     </div>
 
 
@@ -130,13 +145,13 @@
                             <tbody>
                             <tr ng-repeat=" checklist in checklists">
                                <td>{{checklist.id}}</td>
-                                <td>{{checklist.name}}</td>
+                                <td>{{checklist.name | uppercase}}</td>
                                 <td>
                                 	<label  ng-repeat=" item in checklist.items">{{item.name}}</label>
 
                                 </td>
                                 <td>
-                                    <a  ng-class="{active: $state.includes('admin')}" ng-click="loadChecklist(checklist.id)"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a  ng-class="{active: $state.includes('admin')}" ng-click="loadChecklist(checklist.id,'edit')"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
                                 </td>
 
                             </tr>

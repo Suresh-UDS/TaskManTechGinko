@@ -1265,7 +1265,24 @@ demo = {
             type: type,
             delay: 500,
             //timer: 98000,
-            timer: 800,
+            timer: 1200,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    },
+    
+    showNotificationLonger: function(from, align, type,msg) {
+
+        $.notify({
+            icon: "notifications",
+            message: msg
+
+        }, {
+            type: type,
+            delay: 500,
+            timer: 300000,
             placement: {
                 from: from,
                 align: align

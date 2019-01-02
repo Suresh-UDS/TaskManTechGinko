@@ -8,12 +8,12 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.LocationService;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.ImportResult;
@@ -41,8 +43,7 @@ public class LocationResource {
     private LocationService locationService;
 
     @Inject
-	private ImportUtil importUtil;
-
+	private ImportService importService;
 
     @RequestMapping(value = "/location", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -99,6 +100,7 @@ public class LocationResource {
     public SearchResult<LocationDTO> searchLocation(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<LocationDTO> result = null;
         if(searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
             result = locationService.findBySearchCrieria(searchCriteria);
         }
         return result;
@@ -108,7 +110,10 @@ public class LocationResource {
     public ResponseEntity<ImportResult> importLocationData(@RequestParam("locationFile") MultipartFile file){
     	log.info("--Invoked Location Import --");
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importLocationData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importLocationData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 

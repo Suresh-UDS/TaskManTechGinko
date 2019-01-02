@@ -8,9 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-fab bottom right>
-        <button mini (click)="addRates($event)"  ion-fab><ion-icon name="add"></ion-icon></button>
-    </ion-fab>
+
 
     <div padding-top="">
         <div class="padding-left15">
@@ -33,17 +31,20 @@
             <p class="clr-black">Quotation</p>
         </div>
         <div class="white-bg ">
-            <ion-row class="bottom-border margin0 " padding>
-                <ion-col col-4 class="padding0">
+            <ion-row class="bottom-border margin0 ">
+                <ion-col col-4>
                     <p class="margin0 clr-orange">Type</p>
                 </ion-col>
-                <ion-col col-4 class="padding0">
+                <ion-col col-4>
                     <p class="margin0 clr-orange">Name</p>
                 </ion-col>
-                <ion-col col-3 class="padding0">
+                <ion-col col-2>
                     <p class="margin0 clr-orange">Total</p>
                 </ion-col>
-                <ion-col col-1 class="padding0">
+                <ion-col col-2>
+                    <button ion-fab mini color="primary" class="margin0" (click)="addRates($event)">
+                        <ion-icon name="add" class="clr-white"></ion-icon>
+                    </button>
                 </ion-col>
             </ion-row>
             <ion-row *ngFor="let rate of rates;let i = index " class="margin0" padding="">
@@ -69,8 +70,8 @@
                             <td width="10%" class="clr-orange">Action</td>
                         </tr>
                         <tr>
-                            <td class=""><p>{{rate.cost}}</p></td>
-                            <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.no" (change)="addTotal(i,rate.no,rate.cost)"></p></td>
+                            <td class=""><p>{{rate.unitPrice}}</p></td>
+                            <td class=""><p><input type="number" class="form-control align-center width15" [(ngModel)]="rate.qty" (change)="addTotal(i,rate.qty,rate.unitPrice)"></p></td>
                             <td class=""><p>{{rate.uom}}</p></td>
                             <td> <p><i class="material-icons clr-red" (click)="remove(i)">close</i></p></td>
                         </tr>

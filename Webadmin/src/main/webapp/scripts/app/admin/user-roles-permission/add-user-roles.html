@@ -29,7 +29,7 @@
 				<div class="form-container table-container">
 					<label>* Mantatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="conform('save')" show-validation class="form-horizontal">
+						ng-submit="conform('save')"  class="form-horizontal">
 
                        <div class="row">
                            <div class="col-md-8 col-md-offset-2">
@@ -40,8 +40,8 @@
 
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label">Role Name <span class="red-star">*</span> </label>
-                                                   <input type="text" class="form-control InputTxtCaps" ng-model="userRole.name"
+                                                   <label class="control-label">Role Name<span class="red-star">*</span> </label>
+                                                   <input type="text" class="form-control InputTxtCapsAll" ng-model="userRole.name"
                                                           name="RoleName"  autofocus
                                                           required autocomplete="off">
                                                     <div ng-show="form.$submitted || form.RoleName.$touched">
@@ -117,14 +117,14 @@
 
 
                                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-                                                           type="submit" id="form-button-save" ng-disabled="form.RoleName.$invalid">
+                                                           type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                                    </button>
 
-                                                   <button class="btn btn-danger" type="button"
+                                                   <button class="btn btn-danger" type="button" ng-disabled="btnDisable"
                                                            ng-click="conform('cancel')" id="cancel-button">
-                                                       <i class="material-icons">close</i>Discard
+                                                       <i class="material-icons">close</i>Cancel
                                                    </button>
                                                </div>
                                            </div>

@@ -5,247 +5,260 @@
         	<div class="col-md-12">
 
                 <div class="titleCon">
-                    <!--<h3>View Job</h3>-->
+                    <h3>{{job.title}}</h3>
                 </div>
 
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
 						class="form-horizontal">
 
-                        <div class="row">
+                      <div class="ViewContentPageCon">
 
-                            <div class="col-md-4">
+                          <div class="row">
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Job Details - ID - {{job.id}}</div>
-                                    <div class="panel-body">
+                              <div class="col-md-4">
 
-
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Title</td>
-                                                    <td>{{job.title}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Description</td>
-                                                    <td>{{job.description}}</td>
-
-                                                </tr>
-                                                <!--<tr>-->
-                                                    <!--<td>Checklist</td>-->
-                                                    <!--<td>-->
-                                                        <!--<ul class="listOfActions list-group">-->
-                                                            <!--<li class="list-group-item justify-content-between" ng-repeat="checklist in job.checklistItems">-->
-                                                                <!--<span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>-->
-                                                                <!--<span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>-->
-                                                            <!--</li>-->
-                                                        <!--</ul>-->
-                                                    <!--</td>-->
-
-                                                <!--</tr>-->
-                                                <tr>
-
-                                                    <td>Site </td>
-                                                    <td>
-                                                        {{job.siteName}}
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-
-                                                    <td>Location</td>
-                                                    <td>{{job.locationName}}</td>
-
-                                                </tr>
-                                                <tr>
-
-                                                    <td>Employee</td>
-                                                    <td>{{job.employeeName}}</td>
-
-                                                </tr>
-                                                <tr>
-
-                                                    <td>Asset</td>
-                                                    <td>{{job.assetTitle}}</td>
-
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading">Job Details - ID - {{job.id}}</div>
+                                      <div class="panel-body" style="min-height: 350px;">
 
 
+                                          <div class="table-responsive">
+                                              <table class="table">
+                                                  <tbody>
+                                                  <tr>
+                                                      <td>Title</td>
+                                                      <td>{{job.title | uppercase}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>Description</td>
+                                                      <td>{{job.description}}</td>
 
-                                    </div>
-                                </div>
+                                                  </tr>
+                                                  <!--<tr>-->
+                                                  <!--<td>Checklist</td>-->
+                                                  <!--<td>-->
+                                                  <!--<ul class="listOfActions list-group">-->
+                                                  <!--<li class="list-group-item justify-content-between" ng-repeat="checklist in job.checklistItems">-->
+                                                  <!--<span ng-if="!checklist.completed" style="color:red">{{checklist.checklistItemName}}</span>-->
+                                                  <!--<span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>-->
+                                                  <!--</li>-->
+                                                  <!--</ul>-->
+                                                  <!--</td>-->
 
+                                                  <!--</tr>-->
+                                                  <tr>
 
-                            </div>
-                            <div class="col-md-4">
+                                                      <td>Site </td>
+                                                      <td>
+                                                          {{job.siteName | uppercase}}
+                                                      </td>
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Plan</div>
-                                    <div class="panel-body">
+                                                  </tr>
+                                                  <tr>
 
+                                                      <td>Location</td>
+                                                      <td><span ng-if="job.block">{{job.block}},</span>
+                                                          <span ng-if="job.floor">{{job.floor}},</span>
+                                                          <span ng-if="job.zone">{{job.zone}}</span>
+                                                          <span ng-if="!job.block">-</span>
+                                                          <span ng-if="!job.floor">-</span>
+                                                          <span ng-if="!job.zone">-</span>
+                                                      </td>
 
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Start date</td>
-                                                    <td>{{job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>End date</td>
-                                                    <td>{{job.plannedEndTime | date:'dd-MMM-yyyy hh:mm a'}}</td>
+                                                  </tr>
+                                                  <tr>
 
-                                                </tr>
-                                                <tr>
-                                                    <td>Hours</td>
-                                                    <td>
-                                                        {{job.plannedHours}}
-                                                    </td>
+                                                      <td>Employee</td>
+                                                      <td>{{job.employeeName}}</td>
 
-                                                </tr>
-                                                <tr>
+                                                  </tr>
+                                                  <tr>
 
-                                                    <td>Status </td>
-                                                    <td>
-                                                       {{job.jobStatus}}
-                                                    </td>
+                                                      <td>Asset</td>
+                                                      <td><span ng-if="job.assetTitle">{{job.assetTitle}}</span>
+                                                          <span ng-if="!job.assetTitle">No assets</span></td>
 
-                                                </tr>
+                                                  </tr>
 
-                                                <tr ng-if="job.pendingAtUDS && job.status !='COMPLETED'">
-
-                                                    <td>Job Pending Status </td>
-                                                    <td>
-                                                        Job Pending at UDS
-                                                    </td>
-
-                                                </tr>
-
-                                                <tr ng-if="job.pendingAtClient && job.status !='COMPLETED'">
-
-                                                    <td>Job Pending Status </td>
-                                                    <td>
-                                                        Job Pending at {{job.siteProjectName}}
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-
-                                                    <td>Type </td>
-                                                    <td>
-                                                        {{job.jobType}}
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-
-                                                    <td>Comments </td>
-                                                    <td>
-                                                        {{job.comments}}
-                                                    </td>
-
-                                                </tr>
+                                                  </tbody>
+                                              </table>
+                                          </div>
 
 
 
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-                                </div>
+                                      </div>
+                                  </div>
 
 
-                            </div>
-                            <div class="col-md-4">
+                              </div>
+                              <div class="col-md-4">
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Actual </div>
-                                    <div class="panel-body">
-
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Start date</td>
-                                                    <td>{{job.plannedStartTime | date:'dd-MMM-yyyy hh:mm a'}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>End date</td>
-                                                    <td>{{job.actualEndTime  | date:'dd-MMM-yyyy hh:mm a'}}</td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>Hours</td>
-                                                    <td>
-                                                        {{job.actualHours}}
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>Minutes</td>
-                                                    <td>
-                                                        {{job.actualMinutes}}
-                                                    </td>
-
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-                                </div>
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading">Plan</div>
+                                      <div class="panel-body" style="min-height: 350px;">
 
 
-                            </div>
+                                          <div class="table-responsive">
+                                              <table class="table">
+                                                  <tbody>
+                                                  <tr>
+                                                      <td>Start date</td>
+                                                      <td>{{job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>End date</td>
+                                                      <td>{{job.plannedEndTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
 
-                        </div>
-						<div class="row">
+                                                  </tr>
+                                                  <tr>
+                                                      <td>Hours</td>
+                                                      <td>
+                                                          {{job.plannedHours}}
+                                                      </td>
 
-                            <div class="col-md-4">
+                                                  </tr>
+                                                  <tr>
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Ticket Details</div>
-                                    <div class="panel-body">
+                                                      <td>Status </td>
+                                                      <td>
+                                                          {{job.jobStatus}}
+                                                      </td>
+
+                                                  </tr>
+
+                                                  <tr ng-if="job.pendingAtUDS && job.status !='COMPLETED'">
+
+                                                      <td>Job Pending Status </td>
+                                                      <td>
+                                                          Job Pending at UDS
+                                                      </td>
+
+                                                  </tr>
+
+                                                  <tr ng-if="job.pendingAtClient && job.status !='COMPLETED'">
+
+                                                      <td>Job Pending Status </td>
+                                                      <td>
+                                                          Job Pending at {{job.siteProjectName}}
+                                                      </td>
+
+                                                  </tr>
+                                                  <tr>
+
+                                                      <td>Type </td>
+                                                      <td>
+                                                          {{job.jobType}}
+                                                      </td>
+
+                                                  </tr>
+                                                  <tr>
+
+                                                      <td>Comments </td>
+                                                      <td><span ng-if="job.comments">{{job.comments}}</span>
+                                                          <span ng-if="!job.comments">No comments</span>
+                                                      </td>
+
+                                                  </tr>
 
 
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Ticket Id</td>
-                                                    <td>
-                                                    <a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket {{job.ticketId}}</a>
-                                                    <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus != 'Closed'" ng-class="{active: $state.includes('admin')}" ng-click="closeTicket(job.ticketId)"   onClick="$('#deleteModalNew').modal()" data-target="#myModal"     class="btn btn-simple btn-info">Close Ticket {{job.ticketId}}</a>
-                                                    <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{job.ticketId}} Closed </a>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                         </div>
-                                    </div>
-                                </div>
-                             </div>
-                        </div>
+
+                                                  </tbody>
+                                              </table>
+                                          </div>
+
+                                      </div>
+                                  </div>
+
+
+                              </div>
+                              <div class="col-md-4">
+
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading">Actual </div>
+                                      <div class="panel-body" style="min-height: 350px;">
+
+                                          <div class="table-responsive">
+                                              <table class="table">
+                                                  <tbody>
+                                                  <tr>
+                                                      <td>Start date</td>
+                                                      <td>{{job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>End date</td>
+                                                      <td>{{job.actualEndTime  | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+
+                                                  </tr>
+                                                  <tr>
+                                                      <td>Hours</td>
+                                                      <td>
+                                                          {{job.actualHours}}
+                                                      </td>
+
+                                                  </tr>
+                                                  <tr>
+                                                      <td>Minutes</td>
+                                                      <td>
+                                                          {{job.actualMinutes}}
+                                                      </td>
+
+                                                  </tr>
+
+                                                  </tbody>
+                                              </table>
+                                          </div>
+
+                                      </div>
+                                  </div>
+
+
+                              </div>
+
+                          </div>
+                          <div class="row">
+
+                              <div class="col-md-4">
+
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading">Ticket Details</div>
+                                      <div class="panel-body">
+
+
+                                          <div class="table-responsive">
+                                              <table class="table">
+                                                  <tbody>
+                                                  <tr>
+                                                      <td>Ticket Id</td>
+                                                      <td>
+                                                          <span ng-if="!job.ticketId">-</span>
+                                                          <a ng-if="(job.ticketId > 0)" ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({id : job.ticketId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Ticket {{job.ticketId}}</a>
+                                                          <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus != 'Closed'" ng-class="{active: $state.includes('admin')}"  ng-click="closeTicket(job.ticketId)"   onClick="$('#closeTicket').modal()"     class="btn btn-simple btn-info">Close Ticket {{job.ticketId}}</a>
+                                                          <a ng-if="(job.ticketId > 0) && job.jobStatus == 'COMPLETED' && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{job.ticketId}} Closed </a>
+                                                      </td>
+                                                  </tr>
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+                      </div>
+
                         <div class="row">
                             <div class="col-md-12" ng-show="job.images.length>0">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Completed Images </div>
                                     <div class="panel-body">
-                                        <div class="col-md-2" ng-repeat="image in completedImages">
+                                        <div class="col-md-2" ng-repeat="image in job.images">
                                             <!--{{image}}-->
                                             <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
-                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image)" >
-                                                <img src="{{image}}" width="150px" height="150px">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
+                                                <img ng-src="{{image.url}}" width="150px" height="150px">
 
                                             </a>
                                         </div>
@@ -263,6 +276,7 @@
                                         <tr>
                                             <th>Checklist Item </th>
                                             <th>Remarks</th>
+                                            <th>Status</th>
                                             <th>Images</th>
                                         </tr>
                                         <tr ng-repeat="checklist in job.checklistItems">
@@ -270,20 +284,23 @@
                                                 <span ng-if="checklist.completed" style="color:green">{{checklist.checklistItemName}}</span>
                                             </td>
                                             <td>
-                                                <span ng-if="!checklist.completed && checklist.remarks">{{checklist.remarks}}</span>
-                                                <span ng-if="checklist.completed">Completed</span>
-                                                <span ng-if="!checklist.remarks && !checklist.completed">No remarks added</span>
+                                                <span ng-if="checklist.remarks">{{checklist.remarks}}</span>
+                                                <span ng-if="!checklist.remarks">No remarks</span>
                                             </td>
                                             <td>
-                                                <span ng-if="!checklist.image_1">No Image added</span>
-                                                <a ng-if="checklist.image_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_1)" >
-                                                    <img src="{{checklist.image_1}}" width="80px" height="80px">
+                                                <span class="label label-success" ng-if="checklist.completed">Completed</span>
+                                                <span class="label label-warning" ng-if="!checklist.completed">Not Completed</span>
+                                            </td>
+                                            <td>
+                                                <span ng-if="!checklist.imageUrl_1">No image</span>
+                                                <a ng-if="checklist.imageUrl_1" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_1)" >
+                                                    <img ng-src="{{checklist.imageUrl_1}}" width="80px" height="80px">
                                                 </a>
-                                                <a ng-if="checklist.image_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_2)" >
-                                                    <img src="{{checklist.image_2}}" width="80px" height="80px">
+                                                <a ng-if="checklist.imageUrl_2" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_2)" >
+                                                    <img ng-src="{{checklist.imageUrl_2}}" width="80px" height="80px">
                                                 </a>
-                                                <a ng-if="checklist.image_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.image_3)" >
-                                                    <img src="{{checklist.image_3}}" width="80px" height="80px">
+                                                <a ng-if="checklist.imageUrl_3" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(checklist.imageUrl_3)" >
+                                                    <img ng-src="{{checklist.imageUrl_3}}" width="80px" height="80px">
                                                 </a>
                                             </td>
                                         </tr>
@@ -361,7 +378,7 @@
 							<div class="col-sm-12 txt-align-rgt">
 
 								<button class="btn btn-default " type="button"
-									ui-sref="jobs" id="cancel-button">
+									ng-click="back('cancel')" id="cancel-button">
 									<i class=""></i> Back
 								</button>
 							</div>
@@ -410,6 +427,30 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure that you want to close ticket?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button"
+                        class="btn btn-success delete-confirmation-button" ng-click="closeTicketConfirm(cTicket)">Close Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Ticket Close confirmation dialog -->
+
+<!-- Ticket Close confirmation dialog -->
+<div id="closeTicket" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Close Ticket</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to close the ticket?</p>
+                <br/>
+                <input class="form-control border-bottom-input" ng-model="cTicket.comments" placeholder="Enter Remarks..">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

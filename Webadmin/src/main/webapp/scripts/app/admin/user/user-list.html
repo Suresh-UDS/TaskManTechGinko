@@ -6,25 +6,51 @@
     <div class="row">
         <div class="col-md-6 txt-align-lft">
             <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
-                <i class="material-icons">filter_list</i> Advanced Filter
+                <i class="material-icons">filter_list</i> Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
             </button>
         </div>
         <div class="col-md-6 txt-align-rgt">
+
+
 
             <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-user" has-permission="User:Create"  ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
-                <i class="material-icons">refresh</i> Reload
-                <div class="ripple-container"></div>
-            </button>
+
 
         </div>
     </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userLogin">
+                    User: {{searchCriteras.userLogin}}
+                </span>
 
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userFirstName">
+                    First Name: {{searchCriteras.userFirstName}}
+                </span>
+
+                 <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userLastName">
+                    Last Name: {{searchCriteras.userLastName ||userLastName}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userEmail">
+                    Mail: {{searchCriteras.userEmail}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userRoleName && searchCriteras.userRoleName !='-- ALL ROLE --'">
+                    Role: {{searchCriteras.userRoleName}}
+                </span>
+
+            </span>
+    </div>
 
 
     <div class="row" ng-init="init()">
@@ -203,7 +229,7 @@
 
 
                                 <td class="text-right">
-                                    <a    has-permission="User:Edit" ui-sref="edit-user({ id: user.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
+                                    <a  title="Edit"  has-permission="User:Edit" ui-sref="edit-user({ id: user.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">edit</i></a>
                                 </td>
                             </tr>
 
@@ -281,7 +307,7 @@
 							Cancel</button>
 						<button type="button"
 							class="btn btn-danger delete-multiple-confirmation-button"
-							data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
+							>
 							Delete</button>
 					</div>
 				</div>
@@ -293,10 +319,10 @@
 </div>
 
 <!-- AdvancedFilterModal -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm"  role="form" ng-submit = "searchFilter()"  novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -348,14 +374,23 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-xs-12 col-md-4">
-                            <div class="dropdown">
-                                <div class="form-group">
-                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles">
-                                        <option value="">Select Role...</option>
-                                    </select>
-
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <div class="form-group">
+                                        <!-- <label class="control-label">User Role</label> -->
+                                       
+                                        <span ng-show="roleDisable"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!roleDisable && !userRolesListOne.selected" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                               
+	                                    <ui-select ng-model="userRolesListOne.selected"  ng-disabled="roleDisable">
+										  <ui-select-match placeholder="Select User Role..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+										  <ui-select-choices repeat="userRolesListOne in userRolesLists | filter: $select.search"  null-option="allUserRole" loose-null>
+										    <span ng-bind-html="userRolesListOne.name | highlight: $select.search"></span>
+										  </ui-select-choices>
+										</ui-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -364,7 +399,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple" >Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

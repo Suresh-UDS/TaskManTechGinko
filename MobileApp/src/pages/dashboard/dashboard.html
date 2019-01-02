@@ -270,9 +270,9 @@ Tip 2: you can also add an image using data-image tag
 
                 <div [ngSwitch]="categories">
                         <ion-list *ngSwitchCase="'overdue'">
-                            <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                                <ion-refresher-content></ion-refresher-content>
-                            </ion-refresher>
+                            <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                                <!--<ion-refresher-content></ion-refresher-content>-->
+                            <!--</ion-refresher>-->
 
                             <div *ngIf="overdueCount == 0 || !allJobs" class="align-center">
                                 <ion-card>
@@ -348,13 +348,13 @@ Tip 2: you can also add an image using data-image tag
                                     </ion-item>
                                     <ion-item-options (click)="close(slidingItem)" class="ActionBtns">
                                         <div>
-                                            <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 "></ion-icon></button>
+                                            <button has-permission="JobsView" ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 "></ion-icon></button>
                                         </div>
                                         <!--<div>-->
                                         <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                                         <!--</div>-->
                                         <div>
-                                            <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
+                                            <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24"></ion-icon></button>
                                         </div>
                                         <!--<div>-->
                                         <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
@@ -369,9 +369,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'upcoming'">
-                        <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                            <ion-refresher-content></ion-refresher-content>
-                        </ion-refresher>
+                        <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                            <!--<ion-refresher-content></ion-refresher-content>-->
+                        <!--</ion-refresher>-->
 
                         <div *ngIf="upcomingCount == 0 || !allJobs"  class="align-center">
                             <ion-card>
@@ -397,7 +397,7 @@ Tip 2: you can also add an image using data-image tag
                                         </button>
                                     </ion-col>
                                     <ion-col col-8 class="padding-left15">
-                                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="completeJob(job)">
+                                        <div has-permission="JobsEdit" class="border-btm padding-bottom5 ln-ght20" text-capitalize (click)="completeJob(job)">
                                             <p text-left class="margin0">{{job.title}}</p>
                                             <p text-left class="margin0">{{job.employeeName}}</p>
                                             <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}}</p>
@@ -443,13 +443,13 @@ Tip 2: you can also add an image using data-image tag
                             </ion-item>
                             <ion-item-options (click)="close(slidingItem)" class="ActionBtns">
                                 <div>
-                                    <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
+                                    <button has-permission="JobsView" ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
                                 </div>
                                 <!--<div>-->
                                 <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                                 <!--</div>-->
                                 <div>
-                                    <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                                    <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                                 </div>
                                 <!--<div>-->
                                 <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->
@@ -463,9 +463,9 @@ Tip 2: you can also add an image using data-image tag
 
 
                     <ion-list *ngSwitchCase="'completed'">
-                        <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                            <ion-refresher-content></ion-refresher-content>
-                        </ion-refresher>
+                        <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                            <!--<ion-refresher-content></ion-refresher-content>-->
+                        <!--</ion-refresher>-->
 
                         <div *ngIf="completeCount == 0 || !allJobs"  class="align-center">
                             <ion-card>
@@ -541,13 +541,13 @@ Tip 2: you can also add an image using data-image tag
                             </ion-item>
                             <ion-item-options (click)="close(slidingItem)" class="ActionBtns">
                                 <div>
-                                    <button ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
+                                    <button has-permission="JobsView" ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
                                 </div>
                                 <!--<div>-->
                                 <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                                 <!--</div>-->
                                 <div>
-                                    <button ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)">
+                                    <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)">
                                         <ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon>
                                     </button>
                                 </div>
