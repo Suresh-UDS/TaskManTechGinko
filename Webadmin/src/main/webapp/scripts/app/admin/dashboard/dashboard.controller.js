@@ -1837,8 +1837,10 @@ angular.module('timeSheetApp')
 
         $scope.dbdFilter = function(filter){
 
-         $rootScope.searchFilterCriteria.isDashboard = true;
-         $rootScope.searchFilterCriteria.empStatus = filter;
+             $rootScope.searchFilterCriteria.isDashboard = true;
+             $rootScope.searchFilterCriteria.empStatus = filter;
+             $rootScope.searchFilterCriteria.selectedFromDate = new Date();
+             $rootScope.searchFilterCriteria.selectedToDate = new Date();
 
         }
 

@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="AppliedFilterCon"
-         ng-show="!searchCriteria.findAll || localStorage">
+         > <!--ng-show="!searchCriteria.findAll || localStorage"-->
 		<span class="AppliedFilterTxtCon">
 			<span
 	            class="tag label label-info" style="margin-right: 10px"
@@ -88,6 +88,10 @@
             <span class="tag label label-info" style="margin-right: 10px"
                   ng-show="empStatus"> Emp Status:
 					{{empStatus}}
+			</span>
+            <span class="tag label label-info" style="margin-right: 10px"
+                  ng-show="searchCriteras.fromDate"> Created Date:
+					{{searchCriteras.fromDate | date:'dd/MM/yyyy'}}
 			</span>
 		</span>
     </div>

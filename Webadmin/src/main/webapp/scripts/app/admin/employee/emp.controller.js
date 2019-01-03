@@ -1749,8 +1749,10 @@ angular.module('timeSheetApp')
 
 	             	if($rootScope.searchFilterCriteria.selectedFromDate) {
                         $scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.selectedFromDate;
+                        $scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.selectedFromDate;
                     }else{
                         $scope.searchCriteria.checkInDateTimeFrom = new Date();
+                        $scope.searchCriteria.fromDate = new Date();
                     }
 
                     if($rootScope.searchFilterCriteria.selectedToDate) {
