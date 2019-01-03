@@ -56,6 +56,11 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
         //Dashboard back btn function
         $rootScope.dbFilterBtn = function (){
          $rootScope.isDashboard = false;
+         $timeout.cancel($rootScope.attendGraphTimeout);
+         $timeout.cancel($rootScope.jobGraphTimeout);
+         $timeout.cancel($rootScope.ticketGraphTimeout);
+         $timeout.cancel($rootScope.ticketSignalGraphTimeout);
+         $timeout.cancel($rootScope.quotGraphTimeout);
         }
 
 

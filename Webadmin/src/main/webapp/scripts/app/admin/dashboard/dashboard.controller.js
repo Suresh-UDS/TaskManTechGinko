@@ -1202,57 +1202,60 @@ angular.module('timeSheetApp')
 
         //var jobxdata=['Electrical', 'Carpentry', 'Plumbing'];
 
-        $timeout(function () {
-            Highcharts.chart('jobStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Jobs Status'
-                },
-                xAxis: {
-                    categories:$scope.jobStackXSeries
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Job Count'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -30,
-                    verticalAlign: 'top',
-                    y: 25,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: $scope.jobStackYSeries
-            });
-        }, 2500);
+        $rootScope.jobGraph = function () {
+          Highcharts.chart('jobStackedCharts', {
+              chart: {
+                  type: 'column'
+              },
+              title: {
+                  text: 'Jobs Status'
+              },
+              xAxis: {
+                  categories:$scope.jobStackXSeries
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Total Job Count'
+                  },
+                  stackLabels: {
+                      enabled: true,
+                      style: {
+                          fontWeight: 'bold',
+                          color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                      }
+                  }
+              },
+              legend: {
+                  align: 'right',
+                  x: -30,
+                  verticalAlign: 'top',
+                  y: 25,
+                  floating: true,
+                  backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                  borderColor: '#CCC',
+                  borderWidth: 1,
+                  shadow: false
+              },
+              tooltip: {
+                  headerFormat: '<b>{point.x}</b><br/>',
+                  pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+              },
+              plotOptions: {
+                  column: {
+                      stacking: 'normal',
+                      dataLabels: {
+                          enabled: true,
+                          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                      }
+                  }
+              },
+              series: $scope.jobStackYSeries
+          });
+      }
+        // Timeout jobGraph function
+
+        $rootScope.jobGraphTimeout = $timeout($rootScope.jobGraph(), 2500);
 
 
         // Sample data for pie chart
@@ -1275,110 +1278,116 @@ angular.module('timeSheetApp')
             y: 25
         }]
 
-        $timeout(function () {
-            Highcharts.chart('AttendanceStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Attendance Status'
-                },
-                xAxis: {
-                    categories: $scope.attnStackXSeries
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Count'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -30,
-                    verticalAlign: 'top',
-                    y: 25,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: $scope.attnStackYSeries
-            });
-        }, 2500)
+        $rootScope.attendGraph = function () {
+         Highcharts.chart('AttendanceStackedCharts', {
+             chart: {
+                 type: 'column'
+             },
+             title: {
+                 text: 'Attendance Status'
+             },
+             xAxis: {
+                 categories: $scope.attnStackXSeries
+             },
+             yAxis: {
+                 min: 0,
+                 title: {
+                     text: 'Total Count'
+                 },
+                 stackLabels: {
+                     enabled: true,
+                     style: {
+                         fontWeight: 'bold',
+                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                     }
+                 }
+             },
+             legend: {
+                 align: 'right',
+                 x: -30,
+                 verticalAlign: 'top',
+                 y: 25,
+                 floating: true,
+                 backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                 borderColor: '#CCC',
+                 borderWidth: 1,
+                 shadow: false
+             },
+             tooltip: {
+                 headerFormat: '<b>{point.x}</b><br/>',
+                 pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+             },
+             plotOptions: {
+                 column: {
+                     stacking: 'normal',
+                     dataLabels: {
+                         enabled: true,
+                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                     }
+                 }
+             },
+             series: $scope.attnStackYSeries
+         });
+     }
 
+        //Timeout attendGraph function
 
-        $timeout(function () {
-            Highcharts.chart('ticketStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Tickets'
-                },
-                xAxis: {
-                    categories: $scope.ticketStackXSeries
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Count'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -30,
-                    verticalAlign: 'top',
-                    y: 25,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: $scope.ticketStackYSeries
-            });
-        },1000);
+        $rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
+
+        $rootScope.ticketGraph = function () {
+         Highcharts.chart('ticketStackedCharts', {
+             chart: {
+                 type: 'column'
+             },
+             title: {
+                 text: 'Tickets'
+             },
+             xAxis: {
+                 categories: $scope.ticketStackXSeries
+             },
+             yAxis: {
+                 min: 0,
+                 title: {
+                     text: 'Total Count'
+                 },
+                 stackLabels: {
+                     enabled: true,
+                     style: {
+                         fontWeight: 'bold',
+                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                     }
+                 }
+             },
+             legend: {
+                 align: 'right',
+                 x: -30,
+                 verticalAlign: 'top',
+                 y: 25,
+                 floating: true,
+                 backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                 borderColor: '#CCC',
+                 borderWidth: 1,
+                 shadow: false
+             },
+             tooltip: {
+                 headerFormat: '<b>{point.x}</b><br/>',
+                 pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+             },
+             plotOptions: {
+                 column: {
+                     stacking: 'normal',
+                     dataLabels: {
+                         enabled: true,
+                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                     }
+                 }
+             },
+             series: $scope.ticketStackYSeries
+         });
+     }
+        //Timeout ticketGraph function
+
+       $rootScope.ticketGraphTimeout = $timeout($rootScope.ticketGraph(),1000);
 
 
 
@@ -1460,278 +1469,281 @@ angular.module('timeSheetApp')
             }]
         });
 
-        $timeout(function(){
-            Highcharts.chart('ticketSingleStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Average Ticket Age'
-                },
-                subtitle: {
-                    text: ''
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Average Age'
-                    }
+        $rootScope.ticketSignalGraph = function(){
+           Highcharts.chart('ticketSingleStackedCharts', {
+               chart: {
+                   type: 'column'
+               },
+               title: {
+                   text: 'Average Ticket Age'
+               },
+               subtitle: {
+                   text: ''
+               },
+               xAxis: {
+                   type: 'category'
+               },
+               yAxis: {
+                   title: {
+                       text: 'Average Age'
+                   }
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y}'
-                        }
-                    }
-                },
+               },
+               legend: {
+                   enabled: false
+               },
+               plotOptions: {
+                   series: {
+                       borderWidth: 0,
+                       dataLabels: {
+                           enabled: true,
+                           format: '{point.y}'
+                       }
+                   }
+               },
 
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
-                },
+               tooltip: {
+                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                   pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+               },
 
-                "series": [
-                    {
-                        "name": "Ticket Categories",
-                        "colorByPoint": true,
-                        "data": $scope.ticketAgeYSeries
-                    }
-                ],
-                "drilldown": {
-                    "series": [
-                        {
-                            "name": "Chrome",
-                            "id": "Chrome",
-                            "data": [
-                                [
-                                    "v65.0",
-                                    0.1
-                                ],
-                                [
-                                    "v64.0",
-                                    1.3
-                                ],
-                                [
-                                    "v63.0",
-                                    53.02
-                                ],
-                                [
-                                    "v62.0",
-                                    1.4
-                                ],
-                                [
-                                    "v61.0",
-                                    0.88
-                                ],
-                                [
-                                    "v60.0",
-                                    0.56
-                                ],
-                                [
-                                    "v59.0",
-                                    0.45
-                                ],
-                                [
-                                    "v58.0",
-                                    0.49
-                                ],
-                                [
-                                    "v57.0",
-                                    0.32
-                                ],
-                                [
-                                    "v56.0",
-                                    0.29
-                                ],
-                                [
-                                    "v55.0",
-                                    0.79
-                                ],
-                                [
-                                    "v54.0",
-                                    0.18
-                                ],
-                                [
-                                    "v51.0",
-                                    0.13
-                                ],
-                                [
-                                    "v49.0",
-                                    2.16
-                                ],
-                                [
-                                    "v48.0",
-                                    0.13
-                                ],
-                                [
-                                    "v47.0",
-                                    0.11
-                                ],
-                                [
-                                    "v43.0",
-                                    0.17
-                                ],
-                                [
-                                    "v29.0",
-                                    0.26
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Firefox",
-                            "id": "Firefox",
-                            "data": [
-                                [
-                                    "v58.0",
-                                    1.02
-                                ],
-                                [
-                                    "v57.0",
-                                    7.36
-                                ],
-                                [
-                                    "v56.0",
-                                    0.35
-                                ],
-                                [
-                                    "v55.0",
-                                    0.11
-                                ],
-                                [
-                                    "v54.0",
-                                    0.1
-                                ],
-                                [
-                                    "v52.0",
-                                    0.95
-                                ],
-                                [
-                                    "v51.0",
-                                    0.15
-                                ],
-                                [
-                                    "v50.0",
-                                    0.1
-                                ],
-                                [
-                                    "v48.0",
-                                    0.31
-                                ],
-                                [
-                                    "v47.0",
-                                    0.12
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Internet Explorer",
-                            "id": "Internet Explorer",
-                            "data": [
-                                [
-                                    "v11.0",
-                                    6.2
-                                ],
-                                [
-                                    "v10.0",
-                                    0.29
-                                ],
-                                [
-                                    "v9.0",
-                                    0.27
-                                ],
-                                [
-                                    "v8.0",
-                                    0.47
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Safari",
-                            "id": "Safari",
-                            "data": [
-                                [
-                                    "v11.0",
-                                    3.39
-                                ],
-                                [
-                                    "v10.1",
-                                    0.96
-                                ],
-                                [
-                                    "v10.0",
-                                    0.36
-                                ],
-                                [
-                                    "v9.1",
-                                    0.54
-                                ],
-                                [
-                                    "v9.0",
-                                    0.13
-                                ],
-                                [
-                                    "v5.1",
-                                    0.2
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Edge",
-                            "id": "Edge",
-                            "data": [
-                                [
-                                    "v16",
-                                    2.6
-                                ],
-                                [
-                                    "v15",
-                                    0.92
-                                ],
-                                [
-                                    "v14",
-                                    0.4
-                                ],
-                                [
-                                    "v13",
-                                    0.1
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Opera",
-                            "id": "Opera",
-                            "data": [
-                                [
-                                    "v50.0",
-                                    0.96
-                                ],
-                                [
-                                    "v49.0",
-                                    0.82
-                                ],
-                                [
-                                    "v12.1",
-                                    0.14
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            });
-        },2500);
+               "series": [
+                   {
+                       "name": "Ticket Categories",
+                       "colorByPoint": true,
+                       "data": $scope.ticketAgeYSeries
+                   }
+               ],
+               "drilldown": {
+                   "series": [
+                       {
+                           "name": "Chrome",
+                           "id": "Chrome",
+                           "data": [
+                               [
+                                   "v65.0",
+                                   0.1
+                               ],
+                               [
+                                   "v64.0",
+                                   1.3
+                               ],
+                               [
+                                   "v63.0",
+                                   53.02
+                               ],
+                               [
+                                   "v62.0",
+                                   1.4
+                               ],
+                               [
+                                   "v61.0",
+                                   0.88
+                               ],
+                               [
+                                   "v60.0",
+                                   0.56
+                               ],
+                               [
+                                   "v59.0",
+                                   0.45
+                               ],
+                               [
+                                   "v58.0",
+                                   0.49
+                               ],
+                               [
+                                   "v57.0",
+                                   0.32
+                               ],
+                               [
+                                   "v56.0",
+                                   0.29
+                               ],
+                               [
+                                   "v55.0",
+                                   0.79
+                               ],
+                               [
+                                   "v54.0",
+                                   0.18
+                               ],
+                               [
+                                   "v51.0",
+                                   0.13
+                               ],
+                               [
+                                   "v49.0",
+                                   2.16
+                               ],
+                               [
+                                   "v48.0",
+                                   0.13
+                               ],
+                               [
+                                   "v47.0",
+                                   0.11
+                               ],
+                               [
+                                   "v43.0",
+                                   0.17
+                               ],
+                               [
+                                   "v29.0",
+                                   0.26
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Firefox",
+                           "id": "Firefox",
+                           "data": [
+                               [
+                                   "v58.0",
+                                   1.02
+                               ],
+                               [
+                                   "v57.0",
+                                   7.36
+                               ],
+                               [
+                                   "v56.0",
+                                   0.35
+                               ],
+                               [
+                                   "v55.0",
+                                   0.11
+                               ],
+                               [
+                                   "v54.0",
+                                   0.1
+                               ],
+                               [
+                                   "v52.0",
+                                   0.95
+                               ],
+                               [
+                                   "v51.0",
+                                   0.15
+                               ],
+                               [
+                                   "v50.0",
+                                   0.1
+                               ],
+                               [
+                                   "v48.0",
+                                   0.31
+                               ],
+                               [
+                                   "v47.0",
+                                   0.12
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Internet Explorer",
+                           "id": "Internet Explorer",
+                           "data": [
+                               [
+                                   "v11.0",
+                                   6.2
+                               ],
+                               [
+                                   "v10.0",
+                                   0.29
+                               ],
+                               [
+                                   "v9.0",
+                                   0.27
+                               ],
+                               [
+                                   "v8.0",
+                                   0.47
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Safari",
+                           "id": "Safari",
+                           "data": [
+                               [
+                                   "v11.0",
+                                   3.39
+                               ],
+                               [
+                                   "v10.1",
+                                   0.96
+                               ],
+                               [
+                                   "v10.0",
+                                   0.36
+                               ],
+                               [
+                                   "v9.1",
+                                   0.54
+                               ],
+                               [
+                                   "v9.0",
+                                   0.13
+                               ],
+                               [
+                                   "v5.1",
+                                   0.2
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Edge",
+                           "id": "Edge",
+                           "data": [
+                               [
+                                   "v16",
+                                   2.6
+                               ],
+                               [
+                                   "v15",
+                                   0.92
+                               ],
+                               [
+                                   "v14",
+                                   0.4
+                               ],
+                               [
+                                   "v13",
+                                   0.1
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Opera",
+                           "id": "Opera",
+                           "data": [
+                               [
+                                   "v50.0",
+                                   0.96
+                               ],
+                               [
+                                   "v49.0",
+                                   0.82
+                               ],
+                               [
+                                   "v12.1",
+                                   0.14
+                               ]
+                           ]
+                       }
+                   ]
+               }
+           });
+       }
+        //Timeout ticketSignalGraph function
+
+        $rootScope.ticketSignalGraphTimeout = $timeout($rootScope.ticketSignalGraph(),2500);
 
 
         // var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
 
-        $timeout(function () {
+         $rootScope.quotGraph = function () {
             Highcharts.chart('quotationStackedCharts', {
                 chart: {
                     type: 'column'
@@ -1782,18 +1794,11 @@ angular.module('timeSheetApp')
                 series: $scope.quoteStackYSeries
             });
 
-        },1500);
+        }
 
+        // Timeout quotGraph function
 
-
-
-
-
-
-
-
-
-
+        $rootScope.quotGraphTimeout = $timeout($rootScope.quotGraph(),1500);
 
 // Chart data sample end
 
