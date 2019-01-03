@@ -210,7 +210,7 @@ public class SearchCriteria extends Paginator {
 
 	private String linkType;
 
-	private boolean isLeft;
+	private boolean left;
 
 	public String getModule() {
 		return module;
@@ -1097,10 +1097,10 @@ public class SearchCriteria extends Paginator {
     }
 
     public boolean isLeft() {
-        return isLeft;
+        return left;
     }
 
     public void setLeft(boolean left) {
-        isLeft = left;
+        this.left = left;
     }
 }

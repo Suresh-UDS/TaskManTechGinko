@@ -1048,7 +1048,7 @@ angular
 		        		/* Root scope (search criteria) start*/
 
                     if($rootScope.searchFilterCriteria.isDashboard){
-
+                         $rootScope.isDashboard = true;
                          if($rootScope.searchFilterCriteria.projectId){
                             $scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
                             $scope.client.selected =$scope.searchProject;

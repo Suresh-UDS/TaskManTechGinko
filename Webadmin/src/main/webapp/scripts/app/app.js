@@ -17,6 +17,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
         $rootScope.resLoader=false;
         $rootScope.searchCriterias={};
         $rootScope.searchFilterCriteria = {};
+        $rootScope.isDashboard = false;
 
         /** @reatin - retaining scope value.**/
 
@@ -45,6 +46,18 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
             }
 
         });
+
+         $rootScope.backToDashboard = function () {
+            if($rootScope.isDashboard){
+               $state.go('dashboard');
+            }
+        };
+
+        //Dashboard back btn function
+        $rootScope.dbFilterBtn = function (){
+         $rootScope.isDashboard = false;
+        }
+
 
       //console.log('current state - ' +JSON.stringify($state));
         $rootScope.isLoggedIn = true;

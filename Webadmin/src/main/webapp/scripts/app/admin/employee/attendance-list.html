@@ -20,6 +20,10 @@
                 <i class="material-icons">refresh</i> Clear filter
                 <div class="ripple-container"></div>
             </button>
+            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
+                <i class="material-icons">keyboard_return</i>Dashboard
+                <div class="ripple-container"></div>
+            </button>
         </div>
         <div class="col-md-6 txt-align-rgt">
 
@@ -57,11 +61,11 @@
 	            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
 					Client: {{searchCriteras.projectName}}
 			    </span>
-			    
+
 			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
                     Region: {{searchCriteras.region}}
                 </span>
-                
+
                 <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
                     Branch: {{searchCriteras.branch}}
                 </span>
@@ -70,7 +74,7 @@
 	                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
 					Site: {{searchCriteras.siteName}}
 			    </span>
-			    
+
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
                     From: {{searchCriteras.checkInDateTimeFrom  | date:'dd/MM/yyyy'}}
                 </span>

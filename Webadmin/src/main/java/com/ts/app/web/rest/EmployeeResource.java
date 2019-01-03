@@ -650,7 +650,7 @@ public class EmployeeResource {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/employee/search/absent", method = RequestMethod.POST)
+    @RequestMapping(value="/employee/absent/search", method = RequestMethod.POST)
     public ResponseEntity<?> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
     	List<EmployeeDTO> response = null;
     	if(searchCriteria!=null) {
