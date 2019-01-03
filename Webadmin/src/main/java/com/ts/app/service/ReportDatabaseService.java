@@ -157,6 +157,11 @@ public class ReportDatabaseService {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
+        
+        SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
+        SimpleDateFormat yearFmt = new SimpleDateFormat("YYYY");
+        String month = monthFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
+        String year  = yearFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
 
         if(ticketReportList.getAssignedOn() != null) {
             assignedOn.setTime(ticketReportList.getAssignedOn());
@@ -180,6 +185,10 @@ public class ReportDatabaseService {
             .tag("id", String.valueOf(ticketReportList.getTicketId()))
             .addField("date", cal.getTimeInMillis())
             .tag("date", String.valueOf(cal.getTimeInMillis()))
+            .addField("month", month)
+        	.tag("month", month)
+        	.addField("year", year)
+        	.tag("year", year)
             .addField("siteId", ticketReportList.getSiteId())
             .addField("projectId", ticketReportList.getProjectId())
             .addField("status", ticketReportList.getStatus())
