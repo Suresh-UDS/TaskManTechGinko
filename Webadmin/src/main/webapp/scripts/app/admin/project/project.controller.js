@@ -320,23 +320,23 @@ angular.module('timeSheetApp')
 		/* Root scope (search criteria) start*/
 
 		if($rootScope.searchFilterCriteria.isDashboard){
-
+            $rootScope.isDashboard = true;
 			if($rootScope.searchFilterCriteria.projectId){
 				$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
 				$scope.client.selected =$scope.searchProject;
 			}else{
 				$scope.searchProject = null;
 				$scope.client.selected =$scope.allClients;
-			} 	
+			}
 			/* Root scope (search criteria) end*/
-		} 
+		}
 		else{
 
 			if($scope.client.selected && $scope.client.selected.id !=0){
 				$scope.searchProject = $scope.client.selected;
 			}else{
 				$scope.searchProject = null;
-			} 
+			}
 		}
 
 		/* Root scope (search criteria) */
@@ -346,11 +346,11 @@ angular.module('timeSheetApp')
 
 
 		if(!$scope.searchProject) {
-			$scope.searchCriteria.findAll = true;	
+			$scope.searchCriteria.findAll = true;
 		}
 
 		if($scope.searchProject) {
-			$scope.searchCriteria.projectId = $scope.searchProject.id;	
+			$scope.searchCriteria.projectId = $scope.searchProject.id;
 			$scope.searchCriteria.projectName = $scope.searchProject.name;
 		}else {
 			$scope.searchCriteria.projectId = null;
