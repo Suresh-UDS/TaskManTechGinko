@@ -79,7 +79,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //.csrf()
         //.ignoringAntMatchers("/websocket/**")
         //.ignoringAntMatchers("/api/auth")
-        .disable()
+//        .disable()
         //.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
         .addFilterAfter(new AuthenticationTokenProcessingFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new CORSFilter(), UsernamePasswordAuthenticationFilter.class)
