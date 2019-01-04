@@ -76,13 +76,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-        //.csrf()
+        .csrf()
         //.ignoringAntMatchers("/websocket/**")
         //.ignoringAntMatchers("/api/auth")
-        //.disable()
-        .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
-		.csrf()
-    .and()
+        .disable()
+        //.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
         .addFilterAfter(new AuthenticationTokenProcessingFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(new CORSFilter(), UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling()
@@ -114,7 +112,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/api/auth").permitAll()
         .antMatchers("/api/register").permitAll()
-        .antMatchers("/api/activate").permitAll()           
+        .antMatchers("/api/activate").permitAll()
         .antMatchers("/api/authenticate").permitAll()
         .antMatchers("/api/account/reset_password/init").permitAll()
         .antMatchers("/api/account/reset_password/finish").permitAll()
