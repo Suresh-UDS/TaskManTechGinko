@@ -6,7 +6,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
      'angular-star-rating-new','paginations','excelGrid'
-     //,'spring-security-csrf-token-interceptor'
+     //,'spring-security-csrf-token-interceptor' 
      ])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
