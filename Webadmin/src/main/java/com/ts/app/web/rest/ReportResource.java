@@ -1,11 +1,7 @@
 package com.ts.app.web.rest;
 
 import com.ts.app.domain.*;
-import com.ts.app.domain.Measurements.AttendanceStatusMeasurement;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
-import com.ts.app.domain.Measurements.QuotationStatusMeasurement;
-import com.ts.app.domain.Measurements.TicketAvgStatus;
-import com.ts.app.domain.Measurements.TicketStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportDatabaseService;
 import com.ts.app.service.ReportService;
@@ -273,6 +269,12 @@ public class ReportResource {
     @RequestMapping(value = "/getAvgTicket", method = RequestMethod.GET)
     public ResponseEntity<?> getAveticket() {
     	List<ChartModelEntity> response = reportDatabaseUtil.getAverageTicketAge();
+    	return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/getAvgTicket/monthly", method = RequestMethod.GET)
+    public ResponseEntity<?> getAveticketMonthly() {
+    	Map<String, Map<String, Status>> response = reportDatabaseUtil.getAverageTicketAgeMonthly();
     	return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

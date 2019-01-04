@@ -46,6 +46,12 @@ public class TicketStatusMeasurement {
 
     @Column(name="totalCount")
     private int totalCount;
+    
+    @Column(name="month")
+    private String month;
+    
+    @Column(name="year")
+    private String year;
 
     public Instant getTime() {
         return time;
@@ -150,6 +156,22 @@ public class TicketStatusMeasurement {
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
 
 
 	

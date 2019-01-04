@@ -6,6 +6,7 @@ public class Status {
 
     private String name;
     private List<Integer> data;
+    private String marker;
 
     public String getName() {
         return name;
@@ -22,4 +23,12 @@ public class Status {
     public void setData(List<Integer> data) {
         this.data = data;
     }
+
+	public String getMarker() {
+		return marker;
+	}
+
+	public void setMarker(String marker) {
+		this.marker = marker;
+	}
 }
