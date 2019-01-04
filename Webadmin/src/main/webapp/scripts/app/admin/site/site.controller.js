@@ -871,7 +871,7 @@ angular.module('timeSheetApp')
 		/* Root scope (search criteria) start*/
 
 		if($rootScope.searchFilterCriteria.isDashboard){
-
+             $rootScope.isDashboard = true;
 			if($rootScope.searchFilterCriteria.projectId){
 				$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
 				$scope.client.selected =$scope.searchProject;
@@ -879,7 +879,7 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.searchProject = null;
 				$scope.client.selected =$scope.searchProject;
-			} 
+			}
 			if($rootScope.searchFilterCriteria.regionId){
 				$scope.searchRegion = {id:$rootScope.searchFilterCriteria.regionId,name:$rootScope.searchFilterCriteria.region}
 				$scope.regionsListOne.selected = $scope.searchRegion;
@@ -913,7 +913,7 @@ angular.module('timeSheetApp')
 				$scope.searchProject = $scope.client.selected;
 			}else{
 				$scope.searchProject = null;
-			} 
+			}
 			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 				$scope.searchSite = $scope.sitesListOne.selected;
 			}else{
@@ -1566,7 +1566,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.clearProject = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.client.selected = undefined;
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
@@ -1577,7 +1577,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearRegion = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
 		$scope.sitesListOne.selected = undefined;
@@ -1593,7 +1593,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearSite = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.sitesListOne.selected = undefined;
 
 	};

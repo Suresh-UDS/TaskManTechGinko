@@ -86,11 +86,11 @@ angular
 					$scope.searchStatus = null;
 					$scope.btnDisable = false;
 					$scope.ticketQuot = false;
-					$scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+					$scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 					$scope.searchCreatedDateSer = new Date();
 					$scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 	                $scope.searchToDateSer = new Date();
-					
+
 					/** Ui-select scopes **/
 			        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
 			        $scope.client = {};
@@ -149,7 +149,7 @@ angular
 		                $scope.selectedApprovedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 
 			        });
-			        
+
 			        $('input#searchCreatedDate').on('dp.change', function(e){
 		                $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchCreatedDateSer = new Date(e.date._d);
@@ -157,13 +157,13 @@ angular
 		                if($scope.searchToDateSer){
 		                	$scope.searchToDateSer.setHours(0,0,0,0);
 		                }
-		                
+
 
 		                if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
 		                	$scope.fromErrMsg = 'From date cannot be greater than To date';
-		                	
+
 		                	    alert($scope.fromErrMsg);
-		                	
+
 		                		 $('input#searchCreatedDate').data('DateTimePicker').clear();
 		                         $('input#searchToDate').data('DateTimePicker').clear();
 		                		 $scope.searchCreatedDateSer = new Date();
@@ -172,11 +172,11 @@ angular
 		                         $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 		                         $('input#searchCreatedDate').val($scope.searchCreatedDate);
 		                         $('input#searchToDate').val($scope.searchToDate);
-		                	
+
 		                	return false;
 		                }
 		            });
-			        
+
 			        $('input#searchToDate').on('dp.change', function(e){
 		                $scope.searchToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchToDateSer = new Date(e.date._d);
@@ -187,9 +187,9 @@ angular
 
 		                if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
 		                	$scope.toErrMsg = 'To date cannot be lesser than From date';
-		                	
+
 		                	     alert($scope.toErrMsg);
-		                	
+
 		                		 $('input#searchCreatedDate').data('DateTimePicker').clear();
 		                         $('input#searchToDate').data('DateTimePicker').clear();
 		                		 $scope.searchCreatedDateSer = new Date();
@@ -198,7 +198,7 @@ angular
 		                         $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 		                         $('input#searchCreatedDate').val($scope.searchCreatedDate);
 		                         $('input#searchToDate').val($scope.searchToDate);
-		                	  
+
 		                	return false;
 		                }
 		            });
@@ -338,7 +338,7 @@ angular
                                     $scope.SelectClients[i] = $scope.projects[i];
                                     $scope.clients[i+1] = $scope.projects[i];
                                 }
-                               
+
                                 $scope.clientDisable = false;
                                 $scope.clientFilterDisable = false;
                             });
@@ -478,11 +478,11 @@ angular
                         });
 			           }
 					};
-					
+
 					 /** Ui-select function **/
-			         
+
 			         $scope.loadDepSitesList = function (searchProject) {
-	
+
 			               $scope.siteSpin = true;
 			               $scope.searchProject = searchProject;
 			               if(jQuery.isEmptyObject($scope.searchProject) == true){
@@ -492,13 +492,13 @@ angular
 			 	                  $scope.sitesLists = [];
 			 	                  $scope.sitesListOne.selected = null;
 			 	                  $scope.sitesLists[0] = $scope.allSites;
-			 	                  
+
 			 	                  for(var i=0;i<$scope.sitesList.length;i++)
 			 	                  {
 			 	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
 			 	                      $scope.Selectsites[i] = $scope.sitesList[i];
 			 	                  }
-			 	                 
+
 			 	                  $scope.siteFilterDisable = false;
 			 	                  $scope.siteSpin = false;
 			 	              });
@@ -507,46 +507,46 @@ angular
 			 	                     var depProj=$scope.SelectClient.selected.id;
 			 	                     $scope.SelectSites = [];
 					                 $scope.SelectSite.selected = null;
-					                 $scope.selectedSite = null; 
+					                 $scope.selectedSite = null;
 			 	              }else if(jQuery.isEmptyObject($scope.searchProject) == false){
 			 	                      var depProj=$scope.searchProject.id;
 			 	              }else{
 			 	                      var depProj=0;
 			 	              }
-			 	           
+
 			 	              ProjectComponent.findSites(depProj).then(function (data) {
-			 	                  
+
 			 	                  $scope.sitesList = data;
 			 	                  $scope.sitesLists = [];
 			 	                  $scope.sitesListOne.selected = null;
 			 	                  $scope.sitesLists[0] = $scope.allSites;
-			 	                  
+
 			 	                  //console.log('Site List',$scope.sitesList);
-			 	                  
+
 			 	                  for(var i=0;i<$scope.sitesList.length;i++)
 			 	                  {
 			 	                      $scope.sitesLists[i+1] = $scope.sitesList[i];
-			 	                      
+
 			 	                  }
-			 	                  
+
 			 	                 for(var i=0;i<$scope.sitesList.length;i++)
 				                  {
-				                      
+
 				                      $scope.SelectSites[i] = $scope.sitesList[i];
 				                  }
-			 	                  
+
 			 	                  $scope.siteFilterDisable = false;
 			 	                  $scope.siteDisable = false;
 			 	                  $scope.siteSpin = false;
 			 	              });
 			               }
-			            
+
 
 			             };
-			             
+
 			             $scope.regionFilterDisable = true;
 			             $scope.branchFilterDisable = true;
-			             
+
 			             /*** UI select (Region List) **/
 			             $scope.loadRegionsList = function (projectId, callback) {
 			             	$scope.regionSpin = true;
@@ -572,7 +572,7 @@ angular
 			                     //callback();
 			                 })
 			             };
-			             
+
 			             /*** UI select (Branch List) **/
 			             $scope.loadBranchList = function (projectId, callback) {
 
@@ -727,7 +727,7 @@ angular
                         $scope.saveLoad = true;
                         $scope.btnDisable = true;
 						console.log("Image file",$scope.selectedImageFile);
-						
+
 						if($scope.SelectClient.selected){
 			        		$scope.selectedProject = $scope.SelectClient.selected;
 			        	}else{
@@ -735,16 +735,16 @@ angular
 			        	}
 			            if($scope.SelectSite.selected){
 			        		$scope.selectedSite = $scope.SelectSite.selected;
-			        		
+
 			        	}else{
 			        	   $scope.selectedSite = null;
 			        	}
-                        
+
 						$scope.quotation.siteId = $scope.selectedSite.id;
 						$scope.quotation.siteName = $scope.selectedSite.name;
 						$scope.quotation.projectId = $scope.selectedProject.id;
 						$scope.quotation.projectName = $scope.selectedProject.name;
-						
+
 
 						$scope.rateCardDetails = $scope.serviceRateCardDetails
 								.concat($scope.labourRateCardDetails,
@@ -847,18 +847,18 @@ angular
                                     $scope.selectedSite.name = $scope.quotation.siteName;
                                     //UI scope values
                                     $scope.SelectClient.selected  = $scope.selectedProject;
-                                    
+
                                     ProjectComponent.findSites($scope.quotation.projectId).then(function (data) {
-  	               	                   
+
   	               	                  for(var i=0;i<data.length;i++)
   	               	                  {
   	               	                      $scope.SelectSites[i+1] = data[i];
   	               	                      $scope.siteDisable = false;
   	               	                  }
-  	               	                  
+
                                     });
                                     $scope.SelectSite.selected = $scope.selectedSite;
-                                    
+
                                     if($scope.quotation.images.length>0){
                                       //console.log("images found");
                                         for(var i=0;i<$scope.quotation.images.length;i++){
@@ -977,7 +977,7 @@ angular
 			        	$scope.regionFilterDisable = true;
 			            $scope.branchFilterDisable = true;
                         $scope.sitesList = null;
-                        
+
                         /** Ui-select scopes **/
                     	$scope.client.selected = null;
                     	$scope.sitesLists =  [];
@@ -986,8 +986,8 @@ angular
                         $scope.regionsListOne.selected =  null;
                         $scope.branchsLists =  [];
                         $scope.branchsListOne.selected =  null;
-                        
-                        $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy'); 
+
+                        $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
     					$scope.searchCreatedDateSer = new Date();
     					$scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
     	                $scope.searchToDateSer = new Date();
@@ -1038,13 +1038,13 @@ angular
 			            $scope.setPage(1);
 			            //$scope.loadQuotations();
 			        }
-			        
+
 			        $scope.loadQuotations = function () {
 			        	$scope.clearFilter();
 			        	$scope.search();
 		            };
 
-			        
+
 			        $scope.searchFilter = function () {
 			            $('.AdvancedFilterModal.in').modal('hide');
 			            //$scope.setPage(1);
@@ -1080,7 +1080,7 @@ angular
 		        	}
 
 		        	$scope.searchCriteria.currPage = currPageVal;
-		        	
+
 		        	if($scope.client.selected && $scope.client.selected.id !=0){
 		        		$scope.searchProject = $scope.client.selected;
 		        	}else{
@@ -1101,7 +1101,7 @@ angular
 		        	}else{
 		        	   $scope.searchSite = null;
 		        	}
-		        	
+
 		        	 $scope.searchCriteria.findAll = false;
 
 			        	if(!$scope.searchId && !$scope.searchTitle  && !$scope.searchProject && !$scope.searchSite
@@ -1117,7 +1117,7 @@ angular
 			        		$scope.searchCriteria.projectId = null;
 			        		$scope.searchCriteria.projectName = null;
 			        	}
-			        	
+
 			        	if($scope.searchRegion) {
 				        	$scope.searchCriteria.regionId = $scope.searchRegion.id;
 		                    $scope.searchCriteria.region = $scope.searchRegion.name;
@@ -1146,26 +1146,26 @@ angular
 				    	$scope.searchCriteria.siteId =null;
 				    	$scope.searchCriteria.siteName = null;
 				    }
-			        	
+
 
 			        	if($scope.searchStatus){
 			        		$scope.searchCriteria.quotationStatus = $scope.searchStatus;
-			        		
+
 			        		$scope.searchCriteria.quotationIsSubmitted = false;
 			        		$scope.searchCriteria.quotationIsArchived = false;
 			        		$scope.searchCriteria.quotationIsRejected = false;
 			        		$scope.searchCriteria.quotationIsDrafted = false;
 			        		$scope.searchCriteria.quotationIsApproved = false;
-			        		
+
 			        		switch($scope.searchStatus){
-			        		
+
 				        		case "Waiting for approval" : $scope.searchCriteria.quotationIsSubmitted = true; break;
 				        		case "Archived" : $scope.searchCriteria.quotationIsArchived = true; break;
 				        		case "Rejected" : $scope.searchCriteria.quotationIsRejected = true; break;
 				        		case "Pending" : $scope.searchCriteria.quotationIsDrafted = true; break;
 				        		case "Approved" : $scope.searchCriteria.quotationIsApproved = true; break;
 				        		//default:
-			        		
+
 			        		}
 			        }else{
 			        	$scope.searchCriteria.quotationStatus = null;
@@ -1192,16 +1192,16 @@ angular
 			        }else{
 			        	$scope.searchCriteria.quotationApprovedBy = null;
 			        }
-			        
-			  
+
+
 			        if($scope.searchCreatedDateSer) {
 			        	 $scope.searchCriteria.quotationCreatedDate = $scope.searchCreatedDateSer;
-			        	
+
 		             }
-			        
+
 			        if($scope.searchToDateSer) {
 			        	 $scope.searchCriteria.toDate = $scope.searchToDateSer;
-			        	
+
 		             }
 
 			        if($scope.searchSubmittedDateSer) {
@@ -1260,7 +1260,7 @@ angular
 	                            if($scope.localStorage.regionId){
 	                                $scope.searchRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.region};
 	                                $scope.regionsListOne.selected = $scope.searchRegion;
-	                                
+
 	                                $scope.regionFilterFunction($scope.searchProject);
 	                             }else{
 	                                $scope.searchRegion = null;
@@ -1284,23 +1284,23 @@ angular
 	                                $scope.sitesListOne.selected = $scope.searchSite;
 	                             }
 	                             if($scope.localStorage.quotationStatus){
-	                             	$scope.searchStatus  = $scope.localStorage.quotationStatus;	
-	                             	
+	                             	$scope.searchStatus  = $scope.localStorage.quotationStatus;
+
 	                             }else{
 	                            	 $scope.searchStatus  = null;
-	                             } 
+	                             }
 	                             if($scope.localStorage.quotationCreatedBy){
 	                            	 $scope.searchCreatedBy = $scope.localStorage.quotationCreatedBy;
 	                            }else{
 	                            	 $scope.searchCreatedBy = "";
 	                            }
-	                             
+
 	                             if($scope.localStorage.quotationCreatedDate){
-	                            	 $scope.searchCreatedDate=$filter('date')($scope.localStorage.quotationCreatedDate, 'dd/MM/yyyy');  
+	                            	 $scope.searchCreatedDate=$filter('date')($scope.localStorage.quotationCreatedDate, 'dd/MM/yyyy');
 	                            	 $scope.searchCreatedDateSer= $scope.localStorage.quotationCreatedDate;
 	                            }
 	                             if($scope.localStorage.toDate){
-	                            	 $scope.searchToDate=$filter('date')($scope.localStorage.toDate, 'dd/MM/yyyy');  
+	                            	 $scope.searchToDate=$filter('date')($scope.localStorage.toDate, 'dd/MM/yyyy');
 	                            	 $scope.searchToDateSer= $scope.localStorage.toDate;
 	                            }
 	                             if($scope.localStorage.quotationApprovedBy){
@@ -1308,7 +1308,7 @@ angular
 	                            }else{
 	                            	 $scope.searchApprovedBy = "";
 	                            }
-	                             
+
 	                             if($scope.localStorage.quotationTitle){
 	                            	 $scope.searchTitle = $scope.localStorage.quotationTitle;
 	                            }else{
@@ -1332,7 +1332,7 @@ angular
 
                         //RateCardComponent.search($scope.searchCriteria).then(function (data) {
 		        	RateCardComponent.getAllQuotations($scope.searchCriteras).then(function (data) {
-		        	    $scope.quotations = data.transactions; 
+		        	    $scope.quotations = data.transactions;
 		        	    console.log('quotation',$scope.quotations);
 		                $scope.quotationsLoader = true;
 
@@ -1430,10 +1430,10 @@ angular
 						        }
 
 					        }
-					        
-					        
+
+
 					        //Search Filter Site Load Function
-					        
+
 					        $scope.projectFilterFunction = function (searchProject){
 					        	$scope.siteSpin = true;
 					        	ProjectComponent.findSites(searchProject.id).then(function (data) {
@@ -1449,11 +1449,11 @@ angular
 					                  $scope.siteFilterDisable = false;
 					                  $scope.siteSpin = false;
 					              });
-					        	
+
 					        };
-					        
+
 					      //Search Filter Region Load Function
-					        
+
 					        $scope.regionFilterFunction = function (searchProject){
 					        	$scope.regionSpin = true;
 					            SiteComponent.getRegionByProject(searchProject.id).then(function (response) {
@@ -1474,9 +1474,9 @@ angular
 					                //callback();
 					            });
 					        };
-					        
+
 					        //Search Filter Branch Load Function
-					        
+
 					        $scope.branchFilterFunction = function (searchProject,searchRegion){
 					        	$scope.branchSpin = true;
 					            SiteComponent.getBranchByProject(searchProject.id,searchRegion.id).then(function (response) {
@@ -1508,8 +1508,8 @@ angular
 
 					             })
 					        };
-					        
-					        
+
+
 					        $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
 					            if(branch){
 					                $scope.siteFilterDisable = true;
@@ -1569,16 +1569,16 @@ angular
 
 					            }*/
 					        };
-					        
-					        
+
+
 					        /*
 					         * Ui select allow-clear modified function start
 					         *
 					         * */
-					        
+
 
 					        $scope.clearProject = function($event) {
-					     	   $event.stopPropagation(); 
+					     	   $event.stopPropagation();
 					     	   $scope.client.selected = undefined;
 					     	   $scope.regionsListOne.selected = undefined;
 					     	   $scope.branchsListOne.selected = undefined;
@@ -1587,31 +1587,31 @@ angular
 					     	   $scope.branchFilterDisable = true;
 					     	   $scope.siteFilterDisable = true;
 					     	};
-					     	
+
 					     	$scope.clearRegion = function($event) {
-					      	   $event.stopPropagation(); 
+					      	   $event.stopPropagation();
 					      	   $scope.regionsListOne.selected = undefined;
 					      	   $scope.branchsListOne.selected = undefined;
 					      	   $scope.sitesListOne.selected = undefined;
 					      	   $scope.branchFilterDisable = true;
 					      	   $scope.siteFilterDisable = true;
 					      	};
-					      	
+
 					      	$scope.clearBranch = function($event) {
 						   	   $event.stopPropagation();
 						   	   $scope.branchsListOne.selected = undefined;
 						   	   $scope.sitesListOne.selected = undefined;
 						   	   $scope.siteFilterDisable = true;
 						   	};
-					         
+
 					   	$scope.clearSite = function($event) {
-					    	   $event.stopPropagation(); 
+					    	   $event.stopPropagation();
 					    	   $scope.sitesListOne.selected = undefined;
-					    	  
+
 					    	};
-					        	
-					    
-					           	
+
+
+
 					   	/*
 					        * Ui select allow-clear modified function end
 					        *
