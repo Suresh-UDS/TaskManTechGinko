@@ -1,15 +1,12 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
@@ -21,32 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeLocation;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Feedback;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRoleEnum;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.QRCodeUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeLocationDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.*;
 
 /**
  * Service class for managing location information.

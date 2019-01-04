@@ -1,9 +1,9 @@
 package com.ts.app.web.rest.dto;
 
 
-import java.io.Serializable;
-
 import com.ts.app.domain.FeedbackAnswerType;
+
+import java.io.Serializable;
 
 public class FeedbackQuestionDTO extends BaseDTO implements Serializable {
 

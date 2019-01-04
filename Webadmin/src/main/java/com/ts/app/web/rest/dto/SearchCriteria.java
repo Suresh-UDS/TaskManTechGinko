@@ -258,6 +258,10 @@ public class SearchCriteria extends Paginator {
 
 	private boolean quotationIsApproved;
 
+	private String linkType;
+
+	private boolean left;
+
 	public String getModule() {
 		return module;
 	}
@@ -1316,5 +1320,21 @@ public class SearchCriteria extends Paginator {
 
     public void setTicketDescription(String ticketDescription) {
         this.ticketDescription = ticketDescription;
+    }
+
+    public String getLinkType() {
+        return linkType;
+    }
+
+    public void setLinkType(String linkType) {
+        this.linkType = linkType;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
     }
 }

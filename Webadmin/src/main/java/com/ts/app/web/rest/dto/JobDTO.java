@@ -1,13 +1,13 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
+
+import java.util.Date;
+import java.util.List;
 
 public class JobDTO extends BaseDTO {
 

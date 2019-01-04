@@ -1,17 +1,5 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import com.ts.app.domain.ApplicationVersionControl;
 import com.ts.app.domain.Setting;
 import com.ts.app.repository.ApplicationVersionControlRepository;
@@ -19,6 +7,16 @@ import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SettingsDTO;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

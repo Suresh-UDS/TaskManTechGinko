@@ -3,8 +3,6 @@ package com.ts.app.web.rest;
 import com.ts.app.Application;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.service.UserService;
-import com.ts.app.web.rest.UserResource;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

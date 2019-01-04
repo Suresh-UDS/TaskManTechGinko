@@ -1,13 +1,12 @@
 package com.ts.app.repository;
 
-import java.sql.Date;
-import java.util.List;
-
+import com.ts.app.domain.SchedulerConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.SchedulerConfig;
+import java.sql.Date;
+import java.util.List;
 
 public interface SchedulerConfigRepository extends JpaRepository<SchedulerConfig, Long>{
 

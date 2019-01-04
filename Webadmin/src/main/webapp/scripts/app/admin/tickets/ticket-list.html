@@ -21,6 +21,10 @@
                 <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
             </button>
+            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
+                <i class="material-icons">keyboard_return</i>Dashboard
+                <div class="ripple-container"></div>
+            </button>
 
         </div>
         <div class="col-md-6 txt-align-rgt">
@@ -90,7 +94,7 @@
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.ticketDescription">
                     Description: {{searchCriteras.ticketDescription}}
-                </span> 
+                </span>
 
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.ticketStatus !=null && searchCriteras.ticketStatus !='-- ALL STATUS --'">
                     Status: {{searchCriteras.ticketStatus}}
@@ -846,7 +850,7 @@
                                                     <label class="label-control">Employee</label>
                                                     <span ng-show="empSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!empSpin && !empListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    
+
                                                     <ui-select ng-model="empListOne.selected"  ng-disabled="empLists.length == 1 || empLists == null || employeeFilterDisable">
 													  <ui-select-match placeholder="Select Employee..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 													  <ui-select-choices repeat="empListOne in empLists | filter: $select.search" null-option="allEmp" loose-null>
@@ -887,10 +891,10 @@
                                             <div class="dropdown ">
 	                                            <div class="form-group">
 	                                                    <label class="label-control">Status</label>
-	                                                    
+
 	                                                    <span ng-show="statusSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 	                                                    <span ng-show="!statusSpin && !statusListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-	                                                   
+
 	                                                    <ui-select ng-model="statusListOne.selected" >
 														  <ui-select-match placeholder="Select Status..." allow-clear="true">{{$select.selected}}</ui-select-match>
 														  <ui-select-choices repeat="statusListOne in statusLists | filter: $select.search" null-option="allStatus" loose-null>

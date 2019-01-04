@@ -1,10 +1,16 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Parameter;
+import com.ts.app.domain.ParameterConfig;
+import com.ts.app.domain.ParameterUOM;
+import com.ts.app.repository.ParameterConfigRepository;
+import com.ts.app.repository.ParameterRepository;
+import com.ts.app.repository.ParameterUOMRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,24 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.AssetParameterConfig;
-import com.ts.app.domain.Parameter;
-import com.ts.app.domain.ParameterConfig;
-import com.ts.app.domain.ParameterUOM;
-import com.ts.app.repository.ParameterConfigRepository;
-import com.ts.app.repository.ParameterRepository;
-import com.ts.app.repository.ParameterUOMRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ParameterConfigDTO;
-import com.ts.app.web.rest.dto.ParameterDTO;
-import com.ts.app.web.rest.dto.ParameterUOMDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service class for managing ParameterConfig information.

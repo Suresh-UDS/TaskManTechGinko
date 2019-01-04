@@ -63,6 +63,11 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            searchAbsent: function(searchCriteria) {
+                  return $http.post('api/employee/absent/search', searchCriteria).then(function (response) {
+                      return response.data;
+                  });
+            },
             searchShift: function(searchCriteria) {
                 return $http.post('api/employee/shift/search', searchCriteria).then(function (response) {
                     return response.data;

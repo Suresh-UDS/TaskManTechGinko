@@ -9,7 +9,9 @@ import org.springframework.web.util.WebUtils;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Angular cookie saved the locale with a double quote (%22en%22).

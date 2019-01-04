@@ -384,7 +384,7 @@ public class EmployeeResource {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+//
     @RequestMapping(value = "/employee/search",method = RequestMethod.POST)
     public SearchResult<EmployeeDTO> searchEmployees(@RequestBody SearchCriteria searchCriteria) {
         if(searchCriteria != null) {
@@ -648,6 +648,16 @@ public class EmployeeResource {
             throw new TimesheetException("Error while upload existing enroll image" + e);
         }
         return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value="/employee/absent/search", method = RequestMethod.POST)
+    public ResponseEntity<?> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
+    	List<EmployeeDTO> response = null;
+    	if(searchCriteria!=null) {
+    		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        	response = employeeService.getEmpAttendanceList(searchCriteria);
+    	}
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

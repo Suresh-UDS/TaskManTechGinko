@@ -1,19 +1,19 @@
 package com.ts.app.repository;
 
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import java.sql.Date;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.User;
-
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
 
 	@Override
 	void delete(Employee t);
@@ -63,7 +63,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 //	@Query("SELECT e FROM Employee e WHERE e.active='Y' and e.isLeft = FALSE order by e.name")
 //    Page<Employee> findAll(Pageable pageRequest);
 
-	@Query("SELECT distinct e FROM Employee e WHERE e.id IN :empIds and e.active='Y' and e.isLeft = FALSE order by e.name")
+	@Query("SELECT distinct e FROM Employee e WHERE e.id IN (:empIds) and e.active='Y' and e.isLeft = FALSE order by e.name")
     List<Employee> findAllByIds(@Param("empIds") List<Long> empIds);
 
 	@Query("SELECT e FROM Employee e WHERE e.id <> :empId and e.active='Y' and e.isLeft = FALSE  order by e.empId")
@@ -191,5 +191,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE")
     List<Employee> findEnrolledEmployees();
+
+    @Query("SELECT distinct e FROM Employee e WHERE e.id NOT IN (:subEmpList) and e.active='Y' and e.isLeft = FALSE order by e.name")
+	List<Employee> findAllByNonIds(@Param("subEmpList") List<Long> subEmpList);
 
 }

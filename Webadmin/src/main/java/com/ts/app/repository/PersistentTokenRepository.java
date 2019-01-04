@@ -1,11 +1,10 @@
 package com.ts.app.repository;
 
-import java.time.LocalDate;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.ts.app.domain.PersistentToken;
 import com.ts.app.domain.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
