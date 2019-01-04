@@ -153,54 +153,18 @@ angular
 			        $('input#searchCreatedDate').on('dp.change', function(e){
 		                $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchCreatedDateSer = new Date(e.date._d);
-		                $scope.searchCreatedDateSer.setHours(0,0,0,0);
-		                if($scope.searchToDateSer){
-		                	$scope.searchToDateSer.setHours(0,0,0,0);
+		                /*if($scope.searchToDate < $scope.searchCreatedDate){
+		                	$scope.searchToDate = "";
+			                $scope.searchToDateSer = "";
 		                }
-
-
-		                if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
-		                	$scope.fromErrMsg = 'From date cannot be greater than To date';
-
-		                	    alert($scope.fromErrMsg);
-
-		                		 $('input#searchCreatedDate').data('DateTimePicker').clear();
-		                         $('input#searchToDate').data('DateTimePicker').clear();
-		                		 $scope.searchCreatedDateSer = new Date();
-		                         $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-		                         $scope.searchToDateSer = new Date();
-		                         $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-		                         $('input#searchCreatedDate').val($scope.searchCreatedDate);
-		                         $('input#searchToDate').val($scope.searchToDate);
-
-		                	return false;
-		                }
+		                $('input#searchToDate').datetimepicker().on('dp.show', function () {
+		                return $(this).data('DateTimePicker').minDate(e.date);
+		                });*/
 		            });
 
 			        $('input#searchToDate').on('dp.change', function(e){
 		                $scope.searchToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchToDateSer = new Date(e.date._d);
-		                $scope.searchToDateSer.setHours(0,0,0,0);
-		                if($scope.searchCreatedDateSer){
-		                	$scope.searchCreatedDateSer.setHours(0,0,0,0);
-		                }
-
-		                if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
-		                	$scope.toErrMsg = 'To date cannot be lesser than From date';
-
-		                	     alert($scope.toErrMsg);
-
-		                		 $('input#searchCreatedDate').data('DateTimePicker').clear();
-		                         $('input#searchToDate').data('DateTimePicker').clear();
-		                		 $scope.searchCreatedDateSer = new Date();
-		                         $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-		                         $scope.searchToDateSer = new Date();
-		                         $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-		                         $('input#searchCreatedDate').val($scope.searchCreatedDate);
-		                         $('input#searchToDate').val($scope.searchToDate);
-
-		                	return false;
-		                }
 		            });
 
 			        $scope.initCalender();
@@ -969,8 +933,8 @@ angular
 			        };
 
 			        $scope.clearFilter = function() {
-			        	$('input#searchCreatedDate').data('DateTimePicker').clear();
-			            $('input#searchToDate').data('DateTimePicker').clear();
+			        	//$('input#searchCreatedDate').data('DateTimePicker').clear();
+			            //$('input#searchToDate').data('DateTimePicker').clear();
 			            $scope.noData = false;
 			        	$scope.clearField = true;
 			        	$scope.siteFilterDisable = true;
@@ -991,8 +955,6 @@ angular
     					$scope.searchCreatedDateSer = new Date();
     					$scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
     	                $scope.searchToDateSer = new Date();
-    	                $('input#searchCreatedDate').val($scope.searchCreatedDate);
-                        $('input#searchToDate').val($scope.searchToDate);
 	        		    $scope.selectedProject = null;
 			            $scope.selectedSite = null;
 			            $scope.selectedStatus = null;
@@ -1014,6 +976,9 @@ angular
 			                currPage: 1,
 			                totalPages: 0
 			            }
+
+			            /* Root scope (search criteria) */
+                        $rootScope.searchFilterCriteria.isDashboard = false;
 			        }
 
 			        $scope.isActiveAsc = '';
@@ -1047,7 +1012,7 @@ angular
 
 			        $scope.searchFilter = function () {
 			            $('.AdvancedFilterModal.in').modal('hide');
-			            //$scope.setPage(1);
+			            $scope.setPage(1);
 			            $scope.search();
 			         }
 
@@ -1080,27 +1045,90 @@ angular
 		        	}
 
 		        	$scope.searchCriteria.currPage = currPageVal;
+		        		/* Root scope (search criteria) start*/
 
-		        	if($scope.client.selected && $scope.client.selected.id !=0){
-		        		$scope.searchProject = $scope.client.selected;
-		        	}else{
-		        	   $scope.searchProject = null;
+                    if($rootScope.searchFilterCriteria.isDashboard){
+                         $rootScope.isDashboard = true;
+                         if($rootScope.searchFilterCriteria.projectId){
+                            $scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
+                            $scope.client.selected =$scope.searchProject;
+                            $scope.projectFilterFunction($scope.searchProject);
+                        }else{
+                           $scope.searchProject = null;
+                           $scope.client.selected =$scope.searchProject;
+                        }
+                         if($rootScope.searchFilterCriteria.regionId){
+                            $scope.searchRegion = {id:$rootScope.searchFilterCriteria.regionId,name:$rootScope.searchFilterCriteria.region}
+                            $scope.regionsListOne.selected = $scope.searchRegion;
+                            $scope.regionFilterFunction($scope.searchProject);
+                        }else{
+                           $scope.searchRegion = null;
+                          $scope.regionsListOne.selected = $scope.searchRegion;
+                        }
+                        if($rootScope.searchFilterCriteria.branchId){
+                            $scope.searchBranch = {id:$rootScope.searchFilterCriteria.branchId,name:$rootScope.searchFilterCriteria.branch}
+                            $scope.branchsListOne.selected= $scope.searchBranch;
+                             $scope.branchFilterFunction($scope.searchProject,$scope.searchRegion);
+
+                        }else{
+                           $scope.searchBranch = null;
+                          $scope.branchsListOne.selected = $scope.searchBranch;
+
+                        }
+
+                         if($rootScope.searchFilterCriteria.siteId){
+                            $scope.searchSite = {id:$rootScope.searchFilterCriteria.siteId,name:$rootScope.searchFilterCriteria.siteName};
+                            $scope.sitesListOne.selected = $scope.searchSite;
+                            $scope.siteFilterDisable=false;
+
+                        }else{
+                           $scope.searchSite = null;
+                          $scope.sitesListOne.selected=$scope.searchSite;
+                        }
+                        if($rootScope.searchFilterCriteria.quotStatus){
+                            $scope.searchStatus = $rootScope.searchFilterCriteria.quotStatus;
+                        }else{
+                           $scope.searchStatus = null;
+                           $scope.statusListOne.selected = $scope.searchStatus;
+                        }
+
+                        if($rootScope.searchFilterCriteria.selectedFromDate) {
+                            $scope.searchCriteria.quotationCreatedDate = $rootScope.searchFilterCriteria.selectedFromDate;
+                            $scope.searchCreatedDate = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
+                            $scope.searchCreatedDateSer = new Date($rootScope.searchFilterCriteria.selectedFromDate);
+                        }
+                        if($rootScope.searchFilterCriteria.selectedToDate) {
+                            $scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.selectedToDate;
+                            $scope.searchToDate = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
+                            $scope.searchToDateSer = new Date($rootScope.searchFilterCriteria.selectedToDate);
+                        }
+
+                         /* Root scope (search criteria) end*/
+                    }else{
+
+		        	    if($scope.client.selected && $scope.client.selected.id !=0){
+                            $scope.searchProject = $scope.client.selected;
+                        }else{
+                           $scope.searchProject = null;
+                        }
+                        if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
+                            $scope.searchRegion = $scope.regionsListOne.selected;
+                        }else{
+                           $scope.searchRegion = null;
+                        }
+                        if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
+                            $scope.searchBranch = $scope.branchsListOne.selected;
+                        }else{
+                           $scope.searchBranch = null;
+                        }
+                        if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+                            $scope.searchSite = $scope.sitesListOne.selected;
+                        }else{
+                           $scope.searchSite = null;
+                        }
 		        	}
-		        	if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
-	            		$scope.searchRegion = $scope.regionsListOne.selected;
-	            	}else{
-	            	   $scope.searchRegion = null;
-	            	}
-	            	if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
-	            		$scope.searchBranch = $scope.branchsListOne.selected;
-	            	}else{
-	            	   $scope.searchBranch = null;
-	            	}
-		        	if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
-		        		$scope.searchSite = $scope.sitesListOne.selected;
-		        	}else{
-		        	   $scope.searchSite = null;
-		        	}
+
+		        	$rootScope.searchFilterCriteria.isDashboard = false;
 
 		        	 $scope.searchCriteria.findAll = false;
 
@@ -1233,7 +1261,7 @@ angular
 		                $scope.searchCriteria.sortByAsc = false;
 		            }
 
-                   //console.log("search criteria", JSON.stringify($scope.searchCriteria));
+                     console.log("search criteria", JSON.stringify($scope.searchCriteria));
                      $scope.quotations = '';
                      $scope.quotationsLoader = false;
                      $scope.loadPageTop();
@@ -1372,7 +1400,8 @@ angular
 			         //init load
                         $scope.initLoad = function(){
                              $scope.loadPageTop();
-                             $scope.loadAllQuotations();
+                             //$scope.loadAllQuotations();
+                             $scope.setPage(1);
                              $scope.init();
 
                          }
