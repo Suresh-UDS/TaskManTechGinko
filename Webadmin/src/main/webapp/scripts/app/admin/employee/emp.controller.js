@@ -1708,7 +1708,7 @@ angular.module('timeSheetApp')
 		/* Root scope (search criteria) start*/
 
 		if($rootScope.searchFilterCriteria.isDashboard){
-
+			$rootScope.isDashboard = true;   
 			if($rootScope.searchFilterCriteria.projectId){
 				$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
 				$scope.client.selected =$scope.searchProject;
@@ -1741,6 +1741,13 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.searchSite = null;
 				$scope.sitesListOne.selected=$scope.searchSite;
+			}
+			if($rootScope.searchFilterCriteria.attendFromDate) {
+				$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.attendFromDate;
+			}
+
+			if($rootScope.searchFilterCriteria.attendToDate) {
+				$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.attendToDate;	
 			}
 
 			/* Root scope (search criteria) end*/
