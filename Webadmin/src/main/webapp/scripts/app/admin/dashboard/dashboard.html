@@ -44,8 +44,9 @@
                     <div class="col-md-4">
                         <div class="dropdown">
                             <label class="label-control">Select Client</label>
-                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedProject" ng-change="LoadFilterProjects()" ng-options="project as project.name for project in projects" >
+                            <span ng-show="!clientFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                            <span ng-show="clientFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                            <select class="form-control " ng-model="selectedProject" ng-change="LoadFilterProjects()" ng-options="project as project.name for project in projects track by project.name" >
                                 <option value="">Please select Client...</option>
                             </select>
                         </div>
@@ -55,8 +56,9 @@
                     <div class="col-md-4">
                         <div class="dropdown ">
                             <label class="label-control">Select Region</label>
-                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedRegion" ng-change="LoadFilterRegions()" ng-options="region as region.name for region in regionList">
+                            <span ng-show="!regionFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                            <span ng-show="regionFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                            <select class="form-control " ng-model="selectedRegion" ng-change="LoadFilterRegions()" ng-options="region as region.name for region in regionList track by region.name">
                                 <option value="">Please select Region...</option>
                             </select>
                         </div>
@@ -65,8 +67,9 @@
                     <div class="col-md-4">
                         <div class="dropdown ">
                             <label class="label-control">Select Branch</label>
-                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedBranch" ng-change="LoadFilterBranches()" ng-options="branch as branch.name for branch in branchList">
+                            <span ng-show="!branchFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                            <span ng-show="branchFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                            <select class="form-control " ng-model="selectedBranch" ng-change="LoadFilterBranches()" ng-options="branch as branch.name for branch in branchList track by branch.name">
                                 <option value="">Please select Branch...</option>
                             </select>
                         </div>
@@ -75,8 +78,9 @@
                     <div class="col-md-4">
                         <div class="dropdown ">
                             <label class="label-control">Select Site</label>
-                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                            <select class="form-control " ng-model="selectedSite" ng-change="LoadFilterSites()" ng-options="site as site.name for site in sites">
+                            <span ng-show="!siteFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                            <span ng-show="siteFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                            <select class="form-control " ng-model="selectedSite" ng-change="LoadFilterSites()" ng-options="site as site.name for site in sites track by site.name">
                                 <option value="">Please select Site...</option>
                             </select>
                         </div>
@@ -142,7 +146,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a  ui-sref="employees" ng-click="dbdFilter();">
+                                <a  ui-sref="employees" ng-click="dbdFilter('');">
                                     <div class="card yellowBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">
@@ -157,7 +161,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a  ui-sref="jobs" ng-click="dbdFilter();">
+                                <a  ui-sref="jobs" ng-click="dbdStatusFilter();">
                                     <div class="card lightRedBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">business_center</i>
@@ -275,7 +279,7 @@
                        data-parent="#accordion" data-target="#collapseThree"
                        aria-expanded="false" aria-controls="collapseTwo">
                         <h4 class="panel-title">
-                            Attendance <i class="material-icons">keyboard_arrow_down</i>
+                            Attendance <span class="red-star">(Present and Absent count are based on today's date) </span><i class="material-icons">keyboard_arrow_down</i>
                         </h4>
                     </a>
                 </div>
@@ -286,7 +290,7 @@
                         <div class="row">
 
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a ui-sref="attendances" ng-click="dbdFilter();">
+                                <a ui-sref="employees" ng-click="dbdFilter('');">
                                     <div class="card blueBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">people_outline</i>
@@ -299,7 +303,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a ui-sref="attendances" ng-click="dbdFilter();">
+                                <a ui-sref="attendances" ng-click="dbdFilter('Present');">
                                     <div class="card greenBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">check_circle_outline</i>
@@ -312,7 +316,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a ui-sref="attendances" ng-click="dbdFilter();">
+                                <a ui-sref="employees" ng-click="dbdFilter('Absent');">
                                     <div class="card lightRedBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">
@@ -327,7 +331,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 col-lg-3 col-sm-4">
-                                <a ui-sref="attendances" ng-click="dbdFilter();">
+                                <a ui-sref="employees" ng-click="dbdFilter('Left');">
                                     <div class="card yellowBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">exit_to_app</i>

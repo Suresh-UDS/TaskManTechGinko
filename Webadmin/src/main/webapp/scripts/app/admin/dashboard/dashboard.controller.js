@@ -1,43 +1,9 @@
 'use strict';
 
 angular.module('timeSheetApp')
-
-// Directive for pie charts, pass in title and data only
-    .directive('hcPieChart', function () {
-        return {
-            restrict: 'E',
-            template: '<div></div>',
-            scope: {
-                title: '@',
-                data: '='
-            },
-            link: function (scope, element) {
-                Highcharts.chart(element[0], {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: scope.title
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                            }
-                        }
-                    },
-                    series: [{
-                        data: scope.data
-                    }]
-                });
-            }
-        };
-    })
-
-    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent,SiteComponent,AttendanceComponent) {
+    .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,
+        DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent,
+        SiteComponent,AttendanceComponent,getLocalDbStorage) {
         $rootScope.loginView = false;
 
         $scope.ready = false;
@@ -57,6 +23,11 @@ angular.module('timeSheetApp')
         $scope.branchList=null;
         $scope.selectedRegion=null;
         $scope.selectedBranch = null;
+
+        $scope.siteFilterDisable = false;
+        $scope.regionFilterDisable = false;
+        $scope.branchFilterDisable = false;
+        $scope.clientFilterDisable = false;
 
         /** root scope (searchCriteria) **/
         $rootScope.searchFilterCriteria = {};
@@ -78,6 +49,7 @@ angular.module('timeSheetApp')
         $rootScope.searchFilterCriteria.jobStatus = null;
         $rootScope.searchFilterCriteria.ticketStatus = null;
         $rootScope.searchFilterCriteria.quotStatus = null;
+        $rootScope.searchFilterCriteria.empStatus = null;
         $rootScope.searchFilterCriteria.isDashboard = false;
 
         $scope.selectedFromDateSer =new Date();
@@ -501,6 +473,9 @@ angular.module('timeSheetApp')
                 /** root scope (searchCriteria) **/
                 $rootScope.searchFilterCriteria.selectedFromDate = new Date(e.date._d);
 
+                /** retaining list search value.**/
+                getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
                 $scope.refreshReport();
             }
         });
@@ -521,6 +496,9 @@ angular.module('timeSheetApp')
                 /** root scope (searchCriteria) **/
                 $rootScope.searchFilterCriteria.selectedToDate = new Date(e.date._d);
 
+                /** retaining list search value.**/
+                getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
                 $scope.refreshReport();
             }
 
@@ -531,23 +509,26 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadAllProjects = function(){
+            $scope.clientFilterDisable = true;
             DashboardComponent.loadAllProjects().then(function(data){
                 console.log(data)
                 $scope.projects = data;
                 $scope.projectCount = data.length;
                 $scope.initialProject = data[0];
                 //$scope.loadSites($scope.initialProject.id);
+                $scope.clientFilterDisable = false;
             })
         };
 
         $scope.loadSites = function(projectId,region,branch){
-
+            $scope.siteFilterDisable = true;
             if(branch){
 
                 SiteComponent.getSitesByBranch(projectId,region,branch).then(function (data) {
                     console.log('Sites - ');
                     console.log(data);
                     $scope.sites = data;
+                    $scope.siteFilterDisable = false;
                 });
 
             }else if(region){
@@ -556,6 +537,7 @@ angular.module('timeSheetApp')
                     $scope.sites = data;
                     console.log("Sites - ");
                     console.log(data);
+                    $scope.siteFilterDisable = false;
                 })
 
             }else if(projectId >0){
@@ -563,6 +545,7 @@ angular.module('timeSheetApp')
                 DashboardComponent.loadSites(projectId).then(function(data){
                     console.log('sites ' + JSON.stringify(data));
                     $scope.sites = data;
+                    $scope.siteFilterDisable = false;
                 })
             }
 
@@ -591,8 +574,10 @@ angular.module('timeSheetApp')
             // });
             var searchCriteria = {};
             searchCriteria.siteId = 0;
-            searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;
+            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;*/
+            searchCriteria.fromDate = new Date;
+            searchCriteria.toDate = new Date;
             DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
                 // $scope.totalEmployeeCount = data.totalEmployees;
@@ -629,14 +614,16 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadRegions = function (projectId) {
+            $scope.regionFilterDisable = true;
             SiteComponent.getRegionByProject(projectId).then(function (response) {
                 console.log(response);
                 $scope.regionList = response;
+                $scope.regionFilterDisable = false;
             })
         };
 
         $scope.loadBranch = function (projectId) {
-
+             $scope.branchFilterDisable = true;
             if($scope.selectedProject){
 
                 if($scope.selectedRegion){
@@ -644,6 +631,7 @@ angular.module('timeSheetApp')
                     SiteComponent.getBranchByProject(projectId,$scope.selectedRegion.id).then(function (response) {
                         console.log(response);
                         $scope.branchList = response;
+                        $scope.branchFilterDisable = false;
                     })
 
                 }else{
@@ -714,11 +702,28 @@ angular.module('timeSheetApp')
                 $rootScope.searchFilterCriteria.siteId = null;
                 $rootScope.searchFilterCriteria.siteName = null;
 
+                 /** retaining list search value.**/
+                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
     			$scope.refreshReportByProject();
     			$scope.loadRegions($scope.selectedProject.id);
     			$scope.loadSites($scope.selectedProject.id,null,null);
                 $scope.loadChartData($scope.selectedProject.id,null,null,null);
 
+            }else{
+                $rootScope.searchFilterCriteria.projectId = null;
+                $rootScope.searchFilterCriteria.projectName = null;
+                $rootScope.searchFilterCriteria.regionId = null;
+                $rootScope.searchFilterCriteria.region = null;
+                $rootScope.searchFilterCriteria.branchId = null;
+                $rootScope.searchFilterCriteria.branch = null;
+                $rootScope.searchFilterCriteria.siteId = null;
+                $rootScope.searchFilterCriteria.siteName = null;
+
+                /** retaining list search value.**/
+                getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                $scope.init();
             }
         };
 
@@ -732,14 +737,31 @@ angular.module('timeSheetApp')
                 $rootScope.searchFilterCriteria.region = $scope.selectedRegion.name;
                 $rootScope.searchFilterCriteria.branchId = null;
                 $rootScope.searchFilterCriteria.branch = null;
+                $rootScope.searchFilterCriteria.projectId = $scope.selectedProject.id;
+                $rootScope.searchFilterCriteria.projectName = $scope.selectedProject.name;
                 $rootScope.searchFilterCriteria.siteId = null;
                 $rootScope.searchFilterCriteria.siteName = null;
+
+                 /** retaining list search value.**/
+                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
                 $scope.refreshReportByRegion();
                 $scope.loadBranch($scope.selectedProject.id);
                 $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,null);
                 $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,null,null);
 
+            }else{
+                    $rootScope.searchFilterCriteria.regionId = null;
+                    $rootScope.searchFilterCriteria.region = null;
+                    $rootScope.searchFilterCriteria.branchId = null;
+                    $rootScope.searchFilterCriteria.branch = null;
+                    $rootScope.searchFilterCriteria.siteId = null;
+                    $rootScope.searchFilterCriteria.siteName = null;
+
+                    /** retaining list search value.**/
+                    getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                    $scope.LoadFilterProjects();
             }
         };
 
@@ -748,30 +770,65 @@ angular.module('timeSheetApp')
         	if($scope.selectedBranch){
 
         		/** root scope (searchCriteria) **/
+        		$rootScope.searchFilterCriteria.regionId = $scope.selectedRegion.id;
+                $rootScope.searchFilterCriteria.region = $scope.selectedRegion.name;
                 $rootScope.searchFilterCriteria.branchId = $scope.selectedBranch.id;
                 $rootScope.searchFilterCriteria.branch = $scope.selectedBranch.name;
+                $rootScope.searchFilterCriteria.projectId = $scope.selectedProject.id;
+                $rootScope.searchFilterCriteria.projectName = $scope.selectedProject.name;
                 $rootScope.searchFilterCriteria.siteId = null;
                 $rootScope.searchFilterCriteria.siteName = null;
+
+                 /** retaining list search value.**/
+                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
                 $scope.refreshReportByBranch();
                 $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
                 $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
 
-            }
+            }else{
+               $rootScope.searchFilterCriteria.branchId = null;
+               $rootScope.searchFilterCriteria.branch = null;
+               $rootScope.searchFilterCriteria.siteId = null;
+               $rootScope.searchFilterCriteria.siteName = null;
+
+               /** retaining list search value.**/
+               getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                $scope.LoadFilterRegions();
+             }
         };
 
         $scope.LoadFilterSites = function(){
         	if($scope.selectedSite) {
 
         		/** root scope (searchCriteria) **/
+        		$rootScope.searchFilterCriteria.regionId = $scope.selectedRegion.id;
+                $rootScope.searchFilterCriteria.region = $scope.selectedRegion.name;
+                $rootScope.searchFilterCriteria.branchId = $scope.selectedBranch.id;
+                $rootScope.searchFilterCriteria.branch = $scope.selectedBranch.name;
+        		$rootScope.searchFilterCriteria.projectId = $scope.selectedProject.id;
+                $rootScope.searchFilterCriteria.projectName = $scope.selectedProject.name;
                 $rootScope.searchFilterCriteria.siteId = $scope.selectedSite.id;
                 $rootScope.searchFilterCriteria.siteName = $scope.selectedSite.name;
+
+
+                 /** retaining list search value.**/
+                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
     			$scope.refreshReportBySite();
                 $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
                 console.log('Root search values',$rootScope.searchFilterCriteria);
 
-            }
+            }else{
+                 $rootScope.searchFilterCriteria.siteId = null;
+                 $rootScope.searchFilterCriteria.siteName = null;
+
+                 /** retaining list search value.**/
+                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                 $scope.LoadFilterBranches();
+             }
         };
 
         $scope.refreshReportByProject = function() {
@@ -782,8 +839,10 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
-            searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;
+            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;*/
+            searchCriteria.fromDate = new Date;
+            searchCriteria.toDate = new Date;
             DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
             console.log(data);
             $scope.employeeCount = data.totalEmployees;
@@ -803,8 +862,10 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
-            searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;
+            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;*/
+            searchCriteria.fromDate = new Date();
+            searchCriteria.toDate = new Date();
             searchCriteria.region = $scope.selectedRegion.name;
             DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
@@ -825,8 +886,10 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
-            searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;
+            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
+            searchCriteria.toDate = $scope.selectedToDateSer;*/
+            searchCriteria.fromDate = new Date();
+            searchCriteria.toDate = new Date();
             searchCriteria.region = $scope.selectedRegion.name;
             searchCriteria.branch = $scope.selectedBranch.name;
             DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
@@ -849,8 +912,10 @@ angular.module('timeSheetApp')
             if($scope.selectedSite && $scope.selectedSite.id){
                 var searchCriteria = {};
                 searchCriteria.siteId = $scope.selectedSite.id;
-                searchCriteria.fromDate = $scope.selectedFromDateSer;
-                searchCriteria.toDate = $scope.selectedToDateSer;
+                /*searchCriteria.fromDate = $scope.selectedFromDateSer;
+                searchCriteria.toDate = $scope.selectedToDateSer;*/
+                searchCriteria.fromDate = new Date();
+                searchCriteria.toDate = new Date();
             	DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                     console.log(data);
                     $scope.employeeCount = data.totalEmployees;
@@ -915,7 +980,10 @@ angular.module('timeSheetApp')
                         $scope.result.completedJobCount = 0;
                     }
 
-                    if(!$scope.selectedProject.id && !$scope.selectedSite.id && !$scope.selectedRegion && !$scope.selectedBranch){
+                    if(jQuery.isEmptyObject($scope.selectedProject)== true &&
+                      jQuery.isEmptyObject($scope.selectedSite)== true &&
+                      jQuery.isEmptyObject($scope.selectedRegion)== true &&
+                      jQuery.isEmptyObject($scope.selectedBranch)== true){
                         $scope.loadingStop();
                     }
 
@@ -1002,7 +1070,10 @@ angular.module('timeSheetApp')
                     $scope.rejectedQuotationCount = 0;
                 }
 
-                if(!$scope.selectedProject.id && !$scope.selectedSite.id && !$scope.selectedRegion && !$scope.selectedBranch){
+                if(jQuery.isEmptyObject($scope.selectedProject)== true &&
+                jQuery.isEmptyObject($scope.selectedSite)== true &&
+                jQuery.isEmptyObject($scope.selectedRegion)== true &&
+                jQuery.isEmptyObject($scope.selectedBranch)== true){
                     $scope.loadingStop();
                 }
 
@@ -1043,7 +1114,7 @@ angular.module('timeSheetApp')
 
             });
         }
-        
+
         $scope.loadTicketAgeChart = function() {          // Ticket chart for get Avg age category wise
             TicketComponent.getAverageAge().then(function (data) {
                 console.log("Ticket category wise avg age" +JSON.stringify(data));
@@ -1131,57 +1202,60 @@ angular.module('timeSheetApp')
 
         //var jobxdata=['Electrical', 'Carpentry', 'Plumbing'];
 
-        $timeout(function () {
-            Highcharts.chart('jobStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Jobs Status'
-                },
-                xAxis: {
-                    categories:$scope.jobStackXSeries
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Job Count'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -30,
-                    verticalAlign: 'top',
-                    y: 25,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: $scope.jobStackYSeries
-            });
-        }, 2500);
+        $rootScope.jobGraph = function () {
+          Highcharts.chart('jobStackedCharts', {
+              chart: {
+                  type: 'column'
+              },
+              title: {
+                  text: 'Jobs Status'
+              },
+              xAxis: {
+                  categories:$scope.jobStackXSeries
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Total Job Count'
+                  },
+                  stackLabels: {
+                      enabled: true,
+                      style: {
+                          fontWeight: 'bold',
+                          color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                      }
+                  }
+              },
+              legend: {
+                  align: 'right',
+                  x: -30,
+                  verticalAlign: 'top',
+                  y: 25,
+                  floating: true,
+                  backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                  borderColor: '#CCC',
+                  borderWidth: 1,
+                  shadow: false
+              },
+              tooltip: {
+                  headerFormat: '<b>{point.x}</b><br/>',
+                  pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+              },
+              plotOptions: {
+                  column: {
+                      stacking: 'normal',
+                      dataLabels: {
+                          enabled: true,
+                          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                      }
+                  }
+              },
+              series: $scope.jobStackYSeries
+          });
+      }
+        // Timeout jobGraph function
+
+        $rootScope.jobGraphTimeout = $timeout($rootScope.jobGraph(), 2500);
 
 
         // Sample data for pie chart
@@ -1204,110 +1278,116 @@ angular.module('timeSheetApp')
             y: 25
         }]
 
-        $timeout(function () {
-            Highcharts.chart('AttendanceStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Attendance Status'
-                },
-                xAxis: {
-                    categories: $scope.attnStackXSeries
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Count'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -30,
-                    verticalAlign: 'top',
-                    y: 25,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: $scope.attnStackYSeries
-            });
-        }, 2500)
+        $rootScope.attendGraph = function () {
+         Highcharts.chart('AttendanceStackedCharts', {
+             chart: {
+                 type: 'column'
+             },
+             title: {
+                 text: 'Attendance Status'
+             },
+             xAxis: {
+                 categories: $scope.attnStackXSeries
+             },
+             yAxis: {
+                 min: 0,
+                 title: {
+                     text: 'Total Count'
+                 },
+                 stackLabels: {
+                     enabled: true,
+                     style: {
+                         fontWeight: 'bold',
+                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                     }
+                 }
+             },
+             legend: {
+                 align: 'right',
+                 x: -30,
+                 verticalAlign: 'top',
+                 y: 25,
+                 floating: true,
+                 backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                 borderColor: '#CCC',
+                 borderWidth: 1,
+                 shadow: false
+             },
+             tooltip: {
+                 headerFormat: '<b>{point.x}</b><br/>',
+                 pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+             },
+             plotOptions: {
+                 column: {
+                     stacking: 'normal',
+                     dataLabels: {
+                         enabled: true,
+                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                     }
+                 }
+             },
+             series: $scope.attnStackYSeries
+         });
+     }
 
+        //Timeout attendGraph function
 
-        $timeout(function () {
-            Highcharts.chart('ticketStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Tickets'
-                },
-                xAxis: {
-                    categories: $scope.ticketStackXSeries
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Count'
-                    },
-                    stackLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 'bold',
-                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        }
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    x: -30,
-                    verticalAlign: 'top',
-                    y: 25,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                    borderColor: '#CCC',
-                    borderWidth: 1,
-                    shadow: false
-                },
-                tooltip: {
-                    headerFormat: '<b>{point.x}</b><br/>',
-                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: true,
-                            color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-                        }
-                    }
-                },
-                series: $scope.ticketStackYSeries
-            });
-        },1000);
+        $rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
+
+        $rootScope.ticketGraph = function () {
+         Highcharts.chart('ticketStackedCharts', {
+             chart: {
+                 type: 'column'
+             },
+             title: {
+                 text: 'Tickets'
+             },
+             xAxis: {
+                 categories: $scope.ticketStackXSeries
+             },
+             yAxis: {
+                 min: 0,
+                 title: {
+                     text: 'Total Count'
+                 },
+                 stackLabels: {
+                     enabled: true,
+                     style: {
+                         fontWeight: 'bold',
+                         color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                     }
+                 }
+             },
+             legend: {
+                 align: 'right',
+                 x: -30,
+                 verticalAlign: 'top',
+                 y: 25,
+                 floating: true,
+                 backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                 borderColor: '#CCC',
+                 borderWidth: 1,
+                 shadow: false
+             },
+             tooltip: {
+                 headerFormat: '<b>{point.x}</b><br/>',
+                 pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+             },
+             plotOptions: {
+                 column: {
+                     stacking: 'normal',
+                     dataLabels: {
+                         enabled: true,
+                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                     }
+                 }
+             },
+             series: $scope.ticketStackYSeries
+         });
+     }
+        //Timeout ticketGraph function
+
+       $rootScope.ticketGraphTimeout = $timeout($rootScope.ticketGraph(),1000);
 
 
 
@@ -1389,278 +1469,281 @@ angular.module('timeSheetApp')
             }]
         });
 
-        $timeout(function(){
-            Highcharts.chart('ticketSingleStackedCharts', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Average Ticket Age'
-                },
-                subtitle: {
-                    text: ''
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Average Age'
-                    }
+        $rootScope.ticketSignalGraph = function(){
+           Highcharts.chart('ticketSingleStackedCharts', {
+               chart: {
+                   type: 'column'
+               },
+               title: {
+                   text: 'Average Ticket Age'
+               },
+               subtitle: {
+                   text: ''
+               },
+               xAxis: {
+                   type: 'category'
+               },
+               yAxis: {
+                   title: {
+                       text: 'Average Age'
+                   }
 
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y}'
-                        }
-                    }
-                },
+               },
+               legend: {
+                   enabled: false
+               },
+               plotOptions: {
+                   series: {
+                       borderWidth: 0,
+                       dataLabels: {
+                           enabled: true,
+                           format: '{point.y}'
+                       }
+                   }
+               },
 
-                tooltip: {
-                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
-                },
+               tooltip: {
+                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                   pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+               },
 
-                "series": [
-                    {
-                        "name": "Ticket Categories",
-                        "colorByPoint": true,
-                        "data": $scope.ticketAgeYSeries
-                    }
-                ],
-                "drilldown": {
-                    "series": [
-                        {
-                            "name": "Chrome",
-                            "id": "Chrome",
-                            "data": [
-                                [
-                                    "v65.0",
-                                    0.1
-                                ],
-                                [
-                                    "v64.0",
-                                    1.3
-                                ],
-                                [
-                                    "v63.0",
-                                    53.02
-                                ],
-                                [
-                                    "v62.0",
-                                    1.4
-                                ],
-                                [
-                                    "v61.0",
-                                    0.88
-                                ],
-                                [
-                                    "v60.0",
-                                    0.56
-                                ],
-                                [
-                                    "v59.0",
-                                    0.45
-                                ],
-                                [
-                                    "v58.0",
-                                    0.49
-                                ],
-                                [
-                                    "v57.0",
-                                    0.32
-                                ],
-                                [
-                                    "v56.0",
-                                    0.29
-                                ],
-                                [
-                                    "v55.0",
-                                    0.79
-                                ],
-                                [
-                                    "v54.0",
-                                    0.18
-                                ],
-                                [
-                                    "v51.0",
-                                    0.13
-                                ],
-                                [
-                                    "v49.0",
-                                    2.16
-                                ],
-                                [
-                                    "v48.0",
-                                    0.13
-                                ],
-                                [
-                                    "v47.0",
-                                    0.11
-                                ],
-                                [
-                                    "v43.0",
-                                    0.17
-                                ],
-                                [
-                                    "v29.0",
-                                    0.26
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Firefox",
-                            "id": "Firefox",
-                            "data": [
-                                [
-                                    "v58.0",
-                                    1.02
-                                ],
-                                [
-                                    "v57.0",
-                                    7.36
-                                ],
-                                [
-                                    "v56.0",
-                                    0.35
-                                ],
-                                [
-                                    "v55.0",
-                                    0.11
-                                ],
-                                [
-                                    "v54.0",
-                                    0.1
-                                ],
-                                [
-                                    "v52.0",
-                                    0.95
-                                ],
-                                [
-                                    "v51.0",
-                                    0.15
-                                ],
-                                [
-                                    "v50.0",
-                                    0.1
-                                ],
-                                [
-                                    "v48.0",
-                                    0.31
-                                ],
-                                [
-                                    "v47.0",
-                                    0.12
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Internet Explorer",
-                            "id": "Internet Explorer",
-                            "data": [
-                                [
-                                    "v11.0",
-                                    6.2
-                                ],
-                                [
-                                    "v10.0",
-                                    0.29
-                                ],
-                                [
-                                    "v9.0",
-                                    0.27
-                                ],
-                                [
-                                    "v8.0",
-                                    0.47
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Safari",
-                            "id": "Safari",
-                            "data": [
-                                [
-                                    "v11.0",
-                                    3.39
-                                ],
-                                [
-                                    "v10.1",
-                                    0.96
-                                ],
-                                [
-                                    "v10.0",
-                                    0.36
-                                ],
-                                [
-                                    "v9.1",
-                                    0.54
-                                ],
-                                [
-                                    "v9.0",
-                                    0.13
-                                ],
-                                [
-                                    "v5.1",
-                                    0.2
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Edge",
-                            "id": "Edge",
-                            "data": [
-                                [
-                                    "v16",
-                                    2.6
-                                ],
-                                [
-                                    "v15",
-                                    0.92
-                                ],
-                                [
-                                    "v14",
-                                    0.4
-                                ],
-                                [
-                                    "v13",
-                                    0.1
-                                ]
-                            ]
-                        },
-                        {
-                            "name": "Opera",
-                            "id": "Opera",
-                            "data": [
-                                [
-                                    "v50.0",
-                                    0.96
-                                ],
-                                [
-                                    "v49.0",
-                                    0.82
-                                ],
-                                [
-                                    "v12.1",
-                                    0.14
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            });
-        },2500);
+               "series": [
+                   {
+                       "name": "Ticket Categories",
+                       "colorByPoint": true,
+                       "data": $scope.ticketAgeYSeries
+                   }
+               ],
+               "drilldown": {
+                   "series": [
+                       {
+                           "name": "Chrome",
+                           "id": "Chrome",
+                           "data": [
+                               [
+                                   "v65.0",
+                                   0.1
+                               ],
+                               [
+                                   "v64.0",
+                                   1.3
+                               ],
+                               [
+                                   "v63.0",
+                                   53.02
+                               ],
+                               [
+                                   "v62.0",
+                                   1.4
+                               ],
+                               [
+                                   "v61.0",
+                                   0.88
+                               ],
+                               [
+                                   "v60.0",
+                                   0.56
+                               ],
+                               [
+                                   "v59.0",
+                                   0.45
+                               ],
+                               [
+                                   "v58.0",
+                                   0.49
+                               ],
+                               [
+                                   "v57.0",
+                                   0.32
+                               ],
+                               [
+                                   "v56.0",
+                                   0.29
+                               ],
+                               [
+                                   "v55.0",
+                                   0.79
+                               ],
+                               [
+                                   "v54.0",
+                                   0.18
+                               ],
+                               [
+                                   "v51.0",
+                                   0.13
+                               ],
+                               [
+                                   "v49.0",
+                                   2.16
+                               ],
+                               [
+                                   "v48.0",
+                                   0.13
+                               ],
+                               [
+                                   "v47.0",
+                                   0.11
+                               ],
+                               [
+                                   "v43.0",
+                                   0.17
+                               ],
+                               [
+                                   "v29.0",
+                                   0.26
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Firefox",
+                           "id": "Firefox",
+                           "data": [
+                               [
+                                   "v58.0",
+                                   1.02
+                               ],
+                               [
+                                   "v57.0",
+                                   7.36
+                               ],
+                               [
+                                   "v56.0",
+                                   0.35
+                               ],
+                               [
+                                   "v55.0",
+                                   0.11
+                               ],
+                               [
+                                   "v54.0",
+                                   0.1
+                               ],
+                               [
+                                   "v52.0",
+                                   0.95
+                               ],
+                               [
+                                   "v51.0",
+                                   0.15
+                               ],
+                               [
+                                   "v50.0",
+                                   0.1
+                               ],
+                               [
+                                   "v48.0",
+                                   0.31
+                               ],
+                               [
+                                   "v47.0",
+                                   0.12
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Internet Explorer",
+                           "id": "Internet Explorer",
+                           "data": [
+                               [
+                                   "v11.0",
+                                   6.2
+                               ],
+                               [
+                                   "v10.0",
+                                   0.29
+                               ],
+                               [
+                                   "v9.0",
+                                   0.27
+                               ],
+                               [
+                                   "v8.0",
+                                   0.47
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Safari",
+                           "id": "Safari",
+                           "data": [
+                               [
+                                   "v11.0",
+                                   3.39
+                               ],
+                               [
+                                   "v10.1",
+                                   0.96
+                               ],
+                               [
+                                   "v10.0",
+                                   0.36
+                               ],
+                               [
+                                   "v9.1",
+                                   0.54
+                               ],
+                               [
+                                   "v9.0",
+                                   0.13
+                               ],
+                               [
+                                   "v5.1",
+                                   0.2
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Edge",
+                           "id": "Edge",
+                           "data": [
+                               [
+                                   "v16",
+                                   2.6
+                               ],
+                               [
+                                   "v15",
+                                   0.92
+                               ],
+                               [
+                                   "v14",
+                                   0.4
+                               ],
+                               [
+                                   "v13",
+                                   0.1
+                               ]
+                           ]
+                       },
+                       {
+                           "name": "Opera",
+                           "id": "Opera",
+                           "data": [
+                               [
+                                   "v50.0",
+                                   0.96
+                               ],
+                               [
+                                   "v49.0",
+                                   0.82
+                               ],
+                               [
+                                   "v12.1",
+                                   0.14
+                               ]
+                           ]
+                       }
+                   ]
+               }
+           });
+       }
+        //Timeout ticketSignalGraph function
+
+        $rootScope.ticketSignalGraphTimeout = $timeout($rootScope.ticketSignalGraph(),2500);
 
 
         // var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
 
-        $timeout(function () {
+         $rootScope.quotGraph = function () {
             Highcharts.chart('quotationStackedCharts', {
                 chart: {
                     type: 'column'
@@ -1711,18 +1794,11 @@ angular.module('timeSheetApp')
                 series: $scope.quoteStackYSeries
             });
 
-        },1500);
+        }
 
+        // Timeout quotGraph function
 
-
-
-
-
-
-
-
-
-
+        $rootScope.quotGraphTimeout = $timeout($rootScope.quotGraph(),1500);
 
 // Chart data sample end
 
@@ -1764,9 +1840,12 @@ angular.module('timeSheetApp')
 
         /* Root scope (search criteria) function */
 
-        $scope.dbdFilter = function(){
+        $scope.dbdFilter = function(filter){
 
-         $rootScope.searchFilterCriteria.isDashboard = true;
+             $rootScope.searchFilterCriteria.isDashboard = true;
+             $rootScope.searchFilterCriteria.empStatus = filter;
+             $rootScope.searchFilterCriteria.selectedFromDate = new Date();
+             $rootScope.searchFilterCriteria.selectedToDate = new Date();
 
         }
 
@@ -1790,5 +1869,122 @@ angular.module('timeSheetApp')
 
         }
 
+        /* Localstorage (Retain old values while edit page to list) start */
+        if($rootScope.isDashboard){
 
-    });
+          $scope.localStorage = getLocalDbStorage.getSearch();
+
+          $scope.selectedFromDateSer = new Date($scope.localStorage.selectedFromDate);
+          $scope.selectedFromDate = $filter('date')($scope.localStorage.selectedFromDate, 'dd/MM/yyyy') ;
+
+          /** root scope (searchCriteria) from date **/
+          $rootScope.searchFilterCriteria.selectedFromDate = $scope.selectedFromDateSer;
+
+          $scope.selectedToDateSer = new Date($scope.localStorage.selectedToDate);
+          $scope.selectedToDate = $filter('date')($scope.localStorage.selectedToDate, 'dd/MM/yyyy') ;
+
+          /** root scope (searchCriteria) to date **/
+          $rootScope.searchFilterCriteria.selectedToDate = $scope.selectedToDateSer;
+
+              console.log('Local storage' , $scope.localStorage);
+              if($scope.localStorage.projectId && $scope.localStorage.siteId
+                 && $scope.localStorage.regionId && $scope.localStorage.branchId){
+
+                   $scope.selectedProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                   $scope.selectedSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                   $scope.selectedRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.region};
+                   $scope.selectedBranch = {id:$scope.localStorage.branchId,name:$scope.localStorage.branch};
+
+                   $scope.loadRegions($scope.selectedProject.id);
+                   $scope.loadBranch($scope.selectedProject.id);
+                   $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
+
+                   $scope.refreshReportBySite();
+                   $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
+
+              }else if($scope.localStorage.projectId && !$scope.localStorage.siteId
+                && $scope.localStorage.regionId && $scope.localStorage.branchId){
+
+                    $scope.selectedProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                    $scope.selectedSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                    $scope.selectedRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.region};
+                    $scope.selectedBranch = {id:$scope.localStorage.branchId,name:$scope.localStorage.branch};
+
+                    $scope.loadRegions($scope.selectedProject.id);
+                    $scope.loadBranch($scope.selectedProject.id);
+                    $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
+
+                    $scope.refreshReportByBranch();
+                    $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
+                    $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
+
+              }else if($scope.localStorage.projectId && !$scope.localStorage.siteId
+                  && $scope.localStorage.regionId && !$scope.localStorage.branchId){
+
+                   $scope.selectedProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                   $scope.selectedRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.region};
+
+                   $scope.loadRegions($scope.selectedProject.id);
+                   $scope.loadBranch($scope.selectedProject.id);
+
+                   $scope.refreshReportByRegion();
+                   $scope.loadBranch($scope.selectedProject.id);
+                   $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,null);
+                   $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,null,null);
+
+              }else if($scope.localStorage.projectId && !$scope.localStorage.siteId
+                     && !$scope.localStorage.regionId && !$scope.localStorage.branchId){
+
+                   $scope.selectedProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+
+                   $scope.loadRegions($scope.selectedProject.id);
+                   $scope.loadSites($scope.selectedProject.id,null,null);
+
+                   $scope.refreshReportByProject();
+                   $scope.loadChartData($scope.selectedProject.id,null,null,null);
+              }
+
+              $rootScope.searchFilterCriteria = $scope.localStorage;
+
+
+        }
+        /* Localstorage (Retain old values while edit page to list) end */
+
+
+    })
+
+    // Directive for pie charts, pass in title and data only
+        .directive('hcPieChart', function () {
+            return {
+                restrict: 'E',
+                template: '<div></div>',
+                scope: {
+                    title: '@',
+                    data: '='
+                },
+                link: function (scope, element) {
+                    Highcharts.chart(element[0], {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: scope.title
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                }
+                            }
+                        },
+                        series: [{
+                            data: scope.data
+                        }]
+                    });
+                }
+            };
+        });
+

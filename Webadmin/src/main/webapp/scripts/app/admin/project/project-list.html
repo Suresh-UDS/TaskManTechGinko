@@ -19,6 +19,10 @@
                 <i class="material-icons">refresh</i>Clear filter
                 <div class="ripple-container"></div>
             </button>
+            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
+                <i class="material-icons">keyboard_return</i>Dashboard
+                <div class="ripple-container"></div>
+            </button>
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 txt-align-rgt">
@@ -245,10 +249,10 @@
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control" >Client</label>
-                                    
+
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                     <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                 
+
                                     <ui-select ng-model="client.selected"  ng-disabled="disabled">
 									  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" null-option="allClients" loose-null>
