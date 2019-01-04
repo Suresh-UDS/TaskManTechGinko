@@ -98,6 +98,8 @@ function startup(){
   app.post('/api/rateCard/delete',quotationController.deleteRateCard);
   app.post('/api/quotation/uploadImage',quotationController.updateImages);
   app.post('/api/quotation/summary', quotationController.getSummary);
+  app.get('/api/quotations/findAll', quotationController.findAllQuotations);
+  app.get('/api/lastmodified/quotations', quotationController.findLastModified);
 
   // app.post('/api/oneSignal/send',notificationService.sendNotification);
   // app.post('/api/oneSignal/subscribe', notificationService.subscribe);
