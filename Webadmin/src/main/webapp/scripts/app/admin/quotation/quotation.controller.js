@@ -1089,7 +1089,6 @@ angular
                             $scope.searchStatus = $rootScope.searchFilterCriteria.quotStatus;
                         }else{
                            $scope.searchStatus = null;
-                           $scope.statusListOne.selected = $scope.searchStatus;
                         }
 
                         if($rootScope.searchFilterCriteria.selectedFromDate) {
