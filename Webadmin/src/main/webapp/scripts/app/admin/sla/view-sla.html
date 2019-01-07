@@ -1,168 +1,167 @@
-<div class="crud-form" ng-init="initLoad();loadingStart();loadSla();">
+<div class="crud-form" ng-init="initLoad();loadingStart();">
 
 
-	<div class="margn-top30">
+    <div class="margn-top30">
 
-		<div class="row">
+        <div class="row">
 
-			<div class="col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">Location</div>
-					<div class="panel-body">
-						<div class="table-responsive">
-							<table class="table">
+            <div class="col-md-4 col-lg-4 col-md-offset-4 col-lg-offset-4" >
 
-								<tbody>
-									<tr>
-										<td>Client</td>
-										<td>{{sla.projectName}}</td>
-									</tr>
-									<tr>
-										<td>Site</td>
-										<td>{{sla.siteName}}</td>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Location </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
 
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
+                                <tbody>
+                                    <tr>
+                                        <td>Client</td>
+                                        <td>UDS</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Site</td>
+                                        <td>HDFC Vadapalani</td>
 
-
-			</div>
-			<div class="col-md-6 col-md-offset-3 col-lg-offset-3">
-
-				<div class="panel panel-default">
-					<div class="panel-heading">SLA Info</div>
-					<div class="panel-body">
-
-
-						<div class="table-responsive">
-							<table class="table">
-								<tbody>
-									<tr>
-										<td>Process Type</td>
-										<td>Jobs</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th>Severity</th>
-										<th>Hours</th>
-										<th>Category</th>
-										<th>Levels</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="slas in slaList">
-										<td>{{slas.severity}}</td>
-										<td>{{slas.hours}}</td>
-										<td><span class="tag label label-info"
-											ng-repeat="cat in slas.category">{{cat}}</span></td>
-										<td><a ng-click="editEscalation()"
-											ng-class="{active: $state.includes('admin')}"
-											data-toggle="modal" data-target="#EscalationLevel"
-											class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-										</td>
-									</tr>
-
-								</tbody>
-							</table>
-
-						</div>
-
-					</div>
-				</div>
-
-
-			</div>
-			<!-- <div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Escalation Level</div>
-					<div class="panel-body">
-						<div class="table-responsive">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th>Levels</th>
-										<th>Hours and Mins</th>
-										<th>Email</th>
-									</tr>
-								</thead>
-								<tbody ng-repeat="esc in slaList">
-									<tr ng-repeat="sles in esc.slaesc">
-										<td>{{sles.level}}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>-->
-		</div>
-		<div class="row">
-			<div class="col-md-12 txt-align-rgt">
-				<div class="form-group">
-					<button class="btn" type="button" ui-sref="sla-list"
-						id="cancel-button">
-						Back
-						<div class="ripple-container"></div>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!-- AdvancedFilterModal -->
-<div class="modal fade AdvancedFilterModal FilterModalCon"
-	id="EscalationLevel" tabindex="-1" role="dialog"
-	aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form name="searchForm" novalidate>
-			<div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title">Escalation Level</h4>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-				<div class="modal-body">
-					<div class="row">
 
-						<div class="table-responsive tablecard">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<th>Levels</th>
-										<th>Hours</th>
-										<th>Mins</th>
-										<th>Emails</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr ng-repeat="esc in slaEscalationList">
-										<td>Level {{esc.level}}</td>
-										<td>{{esc.hours}}</td>
-										<td>{{esc.minutes}}</td>
-										<td><span class="tag label label-default">{{esc.email}}</span>
-										</td>
-									</tr>
-								</tbody>
-							</table>
 
-						</div>
+            </div>
+            <div class="col-md-6">
 
-					</div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">SLA Info </div>
+                    <div class="panel-body">
 
-				</div>
 
-			</form>
-		</div>
-	</div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td>Process Type </td>
+                                    <td>Jobs</td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+
+                            <table class="table table-hover">
+                                <thead>
+                                 <tr>
+                                     <th>Severity </th>
+                                     <th>Hours </th>
+                                     <th>Category  </th>
+                                 </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Low </td>
+                                        <td>48 </td>
+                                        <td>
+                                            <span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
+                                            <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Low </td>
+                                        <td>48 </td>
+                                        <td>
+                                            <span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
+                                            <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <td>Low </td>
+                                    <td>48 </td>
+                                    <td>
+                                        <span class="tag label label-info">Cleaning<span data-role="remove"></span></span>
+                                        <span class="tag label label-info">Electrical<span data-role="remove"></span></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Escalation Level</div>
+                    <div class="panel-body">
+
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Levels</th>
+                                    <th>Hours and Mins</th>
+                                    <th>Email</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Level 4 </td>
+                                    <td>24 hr 15 Mins</td>
+                                    <td>praveen@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>Level 3</td>
+                                    <td>24 hr 15 Mins</td>
+                                    <td>praveen@gmail.com</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Level 2 </td>
+                                    <td>24 hr 15 Mins</td>
+                                    <td>praveen@gmail.com</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>Level 1  </td>
+                                    <td>24 hr 15 Mins</td>
+                                    <td>praveen@gmail.com</td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+         <div class="row">
+             <div class="col-md-12 txt-align-rgt">
+                 <div class="form-group">
+
+
+                     <button class="btn" type="button" ui-sref="sla-list" id="cancel-button">
+                         Back
+                         <div class="ripple-container"></div></button>
+
+                 </div>
+             </div>
+         </div>
+
+
+    </div>
+
 </div>
-<!--  End Modal -->

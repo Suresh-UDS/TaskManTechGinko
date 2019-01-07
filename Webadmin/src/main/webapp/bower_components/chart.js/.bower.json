@@ -3,7 +3,7 @@
   "description": "Simple HTML5 charts using the canvas element.",
   "homepage": "http://www.chartjs.org",
   "license": "MIT",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "main": "./dist/Chart.js",
   "ignore": [
     ".github",
@@ -13,11 +13,11 @@
     ".travis.yml",
     "scripts"
   ],
-  "_release": "2.7.2",
+  "_release": "2.7.3",
   "_resolution": {
     "type": "version",
-    "tag": "v2.7.2",
-    "commit": "33e81b45321e0211137f6434600b5435895b5a6f"
+    "tag": "v2.7.3",
+    "commit": "5f57745d3ac27f681e12ca1558deb522e986ab3f"
   },
   "_source": "https://github.com/chartjs/Chart.js.git",
   "_target": "^2.7.2",

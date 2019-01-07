@@ -39,7 +39,6 @@ export class DBService {
     selectAttendance:any;
     amcJobs: any;
     ppmJobs: any;
-    savedImages:any;
 
     constructor(private sqlite: SQLite,private componentService:componentService,private jobService:JobService,
                 private siteService:SiteService,public employeeService:EmployeeService,public attendanceService:AttendanceService,public assetService:AssetService) {
@@ -57,8 +56,7 @@ export class DBService {
         this.selectViewReading = [];
         this.selectReading = []
         this.selectImage = [];
-        this.selectAttendance = [];
-        this.savedImages = [];
+        this.selectAttendance = []
         this.sqlite.create({
             name: 'data.db',
             location: 'default'
@@ -561,7 +559,7 @@ export class DBService {
             {
                 return new Promise((resolve,reject)=>{
                     setTimeout(()=>{
-                        this.db.executeSql("DELETE FROM  readings", {}).then((data) => {
+                        this.db.executeSql("DROP TABLE readings", {}).then((data) => {
                             console.log(data)
                             resolve("drop reading table")
                         }, (error) => {
@@ -574,7 +572,7 @@ export class DBService {
             dropPPMJobTable(){
                 return new Promise((resolve, reject)=>{
                     setTimeout(()=>{
-                        this.db.executeSql("DELETE FROM  ppmJob", {}).then((data) => {
+                        this.db.executeSql("DROP TABLE ppmJob", {}).then((data) => {
                             console.log(data)
                             resolve("drop ppm jobs table")
                         }, (error) => {
@@ -587,7 +585,7 @@ export class DBService {
             dropAMCJobTable(){
                 return new Promise((resolve, reject)=>{
                     setTimeout(()=>{
-                        this.db.executeSql("DELETE FROM  amcJob", {}).then((data) => {
+                        this.db.executeSql("DROP TABLE amcJob", {}).then((data) => {
                             console.log(data)
                             resolve("drop amc jobs table")
                         }, (error) => {
@@ -601,7 +599,7 @@ export class DBService {
             {
                 return new Promise((resolve,reject)=>{
                     setTimeout(()=>{
-                        this.db.executeSql("DELETE FROM  image", {}).then((data) => {
+                        this.db.executeSql("DROP TABLE image", {}).then((data) => {
                             console.log(data)
                             resolve("drop Image table")
                         }, (error) => {
@@ -845,7 +843,7 @@ export class DBService {
     {
         return new Promise((resolve, reject) => {
             setTimeout(()=>{
-                this.db.executeSql('DELETE FROM  attendance');
+                this.db.executeSql('DROP TABLE attendance');
                 resolve("Drop table attendance")
             },3000)
         })
@@ -959,7 +957,7 @@ export class DBService {
                         console.log("Table Name:" + data.rows.item(0).tbl_name);
                         console.log("Drop Table")
                         var table = data.rows.item(0).tbl_name
-                        this.db.executeSql('DELETE FROM  '+table+'',{}).then((data) => {
+                        this.db.executeSql('DROP TABLE '+table+'',{}).then((data) => {
                             console.log(data);
                         })
                         // console.log("Update table");
@@ -976,7 +974,6 @@ export class DBService {
                         console.log(param.length);
                         this.db.executeSql(create, {}).then((data) => {
                             console.log(data);
-                            console.log("length",param.length);
                             for (var i = 0; i < param.length; i++) {
                                 var query = insert;
                                 this.db.executeSql(insert, param[i]).then((data) => {
@@ -1024,9 +1021,7 @@ export class DBService {
 
 
 
-
-
-  //***Get data from sqlite table***/
+    //***Get data from sqlite table***/
 
     //Asset
     getAsset()
@@ -1210,16 +1205,17 @@ export class DBService {
 
 
     //Jobs
-    getJobs()
+    getJobs(id)
     {
+        console.log("ID:"+id)
         this.selectJobs.splice(0,this.selectJobs.length);
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Get Job Table");
-                var addQuery = "select * from job";
-                this.db.executeSql(addQuery,{}).then((data) => {
+                var addQuery = "select * from job where assetId=?";
+                this.db.executeSql(addQuery,[id]).then((data) => {
                     console.log(data)
                     if (data.rows.length > 0) {
                         for (var i = 0; i < data.rows.length; i++) {
@@ -1239,20 +1235,17 @@ export class DBService {
     }
 
     //AMCJobs
-    getAMCJobs(id,amc)
+    getAMCJobs(id)
     {
-        console.log("ID:"+id);
-        console.log("amc"+amc);
+        console.log("ID:"+id)
         this.selectJobs.splice(0,this.amcJobs.length);
-        this.amcJobs = [];
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Get Job Table");
-                var addQuery = "select DISTINCT * from job where assetId='"+id+"' AND maintenanceType='"+amc+"'";
-                console.log(addQuery);
-                this.db.executeSql(addQuery,{}).then((data) => {
+                var addQuery = "select DISTINCT * from amcJob where assetId=?";
+                this.db.executeSql(addQuery,[id]).then((data) => {
                     console.log(data)
                     if (data.rows.length > 0) {
                         for (var i = 0; i < data.rows.length; i++) {
@@ -1272,20 +1265,17 @@ export class DBService {
     }
 
     //PPM Jobs
-    getPPMJobs(id,ppm)
+    getPPMJobs(id)
     {
-        console.log("ID:"+id);
-      console.log("ppm:"+ppm);
+        console.log("ID:"+id)
         this.selectJobs.splice(0,this.ppmJobs.length);
-        this.ppmJobs = [];
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Get Job Table");
-                var addQuery = "select DISTINCT * from job where assetId='"+id+"' AND maintenanceType='"+ppm+"'";
-                console.log(addQuery);
-                this.db.executeSql(addQuery,{}).then((data) => {
+                var addQuery = "select DISTINCT * from ppmJob where assetId=?";
+                this.db.executeSql(addQuery,[id]).then((data) => {
                     console.log(data)
                     if (data.rows.length > 0) {
                         for (var i = 0; i < data.rows.length; i++) {
@@ -1681,332 +1671,4 @@ export class DBService {
 //     }
 
 
-
-  //save Jobs images
-  setSaveJobs(data,image)
-  {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        console.log("Set Job Data");
-        console.log(data)
-        var jobs ;
-        var param =[];
-
-        jobs = data;
-        if(image.length>0) {
-          for (var i = 0; i < image.length; i++) {
-            param.push([jobs.id, image[i], false, ""]);
-          }
         }
-        console.log("param",param);
-        var tablename = 'ppmSaveImage'
-        var createQuery = "create table if not exists ppmSaveImage(id INTEGER PRIMARY KEY AUTOINCREMENT,jobId INT,image TEXT,isChecklist INT DEFAULT 0 ,checklistName TEXT)";
-        var insertQuery = "insert into ppmSaveImage(jobId,image,isChecklist,checklistName) values(?,?,?,?)";
-        var updateQuery = "update ppmSaveImage set jobId,image,isChecklist,checklistName where id=? ";
-        var selectQuery = "select * from ppmSaveImage";
-        setTimeout(() => {
-          this.createJobImage(tablename, createQuery, insertQuery, updateQuery,selectQuery, param).then(
-            response=>{
-              console.log("saving response",response);
-              resolve(response)
-            }
-          )
-        }, 15000)
-      }, 3000)
-    })
-
-
-  }
-
-
-  createJobImage(tbl,create,insert,update,select,param)
-  {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        console.log("CHECK");
-        console.log(param);
-        this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", [tbl]).then((data) => {
-          //testing
-          console.log("Search Table");
-          console.log(data)
-          if (data.rows.length > 0) {
-            console.log("Table exists");
-            console.log("Table Name:" + data.rows.item(0).tbl_name);
-            console.log("Row length:" + data.rows.length);
-            for(var i=0;i<data.rows.length; i++){
-              console.log("ID:" + data.rows.item(i).tbl_name);
-            }
-
-            // console.log("Drop Table")
-            var table = data.rows.item(0).tbl_name
-            /*this.db.executeSql('DELETE FROM  '+table+'',{}).then((data) => {
-              console.log(data);
-            })*/
-            // console.log("Update table");
-            // for (var i = 0; i < param.length; i++) {
-            //     this.db.executeSql(update, param[i]).then((data) => {
-            //     }, (error) => {
-            //         console.log("ERROR: " + JSON.stringify(error))
-            //     })
-            // }
-
-            console.log("Create table " + tbl);
-            console.log(create);
-            console.log(param);
-            console.log(param.length);
-            this.db.executeSql(create, {}).then((data) => {
-              console.log(data);
-              console.log("length",param.length);
-              for (var i = 0; i < param.length; i++) {
-                var query = insert;
-                this.db.executeSql(insert, param[i]).then((data) => {
-                  console.log(data)//
-
-                }, (error) => {
-                  console.log("ERROR: " + JSON.stringify(error))
-                })
-              }
-
-              resolve("s")
-            }, (error) => {
-              console.log("ERROR: " + JSON.stringify(error))
-            })
-
-            this.db.executeSql(select,{}).then((data)=>{
-              console.log("data",JSON.stringify(data));
-            },(error)=>{
-              console.log("ERROR"+JSON.stringify(error))
-            })
-          }
-          else {
-            console.log("No table");
-            console.log("Create table " + tbl);
-            console.log(create);
-            console.log(param);
-            console.log(param.length);
-            this.db.executeSql(create, {}).then((data) => {
-              console.log(data);
-              for (var i = 0; i < param.length; i++) {
-                var query = insert;
-                this.db.executeSql(insert, param[i]).then((data) => {
-                  console.log(data)//
-
-                }, (error) => {
-                  console.log("ERROR: " + JSON.stringify(error))
-                })
-              }
-
-              resolve("s")
-            }, (error) => {
-              console.log("ERROR: " + JSON.stringify(error))
-            })
-
-
-          }
-        })
-
-        /*this.db.executeSql("SELECT * FROM ppmSaveImage").then((data)=>{
-          console.log("select query",data);
-        },(error)=>{
-          console.log("select error",error);
-        })*/
-      }, 1000)
-    })
-  }
-
-
-  //get saved Images
-  getSavedImages(jobId){
-    return new Promise((resolve,reject) =>{
-     setTimeout(()=>{
-       console.log("jobIdd",jobId);
-       console.log("get saved images");
-       console.log(this.db);
-       console.log("Select saved Images List Table");
-       var addQuery = "select * from ppmSaveImage where jobId='"+jobId+"'";
-       console.log(addQuery)
-       this.savedImages = [];
-       this.db.executeSql(addQuery,{jobId}).then((data)=>{
-         if(data.rows.length > 0 ){
-           for (var i=0;i<data.rows.length;i++){
-             this.savedImages.push(data.rows.item(i))
-           }
-         }
-         console.log(this.savedImages);
-         resolve(this.savedImages);
-       },(error)=>{
-         console.log("ERROR: "+JSON.stringify(error));
-         reject("ERROR")
-       })
-     },3000)
-    })
-  }
-
-  setSaves(data,image)
-  {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        console.log("Save Jobs images");
-        console.log(data)
-        var jobs ;
-        var param =[];
-
-        jobs = data;
-        if(image.length>0) {
-          for (var i = 0; i < image.length; i++) {
-            param.push([jobs.id, image[i], false, ""]);
-          }
-        }
-        console.log("param",param);
-        var tablename = 'ppmSaveImage'
-        var createQuery = "create table if not exists ppmSaveImage(id INTEGER PRIMARY KEY AUTOINCREMENT,jobId INT,image TEXT,isChecklist INT DEFAULT 0 ,checklistName TEXT)";
-        var insertQuery = "insert into ppmSaveImage(jobId,image,isChecklist,checklistName) values(?,?,?,?)";
-        var updateQuery = "update ppmSaveImage set jobId,image,isChecklist,checklistName where id=? ";
-        var selectQuery = "select * from ppmSaveImage";
-        setTimeout(() => {
-          this.createJobImage(tablename, createQuery, insertQuery, updateQuery,selectQuery, param).then(
-            response=>{
-              console.log("saving response",response);
-              resolve(response)
-            }
-          )
-        }, 15000)
-      }, 3000)
-    })
-
-
-  }
-
-
-  //complete offline jobs
-
-  setPPMCompletJobs(data)
-  {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // this.db.executeSql("DROP TABLE job", {})
-        console.log("complete jobs");
-        var jobs = [];
-        var param ;
-              console.log("Getting PPM Jobs response");//
-              // jobs = data ;
-              // console.log(jobs);
-              var id = data.id;
-              console.log(id);
-              // if (jobs) {
-              //   for (var i = 0; i < jobs.length; i++) {
-              //     param.push([jobs[i].id, jobs[i].assetId, jobs[i].title, jobs[i].employeeName, jobs[i].siteName, jobs[i].plannedEndTime, jobs[i].plannedStartTime, jobs[i].description, jobs[i].status, jobs[i].maintenanceType, jobs[i].checkInDateTimeFrom, jobs[i].checkInDateTimeTo]);
-                  param = data;
-                  console.log(param);
-                // }
-              // }
-        var tablename = 'job'
-        var createQuery = "create table if not exists job(id INT,assetId INT,title TEXT,employeeName TEXT,siteName TEXT,plannedEndTime TEXT,plannedStartTime TEXT,description TEXT,status TEXT,maintenanceType TEXT,checkInDateTimeFrom TEXT,checkInDateTimeTo TEXT)";
-        var insertQuery = "insert into job(id,assetId,title,employeeName ,siteName,plannedEndTime,plannedStartTime,description,status,maintenanceType,checkInDateTimeFrom,checkInDateTimeTo ) values(?,?,?,?,?,?,?,?,?,?,?,?)";
-        var updateQuery = "update job set assetId=?,title=?,employeeName=?,siteName=?,plannedEndTime=?,plannedStartTime=?,description=?,status=?,maintenanceType=?,checkInDateTimeFrom=?,checkInDateTimeTo=? where id='"+id+"'";
-        console.log(updateQuery);
-        setTimeout(() => {
-          /*this.db.executeSql(updateQuery,[param.assetId,param.title,param.employeeName,param.siteName,param.plannedEndTime,param.plannedStartTime,param.description,param.status,param.maintenanceType,param.checkInDateTimeFrom,param.checkInDateTimeTo]).then((data)=>{
-            console.log("updateddd",data);
-          },(error)=>{
-            console.log("ERROR: "+JSON.stringify(error));
-            reject("ERROR")
-          })*/
-
-
-          this.update(tablename, createQuery, insertQuery, updateQuery, param).then(
-            response=>{
-              console.log("updated");
-              resolve(response)
-            }
-          )
-        }, 15000)
-      }, 3000)
-
-    })
-  }
-
-  //Create table
-  update(tbl,create,insert,update,param)
-  {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        console.log("CHECK");
-        console.log(param);
-        this.db.executeSql("SELECT tbl_name FROM sqlite_master WHERE tbl_name=?", [tbl]).then((data) => {
-          //testing
-          console.log("Search Table");
-          console.log(data)
-          if (data.rows.length > 0) {
-            console.log("Table exists");
-            console.log("Table Name:" + data.rows.item(0).tbl_name);
-            /*console.log("Drop Table")
-            var table = data.rows.item(0).tbl_name
-            this.db.executeSql('DELETE FROM  '+table+'',{}).then((data) => {
-              console.log(data);
-            })*/
-            // console.log("Update table");
-            // for (var i = 0; i < param.length; i++) {
-            //     this.db.executeSql(update, param[i]).then((data) => {
-            //     }, (error) => {
-            //         console.log("ERROR: " + JSON.stringify(error))
-            //     })
-            // }
-
-            console.log("Create table " + tbl);
-            console.log(create);
-            console.log(param);
-            console.log(param.id);
-            this.db.executeSql(create, {}).then((data) => {
-              console.log(data);
-              console.log("length",param.length);
-              // for (var i = 0; i < param.length; i++) {
-                var query = insert;
-                this.db.executeSql(update,[param.assetId,param.title,param.employeeName,param.siteName,param.plannedEndTime,param.plannedStartTime,param.description,param.status,param.maintenanceType,param.checkInDateTimeFrom,param.checkInDateTimeTo]).then((data) => {
-                  console.log("updatedd");
-                  console.log(data);
-
-                }, (error) => {
-                  console.log("ERRORR: " + JSON.stringify(error))
-                })
-              // }
-
-              resolve(data)
-            }, (error) => {
-              console.log("ERROR: " + JSON.stringify(error))
-            })
-          }
-          else {
-            console.log("No table");
-            console.log("Create table " + tbl);
-            console.log(create);
-            console.log(param);
-            console.log(param.length);
-            this.db.executeSql(create, {}).then((data) => {
-              console.log(data);
-              for (var i = 0; i < param.length; i++) {
-                var query = insert;
-                this.db.executeSql(insert, param[i]).then((data) => {
-                  console.log(data)//
-
-                }, (error) => {
-                  console.log("ERROR: " + JSON.stringify(error))
-                })
-              }
-
-              resolve("s")
-            }, (error) => {
-              console.log("ERROR: " + JSON.stringify(error))
-            })
-
-
-          }
-        })
-      }, 1000)
-    })
-  }
-
-
-
-
-}

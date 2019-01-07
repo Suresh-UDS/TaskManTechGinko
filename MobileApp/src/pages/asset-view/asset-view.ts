@@ -215,28 +215,9 @@ export class AssetView {
     //ppmjob
     getPpmJobs(searchCriteria)
     {
-        var searchPPM = {};
-
-        if(this.fromDate !=null){
-            searchPPM = {
-                currPage: 1,
-                checkInDateTimeFrom:this.fromDate,
-                checkInDateTimeTo:this.toDate,
-                assetId:this.assetDetails.id,
-                maintenanceType:'PPM',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            };
-        }else{
-            searchPPM = {
-                currPage: 1,
-                assetId:this.assetDetails.id,
-                maintenanceType:'PPM',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            };
+        var searchPPM={
+            assetId:searchCriteria.assetId,
+            maintenanceType:'PPM'
         }
         // var searchAMC={
         //     assetId:searchCriteria.assetId,
@@ -286,28 +267,9 @@ export class AssetView {
         //     assetId:searchCriteria.assetId,
         //     maintenanceType:'PPM'
         // }
-        var searchAMC = {};
-
-        if(this.fromDate){
-            searchAMC={
-                currPage: 1,
-                assetId:this.assetDetails.id,
-                checkInDateTimeFrom:this.fromDate,
-                checkInDateTimeTo:this.toDate,
-                maintenanceType:'AMC',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            }
-        }else{
-            searchAMC={
-                currPage: 1,
-                assetId:this.assetDetails.id,
-                maintenanceType:'AMC',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            }
+        var searchAMC={
+            assetId:searchCriteria.assetId,
+            maintenanceType:'AMC'
         }
         // var search={
         //     assetId:searchCriteria.assetId,
@@ -353,31 +315,11 @@ export class AssetView {
         console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-        var searchPPM = {};
-
-        if(this.fromDate !=null){
-            searchPPM = {
-                currPage: this.page + 1,
-                checkInDateTimeFrom:this.fromDate,
-                checkInDateTimeTo:this.toDate,
-                assetId:this.assetDetails.id,
-                maintenanceType:'PPM',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            };
-        }else{
-            searchPPM = {
-                currPage: this.page + 1,
-                assetId:this.assetDetails.id,
-                maintenanceType:'PPM',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            };
-        }
-
-
+        var searchPPM = {
+            currPage: this.page + 1,
+            assetId:this.assetDetails.id,
+            maintenanceType:'PPM'
+        };
         if (this.page > this.totalPages) {
             console.log("End of all pages");
             infiniteScroll.complete();
@@ -415,30 +357,11 @@ export class AssetView {
         console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-        var searchAMC = {};
-
-        if(this.fromDate){
-            searchAMC={
-                currPage: this.page + 1,
-                assetId:this.assetDetails.id,
-                checkInDateTimeFrom:this.fromDate,
-                checkInDateTimeTo:this.toDate,
-                maintenanceType:'AMC',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            }
-        }else{
-            searchAMC={
-                currPage: this.page + 1,
-                assetId:this.assetDetails.id,
-                maintenanceType:'AMC',
-                columnName:"plannedStartTime",
-                sortByAsc:true,
-                sort:10
-            }
-        }
-
+        var searchAMC = {
+            currPage: this.page + 1,
+            assetId:this.assetDetails.id,
+            maintenanceType:'AMC'
+        };
         if (this.page > this.totalPages) {
             console.log("End of all pages");
             infiniteScroll.complete();

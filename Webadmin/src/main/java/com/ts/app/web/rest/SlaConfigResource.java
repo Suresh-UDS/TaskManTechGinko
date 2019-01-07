@@ -50,7 +50,7 @@ public class SlaConfigResource {
 		log.debug("********SLAConfig update******** " + slaconfigdto.getId());
 		slaservice.updateSLA(slaconfigdto);
 	}
-	@RequestMapping(value = "/sla/delete/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/sla/delete/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteSla(@PathVariable Long id)
 	{
 		log.debug("*********SLAConfig Delete********" + id);

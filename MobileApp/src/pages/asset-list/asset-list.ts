@@ -247,15 +247,11 @@ export class AssetList {
                                                             this.dbService.setConfig().then(
                                                                 response=>{
                                                                     console.log(response)
-                                                                  this.dbService.setJobs().then(
-                                                                    response=>{
-                                                                     console.log(response);
-                                                                    })
-                                                                    // this.dbService.setPPMJobs().then(
-                                                                    //     response=>{
-                                                                    //         console.log(response)
-                                                                    //         this.dbService.setAMCJobs().then(
-                                                                    //             response=> {
+                                                                    this.dbService.setPPMJobs().then(
+                                                                        response=>{
+                                                                            console.log(response)
+                                                                            this.dbService.setAMCJobs().then(
+                                                                                response=> {
                                                                                     console.log(response)
                                                                                     this.dbService.setTickets().then(
                                                                                         response => {
@@ -282,8 +278,8 @@ export class AssetList {
                                                                                 })
                                                                         })
                                                                 })
-                                                        // })
-                                                // })
+                                                        })
+                                                })
                                 })
                         })
 

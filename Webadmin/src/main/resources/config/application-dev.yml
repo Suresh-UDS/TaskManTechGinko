@@ -15,7 +15,7 @@ spring:
         active: dev
     devtools:
         restart:
-            enabled: false
+            enabled: true
         livereload:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
@@ -24,7 +24,7 @@ spring:
         url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: test
+        password: tgadmin123#
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -65,10 +65,10 @@ server:
          max-threads:  400
 upload:
     file:
-         path: D:/fms/uploads
+         path: /opt/uploads
 export:
     file:
-         path: D:/fms/exports
+         path: /opt/exports
 qrcode:
     file:
          path: /opt/qrcode

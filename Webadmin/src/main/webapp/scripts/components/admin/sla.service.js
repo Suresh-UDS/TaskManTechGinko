@@ -44,23 +44,19 @@ angular.module('timeSheetApp')
 						return cb(err);
 					}.bind(this)).$promise;
 			},
-			
-			
-			deleteSla: function (id, callback) {
+			deleteSite: function (site, callback) {
 
-	                var cb = callback || angular.noop;
-	                alert("id: "+id);
-	                return  $http.delete('api/sla/delete/'+id).then(
-	                    function (response) {
-	                        return cb(response);
-	                    }).catch(
-	                    function (err) {
-	                        console.log(JSON.stringify(err));
-	                        return cb(err);
-	                    })
-	            },
-			
-			
+				var cb = callback || angular.noop;
+
+				return SiteDelete.deleteSite(site,
+					function () {
+						return cb(site);
+					},
+					function (err) {
+						this.logout();
+						return cb(err);
+					}.bind(this)).$promise;
+			},
 			}
 		
 	});

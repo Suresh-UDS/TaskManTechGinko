@@ -36,9 +36,9 @@
 
     <div [ngSwitch]="categories">
         <ion-list *ngSwitchCase="'today'">
-            <!--<ion-refresher (ionRefresh)="doRefresh($event,today)">-->
-                <!--<ion-refresher-content></ion-refresher-content>-->
-            <!--</ion-refresher>-->
+            <ion-refresher (ionRefresh)="doRefresh($event,today)">
+                <ion-refresher-content></ion-refresher-content>
+            </ion-refresher>
             <div *ngIf="todaysJobs?.length<0">
                 <ion-card>
                     <ion-card-content>
@@ -135,9 +135,9 @@
 
         <ion-list *ngSwitchCase="'jobs'">
 
-            <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
-                <!--<ion-refresher-content></ion-refresher-content>-->
-            <!--</ion-refresher>-->
+            <ion-refresher (ionRefresh)="doRefresh($event,all)">
+                <ion-refresher-content></ion-refresher-content>
+            </ion-refresher>
 
             <div  class="white-bg" *ngFor="let job of allJobs" >
                 <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ||job.parentJobId <=0">

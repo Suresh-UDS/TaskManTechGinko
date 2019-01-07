@@ -711,8 +711,6 @@ angular.module('timeSheetApp')
              $scope.searchCriteria.list = true;
              $scope.searchCriteria.report = true;
              $scope.searchCriteria.isReport = true;
-             $scope.searchCriteria.columnName = "createdDate";
-             $scope.searchCriteria.sortByAsc = false;
         	AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
         		var result = data.results[0];
         		console.log(result);

@@ -17,7 +17,6 @@ import {DBService} from "../service/dbService";
 import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native/file-transfer";
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{OfflineGetassetreadings} from "../offline-getassetreadings/offline-getassetreadings";
-import {OfflineCompleteJob} from "../offline-complete-job/offline-complete-job";
 
 /**
  * Generated class for the OfflineAsset page.
@@ -101,10 +100,9 @@ export class OfflineAsset {
         // var searchCriteria={
         //     assetId:this.assetDetails.id
         // }
-      this.assetDetails.PPMJobs = null;
         this.spinner = true;
         //offline
-        this.dbService.getPPMJobs(this.assetDetails.id,"ppm").then(
+        this.dbService.getPPMJobs(this.assetDetails.id).then(
             (res) => {
                 this.spinner=false;
                 this.componentService.closeLoader()
@@ -124,10 +122,9 @@ export class OfflineAsset {
         // var searchCriteria={
         //     assetId:this.assetDetails.id
         // }
-      this.assetDetails.AMCJobs = null;
         this.spinner = true;
         //offline
-        this.dbService.getAMCJobs(this.assetDetails.id,"amc").then(
+        this.dbService.getAMCJobs(this.assetDetails.id).then(
             (res) => {
                 this.spinner=false;
                 this.componentService.closeLoader()
@@ -151,7 +148,7 @@ export class OfflineAsset {
     }
 
     compeleteJob(job) {
-        this.navCtrl.push(OfflineCompleteJob, {job: job})
+        this.navCtrl.push(CompleteJobPage, {job: job})
     }
 
     open(itemSlide: ItemSliding, item: Item, c) {

@@ -148,9 +148,7 @@ angular.module('timeSheetApp')
 
         $scope.loadChartDataByRegion = function(projectId,region,startDate,endDate){
         	$scope.loadingStart();
-        	var sDate= $filter('date')(startDate, 'yyyy/MM/dd');
-        	var eDate = $filter('date')(endDate, 'yyyy/MM/dd') ;
-            DashboardComponent.loadTicketChartDataByRegion(projectId,region,sDate,eDate).then(function(response){
+            DashboardComponent.loadTicketChartDataByRegion(projectId,region,startDate,endDate).then(function(response){
                /* console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);

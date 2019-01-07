@@ -105,8 +105,7 @@ export class CreateTicket {
             console.log(this.empSelect);
             var searchCriteria = {
                 currPage : 1,
-                siteId:id,
-                list:true
+                siteId:id
             };
             this.employeeService.searchEmployees(searchCriteria).subscribe(
                 response=> {

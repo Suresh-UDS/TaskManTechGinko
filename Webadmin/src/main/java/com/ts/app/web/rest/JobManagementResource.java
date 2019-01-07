@@ -117,10 +117,10 @@ public class JobManagementResource {
 
 		if(response != null && response.getId() > 0) {
 			String sendNotification = request.getParameter("sendNotification");
-//			if(StringUtils.isNotBlank(sendNotification)) {
+			if(StringUtils.isNotBlank(sendNotification)) {
 				boolean isNotification = Boolean.parseBoolean(sendNotification);
 				log.debug("Job save isNotification - "+ isNotification);
-//				if(isNotification) { //SEND PUSH notification for the users connected to the site.
+				if(isNotification) { //SEND PUSH notification for the users connected to the site.
 					long siteId = jobDTO.getSiteId();
 					log.debug("Job save siteId - "+ siteId);
 					List<User> users = userService.findUsers(siteId);
@@ -136,8 +136,8 @@ public class JobManagementResource {
 						pushService.send(userIds, message);
 						//jobService.saveNotificationLog(response.getId(), SecurityUtils.getCurrentUserId(), users, siteId, message);
 					}
-//				}
-//			}
+				}
+			}
 		}
 		if(response != null && response.getId() > 0) {
 			return new ResponseEntity<>(response,HttpStatus.CREATED);

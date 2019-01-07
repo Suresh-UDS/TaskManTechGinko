@@ -69,7 +69,7 @@
                                                <label class="control-label">Region</label>
                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                <select name='region'
-                                                       class="form-control " ng-model="selectedRegion" ng-change="loadBranch(SelectClient.selected.id)"  ng-options="region.name for region in regionList" tabindex="4"    >
+                                                       class="form-control " ng-model="selectedRegion" ng-change="loadBranch(SelectClient.selected.id)"  ng-options="region.name for region in regionList" tabindex="7"    >
                                                    <option value="">Select Region...</option>
                                                </select>
                                                <!--<div ng-show="form.$submitted || form.region.$touched">-->
@@ -83,7 +83,7 @@
                                            </div>
                                        </div>
                                        <div class="col-md-2" style="padding: 18px 0 0 0;">
-                                           <a href="javascript:void(0);"  data-toggle="collapse" data-parent="#accordian" data-target="#addRegion" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                           <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addRegion" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                <i class="material-icons">add</i>
                                            </a>
                                        </div>
@@ -101,7 +101,7 @@
                                                <label class="control-label">Branch</label>
                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                <select name='branch'
-                                                       class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList" tabindex="6" >
+                                                       class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList" tabindex="7" >
                                                    <option value="">Select Branch...</option>
                                                </select>
                                                <!--<div ng-show="form.$submitted || form.region.$touched">-->
@@ -134,7 +134,7 @@
                                                <label class="control-label">Site Name<span class="red-star">*</span> </label>
                                                <input id='siteName' ng-model="site.name" class='form-control InputTxtCapsAll'
                                                       name='siteName' type='text' value=""
-                                                      ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="7"  required/>
+                                                      ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="4"  required/>
                                                <div ng-show="form.$submitted || form.siteName.$touched">
                                                    <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -167,7 +167,7 @@
                                                <label class="control-label">Address<span class="red-star">*</span> </label>
                                                <input id='siteAddress' ng-model="site.address" class='form-control InputTxtCaps'
                                                       name='address' type='text' value=""
-                                                      ng-minlength=1 tabindex="8"  required/>
+                                                      ng-minlength=1 tabindex="6"  required/>
                                                <div ng-show="form.$submitted || form.address.$touched">
                                                    <div ng-show="form.address.$dirty || form.address.$invalid">
                                                        <p class="help-block" style="color:maroon"
@@ -187,25 +187,11 @@
                                    <div class="row">
                                        <div class="col-md-6">
                                            <div class="form-group">
-                                               <label class="control-label">City <span class="red-star">*</span></label>
-                                               <input type="text" name="city" ng-model="site.city" class="form-control InputTxtCaps" tabindex="9" required>
-                                               <div ng-show="form.$submitted || form.city.$touched">
-                                                   <div ng-show="form.city.$dirty || form.city.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.city.$error.required">
-                                                           City is required.
-                                                       </p>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group">
-                                               <label class="control-label">State <span class="red-star">*</span></label>
+                                               <label class="control-label">State<span class="red-star">*</span></label>
                                                <!-- <input type="text" ng-model="site.state" class="form-control InputTxtCaps"> -->
                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                 <select name='stateName'
-                                                  class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames" tabindex="10"   required >
+                                                  class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames" tabindex="7"   required >
                                                     <option value="">Select State...</option>
                                                 </select>
                                                 <div ng-show="form.$submitted || form.stateName.$touched">
@@ -218,40 +204,10 @@
                                                </div>
                                            </div>
                                        </div>
-                                       
-                                   </div>
-                                   <div class="row">
-                                       
                                        <div class="col-md-6">
                                            <div class="form-group">
-                                               <label class="control-label">Pin Code<span class="red-star">*</span></label>
-                                               <input type="text" name="pinCode" ng-model="site.pinCode" ng-pattern='/^[0-9]{1,6}$/' class="form-control InputTxtCaps" tabindex="11" required>
-                                               <div ng-show="form.$submitted || form.pinCode.$touched">
-                                                   <div ng-show="form.pinCode.$dirty || form.pinCode.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.pinCode.$error.required">
-                                                           Pin code is required.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.pinCode.$error.pattern">
-                                                           Pin code is invalid.
-                                                       </p>
-                                                   </div>
-                                               </div> 
-                                           </div>
-                                       </div>
-                                       <div class="col-md-6">
-                                           <div class="form-group">
-                                               <label class="control-label">Country <span class="red-star">*</span></label>
-                                               <input type="text" name="country" ng-model="site.country" class="form-control InputTxtCaps" tabindex="12" required>
-                                               <div ng-show="form.$submitted || form.country.$touched">
-                                                   <div ng-show="form.country.$dirty || form.country.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.country.$error.required">
-                                                           Country is required.
-                                                       </p>
-                                                   </div>
-                                               </div>
+                                               <label class="control-label">Country</label>
+                                               <input type="text" ng-model="site.country" class="form-control InputTxtCaps" tabindex="8">
                                            </div>
                                        </div>
                                    </div>
@@ -364,7 +320,7 @@
   				                        <div class="form-group">
   				                            <label class="label-control">From Time</label>
   				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftFrom" value="" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" tabindex="13" autocomplete="off" />
+  				                            <input type="text" class="form-control timepicker"  id="shiftFrom" value="" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" tabindex="9" autocomplete="off" />
 
 
                                       <div
@@ -381,7 +337,7 @@
   				                        <div class="form-group">
   				                            <label class="label-control">To Time</label>
   				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftTo" value="" ng-model="newShiftItem.endTimeDup" placeholder="hh:mm" tabindex="14"  autocomplete="off" />
+  				                            <input type="text" class="form-control timepicker"  id="shiftTo" value="" ng-model="newShiftItem.endTimeDup" placeholder="hh:mm" tabindex="10"  autocomplete="off" />
 
 
                                       <div
@@ -395,7 +351,7 @@
 
   				                    <div class="col-md-4">
 
-  			                            <button class="btn btn-success margn-top20" ng-click="addShiftItem($event)" tabindex="15">
+  			                            <button class="btn btn-success margn-top20" ng-click="addShiftItem($event)" tabindex="11">
   			                                <span class="btn-label" >
   			                                    <i class="material-icons">add</i>
                                                 Add
@@ -430,7 +386,7 @@
                    <div class="row">
                        <div class="col-md-12">
                            <button type="submit" ng-click="conform('cancel')"
-                                   id="cancel-button" ng-disabled="btnDisable"  class="btn btn-danger pull-right" tabindex="17">
+                                   id="cancel-button" ng-disabled="btnDisable"  class="btn btn-danger pull-right" tabindex="13">
                                    <i class="material-icons">close</i> Cancel
                            </button>
 
@@ -443,7 +399,7 @@
 
                            <button type="submit"  ng-click="conform('save',form.$invalid)" id="form-button-save"
                                    ng-disabled="form.$invalid || btnDisable"  class="btn btn-success ld ld-over-inverse pull-right"
-                                   ng-class="{'running':saveLoad}" tabindex="16">
+                                   ng-class="{'running':saveLoad}" tabindex="12">
                            <span class="btn-label"><i class="material-icons">check</i></span> Create site
                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                            </button>
@@ -457,7 +413,7 @@
 
     </div>
 
-<!--     <div class="">
+    <div class="">
         <div class="row">
             <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
@@ -480,7 +436,7 @@
             </div>
 
         </div>
-    </div> -->
+    </div>
 
 
 </div>

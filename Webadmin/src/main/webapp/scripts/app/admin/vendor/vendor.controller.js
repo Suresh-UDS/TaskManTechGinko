@@ -470,8 +470,6 @@ angular.module('timeSheetApp')
             $scope.downloader=true;
             $scope.searchCriteria.exportType = type;
             $scope.searchCriteria.report = true;
-            $scope.searchCriteria.columnName = "createdDate";
-            $scope.searchCriteria.sortByAsc = false;
 
             console.log('calling asset export api');
             VendorComponent.exportAllData($scope.searchCriteria).then(function(data){
