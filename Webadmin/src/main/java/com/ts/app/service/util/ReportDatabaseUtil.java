@@ -1344,6 +1344,10 @@ public class ReportDatabaseUtil {
             for(QuotationStatusMeasurement quoteReportPoint : quoteReportPoints) {
                 Instant instant = quoteReportPoint.getTime();
                 Date myDate = Date.from(instant);
+                Calendar c = Calendar.getInstance();
+                c.setTime(myDate);
+                c.add(Calendar.DATE, 1);
+                myDate = c.getTime();
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String category = formatter.format(myDate);
                 if(statusPoints.containsKey(category)) {
