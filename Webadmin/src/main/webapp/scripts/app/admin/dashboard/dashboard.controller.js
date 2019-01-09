@@ -553,38 +553,38 @@ angular.module('timeSheetApp')
 
 
         };
-        
+
         // Ovear all sites count
-        
+
         $scope.loadAllSites = function(){
         	 DashboardComponent.loadAllSites().then(function (data) {
                  console.log(data);
                  //$scope.sites = data;
                  $scope.siteCount = data.length;
-             });	
+             });
         };
-        
+
 
         // Ovear all Employee count
-        
+
         $scope.loadAllEmployee = function(){
-        	EmployeeComponent.findAll().then(function(data){
-                 console.log(data);
-                 $scope.totalEmployeeCount = data.length;
-                
-             });	
+        	EmployeeComponent.search({findAll:true}).then(function(data){
+                 //console.log('Total emp',data);
+                 $scope.totalEmployeeCount = data.totalCount;
+
+             });
         };
-        
-     
+
+
 
         $scope.loadAllAttendanceCounts = function () {
-            
+
             console.log($scope.selectedFromDateSer);
              $scope.selectedFromDateSer.setHours(0,0,0,0);
              $scope.selectedToDateSer.setHours(23,59,59,0);
             console.log($scope.selectedFromDateSer + ' ' + $scope.selectedToDateSer);
             $scope.loadingStart();
-            
+
             var searchCriteria = {};
             searchCriteria.siteId = 0;
             /*searchCriteria.fromDate = $scope.selectedFromDateSer;
@@ -1188,7 +1188,7 @@ angular.module('timeSheetApp')
                        }];
                    $rootScope.attendGraph();
                }
-               
+
             });
         }
 
@@ -1880,6 +1880,12 @@ angular.module('timeSheetApp')
 
         /* Root scope (search criteria) function */
 
+         $scope.dbdNoFilter = function(filter){
+
+             $rootScope.searchFilterCriteria.isDashboard = true;
+             $rootScope.searchFilterCriteria.empStatus = filter;
+
+        }
         $scope.dbdFilter = function(filter){
 
              $rootScope.searchFilterCriteria.isDashboard = true;
