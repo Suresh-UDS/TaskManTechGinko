@@ -1339,7 +1339,7 @@ public class ReportDatabaseUtil {
         InfluxDB connection = connectDatabase();
         String query = "select sum(statusCount) as statusCount from QuotationReport where time > now() - 7d group by status,time(1d) fill(0)";
         List<QuotationStatusMeasurement> quoteReportPoints = reportDatabaseService.getQuotationPoints(connection, query, dbName);
-        Map<String, Map<String, Integer>> statusPoints = new HashMap<>();
+        Map<Date, Map<String, Integer>> statusPoints = new HashMap<>();
         Map<String, Integer> statusCounts = null;
         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
         if(quoteReportPoints.size() > 0) {
@@ -1350,10 +1350,9 @@ public class ReportDatabaseUtil {
                 c.setTime(myDate);
                 c.add(Calendar.DATE, 1);
                 myDate = c.getTime();
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                String category = formatter.format(myDate);
-                if(statusPoints.containsKey(category)) {
-                    statusCounts = statusPoints.get(category);
+
+                if(statusPoints.containsKey(myDate)) {
+                    statusCounts = statusPoints.get(myDate);
                 }else {
                     statusCounts = new HashMap<String, Integer>();
                 }
@@ -1373,22 +1372,22 @@ public class ReportDatabaseUtil {
                 statusCounts.put("Approved", ApprovedCnt);
                 statusCounts.put("Rejected", rejectedCnt);
 
-                statusPoints.put(category, statusCounts);
+                statusPoints.put(myDate, statusCounts);
 
             }
             log.debug("Quote status points map count" +statusPoints.toString());
 
             if(!statusPoints.isEmpty()) {
-                Set<Map.Entry<String,Map<String,Integer>>> entrySet = statusPoints.entrySet();
-                List<Map.Entry<String, Map<String,Integer>>> list = new ArrayList<Map.Entry<String, Map<String,Integer>>>(entrySet);
-                Collections.sort( list, new Comparator<Map.Entry<String, Map<String,Integer>>>()
+                Set<Map.Entry<Date,Map<String,Integer>>> entrySet = statusPoints.entrySet();
+                List<Map.Entry<Date, Map<String,Integer>>> list = new ArrayList<>(entrySet);
+                Collections.sort( list, new Comparator<Map.Entry<Date, Map<String,Integer>>>()
                 {
                     @Override
-                    public int compare(Map.Entry<String, Map<String, Integer>> o1,
-                                       Map.Entry<String, Map<String, Integer>> o2) {
+                    public int compare(Map.Entry<Date, Map<String, Integer>> o1,
+                                       Map.Entry<Date, Map<String, Integer>> o2) {
                         // TODO Auto-generated method stub
-                        String ekey1 = null;
-                        String ekey2 = null;
+                        Date ekey1 = null;
+                        Date ekey2 = null;
                         if(o1.getKey() != null && o2.getKey() != null) {
                             ekey1 = o1.getKey();
                             ekey2 = o2.getKey();
@@ -1408,10 +1407,10 @@ public class ReportDatabaseUtil {
                 List<Integer> totalWaitingCnts = new ArrayList<>();
                 List<Integer> totalApprovedCnts = new ArrayList<>();
                 List<Integer> totalRejectedCnts = new ArrayList<>();
-                for(Map.Entry<String, Map<String, Integer>> ent : list) {
-                    String category = ent.getKey();
-                    categoryList.add(category);
-                    Map<String, Integer> categoryWiseCount = statusPoints.get(category);
+                for(Map.Entry<Date, Map<String, Integer>> ent : list) {
+                    Date date = ent.getKey();
+
+                    Map<String, Integer> categoryWiseCount = statusPoints.get(date);
                     if(categoryWiseCount.containsKey("Pending")) {
                         int leftCnt = categoryWiseCount.get("Pending");
                         pendingstatus.setName("Pending");
@@ -1436,6 +1435,10 @@ public class ReportDatabaseUtil {
                         totalRejectedCnts.add(absentCnt);
                         rejstatus.setData(totalRejectedCnts);
                     }
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
+                    String category = formatter.format(date);
+                    categoryList.add(category);
 
                 }
 
