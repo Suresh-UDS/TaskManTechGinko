@@ -274,7 +274,7 @@ public class ReportResource {
     
     @RequestMapping(value = "/getAvgTicket/monthly", method = RequestMethod.GET)
     public ResponseEntity<?> getAveticketMonthly() {
-    	Map<String, Map<String, Status>> response = reportDatabaseUtil.getAverageTicketAgeMonthly();
+        List<ChartModelEntity> response = reportDatabaseUtil.getAverageTicketAgeMonthly();
     	return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
