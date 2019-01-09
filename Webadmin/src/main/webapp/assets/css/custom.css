@@ -1945,6 +1945,23 @@ span.flotingIcons.icon-13 {
 {
     overflow: hidden;
 }
+.Addsla .ui-select-container .ui-select-search
+{
+  width:125px !important;
+}
+/*.Addsla .ui-select-container
+{
+  height:36px;
+  overflow-y:scroll;
+}*/
+.Addsla .ui-select-container .ui-select-match
+{
+     line-height: 30px;
+}
+.ui-select-multiple.ui-select-bootstrap input.ui-select-search{
+ width:100% !important;
+ display:inline-block;
+}
 
 /* Standard syntax */
 @keyframes example {
