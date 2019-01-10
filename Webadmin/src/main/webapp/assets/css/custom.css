@@ -1947,7 +1947,7 @@ span.flotingIcons.icon-13 {
 }
 .Addsla .ui-select-container .ui-select-search
 {
-  width:125px !important;
+  width:100%!important;
 }
 /*.Addsla .ui-select-container
 {
@@ -1956,11 +1956,15 @@ span.flotingIcons.icon-13 {
 }*/
 .Addsla .ui-select-container .ui-select-match
 {
-     line-height: 30px;
+     line-height: 32px;
 }
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search{
  width:100% !important;
  display:inline-block;
+}
+
+.form-group .form-control[disabled]{
+  border-bottom:1px solid #d6d6d6 !important;
 }
 
 /* Standard syntax */

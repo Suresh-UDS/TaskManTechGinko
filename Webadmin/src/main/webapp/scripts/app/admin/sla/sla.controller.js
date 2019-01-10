@@ -1,10 +1,7 @@
 'use strict';
 
-angular
-		.module('timeSheetApp')
-		.controller(
-				'SlaController',
-				function($rootScope, $scope, $state, $timeout,
+angular.module('timeSheetApp')
+		.controller('SlaController',function($rootScope, $scope, $state, $timeout,
 						ProjectComponent, SiteComponent, SlaComponent, $http,
 						$stateParams, $location, PaginationComponent,getLocalStorage) {
 
@@ -40,6 +37,8 @@ angular
 
 					$scope.status = 0;
 					$scope.searchCriteria = {};
+
+					$scope.removeSlaInd = null;
 
 					// Filter
 					$scope.filter = false;
@@ -639,12 +638,6 @@ angular
 										+ JSON.stringify($scope.slaList));
 					};
 
-					$scope.removeSla = function(ind) {
-						console.log("remove index " + ind)
-						$scope.slaList.splice(ind, 1);
-						console.log("remove sla " + $scope.slaList);
-					};
-
 					$scope.editEscalation = function() {
 						console.log("Selected SLA "
 								+ JSON.stringify($scope.sla.slaesc));
@@ -663,12 +656,24 @@ angular
 						$scope.deleteSlaId = sla;
 					}
 					$scope.deleteSla = function() {
-						SlaComponent.deleteSla($scope.deleteSlaId).then(
-								function() {
-									$scope.success = 'OK';
-									$scope.initLoad();
-								});
+                        if($scope.deleteSlaId){
+                           SlaComponent.deleteSla($scope.deleteSlaId).then(
+                            function() {
+                                $scope.success = 'OK';
+                                $scope.initLoad();
+                            });
+                        }
 					};
+
+					$scope.removeSlaConfirm = function(ind) {
+                        $scope.removeSlaInd = ind;
+                    };
+
+                    $scope.removeSla = function() {
+                           console.log("remove index " + $scope.removeSlaInd);
+                           $scope.slaList.splice($scope.removeSlaInd, 1);
+                           console.log("remove sla " + $scope.slaList);
+                    };
 
 					$scope.columnAscOrder = function(field) {
 						$scope.selectedColumn = field;
@@ -704,25 +709,25 @@ angular
 					    return parseInt(esc.level);
 					};
 
-$scope.loadProjectsList = function () {
-        ProjectComponent.findAll().then(function (data) {
-            $scope.projectsList = data;
-            /** Ui-select scope **/
-            $scope.clients[0] = $scope.allClients;
-            //$scope.SelectClients[0] = $scope.SelectClientsNull;
+                $scope.loadProjectsList = function () {
+                        ProjectComponent.findAll().then(function (data) {
+                            $scope.projectsList = data;
+                            /** Ui-select scope **/
+                            $scope.clients[0] = $scope.allClients;
+                            //$scope.SelectClients[0] = $scope.SelectClientsNull;
 
-            $scope.loadingStop();
+                            $scope.loadingStop();
 
-            /** Ui-select scope **/
-            for(var i=0;i<$scope.projectsList.length;i++)
-            {
-                $scope.clients[i+1] = $scope.projectsList[i];
+                            /** Ui-select scope **/
+                            for(var i=0;i<$scope.projectsList.length;i++)
+                            {
+                                $scope.clients[i+1] = $scope.projectsList[i];
 
-            }
-            $scope.clientDisable = false;
-            $scope.clientFilterDisable = false;
-        });
-    };
+                            }
+                            $scope.clientDisable = false;
+                            $scope.clientFilterDisable = false;
+                        });
+                    };
 
     $scope.loadSitesList = function (projectId,region,branch) {
         if(branch){
@@ -755,260 +760,96 @@ $scope.loadProjectsList = function () {
 
     };
 
-//Search Filter Site Load Function
+    //Search Filter Site Load Function
 
-$scope.projectFilterFunction = function (searchProject){
-    $scope.siteSpin = true;
-    ProjectComponent.findSites(searchProject.id).then(function (data) {
-        $scope.selectedSite = null;
-        $scope.sitesList = data;
-        $scope.sitesLists = [];
-        $scope.sitesLists[0] = $scope.allSites;
+    $scope.projectFilterFunction = function (searchProject){
+        $scope.siteSpin = true;
+        ProjectComponent.findSites(searchProject.id).then(function (data) {
+            $scope.selectedSite = null;
+            $scope.sitesList = data;
+            $scope.sitesLists = [];
+            $scope.sitesLists[0] = $scope.allSites;
 
-        for(var i=0;i<$scope.sitesList.length;i++)
-        {
-            $scope.sitesLists[i+1] = $scope.sitesList[i];
-        }
-        $scope.siteFilterDisable = false;
-        $scope.siteSpin = false;
-    });
-
-};
-
-//Search Filter Region Load Function
-
-$scope.regionFilterFunction = function (searchProject){
-    $scope.regionSpin = true;
-    SiteComponent.getRegionByProject(searchProject.id).then(function (response) {
-        //console.log(response);
-        $scope.regionList = response;
-        $scope.regionsLists = [];
-        //$scope.regionsListOne.selected = null;
-        $scope.regionsLists[0] = $scope.allRegions;
-
-        for(var i=0;i<$scope.regionList.length;i++)
-        {
-            $scope.regionsLists[i+1] = $scope.regionList[i];
-        }
-
-        //console.log('region list : ' + JSON.stringify($scope.regionList));
-        $scope.regionSpin = false;
-        $scope.regionFilterDisable = false;
-        //callback();
-    });
-};
-
-//Search Filter Branch Load Function
-
-$scope.branchFilterFunction = function (searchProject,searchRegion){
-    $scope.branchSpin = true;
-    SiteComponent.getBranchByProject(searchProject.id,searchRegion.id).then(function (response) {
-        // //console.log('branch',response);
-        $scope.branchList = response;
-        if($scope.branchList) {
-            $scope.branchsLists = [];
-            // $scope.branchsListOne.selected = null;
-            $scope.branchsLists[0] = $scope.allBranchs;
-
-            for(var i=0;i<$scope.branchList.length;i++)
+            for(var i=0;i<$scope.sitesList.length;i++)
             {
-                $scope.branchsLists[i+1] = $scope.branchList[i];
+                $scope.sitesLists[i+1] = $scope.sitesList[i];
             }
-            /* if($scope.branchList) {
-                        for(var i = 0; i < $scope.branchList.length; i++) {
-                            $scope.uiBranch.push($scope.branchList[i].name);
-                        }*/
-            $scope.branchSpin = false;
-            $scope.branchFilterDisable = false;
-        }
-        else{
-            //console.log('branch list : ' + JSON.stringify($scope.branchList));
-            $scope.getSitesBYRegionOrBranch($scope.searchProject.id,$scope.searchRegion.name,null);
-            $scope.branchSpin = false;
-            $scope.branchFilterDisable = false;
+            $scope.siteFilterDisable = false;
+            $scope.siteSpin = false;
+        });
+
+    };
+
+    //Search Filter Region Load Function
+
+    $scope.regionFilterFunction = function (searchProject){
+        $scope.regionSpin = true;
+        SiteComponent.getRegionByProject(searchProject.id).then(function (response) {
+            //console.log(response);
+            $scope.regionList = response;
+            $scope.regionsLists = [];
+            //$scope.regionsListOne.selected = null;
+            $scope.regionsLists[0] = $scope.allRegions;
+
+            for(var i=0;i<$scope.regionList.length;i++)
+            {
+                $scope.regionsLists[i+1] = $scope.regionList[i];
+            }
+
+            //console.log('region list : ' + JSON.stringify($scope.regionList));
+            $scope.regionSpin = false;
+            $scope.regionFilterDisable = false;
             //callback();
-        }
+        });
+    };
 
-    })
-}
+    //Search Filter Branch Load Function
 
-/*
- * Ui select allow-clear modified function start
- *
- * */
+    $scope.branchFilterFunction = function (searchProject,searchRegion){
+        $scope.branchSpin = true;
+        SiteComponent.getBranchByProject(searchProject.id,searchRegion.id).then(function (response) {
+            // //console.log('branch',response);
+            $scope.branchList = response;
+            if($scope.branchList) {
+                $scope.branchsLists = [];
+                // $scope.branchsListOne.selected = null;
+                $scope.branchsLists[0] = $scope.allBranchs;
 
- /** Ui-select function **/
+                for(var i=0;i<$scope.branchList.length;i++)
+                {
+                    $scope.branchsLists[i+1] = $scope.branchList[i];
+                }
+                /* if($scope.branchList) {
+                            for(var i = 0; i < $scope.branchList.length; i++) {
+                                $scope.uiBranch.push($scope.branchList[i].name);
+                            }*/
+                $scope.branchSpin = false;
+                $scope.branchFilterDisable = false;
+            }
+            else{
+                //console.log('branch list : ' + JSON.stringify($scope.branchList));
+                $scope.getSitesBYRegionOrBranch($scope.searchProject.id,$scope.searchRegion.name,null);
+                $scope.branchSpin = false;
+                $scope.branchFilterDisable = false;
+                //callback();
+            }
 
- 	$scope.loadDepSitesList = function (searchProject) {
- 		$scope.siteSpin = true;
- 		$scope.searchProject = searchProject;
+        })
+    }
 
- 		if(jQuery.isEmptyObject($scope.searchProject) == true){
- 			SiteComponent.findAll().then(function (data) {
- 				$scope.selectedSite = null;
- 				$scope.sitesList = data;
- 				$scope.sitesLists = [];
- 				$scope.sitesListOne.selected = null;
- 				$scope.sitesLists[0] = $scope.allSites;
+    /*
+     * Ui select allow-clear modified function start
+     *
+     * */
 
- 				for(var i=0;i<$scope.sitesList.length;i++)
- 				{
- 					$scope.sitesLists[i+1] = $scope.sitesList[i];
- 				}
- 				$scope.siteFilterDisable = false;
- 				$scope.siteSpin = false;
- 			});
- 		}else{
- 			if(jQuery.isEmptyObject($scope.selectedProject) == false) {
- 				var depProj=$scope.selectedProject.id;
- 				$scope.selectedSite = null;
- 			}else if(jQuery.isEmptyObject($scope.searchProject) == false){
- 				var depProj=$scope.searchProject.id;
- 			}else if(jQuery.isEmptyObject($scope.addRegionProject) == false){
- 				var depProj=$scope.addRegionProject.id;
- 			}else{
- 				var depProj=0;
- 			}
+     /** Ui-select function **/
 
- 			ProjectComponent.findSites(depProj).then(function (data) {
+        $scope.loadDepSitesList = function (searchProject) {
+            $scope.siteSpin = true;
+            $scope.searchProject = searchProject;
 
- 				$scope.sitesList = data;
- 				$scope.sitesLists = [];
- 				$scope.sitesListOne.selected = null;
- 				$scope.sitesLists[0] = $scope.allSites;
-
- 				for(var i=0;i<$scope.sitesList.length;i++)
- 				{
- 					$scope.sitesLists[i+1] = $scope.sitesList[i];
- 				}
- 				$scope.siteFilterDisable = false;
- 				$scope.siteSpin = false;
- 			});
- 		}
-
- 	};
-
- 	/** UI select (Region List) **/
-    	$scope.loadRegionsList = function (projectId, callback) {
-
-    		/** add region and branch scopes **/
-    		$scope.regionSelectedProject = {};
-    		$scope.branchSelectedProject = {};
-    		$scope.selectedRegionOne = {};
-    		$scope.regions = null;
-    		$scope.loadRegions(projectId.id);
-    		$scope.regionSelectedProject = projectId;
-    		$scope.branchSelectedProject = projectId;
-
-    		$scope.regionSpin = true;
-    		$scope.branchsLists = [];
-    		$scope.branchsListOne.selected = null;
-    		$scope.branchFilterDisable = true;
-    		$scope.selectedBranch = {};
-    		SiteComponent.getRegionByProject(projectId.id).then(function (response) {
-    			// //console.log(response);
-    			$scope.regionList = response;
-    			$scope.regionsLists = [];
-    			$scope.regionsListOne.selected = null;
-    			$scope.regionsLists[0] = $scope.allRegions;
-
-
-    			for(var i=0;i<$scope.regionList.length;i++)
-    			{
-    				$scope.regionsLists[i+1] = $scope.regionList[i];
-    			}
-
-    			// //console.log('region list : ' + JSON.stringify($scope.regionList));
-    			$scope.regionSpin = false;
-    			$scope.regionFilterDisable = false;
-    			//callback();
-    		})
-    	};
-
-/*** UI select (Branch List) **/
-	$scope.loadBranchList = function (projectId, callback) {
-
-		if(projectId){
-
-			if($scope.regionsListOne.selected){
-				//console.log($scope.regionsListOne.selected);
-				$scope.branchSpin = true;
-				SiteComponent.getBranchByProject(projectId,$scope.regionsListOne.selected.id).then(function (response) {
-					//console.log(response);
-					$scope.branchList = response;
-					if($scope.branchList) {
-						$scope.branchsLists = [];
-						$scope.branchsListOne.selected = null;
-						$scope.branchsLists[0] = $scope.allBranchs;
-
-						for(var i=0;i<$scope.branchList.length;i++)
-						{
-							$scope.branchsLists[i+1] = $scope.branchList[i];
-						}
-						/* if($scope.branchList) {
-                            		for(var i = 0; i < $scope.branchList.length; i++) {
-                            			$scope.uiBranch.push($scope.branchList[i].name);
-                            		}*/
-						$scope.branchSpin = false;
-						$scope.branchFilterDisable = false;
-					}
-					else{
-						//console.log('branch list : ' + JSON.stringify($scope.branchList));
-						$scope.getSitesBYRegionOrBranch(projectId,$scope.regionsListOne.selected.name,null);
-						$scope.branchSpin = false;
-						$scope.branchFilterDisable = false;
-						//callback();
-					}
-
-				})
-
-			}
-
-		}
-	};
-
-	$scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
-		if(branch){
-			$scope.siteFilterDisable = true;
-			$scope.siteSpin = true;
-			SiteComponent.getSitesByBranch(projectId,region,branch).then(function (data) {
-				$scope.selectedSite = null;
-				$scope.sitesList = data;
-				$scope.sitesLists = [];
-				$scope.sitesListOne.selected = null;
-				$scope.sitesLists[0] = $scope.allSites;
-
-				for(var i=0;i<$scope.sitesList.length;i++)
-				{
-					$scope.sitesLists[i+1] = $scope.sitesList[i];
-				}
-				$scope.siteFilterDisable = false;
-				$scope.siteSpin = false;
-			});
-
-		}else if(region){
-			$scope.siteFilterDisable = true;
-			$scope.siteSpin = true;
-
-			SiteComponent.getSitesByRegion(projectId,region).then(function (data) {
-				$scope.selectedSite = null;
-				$scope.sitesList = data;
-				$scope.sitesLists = [];
-				$scope.sitesListOne.selected = null;
-				$scope.sitesLists[0] = $scope.allSites;
-
-				for(var i=0;i<$scope.sitesList.length;i++)
-				{
-					$scope.sitesLists[i+1] = $scope.sitesList[i];
-				}
-				$scope.siteFilterDisable = false;
-				$scope.siteSpin = false;
-			})
-
-		}/*else if(projectId >0){
-                $scope.siteFilterDisable = true;
-                $scope.siteSpin = true;
-                ProjectComponent.findSites(projectId).then(function (data) {
+            if(jQuery.isEmptyObject($scope.searchProject) == true){
+                SiteComponent.findAll().then(function (data) {
                     $scope.selectedSite = null;
                     $scope.sitesList = data;
                     $scope.sitesLists = [];
@@ -1023,59 +864,223 @@ $scope.branchFilterFunction = function (searchProject,searchRegion){
                     $scope.siteSpin = false;
                 });
             }else{
+                if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                    var depProj=$scope.selectedProject.id;
+                    $scope.selectedSite = null;
+                }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                    var depProj=$scope.searchProject.id;
+                }else if(jQuery.isEmptyObject($scope.addRegionProject) == false){
+                    var depProj=$scope.addRegionProject.id;
+                }else{
+                    var depProj=0;
+                }
 
-            }*/
-	}
+                ProjectComponent.findSites(depProj).then(function (data) {
 
-	$scope.loadRegions = function (projectId, callback) {
-        SiteComponent.getRegionByProject(projectId).then(function (response) {
+                    $scope.sitesList = data;
+                    $scope.sitesLists = [];
+                    $scope.sitesListOne.selected = null;
+                    $scope.sitesLists[0] = $scope.allSites;
 
-            $scope.regions = response;
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.sitesLists[i+1] = $scope.sitesList[i];
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                });
+            }
+
+        };
+
+        /** UI select (Region List) **/
+            $scope.loadRegionsList = function (projectId, callback) {
+
+                /** add region and branch scopes **/
+                $scope.regionSelectedProject = {};
+                $scope.branchSelectedProject = {};
+                $scope.selectedRegionOne = {};
+                $scope.regions = null;
+                $scope.loadRegions(projectId.id);
+                $scope.regionSelectedProject = projectId;
+                $scope.branchSelectedProject = projectId;
+
+                $scope.regionSpin = true;
+                $scope.branchsLists = [];
+                $scope.branchsListOne.selected = null;
+                $scope.branchFilterDisable = true;
+                $scope.selectedBranch = {};
+                SiteComponent.getRegionByProject(projectId.id).then(function (response) {
+                    // //console.log(response);
+                    $scope.regionList = response;
+                    $scope.regionsLists = [];
+                    $scope.regionsListOne.selected = null;
+                    $scope.regionsLists[0] = $scope.allRegions;
+
+
+                    for(var i=0;i<$scope.regionList.length;i++)
+                    {
+                        $scope.regionsLists[i+1] = $scope.regionList[i];
+                    }
+
+                    // //console.log('region list : ' + JSON.stringify($scope.regionList));
+                    $scope.regionSpin = false;
+                    $scope.regionFilterDisable = false;
+                    //callback();
+                })
+            };
+
+    /*** UI select (Branch List) **/
+        $scope.loadBranchList = function (projectId, callback) {
+
+            if(projectId){
+
+                if($scope.regionsListOne.selected){
+                    //console.log($scope.regionsListOne.selected);
+                    $scope.branchSpin = true;
+                    SiteComponent.getBranchByProject(projectId,$scope.regionsListOne.selected.id).then(function (response) {
+                        //console.log(response);
+                        $scope.branchList = response;
+                        if($scope.branchList) {
+                            $scope.branchsLists = [];
+                            $scope.branchsListOne.selected = null;
+                            $scope.branchsLists[0] = $scope.allBranchs;
+
+                            for(var i=0;i<$scope.branchList.length;i++)
+                            {
+                                $scope.branchsLists[i+1] = $scope.branchList[i];
+                            }
+                            /* if($scope.branchList) {
+                                        for(var i = 0; i < $scope.branchList.length; i++) {
+                                            $scope.uiBranch.push($scope.branchList[i].name);
+                                        }*/
+                            $scope.branchSpin = false;
+                            $scope.branchFilterDisable = false;
+                        }
+                        else{
+                            //console.log('branch list : ' + JSON.stringify($scope.branchList));
+                            $scope.getSitesBYRegionOrBranch(projectId,$scope.regionsListOne.selected.name,null);
+                            $scope.branchSpin = false;
+                            $scope.branchFilterDisable = false;
+                            //callback();
+                        }
+
+                    })
+
+                }
+
+            }
+        };
+
+        $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
+            if(branch){
+                $scope.siteFilterDisable = true;
+                $scope.siteSpin = true;
+                SiteComponent.getSitesByBranch(projectId,region,branch).then(function (data) {
+                    $scope.selectedSite = null;
+                    $scope.sitesList = data;
+                    $scope.sitesLists = [];
+                    $scope.sitesListOne.selected = null;
+                    $scope.sitesLists[0] = $scope.allSites;
+
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.sitesLists[i+1] = $scope.sitesList[i];
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                });
+
+            }else if(region){
+                $scope.siteFilterDisable = true;
+                $scope.siteSpin = true;
+
+                SiteComponent.getSitesByRegion(projectId,region).then(function (data) {
+                    $scope.selectedSite = null;
+                    $scope.sitesList = data;
+                    $scope.sitesLists = [];
+                    $scope.sitesListOne.selected = null;
+                    $scope.sitesLists[0] = $scope.allSites;
+
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.sitesLists[i+1] = $scope.sitesList[i];
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                })
+
+            }/*else if(projectId >0){
+                    $scope.siteFilterDisable = true;
+                    $scope.siteSpin = true;
+                    ProjectComponent.findSites(projectId).then(function (data) {
+                        $scope.selectedSite = null;
+                        $scope.sitesList = data;
+                        $scope.sitesLists = [];
+                        $scope.sitesListOne.selected = null;
+                        $scope.sitesLists[0] = $scope.allSites;
+
+                        for(var i=0;i<$scope.sitesList.length;i++)
+                        {
+                            $scope.sitesLists[i+1] = $scope.sitesList[i];
+                        }
+                        $scope.siteFilterDisable = false;
+                        $scope.siteSpin = false;
+                    });
+                }else{
+
+                }*/
+        }
+
+        $scope.loadRegions = function (projectId, callback) {
+            SiteComponent.getRegionByProject(projectId).then(function (response) {
+
+                $scope.regions = response;
 
 
 
-        })
+            })
     };
 
 
 
-$scope.clearProject = function($event) {
-    $event.stopPropagation();
-    $scope.client.selected = undefined;
-    $scope.regionsListOne.selected = undefined;
-    $scope.branchsListOne.selected = undefined;
-    $scope.sitesListOne.selected = undefined;
-    $scope.regionFilterDisable = true;
-    $scope.branchFilterDisable = true;
-    $scope.siteFilterDisable = true;
-};
+    $scope.clearProject = function($event) {
+        $event.stopPropagation();
+        $scope.client.selected = undefined;
+        $scope.regionsListOne.selected = undefined;
+        $scope.branchsListOne.selected = undefined;
+        $scope.sitesListOne.selected = undefined;
+        $scope.regionFilterDisable = true;
+        $scope.branchFilterDisable = true;
+        $scope.siteFilterDisable = true;
+    };
 
-$scope.clearRegion = function($event) {
-    $event.stopPropagation();
-    $scope.regionsListOne.selected = undefined;
-    $scope.branchsListOne.selected = undefined;
-    $scope.sitesListOne.selected = undefined;
-    $scope.branchFilterDisable = true;
-    $scope.siteFilterDisable = true;
-};
+    $scope.clearRegion = function($event) {
+        $event.stopPropagation();
+        $scope.regionsListOne.selected = undefined;
+        $scope.branchsListOne.selected = undefined;
+        $scope.sitesListOne.selected = undefined;
+        $scope.branchFilterDisable = true;
+        $scope.siteFilterDisable = true;
+    };
 
-$scope.clearBranch = function($event) {
-    $event.stopPropagation();
-    $scope.branchsListOne.selected = undefined;
-    $scope.sitesListOne.selected = undefined;
-    $scope.siteFilterDisable = true;
-};
+    $scope.clearBranch = function($event) {
+        $event.stopPropagation();
+        $scope.branchsListOne.selected = undefined;
+        $scope.sitesListOne.selected = undefined;
+        $scope.siteFilterDisable = true;
+    };
 
-$scope.clearSite = function($event) {
-    $event.stopPropagation();
-    $scope.sitesListOne.selected = undefined;
+    $scope.clearSite = function($event) {
+        $event.stopPropagation();
+        $scope.sitesListOne.selected = undefined;
 
-};
+    };
 
 
-/*
- * Ui select allow-clear modified function end
- *
- * */
+    /*
+     * Ui select allow-clear modified function end
+     *
+     * */
 
 });

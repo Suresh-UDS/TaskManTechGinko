@@ -10,10 +10,6 @@
                 <i class="material-icons">refresh</i> Clear Filter
                 <div class="ripple-container"></div>
             </button>
-            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
-                <i class="material-icons">keyboard_return</i>Dashboard
-                <div class="ripple-container"></div>
-            </button>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 txt-align-rgt">
 
@@ -26,7 +22,25 @@
 
         </div>
     </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+                    Client: {{searchCriteras.projectName}}
+                </span>
 
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+                    Region: {{searchCriteras.region}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+                    Branch: {{searchCriteras.branch}}
+                </span>
+
+                <span class="tag label label-info"  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+                    Site: {{searchCriteras.siteName}}
+                </span>
+            </span>
+    </div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card TableCard">
@@ -35,7 +49,17 @@
 						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th>Client <span class="sortingIcons"> <span
+                                    <th>Id <span class="sortingIcons"> <span
+                                        ng-click="columnAscOrder('id')"
+                                        ng-class="isActiveAsc == 'id' ? 'active' : ''"> <i
+                                        class="fa fa-caret-up"></i>
+										</span> <span ng-click="columnDescOrder('id')"
+                                                      ng-class="isActiveDesc == 'id' ? 'active' : ''"> <i
+                                        ng-class="class" class="fa fa-caret-down"></i>
+										</span>
+									</span>
+                                    </th>
+									<!--<th>Client <span class="sortingIcons"> <span
 											ng-click="columnAscOrder('name')"
 											ng-class="isActiveAsc == 'name' ? 'active' : ''"> <i
 												class="fa fa-caret-up"></i>
@@ -44,7 +68,7 @@
 												ng-class="class" class="fa fa-caret-down"></i>
 										</span>
 									</span>
-									</th>
+									</th>-->
 									<th>Site <span class="sortingIcons"> <span
 											ng-click="columnAscOrder('name')"
 											ng-class="isActiveAsc == 'name' ? 'active' : ''"> <i
@@ -55,25 +79,49 @@
 										</span>
 									</span>
 									</th>
-									<th>Process Type <span class="sortingIcons"> <span
-											ng-click="columnAscOrder('processType')"
-											ng-class="isActiveAsc == 'processType' ? 'active' : ''">
+                                    <th>Process Type <span class="sortingIcons"> <span
+                                        ng-click="columnAscOrder('processType')"
+                                        ng-class="isActiveAsc == 'processType' ? 'active' : ''">
 												<i class="fa fa-caret-up"></i>
 										</span> <span ng-click="columnDescOrder('processType')"
-											ng-class="isActiveDesc == 'processType' ? 'active' : ''">
+                                                      ng-class="isActiveDesc == 'processType' ? 'active' : ''">
 												<i ng-class="class" class="fa fa-caret-down"></i>
 										</span>
 									</span>
-									</th>
+                                    </th>
+                                    <th>Severity <span class="sortingIcons"> <span
+                                        ng-click="columnAscOrder('severity')"
+                                        ng-class="isActiveAsc == 'severity' ? 'active' : ''"> <i
+                                        class="fa fa-caret-up"></i>
+										</span> <span ng-click="columnDescOrder('severity')"
+                                                      ng-class="isActiveDesc == 'severity' ? 'active' : ''"> <i
+                                        ng-class="class" class="fa fa-caret-down"></i>
+										</span>
+									</span>
+                                    </th>
+                                    <th>Category <span class="sortingIcons"> <span
+                                        ng-click="columnAscOrder('category')"
+                                        ng-class="isActiveAsc == 'category' ? 'active' : ''"> <i
+                                        class="fa fa-caret-up"></i>
+										</span> <span ng-click="columnDescOrder('category')"
+                                                      ng-class="isActiveDesc == 'category' ? 'active' : ''"> <i
+                                        ng-class="class" class="fa fa-caret-down"></i>
+										</span>
+									</span>
+                                    </th>
+
 									<th>Active</th>
 									<th class="text-right">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="slalist in slas">
-									<td>{{slalist.projectName}}</td>
+                                    <td>{{slalist.id}}</td>
+                                    <!--<td>{{slalist.projectName}}</td>-->
 									<td>{{slalist.siteName}}</td>
 									<td>{{slalist.processType}}</td>
+                                    <td>{{slalist.severity}}</td>
+                                    <td><span ng-repeat="category in slalist.category">{{category}},</span></td>
 									<td>
 										<button class="btn  btn-xs btn-danger" disabled
 											ng-show="slalist.active == 'N'">InActive</button>
@@ -96,13 +144,17 @@
 												ng-class="{active: $state.includes('admin')}"
 												ui-sref="edit-sla({ id: slalist.id })"
 												class="btn btn-simple btn-info"><i
-												class="material-icons">edit</i></a> <a
+												class="material-icons">edit</i>
+                                            </a>
+                                            <a
 												ng-class="{active: $state.includes('admin')}"
 												ng-click="deleteConfirm(slalist.id)"
 												onClick="$('#deleteModal').modal()" data-target="#myModal"
 												class="btn btn-simple btn-danger"><i
-												class="material-icons">close</i></a>
-										</div></td>
+												class="material-icons">delete</i>
+                                            </a>
+										</div>
+                                    </td>
 								</tr>
 							</tbody>
 						</table>
@@ -175,7 +227,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="button" ng-click="deleteSla({ id: slalist.id })"
+					<button type="button" ng-click="deleteSla();"
 						class="btn btn-danger delete-confirmation-button"
 						data-dismiss="modal">Delete</button>
 				</div>
@@ -201,7 +253,7 @@
 						Cancel</button>
 					<button type="button"
 						class="btn btn-danger delete-multiple-confirmation-button"
-						data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
+						>
 						Delete</button>
 				</div>
 			</div>
