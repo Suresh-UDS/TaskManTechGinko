@@ -3,6 +3,7 @@ package com.ts.app.service;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +51,9 @@ public class SlaConfigService extends AbstractService {
 	
 	@Inject
 	private JobRepository jobRepository;
+
+	@Inject
+	private UserRepository userRepository;
 		
 	public SlaConfigDTO saveSla(SlaConfigDTO slaconfigdto){
 		
@@ -181,39 +185,61 @@ public class SlaConfigService extends AbstractService {
 	
 	public SearchResult<SlaConfigDTO> findBySlaList(SearchCriteria searchCriteria) {
 		SearchResult<SlaConfigDTO> result = new SearchResult<SlaConfigDTO>();
+        User user = userRepository.findOne(searchCriteria.getUserId());
+        log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
+        Employee employee = user.getEmployee();
+        log.debug(">>> user <<<"+ employee.getFullName() +" and "+employee.getId());
+        List<EmployeeProjectSite> sites = employee.getProjectSites();
+
 		if(searchCriteria != null) {
+
+		    List<Long> siteIds = new ArrayList<Long>();
+            if(employee != null && !user.isAdmin()) {
+                for (EmployeeProjectSite site : sites) {
+                    siteIds.add(site.getSite().getId());
+                    searchCriteria.setSiteIds(siteIds);
+                }
+            }else if(user.isAdmin()){
+                searchCriteria.setAdmin(true);
+            }
+
             Pageable pageRequest = null;
-           if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
-
-            }else{ 
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                if (searchCriteria.isReport()) {
+                   pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+                } else {
+                   pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+                }
+            }else{
+               if (searchCriteria.isList()) {
+                   pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+               } else {
+                   pageRequest = createPageRequest(searchCriteria.getCurrPage());
+               }
             }
             Page<SlaConfig> page = null;
+            List<SlaConfig> slaLists = new ArrayList<>();
 			List<SlaConfigDTO> transactions = null;
+
 			log.debug("Site id = "+ searchCriteria.getSiteId());
-			if(!searchCriteria.isFindAll()) {
-				if(searchCriteria.getSiteId() != 0) {
-						
-					page = slaconfigrepository.findSlaBySiteId(searchCriteria.getSiteId(), pageRequest);
-					log.debug("page content " + page);
-				}else {
-					page = slaconfigrepository.findSlaBySiteName(pageRequest);
-				}
+			if(!searchCriteria.isConsolidated()) {
+                log.debug(">>> inside search consolidate <<<");
+                page = slaconfigrepository.findAll(new SlaSpecification(searchCriteria,true), pageRequest);
+                slaLists.addAll(page.getContent());
 			}
-			if(page != null) {
+
+			if(CollectionUtils.isNotEmpty(slaLists)) {
 				//transactions = mapperUtil.toModelList(page.getContent(), SiteDTO.class);
 				if(transactions == null) {
 					transactions = new ArrayList<SlaConfigDTO>();
 				}
-				List<SlaConfig> slaList =  page.getContent();
-				if(CollectionUtils.isNotEmpty(slaList)) {
-					for(SlaConfig sla : slaList) {
-						transactions.add(mapToModel(sla));
-					}
-				}
+                for(SlaConfig sla : slaLists) {
+                    transactions.add(mapperUtil.toModel(sla, SlaConfigDTO.class));
+                }
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}
