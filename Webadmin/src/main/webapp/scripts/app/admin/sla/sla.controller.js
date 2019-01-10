@@ -39,6 +39,8 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria = {};
 
 					$scope.removeSlaInd = null;
+					$scope.searchPType = null;
+					$scope.searchSeverity = null;
 
 					// Filter
 					$scope.filter = false;
@@ -88,6 +90,8 @@ angular.module('timeSheetApp')
 						$scope.siteFilterDisable = true;
                         $scope.regionFilterDisable = true;
                         $scope.branchFilterDisable = true;
+                        $scope.searchPType = null;
+                        $scope.searchSeverity = null;
 						//$scope.selectedSite = null;
 						$scope.slaList = null;
 
@@ -167,7 +171,7 @@ angular.module('timeSheetApp')
 					};
 
 					$rootScope.back = function(text) {
-						if (text == 'cancel') {
+						if (text == 'cancel' || text == 'back') {
 							/** @reatin - retaining scope value.* */
 							$rootScope.retain = 1;
 							$scope.cancelSla();
@@ -212,7 +216,7 @@ angular.module('timeSheetApp')
 					 */
 
 					$scope.searchFilter = function() {
-					    $('.BasicFilterModal.in').modal('hide');
+					    $('.AdvancedFilterModal.in').modal('hide');
 						$scope.setPage(1);
 						$scope.search();
 					}
@@ -269,11 +273,11 @@ angular.module('timeSheetApp')
 
                          $scope.searchCriteria.findAll = false;
 
-						if(!$scope.searchSite && !$scope.searchProject) {
+						if(!$scope.searchSite && !$scope.searchProject && !$scope.searchPType && !$scope.searchSeverity) {
 
                             $scope.searchCriteria.findAll = true;
 
-                        }else if(($scope.searchSite) || ($scope.searchProject)) {
+                        }else {
 
                             if($scope.searchSite) {
                                 $scope.searchCriteria.siteId = $scope.searchSite.id;
@@ -309,6 +313,16 @@ angular.module('timeSheetApp')
                             }else {
                                 $scope.searchCriteria.branchId = null;
                                 $scope.searchCriteria.branch = null;
+                            }
+                            if($scope.searchPType){
+                              $scope.searchCriteria.processType = $scope.searchPType;
+                            }else{
+                              $scope.searchCriteria.processType = null;
+                            }
+                            if($scope.searchSeverity){
+                              $scope.searchCriteria.severity = $scope.searchSeverity;
+                            }else{
+                              $scope.searchCriteria.severity = null;
                             }
 
                         }
@@ -378,6 +392,16 @@ angular.module('timeSheetApp')
                                 }else{
                                     $scope.searchSite = null;
                                     $scope.sitesListOne.selected = $scope.searchSite;
+                                }
+                                if($scope.localStorage.processType){
+                                  $scope.selectedPType = $scope.localStorage.processType;
+                                }else{
+                                  $scope.selectedPType = null;
+                                }
+                                if($scope.localStorage.severity){
+                                 $scope.searchSeverity = $scope.localStorage.severity;
+                                }else{
+                                  $scope.searchSeverity = null;
                                 }
 
                             }
@@ -466,6 +490,18 @@ angular.module('timeSheetApp')
 
 					};
 
+					$scope.getSlaDetails = function(id, mode) {
+                        $scope.loadingStart();
+                        SlaComponent.findOne(id).then(function (data) {
+                            $scope.sla = data;
+                            $scope.title = "SLA - " + $scope.sla.id;
+                            $scope.slaList.push($scope.sla);
+                            console.log("sla by id >>>",$scope.slaList);
+                            $scope.loadingStop();
+                        });
+                    };
+
+
 					$scope.addSla = function(validation) {
 						if (validation) {
 							return false;
@@ -488,6 +524,13 @@ angular.module('timeSheetApp')
 					$scope.updateSla = function() {
 						for (var i = 0; i < $scope.slaList.length; i++) {
 							console.log("SlaList add "+ JSON.stringify($scope.slaList));
+                            $scope.sla.projectId =$scope.selectedProject.id;
+                            $scope.sla.siteId= $scope.selectedSite.id;
+                            $scope.sla.projectName =$scope.selectedProject.name;
+                            $scope.sla.siteName= $scope.selectedSite.name;
+							$scope.sla.processType = $scope.selectedPType;
+							$scope.sla.severity = $scope.selectedSeverity;
+							$scope.sla.category = $scope.multipleCategories.selectedCategory;
 							$scope.sla = $scope.slaList[i];
 							console.log("Sla add " + JSON.stringify($scope.sla));
 							SlaComponent.updateSla($scope.sla).then(function(data) {
@@ -562,31 +605,26 @@ angular.module('timeSheetApp')
 								;
 							});
 							if (exists == false) {
-								$scope.slaEscalationList
-										.push($scope.escalation);
+								$scope.slaEscalationList.push($scope.escalation);
 								$scope.escalation = {};
 							}
 						}
 					};
 
 					$scope.updateSlaEscalations = function() {
-						console.log("Escaltions "
-								+ JSON.stringify($scope.escalation));
+						console.log("Escaltions " + JSON.stringify($scope.escalation));
 						$scope.slaEscalationList.push($scope.escalation);
 						$scope.escalation = {};
-						console.log("Escaltion List "
-								+ JSON.stringify($scope.slaEscalationList));
+						console.log("Escaltion List "+ JSON.stringify($scope.slaEscalationList));
 					};
 
 					$scope.removeEscalation = function(ind) {
 						$scope.slaEscalationList.splice(ind, 1);
-						console.log("remove escalation"
-								+ $scope.slaEscalationList)
+						console.log("remove escalation"+ $scope.slaEscalationList)
 					};
 
 					$scope.editesc = function(ind) {
-						console.log("Edit Esclation:"
-								+ $scope.slaEscalationList.slice(ind, ind + 1));
+						console.log("Edit Esclation:"+ $scope.slaEscalationList.slice(ind, ind + 1));
 						var slaesc = $scope.slaEscalationList.slice(ind,
 								ind + 1);
 
@@ -600,8 +638,7 @@ angular.module('timeSheetApp')
 
 					$scope.addSlas = function() {
 						console.log("Sla " + JSON.stringify($scope.sla));
-						console.log("SLA Escalation List "
-								+ JSON.stringify($scope.slaEscalationList));
+						console.log("SLA Escalation List "+ JSON.stringify($scope.slaEscalationList));
 						$scope.sla.slaesc = $scope.slaEscalationList;
 						$scope.sla.category = $scope.multipleCategories.selectedCategory;
 						$scope.slaEscalationList = [];
@@ -614,39 +651,31 @@ angular.module('timeSheetApp')
 							"hours" : $scope.sla.hours,
 							"slaesc" : $scope.sla.slaesc,
 						}
-						console
-								.log("Sla slaEscalation "
-										+ JSON.stringify(slas));
+						console.log("Sla slaEscalation "+ JSON.stringify(slas));
 						$scope.slaList.push(slas);
 						// $scope.selectedProject = {};
 						// $scope.selectedSite = {};
 						// $scope.sla = {};
-						console
-								.log("SlaList "
-										+ JSON.stringify($scope.slaList));
+						console.log("SlaList "+ JSON.stringify($scope.slaList));
 					};
 
 					$scope.updateEscalation = function() {
 						console.log("Sla " + JSON.stringify($scope.sla));
-						console.log("SLA Escalation List "
-								+ JSON.stringify($scope.slaEscalationList));
+						console.log("SLA Escalation List "+ JSON.stringify($scope.slaEscalationList));
 						$scope.sla.slaesc = $scope.slaEscalationList;
 						$scope.slaEscalationList = [];
 						$scope.escalationShowOnce = false;
-						console
-								.log("SlaList "
-										+ JSON.stringify($scope.slaList));
+						console.log("SlaList "+ JSON.stringify($scope.slaList));
 					};
 
 					$scope.editEscalation = function() {
-						console.log("Selected SLA "
-								+ JSON.stringify($scope.sla.slaesc));
+						console.log("Selected SLA ", JSON.stringify($scope.sla.slaesc));
 						if ($scope.escalationShowOnce == false) {
 							$scope.escalationShowOnce = true;
+							$scope.escalation = "";
 							for (var i = 0; i < $scope.sla.slaesc.length; i++) {
 								$scope.escalation = $scope.sla.slaesc[i];
-								console.log("Selected SLA"
-										+ $scope.escalation.level);
+								console.log("Selected SLA", $scope.escalation.level);
 								$scope.updateSlaEscalations();
 							}
 						}
@@ -674,7 +703,8 @@ angular.module('timeSheetApp')
                            $scope.slaList.splice($scope.removeSlaInd, 1);
                            console.log("remove sla " + $scope.slaList);
                     };
-
+                    $scope.isActiveAsc = '';
+                    $scope.isActiveDesc = 'id';
 					$scope.columnAscOrder = function(field) {
 						$scope.selectedColumn = field;
 						$scope.isActiveAsc = field;

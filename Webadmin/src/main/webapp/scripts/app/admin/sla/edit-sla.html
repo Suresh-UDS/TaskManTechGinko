@@ -31,7 +31,7 @@
                                                             class="material-icons">keyboard_arrow_down</i></span> <select
                                                             ng-options="prj.name for prj in projects track by prj.id" name="projectName"
                                                             ng-model="selectedProject" ng-change="loadSites()"
-                                                            class="form-control" required="true">
+                                                            class="form-control" required="true" ng-disabled="true">
                                                             <option value="">Select Client...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
@@ -58,7 +58,7 @@
                                                             class="material-icons">keyboard_arrow_down</i></span> <select
                                                             ng-options="site as site.name for site in sites track by site.id"
                                                             name="siteName" ng-required="true"
-                                                            ng-model="selectedSite" class="form-control">
+                                                            ng-model="selectedSite" class="form-control" ng-disabled="true">
                                                             <option value="">Select Site...</option>
                                                         </select>
                                                         <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
@@ -288,10 +288,10 @@
 
 						<div class="col-md-12">
 
-							<button type="button" ng-click="conform('cancel')"
-								id="cancel-button" class="btn btn-danger pull-right"
+							<button type="button" ng-click="conform('back')"
+								id="cancel-button" class="btn btn-default pull-right"
 								ng-disabled="btnDisable">
-								<i class="material-icons">close</i> Cancel
+								Back
 							</button>
 
 							<button type="submit" id="form-button-save"
