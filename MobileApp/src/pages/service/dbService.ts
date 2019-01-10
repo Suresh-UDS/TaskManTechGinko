@@ -1340,6 +1340,7 @@ export class DBService {
                     console.log(this.selectJobs)
                     resolve(this.selectJobs);
                 }, (error) => {
+                  resolve(error)
                     console.log("ERROR: " + JSON.stringify(error))
                 })
 
@@ -1365,7 +1366,7 @@ export class DBService {
                 this.selectJobs.push(data.rows.item(i))
               }
             }
-            console.log(this.selectJobs)
+            // console.log(this.selectJobs)
             resolve(this.selectJobs);
           }, (error) => {
             console.log("ERROR: " + JSON.stringify(error))

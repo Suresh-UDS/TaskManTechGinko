@@ -64,7 +64,6 @@ export class TabsPage {
   appPackageName:any;
   savedImages: any;
   completedImagesComplete: any;
-  completedImagesSave: any;
   private db: any;
   offlinesingleJob: any;
   completedImages: any;
@@ -90,7 +89,6 @@ export class TabsPage {
     this.savedImages = [];
     this.completedImages = [];
     this.completedImagesComplete = [];
-    this.completedImagesSave = [];
     this.takenImages = [];
     this.offlineData = [];
     this.checklist =[];
@@ -153,7 +151,6 @@ export class TabsPage {
     );
       this.dbService.getAllSavedImages().then(
         (res)=> {
-          console.log("saved images", res);
           this.savedImages = res;
           console.log("savedimages", this.savedImages);
           if (this.savedImages.length > 0) {
@@ -333,32 +330,11 @@ export class TabsPage {
         console.log("jobs sync response",response);
         this.offlineJobs = response;
           console.log("length", this.offlineJobs.length);
-          console.log(this.offlineJobs);
           console.log("images", this.savedImages);
 
         this.component.closeLoader();
 
         for (var i = 0; i < this.offlineJobs.length; i++) {
-         /* this.offlineData = {};
-          this.offlineData.assetId = this.offlineJobs[i].assetId;
-          this.offlineData.checkInDateTimeFrom = this.offlineJobs[i].checkInDateTimeFrom;
-          this.offlineData.checkInDateTimeTo = this.offlineJobs[i].checkInDateTimeTo;
-          this.offlineData.description = this.offlineJobs[i].description;
-          this.offlineData.employeeEmpId = this.offlineJobs[i].employeeEmpId;
-          this.offlineData.employeeId = this.offlineJobs[i].employeeId;
-          this.offlineData.employeeName = this.offlineJobs[i].employeeName;
-          this.offlineData.id = this.offlineJobs[i].id;
-          this.offlineData.maintenanceType = this.offlineJobs[i].maintenanceType;
-          this.offlineData.offlineCompleteResponse = this.offlineJobs[i].offlineCompleteResponse;
-          this.offlineData.offlineUpdate = this.offlineJobs[i].offlineUpdate;
-          this.offlineData.plannedEndTime = this.offlineJobs[i].plannedEndTime;
-          this.offlineData.plannedStartTime = this.offlineJobs[i].plannedStartTime;
-          this.offlineData.siteId = this.offlineJobs[i].siteId;
-          this.offlineData.siteName = this.offlineJobs[i].siteName;
-          this.offlineData.status = this.offlineJobs[i].status;
-          this.offlineData.title = this.offlineJobs[i].title;
-          this.checklist=[];*/
-          // this.offlineData.checklist=[];
 
          /* this.dbService.getCheckList(this.offlineJobs[i].id).then(
             res=>{
@@ -379,11 +355,6 @@ export class TabsPage {
                 }
               }*/
 
-
-
-            console.log("offlinejob",this.offlineJobs);
-
-
           if (this.offlineJobs[i].offlineCompleteResponse == 0) {
 
             //completed Jobs
@@ -392,15 +363,17 @@ export class TabsPage {
               console.log("completed jobs", this.offlineJobs[i]);
               this.offlinesingleJob = this.offlineJobs[i];
               this.completedImagesComplete = [];
-
+              console.log("dbimages",this.savedImages);
               for (var k = 0; k < this.savedImages.length; k++) {
                 if (this.offlinesingleJob.id == this.savedImages[k].jobId) {
+                  console.log("savedimage for completed job",this.savedImages[k]);
                   this.completedImagesComplete.push(this.savedImages[k].image);
                   console.log("completedImagescomplete", this.completedImagesComplete);
                 }
               }
               console.log("completed images",this.completedImagesComplete);
               this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
+              this.offlinesingleJob.active="Y";
               this.completeJob(this.offlinesingleJob, this.completedImagesComplete);
               this.offlinesingleJob.offlineCompleteResponse = 1;
               console.log("setofflinecompleteResponse", this.offlinesingleJob);
@@ -417,16 +390,17 @@ export class TabsPage {
             else {
               console.log("saved jobs", this.offlineJobs[i]);
               this.offlinesingleJob = this.offlineJobs[i];
-              this.completedImagesSave = [];
-              for (var k = 0; k < this.savedImages.length; k++) {
-                if (this.offlinesingleJob.id == this.savedImages[k].jobId) {
-                  this.completedImagesSave.push(this.savedImages[k].image);
-                  console.log("completedImagesSave", this.completedImagesSave);
-                }
-              }
-              console.log("completedImagesSave", this.completedImagesSave);
+              // this.completedImagesSave = [];
+              // for (var k = 0; k < this.savedImages.length; k++) {
+              //   if (this.offlinesingleJob.id == this.savedImages[k].jobId) {
+              //     this.completedImagesSave.push(this.savedImages[k].image);
+              //     console.log("completedImagesSave", this.completedImagesSave);
+              //   }
+              // }
+              // console.log("completedImagesSave", this.completedImagesSave);
               this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
-              this.saveJob(this.offlinesingleJob, this.completedImagesSave);
+              this.offlinesingleJob.active="Y";
+              this.saveJob(this.offlinesingleJob);
               this.offlinesingleJob.offlineCompleteResponse = 1;
               console.log("setofflinecompleteResponse", this.offlinesingleJob);
               this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
@@ -438,45 +412,12 @@ export class TabsPage {
                   this.component.closeLoader();
                 }
               );
-              /*if(this.completedImagesSave>0){
-                console.log("completedImagesSave", this.completedImagesSave);
-                this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
-                this.saveJob(this.offlinesingleJob, this.completedImagesSave);
-                this.offlinesingleJob.offlineCompleteResponse = 1;
-                console.log("setofflinecompleteResponse", this.offlinesingleJob);
-                this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
-                  (res) => {
-                    console.log("save offlinecomplete response", res);
-                    this.component.closeLoader();
-                  }, (err) => {
-                    console.log("error offlinecomplete response", err);
-                    this.component.closeLoader();
-                  }
-                );
-              }else {
-                console.log("completedImagesSave", this.completedImagesSave);
-                this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
-                this.saveJob(this.offlinesingleJob, this.completedImagesSave);
-                this.offlinesingleJob.offlineCompleteResponse = 1;
-                console.log("setofflinecompleteResponse", this.offlinesingleJob);
-                this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
-                  (res) => {
-                    console.log("save offlinecomplete response", res);
-                    this.component.closeLoader();
-                  }, (err) => {
-                    console.log("error offlinecomplete response", err);
-                    this.component.closeLoader();
-                  }
-                );
-              }*/
 
             }
           }else{
-            console.log("job already synced");
+            // console.log("job already synced");
             this.component.showToastMessage('job already synced','bottom');
           }
-           /* }
-          )*/
         }
       },(err)=>{
         this.component.closeLoader();
@@ -485,88 +426,105 @@ export class TabsPage {
     this.component.closeLoader();
   }
 
-  saveJob(job,takenImages){
+  saveJob(job){
     this.component.showLoader('Saving Job');
     console.log(job)
-    this.takenImages = takenImages;
+    // this.takenImages = takenImages;
+
     this.jobService.saveJob(job).subscribe(
       response=>{
         if(response.errorStatus){
           this.component.closeAll();
           demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
         }else{
+          var checkoutdetails;
+          checkoutdetails={
+            employeeId:'',
+            employeeEmpId:'',
+            projectId:'',
+            siteId:'',
+            jobId:'',
+            latitudeOut:'',
+            longitude:'',
+            completeJob:false,
+            id:null
+          };
+
           console.log("Save Job response");
-          // this.component.closeLoader();
           this.component.showToastMessage('Job Saved Successfully','bottom');
           console.log(response);
           console.log(job.checkInOutId);
-          console.log("takenimages length",this.takenImages.length);
-          if(this.takenImages.length>0){
+          // console.log("takenimages length",this.completedImagesSave.length);
+          // if(this.completedImagesSave.length>0){
             this.component.showLoader('Uploading Images');
-            this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-            this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-            this.checkOutDetails.projectId =job.siteProjectId;
-            this.checkOutDetails.siteId = job.siteId;
-            this.checkOutDetails.jobId = job.id;
-            this.checkOutDetails.id=job.checkInOutId;
-            console.log("checkoutDetails",this.checkOutDetails);
-            this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+            checkoutdetails.employeeId = window.localStorage.getItem('employeeId');
+            checkoutdetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+            checkoutdetails.projectId =job.siteProjectId;
+            checkoutdetails.siteId = job.siteId;
+            checkoutdetails.jobId = job.id;
+            checkoutdetails.id=job.checkInOutId;
+            console.log("checkoutDetails",checkoutdetails);
+            this.jobService.updateJobImages(checkoutdetails).subscribe(
               response=>{
                 // this.component.closeLoader();
                 console.log("complete job response");
                 console.log(response);
                 console.log(job);
-                // this.component.showToastMessage('Job Completed Successfully','bottom');
-                // this.component.showLoader('Uploading Images');
+                var completedImagesSave;
+                 completedImagesSave=[];
+                for (var k = 0; k < this.savedImages.length; k++) {
+                  if (job.id == this.savedImages[k].jobId) {
+                    console.log("savedimage for completed job",this.savedImages[k]);
+                    completedImagesSave.push(this.savedImages[k].image);
+                    console.log("completedImagescomplete", completedImagesSave);
+                  }
+                }
                 //TODO
                 //File Upload after successful checkout
-                for(let i in this.takenImages) {
+                for(var i=0; i<completedImagesSave.length;i++) {
 
                   console.log("image loop");
                   console.log(i);
-                  console.log(this.takenImages[i]);
-                  console.log(this.takenImages[i].file);
-                  // console.log(this.jobDetails.id);
-                  // console.log(this.jobDetails.id+i);
-                  console.log(this.checkOutDetails.employeeId);
-                  console.log(this.checkOutDetails.employeeEmpId);
-                  console.log(this.checkOutDetails.projectId);
-                  console.log(this.checkOutDetails.siteId);
-                  console.log(this.checkOutDetails.jobId);
+                  console.log(completedImagesSave[i]);
+                  console.log(completedImagesSave[i].file);
+                  console.log(checkoutdetails.employeeId);
+                  console.log(checkoutdetails.employeeEmpId);
+                  console.log(checkoutdetails.projectId);
+                  console.log(checkoutdetails.siteId);
+                  console.log(checkoutdetails.jobId);
                   var employeeId=Number;
                   console.log(typeof employeeId);
-                  employeeId=this.checkOutDetails.employeeId;
+                  employeeId=checkoutdetails.employeeId;
                   console.log(typeof employeeId);
                   console.log(employeeId);
-                  console.log(typeof this.checkOutDetails.jobId);
-                  console.log(typeof this.checkOutDetails.projectId);
-                  console.log(typeof this.checkOutDetails.employeeEmpId);
-                  console.log(typeof this.checkOutDetails.employeeId);
+                  console.log(typeof checkoutdetails.jobId);
+                  console.log(typeof checkoutdetails.projectId);
+                  console.log(typeof checkoutdetails.employeeEmpId);
+                  console.log(typeof checkoutdetails.employeeId);
                   console.log(typeof response.transactionId);
                   let token_header=window.localStorage.getItem('session');
                   let options: FileUploadOptions = {
                     fileKey: 'photoOutFile',
-                    fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
+                    fileName:checkoutdetails.employeeId+'_photoOutFile_'+response.transactionId,
                     headers:{
                       'X-Auth-Token':token_header
                     },
                     params:{
-                      employeeEmpId: this.checkOutDetails.employeeEmpId,
-                      employeeId: this.checkOutDetails.employeeId,
-                      projectId:this.checkOutDetails.projectId,
-                      siteId:this.checkOutDetails.siteId,
+                      employeeEmpId: checkoutdetails.employeeEmpId,
+                      employeeId: checkoutdetails.employeeId,
+                      projectId:checkoutdetails.projectId,
+                      siteId:checkoutdetails.siteId,
                       checkInOutId:response.transactionId,
-                      jobId:this.checkOutDetails.jobId,
+                      jobId:checkoutdetails.jobId,
                       action:"OUT"
                     }
                   };
 
-                  this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/employee/image/upload', options)
+                  this.fileTransfer.upload(completedImagesSave[i], this.config.Url+'api/employee/image/upload', options)
                     .then((data) => {
                       this.component.closeAll();
                       console.log(data);
                       console.log("image upload");
-                      this.navCtrl.pop();
                     }, (err) => {
                       this.component.closeAll();
                       console.log(err);
@@ -580,10 +538,10 @@ export class TabsPage {
                 // this.navCtrl.pop();
               }
             )
-          }else{
+         /* }else{
             this.component.closeAll();
             this.navCtrl.pop();
-          }
+          }*/
         }
       }
       ,err=>{
@@ -603,17 +561,28 @@ export class TabsPage {
     this.jobService.saveJob(job).subscribe(
       response=>{
         console.log("get jobs",job);
-        this.checkOutDetails.completeJob=true;
-        this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-        this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-        this.checkOutDetails.projectId =job.siteProjectId;
-        this.checkOutDetails.siteId = job.siteId;
-        this.checkOutDetails.jobId = job.id;
-        // this.checkOutDetails.latitudeOut = this.latitude;
-        // this.checkOutDetails.longitude = this.longitude;
-        this.checkOutDetails.id=job.checkInOutId;
-        console.log(this.checkOutDetails);
-        this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+        var checkoutdetails;
+        checkoutdetails={
+          employeeId:'',
+          employeeEmpId:'',
+          projectId:'',
+          siteId:'',
+          jobId:'',
+          latitudeOut:'',
+          longitude:'',
+          completeJob:false,
+          id:null
+        };
+        checkoutdetails.completeJob=true;
+        checkoutdetails.employeeId = window.localStorage.getItem('employeeId');
+        checkoutdetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+        checkoutdetails.projectId =job.siteProjectId;
+        checkoutdetails.siteId = job.siteId;
+        checkoutdetails.jobId = job.id;
+        checkoutdetails.id=job.checkInOutId;
+        console.log(checkoutdetails);
+        console.log(this.savedImages);
+        this.jobService.updateJobImages(checkoutdetails).subscribe(
           response=>{
             if(response.errorStatus){
               this.component.closeAll();
@@ -627,43 +596,42 @@ export class TabsPage {
               // this.component.showLoader('Uploading Images');
               //TODO
               //File Upload after successful checkout
+
               for(let i in takenImages) {
 
                 console.log("image loop");
                 console.log(i);
                 console.log(takenImages[i]);
                 console.log(takenImages[i].file);
-                // console.log(this.jobDetails.id);
-                // console.log(this.jobDetails.id+i);
-                console.log(this.checkOutDetails.employeeId);
-                console.log(this.checkOutDetails.employeeEmpId);
-                console.log(this.checkOutDetails.projectId);
-                console.log(this.checkOutDetails.siteId);
-                console.log(this.checkOutDetails.jobId);
+                console.log(checkoutdetails.employeeId);
+                console.log(checkoutdetails.employeeEmpId);
+                console.log(checkoutdetails.projectId);
+                console.log(checkoutdetails.siteId);
+                console.log(checkoutdetails.jobId);
                 var employeeId=Number;
                 console.log(typeof employeeId);
-                employeeId=this.checkOutDetails.employeeId;
+                employeeId=checkoutdetails.employeeId;
                 console.log(typeof employeeId);
                 console.log(employeeId);
-                console.log(typeof this.checkOutDetails.jobId);
-                console.log(typeof this.checkOutDetails.projectId);
-                console.log(typeof this.checkOutDetails.employeeEmpId);
-                console.log(typeof this.checkOutDetails.employeeId);
+                console.log(typeof checkoutdetails.jobId);
+                console.log(typeof checkoutdetails.projectId);
+                console.log(typeof checkoutdetails.employeeEmpId);
+                console.log(typeof checkoutdetails.employeeId);
                 console.log(typeof response.transactionId);
                 let token_header=window.localStorage.getItem('session');
                 let options: FileUploadOptions = {
                   fileKey: 'photoOutFile',
-                  fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
+                  fileName:checkoutdetails.employeeId+'_photoOutFile_'+response.transactionId,
                   headers:{
                     'X-Auth-Token':token_header
                   },
                   params:{
-                    employeeEmpId: this.checkOutDetails.employeeEmpId,
-                    employeeId: this.checkOutDetails.employeeId,
-                    projectId:this.checkOutDetails.projectId,
-                    siteId:this.checkOutDetails.siteId,
+                    employeeEmpId: checkoutdetails.employeeEmpId,
+                    employeeId: checkoutdetails.employeeId,
+                    projectId:checkoutdetails.projectId,
+                    siteId:checkoutdetails.siteId,
                     checkInOutId:response.transactionId,
-                    jobId:this.checkOutDetails.jobId,
+                    jobId:checkoutdetails.jobId,
                     action:"OUT"
                   }
                 };

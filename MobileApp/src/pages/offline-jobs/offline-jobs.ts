@@ -30,12 +30,19 @@ export class OfflineJobs {
           console.log("job details");
           console.log(res)
           this.jobDetails = res
+          if(this.jobDetails.code == '5'){
+            console.log("no table");
+            this.spinner=false;
+          }
         },
         (err) => {
           this.spinner=false;
 
         }
-      )
+      ).catch((res)=>{
+        console.log("error",res);
+        this.spinner = false;
+      })
   }
 
   viewJob(job) {

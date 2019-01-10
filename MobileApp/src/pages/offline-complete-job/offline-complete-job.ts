@@ -225,16 +225,16 @@ export class OfflineCompleteJob {
           this.dbService.setCompletJobs(this.jobData).then(
             (res)=>{
               console.log("save job",res);
-              this.component.closeLoader();
               this.navCtrl.setRoot(OfflinePage);
+              this.component.closeLoader();
             },(err)=>{
               console.log("error job",err);
               this.component.closeLoader();
 
             }
           );
-          this.component.closeLoader();
           this.navCtrl.pop();
+          this.component.closeLoader();
         },(err)=>{
           console.log("error in saving image",err);
           this.component.closeLoader();

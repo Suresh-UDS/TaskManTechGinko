@@ -34,7 +34,7 @@
       <ion-segment-button value="readings" (ionSelect)="getReading(readingSearchCriteria)">Reading</ion-segment-button>
       <ion-segment-button value="PPMJobs" (ionSelect)="getPPMJobs(jobSearchCriteria)">PPMJobs</ion-segment-button>
       <ion-segment-button value="AMCJobs" (ionSelect)="getAMCJobs(jobSearchCriteria)">AMCJobs</ion-segment-button>
-      <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
+      <!--<ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>-->
       <!--<ion-segment-button value="history">History</ion-segment-button>-->
     </ion-segment>
   </ion-toolbar>
@@ -90,7 +90,7 @@
   <!--</ion-fab>-->
 
   <div [ngSwitch]="categories" margin-top="">
-    <ion-list *ngSwitchCase="'details'" padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'details'" class="assetview-padding" padding-left="" padding-right="">
       <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
       <!--<ion-label color="light" class="margin0 bg-orange " padding-right padding-left>Add</ion-label>-->
       <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
@@ -98,28 +98,32 @@
       <!--</button>-->
       <!--</ion-fab>-->
       <div class="card">
-        <div class="panel-heading card-header-md-clr-orange">Asset Details</div>
+        <div class="panel-heading card-header-md-clr-orange cards-header">Asset Details</div>
 
         <div class="card-content table-responsive padding-top0">
           <ion-row class="margin0 white-bg">
             <ion-col col-6 class="label-on-left" no-padding>Name</ion-col>
             <ion-col col-6 no-padding>
+              <p text-right *ngIf="assetDetails.title==null">N/A</p>
               <p text-right>{{assetDetails.title}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding>Code</ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.code==null">N/A</p>
               <p text-right>{{assetDetails.code}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Group
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.assetGroup==null">N/A</p>
               <p text-right>{{assetDetails.assetGroup}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Type
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.assetType==null">N/A</p>
               <p text-right>{{assetDetails.assetType}}</p>
             </ion-col>
           </ion-row>
@@ -127,7 +131,7 @@
       </div>
 
       <div class="card">
-        <div class="panel-heading card-header-md-clr-orange">Asset Location</div>
+        <div class="panel-heading card-header-md-clr-orange cards-header">Asset Location</div>
 
         <div class="card-content table-responsive padding-top0">
           <ion-row class="margin0 white-bg">
@@ -141,24 +145,28 @@
               Site
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.siteName==null">N/A</p>
               <p text-right>{{assetDetails.siteName}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Block
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.block==null">N/A</p>
               <p text-right>{{assetDetails.block}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Floor
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.floor==null">N/A</p>
               <p text-right>{{assetDetails.floor}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Zone
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.zone==null">N/A</p>
               <p text-right>{{assetDetails.zone}}</p>
             </ion-col>
           </ion-row>
@@ -166,74 +174,84 @@
       </div>
 
       <div class="card">
-        <div class="panel-heading card-header-md-clr-orange">Manufacturer Details</div>
+        <div class="panel-heading card-header-md-clr-orange cards-header">Manufacturer Details</div>
         <div class="card-content table-responsive padding-top0">
           <ion-row class="margin0 white-bg">
             <ion-col col-6 class="label-on-left" no-padding="">
               Manufacturer
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.manufacturerName==null">N/A</p>
               <p text-right>{{assetDetails.manufacturerName}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Model Number
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.modelNumber==null">N/A</p>
               <p text-right>{{assetDetails.modelNumber}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Serial
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.serialNumber==null">N/A</p>
               <p text-right>{{assetDetails.serialNumber}}</p>
             </ion-col>
             <ion-col col-5 class="label-on-left" no-padding="">
               Acquired Date
             </ion-col>
             <ion-col col-7 no-padding="">
+              <p text-right *ngIf="assetDetails.acquiredDate==null">N/A</p>
               <p text-right>{{assetDetails.acquiredDate | date:'MMM d, y, h:mm a' }}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Purchase Price
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.purchasePrice==null">N/A</p>
               <p text-right>{{assetDetails.purchasePrice}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Current Price
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.currentPrice==null">N/A</p>
               <p text-right>{{assetDetails.currentPrice}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="">
               Estimated Dispose Price
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.estimatedDisposePrice==null">N/A</p>
               <p text-right>{{assetDetails.estimatedDisposePrice}}</p>
             </ion-col>
           </ion-row>
         </div>
       </div>
       <div class="card">
-        <div class="panel-heading card-header-md-clr-orange">AMC Vendor Details</div>
+        <div class="panel-heading card-header-md-clr-orange cards-header">AMC Vendor Details</div>
         <div class="card-content table-responsive padding-top0">
           <ion-row class="margin0 white-bg">
             <ion-col col-6 class="label-on-left" no-padding="jk">
               Vendor
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.warrantyType==null">N/A</p>
               <p text-right>{{assetDetails.warrantyType}}</p>
             </ion-col>
             <ion-col col-6 class="label-on-left" no-padding="jk">
               Warranty Type
             </ion-col>
             <ion-col col-6 no-padding="">
+              <p text-right *ngIf="assetDetails.warrantyType==null">N/A</p>
               <p text-right>{{assetDetails.warrantyType}}</p>
             </ion-col>
             <ion-col col-5 class="label-on-left" no-padding="">
               Warranty End Date
             </ion-col>
             <ion-col col-7 no-padding="">
+              <p text-right *ngIf="assetDetails.warrantyExpiryDate==null">N/A</p>
               <p text-right>{{assetDetails.warrantyExpiryDate | date:'MMM d, y, h:mm a' }}</p>
             </ion-col>
           </ion-row>
@@ -241,9 +259,8 @@
       </div>
 
 
-
     </ion-list>
-    <ion-list *ngSwitchCase="'ppm'" padding-left  padding-right>
+    <ion-list *ngSwitchCase="'ppm'" class="assetview-padding" padding-left  padding-right>
 
       <!--<div float-right  *ngIf="assetDetails.ppms" padding>-->
       <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10 margn-btom20"(click)="showCalendar()"></ion-icon>-->
@@ -253,63 +270,64 @@
         <ion-spinner name="circles"></ion-spinner>
       </div>
 
-      <div text-center="" *ngIf=" (!assetDetails.ppms || assetDetails.ppms.length == 0) && !spinner ">
-        <ion-card text-center>
-          <ion-card-content>
-            No Data found
-          </ion-card-content>
+      <div text-center="" class="no-data" *ngIf=" (!assetDetails.ppms || assetDetails.ppms.length < 0) && !spinner ">
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
 
-      <div  class="white-bg" *ngFor="let ppm of assetDetails.ppms;let k=index" >
 
-        <div class="padding-left16 padding-top5" >
-          <ion-row class="margin0 margin-top40">
-            <ion-col col-2 class="ver-center">
-              <button ion-button clear color="primary" class="">
-                <ion-icon name="md-clock" class="green fnt-40"></ion-icon>
-                <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
-                <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
-              </button>
-            </ion-col>
-            <ion-col col-7="" class="padding-left5 border-btm">
-              <div class=" padding-bottom5 ln-ght20" text-capitalize>
-                <p text-left class="margin0">{{ ppm.title }}</p>
-                <p text-left class="margin0">{{ ppm.status ? ppm.status : "Status" }}</p>
-              </div>
-            </ion-col>
-            <ion-col col-3 class="border-btm">
-              <p text-left class="margin0 clr-orange"> {{ ppm.frequencyPrefix }} </p>
-              <p text-left class="margin0 clr-orange"> {{ ppm.frequency }} </p>
-            </ion-col>
-          </ion-row>
-        </div>
+      <div class="card cardWithRadius">
+        <div  *ngFor="let ppm of assetDetails.ppms;let k=index" >
 
-        <ion-item #item class="item-fnt padding-left0" >
-          <!--<div class="padding-left16">-->
-
-          <div text-capitalize >
-            <ion-row class="margin0">
-              <ion-col col-6 class="padding-right5">
-                <div>
-                  <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ ppm.startDate }} </p>
+          <div class="padding-left16 padding-top5" >
+            <ion-row class="margin0 margin-top40">
+              <ion-col col-2 class="ver-center">
+                <button ion-button clear color="primary" class="">
+                  <ion-icon name="md-clock" class="green fnt-40"></ion-icon>
+                  <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
+                  <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
+                </button>
+              </ion-col>
+              <ion-col col-7="" class="padding-left5 border-btm">
+                <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                  <p text-left class="margin0">{{ ppm.title }}</p>
+                  <p text-left class="margin0">{{ ppm.status ? ppm.status : "Status" }}</p>
                 </div>
               </ion-col>
-              <ion-col col-6>
-                <div>
-                  <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ ppm.endDate }} </p>
-                </div>
+              <ion-col col-3 class="border-btm">
+                <p text-left class="margin0 clr-orange"> {{ ppm.frequencyPrefix }} </p>
+                <p text-left class="margin0 clr-orange"> {{ ppm.frequency }} </p>
               </ion-col>
             </ion-row>
           </div>
-          <!--</div>-->
-        </ion-item>
 
+          <ion-item class="item-fnt padding-left0 item-md" >
+            <!--<div class="padding-left16">-->
 
+            <div text-capitalize >
+              <ion-row class="margin0">
+                <ion-col col-6 class="padding-right5">
+                  <div>
+                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ ppm.startDate }} </p>
+                  </div>
+                </ion-col>
+                <ion-col col-6>
+                  <div>
+                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ ppm.endDate }} </p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <!--</div>-->
+          </ion-item>
+
+        </div>
       </div>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'amc'" padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'amc'" class="assetview-padding" padding-left="" padding-right="">
       <!--<div float-right  *ngIf="assetDetails.amcs" class="margn-btom20">-->
       <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>-->
       <!--</div>-->
@@ -317,15 +335,14 @@
         <ion-spinner name="circles"></ion-spinner>
       </div>
 
-      <div text-center="" *ngIf="(!assetDetails.amcs || assetDetails.amcs.length == 0) && !spinner">
-        <ion-card text-center="">
-          <ion-card-content>
-            No Data found
-          </ion-card-content>
+      <div text-center="" *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && !spinner" class="no-data">
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
 
-      <div  class="white-bg" *ngFor="let amc of assetDetails.amcs;let k=index" >
+      <div  class="card cardWithRadius" *ngFor="let amc of assetDetails.amcs;let k=index" >
 
         <div class="padding-left16 padding-top5" >
           <ion-row class="margin0 margin-top40">
@@ -374,21 +391,20 @@
       </div>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'config'" padding-left="" padding-right="" >
+    <ion-list *ngSwitchCase="'config'" class="assetview-padding" padding-left="" padding-right="" >
 
       <div  *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && spinner" text-center class="margin-top25">
         <ion-spinner name="circles"></ion-spinner>
       </div>
 
-      <div text-center="" *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && !spinner">
-        <ion-card text-center="">
-          <ion-card-content>
-            No Data found
-          </ion-card-content>
+      <div text-center="" *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && !spinner" class="no-data">
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
 
-      <div class="white-bg border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
+      <div class="card cardWithRadius border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
         <div class="padding-top5">
           <ion-row class="margin0">
             <ion-col col-2 class="ver-center">
@@ -455,7 +471,7 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'PPMJobs'"  padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'PPMJobs'" class="assetview-padding"  padding-left="" padding-right="">
 
 
       <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
@@ -470,10 +486,9 @@
 
 
       <div text-center="" *ngIf="(!assetDetails.PPMJobs || assetDetails.PPMJobs.length == 0) && !spinner" margin-top>
-        <ion-card text-center="">
-          <ion-card-content>
-            No Data found
-          </ion-card-content>
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
 
@@ -573,7 +588,7 @@
       </ion-infinite-scroll>
 
     </ion-list>
-      <ion-list *ngSwitchCase="'AMCJobs'"  padding-left="" padding-right="">
+      <ion-list *ngSwitchCase="'AMCJobs'" class="assetview-padding"  padding-left="" padding-right="">
 
 
           <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
@@ -587,13 +602,12 @@
           </div>
 
 
-          <div text-center="" *ngIf="(!assetDetails.AMCJobs || assetDetails.AMCJobs.length == 0) && !spinner" margin-top>
-              <ion-card text-center="">
-                  <ion-card-content>
-                      No Data found
-                  </ion-card-content>
-              </ion-card>
-          </div>
+        <div text-center="" *ngIf="(!assetDetails.AMCJobs || assetDetails.AMCJobs.length == 0) && !spinner" class="no-data" margin-top>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
 
           <ion-refresher (ionRefresh)="doRefresh($event,'jobs')">
               <ion-refresher-content></ion-refresher-content>
@@ -692,17 +706,16 @@
 
       </ion-list>
 
-    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 56px" padding-left="" padding-right="">
+    <ion-list *ngSwitchCase="'tickets'" class="assetview-padding" style="margin-top : 56px" padding-left="" padding-right="">
 
       <div  *ngIf="(assetDetails.tickets?.length == 0) && spinner" text-center class="margin-top25">
         <ion-spinner name="circles"></ion-spinner>
       </div>
 
-      <div text-center *ngIf="(assetDetails.tickets?.length == 0) && !spinner">
-        <ion-card text-center="">
-          <ion-card-content>
-            No Data found
-          </ion-card-content>
+      <div text-center *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && !spinner" class="no-data">
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
 
@@ -752,16 +765,15 @@
 
     </ion-list>
 
-    <ion-list *ngSwitchCase="'readings'">
+    <ion-list *ngSwitchCase="'readings'" class="assetview-padding">
 
       <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length == 0) && spinner" text-center>
         <ion-spinner name="circles"></ion-spinner>
       </div>
-      <div *ngIf="(!assetDetails.reading || assetDetails.reading.length == 0) && !spinner"  text-center>
-        <ion-card text-center>
-          <ion-card-content>
-            No Data found
-          </ion-card-content>
+      <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner" class="no-data" text-center>
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
         </ion-card>
       </div>
 
@@ -808,7 +820,7 @@
       </ion-infinite-scroll>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'history'">
+    <ion-list *ngSwitchCase="'history'" class="assetview-padding">
       <div class="col-md-6 p-l-30 p-r-30">
 
         <div class="white-bg">

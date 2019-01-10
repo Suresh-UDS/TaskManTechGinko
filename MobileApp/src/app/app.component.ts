@@ -149,9 +149,9 @@ export class MyApp {
       { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
       // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
-      // { title: 'Expense', component: ExpensePage,active:false,icon:'pie_chart',permission:'AttendanceList'},
-      // { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'widgets',permission:'FeedbackList'},
-      // {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
+      { title: 'Expense', component: ExpensePage,active:false,icon:'pie_chart',permission:'AttendanceList'},
+      { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'widgets',permission:'FeedbackList'},
+      {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
       // { title:'IndentList',component:IndentList,active:false,icon:'shopping_cart',permission:'AttendanceList'},
       { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
       { title: 'ChangePassword', component:ChangePassword,active:false,icon:'lock',permission:'FeedbackList'}
