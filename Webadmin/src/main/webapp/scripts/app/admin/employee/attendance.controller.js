@@ -537,19 +537,19 @@ angular.module('timeSheetApp')
 				$scope.sitesListOne.selected=$scope.searchSite;
 			}
 
-			if($rootScope.searchFilterCriteria.selectedFromDate) {
-				$scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.selectedFromDate;
-				$scope.selectedDateFrom = $filter('date')($rootScope.searchFilterCriteria.selectedFromDate, 'dd/MM/yyyy');
-				$scope.selectedDateFromSer = new Date($rootScope.searchFilterCriteria.selectedFromDate);
+			if($rootScope.searchFilterCriteria.attendFromDate) {
+				$scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.attendFromDate;
+				$scope.selectedDateFrom = $filter('date')($rootScope.searchFilterCriteria.attendFromDate, 'dd/MM/yyyy');
+				$scope.selectedDateFromSer = new Date($rootScope.searchFilterCriteria.attendFromDate);
 			}/*else{
 	        	    $scope.searchCriteria.checkInDateTimeFrom = null;
 	        	    $scope.selectedDateFrom = null;
 	        	}*/
 
-	        	if($rootScope.searchFilterCriteria.selectedToDate) {
-	        		$scope.searchCriteria.checkInDateTimeTo = $rootScope.searchFilterCriteria.selectedToDate;
-	        		$scope.selectedDateTo = $filter('date')($rootScope.searchFilterCriteria.selectedToDate, 'dd/MM/yyyy');
-	        		$scope.selectedDateToSer = new Date($rootScope.searchFilterCriteria.selectedToDate);
+	        	if($rootScope.searchFilterCriteria.attendToDate) {
+	        		$scope.searchCriteria.checkInDateTimeTo = $rootScope.searchFilterCriteria.attendToDate;
+	        		$scope.selectedDateTo = $filter('date')($rootScope.searchFilterCriteria.attendToDate, 'dd/MM/yyyy');
+	        		$scope.selectedDateToSer = new Date($rootScope.searchFilterCriteria.attendToDate);
 	        	}/*else{
 	        	    $scope.searchCriteria.checkInDateTimeTo = null;
 	        	    $scope.selectedDateTo = null;

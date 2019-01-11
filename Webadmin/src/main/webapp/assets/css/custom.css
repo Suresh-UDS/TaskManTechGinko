@@ -4,7 +4,7 @@ a:focus
 }
 body
 {
-  font-size: 13px;
+    font-size: 13px;
     background-color: #f9f9f9;
 }
 ul li
@@ -1778,9 +1778,21 @@ a.cal-btn i
 {
     font-size: 30px !important;
 }
+
+   .loaderCenter{
+      top: calc(100% / 2.5);
+      left: calc(100% / 2.5);
+      z-index: -100000;
+      position: absolute;
+      overflow:hidden !important;
+      text-align:center;
+  }
+  .loaderCenter img{
+        width:15%;
+    }
   .pageCenter{
       top: calc(200% / 5);
-      left: calc(100% / 2.3);
+      left: calc(100% / 2.5);
       z-index: 100000;
       position: absolute;
       display: none;
@@ -1932,6 +1944,28 @@ span.flotingIcons.icon-13 {
 .noScroll
 {
     overflow: hidden;
+}
+.Addsla .ui-select-container .ui-select-search
+{
+  width:100%!important;
+}
+/*.Addsla .ui-select-container
+{
+  height:36px;
+  overflow-y:scroll;
+}*/
+.Addsla .ui-select-container .ui-select-match
+{
+     line-height: 32px;
+}
+
+.ui-select-multiple.ui-select-bootstrap input.ui-select-search{
+ width:100% !important;
+ display:inline-block;
+}
+
+.form-group .form-control[disabled]{
+  border-bottom:1px solid #d6d6d6 !important;
 }
 
 /* Standard syntax */

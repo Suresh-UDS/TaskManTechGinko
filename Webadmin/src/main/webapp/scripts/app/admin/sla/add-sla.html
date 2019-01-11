@@ -25,7 +25,7 @@
 							<div class="panel-body">
 
 								<div class="row">
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class="form-group no-padding">
 											<div class="dropdown">
 												<div class="form-group">
@@ -35,14 +35,23 @@
 														class="material-icons">keyboard_arrow_down</i></span> <select
 														ng-options="prj.name for prj in projects"
 														ng-model="selectedProject" ng-change="loadSites()"
-														class="form-control" required="required">
+														class="form-control" name="projectName" ng-required="true">
 														<option value="">Select Client...</option>
 													</select>
+                                                    <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
+                                                        <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.projectName.$error.required">
+                                                                Client name is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 										<div class="form-group no-padding">
 											<div class="dropdown">
 												<div class="form-group">
@@ -51,15 +60,24 @@
 														class="form-control-feedback d-arrow-icon"><i
 														class="material-icons">keyboard_arrow_down</i></span> <select
 														ng-options="site.name for site in sites"
-														ng-model="selectedSite" class="form-control"
-														required="required">
+														ng-model="selectedSite" name="siteName" class="form-control"
+														ng-required="true">
 														<option value="">Select Site...</option>
 													</select>
+                                                    <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
+                                                        <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.siteName.$error.required">
+                                                                Site name is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-4">
 
 										<div class="form-group no-padding">
 											<div class="dropdown">
@@ -67,12 +85,23 @@
 													<label class="control-label">Select Process Type <span
 														class="red-star">*</span></label> <span
 														class="form-control-feedback d-arrow-icon"><i
-														class="material-icons">keyboard_arrow_down</i></span> <select
-														ng-model="sla.processType" class="form-control"
-														required="required">
+														class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select
+														ng-model="selectedPType" class="form-control"
+														name="pType" ng-required="true">
+                                                        <option value="">Select Process Type</option>
 														<option value="Tickets">Tickets</option>
 														<option value="Jobs">Jobs</option>
 													</select>
+                                                    <div ng-show="form.$submitted || form.pType.$touched || form.pType.$dirty">
+                                                        <div ng-show="form.pType.$dirty || form.pType.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.pType.$error.required">
+                                                                Process Type is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
 												</div>
 											</div>
 										</div>
@@ -80,7 +109,7 @@
 
 									</div>
 									<div class="col-md-3">
-										<div class="form-group no-padding">
+										<!--<div class="form-group no-padding">
 											<div class="dropdown">
 												<div class="form-group">
 													<label class="control-label">Select Category <span
@@ -95,12 +124,38 @@
 													</select>
 												</div>
 											</div>
-										</div>
-									</div>
+										</div>-->
+
+								    </div>
 								</div>
 
 								<div class="row">
 
+									<div class="col-md-5">
+                                        <div class="form-group no-padding">
+                                            <div class="form-group">
+                                                <div class="dropdown Addsla">
+                                                    <label class="control-label">Select Category <span class="red-star">*</span></label>
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <ui-select multiple ng-model="multipleCategories.selectedCategory" name="category" ng-disabled="disabled" close-on-select="false" ng-required="true"  style="width: 491px;"  title="Choose a category">
+                                                        <ui-select-match placeholder="Select Category...">{{$item}}</ui-select-match>
+                                                        <ui-select-choices repeat="category in categories | filter: $select.search">
+                                                            <div ng-bind-html="category | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <div ng-show="form.$submitted || form.category.$touched || form.category.$dirty">
+                                                        <div ng-show="form.category.$dirty || form.category.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.category.$error.required">
+                                                                Category is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 									<div class="col-md-3">
 
 										<div class="form-group no-padding">
@@ -110,13 +165,23 @@
 														class="red-star">*</span></label> <span
 														class="form-control-feedback d-arrow-icon"><i
 														class="material-icons">keyboard_arrow_down</i></span> <select
-														ng-model="sla.severity" class="form-control"
+														ng-model="selectedSeverity" class="form-control"
 														required="required">
+														<option value="">Select Severity</option>
 														<option value="Low">Low</option>
 														<option value="Medium">Medium</option>
 														<option value="High">High</option>
 														<option value="High">Critical</option>
 													</select>
+                                                    <div ng-show="form.$submitted || form.category.$touched || form.category.$dirty">
+                                                        <div ng-show="form.category.$dirty || form.category.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.category.$error.required">
+                                                                Category is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
 												</div>
 											</div>
 										</div>
@@ -129,33 +194,31 @@
 											<label class="control-label">Hours<span
 												class="red-star">*</span></label></label> <input id="hours" type="number"
 												class="form-control ng-valid ng-dirty ng-touched"
-												ng-model="sla.hours" tabindex="0" aria-invalid="false"
-												autocomplete="off" required maxlength=2
+												ng-model="sla.hours" name="hours" tabindex="0" aria-invalid="false"
+												autocomplete="off" ng-required="true" min=1 max="2"
 												ng-pattern="/^[0-9]{1,7}$/"> <span
 												class="material-input"></span>
 
-											<div ng-show="form.$submitted || form.hours.$touched">
+											<div ng-show="form.$submitted || form.hours.$touched || form.hours.$dirty">
 												<div ng-show="form.hours.$dirty || form.hours.$invalid">
 													<p class="help-block" style="color: maroon"
 														ng-show="form.hours.$error.required">Hours is
 														required.</p>
 													<p class="help-block" style="color: maroon"
-														ng-show="form.hours.$error.maxlength">Hours cannot
-														be longer than 2 digits.</p>
-
-													<!--                                                             <p class="help-block" style="color:maroon" -->
-													<!--                                                                ng-show="form.address.$error.pattern"> -->
-													<!--                                                                 Address can only contain letters, numbers and space. -->
-													<!--                                                             </p> -->
+														ng-show="form.hours.$error.minlength">Hours cannot
+														be lesser than 1.</p>
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.hours.$error.maxlength">Hours cannot
+                                                        be longer than 2.</p>
 												</div>
 											</div>
 
 										</div>
 
 									</div>
-									<div class="col-md-7 txt-align-rgt">
+									<div class="col-md-2 txt-align-rgt">
 										<button type="button" class="btn btn-success margn-top15"
-											data-toggle="modal" data-target="#AddEscalationLevel"
+											data-toggle="modal" ng-disabled="form.$invalid" data-target="#AddEscalationLevel"
 											tabindex="0">
 											<span class="btn-label"> <i class="material-icons">add</i>
 											</span> Add Escalation
@@ -190,13 +253,17 @@
 																{{slaEsc.level}}</span></td>
 														<td class="text-right">
 															<!--<a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
-															<a ng-click="removeSla($index)"
+															<a ng-click="removeSlaConfirm($index)"
 															ng-class="{active: $state.includes('admin')}"
 															onClick="$('#deleteModal').modal()"
 															data-target="#myModal" class="btn btn-simple btn-danger"><i
-																class="material-icons">close</i></a>
+																class="material-icons">delete</i>
+                                                            </a>
 														</td>
 													</tr>
+                                                    <tr ng-if="slaList.length==0">
+                                                        <td align="center"  colspan="6">No Data Found</td>
+                                                    </tr>
 
 												</tbody>
 											</table>
@@ -239,38 +306,15 @@
 
 	</div>
 
-	<div class="">
-		<div class="row">
-			<div class="col-mod-12">
-				<div class="alert alert-success" ng-show="success">
-					<strong>Site saved!</strong>
-				</div>
-				<div class="alert alert-danger" ng-show="errorSitesExists">
-					<strong>Site already registered!</strong> Please choose another
-					one.
-				</div>
-				<div class="alert alert-danger" ng-show="error">
-					<strong>Site Not Saved!</strong> Please try again later.
-				</div>
-				<div class="alert alert-danger" ng-show="errorProject">
-					<strong>Invalid Client</strong> Please choose another one.
-				</div>
-			</div>
-			<div class="col-md-12"></div>
-
-		</div>
-	</div>
-
-
 </div>
 
-<!-- AdvancedFilterModal -->
+<!-- EscalationModal -->
 <div class="modal fade AdvancedFilterModal FilterModalCon"
 	id="AddEscalationLevel" tabindex="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form name="searchForm"novalidate ">
+			<form name="ecalationForm"novalidate ">
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
@@ -292,12 +336,21 @@
 											class="red-star">*</span></label> <span
 											class="form-control-feedback d-arrow-icon"><i
 											class="material-icons">keyboard_arrow_down</i></span> <select
-											ng-model="escalation.level" class="form-control">
+											ng-model="escalation.level" name="level" class="form-control" ng-required="true">
+                                            <option value="">Select Level</option>
 											<option value="1">Level 1</option>
 											<option value="2">Level 2</option>
 											<option value="3">Level 3</option>
 											<option value="4">Level 4</option>
 										</select>
+                                        <div ng-show="ecalationForm.$submitted || ecalationForm.level.$touched || ecalationForm.level.$dirty">
+                                            <div ng-show="ecalationForm.level.$dirty || ecalationForm.level.$invalid">
+                                                <p class="help-block" style="color: maroon"
+                                                   ng-show="ecalationForm.level.$error.required">Level is
+                                                    required.</p>
+
+                                            </div>
+                                        </div>
 									</div>
 								</div>
 							</div>
@@ -306,36 +359,69 @@
 
 						<div class="col-md-1">
 							<div class="form-group no-padding">
-								<label class="control-label">Hours</label> <input type="number"
-									id="hrs" ng-model="escalation.hours" ng-maxlength="2"
-									ng-pattern="/^[0-9]{1,7}$/"
+								<label class="control-label">Hours<span class="red-star">*</span></label> <input type="number"
+									id="hrs" ng-model="escalation.hours" min="1" max="2"
+									ng-pattern="/^[0-9]{1,7}$/" name="hours"
 									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
-									aria-invalid="false" autocomplete="off"> <span
+									aria-invalid="false" autocomplete="off" ng-required="true"> <span
 									class="material-input"></span>
+                                    <div ng-show="ecalationForm.$submitted || ecalationForm.hours.$touched || ecalationForm.hours.$dirty">
+                                        <div ng-show="ecalationForm.hours.$dirty || ecalationForm.hours.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.hours.$error.required">Hours is
+                                                required.</p>
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.hours.$error.minlength">Hours cannot
+                                                be lesser than 1.</p>
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.hours.$error.maxlength">Hours cannot
+                                                be longer than 2.</p>
+                                        </div>
+                                    </div>
 
 							</div>
 						</div>
 						<div class="col-md-1">
 							<div class="form-group no-padding">
-								<label class="control-label">Mins</label> <input type="number"
-									ng-model="escalation.minutes" maxlength="2"
-									ng-pattern="/^[0-9]{1,7}$/"
+								<label class="control-label">Mins<span class="red-star">*</span></label> <input type="number"
+									ng-model="escalation.minutes" min="0" max="59"
+									ng-pattern="/^[0-9]{1,7}$/" name="mins"
 									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
-									aria-invalid="false" autocomplete="off"> <span
+									aria-invalid="false" autocomplete="off" ng-required="true"> <span
 									class="material-input"></span>
+                                    <div ng-show="ecalationForm.$submitted || ecalationForm.mins.$touched || ecalationForm.mins.$dirty">
+                                        <div ng-show="ecalationForm.mins.$dirty || ecalationForm.mins.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.mins.$error.required">Mins is
+                                                required.</p>
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.mins.$error.minlength">Mins cannot
+                                                be lesser than 0.</p>
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.mins.$error.maxlength">Mins cannot
+                                                be longer than 59.</p>
+                                        </div>
+                                    </div>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group no-padding">
-								<label class="control-label">Email</label> <input type="text"
-									ng-model="escalation.email"
+								<label class="control-label">Email<span class="red-star">*</span></label> <input type="text"
+									ng-model="escalation.email" name="email"
 									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
-									aria-invalid="false" autocomplete="off"> <span
+									aria-invalid="false" autocomplete="off" ng-required="true"> <span
 									class="material-input"></span>
+                                    <div ng-show="ecalationForm.$submitted || ecalationForm.email.$touched || ecalationForm.email.$dirty">
+                                        <div ng-show="ecalationForm.email.$dirty || ecalationForm.email.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="ecalationForm.email.$error.required">Email is
+                                                required.</p>
+                                        </div>
+                                    </div>
 							</div>
 						</div>
 						<div class="col-md-2 txt-align-rgt">
-							<button ng-click="addSlaEscalations()"
+							<button ng-click="addSlaEscalations()" ng-disabled="ecalationForm.$invalid"
 								class="btn btn-success margn-top15" tabindex="0">Add</button>
 						</div>
 
@@ -365,11 +451,14 @@
 											<!--    <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
 											<a ng-click="removeEscalation($index)"
 											ng-class="{active: $state.includes('admin')}"
-											onClick="$('#deleteModal').modal()" data-target="#myModal"
+                                               onClick="$('#deleteModal').modal()" data-target="#myModal"
 											class="btn btn-simple btn-danger"><i
-												class="material-icons">close</i></a>
+												class="material-icons">delete</i></a>
 										</td>
 									</tr>
+                                    <tr ng-if="slaEscalationList.length == 0">
+                                        <td colspan="5" class="txt-align-center">No Data</td>
+                                    </tr>
 								</tbody>
 							</table>
 
@@ -390,3 +479,24 @@
 	</div>
 </div>
 <!--  End Modal -->
+<!-- Delete confirmation dialog -->
+<div id="deleteModal" class="delete-confirmation modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Delete</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure that you want to delete this record?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" data-dismiss="modal"
+                        class="btn btn-danger delete-confirmation-button" ng-click="removeSla();">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Delete confirmation dialog -->

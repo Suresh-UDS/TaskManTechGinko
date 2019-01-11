@@ -32,6 +32,11 @@ public class ReportDatabaseConfiguration {
 	
 	@Bean
 	public InfluxDB initializeInfluxDbConnection() {
+
+	    log.debug("Influxdb url : " +url);
+	    log.debug("Influxdb username : " +username);
+	    log.debug("Influxdb password :" +password);
+	    log.debug("Influxdb retention policy :" +retentionPolicy);
 		
 		InfluxDB influxDb = InfluxDBFactory.connect(url, username, password);
 		

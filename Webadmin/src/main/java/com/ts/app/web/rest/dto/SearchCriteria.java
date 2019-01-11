@@ -262,6 +262,14 @@ public class SearchCriteria extends Paginator {
 
 	private boolean left;
 
+	private String processType;
+
+	private String severity;
+
+	private Date slaCreatedDate;
+
+	private String category;
+
 	public String getModule() {
 		return module;
 	}
@@ -1336,5 +1344,37 @@ public class SearchCriteria extends Paginator {
 
     public void setLeft(boolean left) {
         this.left = left;
+    }
+
+    public String getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(String processType) {
+        this.processType = processType;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public Date getSlaCreatedDate() {
+        return slaCreatedDate;
+    }
+
+    public void setSlaCreatedDate(Date slaCreatedDate) {
+        this.slaCreatedDate = slaCreatedDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

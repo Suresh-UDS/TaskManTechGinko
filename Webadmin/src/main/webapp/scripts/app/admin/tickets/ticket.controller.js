@@ -177,7 +177,7 @@ angular.module('timeSheetApp')
 
 	}
 	$rootScope.back = function (text) {
-		if(text == 'cancel')
+		if(text == 'cancel' || text == 'back')
 		{
 			/** @reatin - retaining scope value.**/
 			$rootScope.retain=1;
