@@ -228,7 +228,7 @@ public class SlaConfigService extends AbstractService {
 			log.debug("Site id = "+ searchCriteria.getSiteId());
 			if(!searchCriteria.isConsolidated()) {
                 log.debug(">>> inside search consolidate <<<");
-                page = slaconfigrepository.findAll(new SlaSpecification(searchCriteria,true), pageRequest);
+                page = slaconfigrepository.findAll(new SlaSpecification(searchCriteria, searchCriteria.isAdmin()), pageRequest);
                 slaLists.addAll(page.getContent());
 			}
 
