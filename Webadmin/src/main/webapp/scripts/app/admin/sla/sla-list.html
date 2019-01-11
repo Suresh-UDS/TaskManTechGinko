@@ -524,7 +524,7 @@
 
                                         </tr>
                                         </thead>
-                                        <tbody ng-repeat="slas in slaList">
+                                        <tbody ng-repeat="slas in slaView">
                                         <tr >
                                             <td>{{slas.processType}}</td>
                                             <td>{{slas.severity}}</td>
@@ -554,7 +554,7 @@
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                    <tr ng-repeat="esc in slas.slaesc | orderBy : esc.level">
+                                                                    <tr ng-repeat="esc in slas.slaesc | orderBy :esc.level">
                                                                         <td>Level {{esc.level}}</td>
                                                                         <td>{{esc.hours}}</td>
                                                                         <td>{{esc.minutes}}</td>
@@ -571,6 +571,9 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                        </tr>
+                                        <tr ng-if="slas.category.length == 0">
+                                            <td colspan="5" class="txt-align-center">No Data</td>
                                         </tr>
 
                                         </tbody>

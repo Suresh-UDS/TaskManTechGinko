@@ -191,7 +191,7 @@
                                                     type="number" name="hrs"
                                                     class="form-control ng-valid ng-dirty ng-touched"
                                                     ng-model="sla.hours" tabindex="0" aria-invalid="false"
-                                                    autocomplete="off" name="hours" ng-required="true" min="1" max="2">
+                                                    autocomplete="off" name="hours" ng-required="true" min="0" max="2">
                                                 <div ng-show="form.$submitted || form.hours.$touched || form.hours.$dirty ">
                                                     <div ng-show="form.hours.$dirty || form.hours.$invalid">
                                                         <p class="help-block" style="color: maroon"
@@ -199,7 +199,7 @@
                                                             required.</p>
                                                         <p class="help-block" style="color: maroon"
                                                            ng-show="form.hours.$error.minlength">Hours cannot
-                                                            be lesser than 1.</p>
+                                                            be lesser than 0.</p>
                                                         <p class="help-block" style="color: maroon"
                                                            ng-show="form.hours.$error.maxlength">Hours cannot
                                                             be longer than 2.</p>
@@ -240,7 +240,7 @@
                                                         {{slas.processType}} - {{slas.category}} - {{slas.severity}} - {{slas.hours}} - {{slas.slaesc.level}} - {{slas.slaesc.hours}} - {{slas.slaesc.minutes}} - {{slas.slaesc.email}}
                                                         <span class="badge badge-default badge-pill" ng-click="removeSla($index)"><i class="material-icons">remove_circle</i></span>
                                                     </li> -->
-                                                            <tr ng-repeat="slas in slaList">
+                                                            <tr ng-repeat="slas in slaView">
                                                                 <td>{{slas.processType}}</td>
                                                                 <td>{{slas.severity}}</td>
                                                                 <td>{{slas.hours}}</td>
@@ -269,7 +269,7 @@
                                                                     </a>
                                                                 </td>
                                                             </tr>
-                                                            <tr ng-if="slaList.length==0">
+                                                            <tr ng-if="slaView.length==0">
                                                                 <td align="center"  colspan="6">No Data Found</td>
                                                             </tr>
                                                         </tbody>
@@ -485,6 +485,9 @@
 											class="btn btn-simple btn-danger"><i
 												class="material-icons">delete</i></a></td>
 									</tr>
+                                    <tr ng-if="slaEscalationList.length == 0">
+                                        <td colspan="5" class="txt-align-center">No Data</td>
+                                    </tr>
 								</tbody>
 							</table>
 

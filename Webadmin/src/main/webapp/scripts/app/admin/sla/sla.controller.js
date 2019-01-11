@@ -7,7 +7,7 @@ angular.module('timeSheetApp')
 
 					$scope.sla = {};
 
-					$scope.slaList = [];
+					$scope.slaView = [];
 
 					$scope.escalation = {};
 
@@ -93,7 +93,7 @@ angular.module('timeSheetApp')
                         $scope.searchPType = null;
                         $scope.searchSeverity = null;
 						//$scope.selectedSite = null;
-						$scope.slaList = null;
+						$scope.slaView = [];
 
 						/** Ui-select scopes * */
 						// $scope.client.selected = null;
@@ -454,10 +454,12 @@ angular.module('timeSheetApp')
 					$scope.loadSla = function() {
 					   if($stateParams.id){
 					      console.log("*****Selected SLA id " + $stateParams.id);
+					        $scope.slaView = [];
                             SlaComponent.findOne($stateParams.id).then(function(data) {
                             $scope.sla = data;
                             $scope.title = "SLA - " + $scope.sla.id;
-                            $scope.slaList.push($scope.sla);
+                            $scope.slaView.push($scope.sla);
+                            console.log("sla array",$scope.slaList);
                             $scope.selectedProject = {id:$scope.sla.projectId,name:$scope.sla.projectName};
                             $scope.selectedSite ={id:$scope.sla.siteId,name:$scope.sla.siteName};
                             if ($scope.selectedProject) {
@@ -492,10 +494,11 @@ angular.module('timeSheetApp')
 
 					$scope.getSlaDetails = function(id, mode) {
                         $scope.loadingStart();
+                        $scope.slaView = [];
                         SlaComponent.findOne(id).then(function (data) {
                             $scope.sla = data;
                             $scope.title = "SLA - " + $scope.sla.id;
-                            $scope.slaList.push($scope.sla);
+                            $scope.slaView.push($scope.sla);
                             console.log("sla by id >>>",$scope.slaList);
                             $scope.loadingStop();
                         });
