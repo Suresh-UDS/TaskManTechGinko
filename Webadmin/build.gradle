@@ -53,7 +53,7 @@ bootRun {
 }
 
 //apply from: 'yeoman.gradle'
-apply from: 'sonar.gradle'
+//apply from: 'sonar.gradle'
 
 apply plugin: 'eclipse'
 
@@ -76,6 +76,8 @@ if (project.hasProperty('prod')) {
   apply from: 'profile_dev.gradle'
 } else if (project.hasProperty('uat')) {
   apply from: 'profile_uat.gradle'
+} else if (project.hasProperty('uat_a1')) {
+  apply from: 'profile_uat_a1.gradle'
 } else {
   apply from: 'profile_dev-local.gradle'
 }
