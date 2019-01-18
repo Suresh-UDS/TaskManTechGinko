@@ -248,6 +248,15 @@ google:
           callback:
               host: 13.232.248.92
               port: 8080
+              
+influxdb:
+   url: http://127.0.0.1:8086
+   username: root
+   password: root
+   dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
+              
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
