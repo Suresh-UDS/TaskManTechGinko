@@ -264,7 +264,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
             pattern: /bool|true|0|1/
         });
     }])
-
+ 
     .filter('trusted', ['$sce', function ($sce) {
 	    return function(url) {
 	        return $sce.trustAsResourceUrl(url);
