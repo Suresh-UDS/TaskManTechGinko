@@ -27,7 +27,7 @@ angular.module('timeSheetApp')
         $scope.transactionCriteria = {};
     	$scope.pages = { currPage : 1};
     	$scope.pageSort = 10;
-    	
+
     	$rootScope.exportStatusObj  ={};
 
     	$scope.refreshPage = function() {
@@ -144,12 +144,12 @@ angular.module('timeSheetApp')
     	/* Add item group */
 
         $scope.addMaterialItemGroup = function () {
-            console.log($scope.materialItemGroup);
-             $scope.loadingStart();
+            //console.log($scope.materialItemGroup);
             if($scope.materialItemGroup){
-                console.log("MaterialItmGroup Group entered");
+                $scope.loadingStart();
+                //console.log("MaterialItmGroup Group entered");
                 InventoryComponent.createItemGroup($scope.materialItemGroup).then(function (response) {
-                    console.log(response);
+                    //console.log(response);
                     if(response.data.status && response.data.status === "400"){
                     	 $scope.materialItemGroup = "";
                          $scope.showNotifications('top','center','danger','Item group already exists!');
@@ -159,14 +159,14 @@ angular.module('timeSheetApp')
 	                     $scope.showNotifications('top','center','success','Item group has been added Successfully!');
 	                     $scope.loadMaterialItmGroup();
                     }
-                   
+
                 }).catch(function(){
                 $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to add Item group. Please try again later..');
                 $scope.error = 'ERROR';
             });
             }else{
-                console.log("Item Group not entered");
+                //console.log("Item Group not entered");
             }
         }
 
@@ -355,14 +355,14 @@ angular.module('timeSheetApp')
              InventoryComponent.update($scope.editInventory).then(function (response) {
             	console.log(response);
                 $scope.loadingStop();
-                if(response.status === 400) { 
+                if(response.status === 400) {
                 	 $scope.showNotifications('top','center','danger','Unable to update Material');
                      $scope.error = 'ERROR';
                 }else{
                 	$scope.showNotifications('top','center','success','Material updated Successfully');
                     $location.path('/inventory-list');
                 }
-                
+
             }).catch(function (response) {
                 $rootScope.loadingStop();
                 $scope.success = null;
@@ -384,7 +384,7 @@ angular.module('timeSheetApp')
             $scope.setPage(1);
             $scope.search();
          }
-    	
+
     	   $scope.isActiveAsc = 'id';
            $scope.isActiveDesc = '';
 
@@ -568,7 +568,7 @@ angular.module('timeSheetApp')
                     $('.pageCenter').hide();$('.overlay').hide();
 
                 }
-                
+
                 $scope.exportAllData = function(type){
                     $rootScope.exportStatusObj.exportMsg = '';
                     $scope.downloader=true;
@@ -592,8 +592,8 @@ angular.module('timeSheetApp')
                           console.log(err);
                   });
                };
-                
-                
+
+
                 $scope.exportStatusMap = [];
                 $scope.exportStatus = function() {
                     //console.log('empId='+$scope.empId);
@@ -662,7 +662,7 @@ angular.module('timeSheetApp')
                         }
 
                 };
-                
+
              // store the interval promise in this variable
                 var promise;
 

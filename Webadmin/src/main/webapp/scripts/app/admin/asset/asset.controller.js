@@ -1452,7 +1452,7 @@ angular.module('timeSheetApp')
 							$scope.searchAssetCode = "";
 						}
 
-						$scope.searchAcquiredDate = $filter('date')($scope.localStorage.acquiredDate, 'dd/MM/yyyy'); 
+						$scope.searchAcquiredDate = $filter('date')($scope.localStorage.acquiredDate, 'dd/MM/yyyy');
 						$scope.searchAcquiredDateSer = $scope.localStorage.acquiredDate;
 						$scope.searchCreatedDate = $filter('date')($scope.localStorage.assetCreatedDate, 'dd/MM/yyyy');
 						$scope.searchCreatedDateSer = $scope.localStorage.assetCreatedDate;
@@ -2461,8 +2461,8 @@ angular.module('timeSheetApp')
 			$scope.addAssetGroup = function () {
 
 				//console.log($scope.assetGroup);
-				$scope.loadingStart();
 				if($scope.assetGroup){
+				    $scope.loadingStart();
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
 						//console.log(response);
@@ -4217,7 +4217,7 @@ angular.module('timeSheetApp')
 
 
 			$scope.clearProject = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.client.selected = undefined;
 				$scope.regionsListOne.selected = undefined;
 				$scope.branchsListOne.selected = undefined;
@@ -4228,7 +4228,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.clearRegion = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.regionsListOne.selected = undefined;
 				$scope.branchsListOne.selected = undefined;
 				$scope.sitesListOne.selected = undefined;
@@ -4244,7 +4244,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.clearSite = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.sitesListOne.selected = undefined;
 
 			};
