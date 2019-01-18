@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.service.ChecklistService;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.ChecklistDTO;
 import com.ts.app.web.rest.dto.ImportResult;
@@ -42,7 +44,7 @@ public class ChecklistResource {
 	private ChecklistService checklistService;
 	
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 	@Inject
 	public ChecklistResource(ChecklistService checklistService) {
@@ -105,7 +107,10 @@ public class ChecklistResource {
 	  @RequestMapping(path="/checklist/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<ImportResult> importJobData(@RequestParam("checklistFile") MultipartFile file){
 			Calendar cal = Calendar.getInstance();
-			ImportResult result = importUtil.importChecklistData(file, cal.getTimeInMillis());
+			ImportResult result = importService.importChecklistData(file, cal.getTimeInMillis());
+	        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+		    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+		    }
 			return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 		}
 	  

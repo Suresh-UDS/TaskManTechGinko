@@ -1,8 +1,8 @@
 package com.ts.app.config;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Properties specific to JHipster.

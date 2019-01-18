@@ -1,15 +1,14 @@
 package com.ts.app.web.rest.util;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.codec.Hex;
 
-import com.ts.app.web.rest.dto.EmployeeDTO;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TokenUtils {
 	public static final String MAGIC_KEY = "obfuscate";

@@ -19,6 +19,10 @@
                 <i class="material-icons">refresh</i>Clear filter
                 <div class="ripple-container"></div>
             </button>
+            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
+                <i class="material-icons">keyboard_return</i>Dashboard
+                <div class="ripple-container"></div>
+            </button>
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 txt-align-rgt">
@@ -34,8 +38,8 @@
     </div>
     <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
             <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    {{searchCriteria.projectName || localStorage.projectName}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+                    {{searchCriteras.projectName}}
                 </span>
             </span>
     </div>
@@ -245,24 +249,12 @@
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <label class="label-control" >Client</label>
-                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!-- ng-change="loadDepSites()" -->
-                                    <!--<select class="form-control " ng-model="searchProject"  ng-options="project as project.name for project in projectsList" ng-pattern="Select Client" required>-->
-                                    <!--<option value="">Select Client...</option>-->
-                                    <!--</select>-->
+
                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                   <!--  <ui-select ng-model="searchProject"   required>
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                        <ui-select-no-choice>
-                                            --No--
-                                        </ui-select-no-choice>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search"  ng-click="selectProject(searchProject)">
-                                            <div ng-bind="client"></div>
-                                        </ui-select-choices>
-                                    </ui-select> -->
+                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
                                     <ui-select ng-model="client.selected"  ng-disabled="disabled">
-									  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" null-option="allClients" loose-null>
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>

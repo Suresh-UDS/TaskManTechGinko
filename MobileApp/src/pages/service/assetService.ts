@@ -240,5 +240,14 @@ export class AssetService {
         })
     }
 
+    getAssetMaterial(search):Observable<any>{
+        return this.http.post(this.config.Url+'api/assets/jobmaterials',search).map(
+           response=>{
+               console.log(response);
+               return response.json();
+           }
+        )
+    }
+
 
 }

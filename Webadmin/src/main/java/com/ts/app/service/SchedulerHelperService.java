@@ -9,16 +9,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -26,13 +30,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.http.util.TextUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.OnDelete;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,17 +48,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
-import com.google.common.primitives.Longs;
 import com.ts.app.config.Constants;
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
 import com.ts.app.domain.Attendance;
-import com.ts.app.domain.Clientgroup;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeAttendanceReport;
 import com.ts.app.domain.EmployeeProjectSite;
 import com.ts.app.domain.EmployeeShift;
 import com.ts.app.domain.ExportContent;
+import com.ts.app.domain.Frequency;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
@@ -66,6 +67,7 @@ import com.ts.app.domain.SchedulerConfig;
 import com.ts.app.domain.Setting;
 import com.ts.app.domain.Shift;
 import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.AssetRepository;
 import com.ts.app.repository.AttendanceRepository;
@@ -76,6 +78,7 @@ import com.ts.app.repository.ProjectRepository;
 import com.ts.app.repository.SchedulerConfigRepository;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.CommonUtil;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -105,8 +108,15 @@ public class SchedulerHelperService extends AbstractService {
 	private static final String DAILY = "DAY";
 	private static final String WEEKLY = "WEEK";
 	private static final String MONTHLY = "MONTH";
+	
+	private static final String FREQ_ONCE_EVERY_HOUR = "1H";
+	private static final String FREQ_ONCE_EVERY_2_HOUR = "2H";
+	private static final String FREQ_ONCE_EVERY_3_HOUR = "3H";
+	private static final String FREQ_ONCE_EVERY_4_HOUR = "4H";
+	private static final String FREQ_ONCE_EVERY_5_HOUR = "5H";
+	private static final String FREQ_ONCE_EVERY_6_HOUR = "6H";
 
-	private static final String FREQ_ONCE_EVERY_HOUR = "Once in an hour";
+	
 
 	@Inject
 	private PushService pushService;
@@ -128,6 +138,9 @@ public class SchedulerHelperService extends AbstractService {
 
 	@Inject
 	private EmployeeRepository employeeRepository;
+
+	@Inject
+    private UserRepository userRepository;
 
 	@Inject
 	private SiteRepository siteRepository;
@@ -417,7 +430,7 @@ public class SchedulerHelperService extends AbstractService {
 						} catch (Exception e) {
 							log.error("Error while sending push and email notification for overdue job alerts", e);
 						}
-						
+
 						job.setOverdueAlertCount(alertCnt);
 						*/
 						job.setStatus(JobStatus.OVERDUE);
@@ -486,7 +499,7 @@ public class SchedulerHelperService extends AbstractService {
 						Site site = siteItr.next();
 						// if(site.getId() == 119) {
 						// Hibernate.initialize(site.getShifts());
-						Map<String, Long> employeeAttnCnt = extractAttendanceDataForReport(date, proj, site, cal, dayEndcal, siteAttnList, shiftWiseSummary, siteShiftConsolidatedData, 
+						Map<String, Long> employeeAttnCnt = extractAttendanceDataForReport(date, proj, site, cal, dayEndcal, siteAttnList, shiftWiseSummary, siteShiftConsolidatedData,
 																		siteWiseConsolidatedMap, consolidatedData, empAttnList, content, shiftAlert);
 						projEmployees += employeeAttnCnt.get("ProjEmployees");
 						projPresent += employeeAttnCnt.get("ProjPresent");
@@ -573,9 +586,9 @@ public class SchedulerHelperService extends AbstractService {
 			}
 		}
 	}
-	
-	private Map<String, Long> extractAttendanceDataForReport(Date date,Project proj, Site site, Calendar cal, Calendar dayEndCal, List<EmployeeAttendanceReport> siteAttnList, Map<String, Map<String, Integer>> shiftWiseSummary, 
-										List<Map<String, String>> siteShiftConsolidatedData, Map<String, List<Map<String, String>>> siteWiseConsolidatedMap, 
+
+	private Map<String, Long> extractAttendanceDataForReport(Date date,Project proj, Site site, Calendar cal, Calendar dayEndCal, List<EmployeeAttendanceReport> siteAttnList, Map<String, Map<String, Integer>> shiftWiseSummary,
+										List<Map<String, String>> siteShiftConsolidatedData, Map<String, List<Map<String, String>>> siteWiseConsolidatedMap,
 										List<Map<String, String>> consolidatedData, List<EmployeeAttendanceReport> empAttnList, StringBuilder content,
 										boolean shiftAlert) {
 		Map<String, Long> employeeAttnCount = new HashMap<String, Long>();
@@ -809,7 +822,7 @@ public class SchedulerHelperService extends AbstractService {
 							endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
 					empAttnRep.setProjectName(proj.getName());
 					siteAttnList.add(empAttnRep);
-				} 
+				}
 			}
 		}
 		log.debug("send detailed report");
@@ -960,33 +973,36 @@ public class SchedulerHelperService extends AbstractService {
 											break;
 										}
 									}
-									
+
 									EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
-									empAttnRep.setEmpId(emp.getId());
-									empAttnRep.setEmployeeId(emp.getEmpId());
-									empAttnRep.setName(emp.getName());
-									empAttnRep.setLastName(emp.getLastName());
-									empAttnRep.setDesignation(emp.getDesignation());
-									empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
-									empAttnRep.setSiteName(site.getName());
-									if (empShift != null) {
-										Timestamp startTime = empShift.getStartTime();
-										Calendar startCal = Calendar.getInstance();
-										startCal.setTimeInMillis(startTime.getTime());
-										empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":"
-												+ startCal.get(Calendar.MINUTE));
-										Timestamp endTime = empShift.getEndTime();
-										Calendar endCal = Calendar.getInstance();
-										endCal.setTimeInMillis(endTime.getTime());
-										empAttnRep.setShiftEndTime(
-												endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
-										
-									} else {
-										empAttnRep.setShiftStartTime("attendance.generalShift.startTime");
-										empAttnRep.setShiftEndTime("attendance.generalShift.endTime");
-									}
-									empAttnRep.setProjectName(proj.getName());
-									siteAttnList.add(empAttnRep);
+									if(emp.getDesignation() != "Help Desk" || emp.getDesignation() != "Supervisor") {
+                                        empAttnRep.setEmpId(emp.getId());
+                                        empAttnRep.setEmployeeId(emp.getEmpId());
+                                        empAttnRep.setName(emp.getName());
+                                        empAttnRep.setLastName(emp.getLastName());
+                                        empAttnRep.setDesignation(emp.getDesignation());
+                                        empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
+                                        empAttnRep.setSiteName(site.getName());
+                                        if (empShift != null) {
+                                            Timestamp startTime = empShift.getStartTime();
+                                            Calendar startCal = Calendar.getInstance();
+                                            startCal.setTimeInMillis(startTime.getTime());
+                                            empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":"
+                                                + startCal.get(Calendar.MINUTE));
+                                            Timestamp endTime = empShift.getEndTime();
+                                            Calendar endCal = Calendar.getInstance();
+                                            endCal.setTimeInMillis(endTime.getTime());
+                                            empAttnRep.setShiftEndTime(
+                                                endCal.get(Calendar.HOUR_OF_DAY) + ":" + endCal.get(Calendar.MINUTE));
+
+                                        } else {
+                                            empAttnRep.setShiftStartTime("attendance.generalShift.startTime");
+                                            empAttnRep.setShiftEndTime("attendance.generalShift.endTime");
+                                        }
+                                        empAttnRep.setProjectName(proj.getName());
+                                        siteAttnList.add(empAttnRep);
+                                    }
+
 								}
 							}
 						}
@@ -1044,12 +1060,27 @@ public class SchedulerHelperService extends AbstractService {
 												e);
 									}
 								}
-								
-								log.debug("This site not having employees ", siteAttnList);
-								
+
+//								log.debug("This site not having employees ", siteAttnList);
+
 								if(siteAttnList.isEmpty()) {
 									log.debug("This site not having employees ", siteAttnList);
-								}
+								} else {
+                                    ListIterator<EmployeeAttendanceReport> iterator = siteAttnList.listIterator();
+                                    while(iterator.hasNext())
+                                    {
+                                        EmployeeAttendanceReport employee = iterator.next();
+                                        User user = userRepository.findByLogin(employee.getEmployeeId());
+                                        if (user.getUserRole().equals(env.getProperty("roles.exclude.role1")))
+                                        {
+                                            iterator.remove();
+                                        } else if (user.getUserRole().equals(env.getProperty("roles.exclude.role2"))) {
+                                            iterator.remove();
+                                        } else if (user.getUserRole().equals(env.getProperty("roles.exclude.role3"))) {
+                                            iterator.remove();
+                                        }
+                                    }
+                                }
 
 								if (dayReport && !siteAttnList.isEmpty() || onDemand) {
 									exportResult = exportUtil.writeMusterRollAttendanceReportToFile(proj.getName(),
@@ -1213,61 +1244,6 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
-	public void createDailyTasks() {
-		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
-			log.debug("Daily jobs enabled");
-			Calendar cal = Calendar.getInstance();
-			// cal.set(Calendar.HOUR_OF_DAY, 0);
-			// cal.set(Calendar.MINUTE, 0);
-			Calendar endCal = Calendar.getInstance();
-			endCal.set(Calendar.HOUR_OF_DAY, 23);
-			endCal.set(Calendar.MINUTE, 59);
-			Calendar nextDay = Calendar.getInstance();
-			nextDay.add(Calendar.DATE, 1);
-			nextDay.set(Calendar.HOUR_OF_DAY, 23);
-			nextDay.set(Calendar.MINUTE, 59);
-
-			java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
-			java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
-			java.sql.Date tomorrow = new java.sql.Date(nextDay.getTimeInMillis());
-			List<SchedulerConfig> dailyTasks = schedulerConfigRepository.getDailyTask(startDate);
-			log.debug("Found {} Daily Tasks", dailyTasks.size());
-
-			if (CollectionUtils.isNotEmpty(dailyTasks)) {
-				for (SchedulerConfig dailyTask : dailyTasks) {
-					long parentJobId = dailyTask.getJob().getId();
-					log.debug("Parent job id - " + parentJobId);
-					log.debug("Parent job date - " + startDate);
-					log.debug("Parent job date - " + endDate);
-					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, startDate, tomorrow);
-					// log.debug("Parent jobs list- "+job.get(0).getId());
-					if (CollectionUtils.isEmpty(job) && job.isEmpty()) {
-						log.debug("Parent job found");
-						// createJobs(dailyTask);
-
-						try {
-							boolean shouldProcess = true;
-							if (dailyTask.isScheduleDailyExcludeWeekend()) {
-								log.debug("Schedule exclude weekend true");
-								Calendar today = Calendar.getInstance();
-								log.debug("Todays day---- ", today.get(Calendar.DAY_OF_WEEK));
-								if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-										|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-									shouldProcess = false;
-								}
-							}
-							if (shouldProcess) {
-								createJobs(dailyTask);
-							}
-						} catch (Exception ex) {
-							log.warn("Failed to create JOB ", ex);
-						}
-					}
-				}
-				schedulerConfigRepository.save(dailyTasks);
-			}
-		}
-	}
 
 	@Transactional
 	public void sendWarrantyExpireAlert() {
@@ -1462,253 +1438,13 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
-	public void createJobs(SchedulerConfig dailyTask) {
-		if (log.isDebugEnabled())
-			log.debug("createJobs - SchedulerConfig - dailyTask - " + dailyTask.getId());
-		if ("CREATE_JOB".equals(dailyTask.getType())) {
-			Calendar scheduledEndDate = Calendar.getInstance();
-			PageRequest pageRequest = new PageRequest(1, 1);
-			Job parentJob = dailyTask.getJob();
-			if (log.isDebugEnabled())
-				log.debug("createJobs - parentJob - " + parentJob + ", - "
-						+ (parentJob != null ? parentJob.getId() : null));
-			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
-			if (log.isDebugEnabled())
-				log.debug("createJobs - prevJobs - " + prevJobs);
-			scheduledEndDate.setTime(parentJob.getScheduleEndDate());
-			scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
-			scheduledEndDate.set(Calendar.MINUTE, 59);
-			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR))
-					.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
-					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH))
-					.withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY))
-					.withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
-			if (log.isDebugEnabled())
-				log.debug("createJobs - endDate - " + endDate);
-			if (dailyTask.getSchedule().equalsIgnoreCase(DAILY)) {
-				String creationPolicy = env.getProperty("scheduler.dailyJob.creation");
-				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create
-																	// jobs for the rest of the
-																	// month
-					DateTime currDate = DateTime.now();
-					DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
-					if (endDate.isBefore(lastDate)) {
-						lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
-						lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
-					}
-					if (log.isDebugEnabled())
-						log.debug("createJobs - lastDate - " + lastDate);
-					if (CollectionUtils.isNotEmpty(prevJobs)) {
-						Job prevJob = prevJobs.get(0);
-						if (prevJob.getPlannedStartTime().before(currDate.toDate())) {
-							while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-								if (log.isDebugEnabled())
-									log.debug("createJobs - currDate - " + currDate);
-								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-								currDate = currDate.plusDays(1);
-							}
-						}
-					} else {
-						while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-							if (log.isDebugEnabled())
-								log.debug("createJobs - currDate - " + currDate);
-							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-							currDate = currDate.plusDays(1);
-						}
-					}
-				} else if (creationPolicy.equalsIgnoreCase("daily")) {
-					DateTime currDate = DateTime.now();
-					if (CollectionUtils.isNotEmpty(prevJobs)) {
-						Job prevJob = prevJobs.get(0);
-						if (prevJob.getPlannedStartTime().before(currDate.toDate())) {
-							jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
-						}
-					} else {
-						jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), new Date());
-					}
-				}
-				dailyTask.setLastRun(new Date());
-			} else if (dailyTask.getSchedule().equalsIgnoreCase(WEEKLY)) {
-				String creationPolicy = env.getProperty("scheduler.weeklyJob.creation");
-				if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create
-																	// jobs for the rest of the
-																	// month
-					DateTime currDate = DateTime.now();
-					if (CollectionUtils.isNotEmpty(prevJobs)) {
-						Job prevJob = prevJobs.get(0);
-						if (prevJob.getPlannedStartTime().before(currDate.toDate())) {
-							DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
-							currDate = currDate.plusDays(7);
-							while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-								dailyTask.setLastRun(currDate.toDate());
-								currDate = currDate.plusDays(7); // create for every week.
-							}
-						}
-					}
-				}
-			} else if (dailyTask.getSchedule().equalsIgnoreCase(MONTHLY)) {
-				String creationPolicy = env.getProperty("scheduler.monthlyJob.creation");
-				if (creationPolicy.equalsIgnoreCase("yearly")) { // if the creation policy is set to monthly, create
-																	// jobs for the rest of the
-																	// month
-					DateTime currDate = DateTime.now();
-					if (CollectionUtils.isNotEmpty(prevJobs)) {
-						Job prevJob = prevJobs.get(0);
-						if (prevJob.getPlannedStartTime().before(currDate.toDate())) {
-							DateTime lastDate = currDate.dayOfMonth().withMaximumValue();
-							currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue());
-							while (currDate.isBefore(lastDate) || currDate.isEqual(lastDate)) {
-								jobCreationTask(dailyTask, dailyTask.getJob(), dailyTask.getData(), currDate.toDate());
-								dailyTask.setLastRun(currDate.toDate());
-								currDate = currDate.plusDays(currDate.dayOfMonth().getMaximumValue()); // create for
-																										// every month.
-							}
-						}
-					}
-				}
-			}
-		} else {
-			log.warn("Unknown scheduler config type job" + dailyTask);
-		}
-	}
-
-	void jobCreationTask(SchedulerConfig dailyTask, Job parentJob, String data, Date jobDate) {
-		log.debug("Creating Job : " + data);
-		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
-		String sTime = dataMap.get("plannedStartTime");
-		String eTime = dataMap.get("plannedEndTime");
-		SimpleDateFormat sdf = new SimpleDateFormat("E MMM d HH:mm:ss z yyyy");
-		try {
-			Date sHrs = sdf.parse(sTime);
-			Date eHrs = sdf.parse(eTime);
-
-			try {
-				boolean shouldProcess = true;
-				if (dailyTask.isScheduleDailyExcludeWeekend()) {
-					Calendar today = Calendar.getInstance();
-					today.setTime(jobDate);
-					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-							|| today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-						shouldProcess = false;
-					}
-				}
-				if (shouldProcess) {
-					createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs);
-				}
-			} catch (Exception ex) {
-				log.warn("Failed to create JOB ", ex);
-			}
-
-		} catch (Exception e) {
-			log.error("Error while creating scheduled job ", e);
-		}
-	}
-
-	private JobDTO createJob(Job parentJob, Map<String, String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs,
-			Date eHrs) {
-		JobDTO job = new JobDTO();
-		job.setTitle(dataMap.get("title"));
-		job.setDescription(dataMap.get("description"));
-		job.setSiteId(Long.parseLong(dataMap.get("siteId")));
-		job.setEmployeeId(Long.parseLong(dataMap.get("empId")));
-		String frequency = dataMap.containsKey("frequency") ? dataMap.get("frequency") : null;
-		String plannedHours = dataMap.get("plannedHours");
-		Calendar plannedEndTimeCal = Calendar.getInstance();
-		plannedEndTimeCal.setTime(plannedEndTime);
-
-		Calendar startTime = Calendar.getInstance();
-		startTime.setTime(jobDate);
-		// update the plannedEndTimeCal to the current job date in iteration
-		plannedEndTimeCal.set(Calendar.DAY_OF_MONTH, startTime.get(Calendar.DAY_OF_MONTH));
-		plannedEndTimeCal.set(Calendar.MONTH, startTime.get(Calendar.MONTH));
-
-		Calendar endTime = Calendar.getInstance();
-		endTime.setTime(jobDate);
-		Calendar cal = DateUtils.toCalendar(sHrs);
-		int sHr = cal.get(Calendar.HOUR_OF_DAY);
-		int sMin = cal.get(Calendar.MINUTE);
-		log.debug("Start time hours =" + sHr + ", start time mins -" + sMin);
-		startTime.set(Calendar.HOUR_OF_DAY, sHr);
-		startTime.set(Calendar.MINUTE, sMin);
-		startTime.set(Calendar.SECOND, 0);
-		startTime.getTime(); // to recalculate
-		cal = DateUtils.toCalendar(eHrs);
-		int eHr = cal.get(Calendar.HOUR_OF_DAY);
-		int eMin = cal.get(Calendar.MINUTE);
-		log.debug("End time hours =" + eHr + ", end time mins -" + eMin);
-		if (StringUtils.isNotEmpty(frequency) && frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
-			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
-			endTime.add(Calendar.HOUR_OF_DAY, 1);
-			endTime.set(Calendar.MINUTE, eMin);
-			endTime.set(Calendar.SECOND, 0);
-			endTime.getTime(); // to recalculate
-		} else {
-			endTime.set(Calendar.HOUR_OF_DAY, eHr);
-			endTime.set(Calendar.MINUTE, eMin);
-			endTime.set(Calendar.SECOND, 0);
-			endTime.getTime(); // to recalculate
-		}
-
-		job.setPlannedStartTime(startTime.getTime());
-		job.setPlannedEndTime(endTime.getTime());
-		job.setPlannedHours(Integer.parseInt(plannedHours));
-		job.setScheduled(true);
-		job.setJobType(parentJob.getType());
-		job.setSchedule("ONCE");
-		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
-		job.setActive("Y");
-		job.setParentJobId(parentJob.getId());
-		job.setParentJob(parentJob);
-		job.setJobType(parentJob.getType());
-		job.setZone(parentJob.getZone());
-		job.setFloor(parentJob.getFloor());
-		job.setBlock(parentJob.getBlock());
-		log.debug("Job status in scheduler {}", job.getJobStatus());
-		if (CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
-			List<JobChecklist> jobclList = parentJob.getChecklistItems();
-			List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
-			for (JobChecklist jobcl : jobclList) {
-				JobChecklistDTO checklist = new JobChecklistDTO();
-				checklist.setChecklistId(jobcl.getChecklistId());
-				checklist.setChecklistName(jobcl.getChecklistName());
-				checklist.setChecklistItemId(jobcl.getChecklistItemId());
-				checklist.setChecklistItemName(jobcl.getChecklistItemName());
-				checklistItems.add(checklist);
-
-			}
-			if (job.getChecklistItems() != null) {
-				job.getChecklistItems().addAll(checklistItems);
-			} else {
-				job.setChecklistItems(checklistItems);
-			}
-		}
-		log.debug("JobDTO parent job id - " + parentJob.getId());
-		log.debug("JobDTO parent job id - " + job.getParentJobId());
-		log.debug("JobDTO Details before calling saveJob - " + job);
-		jobManagementService.saveJob(job);
-		if (StringUtils.isNotEmpty(frequency) && frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
-			Calendar tmpCal = Calendar.getInstance();
-			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
-			tmpCal.set(Calendar.MONTH, plannedEndTimeCal.get(Calendar.MONTH));
-			tmpCal.set(Calendar.HOUR_OF_DAY, plannedEndTimeCal.get(Calendar.HOUR_OF_DAY));
-			tmpCal.set(Calendar.MINUTE, plannedEndTimeCal.get(Calendar.MINUTE));
-			tmpCal.getTime(); // recalculate
-			log.debug("Planned end time cal value = " + tmpCal.getTime());
-			log.debug("end time value based on frequency = " + endTime.getTime());
-			log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
-			if (tmpCal.getTime().after(endTime.getTime())) {
-				tmpCal.setTime(endTime.getTime());
-				tmpCal.add(Calendar.HOUR_OF_DAY, 1);
-				tmpCal.getTime(); // recalculate
-				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime());
-			}
-		}
-		return job;
-	}
-
 	public void sendDaywiseReportEmail(Date date, boolean isOnDemand, long projectId) {
 		// TODO Auto-generated method stub
+		Calendar reportCal = Calendar.getInstance();
+		reportCal.setTime(date);
+		if(!isOnDemand && reportCal.get(Calendar.DAY_OF_WEEK) == 1) { //FILTER TO AVOID DAILY REPORTS ON SUNDAYS
+			return;
+		}
 		dayWiseJQTReport(date, isOnDemand, projectId);
 	}
 
@@ -1738,12 +1474,12 @@ public class SchedulerHelperService extends AbstractService {
 		List<Project> projects = projectRepository.findAll();
 		for (Project proj : projects) {
 			log.info("Generating daily report for client -"+ proj.getName());
-			
+
 			if(projectId > 0 && projectId != proj.getId()) {
 				continue;
 			}
 
-			
+
 			StringBuffer sb = new StringBuffer();
 			sb.append("<table border=\"1\" cellpadding=\"5\"  style=\"border-collapse:collapse;margin-bottom:20px;\">");
 			sb.append("<tr bgcolor=\"FFD966\"><th>Site</th>");
@@ -1780,7 +1516,7 @@ public class SchedulerHelperService extends AbstractService {
 			Calendar alertTimeCal = Calendar.getInstance();
 			List<String> files = new ArrayList<String>();
 			boolean generateReport = false;
-			
+
 			//data for attendance report
 			Map<String, Map<String, Integer>> shiftWiseSummary = new HashMap<String, Map<String, Integer>>();
 			List<EmployeeAttendanceReport> empAttnList = new ArrayList<EmployeeAttendanceReport>();
@@ -1793,12 +1529,12 @@ public class SchedulerHelperService extends AbstractService {
 			long projEmployees = 0;
 			long projPresent = 0;
 			long projAbsent = 0;
-			
+
 			while (siteItr.hasNext()) {
 				sb.append("<tr bgcolor=\"FFD966\">");
 				Site site = siteItr.next();
-				
-				
+
+
 				List<Setting> settings = null;
 				List<Setting> emailAlertTimeSettings = null;
 				List<Setting> clientGroupAlertSettings = null;
@@ -1831,7 +1567,7 @@ public class SchedulerHelperService extends AbstractService {
 				String alertTime = null;
 
 				alertTime = dayWiseAlertTime != null ? dayWiseAlertTime.getSettingValue() : null;
-				
+
 				if (StringUtils.isNotEmpty(alertTime)) {
 					try {
 						Date alertDateTime = DateUtil.parseToDateTime(alertTime);
@@ -1846,7 +1582,7 @@ public class SchedulerHelperService extends AbstractService {
 								+ proj.getName(), e);
 					}
 				}
-				
+
 				if(alertTimeCal.equals(now) || isOnDemand) {
 					log.info("Site daily report alert time matches ");
 					log.info("Generating daily report for site -"+ site.getName());
@@ -1857,13 +1593,13 @@ public class SchedulerHelperService extends AbstractService {
 					sc.setToDate(dayEndcal.getTime());
 					sc.setQuotationCreatedDate(cal.getTime());
 					sc.setSiteId(site.getId());
-	
-	
-					
+
+
+
 					sb.append("<td><b>" + StringUtils.capitalize(site.getName()) + "</b></td>");
 					ExportResult jobResult = new ExportResult();
 					if (env.getProperty("scheduler.dayWiseJobReport.enabled").equalsIgnoreCase("true")) {
-	
+
 					// if report generation needed
 
 
@@ -1908,18 +1644,18 @@ public class SchedulerHelperService extends AbstractService {
 							sb.append("<td></td>");
 //							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
-							sb.append("<td><b>0</b></td>");		
+							sb.append("<td><b>0</b></td>");
 						}
 
 					}
-	
+
 					ExportResult exportTicketResult = new ExportResult();
 					if (env.getProperty("scheduler.dayWiseTicketReport.enabled").equalsIgnoreCase("true")) {
 						List<TicketDTO> ticketResults = ticketManagementService.generateReport(sc, false);
-	
+
 						if (CollectionUtils.isNotEmpty(ticketResults)) {
 							// if report generation needed
-		
+
 								// if report generation needed
 								log.debug("results exists");
 								if (eodReports != null && eodReports.getSettingValue().equalsIgnoreCase("true")) {
@@ -1951,23 +1687,23 @@ public class SchedulerHelperService extends AbstractService {
 									sb.append("<td></td>");
 		//							sb.append("<td>0</td>");
 									sb.append("<td>0</td>");
-									sb.append("<td><b>0</b></td>");		
+									sb.append("<td><b>0</b></td>");
 								}
-		
+
 							} else {
 								log.debug("no tickets found on the daterange");
 								sb.append("<td></td>");
 								sb.append("<td></td>");
 		//						sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
-								sb.append("<td><b>0</b></td>");						
+								sb.append("<td><b>0</b></td>");
 							}
 						}
-		
+
 						ExportResult exportQuotationResult = new ExportResult();
 						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
 							List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
-		
+
 							Object quotationObj = quotationService.getQuotations(sc);
 							if (quotationObj != null) {
 								ObjectMapper mapper = new ObjectMapper();
@@ -1982,7 +1718,7 @@ public class SchedulerHelperService extends AbstractService {
 									log.error("Error while converting quotation results to objects", e);
 								}
 							}
-		
+
 							if (CollectionUtils.isNotEmpty(quotationResults)) {
 								// if report generation needed
 								log.debug("results exists");
@@ -2004,7 +1740,7 @@ public class SchedulerHelperService extends AbstractService {
 										log.error("Error while converting quotation results to objects", e);
 									}
 									log.debug("send report");
-		
+
 									if (quotationSummary != null) {
 										/*
 										sb.append(
@@ -2024,7 +1760,7 @@ public class SchedulerHelperService extends AbstractService {
 										sb.append("<td>" + quotationSummary.getTotalApproved() + "</td>");
 										sb.append("<td></td>");
 										sb.append("<td><b>" + quotationSummary.getTotalCount() + "</b></td>");
-		
+
 									}
 									exportQuotationResult = exportUtil.writeQuotationExcelReportToFile(quotationResults, null,
 											exportQuotationResult);
@@ -2034,9 +1770,9 @@ public class SchedulerHelperService extends AbstractService {
 									sb.append("<td></td>");
 									sb.append("<td>0</td>");
 									sb.append("<td>0</td>");
-									sb.append("<td><b>0</b></td>");		
+									sb.append("<td><b>0</b></td>");
 								}
-		
+
 							} else {
 								log.debug("no quotations found on the daterange");
 								sb.append("<td>0</td>");
@@ -2046,10 +1782,10 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<td><b>0</b></td>");
 							}
 						}
-						
+
 						//generate attendance report if enabled
 						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
-							Map<String, Long> empAttnCountMap = extractAttendanceDataForReport(date, proj, site, cal, dayEndcal, siteAttnList, shiftWiseSummary, 
+							Map<String, Long> empAttnCountMap = extractAttendanceDataForReport(date, proj, site, cal, dayEndcal, siteAttnList, shiftWiseSummary,
 																	siteShiftConsolidatedData, siteWiseConsolidatedMap, consolidatedData, empAttnList, content, false);
 							if(MapUtils.isNotEmpty(empAttnCountMap)) {
 								projEmployees += empAttnCountMap.get("ProjEmployees");
@@ -2058,7 +1794,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<td>"+ empAttnCountMap.get("ProjPresent") +"</td>");
 								sb.append("<td>"+ empAttnCountMap.get("ProjAbsent") +"</td>");
 								sb.append("<td>" + empAttnCountMap.get("ProjEmployees") + "</td>");
-								
+
 							}else {
 								sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
@@ -2070,9 +1806,9 @@ public class SchedulerHelperService extends AbstractService {
 							sb.append("<td>0</td>");
 							sb.append("<td><b>0</b></td>");
 						}
-						
+
 						sb.append("</tr>");
-					
+
 						if (eodReports != null && (generateReport || isOnDemand)
 								&& (eodReportClientGroupAlert != null
 								&& eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("true"))) {
@@ -2080,12 +1816,12 @@ public class SchedulerHelperService extends AbstractService {
 							if(StringUtils.isEmpty(proj.getClientGroup())) {
 								proj.setClientGroup(proj.getName());
 							}
-							
+
 							if (proj.getClientGroup() != null) {
-		
+
 								ClientgroupDTO clientGrp = null;
 								Map<String, List<ExportContent>> clientContentMap = null;
-		
+
 								if (clientGroupMap.containsKey(proj.getClientGroup())) {
 									clientGrp = clientGroupMap.get(proj.getClientGroup());
 									clientContentMap = clientGrp.getContents();
@@ -2094,9 +1830,9 @@ public class SchedulerHelperService extends AbstractService {
 									clientGrp.setClientgroup(proj.getClientGroup());
 									clientContentMap = new HashMap<String, List<ExportContent>>();
 								}
-		
+
 								List<ExportContent> exportContents = null;
-		
+
 								ExportContent exportCnt = new ExportContent();
 								exportCnt.setEmail(eodReportEmails !=null ? eodReportEmails.getSettingValue() : StringUtils.EMPTY);
 								exportCnt.setSiteId(site.getId());
@@ -2106,24 +1842,24 @@ public class SchedulerHelperService extends AbstractService {
 								exportCnt.setTicketFile(exportTicketResult.getFile());
 								exportCnt.setQuotationFile(exportQuotationResult.getFile());
 								// exportCnt.setFile(files);
-		
+
 								if (clientContentMap.containsKey(proj.getName())) {
 									exportContents = clientContentMap.get(proj.getName());
 								} else {
 									exportContents = new ArrayList<ExportContent>();
 								}
-		
+
 								exportContents.add(exportCnt);
-		
+
 								clientContentMap.put(proj.getName(), exportContents);
-								
+
 								clientGrp.setContents(clientContentMap);
-		
+
 								clientGroupMap.put(proj.getClientGroup(), clientGrp);
-		
+
 							}
-		
-						} 
+
+						}
 		//				else if (eodReportEmails != null && (alertTimeCal.equals(now) || isOnDemand)) {
 		//					if (CollectionUtils.isNotEmpty(files)) {
 		//						mailService.sendDaywiseReportEmailFile(site.getName(), eodReportEmails.getSettingValue(), files,
@@ -2156,7 +1892,7 @@ public class SchedulerHelperService extends AbstractService {
 			sb.append("</table>");
 			sb.append("<br/>");
 			sb.append("<br/>");
-			
+
 			//export attendance report file for the project in iteration
 			// get total employee count
 			ExportResult exportAttnResult = new ExportResult();
@@ -2188,9 +1924,9 @@ public class SchedulerHelperService extends AbstractService {
 					exportContents.get(0).setAttendanceFile(exportAttnResult.getFile());
 				}
 			}
-			
+
 			if (StringUtils.isNotEmpty(proj.getClientGroup()) && clientGroupMap.containsKey(proj.getClientGroup())) {
-				
+
 				ClientgroupDTO clientGrp = clientGroupMap.get(proj.getClientGroup());
 				if(clientGrp != null) {
 					if(StringUtils.isNotEmpty(clientGrp.getSummary())) {
@@ -2200,7 +1936,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 			}
-			
+
 			if (eodReportEmails != null && (generateReport || isOnDemand)
 					&& (eodReportClientGroupAlert == null
 							|| eodReportClientGroupAlert.getSettingValue().equalsIgnoreCase("false"))) {
@@ -2210,8 +1946,8 @@ public class SchedulerHelperService extends AbstractService {
 							cal.getTime(), sb.toString());
 				}
 			}
-			
-			
+
+
 		}
 
 		if (MapUtils.isNotEmpty(clientGroupMap)) {
@@ -2234,8 +1970,8 @@ public class SchedulerHelperService extends AbstractService {
 		for (Map.Entry<String, ClientgroupDTO> entry : newMap.entrySet()) {
 			// exportedContent.put("clientGroup", entry.getKey());
 			log.info("Generating report for client group - " + entry.getKey());
-			
-			StringBuffer clientSummary = new StringBuffer(); 
+
+			StringBuffer clientSummary = new StringBuffer();
 			ClientgroupDTO clientGrp = entry.getValue();
 			clientSummary.append(clientGrp.getSummary());
 			//clientSummary.append("</table>");
@@ -2345,7 +2081,7 @@ public class SchedulerHelperService extends AbstractService {
 					xssfAttnWorkbook.write(attnFos);
 					files.add(attnReportFile);
 				}
-				
+
 
 			} catch (Exception e) {
 				log.error(
@@ -2410,6 +2146,441 @@ public class SchedulerHelperService extends AbstractService {
 			//System.out.println();
 		}
 	}
+
+	public void createDailyTask(Date date, List<Long> siteIds) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		Calendar endCal = Calendar.getInstance();
+		endCal.setTime(date);
+		endCal.set(Calendar.HOUR_OF_DAY, 23);
+		endCal.set(Calendar.MINUTE, 59);
+		java.sql.Date startDate = new java.sql.Date(cal.getTimeInMillis());
+		java.sql.Date endDate = new java.sql.Date(endCal.getTimeInMillis());
+
+		List<SchedulerConfig> dailyTasks = null;
+		if(CollectionUtils.isNotEmpty(siteIds)) {
+			dailyTasks = schedulerConfigRepository.getDailyTask(startDate, siteIds);
+		}else {
+			dailyTasks = schedulerConfigRepository.getDailyTask(startDate);
+		}
+		log.debug("Found {} Daily Tasks", dailyTasks.size());
+		ExecutorService executorService = Executors.newFixedThreadPool(50); //Executes job creation task for each schedule asynchronously
+		List<Future> futures = new ArrayList<Future>();
+		if (CollectionUtils.isNotEmpty(dailyTasks)) {
+			for (SchedulerConfig dailyTask : dailyTasks) {
+				long parentJobId = dailyTask.getJob().getId();
+				if(log.isDebugEnabled()) {
+					log.debug("Parent job id - "+parentJobId);
+					log.debug("Parent job date - "+startDate);
+					log.debug("Parent job date - "+endDate);
+				}
+				JobCreationThread jobThrd = new JobCreationThread(dailyTask, parentJobId, cal, endCal, jobRepository);
+				futures.add(executorService.submit(jobThrd));
+				/*
+				jobThrd.execute();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					log.error("Error while waiting for next job creation task");
+				}
+				*/
+			}
+			
+			for(Future future : futures) {
+				try {
+					future.get();
+				} catch (InterruptedException | ExecutionException e) {
+					log.error("Error while running the job creation thread executor task ",e);
+				}
+			}
+			executorService.shutdown();
+			
+		}
+		schedulerConfigRepository.save(dailyTasks);
+	}
+
+	final class JobCreationThread implements Runnable {
+
+		private final Logger logger = LoggerFactory.getLogger(JobCreationThread.class);
+
+		private long parentJobId;
+		private Calendar startTimeCal;
+		private Calendar endTimeCal;
+		private SchedulerConfig schedulerConfig;
+		private JobRepository jobRepository;
+
+		public JobCreationThread(SchedulerConfig schConfig, long parentJobId, Calendar startCal, Calendar endCal, JobRepository jobRepo) {
+			this.parentJobId = parentJobId;
+			this.startTimeCal = startCal;
+			this.endTimeCal = endCal;
+			this.schedulerConfig = schConfig;
+			this.jobRepository = jobRepo;
+		}
+
+		public void execute() {
+			if(logger.isDebugEnabled()) {
+				logger.debug("Job Creation Thread Started for, parentJobId -" + parentJobId + ", startTimeCal - " + startTimeCal + ", endTimeCal-" + endTimeCal);
+			}
+			List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, DateUtil.convertToSQLDate(startTimeCal.getTime()), DateUtil.convertToSQLDate(endTimeCal.getTime()));
+			if (CollectionUtils.isEmpty(job)) {
+				 long siteId = 0; 
+				 try {
+					 boolean shouldProcess = true;
+					 Job parentJob = jobRepository.findOne(parentJobId);
+					 siteId = parentJob.getSite().getId();
+                     if(schedulerConfig.isScheduleDailyExcludeWeekend()) {
+                         //if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                        	if(startTimeCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                             shouldProcess =false;
+                         }
+                     }
+                     if(shouldProcess) {
+                         createJobs(schedulerConfig);
+                     }
+				 } catch (Exception ex) {
+					 if(logger.isErrorEnabled())
+						 logger.error("Failed to create JOB ", ex);
+					 mailService.sendJobCreationErrorEmail(siteId);
+					 
+				 }
+			}
+			if(logger.isDebugEnabled()) {
+				logger.debug("Job Creation Thread Completed for, parentJobId -" + parentJobId + ", startTimeCal - " + startTimeCal + ", endTimeCal-" + endTimeCal);
+			}
+		}
+		
+		@Override
+		public void run() {
+			execute();
+
+		}
+
+	}
 	
+	public void createJobs(SchedulerConfig scheduledTask) {
+		Job parentJob = scheduledTask.getJob();
+		log.debug("creating jobs for - siteId -" + parentJob.getSite().getId());
+		if ("CREATE_JOB".equals(scheduledTask.getType())) {
+			String creationPolicy = env.getProperty("scheduler.job.creationPolicy");
+			PageRequest pageRequest = new PageRequest(1, 1);
+			List<Job> prevJobs = jobRepository.findLastJobByParentJobId(parentJob.getId(), pageRequest);
+			DateTime today = DateTime.now();
+			today = today.withHourOfDay(0); //set today's hour to 0
+			Calendar scheduledEndDate = Calendar.getInstance();
+			if(parentJob.getScheduleEndDate() != null) {
+				scheduledEndDate.setTime(parentJob.getScheduleEndDate());
+				scheduledEndDate.set(Calendar.HOUR_OF_DAY, 23);
+				scheduledEndDate.set(Calendar.MINUTE, 59);
+			}
+			DateTime endDate = DateTime.now().withYear(scheduledEndDate.get(Calendar.YEAR)).withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1)
+					.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH)).withHourOfDay(scheduledEndDate.get(Calendar.HOUR_OF_DAY)).withMinuteOfHour(scheduledEndDate.get(Calendar.MINUTE));
+			List<JobDTO> jobDtos = new ArrayList<JobDTO>();
+			//change the creationPolicy based on the frequency
+			Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(scheduledTask.getData());
+			if(dataMap != null && dataMap.containsKey("frequency")
+					&& (dataMap.get("frequency").equals(FREQ_ONCE_EVERY_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_2_HOUR) ||
+							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_3_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_4_HOUR) ||
+							dataMap.get("frequency").equals(FREQ_ONCE_EVERY_5_HOUR) || dataMap.get("frequency").equals(FREQ_ONCE_EVERY_6_HOUR))) {
+				creationPolicy = "daily";
+			}
+			if (creationPolicy.equalsIgnoreCase("monthly")) { // if the creation policy is set to monthly, create jobs for the rest of the
+																// month
+				DateTime currDate = DateTime.now();
+				DateTime lastDate = currDate.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59);
+
+				if(endDate.isBefore(lastDate)) {
+					lastDate = lastDate.withMonthOfYear(scheduledEndDate.get(Calendar.MONTH) + 1);
+					lastDate = lastDate.withDayOfMonth(scheduledEndDate.get(Calendar.DAY_OF_MONTH));
+				}
+
+				if(CollectionUtils.isNotEmpty(prevJobs)) {
+					Job prevJob = prevJobs.get(0);
+					DateTime plannedTime = new DateTime(parentJob.getPlannedStartTime().getTime());
+					currDate = currDate.withHourOfDay(plannedTime.getHourOfDay()).withMinuteOfHour(plannedTime.getMinuteOfHour())
+											.withSecondOfMinute(plannedTime.getMinuteOfHour());
+					//currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+						while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { //create task for future dates.
+							//if(currDate.isAfter(today) || currDate.isEqual(today)) {
+								jobCreationTask(scheduledTask, parentJob, scheduledTask.getData(), currDate.toDate(), jobDtos);
+							//}
+							currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+						}
+						if(CollectionUtils.isNotEmpty(jobDtos)) {
+							jobManagementService.saveScheduledJob(jobDtos, parentJob.getId(), parentJob.getEmployee(), parentJob.getSite());
+						}
+					}
+				}else {
+					currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+					while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) { // create task for future dates.
+						//if(currDate.isAfter(today) || currDate.isEqual(today)) {
+							jobCreationTask(scheduledTask, parentJob, scheduledTask.getData(), currDate.toDate(), jobDtos);
+						//}
+						currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+					}
+					if(CollectionUtils.isNotEmpty(jobDtos)) {
+						jobManagementService.saveScheduledJob(jobDtos, parentJob.getId(), parentJob.getEmployee(), parentJob.getSite());
+					}
+				}
+			} else if (creationPolicy.equalsIgnoreCase("daily")) {
+
+				DateTime currDate = DateTime.now();
+				
+				DateTime lastDate = DateTime.now();
+
+				lastDate = lastDate.plusDays(2);
+
+				
+				if(CollectionUtils.isNotEmpty(prevJobs)) {
+					Job prevJob = prevJobs.get(0);
+					//currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+					if(prevJob.getPlannedStartTime().before(currDate.toDate())){
+						while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) {
+							//if(currDate.isAfter(today) && currDate.isBefore(endDate)) {
+							if(currDate.isBefore(endDate)) {
+								jobCreationTask(scheduledTask, parentJob, scheduledTask.getData(), currDate.toDate(), jobDtos);
+							}
+							currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+						}
+						if(CollectionUtils.isNotEmpty(jobDtos)) {
+							jobManagementService.saveScheduledJob(jobDtos, parentJob.getId(), parentJob.getEmployee(), parentJob.getSite());
+						}
+
+					}
+				}else {
+					//currDate = new DateTime(parentJob.getPlannedStartTime().getTime());
+					while ((currDate.isBefore(lastDate) || currDate.isEqual(lastDate))) {
+						//if((currDate.isAfter(today) || currDate.isEqual(today)) && currDate.isBefore(endDate)) {
+						if(currDate.isBefore(endDate)) {
+							jobCreationTask(scheduledTask, parentJob, scheduledTask.getData(), currDate.toDate(), jobDtos);
+						}
+						currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
+					}
+					if(CollectionUtils.isNotEmpty(jobDtos)) {
+						jobManagementService.saveScheduledJob(jobDtos, parentJob.getId(), parentJob.getEmployee(), parentJob.getSite());
+					}
+				}
+			}
+		}
+	}
+	
+	private JobDTO createJob(Job parentJob, Map<String, String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs, Date eHrs, List<JobDTO> jobs) {
+		JobDTO job = new JobDTO();
+		job.setTitle(dataMap.get("title"));
+		job.setDescription(dataMap.get("description"));
+		job.setSiteId(Long.parseLong(dataMap.get("siteId")));
+		job.setEmployeeId(Long.parseLong(dataMap.get("empId")));
+		//job.setSchedule(dataMap.get("schedule"));
+		job.setDuration(dataMap.get("duration"));
+		String frequency = dataMap.containsKey("frequency") ? dataMap.get("frequency") : null;
+		String plannedHours = dataMap.get("plannedHours");
+		Calendar plannedEndTimeCal = Calendar.getInstance();
+		plannedEndTimeCal.setTime(plannedEndTime);
+
+		Calendar startTime = Calendar.getInstance();
+		startTime.setTime(jobDate);
+		// update the plannedEndTimeCal to the current job date in iteration
+		plannedEndTimeCal.set(Calendar.DAY_OF_MONTH, startTime.get(Calendar.DAY_OF_MONTH));
+		plannedEndTimeCal.set(Calendar.MONTH, startTime.get(Calendar.MONTH));
+
+		Calendar endTime = Calendar.getInstance();
+		endTime.setTime(jobDate);
+		Calendar cal = DateUtils.toCalendar(sHrs);
+		int sHr = cal.get(Calendar.HOUR_OF_DAY);
+		int sMin = cal.get(Calendar.MINUTE);
+		//log.debug("Start time hours =" + sHr + ", start time mins -" + sMin);
+		startTime.set(Calendar.HOUR_OF_DAY, sHr);
+		startTime.set(Calendar.MINUTE, sMin);
+		startTime.set(Calendar.SECOND, 0);
+		startTime.getTime(); // to recalculate
+		cal = DateUtils.toCalendar(eHrs);
+		int eHr = cal.get(Calendar.HOUR_OF_DAY);
+		int eMin = cal.get(Calendar.MINUTE);
+		//log.debug("End time hours =" + eHr + ", end time mins -" + eMin);
+		if (StringUtils.isNotEmpty(frequency)) {
+			endTime.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
+			if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 1);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_2_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 2);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_3_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 3);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_4_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 4);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_5_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 5);
+			}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_6_HOUR)) {
+				endTime.add(Calendar.HOUR_OF_DAY, 6);
+			}
+			endTime.set(Calendar.MINUTE, eMin);
+			endTime.set(Calendar.SECOND, 0);
+			endTime.getTime(); // to recalculate
+		} else {
+			endTime.set(Calendar.HOUR_OF_DAY, eHr);
+			endTime.set(Calendar.MINUTE, eMin);
+			endTime.set(Calendar.SECOND, 0);
+			endTime.getTime(); // to recalculate
+		}
+
+		job.setPlannedStartTime(startTime.getTime());
+		job.setPlannedEndTime(endTime.getTime());
+		job.setPlannedHours(Integer.parseInt(plannedHours));
+		job.setScheduled(true);
+		job.setJobType(parentJob.getType());
+		job.setSchedule("ONCE");
+		job.setLocationId(!StringUtils.isEmpty(dataMap.get("location")) ? Long.parseLong(dataMap.get("location")) : 0);
+		job.setActive("Y");
+		job.setMaintenanceType(parentJob.getMaintenanceType());
+		if(parentJob.getAsset() != null) {
+			job.setAssetId(parentJob.getAsset().getId());
+		}
+		job.setParentJobId(parentJob.getId());
+		job.setParentJob(parentJob);
+		job.setJobType(parentJob.getType());
+		job.setZone(parentJob.getZone());
+		job.setFloor(parentJob.getFloor());
+		job.setBlock(parentJob.getBlock());
+		//log.debug("Job status in scheduler {}",job.getJobStatus());
+        if(CollectionUtils.isNotEmpty(parentJob.getChecklistItems())) {
+            List<JobChecklist> jobclList = parentJob.getChecklistItems();
+            List<JobChecklistDTO> checklistItems = new ArrayList<JobChecklistDTO>();
+            for(JobChecklist jobcl : jobclList) {
+                JobChecklistDTO checklist = new JobChecklistDTO();
+                checklist.setChecklistId(String.valueOf(jobcl.getChecklistId()));
+                checklist.setChecklistName(jobcl.getChecklistName());
+                checklist.setChecklistItemId(String.valueOf(jobcl.getChecklistItemId()));
+                checklist.setChecklistItemName(jobcl.getChecklistItemName());
+                checklistItems.add(checklist);
+
+            }
+            if(job.getChecklistItems() != null) {
+                job.getChecklistItems().addAll(checklistItems);
+            }else {
+                job.setChecklistItems(checklistItems);
+            }
+        }
+		//log.debug("JobDTO parent job id - " + parentJob.getId());
+		//log.debug("JobDTO parent job id - " + job.getParentJobId());
+		//log.debug("JobDTO Details before calling saveJob - " + job);
+		//jobManagementService.saveScheduledJob(job);
+		jobs.add(job);
+		if (StringUtils.isNotEmpty(frequency)) {
+			Calendar tmpCal = Calendar.getInstance();
+			tmpCal.set(Calendar.DAY_OF_MONTH, plannedEndTimeCal.get(Calendar.DAY_OF_MONTH));
+			tmpCal.set(Calendar.MONTH, plannedEndTimeCal.get(Calendar.MONTH));
+			tmpCal.set(Calendar.HOUR_OF_DAY, plannedEndTimeCal.get(Calendar.HOUR_OF_DAY));
+			tmpCal.set(Calendar.MINUTE, plannedEndTimeCal.get(Calendar.MINUTE));
+			tmpCal.getTime(); // recalculate
+			//log.debug("Planned end time cal value = " + tmpCal.getTime());
+			//log.debug("end time value based on frequency = " + endTime.getTime());
+			//log.debug("planned end time after endTime " + tmpCal.getTime().after(endTime.getTime()));
+			if (tmpCal.getTime().after(endTime.getTime())) {
+				tmpCal.setTime(endTime.getTime());
+				if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 1);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_2_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 2);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_3_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 3);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_4_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 4);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_5_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 5);
+					tmpCal.getTime(); // recalculate
+				}else if(frequency.equalsIgnoreCase(FREQ_ONCE_EVERY_6_HOUR)) {
+					tmpCal.add(Calendar.HOUR_OF_DAY, 6);
+					tmpCal.getTime(); // recalculate
+				}
+				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime(), jobs);
+			}
+		}
+		return job;
+	}
+	
+	private void jobCreationTask(SchedulerConfig scheduledTask, Job parentJob, String data, Date jobDate, List<JobDTO> jobs) {
+		log.debug("Creating Job : " + data);
+		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
+		String sTime = dataMap.get("plannedStartTime");
+		String eTime = dataMap.get("plannedEndTime");
+		SimpleDateFormat sdf = new SimpleDateFormat("E MMM d HH:mm:ss z yyyy");
+		try {
+			Date sHrs = sdf.parse(sTime);
+			Date eHrs = sdf.parse(eTime);
+
+			try {
+				boolean shouldProcess = true;
+				if (scheduledTask.isScheduleDailyExcludeWeekend()) {
+					Calendar today = Calendar.getInstance();
+					today.setTime(jobDate);
+					//if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+					if (today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+						shouldProcess = false;
+					}
+				}
+				if (shouldProcess) {
+					List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJob.getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate));
+					if (CollectionUtils.isEmpty(job)) {
+						job = jobRepository.findChildJobByTitleSiteDateAndLocation(parentJob.getTitle(), parentJob.getSite().getId(), DateUtil.convertToSQLDate(jobDate), DateUtil.convertToSQLDate(jobDate), parentJob.getBlock(), parentJob.getFloor(), parentJob.getZone());
+						if(CollectionUtils.isEmpty(job)) {
+							createJob(parentJob, dataMap, jobDate, eHrs, sHrs, eHrs, jobs);
+						}
+					}
+				}
+			} catch (Exception ex) {
+				log.warn("Failed to create JOB ", ex);
+				mailService.sendJobCreationErrorEmail(parentJob.getSite().getId());
+				
+			}
+
+		} catch (Exception e) {
+			log.error("Error while creating scheduled job ", e);
+			mailService.sendJobCreationErrorEmail(parentJob.getSite().getId());
+		}
+	}
+
+	private DateTime addDays(DateTime dateTime , String scheduleType, String data) {
+		Frequency frequency = Frequency.fromValue(scheduleType);
+		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
+		int duration = 1;
+		if(dataMap.get("duration") != null) {
+			duration = Integer.parseInt(dataMap.get("duration"));
+		}
+
+		switch(frequency) {
+			case HOUR :
+				dateTime = dateTime.plusHours(1 * duration);
+				break;
+			case DAY :
+				dateTime = dateTime.plusDays(1 * duration);
+				break;
+			case WEEK :
+				dateTime = dateTime.plusWeeks(1 * duration);
+				break;
+			case FORTNIGHT :
+				dateTime = dateTime.plusDays(14 * duration);
+				break;
+			case MONTH :
+				dateTime = dateTime.plusMonths(1 * duration);
+				break;
+			case YEAR :
+				dateTime = dateTime.plusYears(1 * duration);
+				break;
+			case HALFYEAR :
+				dateTime = dateTime.plusMonths(6 * duration);
+				break;
+			case QUARTER :
+				dateTime = dateTime.plusMonths(3 * duration);
+				break;
+			default:
+
+		}
+		return dateTime;
+	}
 
 }

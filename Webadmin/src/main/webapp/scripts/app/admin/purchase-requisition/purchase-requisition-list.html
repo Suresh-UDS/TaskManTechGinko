@@ -1,0 +1,415 @@
+<div ng-init="loadProjectsList();loadSitesList();initLoad()">
+
+    <div class="row">
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 txt-align-lft">
+
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+
+        <div class="col-md-6 txt-align-rgt">
+        
+        	<button ng-show="purchaseReq.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <div class="ripple-container"></div>
+            </button>
+            
+            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <div class="downloaderMd" ng-show="downloader"></div>
+
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-purchase-requisition"  tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
+                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                </span>
+
+                <span class="tag label label-info"  ng-show="searchCriteria.siteName || localStorage.siteName">
+                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                </span>
+            </span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card TableCard">
+                <div class="card-content">
+
+                    <div class="table-responsive tablecard">
+                        <table class="table table-hover">
+                            <thead>
+                               <tr>
+
+                                   <th>Ref.No
+                                      <!--  <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span> -->
+                                   </th>
+                                   <th>Client
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('client')" ng-class="isActiveAsc == 'client' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('client')" ng-class="isActiveDesc == 'client' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Site
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('site')" ng-class="isActiveAsc == 'site' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('site')" ng-class="isActiveDesc == 'site' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Requested By
+                                        <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('requestedBy')" ng-class="isActiveAsc == 'requestedBy' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('requestedBy')" ng-class="isActiveDesc == 'requestedBy' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Requested Date
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('requestedDate')" ng-class="isActiveAsc == 'requestedDate' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('requestedDate')" ng-class="isActiveDesc == 'requestedDate' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Approved By
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('approvedBy')" ng-class="isActiveAsc == 'approvedBy' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('approvedBy')" ng-class="isActiveDesc == 'approvedBy' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                       </span>
+                                   </th>
+                                   <th>Approved  Date
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('approvedDate')" ng-class="isActiveAsc == 'approvedDate' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('approvedDate')" ng-class="isActiveDesc == 'approvedDate' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                       </span>
+                                   </th>
+                                     <th>Status
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('requestStatus')" ng-class="isActiveAsc == 'requestStatus' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('requestStatus')" ng-class="isActiveDesc == 'requestStatus' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                       </span>
+                                   </th>
+                                   <th>Actions</th>
+
+                               </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="purchase in purchaseReq">
+                                <td>{{purchase.purchaseRefGenNumber}}</td>
+                                <td>{{purchase.projectName}}</td>
+                                <td>{{purchase.siteName}}</td>
+                                <td>{{purchase.requestedByName}}</td>
+                                <td>{{purchase.requestedDate | date:"dd-MM-yyyy"}}</td>
+                                <td>{{purchase.approvedByName}}</td>
+                                <td>{{purchase.approvedDate | date:"dd-MM-yyyy"}}</td>
+                                <td>{{purchase.requestStatus}}</td>
+                                <td class="text-right hoverMe">
+
+                                    <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+                                    <div class="HoverBx">
+                                        <button  title="View"  ui-sref="view-purchase-requisition({id: purchase.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                        <a title="Edit"  ui-sref="edit-purchase-requisition({id: purchase.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                        <a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal" ng-click="deleteConfirm(purchase.id)"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
+                                    </div>
+
+
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="txt-align-center LoaderCon"  ng-hide="purchaseReqLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+
+    <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+
+
+
+    <!-- Delete confirmation dialog -->
+    <div id="deleteModal" class="delete-confirmation modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure that you want to delete this record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button"
+                            class="btn btn-danger delete-confirmation-button" ng-click="deletePurchase()" >Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Delete confirmation dialog -->
+
+    <!-- Delete Multiple confirmation dialog -->
+    <div class="delete-multiple-confirmation modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure that you want to delete this record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel</button>
+                    <button type="button"
+                            class="btn btn-danger delete-multiple-confirmation-button"
+                            data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
+                        Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Delete Multiple confirmation dialog -->
+
+</div>
+</div>
+
+<!-- BasicFilterModal -->
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm"  ng-submit="searchFilter();" novalidate >
+
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Filter</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+                                    <h4 class="panel-title">
+                                        Basic Filter
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <label class="label-control">Client</label>
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList track by project.id" ng-pattern="Select Client" ng-required>-->
+                                                    <!--<option value="">Select Client...</option>-->
+                                                    <!--</select>-->
+                                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
+                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
+                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
+                                                            <div ng-bind="client"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="label-control">Site</label>
+                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList track by site.id" ng-pattern="Select Site">-->
+                                                    <!--<option value="">Select Site...</option>-->
+                                                    <!--</select>-->
+                                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sitesList.length == 0" ng-change="selectSite(searchSite)" ng-click="selectSite(searchSite)">
+                                                        <ui-select-match placeholder="Select Site...">{{sitesList.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select site':searchSite : 'Select Site' }}</ui-select-match>
+                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
+                                                            <div ng-bind="site"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <span ng-if="sitesList.length == 0"><p class="error-msg margin0">No sites</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <h4 class="panel-title">
+                                        Advanced Filter
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-md-6 col-sm-4">
+                                            <div class="form-group" style="padding-top: 20px;" >
+                                                <div class="dropdown">
+                                                    <input type="text" ng-model="selectedReferenceNumber"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Reference No"
+                                                           ng-model="searchReferenceNo"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                           <div class="col-xs-12 col-md-6 col-sm-4">
+                                            <div class="form-group no-padding" >
+                                                <div class="dropdown" ng-init="loadStatus()">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Status</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <select class="form-control" ng-model="selectedRequestStatus" ng-options="status for status in requestStatuses">
+                                                            <option value="">Select Status</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    
+                                    <div class="row">
+                                    <div class="col-xs-12 col-md-6 col-sm-4">
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Requested Date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datepicker"  id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="requestedDate"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6 col-sm-4">
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Approved Date</label>
+                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                    <input type="text" class="form-control datepicker"  id="dateFilterApprovedDate" placeholder="DD/MM/YYYY"  ng-model="approvedDate"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

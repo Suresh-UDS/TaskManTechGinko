@@ -1,48 +1,25 @@
 package com.ts.app.service;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.zip.GZIPInputStream;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.CopyObjectRequest;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
-import com.amazonaws.util.IOUtils;
+import com.amazonaws.services.s3.model.*;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
 
 
 @Service
@@ -72,6 +49,9 @@ public class AmazonS3Service {
 
     @Value("${AWS.s3-asset-path}")
     private String assetFilePath;
+
+    @Value("${AWS.s3-expenseDocument-path}")
+    private String expenseDocumentPath;
 
     @Value("${AWS.s3-qrcode-path}")
     private String qrCodePath;
@@ -179,6 +159,36 @@ public class AmazonS3Service {
     	}
 
     	return prefixUrl;
+
+    }
+
+    public String uploadExpenseFileTos3bucket(String fileName, File file) {
+        log.debug("upload Expense document to S3 bucket");
+        String prefixUrl = "";
+        try {
+
+            String folder = bucketEnv + expenseDocumentPath + fileName;
+            String ext = FilenameUtils.getExtension(fileName);
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType("application/"+ ext);
+            metadata.setContentDisposition("attachment;filename="+ fileName +"");
+
+            PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, file)
+                .withMetadata(metadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+            URL url = s3client.getUrl(bucketName, folder);
+            log.debug("S3 uploaded url" +url);
+            prefixUrl = cloudFrontUrl + folder;
+            log.debug("Result from S3 -" +result);
+
+        }catch(AmazonS3Exception e) {
+            log.debug("Error while upload expense document to S3 bucket " + e.getMessage());
+            log.debug("Error Status code " + e.getErrorCode());
+            e.printStackTrace();
+        }
+
+        return prefixUrl;
 
     }
 
@@ -368,25 +378,33 @@ public class AmazonS3Service {
 		 return prefixUrl;
 	}
 
-	public String uploadEmployeeFileToS3bucket(String fileName, File multipartFile) {
+	public String uploadEmployeeFileToS3bucket(String fileName, byte[] file) {
 		log.debug("upload employee checkInOut image to S3 bucket");
     	String prefixUrl = "";
     	try {
 
-    		String folder = bucketEnv + checkInOutPath + fileName;
+
+    		String key = bucketEnv + checkInOutPath + fileName;
     		String ext = FilenameUtils.getExtension(fileName);
+
+            InputStream fis = new ByteArrayInputStream(file);
 
     		ObjectMetadata metadata = new ObjectMetadata();
     		metadata.setContentType("application/"+ ext);
 
-    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
-    				.withMetadata(metadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-    		log.info("===================== Upload File - Done! =====================");
-    		URL url = s3client.getUrl(bucketName, folder);
-    		log.debug("S3 uploaded url" +url);
-    		prefixUrl = cloudFrontUrl + folder;
-    		log.debug("Result from S3 -" +result);
+//    		PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, multipartFile)
+//    				.withMetadata(metadata)
+//                    .withCannedAcl(CannedAccessControlList.PublicRead));
+//    		log.info("===================== Upload File - Done! =====================");
+//    		URL url = s3client.getUrl(bucketName, folder);
+//    		log.debug("S3 uploaded url" +url);
+//    		prefixUrl = cloudFrontUrl + folder;
+//    		log.debug("Result from S3 -" +result);
+
+            PutObjectResult result = s3client.putObject(bucketName, key, fis, metadata);
+            s3client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+            log.debug("result of object request -" + result);
+            prefixUrl = cloudFrontUrl + key;
 
     	}catch(AmazonS3Exception e) {
     		log.debug("Error while upload employee checkInOut to S3 bucket " + e.getMessage());
@@ -401,11 +419,11 @@ public class AmazonS3Service {
 		String key = bucketEnv + checkListPath + filename;
 		String prefixUrl = "";
 		try {
-			
+
 			log.debug(checkListImg);
 			byte[] bI = org.apache.commons.codec.binary.Base64.decodeBase64((checkListImg.substring(checkListImg.indexOf(",")+1)).getBytes());
 			log.debug("Image Strings -" +bI);
-			
+
 			InputStream fis = new ByteArrayInputStream(bI);
 
 			ObjectMetadata metadata = new ObjectMetadata();
@@ -451,6 +469,39 @@ public class AmazonS3Service {
 		}
 		 return prefixUrl;
 	}
+
+	public void uploadExistingCheckin() {
+		log.debug("Calling AWS S3 for Checklist Images upload");
+		String key = "prod/checkListImages/";
+		String destinationKey = "prod/checkListImages/";
+		try {
+			List<S3ObjectSummary> fileList = s3client.listObjects(bucketName, key).getObjectSummaries();
+			for(S3ObjectSummary file : fileList) {
+				String filename = file.getKey();
+				log.debug("Checklist Images before renamed file:" +  filename);
+				    String subString[] = filename.split("/", 2);
+				    System.out.println("Checklist Images Sub String file:" +  subString[0]);
+				    System.out.println("Last String of File :" + subString[1]);
+				    String last[] = subString[1].split("/", 2);
+				    System.out.println("Last String of File :" + last[0]);
+//				if(filename.contains("/")) {
+//					String replacedFile = filename.replace("/", "-");
+//					log.debug("After Slash removed file:" +  replacedFile);
+
+//					CopyObjectRequest copyObjRequest = new CopyObjectRequest(bucketName, filename, bucketName, destinationKey + replacedFile)
+//							.withCannedAccessControlList(CannedAccessControlList.PublicReadWrite);
+//					s3client.copyObject(copyObjRequest);
+
+					log.info("===================== Upload File - Done! =====================");
+//				}
+
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 
 	public String uploadExistingTicketToS3(String fileName, String image) {
 		String key = bucketEnv + ticketPath + fileName;
@@ -534,8 +585,6 @@ public class AmazonS3Service {
             e.printStackTrace();
         }
 	}
-
-
 
 
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.report.title}">TaskMan Day Wise Reports</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.report.greeting}">
+    Dear
+</p>
+
+
+<p th:text="#{email.report.text1(${date})}">
+
+</p>
+
+<p th:utext="${summary}">
+
+</p>
+<br/>
+<p>
+</p>
+<p>
+    <span th:text="#{email.report.text2}">Regards,</span>
+    <br/>
+    <em th:text="#{email.signature}">UDS.</em>
+</p>
+</body>
+</html>

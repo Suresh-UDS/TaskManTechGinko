@@ -1,8 +1,9 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class TicketDTO extends BaseDTO {
     private long id;
@@ -62,6 +63,8 @@ public class TicketDTO extends BaseDTO {
     private Date closedOn;
 
     private String comments;
+    
+    private String remarks;
 
     private String category;
 
@@ -78,6 +81,12 @@ public class TicketDTO extends BaseDTO {
     private String assetTitle;
     
     private long assetId;
+
+    private String branch;
+
+    private String region;
+
+    private ZonedDateTime createdDate;
 
     public long getId() {
         return id;
@@ -262,6 +271,15 @@ public class TicketDTO extends BaseDTO {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+	
+	
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 
 	public String getCategory() {
 		return category;
@@ -375,6 +393,29 @@ public class TicketDTO extends BaseDTO {
 		this.closedByLastName = closedByLastName;
 	}
 
-	
-	
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    @Override
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    @Override
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
 }

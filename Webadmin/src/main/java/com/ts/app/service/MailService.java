@@ -1,7 +1,6 @@
 package com.ts.app.service;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -29,9 +28,12 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import com.ts.app.config.JHipsterProperties;
+import com.ts.app.domain.Setting;
 import com.ts.app.domain.User;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.Sendgrid;
+import com.ts.app.web.rest.dto.SettingsDTO;
 import com.ts.app.web.rest.dto.UserDTO;
 
 /**
@@ -65,6 +67,9 @@ public class MailService {
 
     @Value("${export.file.path}")
     private String exportPath;
+
+    @Inject
+    private SettingsRepository settingsRepository;
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
@@ -115,7 +120,7 @@ public class MailService {
             log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
     }
-    
+
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,File file) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
@@ -154,7 +159,7 @@ public class MailService {
             message.setText(content, isHtml);
             if(isMultipart){
 	            	if(file != null) {
-	            		FileSystemResource fsr = new FileSystemResource(file);	
+	            		FileSystemResource fsr = new FileSystemResource(file);
 	            		message.addAttachment(file.getName(),fsr, "text/html");
 	            	}
             }
@@ -235,7 +240,7 @@ public class MailService {
         if(!StringUtils.isEmpty(to)) {
         		toEmails = to.split(",");
         }
-        
+
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
@@ -296,7 +301,7 @@ public class MailService {
         String subject = messageSource.getMessage("email.ticket.alert.title", null, locale);
         sendEmail(emailIds, subject, content, false, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
-    
+
     @Async
     public void sendTicketUpdatedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
@@ -312,7 +317,7 @@ public class MailService {
         String subject = messageSource.getMessage("email.ticket.updated.alert.title", null, locale);
         sendEmail(emailIds, subject, content, false, true,org.apache.commons.lang3.StringUtils.EMPTY);
     }
-    
+
     @Async
     public void sendTicketClosedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
@@ -346,7 +351,7 @@ public class MailService {
     }
 
     @Async
-    public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate, 
+    public void sendAttendanceDetailedReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, Date currDate,
     							Map<String,String> summaryData, Map<String,Map<String,Integer>> siteWiseSummary, Map<String,List<Map<String,String>>> consolidatedData) {
         log.debug("Sending attendance detailed report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
@@ -363,9 +368,9 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
-    
+
     @Async
-    public void sendAttendanceMusterrollReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, String month 
+    public void sendAttendanceMusterrollReportEmail(String siteName, String emailIds, String reportData, String file, String baseUrl, String month
     							) {
         log.debug("Sending attendance musterroll report e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
@@ -379,7 +384,7 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
-    
+
     @Async
     public void sendAttendanceExportEmail(String siteName, String emailIds, File file, Date currDate) {
         log.debug("Sending attendance export report e-mail to '{}'", emailIds);
@@ -391,7 +396,7 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
-    
+
     @Async
     public void sendTicketExportEmail(String siteName, String emailIds, File file, Date currDate) {
         log.debug("Sending ticket export report e-mail to '{}'", emailIds);
@@ -403,7 +408,7 @@ public class MailService {
         subject += " - " + siteName;
         sendEmail(emailIds, subject, content, true, true,file);
     }
-     
+
     @Async
     public void sendJobExportEmail(String siteName, String emailIds, File file, Date currDate) {
         log.debug("Sending job export report e-mail to '{}'", emailIds);
@@ -428,7 +433,7 @@ public class MailService {
         sendEmail(emailIds, subject, content, true, true,file);
     }
 
-    
+
     @Async
     public void sendJobReportEmailFile(String emailIds, String file,  String baseUrl, Date currDate) {
         log.debug("Sending job report e-mail to '{}'", emailIds);
@@ -443,6 +448,17 @@ public class MailService {
         sendEmail(emailIds, subject, content, true, true,fileName);
     }
 
+    @Async
+    public void sendJobCreationErrorEmail(long siteId) {
+    		Setting setting = settingsRepository.findSettingByKey(SettingsService.JOB_SCHEDULER_ERROR_EMAILS);
+        log.debug("Sending job creation error alert e-mail to '{}'", setting.getSettingValue());
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("site", siteId);
+        String content = templateEngine.process("jobCreationErrorEmail", context);
+        String subject = messageSource.getMessage("email.job.scheduler.title", null, locale);
+        sendEmail(setting.getSettingValue(), subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+    }
 
     @Async
     public void sendJobReportEmail(User user,  String baseUrl) {
@@ -486,7 +502,7 @@ public class MailService {
         String subject = messageSource.getMessage("email.completed.report.title", null, locale);
         sendEmail(user.getEmail(), subject, content, true, true,fileName);
     }
-    
+
     @Async
     public void sendJobCompletionMail(String ticketUrl,String jobUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status, long jobId, String jobTitle){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
@@ -524,7 +540,7 @@ public class MailService {
         String subject = messageSource.getMessage("email.feedback.alert.title", null, locale);
         sendEmail(emailIds, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
-    
+
     @Async
     public void sendReadingAlert(String emailIds, String siteName, String assetCode, String assetName, String type, Date date) {
         log.debug("Sending Reading alert e-mail to '{}'", emailIds);
@@ -563,7 +579,7 @@ public class MailService {
 		}
 		return msg;
 	}
-    
+
     public void sendAttendanceCheckouAlertEmail(String emailIds, Map<String,Object> values) {
     		log.debug("Sending attendance consolidated report e-mail to '{}'", emailIds);
     		Locale locale = Locale.forLanguageTag("en-US");
@@ -574,7 +590,7 @@ public class MailService {
     		String subject = messageSource.getMessage("email.attendance.checkout.alert.title", null, locale);
     		sendEmail(emailIds, subject, emailContent, true, true,org.apache.commons.lang3.StringUtils.EMPTY);
     	}
-    
+
     @Async
 	public void sendAssetBreakdownAlert(String emailIds, String title, String siteName, String assetCode, String username, Date date) {
 		// TODO Auto-generated method stub
@@ -617,7 +633,7 @@ public class MailService {
         String content = templateEngine.process("previousDayJobAlert", context);
         String subject = messageSource.getMessage("email.previousDayJobAlert.title", null, locale);
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
-		
+
 	}
 
 	public void sendEmployeeAssignAlert(String email, long jobId, Date plannedStartTime) {
@@ -645,7 +661,7 @@ public class MailService {
 	        String subject = messageSource.getMessage("email.report.title", values, locale);
 	        List<String> fileNames = files;
 	        sendEmail(emailIds, subject, content, true, true,fileNames);
-		
+
 	}
 
 	@Async
@@ -700,8 +716,20 @@ public class MailService {
 //        	e.printStackTrace();
             log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
-    
+
 	}
 
-	
+	public void sendPurchaseRequest(String email, String code, String siteName, String name) {
+		// TODO Auto-generated method stub
+		Locale locale = Locale.forLanguageTag("en-US");
+		Context context = new Context(locale);
+		context.setVariable("itemCode", code);
+		context.setVariable("siteName", siteName);
+		context.setVariable("item", name);
+		String content = templateEngine.process("purchaseRequisitionAlert", context);
+		String subject = messageSource.getMessage("email.purchaseReqAlert.title", null, locale);
+		sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+	}
+
+
 }

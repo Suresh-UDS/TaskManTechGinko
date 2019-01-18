@@ -1,15 +1,12 @@
 package com.ts.app.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,30 +27,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Attendance;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.RateCard;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.RateCardRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.RateCardDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Service class for exposing rate card related operations.
@@ -581,7 +558,9 @@ public class RateCardService extends AbstractService {
             request.put("isDrafted", searchCriteria.isQuotationIsDrafted());
             request.put("isApproved", searchCriteria.isQuotationIsApproved());
             request.put("currPage", searchCriteria.getCurrPage());
-            request.put("sort", searchCriteria.getSort());
+            request.put("columnName", searchCriteria.getColumnName());
+            request.put("sortByAsc", searchCriteria.isSortByAsc());
+            request.put("sortNum", searchCriteria.getSort());
             request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
@@ -601,6 +580,55 @@ public class RateCardService extends AbstractService {
 //		entities = rateCardRepository.findAll();
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  quotationList;
+    }
+
+    public Object getAllQuotations() {
+	    Object quotations = "";
+	    try{
+	        RestTemplate restTemplate = new RestTemplate();
+	        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+	        jackson2HttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+	        restTemplate.getMessageConverters().add(jackson2HttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            headers.setAll(map);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotations/findAll", String.class);
+            log.debug("Response from quotation srv status "+response.getStatusCode()+ " response " +response.getBody());
+            quotations = response.getBody();
+        } catch (Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+	    return quotations;
+    }
+
+    public Object getLastModifiedResult() {
+        Object lastModResults = "";
+        try{
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jackson2HttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jackson2HttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            headers.setAll(map);
+
+            log.debug("Quotation service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/lastmodified/quotations", String.class);
+            log.debug("Response from quotation srv status "+response.getStatusCode()+ " response " +response.getBody());
+            lastModResults = response.getBody();
+        } catch (Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+        return lastModResults;
     }
 
 	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {

@@ -1,8 +1,7 @@
 package com.ts.app.repository;
 
-import java.sql.Date;
-import java.util.List;
-
+import com.ts.app.domain.Attendance;
+import com.ts.app.domain.EmployeeAttendanceReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,8 +9,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Attendance;
-import com.ts.app.domain.EmployeeAttendanceReport;
+import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>,JpaSpecificationExecutor<Attendance> {
 
@@ -127,5 +127,11 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
 
     @Query("SELECT at FROM Attendance at WHERE at.checkOutImage is not null")
 	Page<Attendance> findByImage(Pageable pageRequest);
+
+    @Query("SELECT at FROM Attendance at WHERE at.checkInTime is not null")
+	List<Attendance> findByEmployeeList();
+
+    @Query("SELECT at FROM Attendance at where at.employee.id NOT IN (:empIds) order by at.checkInTime desc")
+	List<Attendance> findNonEmpIds(@Param("empIds") List<Long> empIds);
 
 }

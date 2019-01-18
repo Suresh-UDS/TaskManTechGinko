@@ -1,0 +1,98 @@
+page-indent-list {
+  .card .card-content {
+    padding: 5px 10px !important;
+    position: relative;
+  }
+  .fab[mini] {
+    margin: 8px;
+    width: 30px;
+    height: 30px;
+    line-height: 40px;
+    margin-top:0px !important;
+  }
+  .fab ion-icon
+  {
+    font-size:16px !important;
+  }
+  .mrgn-p {
+    margin: 0 -6px 10px !important;
+  }
+  .brdr{
+    border-bottom:none !important;
+  }
+  ion-card img {
+    width: 100% !important;
+    height:80px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .brdr{
+    border:1px solid #CCC !important;
+  }
+  .list-md .item-input:last-child
+  {
+    border-bottom:none !important;
+  }
+
+  .item-md.item-block .item-inner
+  {
+    border-bottom:none !important;
+  }
+  .fnt-16
+  {
+    font-size:16px !important;
+  }
+  .label-md
+  {
+    margin:0px !important;
+  }
+  .card .card-content {
+    padding: 0px 9px !important;
+    position: relative;
+  }
+  .table-responsive {
+    width: 100%;
+   margin-bottom:0px !important;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #ddd;
+  }
+  .card {
+    margin:0px !important;
+  }
+  .label
+  {
+    font-weight:400 !important;
+  }
+
+
+  //.fakeList{
+  //  h2, h3, p, ion-icon {
+  //    background-color: lightgrey;
+  //    opacity: 0.5;
+  //    height: 1em;
+  //    margin-top: 10px;
+  //  }
+  //
+  //  h2 {
+  //    width: 35%;
+  //  }
+  //
+  //  h3 {
+  //    width: 40%;
+  //  }
+  //
+  //  p {
+  //    width: 180%;
+  //  }
+  //}
+
+
+
+}

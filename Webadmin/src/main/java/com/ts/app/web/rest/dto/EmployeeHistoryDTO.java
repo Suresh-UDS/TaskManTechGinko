@@ -1,10 +1,6 @@
 package com.ts.app.web.rest.dto;
 
 
-import javax.validation.constraints.Size;
-
-import com.ts.app.domain.Site;
-
 /**
  * A DTO representing a EmployeeHistory
  */

@@ -1,20 +1,17 @@
 package com.ts.app.repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.ts.app.domain.Vendor;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.domain.Specification;
-
-import com.ts.app.domain.Vendor;
-import com.ts.app.web.rest.dto.SearchCriteria;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VendorSpecification implements Specification<Vendor> {
 	SearchCriteria searchCriteria;

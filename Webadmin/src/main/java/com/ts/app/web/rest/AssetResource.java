@@ -58,6 +58,7 @@ import com.ts.app.web.rest.dto.AssetgroupDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -85,9 +86,6 @@ public class AssetResource {
 
 	@Autowired
 	private ServletContext servletContext;
-
-	@Inject
-	private ImportUtil importUtil;
 
 	@Inject
 	private Environment env;
@@ -588,6 +586,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetData(@RequestParam("assetFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -618,6 +619,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetPPMData(@RequestParam("assetPPMFile") MultipartFile file) {
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importPPMFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -648,6 +652,9 @@ public class AssetResource {
 	public ResponseEntity<ImportResult> importAssetAMCData(@RequestParam("assetAMCFile") MultipartFile file) {
 		Calendar cal = Calendar.getInstance();
 		ImportResult result = assetService.importAMCFile(file, cal.getTimeInMillis());
+        if(!StringUtils.isEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result, HttpStatus.OK);
 	}
 
@@ -829,6 +836,17 @@ public class AssetResource {
         }
 	    return result;
     }
+	
+	@RequestMapping(value = "/assets/jobmaterials", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<JobDTO> getAssetMaterials(@RequestBody SearchCriteria searchCriteria) { 
+		List<JobDTO> result = null;
+		try {
+			result = assetService.getAssetMaterials(searchCriteria);
+		} catch(Exception e) {
+			throw new TimesheetException("Error while get Asset Job Materials" +e); 
+		}
+		return result;
+	}
 
 
 

@@ -125,7 +125,7 @@ export class EmployeeService {
             response=>{
                 console.log("Enrolling Face");
                 console.log(response);
-                return response;
+                return response.json();
             }).catch(error=>{
                 console.log("Error in Enrolling Face");
                 console.log(error);

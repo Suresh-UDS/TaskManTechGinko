@@ -1,13 +1,13 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
+
+import java.util.Date;
+import java.util.List;
 
 public class JobDTO extends BaseDTO {
 
@@ -95,6 +95,8 @@ public class JobDTO extends BaseDTO {
 	private String zone;
 	
 	private String maintenanceType;
+	
+	private List<JobMaterialDTO> jobMaterials;
 
 	public String getDuration() {
 		return duration;
@@ -475,4 +477,10 @@ public class JobDTO extends BaseDTO {
     public void setPendingAtClient(boolean pendingAtClient) {
         this.pendingAtClient = pendingAtClient;
     }
+	public List<JobMaterialDTO> getJobMaterials() {
+		return jobMaterials;
+	}
+	public void setJobMaterials(List<JobMaterialDTO> jobMaterials) {
+		this.jobMaterials = jobMaterials;
+	}
 }

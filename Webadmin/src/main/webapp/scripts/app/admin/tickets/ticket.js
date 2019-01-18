@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('create-ticket', {
 		parent : 'manage',
 		url : '/create-ticket/:assetId',
-		controller : 'TicketController',
+		//controller : 'TicketController',
 		data : {
 			authorities : [],
 			pageTitle : 'Create Ticket'
@@ -21,7 +21,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('edit-ticket', {
 		parent : 'manage',
 		url : '/edit-ticket/:id',
-		controller : 'TicketController',
+		//controller : 'TicketController',
 		data : {
 			authorities : [],
 			pageTitle : 'Update Ticket'
@@ -38,7 +38,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-ticket', {
 		parent : 'manage',
 		url : '/view-ticket/:id',
-		controller : 'TicketController',
+		//controller : 'TicketController',
 		data : {
 			authorities : [],
 			pageTitle : 'View Ticket'

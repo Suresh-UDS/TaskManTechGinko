@@ -1,0 +1,126 @@
+<div class="crud-form" ng-init="initLoad();loadingStart();loadExpense()">
+
+
+    <div class="margn-top30">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td>Site </td>
+                                    <td>{{expenseDetails.siteName}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Debit Amount </td>
+                                    <td>{{expenseDetails.debitAmount}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Payment Mode </td>
+                                    <td>{{expenseDetails.mode}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Expense Category  </td>
+                                    <td>{{expenseDetails.expenseCategory}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Expense Date </td>
+                                    <td>{{expenseDetails.expenseDate}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Payment Type </td>
+                                    <td>{{expenseDetails.paymentType}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Billable </td>
+                                    <td>{{expenseDetails.billable}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Reimbursable </td>
+                                    <td>{{expenseDetails.reimbursable}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Balance Amount </td>
+                                    <td>{{expenseDetails.balanceAmount}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Uploaded Documents</td>
+                                    <td>
+                                        <div ng-repeat="img in expenseDetails.expenseDocumentList">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadExpenseImage(img.fileUrl)" >
+                                                <img src="{{img.fileUrl}}" width="150px" height="150px">
+
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+         <div class="row">
+             <div class="col-md-12 txt-align-rgt">
+                 <div class="form-group">
+
+
+                     <button class="btn" type="button" ui-sref="expense-list" id="cancel-button">
+                         Back
+                         <div class="ripple-container"></div></button>
+
+                 </div>
+             </div>
+         </div>
+
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="myModalLabel">Expense Image</h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="txt-align-center">
+                    <img id="photoStart" style="width:300px;height:300px" />
+                </div>
+
+
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-danger btn-round" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

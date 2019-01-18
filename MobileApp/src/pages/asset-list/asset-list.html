@@ -9,19 +9,19 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title text-center>Asset List</ion-title>
+    <ion-title text-center class="title-font">Assets</ion-title>
       <ion-buttons right>
           <button ion-button class="fnt-black" icon-only (click)="openFilters()" class="padding-right10" *ngIf="open">
-              <i class="fa fa-filter fnt-24"></i>
+            <ion-icon name="funnel"></ion-icon>
           </button>
       </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
-    <button ion-button full (click)="setDataSync()">Data Sync</button>
+    <button ion-button full *ngIf="assetList" (click)="setDataSync()"><ion-icon name="sync" class="fnt-24" style="padding-right: 10px" ></ion-icon>Data Sync</button>
 
     <!--<ion-fab right bottom (click)="openFilters()"   >-->
         <!--<button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>-->
@@ -46,14 +46,23 @@
         </span>
     </div>
 
-  <ion-list>
 
 
 
       <!--<ion-refresher (ionRefresh)="doRefresh($event)">-->
           <!--<ion-refresher-content></ion-refresher-content>-->
       <!--</ion-refresher>-->
-      <div *ngIf="!assetList || assetList?.length<0">
+  <ion-list class="asset-padding">
+
+
+
+     <!-- <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>-->
+
+
+
+      <div *ngIf="(!assetList || assetList.length<0 ) && !spinner" class="no-data">
           <ion-card>
               <ion-card-content>
                   <img src="assets/imgs/warning.svg">
@@ -61,16 +70,20 @@
               </ion-card-content>
           </ion-card>
       </div>
-    <ion-item  *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="">
 
+    <div *ngIf="(assetList?.length<0 || assetList == null) && spinner" text-center class="margin-top25">
+      <ion-spinner name="circles"></ion-spinner>
+    </div>
+
+    <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="">
         <ion-thumbnail *ngIf="asset.url" item-start class="">
-            <img [src]=asset.url imageViewer/>
+            <img class="thumbnail" [src]=asset.url imageViewer/>
         </ion-thumbnail>
         <ion-thumbnail *ngIf="!asset.url" item-start class="">
-            <img src="assets/imgs/placeholder.png" imageViewer/>
+            <img class="thumbnail" src="assets/imgs/placeholder.png" imageViewer/>
         </ion-thumbnail>
-        <p text-left="" class="padding-bottom5">{{asset.title}}</p>
-        <p text-left="" class="fnt-12">{{asset.code}}</p>
+        <p text-left="" class="padding-bottom5 text-font">{{asset.title}}</p>
+        <p text-left="" class="fnt-12 text-font">{{asset.code}}</p>
         <button ion-button clear item-end  >
             <ion-icon name="md-eye"></ion-icon>
         </button>
@@ -87,9 +100,8 @@
           <!--<ion-icon name="md-eye"></ion-icon>-->
       <!--</button>-->
     </ion-item>
-
   </ion-list>
-    <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAsset($event)">
+    <ion-infinite-scroll distance="5%" class="asset-padding" *ngIf="page<totalPages"  (ionInfinite)=" doInfiniteAsset($event)">
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 

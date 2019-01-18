@@ -1,17 +1,17 @@
 package com.ts.app.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.TicketStatus;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.PushService;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.TicketManagementService;
-import com.ts.app.service.UserService;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import com.amazonaws.services.elasticmapreduce.model.Ec2InstanceAttributes;
+import com.ts.app.domain.TicketStatusReport;
+import com.ts.app.service.*;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,17 +19,27 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.config.ReportDatabaseConfiguration;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.TicketStatus;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.TicketDTO;
 
 @RestController
 @RequestMapping("/api")
@@ -51,6 +61,9 @@ public class TicketManagementResource {
 	
 	@Inject
 	private SchedulerHelperService schedulerHelperService;
+	
+	@Inject 
+	private ReportDatabaseService reportDatabaseService;
 
 	@RequestMapping(path = "/ticket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed

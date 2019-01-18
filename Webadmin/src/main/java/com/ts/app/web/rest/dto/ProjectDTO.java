@@ -3,9 +3,9 @@ package com.ts.app.web.rest.dto;
 
 import java.util.Date;
 
-import com.ts.app.domain.Project;
+import javax.validation.constraints.Size;
 
-import javax.validation.constraints.*;
+import com.ts.app.domain.Project;
 
 /**
  * A DTO representing a Project.

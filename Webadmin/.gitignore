@@ -65,6 +65,7 @@ local.properties
 # Gradle
 ######################
 .gradle/**
+gradle/**
 .cache-main
 .cache-tests
 .jhipster/**
@@ -126,3 +127,4 @@ Desktop.ini
 !gradle/wrapper/gradle-wrapper.jar
 /bin/
 /.gradle/
+/build/

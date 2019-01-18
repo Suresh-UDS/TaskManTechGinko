@@ -23,6 +23,8 @@ export class Ticket {
     tickets:any;
     clientFilter:any;
     siteFilter:any;
+  fromDate:any;
+  toDate:any;
   constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService, public modalCtrl:ModalController) {
       this.tickets = [];
   }
@@ -62,26 +64,34 @@ export class Ticket {
             console.log(data);
             this.clientFilter=data.project;
             this.siteFilter=data.site;
-            this.applyFilter(data.project,data.site);
+            this.fromDate = data.fromDate;
+            this.toDate = data.toDate;
+            this.applyFilter(data.project,data.site,data.fromDate,data.toDate);
         });
         modal.present();
     }
 
 
-    applyFilter(project,site){
+    applyFilter(project,site,fromDate,toDate){
         this.cs.showLoader("");
         var searchCriteria={
             siteId:site.id,
             projectId:project.id,
+          fromDate:fromDate,
+          toDate:toDate
         };
+
+        console.log("filter",searchCriteria);
 
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.cs.closeAll();
+                this.cs.closeLoader();
                 console.log("Filtering Tickets");
                 console.log(response);
                 this.tickets=response.transactions;
             },error=>{
+              this.cs.closeLoader();
                 this.cs.closeAll();
                 console.log("Error in filtering tickets");
                 console.log(error);

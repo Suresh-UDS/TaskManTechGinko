@@ -1,20 +1,14 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
-
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,8 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing Site information.
@@ -116,7 +110,9 @@ public class SiteService extends AbstractService {
 	private void mapToEntity(SiteDTO siteDTO, Site site) {
 		site.setName(siteDTO.getName());
 		site.setAddress(siteDTO.getAddress());
+		site.setCity(siteDTO.getCity());
 		site.setCountry(siteDTO.getCountry());
+		site.setPinCode(siteDTO.getPinCode());
 		site.setState(siteDTO.getState());
 		site.setAddressLat(siteDTO.getAddressLat());
 		site.setAddressLng(siteDTO.getAddressLng());
@@ -235,7 +231,7 @@ public class SiteService extends AbstractService {
 			}
 			entities = siteRepository.findAll(subEmpIds);
 		}else {
-			entities = siteRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+			entities = siteRepository.findAll();
 		}
 		List<SiteDTO> values = new ArrayList<SiteDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {
@@ -456,12 +452,13 @@ public class SiteService extends AbstractService {
     }
 
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		//ImportResult er = new ImportResult();
+		ImportResult er = null;
 		//fileId += ".csv";
 		if(!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}
@@ -521,7 +518,7 @@ public class SiteService extends AbstractService {
         return mapperUtil.toModelList(branches, BranchDTO.class);
     }
 
-    
+
     public List<SiteDTO> findSitesByRegion(long projectId, String region){
         List<Site> sites = siteRepository.findSitesByRegion(projectId,region);
 
@@ -573,5 +570,24 @@ public class SiteService extends AbstractService {
 
     }
 
+    public boolean isDuplicate(RegionDTO regionDTO) {
+
+    	List<Long> results = regionRepository.findByRegion(regionDTO.getName(), regionDTO.getProjectId());
+
+        if(!results.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isDuplicate(BranchDTO branchDTO) {
+
+    	List<Branch> results = branchRepository.findBranchByProjectAndRegionId(branchDTO.getProjectId(), branchDTO.getRegionId(), branchDTO.getName());
+
+        if(!results.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
 }

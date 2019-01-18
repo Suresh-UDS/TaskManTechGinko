@@ -45,6 +45,7 @@ export class CreateJobPage {
     msg:any;
     ticket:any;
     assetDetails:any;
+    category:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) {
         this.jobDetails=this.navParams.get('job');
         this.assetDetails = this.navParams.get('assetDetails')
@@ -111,7 +112,7 @@ export class CreateJobPage {
             this.component.showLoader("Creating job");
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
-           var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
+            var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
             var EDate = new Date(this.endDate);
 
             this.startTime = moment(this.startDate).subtract(5,'hours').toDate();
@@ -121,7 +122,13 @@ export class CreateJobPage {
             this.plannedStartTime =moment(this.startTime).subtract(30,'minutes').toDate();
             this.plannedEndTime= moment(this.endTime).subtract(30,'minutes').toDate();
 
-            this.plannedHours = 2;
+
+            var momentStartTime = moment(this.plannedStartTime);
+            var momentEndTime = moment(this.plannedEndTime);
+            var duration = moment.duration(momentStartTime.diff(momentEndTime));
+            var hours = duration.asHours();
+            this.plannedHours = Math.abs(hours);
+
             this.userId=localStorage.getItem('employeeUserId');
             this.newJob={
                 "title":this.title,
@@ -135,7 +142,9 @@ export class CreateJobPage {
                 "employeeId":this.employ,
                 "userId":this.userId,
                 "locationId":1,
-                "active":'Y'
+                "active":'Y',
+                "jobType":this.category,
+
 
             };
 
@@ -153,7 +162,8 @@ export class CreateJobPage {
                     "userId":this.userId,
                     "locationId":1,
                     "ticketId":this.ticket.id,
-                    "active":'Y'
+                    "active":'Y',
+                    "jobType":this.category,
                 }
             }
             else if(this.assetDetails)
@@ -171,7 +181,8 @@ export class CreateJobPage {
                     "userId":this.userId,
                     "locationId":1,
                     "assetId":this.assetDetails.id,
-                    "active":'Y'
+                    "active":'Y',
+                    "jobType":this.category,
                 }
             }
 
@@ -181,8 +192,9 @@ export class CreateJobPage {
             this.jobService.createJob(this.newJob).subscribe(
                 response=> {
                     if(response.errorStatus){
-                        this.component.closeAll();
-                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                        console.log("errorstatus",response.errorMessage);
+                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                      this.component.closeAll();
                     }else{
                         this.component.closeAll();
                         console.log(response);

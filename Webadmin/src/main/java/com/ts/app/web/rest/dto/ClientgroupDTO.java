@@ -1,10 +1,10 @@
 package com.ts.app.web.rest.dto;
 
+import com.ts.app.domain.ExportContent;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
-import com.ts.app.domain.ExportContent;
 
 public class ClientgroupDTO extends BaseDTO implements Serializable {
 	

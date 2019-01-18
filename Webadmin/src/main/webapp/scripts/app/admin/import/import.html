@@ -20,7 +20,7 @@
                 <div class="panel-heading">Client</div>
                 <div class="panel-body">
 
-                    <form name="importClientForm" ng-submit="importClients()">
+                    <form name="importClientForm" ng-submit="importClients()" novalidate>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -28,19 +28,28 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedClientFile"
-                                           name="clientFile"
+                                           name="clientFile" ng-required="true"
                                     />
+                                    <div ng-show="importClientForm.$submitted || importClientForm.clientFile.$touched || importClientForm.clientFile.$dirty">
+                                        <div ng-show="importClientForm.clientFile.$dirty || importClientForm.clientFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importClientForm.clientFile.$error.required">
+                                               Client file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadClients()" >
+                                    <button class="btn btn-success" ng-click="uploadClients()" ng-disabled="importClientForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Clients
                                     </button>
-                                   		<span ng-hide="!clientImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                   		<span ng-show="clientImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                 <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                 <!--  <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -57,7 +66,7 @@
                 <div class="panel-heading">Sites</div>
                 <div class="panel-body">
 
-                    <form name="importSiteForm" ng-submit="importSites()">
+                    <form name="importSiteForm" ng-submit="importSites()" novalidate>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -65,17 +74,26 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative"
                                            file-model ng-model="selectedSiteFile"
-                                           name="siteFile"
+                                           name="siteFile" ng-required="true"
                                     />
+                                     <div ng-show="importSiteForm.$submitted || importSiteForm.siteFile.$touched || importSiteForm.siteFile.$dirty">
+                                        <div ng-show="importSiteForm.siteFile.$dirty || importSiteForm.siteFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importSiteForm.siteFile.$error.required">
+                                               Site file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadSitesFile()" >
+                                    <button class="btn btn-success" ng-click="uploadSitesFile()" ng-disabled="importSiteForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Sites
                                     </button>
-                                    <span ng-hide="!siteImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="siteImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +125,7 @@
                                        		<!--&lt;!&ndash;<i class="material-icons">file_upload</i>&ndash;&gt;-->
                                    		<!--&lt;!&ndash;</span>Import Sites Employees&ndash;&gt;-->
                                     <!--&lt;!&ndash;</button>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<span ng-hide="!siteImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span ng-hide="!siteImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>&ndash;&gt;-->
                                 <!--&lt;!&ndash;</div>&ndash;&gt;-->
                             <!--</div>-->
                         <!--</div>-->
@@ -121,7 +139,7 @@
                 <div class="panel-heading">Locations</div>
                 <div class="panel-body">
 
-                    <form name="importLocationForm" ng-submit="importLocations()">
+                    <form name="importLocationForm" ng-submit="importLocations()" novalidate>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -129,17 +147,26 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative"
                                            file-model ng-model="selectedLocationFile"
-                                           name="locationFile"
+                                           name="locationFile" ng-required="true"
                                     />
+                                    <div ng-show="importLocationForm.$submitted || importLocationForm.locationFile.$touched || importLocationForm.locationFile.$dirty">
+                                        <div ng-show="importLocationForm.locationFile.$dirty || importLocationForm.locationFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importLocationForm.locationFile.$error.required">
+                                               Location file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadLocationsFile()" >
+                                    <button class="btn btn-success" ng-click="uploadLocationsFile()" ng-disabled="importLocationForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Locations
                                     </button>
-                                    <span ng-hide="!locationImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="locationImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
                             </div>
                         </div>
@@ -154,29 +181,38 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Employees</div>
                 <div class="panel-body">
-                    <form name="importEmployeeForm" ng-submit="importEmployees()">
+                    <form name="importEmployeeForm" ng-submit="importEmployees()" novalidate>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13">
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative"
                                              file-model ng-model="selectedEmployeeFile"
-                                             name="employeeFile"
+                                             name="employeeFile" ng-required="true"
                                       />
+                                     <div ng-show="importEmployeeForm.$submitted || importEmployeeForm.employeeFile.$touched || importEmployeeForm.employeeFile.$dirty">
+                                        <div ng-show="importEmployeeForm.employeeFile.$dirty || importEmployeeForm.employeeFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importEmployeeForm.employeeFile.$error.required">
+                                               Employee file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                   </div>
                                   <div class="col-md-6">
-                                   <button class="btn btn-success" ng-click="uploadEmployeeFile()" >
+                                   <button class="btn btn-success" ng-click="uploadEmployeeFile()" ng-disabled="importEmployeeForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Employees
                                    </button>
-                                   <span ng-hide="!empImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                   <span ng-show="empImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                   </div>
-                                  <div class="col-md-2">
+                                  <!-- <div class="col-md-2">
                                   </div>
-                                  <div class="col-md-3" ng-hide="!employeeImportMsg()">
-                                  	<span class="card-title">Status - {{employeeImportMsg()}}</span>
-                                  </div>
+                                  <div class="col-md-3" ng-hide="!employeeImportMsg">
+                                  	<span class="card-title">Status - {{employeeImportMsg}}</span>
+                                  </div> -->
                               </div>
 							</div>
                     </form>
@@ -190,27 +226,36 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Jobs</div>
                 <div class="panel-body">
-                    <form name="importJobForm" ng-submit="importJobs()">
+                    <form name="importJobForm" ng-submit="importJobs()" novalidate>
                         <div class="row">
 
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13">
-                                    <input type="file"
+                                    <input type="file" name="jobFile"
                                            class="form-control" style="opacity:100;position:relative"
                                            file-model ng-model="selectedJobFile"
-                                           id="selectedJobFileField"
+                                           id="selectedJobFileField" ng-required="true"
                                     />
+                                    <div ng-show="importJobForm.$submitted || importJobForm.jobFile.$touched || importJobForm.jobFile.$dirty">
+                                        <div ng-show="importJobForm.jobFile.$dirty || importJobForm.jobFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importJobForm.jobFile.$error.required">
+                                               Job file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadJobFile()" >
+                                    <button class="btn btn-success" ng-click="uploadJobFile()" ng-disabled="importJobForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Jobs
                                     </button>
-                                    <span ng-hide="!jobImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="jobImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                <!-- <div class="col-md-12" ng-hide="!jobImportMsg()">
-                                    <span class="card-title">Status - {{jobImportMsg()}}</span>
+                                <!-- <div class="col-md-12" ng-hide="!jobImportMsg">
+                                    <span class="card-title">Status - {{jobImportMsg}}</span>
                                 </div> -->
                             </div>
                         </div>
@@ -226,26 +271,35 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Employee Shift</div>
                 <div class="panel-body">
-                    <form name="importEmployeeShiftForm" >
+                    <form name="importEmployeeShiftForm" novalidate>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedEmployeeShiftFile"
-                                           name="employeeShiftFile"
+                                           name="employeeShiftFile" ng-required="true"
                                     />
+                                    <div ng-show="importEmployeeShiftForm.$submitted || importEmployeeShiftForm.employeeShiftFile.$touched || importEmployeeShiftForm.employeeShiftFile.$dirty">
+                                        <div ng-show="importEmployeeShiftForm.employeeShiftFile.$dirty || importEmployeeShiftForm.employeeShiftFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importEmployeeShiftForm.employeeShiftFile.$error.required">
+                                               Employee shift file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadEmployeeShift()" >
+                                    <button class="btn btn-success" ng-click="uploadEmployeeShift()" ng-disabled="importEmployeeShiftForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Employee Shift
                                     </button>
-                                    <span ng-hide="!employeeShiftImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="employeeShiftImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -258,26 +312,35 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Checklist</div>
                 <div class="panel-body">
-                    <form name="importChecklistForm" ng-submit="importChecklist()">
+                    <form name="importChecklistForm" ng-submit="importChecklist()" novalidate>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedChecklistFile"
-                                           name="checklistFile"
+                                           name="checklistFile" ng-required="true"
                                     />
+                                    <div ng-show="importChecklistForm.$submitted || importChecklistForm.checklistFile.$touched || importChecklistForm.checklistFile.$dirty">
+                                        <div ng-show="importChecklistForm.checklistFile.$dirty || importChecklistForm.checklistFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importChecklistForm.checklistFile.$error.required">
+                                               Checklist file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadChecklist()" >
+                                    <button class="btn btn-success" ng-click="uploadChecklist()"  ng-disabled="importChecklistForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Checklist
                                     </button>
-                                    <span ng-hide="!checklistImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="checklistImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -296,26 +359,35 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Asset</div>
                 <div class="panel-body">
-                    <form name="importAssetForm" >
+                    <form name="importAssetForm" novalidate>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedAssetFile"
-                                           name="assetFile"
+                                           name="assetFile" ng-required="true"
                                     />
+                                    <div ng-show="importAssetForm.$submitted || importAssetForm.assetFile.$touched || importAssetForm.assetFile.$dirty">
+                                        <div ng-show="importAssetForm.assetFile.$dirty || importAssetForm.assetFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importAssetForm.assetFile.$error.required">
+                                               Asset file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadAsset()" >
+                                    <button class="btn btn-success" ng-click="uploadAsset()"  ng-disabled="importAssetForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Asset
                                     </button>
-                                    <span ng-hide="!assetImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="assetImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -328,26 +400,35 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Asset PPM</div>
                 <div class="panel-body">
-                    <form name="importAssetPPMForm" >
+                    <form name="importAssetPPMForm" novalidate>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedAssetPPMFile"
-                                           name="assetPPMFile"
+                                           name="assetPPMFile" ng-required="true"
                                     />
+                                    <div ng-show="importAssetPPMForm.$submitted || importAssetPPMForm.assetPPMFile.$touched || importAssetPPMForm.assetPPMFile.$dirty">
+                                        <div ng-show="importAssetPPMForm.assetPPMFile.$dirty || importAssetPPMForm.assetPPMFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importAssetPPMForm.assetPPMFile.$error.required">
+                                               Asset PPM file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadAssetPPM()" >
+                                    <button class="btn btn-success" ng-click="uploadAssetPPM()" ng-disabled="importAssetPPMForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Asset PPM Schedule
                                     </button>
-                                    <span ng-hide="!assetPPMImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="assetPPMImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
-                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
-                                  	<span class="card-title">Status - {{clientImportMsg()}}</span>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
                                   </div> -->
                             </div>
                         </div>
@@ -363,23 +444,64 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Asset AMC</div>
                 <div class="panel-body">
-                    <form name="importAssetAMCForm" >
+                    <form name="importAssetAMCForm" novalidate>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="selectedAssetAMCFile"
-                                           name="assetAMCFile"
+                                           name="assetAMCFile" ng-required="true"
                                     />
+                                    <div ng-show="importAssetAMCForm.$submitted || importAssetAMCForm.assetAMCFile.$touched || importAssetAMCForm.assetAMCFile.$dirty">
+                                        <div ng-show="importAssetAMCForm.assetAMCFile.$dirty || importAssetAMCForm.assetAMCFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importAssetAMCForm.assetAMCFile.$error.required">
+                                               Asset AMC file is required.
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-success" ng-click="uploadAssetAMC()" >
+                                    <button class="btn btn-success" ng-click="uploadAssetAMC()"  ng-disabled="importAssetAMCForm.$invalid">
                                         <span class="btn-label">
                                        		<i class="material-icons">file_upload</i>
                                    		</span>Import Asset AMC Schedule
                                     </button>
-                                    <span ng-hide="!assetAMCImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                    <span ng-show="assetAMCImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                </div>
+                                  <!-- <div class="col-md-12" ng-hide="!clientImportMsg">
+                                  	<span class="card-title">Status - {{clientImportMsg}}</span>
+                                  </div> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Inventory Master</div>
+                <div class="panel-body">
+                    <form name="importInventoryForm" >
+                        <div class="row">
+                            <div class="form-group label-floating" >
+                                <div class="col-md-6 pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="selectedMasterFile"
+                                           name="inventoryFile"
+                                    />
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-success" ng-click="uploadInventoryMaster()" >
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Inventory Master
+                                    </button>
+                                    <span ng-hide="!inventoryImportStatusLoad()"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
                                 </div>
                                   <!-- <div class="col-md-12" ng-hide="!clientImportMsg()">
                                   	<span class="card-title">Status - {{clientImportMsg()}}</span>

@@ -1,26 +1,13 @@
 package com.ts.app.service;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Date;
-import java.util.Map;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.EmployeeRepository;
 //import com.ts.app.repository.JobRepository;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SiteDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
-
-import com.ts.app.repository.UserRepository;
 
 /**
  * Service class for sending automated email notifications

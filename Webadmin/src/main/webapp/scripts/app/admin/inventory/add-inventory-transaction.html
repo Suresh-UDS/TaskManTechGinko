@@ -15,10 +15,10 @@
 
            <div class="cardsCon addSiteCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveInventory()">
+                     ng-submit="saveInventoryTrans()">
 
                    <div class="row">
-                       <div class="col-md-6">
+                       <div class="col-md-12">
 
 
                            <div class="panel panel-default">
@@ -27,66 +27,91 @@
 
                                    <div class="row">
 
-                                       <div class="col-md-12">
-                                           <div class="form-group">
-                                               <label class="control-label">Client Name </label>
-
-                                               <input type="text" class="form-control"   name='projectName'
-                                                      ng-model="selectedProject" uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
-                                                      ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
-                                                      autofocus  required autocomplete="off"/>
-                                               <div ng-show="form.$submitted || form.projectName.$touched">
-                                                   <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.required">
-                                                           Client name is required.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.minlength">
-                                                           Client name is required to be at least 2 character.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.maxlength">
-                                                           Client name cannot be longer than 50 characters.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.pattern">
-                                                           Client name can only contain letters, digits and space.
-                                                       </p>
-                                                   </div>
-                                               </div>
-
-
-                                           </div>
-                                       </div>
-                                       <div class="col-md-12">
-                                           <div class="form-group">
-                                               <label class="control-label">Site Name </label>
-                                               <input id='siteName' ng-model="site.name" class='form-control'
-                                                      name='siteName' type='text' value=""
-                                                      ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-                                               <div ng-show="form.$submitted || form.siteName.$touched">
-                                                   <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.siteName.$error.required">
-                                                           Site name is required.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.siteName.$error.minlength">
-                                                           Site name is required to be at least 5 character.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.siteName.$error.maxlength">
-                                                           Site name cannot be longer than 50 characters.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.siteName.$error.pattern">
-                                                           Site name can only contain letters, digits and space.
-                                                       </p>
+                                       <div class="col-md-3">
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Select Client <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="client" ng-change="loadAllSites()" ng-options="project as project.name for project in projects" required>
+                                                           <option value="">Select Client...</option>
+                                                       </select>
                                                    </div>
                                                </div>
                                            </div>
                                        </div>
+                                       <div class="col-md-3">
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Select Site <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="projectSite"  ng-change="loadIndents();loadPurchases()" ng-options="site as site.name for site in sites">
+                                                           <option value="">Select Site...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                          <div class="col-md-2">
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group" ng-init="loadTransactionType()">
+                                                       <label class="control-label">Transaction Type <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedTransactionType" ng-change="changeType()" ng-options="transactionType for transactionType in transactionTypes | orderBy">
+                                                           <option value="">Select Transaction type...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                        <div class="col-md-2" ng-show="selectedTransactionType === 'ISSUED'">
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Indent Ref.No<span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedIndent" ng-change="loadItems()" ng-options="materialIndent as materialIndent.indentRefNumber for materialIndent in materialIndents">
+                                                           <option value="">Select Indent Ref.No</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="col-md-2" ng-show="selectedTransactionType === 'RECEIVED'">
+                                           <div class="form-group no-padding" >
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Purchase Ref.No<span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedPurchaseReq" ng-change="loadPurchaseItems()" ng-options="purchaseItem as purchaseItem.purchaseRefGenNumber for purchaseItem in purchaseItems">
+                                                           <option value="">Select Purchase Ref.No...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                       <div class="col-md-2" ng-show="selectedTransactionType === 'ISSUED'">
+                                           <div class="form-group">
+                                               <label class="control-label">Issued Date<span class="red-star">*</span></label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                               <input type="text" class="form-control datepicker"  id="dateFilterIssuedDate" name="PpmTo" ng-model="ppmFrom" autocomplete="off"/>
+                                           </div>
+                                   	  </div>
+                                   	  
+                                   	  <div class="col-md-2" ng-show="selectedTransactionType === 'RECEIVED'">
+                                           <div class="form-group">
+                                               <label class="control-label">Received Date<span class="red-star">*</span></label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                               <input type="text" class="form-control datepicker"  id="dateFilterReceivedDate" name="PpmTo" ng-model="ppmTo" autocomplete="off"/>
+                                           </div>
+                                   	  </div>
+
 
                                    </div>
 
@@ -95,77 +120,151 @@
 
 
                        </div>
-                       <div class="col-md-6">
-
-
+                      
+                      <!--  <div class="col-md-6">
                            <div class="panel panel-default">
                                <div class="panel-heading">Inventory Details</div>
                                <div class="panel-body">
 
                                    <div class="row">
                                        <div class="col-md-6">
-                                           <div class="form-group  ">
-                                               <label class="control-label">Item Name </label>
-                                               <input type="text" class="form-control"   name='inventory-itemname'
-                                                      ng-model="inventory.itemname" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
 
+                                
+                                           
+                                             <div class="form-group no-padding">
+                                               <div class="dropdown">
+                                                   <div class="form-group">
+                                                       <label class="control-label">Select Item Code <span class="red-star">*</span></label>
+                                                       <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedItemCode" ng-change="change()" ng-options="materialItem as materialItem.materialItemCode for materialItem in materialItems">
+                                                           <option value="">Select Item Code...</option>
+                                                       </select>
+                                                   </div>
+                                               </div>
                                            </div>
                                        </div>
 
                                        <div class="col-md-6">
-                                           <div class="form-group ">
-                                               <label class="control-label">Item Code  </label>
-                                               <input type="number" class="form-control"   name='itemcode'
-                                                      ng-model="inventory.itemcode"  required autocomplete="off"/>
+                                           <div class="form-group no-padding" >
+                                            <div class="form-group ">
+                                               <label class="control-label">Item Name</label>
+                                               <input type="text" class="form-control"   name='itemName' ng-disabled="true"
+                                                      ng-model="selectedItemName"  required autocomplete="off"/>
+                                           </div>
                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                            <div class="form-group ">
-                                               <label class="control-label">Stock Received </label>
-                                               <input type="number" class="form-control"   name='stockrec'
-                                                      ng-model="inventory.stockrec"  required autocomplete="off"/>
+                                               <label class="control-label">Store stock</label>
+                                               <input type="number" class="form-control"   name='stock' ng-disabled="true"
+                                                      ng-model="inventory.storeStock"  required autocomplete="off"/>
                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                            <div class="form-group ">
-                                               <label class="control-label">Stock consumed </label>
-                                               <input type="number" class="form-control"   name='stockconsu'
-                                                      ng-model="inventory.stockconsu"  required autocomplete="off"/>
+                                               <label class="control-label">Quantity</label>
+                                               <input type="number" class="form-control"   name='stockQuantity' ng-disabled="true"
+                                                      ng-model="inventory.quantity"  required autocomplete="off"/>
                                            </div>
                                        </div>
-                                       <div class="col-md-12">
+                                       
+                                       <div class="col-md-12" ng-show="selectedTransactionType === 'ISSUED'">
                                            <div class="form-group">
-                                               <label class="control-label">Date</label>
+                                               <label class="control-label">Issued Date<span class="red-star">*</span></label>
                                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                               <input type="text" class="form-control datetimepicker"  id="dateFilterFrom"  placeholder="{{dateFilterFrom | date:'dd-MMM-yyyy'}}"/>
-
+                                               <input type="text" class="form-control datepicker"  id="dateFilterIssuedDate" name="PpmTo" ng-model="ppmFrom" autocomplete="off"/>
                                            </div>
-                                       </div>
-
-
-
-                                   </div>
+                                   	  </div>
+                                   	  
+                                   	  <div class="col-md-12" ng-show="selectedTransactionType === 'RECEIVED'">
+                                           <div class="form-group">
+                                               <label class="control-label">Received Date<span class="red-star">*</span></label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                               <input type="text" class="form-control datepicker"  id="dateFilterReceivedDate" name="PpmTo" ng-model="ppmTo" autocomplete="off"/>
+                                           </div>
+                                   	  </div>
 
                                </div>
                            </div>
 
 
                        </div>
+                      </div> -->
+
                    </div>
-
-
-
+                   
+                   
+                   <div class="panel panel-default">
+                       <div class="panel-heading">Inventory Details</div>
+                       <div class="panel-body">
+                           <div class="table-responsive">
+                   
+                       <table class="table table-hover">
+                         <tr>
+                           <th> 
+	                           <div class="checkbox form-horizontal-checkbox">
+	                                 <label>
+	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="selectAll()">
+	                                 </label>
+	                           </div>
+                           </th>
+                           <th>Item Code</th>
+                           <th>Item Name</th>
+                           <th>Store stock</th>
+                           <th>UOM</th>
+                           <th>Qty Issued</th>
+                           <th>Qty Approved</th>
+                           <th>Issue Qty</th>
+                           <th>Pending Qty</th>                           
+                         </tr>
+                         
+                         <tr ng-repeat="material in materialItems">
+                           <td>
+	                           <div class="checkbox form-horizontal-checkbox">
+	                                 <label>
+	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="material.isChecked" ng-change="selectedOne(material)">
+	                                 </label>
+	                           </div>
+                           </td>
+                            <td>{{material.materialItemCode}}</td>
+                            <td>{{material.materialName}}</td>
+                            <td>{{material.materialStoreStock}}</td>
+                            <td>{{material.materialUom}}</td>
+                            <td>{{material.issuedQuantity ? material.issuedQuantity : "Nil"}}</td>
+                            <td>{{material.approvedQty ? material.approvedQty : "Nil"}}</td>
+                            <td width="10%" ng-hide="material.approvedQty">
+                                <input type="number" class="form-control" name="issue_qty" ng-model="material.currentQuantity" ng-blur="validate(material, material.currentQuantity)" aria-required="true" aria-invalid="true">
+                            </td>
+                            <td width="10%" ng-show="material.approvedQty">
+                                <input type="number" class="form-control" name="approve_qty" ng-model="material.currentAprQty" ng-blur="validateReq(material, material.currentAprQty)" aria-required="true" aria-invalid="true">
+                            </td>
+                            <td ng-if="material.pendingQuantity">{{material.pendingQuantity}}</td>
+                            <td ng-if="material.approvedQty">{{material.approvedQty}}</td>
+                         </tr>
+                         <tr ng-show="!materialItems.length">
+                         	<td colspan="9" class="txt-align-center">No Material Items Found</td>
+                         </tr>
+                       
+                       </table> 
+                   
+                   
+                   </div>
+                          
+                       </div>
+                   </div>            
+                   
+                  
                    <div class="row">
 
                        <div class="col-md-12">
 
-                           <button type="submit" ng-click="cancelInventory()"
+                           <button type="button" ng-click="cancelInventoryTrans()"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                           <button type="submit" type="submit"
-                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                           <button type="submit"
+                                   id="form-button-save" ng-disabled="!selectedItems.length"  class="btn btn-success pull-right"><span class="btn-label">
                                             <i class="material-icons">check</i>
-                                        </span>Create</button>
+                                        </span>Save</button>
 
                            <div class="clearfix"></div>
                        </div>

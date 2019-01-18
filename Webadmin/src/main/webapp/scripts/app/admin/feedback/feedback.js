@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('feedbacks', {
                 parent: 'manage',
                 url: '/feedbacks',
-                controller: 'FeedbackController',
+                //controller: 'FeedbackController',
                 data: {
                     authorities: [],
                     pageTitle: 'Feedbacks   '
@@ -25,7 +25,7 @@ angular.module('timeSheetApp')
             }).state('feedbacksList', {
                 parent: 'manage',
                 url: '/feedbacksList/:pid/:pName/:sid/:sName/:block/:floor/:zone/:date',
-                controller: 'FeedbackController',
+                //controller: 'FeedbackController',
                 data: {
                     authorities: [],
                     pageTitle: 'Feedbacks   '

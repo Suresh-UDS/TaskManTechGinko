@@ -18,4 +18,8 @@ export class QuotationImagePopoverPage {
   {
     this.viewCtrl.dismiss(index);
   }
+ /* dismiss(){
+    let data={'foo':'bar'};
+    this.viewCtrl.dismiss(data);
+  }*/
 }

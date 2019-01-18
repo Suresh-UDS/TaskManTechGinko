@@ -1,10 +1,10 @@
 package com.ts.app.web.rest.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class QuotationDTO extends BaseDTO implements Serializable {
 
@@ -79,6 +79,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private String quotationFileName;
     
     private String url;
+
+    private boolean rejected;
 
 	public String getQuotationFileName() {
 		return quotationFileName;
@@ -360,6 +362,12 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 	public void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
 	}
-	
-	
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
 }

@@ -304,6 +304,7 @@ export class SiteViewPage {
 
   getQuotations(){
       var searchCriteria={
+          siteId:this.siteDetail.id,
           currPage:this.page,
           pageSort:this.pageSort,
       };

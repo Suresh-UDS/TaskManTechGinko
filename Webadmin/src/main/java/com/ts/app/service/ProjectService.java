@@ -1,12 +1,12 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.ClientGroupRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -19,25 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.AssetGroup;
-import com.ts.app.domain.Clientgroup;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.ClientGroupRepository;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ClientgroupDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.ProjectDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Service class for managing users.
@@ -56,7 +42,7 @@ public class ProjectService extends AbstractService {
 
 	@Inject
 	private SiteService siteService;
-	
+
 	@Inject
 	private ClientGroupRepository clientGroupRepository;
 
@@ -68,12 +54,13 @@ public class ProjectService extends AbstractService {
 
 	public boolean isDuplicate(ProjectDTO projectDto) {
 	    log.debug("Project duplicate get"+projectDto.getUserId());
+	    List<Project> projects = projectRepository.findNames(projectDto.getName());
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setProjectName(projectDto.getName());
 		criteria.setUserId(projectDto.getUserId());
 		SearchResult<ProjectDTO> searchResults = findBySearchCrieria(criteria);
 		criteria.setUserId(projectDto.getUserId());
-		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+		if(projects !=null && CollectionUtils.isNotEmpty(projects)) {
 			return true;
 		}
 		return false;
@@ -85,7 +72,7 @@ public class ProjectService extends AbstractService {
         log.debug("Create user information"+projectDto.getUserId());
 		Project project = mapperUtil.toEntity(projectDto, Project.class);
 		project.setActive(project.ACTIVE_YES);
-		
+
 		//create client group if does not exist
 		if(!StringUtils.isEmpty(project.getClientGroup())) {
 			Clientgroup clientGroup = clientGroupRepository.findByName(project.getClientGroup());
@@ -96,7 +83,7 @@ public class ProjectService extends AbstractService {
 				clientGroupRepository.save(clientGroup);
 			}
 		}
-		
+
 		project = projectRepository.save(project);
 		log.debug("Created Information for Project: {}", project);
 		projectDto = mapperUtil.toModel(project, ProjectDTO.class);
@@ -118,7 +105,7 @@ public class ProjectService extends AbstractService {
 		 */
 
 	}
-	
+
 	private void mapToModel(Project project , ProjectDTO projectDTO) {
 		projectDTO.setId(project.getId());
 		projectDTO.setName(org.apache.commons.lang3.StringUtils.upperCase(project.getName()));
@@ -131,7 +118,7 @@ public class ProjectService extends AbstractService {
 		projectDTO.setStartDate(project.getStartDate());
 		projectDTO.setEndDate(project.getEndDate());
 		projectDTO.setContactFirstName(project.getContactFirstName());
-		projectDTO.setContactLastName(project.getContactLastName());	
+		projectDTO.setContactLastName(project.getContactLastName());
 	}
 
 	private void mapToEntity(ProjectDTO projectDTO, Project project) {
@@ -190,7 +177,7 @@ public class ProjectService extends AbstractService {
 				Hibernate.initialize(employee.getSubOrdinates());
 				int levelCnt = 1;
 				subEmpIds.addAll(siteService.findAllSubordinates(employee, subEmpIds, levelCnt));
-	        		
+
 	        		subEmpList.addAll(subEmpIds);
 
 				log.debug("List of subordinate ids -"+ subEmpList);
@@ -198,7 +185,7 @@ public class ProjectService extends AbstractService {
 			}
 			entities = projectRepository.findAll(subEmpList);
 		}else {
-			entities = projectRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+			entities = projectRepository.findAll();
 		}
 		List<ProjectDTO> values = new ArrayList<ProjectDTO>();
 		if(CollectionUtils.isNotEmpty(entities)) {
@@ -318,12 +305,12 @@ public class ProjectService extends AbstractService {
 	}
 
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		//fileId += ".csv";
 		if(!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}
@@ -331,7 +318,7 @@ public class ProjectService extends AbstractService {
 	public ClientgroupDTO createClientGroup(ClientgroupDTO clientGroupDTO) {
 		Clientgroup clientgroup = mapperUtil.toEntity(clientGroupDTO, Clientgroup.class);
 		Clientgroup existingGroup = clientGroupRepository.findByName(clientGroupDTO.getClientgroup());
-		if(existingGroup == null) { 
+		if(existingGroup == null) {
 			clientgroup.setActive(Clientgroup.ACTIVE_YES);
 			clientGroupRepository.save(clientgroup);
 			clientGroupDTO = mapperUtil.toModel(clientgroup, ClientgroupDTO.class);

@@ -1,8 +1,10 @@
 module.exports = {
 
 	db:{
-		url:'mongodb://localhost:27017/quotation_svc',
-		schema : '/../app/schema'
+		url:'mongodb://10.1.2.132:27017,10.1.2.187:27017/quotation_svc?replicaSet=rs0',
+		schema : '/../app/schema',
+        user:'nodedbuser',
+        password:'T#nC0s'
 	},
 
 	server:{

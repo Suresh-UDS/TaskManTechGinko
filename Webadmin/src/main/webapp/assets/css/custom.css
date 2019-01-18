@@ -141,7 +141,28 @@ ul.checkList li
     background: #ffffff;
     z-index: 1000;
 }
+.CheckListNewBx {
+    display: none;
+    position: absolute;
+    width: 300px;
+    top: -29px;
+    right: 37px;
+    border: 1px solid #ccc;
+    min-height: 50px;
+    background: #ffffff;
+    z-index: 1000;
+    padding: 10px;
+    border-radius: 5px;
+}
+.CheckListNewBx div span {
+	 border-radius: 0px !important;
+}
 .infoIcon:hover .CheckListBx
+{
+    display: block;
+}
+
+.infoIcon:hover .CheckListNewBx
 {
     display: block;
 }
@@ -152,7 +173,7 @@ ul.checkList li
 }
 .hiddenCheckList .infoIcon
 {
-    float: left;
+    float: right;
     padding-left: 5px;
     color: #00bcd4;
 }
@@ -262,10 +283,11 @@ ul.checkList li
     color: #000;
     background: none;
     box-shadow: none;
-    font-weight: none;
+    font-weight: normal;
     font-size:14px;
     padding-right: 0;
 }
+
 .navbar .dropdown-menu li a:hover, .navbar .dropdown-menu li a:focus, .navbar .dropdown-menu li a:active, .navbar.navbar-default .dropdown-menu li a:hover, .navbar.navbar-default .dropdown-menu li a:focus, .navbar.navbar-default .dropdown-menu li a:active
 {
     background-color: #ff9800;
@@ -1364,6 +1386,102 @@ input.InputFirstCaps::first-letter
 {
   border-radius: 0;
 }
+
+/* Dashboard New changes */
+
+.cardWithbg
+{
+    min-height: 150px;
+    color: #fff;
+}
+.cardWithbg .card-header
+{
+    text-align: center;
+
+    min-height: 60px;
+}
+.cardWithbg .card-header i
+{
+    font-size: 40px;
+}
+.cardWithbg .card-content
+{
+    text-align: center;
+}
+.cardWithbg .card-content h3,h4
+{
+    margin: 5px 0;
+}
+
+.blueBg
+{
+    background: #20a8d8;
+}
+.skyblueBg
+{
+    background: #63c2de;
+}
+.yellowBg
+{
+    background: #ffc107;
+}
+.lightRedBg
+{
+    background: #f86c6b;
+}
+.greenBg
+{
+    background: yellowgreen;
+}
+
+
+/* Highcharts Custom css */
+
+.highcharts-container
+{
+    width: 100% !important;
+}
+.highcharts-root
+{
+    width: 100% !important;
+}
+
+
+.highcharts-color-1
+{
+    color: #f86c6b !important;
+    fill:#f86c6b !important;
+}
+.highcharts-color-1 rect
+{
+    fill:#f86c6b !important;
+}
+
+
+/*.JobsDashContainer .highcharts-color-2*/
+/*{*/
+    /*fill:yellowgreen !important;*/
+/*}*/
+/*.JobsDashContainer .highcharts-color-0*/
+/*{*/
+    /*fill:#ffc107 !important;*/
+/*}*/
+/*.JobsDashContainer .highcharts-color-0 rect*/
+/*{*/
+    /*fill:#ffc107 !important;*/
+/*}*/
+
+/*.JobsDashContainer .highcharts-color-2 rect*/
+/*{*/
+    /*fill:yellowgreen !important;*/
+/*}*/
+
+
+
+
+/* End Highcharts Custom css */
+
+
 .label-on-left
 {
   padding-top: 20px;
@@ -1662,6 +1780,14 @@ a.cal-btn i
 }
   .pageCenter{
       top: calc(200% / 5);
+      left: calc(100% / 2.3);
+      z-index: 100000;
+      position: absolute;
+      display: none;
+      width:4%;
+  }
+  .pageTopCenter{
+      top: calc(100% / 8);
       left: calc(100% / 2.3);
       z-index: 100000;
       position: absolute;
@@ -1967,7 +2093,7 @@ a.sort-by:after {
   margin-top: 1px;
 }
 .form-group {
-    padding-bottom: 18px !important;
+    padding-bottom: 21px !important;
 }
 p.help-block{
   line-height: 15px;
@@ -2118,3 +2244,109 @@ div.bouncing-container .arrow-down {
                   0 4px 23px 0px rgba(0, 0, 0, 0.12),
                   0 8px 10px -5px rgba(76, 175, 80, 0)!important;
 }
+
+a.clsBtn {
+    height: 22px;
+    right: 0px;
+    color: #000;
+    background: none;
+    box-shadow: none;
+    font-weight: normal;
+    font-size: 14px !important;
+    padding-right: 0 !important;
+    position: absolute;
+    margin-top: -2px;
+    z-index: 100000;
+}
+a.clsBtn:hover , a.clsBtn:active , a.clsBtn:focus {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+
+}
+ul.ckLstDot {
+	position: relative;
+	list-style: none;
+	margin-left: 0;
+	padding-left: 1.2em;
+}
+ul.ckLstDot li:before {
+	content: "";
+	position: absolute;
+	display:inline-block;
+	width:5px;
+	height:5px;
+	background:#00bcd4;
+	bottom:0;
+	top:11px;
+	left:8px;
+
+}
+
+ /* Material Switch css start */
+
+.switch label input[type=checkbox]:checked+.lever {
+    background-color: #dccfe2;
+}
+.switch label .lever {
+    content: "";
+    display: inline-block;
+    position: relative;
+    background-color: #818181;
+    -webkit-border-radius: .9375rem;
+    border-radius: .9375rem;
+    margin-right: .625rem;
+    vertical-align: middle;
+    margin: 0 1rem;
+    width: 2.5rem;
+    height: .9375rem;
+    -webkit-transition: background .3s ease;
+    -o-transition: background .3s ease;
+    transition: background .3s ease;
+}
+.switch label {
+    cursor: pointer;
+}
+.switch label input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked) {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.switch label input[type=checkbox], input[type=radio] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: #a6c;
+    left: 1.5rem;
+}
+
+.switch label .lever:after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 1.3125rem;
+    border-radius: 1.3125rem;
+    left: -.3125rem;
+    top: -.1875rem;
+    -webkit-box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,.4);
+    box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,.4);
+    width: 1.3125rem;
+    height: 1.3125rem;
+    -webkit-transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,-webkit-box-shadow 1s ease;
+    -o-transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,box-shadow 1s ease;
+    transition: left .3s ease,background .3s ease,box-shadow 1s ease,-webkit-box-shadow 1s ease;
+}
+
+ /* Material Switch css end */
+
+

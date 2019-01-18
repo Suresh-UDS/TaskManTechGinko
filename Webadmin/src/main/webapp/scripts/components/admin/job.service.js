@@ -72,8 +72,9 @@ angular.module('timeSheetApp')
 		          });
 		    },
             search: function(searchCriteria,uid) {
-            		console.log('uid in search call - ' + uid);
+            		
 	            	if(uid) {
+	            		console.log('uid in search call - ' + uid);
 		            	return $http.post('api/jobs/report/'+uid).then(function (response) {
 		            		return response.data;
 		            	});
@@ -178,6 +179,12 @@ angular.module('timeSheetApp')
                     console.log(response);
                     return response.data;
                 })
+            },
+
+            getTotalCounts : function (searchCriteria) {
+                return $http.post('api/reports/jobs/count',searchCriteria).then(function (response) {
+                    return response.data;
+                });
             }
 
 

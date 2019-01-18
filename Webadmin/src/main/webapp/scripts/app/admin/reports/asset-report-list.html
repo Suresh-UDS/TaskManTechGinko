@@ -44,23 +44,49 @@
         </div>
     </div>
 
-    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+    <div class="AppliedFilterCon" >
+             
             <span class="AppliedFilterTxtCon">
+                <span
+		            class="tag label label-info" style="margin-right: 10px"
+		            ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+						Client: {{searchCriteras.projectName}}
+				</span>
+				<span class="tag label label-info" style="margin-right: 10px"
+	                  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+					Region: {{searchCriteras.region}}
+				</span>
+				 <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+				    Branch: {{searchCriteras.branch}}
+				</span>
+                <span class="tag label label-info" style="margin-right: 10px"
+		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+						Site: {{searchCriteras.siteName}}
+				 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    Client: {{searchCriteria.projectName || localStorage.projectName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.fromDate">
+                    From Date: {{searchCriteras.fromDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.siteName || localStorage.siteName">
-                    Site: {{searchCriteria.siteName || localStorage.siteName}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.toDate">
+                    To Date: {{searchCriteras.toDate | date:'dd/MM/yyyy'}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.fromDate || localStorage.fromDate">
-                    From Date: {{searchCriteria.fromDate || localStorage.fromDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetTypeName && searchCriteras.assetTypeName !='-- ALL ASSET TYPE --'">
+                    Type: {{searchCriteras.assetTypeName}}
                 </span>
 
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteria.toDate || localStorage.toDate">
-                    To Date: {{searchCriteria.toDate || localStorage.toDate | date:'dd/MM/yyyy'}}
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetGroupName && searchCriteras.assetGroupName !='-- ALL ASSET GROUP --'">
+                    Group: {{searchCriteras.assetGroupName}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetTitle">
+                    Title: {{searchCriteras.assetTitle}}
+                </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.assetCode">
+                    Code: {{searchCriteras.assetCode}}
                 </span>
 
             </span>
@@ -438,12 +464,11 @@
 
 
 <!-- Filter New -->
-<!-- Filter -->
-
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm" role="form" ng-submit ="searchFilter()"  novalidate >
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         <i class="material-icons">clear</i>
@@ -452,69 +477,231 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="row dateFilterCon">
-                        <div class="col-xs-12 col-md-2">
-                            <div class="dropdown" >
-                                <div class="form-group">
-                                    <label class="label-control">From date</label>
-                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off" />
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                   data-target="#collapseOne" aria-expanded="true"
+                                   aria-controls="collapseOne" class="collapsed">
+                                    <h4 class="panel-title">
+                                        Basic Filter <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="collapseOne"
+                                 class="panel-collapse collapse collapseOne in" role="tabpanel"
+                                 aria-labelledby="headingOne" aria-expanded="true"
+                                 style="height: 210px;">
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6" >
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Client</label>
+                                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+													  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}
+													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
+													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+
+													    <span ng-bind-html="client.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+				                            <div class="form-group" >
+
+				                                    <div class="dropdown">
+				                                        <label class="label-control">Region</label>
+				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
+														     <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+														  </ui-select-match>
+														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+														<span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
+				                                    </div>
+				                            </div>
+				                        </div>
+                                   </div>
+
+                                   <div class="row">
+                                   		<div class="col-xs-12 col-md-6 col-lg-6">
+                                   		   <div class="form-group" >
+				                            <div class="dropdown">
+				                                <label class="label-control">Branch</label>
+				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
+													      <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
+													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+													<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
+											 </div>
+				                            </div>
+				                        </div>
+
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="dropdown">
+                                                <div class="form-group">
+                                                    <label class="label-control">Site</label>
+                                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+													  </ui-select-match>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
+													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
+													  </ui-select-choices>
+													</ui-select>
+													<span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-md-2">
-                            <div class="dropdown" >
-                                <div class="form-group">
-                                    <label class="label-control">To date</label>
-                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
-                                </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <h4 class="panel-title">
+                                        Advanced Filter
+                                        <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
                             </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group" >
-                                <div class="dropdown">
-                                    <label class="label-control">Client</label>
-                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projects" >-->
-                                    <!--<option value="">Select Client...</option>-->
-                                    <!--</select>-->
-                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" >
-                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :clearField?'Select Client':searchProject}}</ui-select-match>
-                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search" ng-click="loadSearchProject(searchProject);">
-                                            <div ng-bind="client"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="dropdown">
-                                <div class="form-group">
-                                    <label class="label-control">Site</label>
-                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sites" >-->
-                                    <!--<option value="">Select Site...</option>-->
-                                    <!--</select>-->
-                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon " ><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" >
-                                        <ui-select-match placeholder="Select Site..." >{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?clearField?'Select Site':searchSite : 'Select Site' }}</ui-select-match>
-                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search" ng-click="loadSearchSite(searchSite)">
-                                            <div ng-bind="site" ></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                    <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-4">
+				                            <div class="dropdown" >
+				                                <div class="form-group">
+				                                    <label class="label-control">From date</label>
+				                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+				                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off" />
+				                                </div>
+				                            </div>
+				                        </div>
+                                        <div class="col-xs-12 col-md-4">
+				                            <div class="dropdown" >
+				                                <div class="form-group">
+				                                    <label class="label-control">To date</label>
+				                                    <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
+				                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
+				                                </div>
+				                            </div>
+				                        </div>
+                                        <div class="col-xs-12 col-md-4">
+				                            <div class="form-group no-padding" >
+				                                <div class="dropdown" ng-init="loadAllAssetTypes();">
+				                                    <div class="form-group">
+				                                        <label class="control-label">Asset Type</label>
+				                                       
+				                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                        <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+				                                               
+					                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
+														  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+														  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>
+														    <span ng-bind-html="assetTypesListOne.name | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-4">
+				                            <div class="form-group no-padding" >
+				                                <div class="dropdown" ng-init="loadAllAssetGroups();">
+				                                    <div class="form-group">
+				                                        <label class="control-label">Asset Group</label>
+				                                       
+				                                        <span ng-show="assetGroupDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+				                                        <span ng-show="!assetGroupDisable && !assetGroupsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+				                                               
+					                                    <ui-select ng-model="assetGroupsListOne.selected"  ng-disabled="assetGroupDisable">
+														  <ui-select-match placeholder="Select Asset Group..." allow-clear="true">{{$select.selected.assetgroup}}</ui-select-match>
+														  <ui-select-choices repeat="assetGroupsListOne in assetGroupsLists | filter: $select.search"  null-option="allAssetGroup" loose-null>
+														    <span ng-bind-html="assetGroupsListOne.assetgroup | highlight: $select.search"></span>
+														  </ui-select-choices>
+														</ui-select>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
+                                        <div class="col-xs-12 col-md-4">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <label class="label-control"></label>
+                                                    <input type="text"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Asset Name"
+                                                           ng-model="searchAssetName" tabindex="3"
+                                                    />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-md-4">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <label class="label-control"></label>
+                                                    <input type="text"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Asset Code"
+                                                           ng-model="searchAssetCode" tabindex="4"
+                                                    />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple" ng-click = "searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="5">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"   tabindex="6">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>
@@ -522,7 +709,7 @@
     </div>
 </div>
 
-<!-- -->
+
 <!-- -->
 
 <!--&lt;!&ndash; BasicFilterModal &ndash;&gt;-->

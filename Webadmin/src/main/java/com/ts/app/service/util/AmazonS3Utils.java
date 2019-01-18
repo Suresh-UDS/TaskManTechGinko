@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+import com.ts.app.web.rest.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,24 +16,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.Employee;
 import com.ts.app.service.AmazonS3Service;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetDocumentDTO;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.CheckInOutImageDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.TicketDTO;
 
 @Component
 public class AmazonS3Utils {
 
 	private final Logger log = LoggerFactory.getLogger(AmazonS3Utils.class);
-	
+
 	@Inject
 	private AmazonS3Service amazonS3Service;
-	
+
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
@@ -40,11 +32,11 @@ public class AmazonS3Utils {
         fos.close();
         return convFile;
     }
-    
+
     private String generateFileName(MultipartFile multiPart) {
         return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
     }
-    
+
     /* Upload Asset document and Photos to S3 bucket */
     public AssetDocumentDTO uploadAssetFile(String assetCode, MultipartFile multipartFile, AssetDocumentDTO assetDocumentDTO) {
 
@@ -62,9 +54,9 @@ public class AmazonS3Utils {
         }
         return assetDocumentDTO;
     }
-    
-    
-    public AssetDTO uploadQrCodeFile(String code, byte[] qrCodeImage, AssetDTO assetDTO) { 
+
+
+    public AssetDTO uploadQrCodeFile(String code, byte[] qrCodeImage, AssetDTO assetDTO) {
     	String filename = code +".png";
     	String fileUrl = "";
     	String imageDataString = "data:image/png;base64,";
@@ -75,13 +67,13 @@ public class AmazonS3Utils {
 	        fileUrl = amazonS3Service.uploadQrToS3bucket(filename, imageDataString);
 	        assetDTO.setQrCodeImage(filename);
 	        assetDTO.setUrl(fileUrl);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return assetDTO;
     }
-    
+
     public String uploadAttendanceFile(String empId, String action, MultipartFile multipartFile, long dateTime) {
     	String nameOfFile = empId + "_" + action + "_" + dateTime + ".jpg";
     	try{
@@ -91,12 +83,12 @@ public class AmazonS3Utils {
     	}catch(Exception e){
     		e.printStackTrace();
     	}
-    	
+
 		return nameOfFile;
-    	
+
     }
-    
-    public QuotationDTO uploadQuotationFile(String quotationId, MultipartFile multipartfile, long dateTime, QuotationDTO quotationDTO) { 
+
+    public QuotationDTO uploadQuotationFile(String quotationId, MultipartFile multipartfile, long dateTime, QuotationDTO quotationDTO) {
     	String fileUrl = "";
     	String quotationFileName = quotationId + "_" + dateTime + ".jpg";
     	try {
@@ -107,20 +99,20 @@ public class AmazonS3Utils {
     	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return quotationDTO;
-    } 
-    
+    }
+
     public TicketDTO uploadTicketFile(long ticketId, MultipartFile mulitipartfile, TicketDTO ticketDTO) {
     	String fileUrl = "";
-        try { 
+        try {
         	File file = convertMultiPartToFile(mulitipartfile);
         	String fileName = generateFileName(mulitipartfile);
         	String nameOfFile = ticketId + "_" + fileName;
         	fileUrl = amazonS3Service.uploadTicketFileToS3(nameOfFile, file);
         	ticketDTO.setImage(nameOfFile);
         	ticketDTO.setUrl(fileUrl);
-        } catch(Exception e) { 
+        } catch(Exception e) {
         	e.printStackTrace();
         }
         return ticketDTO;
@@ -129,26 +121,26 @@ public class AmazonS3Utils {
 	public String deleteAssetFile(String key, String file) {
 		// TODO Auto-generated method stub
 		String fileName = file;
-		try { 
+		try {
 			amazonS3Service.deleteFileFromS3Bucket(key , fileName);
-		} catch(Exception e) { 
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return fileName;
-	}    
-	
-	public EmployeeDTO uploadEnrollImage(String enrollImg, EmployeeDTO employeeDTO, long dateTime) { 
+	}
+
+	public EmployeeDTO uploadEnrollImage(String enrollImg, EmployeeDTO employeeDTO, long dateTime) {
     	String filename = "enrollImage_"+ dateTime +".png";
     	String fileUrl = "";
     	try {
 	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, enrollImg);
 	        employeeDTO.setEnrolled_face(filename);
 	        employeeDTO.setUrl(fileUrl);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return employeeDTO;
     }
 
@@ -160,13 +152,13 @@ public class AmazonS3Utils {
 	        fileUrl = amazonS3Service.uploadCheckOutImageToS3(filename, checkOutImage);
 	        attnDto.setCheckOutImage(filename);
 	        attnDto.setUrl(fileUrl);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return attnDto;
 	}
-	
+
 	public AttendanceDTO uploadCheckInImage(String checkInImage, AttendanceDTO attnDto, long dateTime) {
 		// TODO Auto-generated method stub
 		String filename = "checkInImage_"+ dateTime +".png";
@@ -175,28 +167,29 @@ public class AmazonS3Utils {
 	        fileUrl = amazonS3Service.uploadCheckInImageToS3(filename, checkInImage);
 	        attnDto.setCheckInImage(filename);
 	        attnDto.setUrl(fileUrl);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return attnDto;
 	}
-	
+
 	public CheckInOutImageDTO uploadEmployeeFile(String empId, CheckInOutImageDTO checkInOutImageDto, String action, MultipartFile multipartFile, long dateTime) {
     	String nameOfFile = empId + "_" + action + "_" + dateTime + ".jpg";
     	String fileUrl = "";
     	try{
-    		File file = convertMultiPartToFile(multipartFile);
+//    		File file = convertMultiPartToFile(multipartFile);
+
             String fileName = nameOfFile;
-            fileUrl = amazonS3Service.uploadEmployeeFileToS3bucket(fileName, file);
+            fileUrl = amazonS3Service.uploadEmployeeFileToS3bucket(fileName, multipartFile.getBytes());
             checkInOutImageDto.setUrl(fileUrl);
             checkInOutImageDto.setPhotoOut(fileName);
     	}catch(Exception e){
     		e.printStackTrace();
     	}
-    	
+
 		return checkInOutImageDto;
-    	
+
     }
 
 	public String uploadCheckListImage(String checkListImg, String checklistItemName, long jobId, String img) {
@@ -210,10 +203,10 @@ public class AmazonS3Utils {
     			filename = jobId +"_"+ checklistItemName +"_"+ img +".png";
     		}
     		String fileUrl = amazonS3Service.uploadCheckListImageToS3(filename, checkListImg);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return filename;
 	}
 
@@ -228,22 +221,22 @@ public class AmazonS3Utils {
 	        fileUrl = amazonS3Service.uploadLocationQrToS3bucket(filename, imageDataString);
 	        locDTO.setQrCodeImage(filename);
 	        locDTO.setUrl(fileUrl);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return locDTO;
 	}
 
 	public TicketDTO uploadExistingTicketFile(long ticketId, String image, long dateTime, TicketDTO ticketModel) {
 	   	String fileUrl = "";
         String name = ticketId + "_" + dateTime + ".jpg";
-        try { 
+        try {
         	String fileName = name;
         	fileUrl = amazonS3Service.uploadExistingTicketToS3(fileName, image);
         	ticketModel.setImage(fileName);
         	ticketModel.setUrl(fileUrl);
-        } catch(Exception e) { 
+        } catch(Exception e) {
         	e.printStackTrace();
         }
         return ticketModel;
@@ -256,43 +249,28 @@ public class AmazonS3Utils {
 	        fileUrl = amazonS3Service.uploadEnrollImageToS3(filename, enrolled_face);
 	        employee.setEnrolled_face(filename);
 	        log.debug(fileUrl);
-    	} catch(Exception e) { 
+    	} catch(Exception e) {
     		e.printStackTrace();
     	}
-    	
+
 		return employee;
 	}
-    
-  
-    
-      
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    public ExpenseDocumentDTO uploadExpenseDocument(long expenseId, MultipartFile multipartFile, ExpenseDocumentDTO expenseDocumentDTO) {
+
+        String fileUrl = "";
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+            String fileName = generateFileName(multipartFile);
+            String nameOfFile = expenseId + "_" + fileName;
+            fileUrl = amazonS3Service.uploadExpenseFileTos3bucket(nameOfFile, file);
+            expenseDocumentDTO.setFile(nameOfFile);
+            expenseDocumentDTO.setFileUrl(fileUrl);
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return expenseDocumentDTO;
+    }
+
 }

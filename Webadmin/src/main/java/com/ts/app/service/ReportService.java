@@ -1,43 +1,25 @@
 package com.ts.app.service;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.web.rest.dto.ReportResult;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobType;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.AttendanceRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.web.rest.dto.ReportResult;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Service
 @Transactional
@@ -609,6 +591,7 @@ public class ReportService extends AbstractService {
         
         long totalNewTicketCount = 0;
         long totalOpenTicketCount = 0;
+        long totalInProgressTicketCount = 0;
         long totalAssignedTicketCount = 0;
         long totalClosedTicketCount = 0;
         long totalPendingTicketCount = 0;
@@ -619,6 +602,8 @@ public class ReportService extends AbstractService {
         totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
         
         totalOpenTicketCount = ticketRepository.findOpenTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
+        
+        totalInProgressTicketCount = ticketRepository.findInProgressTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
 
         totalPendingTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
         
@@ -682,10 +667,11 @@ public class ReportService extends AbstractService {
 
         ReportResult reportResult = new ReportResult();
         //reportResult.setSiteId(siteId);
-        reportResult.setTotalTicketCount(totalOpenTicketCount + totalAssignedTicketCount + totalClosedTicketCount);
+        reportResult.setTotalTicketCount(totalOpenTicketCount + totalInProgressTicketCount + totalAssignedTicketCount + totalClosedTicketCount);
         reportResult.setTotalNewTicketCount(totalNewTicketCount);
         reportResult.setTotalOpenTicketCount(totalOpenTicketCount);
-        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount);
+        reportResult.setTotalInProgressTicketCount(totalInProgressTicketCount);
+        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount + totalInProgressTicketCount);
         reportResult.setTotalPendingTicketCount(totalPendingTicketCount);
         reportResult.setTotalClosedTicketCount(totalClosedTicketCount);
         reportResult.setTotalPendingDueToClientTicketCount(totalPendingDueToClientTicketCount);
@@ -849,4 +835,6 @@ public class ReportService extends AbstractService {
         return resultVal != null ? resultVal.longValue() : 0;
 
     }
+
+
 }

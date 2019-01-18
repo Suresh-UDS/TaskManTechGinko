@@ -1,11 +1,11 @@
 package com.ts.app.repository;
 
-import java.util.List;
+import com.ts.app.domain.AssetParameterReading;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.AssetParameterReading;
+import java.util.List;
 
 public interface AssetParamReadingRepository extends JpaRepository<AssetParameterReading ,Long>{
 

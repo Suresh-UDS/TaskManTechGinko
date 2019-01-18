@@ -1,29 +1,17 @@
 package com.ts.app.web.rest;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import org.json.JSONException;
+import com.ts.app.ext.api.FaceRecognitionService;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.ext.api.FaceRecognitionService;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.web.rest.dto.FaceRecognitionRequest;
-import com.ts.app.web.rest.dto.FaceRecognitionResponse;
-import com.ts.app.web.rest.errors.TimesheetException;
-import org.apache.http.HttpResponse;
+import javax.inject.Inject;
+import javax.validation.Valid;
 
 /**
  * REST controller for storing face detection information and verifying

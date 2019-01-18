@@ -1,0 +1,262 @@
+<div class="crud-form"
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div  ng-init="loadPageTop();loadProjects();loadUOM();editPurchaseReq();">
+
+
+        <div class="col-md-8">
+            <!--<h2 class="title">Add Site</h2>-->
+        </div>
+
+
+        <!--<div class="card-header" data-background-color="red">-->
+        <!--<h4 class="title">Add Site</h4>-->
+        <!--<p class="category"></p>-->
+        <!--</div>-->
+
+        <div class="cardsCon addSiteCon">
+            <form ng-show="!success" name="form" role="form" novalidate
+                  ng-submit="saveInventory()">
+
+
+                <div class="card margin-TB-5 tablecard">
+
+                    <div class="card-content">
+
+                        <h3 class="HeadingTxt">Location</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Client <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "prj.name for prj in projects track by prj.id" name="project" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control" required>
+                                                <option value="">Select...</option>
+                                            </select>
+                                            <div ng-show="form.$submitted || form.project.$touched">
+                                                <div ng-show="form.project.$dirty || form.project.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.project.$error.required">Client is
+                                                        required.</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Site <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "site.name for site in sites track by site.id" name="site" ng-model = "selectedSite" ng-change="loadEmployees();loadPurchases();" class="form-control" required>
+                                                <option value="">Select...</option>
+                                            </select>
+                                            <div ng-show="form.$submitted || form.site.$touched">
+                                                <div ng-show="form.site.$dirty || form.site.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.site.$error.required">Site is
+                                                        required.</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">P.O Number </label>
+                               				<input type="text" name="refNumber" class="form-control" ng-model="purchaseReqObj.purchaseOrderNumber">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="HeadingTxt">Requester Details</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group no-padding">
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Employee<span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "employee as employee.name for employee in employees track by employee.id" name="empName" ng-model ="selectedEmployee" class="form-control" required>
+                                                <option value="">Select...</option>
+                                            </select>
+                                            <div ng-show="form.$submitted || form.empName.$touched">
+                                                <div ng-show="form.empName.$dirty || form.empName.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.empName.$error.required">Employee is
+                                                        required.</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Reference Number <span class="red-star">*</span></label>
+                                    <input type="text" name="refNumber" class="form-control" ng-model="purchaseReqObj.purchaseRefGenNumber" ng-disabled="true">
+                                    <!-- <div ng-show="form.$submitted || form.refNumber.$touched" required>
+                                        <div ng-show="form.refNumber.$dirty || form.refNumber.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="form.refNumber.$error.required">Reference Number is
+                                                required.</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="control-label">Purpose</label>
+                                    <input type="text" class="form-control" ng-model="purchaseReqObj.message">
+                                </div>
+                            </div>
+
+                        </div>
+                        <h3 class="HeadingTxt">Item Details </h3>
+                        <div class="row">
+                            <ng-form name="itemForm" novalidate>
+                                <div class="col-md-3">
+                                    <div class="form-group no-padding">
+                                        <div class="dropdown">
+                                            <div class="form-group">
+                                                <label class="control-label">Item Code<span class="red-star">*</span></label>
+                                                <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select ng-options = "purchase as purchase.itemCode for purchase in purchases track by purchase.id" ng-model="selectedItemCode"  class="form-control">
+                                                    <option value="">Select...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Item Name</label>
+                                        <input type="text" class="form-control" name="itemName" ng-disabled="true" ng-model="selectedItemCode.name">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label">UOM</label>
+                                        <input type="text" class="form-control" name="uop" ng-pattern="/^[0-9]*$/" ng-model="selectedItemCode.uom" ng-disabled="true">
+                                        <div ng-show="itemForm.$submitted || itemForm.uop.$touched">
+                                            <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
+                                                <p class="help-block" style="color: maroon"
+                                                   ng-show="itemForm.uop.$error.required">UOM is
+                                                    invalid.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group   is-empty">
+                                        <label class="control-label">Quantity <span class="red-star">*</span></label>
+                                        <input type="number" class="form-control" name="quantity" min="1" ng-model="selectedQuantity" required>
+                                        <div ng-show="itemForm.$submitted || itemForm.quantity.$touched">
+                                            <div ng-show="itemForm.quantity.$dirty || itemForm.quantity.$invalid">
+                                                <p class="help-block" style="color: maroon"
+                                                   ng-show="itemForm.quantity.$error.required">Quantity is
+                                                    required.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <button class="btn btn-success" ng-click="addPurchaseItem()"  ng-show="!isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                        Add
+                                    </button>
+
+                                    <button class="btn btn-success" ng-click="updatePurchaseItems()"  ng-show="isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                        Update
+                                    </button>
+                                    <button class="btn btn-danger" ng-click="clearPurchaseItems()"  ng-show="isEdit"  style="padding: 12px 20px; margin-top: 16px;">
+                                        Clear
+                                    </button>
+
+                                </div>
+                            </ng-form>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="table-responsive tablecard">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Item Code</th>
+                                            <th>Item Name</th>
+                                            <th>UOM</th>
+                                            <th>Quantity</th>
+                                            <th class="text-right">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="purchase in materialItems" ng-class="{'highlight-text':$index == selectedRow}">
+                                            <td>{{purchase.materialItemCode}}</td>
+                                            <td>{{purchase.materialName}}</td>
+                                            <td>{{purchase.materialUom}}</td>
+                                            <td>{{purchase.quantity}}</td>
+                                            <td class="text-right" ng-click="editMaterial($index, purchase)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                        </tr>
+                                        <tr>
+                                            <td ng-if="!materialItems.length" colspan="7" align="center"> No purchase items found </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <button type="submit" ng-click="cancelPurchase()"
+                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+
+                        <button type="submit"
+                                id="form-button-save" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid"
+                                class="btn btn-success pull-right" ng-click="updatePurchaseReq()"><span class="btn-label">
+                                            <i class="material-icons">check</i>
+                                        </span>Update Purchase Requisition</button>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+

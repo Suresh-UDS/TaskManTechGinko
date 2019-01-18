@@ -1,15 +1,13 @@
 package com.ts.app.web.rest.dto;
 
 
-import java.util.List;
-
-import javax.validation.constraints.Size;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ts.app.domain.Site;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * A DTO representing a Employee
@@ -96,6 +94,10 @@ public class EmployeeDTO extends BaseDTO {
     private String url;
 
     private String faceId;
+    
+    private String region;
+    
+    private String branch;
 
     public long getId() {
         return id;
@@ -410,9 +412,24 @@ public class EmployeeDTO extends BaseDTO {
 	public void setRelievers(List<EmployeeRelieverDTO> relievers) {
 		this.relievers = relievers;
 	}
-    
 
-    @Override
+    public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	@Override
     public String toString() {
         String details = "EmployeeDTO{" +
             "name='" + name +

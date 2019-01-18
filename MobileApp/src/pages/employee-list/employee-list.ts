@@ -35,6 +35,9 @@ export class EmployeeListPage {
     totalPages:0;
     pageSort:15;
     count=0;
+    project:any;
+    site:any;
+    searchCriteria:any;
 clientFilter:any;
 siteFilter:any;
   constructor(public navCtrl: NavController,public component:componentService,public myService:authService, public navParams: NavParams, private  authService: authService, public camera: Camera,
@@ -43,6 +46,7 @@ siteFilter:any;
               private modalCtrl:ModalController) {
 
       this.employees = [];
+      this.searchCriteria ={};
 
   }
 
@@ -91,9 +95,21 @@ siteFilter:any;
       console.log(infiniteScroll);
         console.log(this.totalPages);
         console.log(this.page);
-      var searchCriteria ={
-          currPage:this.page+1
-      };
+
+
+
+        if(this.project && this.project.id>0){
+            this.searchCriteria.currPage = this.page+1;
+            this.searchCriteria.projectId=this.project.id;
+          if(this.site && this.site.id>0){
+            this.searchCriteria.siteId = this.site.id;
+          }
+
+        }else{
+          this.searchCriteria.currPage = this.page+1;
+        }
+        console.log("Search criteira - ");
+        console.log(this.searchCriteria);
       if(this.page>this.totalPages){
           console.log("End of all pages");
           infiniteScroll.complete();
@@ -104,7 +120,7 @@ siteFilter:any;
           console.log(this.totalPages);
           console.log(this.page);
           setTimeout(()=>{
-              this.employeeService.searchEmployees(searchCriteria).subscribe(
+              this.employeeService.searchEmployees(this.searchCriteria).subscribe(
                   response=>{
                       console.log('ionViewDidLoad Employee list:');
                       console.log(response);
@@ -238,6 +254,14 @@ siteFilter:any;
 
     applyFilter(project,site)
     {
+
+      if(project.id>0){
+        this.project = project;
+      }
+
+      if(site.id>0){
+        this.site = site;
+      }
         this.component.showLoader("");
         var searchCriteria = {
             siteId:site.id,

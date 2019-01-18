@@ -1,9 +1,6 @@
 package com.ts.app.repository;
 
-import java.sql.Date;
-import java.time.ZonedDateTime;
-import java.util.List;
-
+import com.ts.app.domain.Ticket;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +8,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Ticket;
+import java.sql.Date;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecificationExecutor<Ticket> {
 
@@ -77,6 +76,9 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status = 'Open' and  t.createdDate between :startDate and :endDate ")
 	long findOpenTicketsBySiteIdAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
+
+    @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status = 'In Progress' and  t.createdDate between :startDate and :endDate ")
+	long findInProgressTicketsBySiteIdAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
     @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status = :status and t.createdDate between :startDate and :endDate ")
 	long findCountBySiteIdStatusAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("status") String status, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);

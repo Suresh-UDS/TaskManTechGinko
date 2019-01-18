@@ -27,6 +27,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.EmployeeService;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
@@ -81,6 +82,9 @@ public class EmployeeResource {
 
     @Inject
     private UserService userService;
+    
+    @Inject
+    private ImportService importService;
 
     @Inject
     public EmployeeResource(EmployeeService employeeService) {
@@ -380,7 +384,7 @@ public class EmployeeResource {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+//
     @RequestMapping(value = "/employee/search",method = RequestMethod.POST)
     public SearchResult<EmployeeDTO> searchEmployees(@RequestBody SearchCriteria searchCriteria) {
         if(searchCriteria != null) {
@@ -570,7 +574,10 @@ public class EmployeeResource {
     public ResponseEntity<ImportResult> importJobData(@RequestParam("employeeFile") MultipartFile file){
         log.info("Employee Import Status********************");
         Calendar cal = Calendar.getInstance();
-        ImportResult result = importUtil.importEmployeeData(file, cal.getTimeInMillis());
+        ImportResult result = importService.importEmployeeData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+        		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
     }
 
@@ -601,7 +608,10 @@ public class EmployeeResource {
     public ResponseEntity<ImportResult> importShiftData(@RequestParam("employeeShiftFile") MultipartFile file){
         log.info("Employee Shift Import Status********************");
         Calendar cal = Calendar.getInstance();
-        ImportResult result = importUtil.importEmployeeShiftData(file, cal.getTimeInMillis());
+        ImportResult result = importService.importEmployeeShiftData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
         return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
     }
 
@@ -638,6 +648,16 @@ public class EmployeeResource {
             throw new TimesheetException("Error while upload existing enroll image" + e);
         }
         return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value="/employee/absent/search", method = RequestMethod.POST)
+    public ResponseEntity<?> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
+    	List<EmployeeDTO> response = null;
+    	if(searchCriteria!=null) {
+    		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        	response = employeeService.getEmpAttendanceList(searchCriteria);
+    	}
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

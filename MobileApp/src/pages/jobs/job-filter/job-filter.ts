@@ -17,9 +17,15 @@ import { DatePicker } from '@ionic-native/date-picker';
     templateUrl: 'job-filter.html',
 })
 export class JobFilter{
+  emp: any;
+  employeeActive: boolean;
+  empIndex: any;
+  index: any;
+  siteActive: any;
+  site: any;
 
 
-    clientList:any;
+  clientList:any;
     siteList:any;
     assetGroup:any;
     selectedProject:any;
@@ -44,6 +50,14 @@ export class JobFilter{
     totalPages:0;
     pageSort:15;
     count=0;
+  chooseClient = true;
+  projectActive: any;
+  siteSpinner = false;
+  showSites = false;
+  projectindex: any;
+  chooseSite = true;
+  empSpinner=false;
+  showEmployees=false;
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
                 public siteService:SiteService, public assetService:AssetService,private jobService:JobService,private employeeService:EmployeeService,
                 private   datePicker:DatePicker) {
@@ -65,7 +79,7 @@ export class JobFilter{
                 console.log(response);
                 this.clientList=response;
                 this.selectedProject = this.clientList[0];
-                this.selectSite(this.selectedProject);
+                // this.selectSite(this.selectedProject);
                 console.log('select default value:');
                 this.component.closeLoader();
             },
@@ -79,14 +93,27 @@ export class JobFilter{
             }
         )
 
+      /*this.fromDate = new Date();
+        this.toDate = new Date();
+        console.log("current date",this.fromDate);*/
+
     }
 
-    selectSite(project)
+    selectSite(project,i)
     {
+      this.projectActive=true;
+      this.projectindex = i;
+      this.siteSpinner= true;
+      this.chooseClient= false;
+      this.showSites = false;
         this.selectedProject = project;
         this.scrollSite = true;
+        this.showEmployees = false;
         this.siteService.findSitesByProject(project.id).subscribe(
             response=>{
+              this.siteSpinner=false;
+              this.showSites = true;
+              this.chooseSite = true;
                 console.log("====Site By ProjectId======");
                 console.log(response);
                 this.siteList=response;
@@ -102,13 +129,68 @@ export class JobFilter{
         )
     }
 
-    highLightSite(index,site){
+    highLightSite(i,site){
         console.log("Selected Site");
         console.log(site);
-        this.activeSite= index;
+        this.activeSite= i;
         this.selectedSite = site;
-        this.getEmployee(site.id);
+      if(site)
+      {
+        this.index = i;
+        this.projectActive = true;
+        this.siteActive = true;
+        // this.siteName = site.name;
+        this.site = site;
+        this.empSpinner=true;
+        this.chooseSite=false;
+        this.showEmployees=false;
+
+        console.log('ionViewDidLoad Add jobs employee');
+
+        window.localStorage.setItem('site',this.site.id);
+        console.log(this.empSelect);
+        var search={
+          currPage:1,
+          siteId:this.site.id
+        };
+        this.employeeService.searchEmployees(search).subscribe(
+          response=> {
+            this.empSpinner=false;
+            this.showEmployees=true;
+            console.log(response);
+            if(response.transactions!==0)
+            {
+              this.empSelect=false;
+              this.empPlace="Employee";
+              this.employee=response.transactions;
+              console.log(this.employee);
+            }
+            else
+            {
+              this.empSelect=true;
+              this.empPlace="No Employee";
+              this.employee=[]
+            }
+          },
+          error=>{
+            console.log(error);
+            console.log(this.employee);
+          })
+
+      }
+      else
+      {
+        this.employee=[];
+      }
     }
+
+  activeEmployee(emp,i)
+  {
+    this.empIndex = i;
+    this.employeeActive = true;
+    this.emp = emp;
+    console.log( this.emp);
+  }
 
     dismiss(){
         let data={'foo':'bar'};
@@ -177,43 +259,7 @@ export class JobFilter{
 
     getEmployee(id)
     {
-        if(id)
-        {
-            console.log('ionViewDidLoad Add jobs employee');
 
-            window.localStorage.setItem('site',id);
-            console.log(this.empSelect);
-            var search={
-                currPage:1,
-                siteId:id
-            };
-            this.employeeService.searchEmployees(search).subscribe(
-                response=> {
-                    console.log(response);
-                    if(response.transactions!==null)
-                    {
-                        this.empSelect=false;
-                        this.empPlace="Employee";
-                        this.employee=response.transactions;
-                        console.log(this.employee);
-                    }
-                    else
-                    {
-                        this.empSelect=true;
-                        this.empPlace="No Employee";
-                        this.employee=[]
-                    }
-                },
-                error=>{
-                    console.log(error);
-                    console.log(this.employee);
-                })
-
-        }
-        else
-        {
-            this.employee=[];
-        }
     }
 
     filter(){
@@ -222,10 +268,13 @@ export class JobFilter{
 
     filterJob(){
         this.searchCriteria = {
+            fromDate:this.fromDate,
+            toDate:this.toDate,
             selectedSite:this.selectedSite.id,
             selectedProject:this.selectedProject.id,
             selectedEmployee:this.employ
         };
+        console.log("searchCriteria",this.searchCriteria);
         this.viewCtrl.dismiss(this.searchCriteria);
     }
 

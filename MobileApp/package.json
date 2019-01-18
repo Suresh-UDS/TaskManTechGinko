@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "5.0.3",
     "@angular/router": "^3.0.0-alpha.7",
     "@ionic-native/app-version": "^4.7.0",
+    "@ionic-native/background-geolocation": "^4.17.0",
     "@ionic-native/background-mode": "^4.6.0",
     "@ionic-native/battery-status": "^4.6.0",
     "@ionic-native/calendar": "^4.5.2",
@@ -35,7 +36,7 @@
     "@ionic-native/file-path": "^4.5.3",
     "@ionic-native/file-transfer": "^4.5.3",
     "@ionic-native/geofence": "^4.5.2",
-    "@ionic-native/geolocation": "^4.5.2",
+    "@ionic-native/geolocation": "^4.18.0",
     "@ionic-native/location-accuracy": "^4.12.0",
     "@ionic-native/market": "^4.11.0",
     "@ionic-native/native-audio": "^4.7.0",
@@ -82,6 +83,8 @@
     "ionic-img-viewer": "^2.9.0",
     "ionic-native": "^2.9.0",
     "ionic-plugin-keyboard": "^2.2.1",
+    "ionic-select-searchable": "^2.10.0",
+    "ionic2-auto-complete": "^1.6.2-alpha",
     "ionic2-calendar": "^0.3.13-weekdayview-tpls",
     "ionic2-date-picker": "^1.1.0",
     "ionicons": "3.0.0",
@@ -129,9 +132,6 @@
       },
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-camera": {},
-      "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
-      },
       "cordova-plugin-x-toast": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-file-transfer": {},
@@ -149,7 +149,10 @@
       "cordova-plugin-network-information": {},
       "cordova.plugins.diagnostic": {},
       "uk.co.workingedge.cordova.plugin.sqliteporter": {},
-      "cordova-plugin-request-location-accuracy": {}
+      "cordova-plugin-request-location-accuracy": {},
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+      }
     },
     "platforms": [
       "android",

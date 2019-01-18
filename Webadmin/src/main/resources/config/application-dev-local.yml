@@ -21,13 +21,13 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://13.232.248.92:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: tgadmin123#
+        password: root
         #username: UDSTaskMan
         #password: Rd32018Uds
     jpa:
@@ -65,6 +65,8 @@ liquibase:
 
 server:
     port: 8088
+    compression: on
+    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
 
 upload:
     file:
@@ -257,6 +259,14 @@ google:
           callback:
               host: localhost
               port: 8080
+              
+influxdb:
+   url: http://127.0.0.1:8086
+   username: root
+   password: root
+   dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
               
 # ===================================================================
 # JHipster specific properties

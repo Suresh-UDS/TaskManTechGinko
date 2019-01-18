@@ -5,8 +5,8 @@
         </button>
         <ion-title>Jobs</ion-title>
         <ion-buttons right>
-        <button color="primary" ion-button clear (click)="scanQR()" class="add-btn">
-        <i class="fa fa-qrcode clr-orange fnt-24"></i>
+        <button ion-button class="fnt-black" icon-only (click)="presentModal()" class="padding-right10">
+          <ion-icon name="funnel"></ion-icon>
         </button>
             <button color="primary" ion-button clear has-permission="JobsCreate" class="add-btn" (click)="addJob()" ><ion-icon name="add"></ion-icon></button>
 
@@ -26,9 +26,10 @@
 </ion-header>
 
 <ion-content>
-    <!--<ion-fab  bottom right  >-->
-        <!--<button ion-fab color="primary" (click)="presentModal()"><ion-icon name="funnel"></ion-icon></button>-->
-    <!--</ion-fab>-->
+
+    <ion-fab  bottom right (click)="scanQR()" >
+        <button ion-fab color="primary" ><i class="fa fa-qrcode clr-white fnt-24"></i></button>
+    </ion-fab>
 
     <!--<ion-fab top right edge >-->
     <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
@@ -39,16 +40,22 @@
             <ion-refresher (ionRefresh)="doRefresh($event,today)">
                 <ion-refresher-content></ion-refresher-content>
             </ion-refresher>
-            <div *ngIf="todaysJobs?.length<0">
-                <ion-card>
-                    <ion-card-content>
-                        No Jobs
+            <div *ngIf="(todaysJobs?.length<0 || todaysJobs == null) && !spinner">
+                <ion-card no-margin>
+                    <ion-card-content text-center>
+                        <img  text-center src="assets/imgs/warning.svg">
+                        <span><p text-center>No Data Found</p></span>
                     </ion-card-content>
                 </ion-card>
             </div>
+
+            <div  *ngIf="(!todaysJobs || todaysJobs.length < 0) && spinner" text-center class="margin-top25">
+                <ion-spinner name="circles"></ion-spinner>
+            </div>
+
             <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
-                <div class="padding-left16 padding-top5" *ngIf="job.parentJobId <=0">
+                <div class="padding-left16 padding-top5" *ngIf="job.parentJobId <=0 && job.schedule=='ONCE' && job.scheduled == true ">
                     <ion-row class="margin0">
 
                         <ion-col col-2 class="ver-center">
@@ -80,7 +87,7 @@
                         -->
 
                     </ion-row>
-                </div>
+
                 <ion-item-sliding #slidingItem >
 
                     <ion-item #item class="item-fnt padding-left0" >
@@ -124,7 +131,7 @@
                         </div>
                     </ion-item-options>
                 </ion-item-sliding>
-
+                </div>
             </div>
             <ion-infinite-scroll *ngIf="todaysPage<todaysTotalPages"  (ionInfinite)="doInfiniteTodaysJobs($event)">
                 <ion-infinite-scroll-content></ion-infinite-scroll-content>
@@ -135,12 +142,25 @@
 
         <ion-list *ngSwitchCase="'jobs'">
 
-            <ion-refresher (ionRefresh)="doRefresh($event,all)">
-                <ion-refresher-content></ion-refresher-content>
-            </ion-refresher>
+            <!--<ion-refresher (ionRefresh)="doRefresh($event,all)">-->
+                <!--<ion-refresher-content></ion-refresher-content>-->
+            <!--</ion-refresher>-->
+
+            <div *ngIf="(allJobs?.length<0 || allJobs == null) && !spinner">
+                <ion-card no-margin>
+                    <ion-card-content text-center>
+                        <img  text-center src="assets/imgs/warning.svg">
+                        <span><p text-center>No Data Found</p></span>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+
+            <div  *ngIf="(!allJobs || allJobs.length < 0) && spinner" text-center class="margin-top25">
+                <ion-spinner name="circles"></ion-spinner>
+            </div>
 
             <div  class="white-bg" *ngFor="let job of allJobs" >
-                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' || job.schedule==null ||job.parentJobId <=0">
+                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' && job.schedule==null ||job.parentJobId <=0">
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">

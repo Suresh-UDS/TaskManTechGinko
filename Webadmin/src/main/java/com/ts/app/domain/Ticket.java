@@ -1,20 +1,10 @@
 package com.ts.app.domain;
 
-import java.io.Serializable;
-import java.sql.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.sql.Date;
 
 @Entity
 @Table(name = "ticket")
@@ -74,6 +64,8 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     private String image;
 
     private String comments;
+    
+    private String remarks;
 
     private String status;
     
@@ -162,8 +154,16 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
+    
+    public String getRemarks() {
+		return remarks;
+	}
 
-    public String getReportingTo() {
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getReportingTo() {
         return reportingTo;
     }
 

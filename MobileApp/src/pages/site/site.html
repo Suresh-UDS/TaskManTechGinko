@@ -3,15 +3,17 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Site List</ion-title>
+    <ion-title>Sites</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list *ngIf="sites">
-    <ion-item *ngFor="let site of sites;let i of index" class="bottom-border emp" (click)="viewSite(site)">
-      <ion-icon name="podium" item-start class="icon-color"></ion-icon>
-      <p text-left  class="fnt-wt" text-capitalize>{{site.name}}</p>
+
+    <ion-item *ngFor="let site of sites;let i of index" class="border-btm-dotted emp" (click)="viewSite(site)">
+      <ion-icon name="ios-podium-outline" item-start class="icon-color CircleIcon"></ion-icon>
+      <p text-left  class="fnt-wt-400" text-capitalize>{{site.name}}</p>
+      <ion-icon class="grey" item-end name="ios-arrow-forward-outline"></ion-icon>
     </ion-item>
   </ion-list>
 
@@ -22,11 +24,12 @@
     </ion-item>
   </ion-list>
 
-  <ion-card *ngIf="!sites && !isLoading">
-    <ion-card-content>
-      <img src="assets/imgs/warning.svg">
-      <span><p text-center>No Data Found</p></span>
-    </ion-card-content>
-  </ion-card>
+
+    <ion-card *ngIf="!sites && !isLoading">
+        <ion-card-content>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+        </ion-card-content>
+    </ion-card>
 
 </ion-content>

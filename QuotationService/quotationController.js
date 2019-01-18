@@ -775,7 +775,8 @@ module.exports = {
         quotCriterias.siteId=req.body.siteId;
       }
       if(req.body.title){
-        quotCriterias.title={$regex:'^'+req.body.title,$options:"si"};
+        quotCriterias.title={$regex:req.body.title,$options:"i"};
+       
       }
       if(req.body.status){
         //quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
@@ -804,8 +805,11 @@ module.exports = {
       if(req.body.createdDate){
           var startDate = new Date(req.body.createdDate);
           startDate.setHours(0,0,0);
-          quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            if(req.body.toDate){
+          var endDate = new Date(req.body.toDate);
+          endDate.setHours(23,59,59);
+          //quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
+          quotCriterias.createdDate = { $gt: startDate, $lt: endDate };
+           /* if(req.body.toDate){
                 var endDate = new Date(req.body.toDate);
                 endDate.setHours(23,59,59);
                 quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
@@ -813,33 +817,98 @@ module.exports = {
                 var endDate = new Date();
                 endDate.setHours(23,59,59);
                 quotCriterias.lastModifiedDate = { $gt: startDate, $lt: endDate };
-            }
+            }*/
        }
-   
-      console.log("currPage",req.body.currPage-1 +"sort"+ req.body.sort);
-      var quotQuery = Quotation.find(quotCriterias).sort({'createdDate':-1}).skip((req.body.currPage-1)*10).limit(req.body.sort);
-      //var quotQueryCount = Quotation.find(quotCriterias).count();
-      //var quotQueryCountVal = 0; 
+
+     //Order by column asc/desc
+
+      var sortVal = {};
+ 
+      if(req.body.columnName && req.body.sortByAsc){
+
+        sortVal[ req.body.columnName ]= 1;
+
+        //var sortVal =  { req.body.columnName : 1 };
+
+      }else if(req.body.columnName && !req.body.sortByAsc){
+
+        sortVal[ req.body.columnName ]= -1;
+
+        //var sortVal =  { req.body.columnName : -1 };
+
+      }else{
+        sortVal = {'createdDate' : -1};
+      }
+
+      
+
+      console.log("currPage",req.body.currPage +"coloumn:order" + JSON.stringify(sortVal));
+
+      var quotQuery = Quotation.find(quotCriterias).skip((req.body.currPage-1)*10).limit(req.body.sortNum).sort(sortVal);
+
       console.log("Search criteria",quotCriterias);
       quotQuery.exec(function(err,quotations){
           if(err){
               //console.log("Error in finding quotations");
               res.send(400,"No quotation found");
           }else{
-              /*quotQueryCount.exec(function(err,quotationsCount){
+            var quotQueryCount = Quotation.find(quotCriterias).count();
+            var quotQueryCountVal = 0; 
+            var data={};
+              quotQueryCount.exec(function(err,quotationsCount){
                   if(err){
-                    quotQueryCountVal = 0;
+                    //quotQueryCountVal = 0;
+                    data={totalCount:quotQueryCountVal,totalPages:0,currPage:1,transactions:[]};
+                    res.send(200,data); 
                   }else{
                      quotQueryCountVal = quotationsCount;
+                     var tPage = 0;
+                     if(quotQueryCountVal > 10){
+                        tPage = Math.ceil(quotQueryCountVal / 10);
+                     }else{
+                        tPage = 1;
+                     }
+                     data={totalCount:quotQueryCountVal,totalPages:tPage,currPage:req.body.currPage,transactions:quotations};
+                     console.log("result",data);
+                      res.send(200,data); 
                   }
+                   
                 });     
-                //console.log("result",quotations);
-             quotations.totalCount = quotQueryCountVal;*/
-             res.send(200,quotations); 
+           
           }
           
     });     
 
-   }
+   },
+
+   findAllQuotations: function(req,res,next) {
+    console.log("Find All Quotations");
+    Quotation.find({}, function(err,quotations){
+        if(err){
+            console.log("unable to get All Quotations")
+            res.json(200,err);
+        }else{
+            res.json(200,quotations);
+        }
+    });
+   },
+
+   findLastModified: function(req,res,nex) {
+        console.log("Find lastmodified quotations");
+        var currentDate = new Date();
+        currentDate.getTime() - 1000*60*5;
+        console.log(currentDate);
+        Quotation.find({lastModifiedDate: {$gt: currentDate}}, function(err, quotation){
+            if(err) {
+                console.log("Unable to get lastmodified quotations");
+                res.json(400, err);
+            }else{
+                res.json(200, quotation);
+            }
+        });
+    }
+
+    
+
 };
 

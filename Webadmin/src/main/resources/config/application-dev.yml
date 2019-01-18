@@ -21,10 +21,10 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://13.232.248.92:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: tgadmin123#
+        password: root
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -40,7 +40,7 @@ spring:
         host: smtp.office365.com
         port: 587
         username: taskmanfms@uds.in
-        password: Ta$k@1234
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
@@ -63,6 +63,9 @@ server:
     tomcat:
          max-connections: 100
          max-threads:  400
+    compression: on
+    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
+
 upload:
     file:
          path: /opt/uploads
@@ -144,20 +147,24 @@ email:
             title: Completed job report
 reports:
     job-report:
-        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/job-reports
+        url: http://52.221.57.9:8088/#/job-reports
     attendance-report:
-        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/attendance-reports
+        url: http://52.221.57.9:8088/#/attendance-reports
     feedback-report:
-        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/feedbacksList
+        url: http://52.221.57.9:8088/#/feedbacksList
     asset-report:
-        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/asset-report
+        url: http://52.221.57.9:8088/#/asset-report
     vendor-report:
-        url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
+    pr-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/pr-report
+    inventory-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/inventory-report
 
 url:
-    ticket-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-ticket/
-    quotation-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation/
-    job-view: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8088/#/view-job/
+    ticket-view: http://52.221.57.9:8088/#/view-ticket/
+    quotation-view: http://52.221.57.9:8088/#/view-quotation/
+    job-view: http://52.221.57.9:8088/#/view-job/
 
 #facedetection:
 #    api:
@@ -183,7 +190,8 @@ locationService:
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://localhost:8001/api
+    url: http://localhost:8001/api
+#   url: http://52.221.57.9:8001/api
 
 pushService:
    url: http://localhost:9000/
@@ -206,6 +214,7 @@ AWS:
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
    s3-locationqr-path : locationQrCodes/
+   s3-expenseDocument-path: expenseDocuments/
 
 scheduler:
    job:
@@ -249,12 +258,27 @@ scheduler:
 
 default.user.password: uds12345
 
+roles:
+    exclude:
+        role1: Help Desk
+        role2: Client
+        role3: Supervisor
+
 google:
    drive:
       api:
           callback:
               host: ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com
               port: 8080
+
+influxdb:
+   url: http://3.0.29.145:8086
+   username: superadmin
+   password: "*BehindWheel7"
+   dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
+
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

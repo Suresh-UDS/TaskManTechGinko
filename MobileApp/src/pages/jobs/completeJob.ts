@@ -15,6 +15,9 @@ import{ModalController} from "ionic-angular";
 import{Checklist} from "../checklist/checklist";
 import{ImageViewerController} from "ionic-img-viewer";
 import {AttendancePopoverPage} from "../attendance/attendance-popover";
+import {AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
+import{AddMaterial} from "../add-material/add-material";
+
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 declare  var demo;
@@ -39,6 +42,8 @@ export class CompleteJobPage {
         longitude:any;
         completeJob:any;
         id:any;
+      jobMaterials:any;
+
     };
     latitude:any;
     longitude:any;
@@ -55,8 +60,12 @@ export class CompleteJobPage {
     index:any;
     spinner:any;
     categories:any;
+  siteId:any;
+  material:any;
 
-    constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
+
+
+  constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
                 private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer,
                 private file: File,private modalCtrl:ModalController,imageViewerCtrl: ImageViewerController) {
@@ -66,7 +75,9 @@ export class CompleteJobPage {
         this.checkListItems=[];
         this.takenImages=[];
         this.jobDetails=[];
-        this.jobDetails=this.navParams.get('job');
+    this.material=[];
+
+    this.jobDetails=this.navParams.get('job');
         this.takenImages = [];
         this.checkOutDetails={
             employeeId:'',
@@ -77,7 +88,9 @@ export class CompleteJobPage {
         latitudeOut:'',
         longitude:'',
         completeJob:false,
-        id:null
+        id:null,
+          jobMaterials:[],
+
         };
         /*
         this.jobService.loadCheckLists().subscribe(
@@ -184,9 +197,11 @@ export class CompleteJobPage {
 
     }
 
-    saveJob(job){
+    saveJob(job,material){
         this.component.showLoader('Saving Job');
-        console.log(job)
+        console.log(job);
+      console.log(material);
+      job.jobMaterials=material;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 if(response.errorStatus){
@@ -206,7 +221,9 @@ export class CompleteJobPage {
                         this.checkOutDetails.siteId = job.siteId;
                         this.checkOutDetails.jobId = job.id;
                         this.checkOutDetails.id=job.checkInOutId;
-                        this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+                      this.checkOutDetails.jobMaterials=material;
+
+                      this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                             response=>{
                                 // this.component.closeLoader();
                                 console.log("complete job response");
@@ -291,7 +308,9 @@ export class CompleteJobPage {
         )
     }
 
-    completeJob(job, takenImages){
+    completeJob(job, takenImages,material){
+      console.log("getJobs",job);
+      console.log("getImages",takenImages);
         this.component.showLoader('Completing Job');
         this.geolocation.getCurrentPosition().then((response)=>{
             this.component.closeAll();
@@ -302,7 +321,10 @@ export class CompleteJobPage {
         }).catch((error)=>{
             this.latitude = 0;
             this.longitude = 0;
-        })
+        });
+      console.log("material in complete job");
+      console.log(material);
+      job.jobMaterials=material;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log(job);
@@ -315,7 +337,9 @@ export class CompleteJobPage {
                 this.checkOutDetails.latitudeOut = this.latitude;
                 this.checkOutDetails.longitude = this.longitude;
                 this.checkOutDetails.id=job.checkInOutId;
-                console.log(this.checkOutDetails);
+              this.checkOutDetails.jobMaterials=material;
+
+              console.log(this.checkOutDetails);
                 this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                     response=>{
                         if(response.errorStatus){
@@ -506,4 +530,17 @@ export class CompleteJobPage {
         popover.present({
         });
     }
+  addMaterial()
+  {
+    // this.navCtrl.push(AddMaterial,{job:this.jobDetails});
+    let profileModal = this.modalCtrl.create(AddMaterial, {job:this.jobDetails});
+    profileModal.onDidDismiss(data => {
+      console.log("data");
+      console.log(data);
+      console.log("Job Material in complete job page");
+      this.material=data.jobMaterial;
+      console.log(data.jobMaterial);
+    });
+    profileModal.present();
+  }
 }

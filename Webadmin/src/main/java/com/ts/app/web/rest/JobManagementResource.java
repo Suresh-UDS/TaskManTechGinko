@@ -31,10 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AmazonS3Service;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
@@ -50,6 +52,7 @@ import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
 import com.ts.app.web.rest.dto.GraphResponse;
 import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
 import com.ts.app.web.rest.dto.JobDTO;
 import com.ts.app.web.rest.dto.LocationDTO;
 import com.ts.app.web.rest.dto.NotificationLogDTO;
@@ -85,13 +88,16 @@ public class JobManagementResource {
 	private SchedulerService schedulerService;
 
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 	@Inject
 	private CacheUtil cacheUtil;
 
 	@Inject
 	private ReportUtil reportUtil;
+
+	@Inject
+	private AmazonS3Service amazonSerivce;
 
 	@Inject
 	private AmazonS3Service amazonService;
@@ -117,10 +123,10 @@ public class JobManagementResource {
 
 		if(response != null && response.getId() > 0) {
 			String sendNotification = request.getParameter("sendNotification");
-			if(StringUtils.isNotBlank(sendNotification)) {
+//			if(StringUtils.isNotBlank(sendNotification)) {
 				boolean isNotification = Boolean.parseBoolean(sendNotification);
 				log.debug("Job save isNotification - "+ isNotification);
-				if(isNotification) { //SEND PUSH notification for the users connected to the site.
+//				if(isNotification) { //SEND PUSH notification for the users connected to the site.
 					long siteId = jobDTO.getSiteId();
 					log.debug("Job save siteId - "+ siteId);
 					List<User> users = userService.findUsers(siteId);
@@ -136,8 +142,8 @@ public class JobManagementResource {
 						pushService.send(userIds, message);
 						//jobService.saveNotificationLog(response.getId(), SecurityUtils.getCurrentUserId(), users, siteId, message);
 					}
-				}
-			}
+//				}
+//			}
 		}
 		if(response != null && response.getId() > 0) {
 			return new ResponseEntity<>(response,HttpStatus.CREATED);
@@ -235,6 +241,17 @@ public class JobManagementResource {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @RequestMapping(path = "/checklist/update",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateChecklist(@RequestBody JobChecklistDTO jobChecklistDTO){
+        long userId = SecurityUtils.getCurrentUserId();
+        JobChecklist response = jobService.updateCheckList(jobChecklistDTO);
+        if(response.getId()<=0){
+            jobChecklistDTO.setErrorStatus(true);
+            jobChecklistDTO.setErrorMessage("Error in saving Checklist..");
+            return new ResponseEntity<Object>(jobChecklistDTO,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 	@RequestMapping(value = "/jobs/search",method = RequestMethod.POST)
@@ -370,7 +387,10 @@ public class JobManagementResource {
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importJobData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
@@ -387,7 +407,7 @@ public class JobManagementResource {
 					result.setMsg("Completed importing");
 					break;
 				case "FAILED" :
-					result.setMsg("Failed to import. Please try again");
+					//result.setMsg("Failed to import. Please try again");
 					break;
 				default :
 					result.setMsg("Completed importing");
@@ -478,6 +498,11 @@ public class JobManagementResource {
     public List<CheckInOutDTO> findCheckInOutByEmployee(@PathVariable("id") Long jobId) {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
+    }
+
+    @RequestMapping(value="/uploadAttendanceCheckIn", method= RequestMethod.GET)
+    public void uploadAttendance() {
+    	amazonSerivce.uploadExistingCheckin();
     }
 
     @RequestMapping(value = "/job/uploadExisting/checklistImg", method = RequestMethod.POST)

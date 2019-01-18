@@ -8,9 +8,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import com.ts.app.domain.Branch;
-import com.ts.app.domain.Region;
-import com.ts.app.web.rest.dto.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,8 +26,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.SiteService;
 import com.ts.app.service.util.ImportUtil;
+import com.ts.app.web.rest.dto.BranchDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.RegionDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.ShiftDTO;
+import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.util.TokenUtils;
 
@@ -47,7 +54,7 @@ public class SiteResource {
 	private SiteService siteService;
 
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 	@Inject
 	public SiteResource(SiteService siteService) {
@@ -150,7 +157,10 @@ public class SiteResource {
     public ResponseEntity<ImportResult> importJobData(@RequestParam("siteFile") MultipartFile file){
     	log.info("--Invoked Site Import --");
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importSiteData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importSiteData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
@@ -170,7 +180,15 @@ public class SiteResource {
     public ResponseEntity<?> saveRegion(@RequestBody RegionDTO region){
         long userId = SecurityUtils.getCurrentUserId();
         try {
-            RegionDTO regionDTO= siteService.createRegion(region);
+        	if(!siteService.isDuplicate(region)) {        		
+        		RegionDTO regionDTO= siteService.createRegion(region);
+        	}else {
+                log.debug(">>> duplicate <<<");
+                region.setErrorMessage("error.duplicateRecordError");
+                region.setErrorStatus(true);
+//                region.setStatus("400");
+                return new ResponseEntity<>(region,HttpStatus.BAD_REQUEST);
+            }
         }catch(Exception e) {
             throw new TimesheetException(e, region);
         }
@@ -182,7 +200,15 @@ public class SiteResource {
     public ResponseEntity<?> saveBranch(@RequestBody BranchDTO branchDTO){
         long userId = SecurityUtils.getCurrentUserId();
         try {
-            BranchDTO branchDTO1= siteService.createBranch(branchDTO);
+        	if(!siteService.isDuplicate(branchDTO)) {   
+        		BranchDTO branchDTO1= siteService.createBranch(branchDTO);        		
+        	}else {
+        		log.debug(">>> duplicate <<<");
+        		branchDTO.setErrorMessage("error.duplicateRecordError");
+                branchDTO.setErrorStatus(true);
+//                branchDTO.setStatus("400");
+                return new ResponseEntity<>(branchDTO,HttpStatus.BAD_REQUEST);
+        	}
         }catch(Exception e) {
             throw new TimesheetException(e, branchDTO);
         }
@@ -256,7 +282,7 @@ public class SiteResource {
     public ResponseEntity<ImportResult> changeSiteEmployee(@RequestParam("siteFile") MultipartFile file){
         log.info("--Invoked Change Site Import --");
         Calendar cal = Calendar.getInstance();
-        ImportResult result = importUtil.changeEmployeeSite(file, cal.getTimeInMillis());
+        ImportResult result = importService.changeEmployeeSite(file, cal.getTimeInMillis());
         return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
     }
 

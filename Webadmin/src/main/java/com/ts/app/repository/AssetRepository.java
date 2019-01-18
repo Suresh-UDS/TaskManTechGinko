@@ -1,9 +1,8 @@
 package com.ts.app.repository;
 
-import java.sql.Date;
-import java.time.ZonedDateTime;
-import java.util.List;
-
+import com.ts.app.domain.Asset;
+import com.ts.app.domain.AssetAMCSchedule;
+import com.ts.app.domain.AssetParameterReading;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,10 +10,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.AssetAMCSchedule;
-import com.ts.app.domain.AssetParameterReading;
-import com.ts.app.domain.Employee;
+import java.sql.Date;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 /**
  * Created by karth on 7/5/2017.

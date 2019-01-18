@@ -1,12 +1,11 @@
 package com.ts.app.web.rest.dto;
 
 
-import java.util.Date;
-import java.util.List;
+import com.ts.app.domain.Site;
 
 import javax.validation.constraints.Size;
-
-import com.ts.app.domain.Site;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A DTO representing a Site
@@ -31,6 +30,8 @@ public class SiteDTO extends BaseDTO {
 	private String address;
 	private String country;
 	private String state;
+	private String city;
+	private String pinCode;
 
 	private double addressLat;
 	private double addressLng;
@@ -152,8 +153,24 @@ public class SiteDTO extends BaseDTO {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+    public String getCity() {
+		return city;
+	}
 
-    public double getRadius() {
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPinCode() {
+		return pinCode;
+	}
+
+	public void setPinCode(String pinCode) {
+		this.pinCode = pinCode;
+	}
+
+	public double getRadius() {
         return radius;
     }
 

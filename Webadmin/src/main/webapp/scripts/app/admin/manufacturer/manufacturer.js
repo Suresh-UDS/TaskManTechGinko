@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('manufacturer-list', {
                 parent: 'manage',
                 url: '/manufacturer-list',
-                controller: 'ManufacturerController',
+                //controller: 'ManufacturerController',
                 data: {
                     authorities: [],
                     pageTitle: 'Manufacturer'
@@ -23,7 +23,7 @@ angular.module('timeSheetApp')
             }).state('add-manufacturer', {
                 parent: 'manage',
                 url: '/add-manufacturer',
-                controller: 'ManufacturerController',
+                //controller: 'ManufacturerController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Manufacturer'
@@ -40,7 +40,7 @@ angular.module('timeSheetApp')
             }).state('edit-manufacturer', {
                 parent : 'manage',
                 url : '/edit-manufacturer/:id',
-                controller : 'ManufacturerController',
+                //controller : 'ManufacturerController',
                 data : {
                     authorities : [],
                     pageTitle : 'Update Manufacturer'

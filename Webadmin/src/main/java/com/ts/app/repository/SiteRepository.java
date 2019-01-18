@@ -1,24 +1,23 @@
 package com.ts.app.repository;
 
-import java.util.List;
-import java.util.Set;
-
+import com.ts.app.domain.Shift;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Shift;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
+import java.util.List;
+import java.util.Set;
 
 public interface SiteRepository extends JpaRepository<Site, Long> {
 
 	@Override
 	void delete(Site t);
 
-	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name")
+	@Query("SELECT s FROM Site s WHERE s.active='Y' order by s.name ASC ")
 	List<Site> findAll();
 
 	@Query("SELECT s FROM Site s join s.employeeProjSites e WHERE e.employee.id = :empId and s.active='Y' order by s.name")

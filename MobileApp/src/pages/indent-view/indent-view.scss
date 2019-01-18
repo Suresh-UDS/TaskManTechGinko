@@ -1,0 +1,47 @@
+page-indent-view {
+.margin-btm
+{
+  margin-bottom:0px !important;
+  padding: 14px 24px !important;
+}
+  .gray-bg{
+    background-color:#cac8c8 !important;
+  }
+  .card .card-content {
+    padding: 5px 10px !important;
+    position: relative;
+  }
+  .fab[mini] {
+    margin: 8px;
+    width: 30px;
+    height: 30px;
+    line-height: 40px;
+    margin-top:0px !important;
+  }
+  .fab ion-icon
+  {
+    font-size:16px !important;
+  }
+  .mrgn-p {
+    margin: 0 -6px 10px !important;
+  }
+  .brdr{
+    border-bottom:none !important;
+  }
+  ion-card img {
+    width: 100% !important;
+    height:80px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .brdr{
+    border:1px solid #CCC !important;
+  }
+}

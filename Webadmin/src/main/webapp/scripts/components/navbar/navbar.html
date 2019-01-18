@@ -23,20 +23,20 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Client:List" >
-                <a ui-sref="projects">
+                <a ui-sref="projects" ng-click="dbFilterBtn();">
                     <i class="material-icons">people</i>
                     <p>Client </p>
                 </a>
             </li>
 
             <li ui-sref-active="active" has-permission="Site:List">
-                <a ui-sref="sites">
+                <a ui-sref="sites" ng-click="dbFilterBtn();">
                     <i class="material-icons">device_hub</i>
                     <p>Sites</p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Location:List">
-                <a ui-sref="locations">
+                <a ui-sref="locations" ng-click="dbFilterBtn();">
                     <i class="material-icons">place</i>
                     <p>Locations</p>
                 </a>
@@ -51,13 +51,13 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <div class="collapse" id="formsExamples">
                     <ul class="nav SubNav">
                         <li ui-sref-active="active" has-permission="Employee:List">
-                            <a ui-sref="employees">
+                            <a ui-sref="employees" ng-click="dbFilterBtn();">
 			                    <i class="material-icons">people</i>
 			                    <p>Master</p>
 			                </a>
                         </li>
                         <li ui-sref-active="active" has-permission="Employee:List">
-                            <a ui-sref="employeeShifts">
+                            <a ui-sref="employeeShifts" ng-click="dbFilterBtn();">
 			                    <i class="material-icons">alarm</i>
 			                    <p>Shift Details</p>
 			                </a>
@@ -66,32 +66,32 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </div>
             </li>
             <li ui-sref-active="active" has-permission="Assets:List">
-                <a  data-toggle="collapse" data-target="#AssetSubMenus">
+                <a  data-toggle="collapse" data-target="#AssetSubMenus" href="javascript:void(0);">
                     <i class="material-icons">assessment</i>
                     <p>Assets  <b class="caret"></b></p>
                 </a>
                 <div class="collapse" id="AssetSubMenus">
                     <ul class="nav SubNav">
                         <li ui-sref-active="active">
-                            <a ui-sref="vendor-list">
+                            <a ui-sref="vendor-list" ng-click="dbFilterBtn();">
                                 <i class="material-icons">supervisor_account</i>
                                 <p>Vendor</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="manufacturer-list">
+                            <a ui-sref="manufacturer-list" ng-click="dbFilterBtn();">
                                 <i class="material-icons">business</i>
                                 <p>Manufacturer</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="parameter-config">
+                            <a ui-sref="parameter-config" ng-click="dbFilterBtn();">
                                 <i class="material-icons">brightness_high</i>
                                 <p>Config</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="assets">
+                            <a ui-sref="assets" ng-click="dbFilterBtn();">
                                 <i class="material-icons">dashboard</i>
                                 <p>Master</p>
                             </a>
@@ -100,44 +100,44 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 </div>
             </li>
             <li ui-sref-active="active" has-permission="Checklist:List">
-                <a ui-sref="checklists">
+                <a ui-sref="checklists" ng-click="dbFilterBtn();">
                     <i class="material-icons">playlist_add_check</i>
                     <p>Checklist</p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Jobs:List">
-                <a ui-sref="jobs">
+                <a ui-sref="jobs" ng-click="dbFilterBtn();">
                     <i class="material-icons">description</i>
                     <p>Jobs </p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Attendance:List">
-                <a ui-sref="attendances">
+                <a ui-sref="attendances" ng-click="dbFilterBtn();">
                     <i class="material-icons">content_paste</i>
                     <p>Attendance</p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Quotation:List">
-                <a ui-sref="quotation-list">
+                <a ui-sref="quotation-list" ng-click="dbFilterBtn();">
                     <i class="material-icons">receipt</i>
                     <p>Quotation </p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Import:List">
-                <a ui-sref="imports">
+                <a ui-sref="imports" ng-click="dbFilterBtn();">
                     <i class="material-icons">file_upload</i>
                     <p>Import</p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="Tickets:List">
-                <a ui-sref="tickets">
+                <a ui-sref="tickets" ng-click="dbFilterBtn();">
                     <i class="material-icons">tab</i>
                     <p>Tickets</p>
                 </a>
             </li>
             <!-- <li  ng-class="{active: $state.includes('admin')}">
                 <a data-toggle="collapse" data-target="#Inventory" href="#">
-                    <i class="material-icons">location_city</i>
+                    <i class="material-icons">widgets</i>
                     <p> Inventory
                         <b class="caret"></b>
                     </p>
@@ -147,14 +147,14 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
                         <li ui-sref-active="active"  >
                             <a ui-sref="inventory-list">
-                                <i class="material-icons">location_city</i>
-                                <p>Inventory Master</p>
+                                <i class="material-icons">widgets</i>
+                                <p>Master</p>
                             </a>
                         </li>
                         <li ui-sref-active="active"  >
                             <a ui-sref="inventory-transaction-list">
-                                <i class="material-icons">location_city</i>
-                                <p>Inventory Transaction</p>
+                                <i class="material-icons">widgets</i>
+                                <p>Issued / Received</p>
                             </a>
                         </li>
 
@@ -162,12 +162,73 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li> -->
-            <!-- <li ui-sref-active="active">
-                <a ui-sref="sla-list">
+            <li ui-sref-active="active" has-permission="SLA:List">
+                <a ui-sref="sla-list" ng-click="dbFilterBtn();">
                     <i class="material-icons">contact_mail</i>
                     <p>SLA Management</p>
                 </a>
-            </li> -->
+            </li>
+
+            <li ui-sref-active="active"  >
+                <a ui-sref="expense-list">
+                    <i class="material-icons">pie_chart</i>
+                    <p>Expense Transaction</p>
+                </a>
+            </li>
+            <!--<li ui-sref-active="active">-->
+                <!--<a  data-toggle="collapse" data-target="#Expense" href="#">-->
+                    <!--<i class="material-icons">pie_chart</i>-->
+                    <!--<p>Expense Management  <b class="caret"></b> </p>-->
+                <!--</a>-->
+                <!--<div class="collapse" id="Expense" >-->
+                    <!--<ul class="nav SubNav">-->
+
+                        <!--<li ui-sref-active="active">-->
+                            <!--<a ui-sref="budget-list">-->
+                                <!--<i class="material-icons">pie_chart</i>-->
+                                <!--<p>Budget Master</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li ui-sref-active="active"  >-->
+                            <!--<a ui-sref="expense-list">-->
+                                <!--<i class="material-icons">pie_chart</i>-->
+                                <!--<p>Expense Transaction</p>-->
+                            <!--</a>-->
+                        <!--</li>-->
+
+
+                    <!--</ul>-->
+                <!--</div>-->
+
+            <!--</li>-->
+
+            <li ui-sref-active="active">
+                <a  data-toggle="collapse" data-target="#Purchase" href="#">
+                    <i class="material-icons">shopping_cart</i>
+                    <p>Purchase <b class="caret"></b> </p>
+                </a>
+                <div class="collapse" id="Purchase" >
+                    <ul class="nav SubNav">
+
+                        <li ui-sref-active="active">
+                            <a ui-sref="indent-list">
+                                <i class="material-icons">shopping_cart</i>
+                                <p>Indent</p>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active"  >
+                            <a ui-sref="purchase-requisition-list">
+                                <i class="material-icons">shopping_cart</i>
+                                <p>Purchase Requisition</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+
+            </li>
+
             <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
                 <a data-toggle="collapse" data-target="#formsExamplesReport" href="javascript:void(0);">
                     <i class="material-icons">content_paste</i>
@@ -178,37 +239,37 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <div class="collapse" id="formsExamplesReport">
                     <ul class="nav SubNav">
                         <li ui-sref-active="active" has-permission="EmployeeReports:List">
-                            <a ui-sref="employeeReports">
+                            <a ui-sref="employeeReports" ng-click="dbFilterBtn();">
                                 <i class="material-icons">people</i>
                                 <p>Employee</p>
                             </a>
                         </li>
                         <li ui-sref-active="active" has-permission="JobReports:List">
-                            <a ui-sref="jobReports">
+                            <a ui-sref="jobReports" ng-click="dbFilterBtn();">
                                 <i class="material-icons">description</i>
                                 <p>Job</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="attendanceReports" has-permission="AttendanceReports:List">
+                            <a ui-sref="attendanceReports" has-permission="AttendanceReports:List" ng-click="dbFilterBtn();">
                                 <i class="material-icons">content_paste</i>
                                 <p>Attendance</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="feedbackReports" has-permission="FeedbackReports:List">
+                            <a ui-sref="feedbackReports" has-permission="FeedbackReports:List" ng-click="dbFilterBtn();">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedback</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="ticketReports" has-permission="TicketReports:List">
+                            <a ui-sref="ticketReports" has-permission="TicketReports:List" ng-click="dbFilterBtn();">
                                 <i class="material-icons">tab</i>
                                 <p>Ticket</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="assetReports" has-permission="Asset:List">
+                            <a ui-sref="assetReports" has-permission="Asset:List" ng-click="dbFilterBtn();">
                                 <i class="material-icons">description</i>
                                 <p>Asset</p>
                             </a>
@@ -218,25 +279,25 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </li>
 
             <li ui-sref-active="active" has-permission="RateCard:List">
-                <a ui-sref="rateCardList">
+                <a ui-sref="rateCardList" ng-click="dbFilterBtn();">
                     <i class="material-icons">credit_card</i>
                     <p>Rate Card </p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="UserRole:List"  >
-                <a ui-sref="user-roles">
+                <a ui-sref="user-roles" ng-click="dbFilterBtn();">
                     <i class="material-icons">group</i>
                     <p>User Roles</p>
                 </a>
             </li>
             <li ui-sref-active="active" has-permission="RolePermission:List"  >
-                <a ui-sref="role-permission">
+                <a ui-sref="role-permission" ng-click="dbFilterBtn();">
                     <i class="material-icons">group</i>
                     <p>Role Permission</p>
                 </a>
             </li>
             <li ui-sref-active="active"  has-permission="ModuleActions:List" >
-                <a ui-sref="app-module-actions">
+                <a ui-sref="app-module-actions" ng-click="dbFilterBtn();">
                     <i class="material-icons">view_module</i>
                     <p>App Module & Actions</p>
                 </a>
@@ -253,19 +314,19 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     <ul class="nav SubNav">
 
                         <li ui-sref-active="active"  >
-                            <a ui-sref="feedbacks">
+                            <a ui-sref="feedbacks" ng-click="dbFilterBtn();">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedbacks</p>
                             </a>
                         </li>
                         <li ui-sref-active="active"  >
-                            <a ui-sref="feedback-questions">
+                            <a ui-sref="feedback-questions" ng-click="dbFilterBtn();">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedback Master</p>
                             </a>
                         </li>
                         <li ui-sref-active="active"  >
-                            <a ui-sref="feedback-setup">
+                            <a ui-sref="feedback-setup" ng-click="dbFilterBtn();">
                                 <i class="material-icons">feedback</i>
                                 <p>Feedback Setup</p>
                             </a>
@@ -285,19 +346,19 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                 <div class="collapse" id="formsExamples1">
                     <ul class="nav SubNav">
                         <li ui-sref-active="active">
-                            <a ui-sref="users">
+                            <a ui-sref="users" ng-click="dbFilterBtn();">
                                 <i class="material-icons">people</i>
                                 <p>User</p>
                             </a>
                         </li>
                         <li ui-sref-active="active" has-permission="UserGroup:List">
-                            <a ui-sref="userGroups">
+                            <a ui-sref="userGroups" ng-click="dbFilterBtn();">
                                 <i class="material-icons">group</i>
                                 <p>User Group</p>
                             </a>
                         </li>
                         <li ui-sref-active="active" has-permission="Settings:List">
-                            <a ui-sref="app_settings">
+                            <a ui-sref="app_settings" ng-click="dbFilterBtn();">
                                 <i class="material-icons">settings</i>
                                 <p>Settings</p>
                             </a>

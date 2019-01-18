@@ -52,6 +52,11 @@ angular.module('timeSheetApp')
                 return $http.post('api/attendance/'+attendanceId+'/addRemarks',remarks).then(function (response){
                     return response.data;
                 })
+            },
+            getTotalStatusCounts: function () {
+                return $http.get('api/reports/attendance').then(function (response) {
+                   return response.data;
+                });
             }
 
 

@@ -1,12 +1,11 @@
 package com.ts.app.web.rest.util;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.ts.app.security.AuthoritiesConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.ts.app.security.AuthoritiesConstants;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserUtil {
 

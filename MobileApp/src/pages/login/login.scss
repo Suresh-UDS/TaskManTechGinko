@@ -9,5 +9,41 @@ page-login {
     background-color: transparent !important;
     color: #ff9800;
   }
+  .login-new{
+    border-radius: 50% !important;
+    width: 80px;
+    height: 80px;
+    padding: 8px;
+    position: relative;
+  }
+  .button-signin{
+    background-color: #ff9800;
+    color: #f9f9f9;
+    box-shadow: none;
+    font-weight: 400;
+    font-size: 13px;
+    padding: 10px 35px;
+    margin: 15px 0px;
+
+  }
+  .card-signin{
+    background-color: #dfdfdf;
+    margin : -40px 105px 7px !important;
+  }
+  .btn-signin{
+    border-radius: 50px;
+    font-weight: 500;
+    min-width: 100px;
+    background-color: #ff9800;
+    color: #ffffff;
+    box-shadow: #cfcfcf;
+  }
+  .btn-lg{
+    font-size: 14px;
+    padding: 10px 30px !important;
+  }
+  .btn-wd{
+    min-width: 100px !important;
+  }
 
 }

@@ -1,10 +1,10 @@
 package com.ts.app.web.rest.dto;
 
+import com.ts.app.domain.JobType;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.ts.app.domain.JobType;
 
 public class GraphResponse {
 

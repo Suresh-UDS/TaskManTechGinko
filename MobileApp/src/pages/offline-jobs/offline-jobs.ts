@@ -29,7 +29,7 @@ export class OfflineJobs {
           this.spinner=false;
           console.log("job details");
           console.log(res)
-          this.jobDetails = res;
+          this.jobDetails = res
         },
         (err) => {
           this.spinner=false;
