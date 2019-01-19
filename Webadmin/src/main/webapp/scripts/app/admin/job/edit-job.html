@@ -131,7 +131,7 @@
                                                         <!--uib-typeahead="checklist as checklist.name for checklist in checklists | filter:$viewValue | limitTo:5"-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedChecklist" ng-init="selectedChecklist = selected" 
+                                                        <select class="form-control " ng-model="selectedChecklist" ng-init="selectedChecklist = selected"
                                                         ng-options="checklist as checklist.name for checklist in checklists track by checklist.id" tabindex="7">
                                                             <option value="">Select Checklist...</option>
                                                         </select>
@@ -151,7 +151,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select required class="form-control " ng-model="selectedEmployee"  
+                                                        <select required class="form-control " ng-model="selectedEmployee"
                                                         ng-options="emp as emp.name for emp in employees track by emp.id" ng-change="checkSite();" tabindex="8">
                                                             <option value="">Select Employees...</option>
                                                         </select>
@@ -689,9 +689,9 @@
                                             id="save-and-go-back-button" ng-disabled="form.$invalid">
                                             <i class="fa fa-rotate-left" ></i> Save and go back to list
                                         </button> -->
-                                    <button class="btn btn-danger" type="button"
-                                            ng-disabled="btnDisable" ng-click="conform('cancel')" id="cancel-button" tabindex="34">
-                                        <i class="material-icons">close</i> Cancel
+                                    <button class="btn btn-default" type="button"
+                                            ng-disabled="btnDisable" ng-click="conform('back')" id="cancel-button" tabindex="34">
+                                        Back
                                     </button>
                                 </div>
 

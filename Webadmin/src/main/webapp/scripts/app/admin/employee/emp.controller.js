@@ -30,6 +30,7 @@ angular.module('timeSheetApp')
 	$scope.isCheckedIn = false;
 	$scope.isCheckedOut = false;
 	$scope.attendSite  =null;
+	$scope.empStatus = null;
 
 	// $scope.employeeDesignations=null;
 
@@ -1708,7 +1709,8 @@ angular.module('timeSheetApp')
 		/* Root scope (search criteria) start*/
 
 		if($rootScope.searchFilterCriteria.isDashboard){
-
+			$rootScope.isDashboard = true;
+			$scope.empStatus = $rootScope.searchFilterCriteria.empStatus;
 			if($rootScope.searchFilterCriteria.projectId){
 				$scope.searchProject ={id:$rootScope.searchFilterCriteria.projectId,name:$rootScope.searchFilterCriteria.projectName};
 				$scope.client.selected =$scope.searchProject;
@@ -1716,7 +1718,7 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.searchProject = null;
 				$scope.client.selected =$scope.searchProject;
-			} 
+			}
 			if($rootScope.searchFilterCriteria.regionId){
 				$scope.searchRegion = {id:$rootScope.searchFilterCriteria.regionId,name:$rootScope.searchFilterCriteria.region}
 				$scope.regionsListOne.selected = $scope.searchRegion;
@@ -1741,6 +1743,13 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.searchSite = null;
 				$scope.sitesListOne.selected=$scope.searchSite;
+			}
+			if($rootScope.searchFilterCriteria.attendFromDate) {
+				$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.attendFromDate;
+			}
+
+			if($rootScope.searchFilterCriteria.attendToDate) {
+				$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.attendToDate;
 			}
 
 			/* Root scope (search criteria) end*/
@@ -2417,6 +2426,7 @@ angular.module('timeSheetApp')
 		$scope.localStorage = null;
 		$scope.clearField = true;
 		$rootScope.searchCriteriaEmployees = null;
+		$scope.empStatus = null;
 		$scope.pages = {
 				currPage: 1,
 				totalPages: 0
@@ -2747,7 +2757,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.clearProject = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.client.selected = undefined;
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
@@ -2758,7 +2768,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearRegion = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
 		$scope.sitesListOne.selected = undefined;
@@ -2774,7 +2784,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearSite = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.sitesListOne.selected = undefined;
 
 	};

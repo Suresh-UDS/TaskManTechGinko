@@ -20,7 +20,7 @@ var Notification = mongoose.model('Notification');
 var Sequence = mongoose.model('Sequence');
 var fs = require('fs');
 var path = require('path');
-var config = require('./'+ process.argv[2] + '.properties');
+var config = require('./config/'+ process.argv[2] + '.properties');
 var database = require('./config/db');
 
 var cors = require('cors');
@@ -98,6 +98,8 @@ function startup(){
   app.post('/api/rateCard/delete',quotationController.deleteRateCard);
   app.post('/api/quotation/uploadImage',quotationController.updateImages);
   app.post('/api/quotation/summary', quotationController.getSummary);
+  app.get('/api/quotations/findAll', quotationController.findAllQuotations);
+  app.get('/api/lastmodified/quotations', quotationController.findLastModified);
 
   // app.post('/api/oneSignal/send',notificationService.sendNotification);
   // app.post('/api/oneSignal/subscribe', notificationService.subscribe);

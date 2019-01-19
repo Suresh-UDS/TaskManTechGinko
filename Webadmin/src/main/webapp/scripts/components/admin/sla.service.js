@@ -44,12 +44,11 @@ angular.module('timeSheetApp')
 						return cb(err);
 					}.bind(this)).$promise;
 			},
-			
-			
+
+
 			deleteSla: function (id, callback) {
 
 	                var cb = callback || angular.noop;
-	                alert("id: "+id);
 	                return  $http.delete('api/sla/delete/'+id).then(
 	                    function (response) {
 	                        return cb(response);
@@ -59,8 +58,8 @@ angular.module('timeSheetApp')
 	                        return cb(err);
 	                    })
 	            },
-			
-			
+
+
 			}
-		
+
 	});

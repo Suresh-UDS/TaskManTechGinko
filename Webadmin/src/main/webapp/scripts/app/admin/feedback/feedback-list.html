@@ -352,13 +352,13 @@
 								                            <div loader-css="ball-pulse"></div>
 								                            <h3 >Loading, please wait...</h3>
 								                        </div>
-								
+
 								                    </div>
-								
+
 								                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="feedbackListData">
-								
+
 								                        <h3>No data Found</h3>
-								
+
 								                    </div>
 											    </td>
 											</tr>
@@ -392,11 +392,11 @@
 
 											    </td>
 											</tr>
-											<tr>
+											<tr id="collapseThree" class="accordion-body collapseThree{{$index}} collapse">
 											    <td colspan="4">
 											         <div class="row">
 											            <div class="col-md-10 col-md-offset-1">
-												           <div id="collapseThree" class="accordion-body collapseThree{{$index}} collapse">
+												           <div >
 														        <div class="table-responsive tablecard">
 																	<table class="table table-striped table-bordered">
 																		<thead>
@@ -410,8 +410,8 @@
 																			</tr>
 																		</thead>
 																		<tbody>
-																		   <tr ng-repeat="feedbackDetailResult in feedbackDetail.results"> 
-																			
+																		   <tr ng-repeat="feedbackDetailResult in feedbackDetail.results">
+
 																				<td>{{feedbackDetailResult.question}}</td>
 																				<td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'true'"><i class="material-icons">done</i></span>
 											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'true'"><i class="material-icons">close</i></span>
@@ -420,7 +420,7 @@
 											                                    <td><span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer == 'false'"><i class="material-icons">done</i></span>
 											                                        <span ng-if="feedbackDetailResult.answerType =='YESNO' && feedbackDetailResult.answer != 'false'"><i class="material-icons">close</i></span>
 											                                        <span ng-if="feedbackDetailResult.answerType !='YESNO'">NA</span>
-											                                    <td> 
+											                                    <td>
 											                                        <!-- <span ng-if="feedbackDetailResult.answerType =='RATING'">{{feedbackDetailResult.answer}}</span>
 											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">-</span> -->
 											                                         <div  ng-if="feedbackDetailResult.answerType =='RATING'" >
@@ -428,21 +428,21 @@
 											                                        </div>
 											                                        <span ng-if="feedbackDetailResult.answerType !='RATING'">NA</span>
 											                                    </td>
-													                            
+
 													                            <td><span ng-if="feedbackDetailResult.remarks">{{feedbackDetailResult.remarks}}</span>
-													                                <span ng-if="!feedbackDetailResult.remarks">-</span> 
+													                                <span ng-if="!feedbackDetailResult.remarks">-</span>
 													                            </td>
 																			</tr>
 
 																		</tbody>
-																	
+
 
 																	</table>
 																</div>
 													       </div>
 											           </div>
-											           
-											                
+
+
 											       </div>
 											    </td>
 											</tr>
@@ -450,30 +450,30 @@
 									    <tfoot>
 											<tr>
 												<td colspan="6">
-								
+
 												    <div class="txt-align-center LoaderCon"  ng-hide="feedbackListDetailLoader">
 
 								                        <div class="pad-TB-30">
 								                            <div loader-css="ball-pulse"></div>
 								                            <h3 >Loading, please wait...</h3>
 								                        </div>
-								
+
 								                    </div>
-								
+
 								                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
-								
+
 								                        <h3>No data Found</h3>
-								
+
 								                    </div>
 											    </td>
 											</tr>
 										</tfoot>
-				
+
 									</table>
 									<!-- Pagination directive start -->
 
 								    <pagination-new></pagination-new>
-								
+
 								    <!-- Pagination directive end -->
 								</div>
 							</div>
@@ -552,7 +552,7 @@
 
 				                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 									  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
-									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
@@ -578,7 +578,7 @@
 
 	                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 									  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
-									       <a ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									       <a ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
@@ -599,7 +599,7 @@
 
 		                               <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 									  <ui-select-match placeholder="Select branch..."  >{{$select.selected.name}}
-									  <a ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									  <a ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
@@ -621,10 +621,10 @@
 
 	                               <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 									  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
-									  <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									  <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
-									  
+
 									  </ui-select-match>
 									  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" ng-click="searchLocations();loadFeedbackMasters();" loose-null>
 									    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>

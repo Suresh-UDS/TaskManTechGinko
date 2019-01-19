@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,
-        DashboardComponent,JobComponent, $state,$http,$stateParams,$location,TicketComponent,
+        DashboardComponent,JobComponent,EmployeeComponent, $state,$http,$stateParams,$location,TicketComponent,
         SiteComponent,AttendanceComponent,getLocalDbStorage) {
         $rootScope.loginView = false;
 
@@ -65,7 +65,8 @@ angular.module('timeSheetApp')
 
         $scope.init = function() {
             $scope.loadAllProjects();
-            // $scope.loadAllSites();
+            $scope.loadAllSites();
+            $scope.loadAllEmployee();
             $scope.loadAllAttendanceCounts();
             $scope.loadQuotationReportChart();
             $scope.loadQuotationReportCounts();
@@ -100,6 +101,7 @@ angular.module('timeSheetApp')
                     $scope.jobStackXSeries = $scope.jobStackChart.x;
                     $scope.jobStackYSeries = $scope.jobStackChart.status;
                     console.log($scope.jobStackChart.status);
+                    $rootScope.jobGraph();
                 }
             });
         };
@@ -552,26 +554,37 @@ angular.module('timeSheetApp')
 
         };
 
+        // Ovear all sites count
+
+        $scope.loadAllSites = function(){
+        	 DashboardComponent.loadAllSites().then(function (data) {
+                 console.log(data);
+                 //$scope.sites = data;
+                 $scope.siteCount = data.length;
+             });
+        };
+
+
+        // Ovear all Employee count
+
+        $scope.loadAllEmployee = function(){
+        	EmployeeComponent.search({findAll:true}).then(function(data){
+                 //console.log('Total emp',data);
+                 $scope.totalEmployeeCount = data.totalCount;
+
+             });
+        };
+
+
+
         $scope.loadAllAttendanceCounts = function () {
-            // DashboardComponent.loadAllSites().then(function (data) {
-            //     console.log(data);
-            //
-            //     $scope.sites = data;
-            //     $scope.siteCount = data.length;
-            // });
+
             console.log($scope.selectedFromDateSer);
              $scope.selectedFromDateSer.setHours(0,0,0,0);
              $scope.selectedToDateSer.setHours(23,59,59,0);
             console.log($scope.selectedFromDateSer + ' ' + $scope.selectedToDateSer);
             $scope.loadingStart();
-            // DashboardComponent.loadAttendanceReport(0,$scope.selectedFromDateSer,$scope.selectedToDateSer).then(function(data){
-            //     console.log(data);
-            //     $scope.totalEmployeeCount = data.totalEmployeeCount;
-            //     $scope.employeeCount = data.totalEmployeeCount;
-            //     $scope.presentCount = data.presentEmployeeCount;
-            //     $scope.absentCount = data.absentEmployeeCount;
-            //
-            // });
+
             var searchCriteria = {};
             searchCriteria.siteId = 0;
             /*searchCriteria.fromDate = $scope.selectedFromDateSer;
@@ -601,6 +614,27 @@ angular.module('timeSheetApp')
                     $scope.quoteStackXSeries = $scope.quoteStackChart.x;
                     $scope.quoteStackYSeries = $scope.quoteStackChart.status;
                     console.log($scope.quoteStackChart.status);
+                    $rootScope.quotGraph();
+                }else{
+                    $scope.quoteStackXSeries = "";
+                    $scope.quoteStackYSeries = [
+                        {
+                             name: "Waiting For Approval",
+                             data: [0]
+                        },
+                        {
+                            name: "Pending",
+                            data: [0]
+                        },
+                        {
+                            name: "Approved",
+                            data: [0]
+                        },
+                        {
+                            name: "Rejected",
+                            data: [0]
+                        }];
+                    $rootScope.quotGraph();
                 }
 
             });
@@ -1110,6 +1144,7 @@ angular.module('timeSheetApp')
                     $scope.ticketStackChart = data[0];
                     $scope.ticketStackXSeries = $scope.ticketStackChart.x;
                     $scope.ticketStackYSeries = $scope.ticketStackChart.status;
+                    $rootScope.ticketGraph();
                 }
 
             });
@@ -1122,6 +1157,7 @@ angular.module('timeSheetApp')
                     $scope.ticketAgeChart = data[0];
                     $scope.ticketAgeXSeries = $scope.ticketAgeChart.x;
                     $scope.ticketAgeYSeries = $scope.ticketAgeChart.avgStatus;
+                    $rootScope.ticketSingleGraph();
                 }
 
             });
@@ -1134,6 +1170,7 @@ angular.module('timeSheetApp')
                    $scope.attnStackChart = data[0];
                    $scope.attnStackXSeries = $scope.attnStackChart.x;
                    $scope.attnStackYSeries = $scope.attnStackChart.status;
+                   $rootScope.attendGraph();
                }else{
                    $scope.attnStackXSeries = "";
                    $scope.attnStackYSeries = [
@@ -1149,7 +1186,9 @@ angular.module('timeSheetApp')
                            name: "Absent",
                            data: [0]
                        }];
+                   $rootScope.attendGraph();
                }
+
             });
         }
 
@@ -1203,6 +1242,7 @@ angular.module('timeSheetApp')
         //var jobxdata=['Electrical', 'Carpentry', 'Plumbing'];
 
         $rootScope.jobGraph = function () {
+        	console.log('job chart',$scope.jobStackYSeries);
           Highcharts.chart('jobStackedCharts', {
               chart: {
                   type: 'column'
@@ -1255,7 +1295,7 @@ angular.module('timeSheetApp')
       }
         // Timeout jobGraph function
 
-        $rootScope.jobGraphTimeout = $timeout($rootScope.jobGraph(), 2500);
+        //$rootScope.jobGraphTimeout = $timeout($rootScope.jobGraph(), 2500);
 
 
         // Sample data for pie chart
@@ -1332,7 +1372,7 @@ angular.module('timeSheetApp')
 
         //Timeout attendGraph function
 
-        $rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
+        //$rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
 
         $rootScope.ticketGraph = function () {
          Highcharts.chart('ticketStackedCharts', {
@@ -1387,7 +1427,7 @@ angular.module('timeSheetApp')
      }
         //Timeout ticketGraph function
 
-       $rootScope.ticketGraphTimeout = $timeout($rootScope.ticketGraph(),1000);
+       //$rootScope.ticketGraphTimeout = $timeout($rootScope.ticketGraph(),1000);
 
 
 
@@ -1469,7 +1509,7 @@ angular.module('timeSheetApp')
             }]
         });
 
-        $rootScope.ticketSignalGraph = function(){
+        $rootScope.ticketSingleGraph = function(){
            Highcharts.chart('ticketSingleStackedCharts', {
                chart: {
                    type: 'column'
@@ -1738,7 +1778,7 @@ angular.module('timeSheetApp')
        }
         //Timeout ticketSignalGraph function
 
-        $rootScope.ticketSignalGraphTimeout = $timeout($rootScope.ticketSignalGraph(),2500);
+        //$rootScope.ticketSingleGraphTimeout = $timeout($rootScope.ticketSingleGraph(),2500);
 
 
         // var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
@@ -1798,7 +1838,7 @@ angular.module('timeSheetApp')
 
         // Timeout quotGraph function
 
-        $rootScope.quotGraphTimeout = $timeout($rootScope.quotGraph(),1500);
+        //$rootScope.quotGraphTimeout = $timeout($rootScope.quotGraph(),1500);
 
 // Chart data sample end
 
@@ -1840,12 +1880,18 @@ angular.module('timeSheetApp')
 
         /* Root scope (search criteria) function */
 
+         $scope.dbdNoFilter = function(filter){
+
+             $rootScope.searchFilterCriteria.isDashboard = true;
+             $rootScope.searchFilterCriteria.empStatus = filter;
+
+        }
         $scope.dbdFilter = function(filter){
 
              $rootScope.searchFilterCriteria.isDashboard = true;
              $rootScope.searchFilterCriteria.empStatus = filter;
-             $rootScope.searchFilterCriteria.selectedFromDate = new Date();
-             $rootScope.searchFilterCriteria.selectedToDate = new Date();
+             $rootScope.searchFilterCriteria.attendFromDate = new Date();
+             $rootScope.searchFilterCriteria.attendToDate = new Date();
 
         }
 

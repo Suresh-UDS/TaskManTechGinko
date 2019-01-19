@@ -236,3 +236,8 @@ QuotationService/node_modules/*
 MobileApp/www/build/
 
 QuotationService/node_modules
+
+Webadmin/node_modules
+Webadmin/node_modules_1
+Webadmin/src/main/webapp/bower_components
+Webadmin/src/main/webapp/bower_components_1

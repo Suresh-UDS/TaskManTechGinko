@@ -5,7 +5,9 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
-     'angular-star-rating-new','paginations','excelGrid','spring-security-csrf-token-interceptor'])
+     'angular-star-rating-new','paginations','excelGrid'
+     //,'spring-security-csrf-token-interceptor' 
+     ])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
 
@@ -56,11 +58,11 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
         //Dashboard back btn function
         $rootScope.dbFilterBtn = function (){
          $rootScope.isDashboard = false;
-         $timeout.cancel($rootScope.attendGraphTimeout);
+         /*$timeout.cancel($rootScope.attendGraphTimeout);
          $timeout.cancel($rootScope.jobGraphTimeout);
          $timeout.cancel($rootScope.ticketGraphTimeout);
-         $timeout.cancel($rootScope.ticketSignalGraphTimeout);
-         $timeout.cancel($rootScope.quotGraphTimeout);
+         $timeout.cancel($rootScope.ticketSingleGraphTimeout);
+         $timeout.cancel($rootScope.quotGraphTimeout);*/
         }
 
 
@@ -264,7 +266,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
             pattern: /bool|true|0|1/
         });
     }])
- 
+
     .filter('trusted', ['$sce', function ($sce) {
 	    return function(url) {
 	        return $sce.trustAsResourceUrl(url);

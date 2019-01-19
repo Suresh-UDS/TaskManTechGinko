@@ -699,6 +699,7 @@ public class RateCardService extends AbstractService {
 
             JSONObject request = new JSONObject();
             request.put("_id",quotation.get_id());
+            request.put("status", "Approved");
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);
@@ -741,6 +742,7 @@ public class RateCardService extends AbstractService {
 
             JSONObject request = new JSONObject();
             request.put("_id",quotation.get_id());
+            request.put("status","Rejected");
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);

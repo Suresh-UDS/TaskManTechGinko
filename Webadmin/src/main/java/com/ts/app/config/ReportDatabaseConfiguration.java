@@ -1,5 +1,6 @@
 package com.ts.app.config;
 
+import okhttp3.OkHttpClient;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Pong;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
+
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ReportDatabaseConfiguration {
@@ -32,8 +35,19 @@ public class ReportDatabaseConfiguration {
 	
 	@Bean
 	public InfluxDB initializeInfluxDbConnection() {
-		
-		InfluxDB influxDb = InfluxDBFactory.connect(url, username, password);
+
+	    log.debug("Influxdb url : " +url);
+	    log.debug("Influxdb username : " +username);
+	    log.debug("Influxdb password :" +password);
+	    log.debug("Influxdb retention policy :" +retentionPolicy);
+
+        OkHttpClient.Builder client = new OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES)
+            .retryOnConnectionFailure(true);
+
+		InfluxDB influxDb = InfluxDBFactory.connect(url, username, password, client);
 		
 		Pong response = influxDb.ping();
         if (response.getVersion().equalsIgnoreCase("unknown")) {
