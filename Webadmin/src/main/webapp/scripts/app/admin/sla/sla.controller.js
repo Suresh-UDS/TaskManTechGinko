@@ -7,6 +7,8 @@ angular.module('timeSheetApp')
 
 					$scope.sla = {};
 
+                    $scope.slaList = [];
+
 					$scope.slaView = [];
 
 					$scope.escalation = {};
