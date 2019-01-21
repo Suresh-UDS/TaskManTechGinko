@@ -360,7 +360,7 @@
 						<div class="col-md-1">
 							<div class="form-group no-padding">
 								<label class="control-label">Hours<span class="red-star">*</span></label> <input type="number"
-									id="hrs" ng-model="escalation.hours" min="1" max="2"
+									id="hrs" ng-model="escalation.hours" min="0" max="2"
 									ng-pattern="/^[0-9]{1,7}$/" name="hours"
 									class="form-control ng-valid ng-dirty ng-touched" tabindex="0"
 									aria-invalid="false" autocomplete="off" ng-required="true"> <span
@@ -372,7 +372,7 @@
                                                 required.</p>
                                             <p class="help-block" style="color: maroon"
                                                ng-show="ecalationForm.hours.$error.minlength">Hours cannot
-                                                be lesser than 1.</p>
+                                                be lesser than 0.</p>
                                             <p class="help-block" style="color: maroon"
                                                ng-show="ecalationForm.hours.$error.maxlength">Hours cannot
                                                 be longer than 2.</p>
