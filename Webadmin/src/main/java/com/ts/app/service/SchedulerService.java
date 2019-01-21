@@ -829,6 +829,12 @@ public class SchedulerService extends AbstractService {
 						hours += eschours;
 						for(Ticket ticket : tickets)
 						{
+						    String siteName = ticket.getSite().getName();
+
+						    String url = env.getProperty("url.ticket-view");
+
+						    url += ticket.getId();
+
 							for(String cat : category)
 							{
 								if(cat.equalsIgnoreCase(ticket.getCategory()));
@@ -841,7 +847,7 @@ public class SchedulerService extends AbstractService {
 											if(slaConfig.getSeverity().equals(ticket.getSeverity()))
 											{
 												try {
-													mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+													mailService.sendEscalationTicketEmail(email,siteName,slaEscalationConfig.getLevel(),ticket.getId(),url,ticket.getTitle(),ticket.getDescription());
 												} catch (Exception e) {
 													// TODO Auto-generated catch block
 													e.printStackTrace();

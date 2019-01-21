@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.sla.ticket.title}">Asset Reading Alert</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.sla.ticket.greeting}">
+</p>
+
+
+<p th:text="#{email.sla.ticket.content(${siteName}, ${level}, ${siteName})}">
+
+</p>
+<br>
+<br>
+<p>Here are the ticket details...</p><br>
+
+<span th:text="#{email.sla.ticketId(${ticketId})}"></span>
+
+<span th:text="#{email.sla.ticketTitle(${ticketTitle})}"></span>
+
+<span th:text="#{email.sla.description(${ticketDesc})}"></span>
+
+<span th:text = "#{email.sla.ticket.url}"></span>
+
+<a th:href="${ticketUrl}">View Ticket</a>
+
+
+<p>
+    <span th:text="#{email.ticket.text}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">.</em>
+</p>
+</body>
+</html>

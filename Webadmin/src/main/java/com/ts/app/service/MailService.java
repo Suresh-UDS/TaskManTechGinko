@@ -719,6 +719,7 @@ public class MailService {
 
 	}
 
+	@Async
 	public void sendPurchaseRequest(String email, String code, String siteName, String name) {
 		// TODO Auto-generated method stub
 		Locale locale = Locale.forLanguageTag("en-US");
@@ -730,6 +731,21 @@ public class MailService {
 		String subject = messageSource.getMessage("email.purchaseReqAlert.title", null, locale);
 		sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
 	}
+
+	@Async
+	public void sendEscalationTicketEmail(String email, String siteName, int level, long ticketId, String url, String title, String description) {
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("siteName", siteName);
+        context.setVariable("level", level);
+        context.setVariable("ticketUrl", url);
+        context.setVariable("ticketId", ticketId);
+        context.setVariable("ticketTitle", title);
+        context.setVariable("ticketDesc", description);
+        String content = templateEngine.process("ticketEscalation", context);
+        String subject = messageSource.getMessage("email.sla.ticket.title", null, locale);
+        sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+    }
 
 
 }
