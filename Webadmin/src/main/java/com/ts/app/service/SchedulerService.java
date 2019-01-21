@@ -810,8 +810,8 @@ public class SchedulerService extends AbstractService {
 		log.debug(">>> Tickets ");
 		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
-		String subject = "test";
-		String content = "Escalation mail for ticket";
+//		String subject = "test";
+//		String content = "Escalation mail for ticket";
 		for(SlaConfig slaConfig : slaConfigs)
 		{
 			List<Ticket> tickets = new ArrayList<Ticket>();
@@ -847,7 +847,7 @@ public class SchedulerService extends AbstractService {
 											if(slaConfig.getSeverity().equals(ticket.getSeverity()))
 											{
 												try {
-													mailService.sendEscalationTicketEmail(email,siteName,slaEscalationConfig.getLevel(),ticket.getId(),url,ticket.getTitle(),ticket.getDescription());
+													mailService.sendEscalationEmail(email,siteName,slaEscalationConfig.getLevel(),ticket.getId(),url,ticket.getTitle(),ticket.getDescription());
 												} catch (Exception e) {
 													// TODO Auto-generated catch block
 													e.printStackTrace();
@@ -901,8 +901,8 @@ public class SchedulerService extends AbstractService {
 		log.debug(">>> Job Escalation ");
 		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
-		String subject = "test";
-		String content = "Escalation mail for job";
+//		String subject = "test";
+//		String content = "Escalation mail for job";
 		for(SlaConfig slaConfig : slaConfigs)
 		{
 			List<Job> jobs = new ArrayList<Job>();
@@ -920,6 +920,10 @@ public class SchedulerService extends AbstractService {
 						hours += eschours;
 						for(Job job : jobs)
 							{
+                                String url = env.getProperty("url.job-view");
+                                url += job.getId();
+
+                                String site = job.getSite().getName();
 							for(String cat : category)
 							{
 								if(job.getType() !=  null)
@@ -933,7 +937,7 @@ public class SchedulerService extends AbstractService {
 										{
 											try
 											{
-												mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+												mailService.sendEscalationEmail(email,site,slaEscalationConfig.getLevel(),job.getId(),url,job.getTitle(),job.getDescription());
 											}
 											catch (Exception e)
 											{
@@ -989,22 +993,22 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
 	}
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
 	public void createJobPoints() {
         reportDatabaseUtil.deleteOrUpdateJobPoints();
     }
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
     public void createTicketPoints() {
         reportDatabaseUtil.deleteOrUpdateTicketPoints();
     }
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
     public void createAttnPoints() {
         reportDatabaseUtil.deleteOrUpdateAttnPoints();
     }
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
     public void createQuotePoints() {
         reportDatabaseUtil.deleteOrUpdateQuotePoints();
     }
