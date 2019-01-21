@@ -583,25 +583,12 @@ angular.module('timeSheetApp')
 						var hour = $scope.escalation.hours;
 						var minute = $scope.escalation.minutes;
 						var email = $scope.escalation.email;
-						if (hour <= 0 && minute <= 0) {
-							return false;
-						}
-						if (level == null || level == "", hour == null
-								|| hour == "", minute == null || minute == "",
-								email == null || email == "",
-								typeof level == 'undefined'
-										|| typeof hour == 'undefined'
-										|| typeof minute == 'undefined'
-										|| typeof email == 'undefined') {
-							return false;
-						} else {
+
 							var arr = $scope.escalation;
 							var arr1 = $scope.slaEscalationList;
-
 							var exists = false;
 							angular.forEach(arr1, function(value1, key) {
-								if (angular.equals(arr.level, value1.level)
-										|| arr.level == value1.level) {
+								if (angular.equals(arr.level, value1.level) || arr.level == value1.level) {
 									value1.hours = arr.hours;
 									value1.minutes = arr.minutes;
 									value1.email = arr.email;
@@ -617,7 +604,7 @@ angular.module('timeSheetApp')
 								$scope.slaEscalationList.push($scope.escalation);
 								$scope.escalation = {};
 							}
-						}
+
 					};
 
 					$scope.updateSlaEscalations = function() {
