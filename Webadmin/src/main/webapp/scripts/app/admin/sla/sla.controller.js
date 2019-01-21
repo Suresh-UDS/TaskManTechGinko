@@ -7,6 +7,8 @@ angular.module('timeSheetApp')
 
 					$scope.sla = {};
 
+                    $scope.slaList = [];
+
 					$scope.slaView = [];
 
 					$scope.escalation = {};
@@ -525,26 +527,30 @@ angular.module('timeSheetApp')
 					};
 
 					$scope.updateSla = function() {
-						for (var i = 0; i < $scope.slaList.length; i++) {
-							console.log("SlaList add "+ JSON.stringify($scope.slaList));
-                            $scope.sla.projectId =$scope.selectedProject.id;
-                            $scope.sla.siteId= $scope.selectedSite.id;
-                            $scope.sla.projectName =$scope.selectedProject.name;
-                            $scope.sla.siteName= $scope.selectedSite.name;
-							$scope.sla.processType = $scope.selectedPType;
-							$scope.sla.severity = $scope.selectedSeverity;
-							$scope.sla.category = $scope.multipleCategories.selectedCategory;
-							$scope.sla = $scope.slaList[i];
-							console.log("Sla add " + JSON.stringify($scope.sla));
-							SlaComponent.updateSla($scope.sla).then(function(data) {
-                                $scope.saveSla = data;
-                                $scope.showNotifications('top','center','success','Sla has been updated successfully!!');
-                                console.log("SLA saving");
-                                console.log(data);
-                                $scope.loadingStop();
-                            });
-						}
-						$location.path('/sla-list');
+                        if($scope.slaView){
+                            for (var i = 0; i < $scope.slaView.length; i++) {
+                                console.log("SlaList add "+ JSON.stringify($scope.slaView));
+                                  $scope.sla.projectId =$scope.selectedProject.id;
+                                  $scope.sla.siteId= $scope.selectedSite.id;
+                                  $scope.sla.projectName =$scope.selectedProject.name;
+                                  $scope.sla.siteName= $scope.selectedSite.name;
+                                $scope.sla.processType = $scope.selectedPType;
+                                $scope.sla.severity = $scope.selectedSeverity;
+                                $scope.sla.category = $scope.multipleCategories.selectedCategory;
+                                $scope.sla = $scope.slaView[i];
+                                console.log("Sla add " + JSON.stringify($scope.sla));
+                                SlaComponent.updateSla($scope.sla).then(function(data) {
+                                      $scope.saveSla = data;
+                                      $scope.showNotifications('top','center','success','Sla has been updated successfully!!');
+                                      console.log("SLA saving");
+                                      console.log(data);
+                                      $scope.loadingStop();
+                                  });
+                            }
+                             $location.path('/sla-list');
+                        }
+
+
 					};
 
 					$scope.loadProjects = function() {

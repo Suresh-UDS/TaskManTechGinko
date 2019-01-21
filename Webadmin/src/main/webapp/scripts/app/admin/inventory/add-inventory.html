@@ -23,7 +23,7 @@
 
 
                         <div class="panel panel-default">
-                            <div class="panel-heading">Inventory Details</div>	
+                            <div class="panel-heading">Inventory Details</div>
                             <div class="panel-body">
 
                                 <div class="row">
@@ -265,27 +265,29 @@
             </div>
             <div class="modal-body">
 
-                <form name="itemGroupForm">
+                <form name="itemGroupForm" novalidate>
                     <div class="row">
-                        <div class="col-md-12 txt-align-center">
-                            <input class="" id="itemgroupName"  ng-model="materialItemGroup.itemGroup"   name="itemgroupName" type="text" value="" ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                        <div class="col-md-12">
+                            <input class="" id="itemgroupName"  ng-model="materialItemGroup.itemGroup" ng-maxlength="50"   name="itemgroupName" type="text" value="" ng-pattern="/^[A-Za-z0-9\s]*$/" required />
                             <div ng-show="itemGroupForm.$submitted || itemGroupForm.itemgroupName.$touched">
                                 <div ng-show="itemGroupForm.itemgroupName.$dirty || itemGroupForm.itemgroupName.$invalid">
-                                    <p class="help-block" style="color:maroon"
+                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                        ng-show="itemGroupForm.itemgroupName.$error.required">
                                        Item Group is required.
                                     </p>
-                                    <p class="help-block" style="color:maroon"
+                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                        ng-show="itemGroupForm.itemgroupName.$error.maxlength">
-                                        Item Group cannot be longer than 250 characters.
+                                        Item Group cannot be longer than 50 characters.
                                     </p>
-                                    <p class="help-block" style="color:maroon"
+                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                        ng-show="itemGroupForm.itemgroupName.$error.pattern">
                                        Item Group can only contain letters, digits and space.
                                     </p>
                                 </div>
                             </div>
-                            <input type="submit"  ng-click="addMaterialItemGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="itemGroupForm.$invalid">
+                        </div>
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit"  ng-click="addMaterialItemGroup()" ng-disabled="itemGroupForm.$invalid" data-dismiss="modal" class="btn btn-success" name="add" value="Add" >
                         </div>
                     </div>
                 </form>

@@ -195,7 +195,7 @@
 												class="red-star">*</span></label></label> <input id="hours" type="number"
 												class="form-control ng-valid ng-dirty ng-touched"
 												ng-model="sla.hours" name="hours" tabindex="0" aria-invalid="false"
-												autocomplete="off" ng-required="true" min=1 max="2"
+												autocomplete="off" ng-required="true" min=0 max="2"
 												ng-pattern="/^[0-9]{1,7}$/"> <span
 												class="material-input"></span>
 
@@ -206,7 +206,7 @@
 														required.</p>
 													<p class="help-block" style="color: maroon"
 														ng-show="form.hours.$error.minlength">Hours cannot
-														be lesser than 1.</p>
+														be lesser than 0.</p>
                                                     <p class="help-block" style="color: maroon"
                                                        ng-show="form.hours.$error.maxlength">Hours cannot
                                                         be longer than 2.</p>
