@@ -511,23 +511,31 @@ angular.module('timeSheetApp')
 						if (validation) {
 							return false;
 						}
-						for (var i = 0; i < $scope.slaList.length; i++) {
-							console.log("SlaList add " + JSON.stringify($scope.slaList));
-							$scope.sla = $scope.slaList[i];
-							console.log("Sla add "+ JSON.stringify($scope.sla));
-							SlaComponent.createSla($scope.sla).then(function(data) {
-                                $scope.saveSla = data;
-                                console.log("SLA saving");
-                                $scope.showNotifications('top','center','success','Sla has been saved successfully!!');
-                                console.log(data);
-                                $scope.loadingStop();
-                                $location.path('/sla-list');
-                            });
+						if($scope.sla.slaesc.length == 0){
+                         $scope.showNotifications('top','center','danger','Escalation is required!!');
+						}else{
+						  for (var i = 0; i < $scope.slaList.length; i++) {
+                            console.log("SlaList add " + JSON.stringify($scope.slaList));
+                            $scope.sla = $scope.slaList[i];
+                            console.log("Sla add "+ JSON.stringify($scope.sla));
+                            SlaComponent.createSla($scope.sla).then(function(data) {
+                                  $scope.saveSla = data;
+                                  console.log("SLA saving");
+                                  $scope.showNotifications('top','center','success','Sla has been saved successfully!!');
+                                  console.log(data);
+                                  $scope.loadingStop();
+                                  $location.path('/sla-list');
+                              });
+                          }
 						}
+
 					};
 
 					$scope.updateSla = function() {
                         if($scope.slaView){
+                           if($scope.sla.slaesc.length == 0){
+                               $scope.showNotifications('top','center','danger','Escalation is required!!');
+                            }else{
                             for (var i = 0; i < $scope.slaView.length; i++) {
                                 console.log("SlaList add "+ JSON.stringify($scope.slaView));
                                   $scope.sla.projectId =$scope.selectedProject.id;
@@ -548,6 +556,7 @@ angular.module('timeSheetApp')
                                   });
                             }
                              $location.path('/sla-list');
+                           }
                         }
 
 
@@ -614,10 +623,10 @@ angular.module('timeSheetApp')
 						console.log("Escaltion List "+ JSON.stringify($scope.slaEscalationList));
 					};
 
-					$scope.removeEscalation = function(ind) {
+					/*$scope.removeEscalation = function(ind) {
 						$scope.slaEscalationList.splice(ind, 1);
 						console.log("remove escalation"+ $scope.slaEscalationList)
-					};
+					};*/
 
 					$scope.editesc = function(ind) {
 						console.log("Edit Esclation:"+ $scope.slaEscalationList.slice(ind, ind + 1));
@@ -697,8 +706,20 @@ angular.module('timeSheetApp')
                     $scope.removeSla = function() {
                            console.log("remove index " + $scope.removeSlaInd);
                            $scope.slaList.splice($scope.removeSlaInd, 1);
+                           $scope.slaView.splice($scope.removeSlaInd, 1);
                            console.log("remove sla " + $scope.slaList);
                     };
+
+                    $scope.removeEscalationConfirm = function(ind) {
+                        $scope.removeEscalationInd = ind;
+                    };
+
+                    $scope.removeEscalation = function() {
+                           console.log("remove index " + $scope.removeEscalationInd);
+                           $scope.slaEscalationList.splice($scope.removeEscalationInd, 1);
+                           console.log("remove sla " + $scope.slaList);
+                    };
+
                     $scope.isActiveAsc = '';
                     $scope.isActiveDesc = 'id';
 					$scope.columnAscOrder = function(field) {
