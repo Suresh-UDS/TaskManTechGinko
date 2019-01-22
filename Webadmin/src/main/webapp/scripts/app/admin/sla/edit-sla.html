@@ -250,7 +250,7 @@
                                                                 <td><span ng-click="editEscalation()"
                                                                     class="tag label label-default" data-toggle="modal"
                                                                     data-target="#AddEscalationLevel"
-                                                                    ng-repeat="slaEsc in slas.slaesc">Level
+                                                                    ng-repeat="slaEsc in slas.slaesc | orderBy:['level']">Level
                                                                         {{slaEsc.level}}</span></td>
                                                                 <td class="text-right">
                                                                     <a
@@ -449,7 +449,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="esc in slaEscalationList | orderBy:sorterFunc">
+									<tr ng-repeat="esc in slaEscalationList |  orderBy:['level']">
 										<td>Level {{esc.level}}</td>
 										<td>{{esc.hours}}</td>
 										<td>{{esc.minutes}}</td>

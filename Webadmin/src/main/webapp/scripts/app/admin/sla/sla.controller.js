@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
 		.controller('SlaController',function($rootScope, $scope, $state, $timeout,
 						ProjectComponent, SiteComponent, SlaComponent, $http,
-						$stateParams, $location, PaginationComponent,getLocalStorage) {
+						$stateParams, $location, PaginationComponent,getLocalStorage,$filter) {
 
 					$scope.sla = {};
 
@@ -629,9 +629,10 @@ angular.module('timeSheetApp')
 					};*/
 
 					$scope.editesc = function(ind) {
-						console.log("Edit Esclation:"+ $scope.slaEscalationList.slice(ind, ind + 1));
-						var slaesc = $scope.slaEscalationList.slice(ind,
-								ind + 1);
+                        // Escalation orderby level
+					    var slaEscOrdered = $filter('orderBy')($scope.slaEscalationList, 'level');
+						console.log("Edit Esclation:"+ slaEscOrdered.slice(ind, ind + 1));
+						var slaesc = slaEscOrdered.slice(ind,ind + 1);
 
 						console.log("Sla " + JSON.stringify(slaesc));
 						$scope.escalation.level = (slaesc[0].level).toString();
@@ -716,8 +717,10 @@ angular.module('timeSheetApp')
 
                     $scope.removeEscalation = function() {
                            console.log("remove index " + $scope.removeEscalationInd);
+                           // Escalation orderby level
+                           $scope.slaEscalationList = $filter('orderBy')($scope.slaEscalationList, 'level');
                            $scope.slaEscalationList.splice($scope.removeEscalationInd, 1);
-                           console.log("remove sla " + $scope.slaList);
+                           console.log("remove sla " + $scope.slaEscalationList);
                     };
 
                     $scope.isActiveAsc = '';
@@ -749,12 +752,6 @@ angular.module('timeSheetApp')
 					 * JSON.stringify($scope.sla)); $scope.slaList = [];
 					 * $scope.slaList.push($scope.sla); }
 					 */
-
-					// Levels orderby function
-
-					$scope.sorterFunc = function(esc){
-					    return parseInt(esc.level);
-					};
 
                 $scope.loadProjectsList = function () {
                         ProjectComponent.findAll().then(function (data) {
