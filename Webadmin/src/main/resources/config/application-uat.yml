@@ -251,7 +251,7 @@ google:
 
 influxdb:
     url: http://localhost:8086
-    username: root
+    username: superadmin
     password: Uds@2019
     dbname: dashboard
     retention-policy: one_year_policy
