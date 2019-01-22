@@ -251,12 +251,11 @@ google:
 
 influxdb:
     url: http://localhost:8086
-    username: superadmin
+    username: root
     password: Uds@2019
     dbname: dashboard
     retention-policy: one_year_policy
     gzip: true
-
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

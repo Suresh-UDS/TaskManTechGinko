@@ -186,7 +186,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	
+
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
@@ -592,7 +592,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 
-	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		log.info("Attendance detailed report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
@@ -600,7 +600,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
 
-	@Scheduled(cron = "0 0 9 1 * ?")
+//	@Scheduled(cron = "0 0 9 1 * ?")
 	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceMusterrollReportSchedule() {
 		log.info("Attendance muster roll report scheduler invoked");
@@ -616,27 +616,27 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
 	}
 
-	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+//	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		log.info("Attendance auto check out scheduler invoked");
 		schedulerHelperService.autoCheckOutAttendance();
 	}
 
-	@Scheduled(cron="0 0 9 * * ?")
+//	@Scheduled(cron="0 0 9 * * ?")
 	public void warrantyExpireAlert() {
 		schedulerHelperService.sendWarrantyExpireAlert();
 		schedulerHelperService.sendSchedulePPMJobsAlert();
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
-	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+//	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void feedbackDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		//cal.add(Calendar.DAY_OF_YEAR, -1);
 		schedulerHelperService.feedbackDetailedReport();
 	}
 
-	
+
 
 	/*public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
@@ -803,7 +803,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */5 * * * ?")
+//	@Scheduled(cron = "0 */5 * * * ?")
 	public void slaTicketEscalationNotification()
 	{
 		String mailStatus = "";
@@ -975,7 +975,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 
-	@Scheduled(cron="0 */30 * * * ?")
+//	@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		log.info("Daywise report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
@@ -983,22 +983,22 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
 	}
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
 	public void createJobPoints() {
         reportDatabaseUtil.deleteOrUpdateJobPoints();
     }
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
     public void createTicketPoints() {
         reportDatabaseUtil.deleteOrUpdateTicketPoints();
     }
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
     public void createAttnPoints() {
         reportDatabaseUtil.deleteOrUpdateAttnPoints();
     }
 
-    @Scheduled(cron="0 */5 * * * ?")
+//    @Scheduled(cron="0 */5 * * * ?")
     public void createQuotePoints() {
         reportDatabaseUtil.deleteOrUpdateQuotePoints();
     }
