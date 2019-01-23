@@ -611,15 +611,15 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
 
             var searchCriteria = {};
-            var relieverCriteria = {};
             // searchCriteria.siteId = 0;
             // relieverCriteria.fromDate = $scope.selectedFromDateSer;
             // relieverCriteria.toDate = $scope.selectedToDateSer;
             searchCriteria.fromDate = new Date;
             searchCriteria.toDate = new Date;
-            // DashboardComponent.getRelieverCounts(relieverCriteria).then(function (data) {
-            //    console.log("Employee Reliever cnts :" +JSON.stringify(data));
-            // });
+            DashboardComponent.getRelieverCounts(searchCriteria).then(function (data) {
+               console.log("Employee Reliever cnts :" +JSON.stringify(data));
+               $scope.relieverCnt = data;
+            });
 
             DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
