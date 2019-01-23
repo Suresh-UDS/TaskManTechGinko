@@ -611,11 +611,16 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
 
             var searchCriteria = {};
-            searchCriteria.siteId = 0;
-            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;*/
+            var relieverCriteria = {};
+            // searchCriteria.siteId = 0;
+            // relieverCriteria.fromDate = $scope.selectedFromDateSer;
+            // relieverCriteria.toDate = $scope.selectedToDateSer;
             searchCriteria.fromDate = new Date;
             searchCriteria.toDate = new Date;
+            // DashboardComponent.getRelieverCounts(relieverCriteria).then(function (data) {
+            //    console.log("Employee Reliever cnts :" +JSON.stringify(data));
+            // });
+
             DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
                 console.log(data);
                 // $scope.totalEmployeeCount = data.totalEmployees;
@@ -624,9 +629,7 @@ angular.module('timeSheetApp')
                 $scope.absentCount = data.totalAbsent;
                 $scope.leftCount = data.totalLeft;
                 $scope.loadingStop();
-
-
-            })
+            });
 
         };
 

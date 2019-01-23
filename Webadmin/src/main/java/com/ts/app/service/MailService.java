@@ -171,57 +171,57 @@ public class MailService {
         }
     }
 
-    public String sendEscalationEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
-        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-                isMultipart, isHtml, to, subject, content);
-
-            log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
-            Properties props = javaMailSender.getJavaMailProperties();
-            Enumeration<Object> keys = props.keys();
-            while(keys.hasMoreElements()) {
-            		String key = (String)keys.nextElement();
-            		log.debug(key + ", "+ props.getProperty(key));
-            }
-            //split the to address if more than 1
-            //trim leading and traling ','
-            StringBuilder sb = new StringBuilder(to);
-            if(to.startsWith(",")) {
-            		sb = sb.replace(0, 1, "");
-            		to = sb.toString();
-            }
-            if(to.endsWith(",")) {
-            		int ind = to.lastIndexOf(",");
-            		sb.replace(ind, ind+1, "");
-            }
-            to = sb.toString();
-            String[] toEmails = null;
-            if(!StringUtils.isEmpty(to)) {
-            		toEmails = to.split(",");
-            }
-            // Prepare message using a Spring helper
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            try {
-                MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
-                message.setTo(toEmails);
-                message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
-                message.setSubject(subject);
-                message.setText(content, isHtml);
-                if(isMultipart){
-                	if(!StringUtils.isEmpty(fileName)) {
-    	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
-    	                message.addAttachment(file.getFilename(),file, "text/html");
-                	}
-                }
-                javaMailSender.send(mimeMessage);
-                fileName = "success";
-                log.debug("Sent e-mail to User '{}'", to);
-            } catch (Exception e) {
-//            	e.printStackTrace();
-                log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
-                fileName = "failed";
-            }
-            return fileName;
-        }
+//    public String sendEscalationEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
+//        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+//                isMultipart, isHtml, to, subject, content);
+//
+//            log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+//            Properties props = javaMailSender.getJavaMailProperties();
+//            Enumeration<Object> keys = props.keys();
+//            while(keys.hasMoreElements()) {
+//            		String key = (String)keys.nextElement();
+//            		log.debug(key + ", "+ props.getProperty(key));
+//            }
+//            //split the to address if more than 1
+//            //trim leading and traling ','
+//            StringBuilder sb = new StringBuilder(to);
+//            if(to.startsWith(",")) {
+//            		sb = sb.replace(0, 1, "");
+//            		to = sb.toString();
+//            }
+//            if(to.endsWith(",")) {
+//            		int ind = to.lastIndexOf(",");
+//            		sb.replace(ind, ind+1, "");
+//            }
+//            to = sb.toString();
+//            String[] toEmails = null;
+//            if(!StringUtils.isEmpty(to)) {
+//            		toEmails = to.split(",");
+//            }
+//            // Prepare message using a Spring helper
+//            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+//            try {
+//                MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+//                message.setTo(toEmails);
+//                message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
+//                message.setSubject(subject);
+//                message.setText(content, isHtml);
+//                if(isMultipart){
+//                	if(!StringUtils.isEmpty(fileName)) {
+//    	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
+//    	                message.addAttachment(file.getFilename(),file, "text/html");
+//                	}
+//                }
+//                javaMailSender.send(mimeMessage);
+//                fileName = "success";
+//                log.debug("Sent e-mail to User '{}'", to);
+//            } catch (Exception e) {
+////            	e.printStackTrace();
+//                log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+//                fileName = "failed";
+//            }
+//            return fileName;
+//        }
 
     @Async
     public void sendEmailFile(String to, String subject, String content, String fileName ,boolean isMultipart, boolean isHtml) {
@@ -261,6 +261,7 @@ public class MailService {
             log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
     }
+
     @Async
     public void sendActivationEmail(UserDTO user, String baseUrl) {
         log.debug("Sending activation e-mail to '{}'", user.getEmail());
@@ -733,15 +734,15 @@ public class MailService {
 	}
 
 	@Async
-	public void sendEscalationTicketEmail(String email, String siteName, int level, long ticketId, String url, String title, String description) {
+	public void sendEscalationEmail(String email, String siteName, int level, long id, String url, String title, String description) {
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
         context.setVariable("siteName", siteName);
         context.setVariable("level", level);
-        context.setVariable("ticketUrl", url);
-        context.setVariable("ticketId", ticketId);
-        context.setVariable("ticketTitle", title);
-        context.setVariable("ticketDesc", description);
+        context.setVariable("url", url);
+        context.setVariable("id", id);
+        context.setVariable("title", title);
+        context.setVariable("desc", description);
         String content = templateEngine.process("ticketEscalation", context);
         String subject = messageSource.getMessage("email.sla.ticket.title", null, locale);
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);

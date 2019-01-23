@@ -5,6 +5,7 @@ import com.ts.app.domain.*;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.*;
 import com.ts.app.rule.EmployeeFilter;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -119,7 +120,7 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private AmazonS3Utils amazonS3utils;
-    
+
     @Inject
     private EmployeeFilter employeeFilter;
 
@@ -657,6 +658,35 @@ public class    EmployeeService extends AbstractService {
         List<Employee> entities = null;
         entities = employeeRepository.findAllRelievers(siteId);
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
+    }
+
+    public long findRelieversCountByEmployee(SearchCriteria searchCriteria){
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
+        long relieverCount =  0;
+        List<EmployeeReliever> empRel = new ArrayList<>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(subEmpList,DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+        }else {
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+        }
+
+        return relieverCount;
     }
 
     public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
@@ -1512,7 +1542,7 @@ public class    EmployeeService extends AbstractService {
     		if(CollectionUtils.isNotEmpty(subEmpList)) {
         		List<Employee> employee = employeeRepository.findAllByNonIds(subEmpList);
         		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
-    		}	
+    		}
 		}
 
     	return resp;
