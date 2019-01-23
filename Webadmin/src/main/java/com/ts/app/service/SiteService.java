@@ -537,8 +537,30 @@ public class SiteService extends AbstractService {
     }
 
     public List<BranchDTO> findBranchByProject(long projectId, long regionId){
-        List<Branch> branches = branchRepository.findBranchByProjectAndRegion(projectId,regionId);
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
 
+        List<Branch> branches =  new ArrayList<Branch>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            branches = branchRepository.findSiteBranches(projectId, subEmpList, regionId);
+        }else {
+            branches = branchRepository.findBranchByProjectAndRegion(projectId, regionId);
+        }
         return mapperUtil.toModelList(branches, BranchDTO.class);
     }
 

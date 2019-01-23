@@ -22,9 +22,6 @@ public interface RegionRepository extends JpaRepository<Region,Long> {
     @Query("SELECT r.id FROM Region r WHERE r.name = :name and r.project.id = :projectId")
     List<Long> findByRegion(@Param("name") String name, @Param("projectId") long projectId);
 
-    @Query("SELECT distinct r FROM Site s,Region r join s.employeeProjSites e WHERE s.project.id = :projectId and s.region = r.name and e.employee.id in (:empIds) and s.active='Y'")
+    @Query("SELECT distinct r FROM Site s, Region r join s.employeeProjSites e WHERE s.project.id = :projectId and s.region = r.name and r.project.id = :projectId and e.employee.id in (:empIds) and s.active='Y'")
     List<Region> findSiteRegions(@Param("projectId") long projectId, @Param("empIds") List<Long> empId);
-
-    @Query("SELECT distinct s.branch FROM Site s, Branch b join s.employeeProjSites e WHERE s.project.id = :projectId and s.region = :region and s.branch = b.name and e.employee.id in (:empIds) and s.active='Y'")
-    List<Branch> findSiteBranches(@Param("projectId") long projectId, @Param("empIds") List<Long> empId, @Param("region") String region);
 }
