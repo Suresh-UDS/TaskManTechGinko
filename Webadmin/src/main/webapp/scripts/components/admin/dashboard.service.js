@@ -95,6 +95,12 @@ angular.module('timeSheetApp')
                 return $http.post('api/reports/quotations/count', searchCriteria).then(function (response) {
                     return response.data;
                 });
+            },
+
+            getRelieverCounts : function (searchCriteria) {
+                return $http.post('api/reliever/count', searchCriteria).then(function (response) {
+                    return response.data;
+                });
             }
         }
     })

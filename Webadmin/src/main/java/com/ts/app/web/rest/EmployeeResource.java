@@ -418,7 +418,7 @@ public class EmployeeResource {
         return relievers;
     }
 
-    @RequestMapping(value = "/reliever/count", method = RequestMethod.GET)
+    @RequestMapping(value = "/reliever/count", method = RequestMethod.POST)
     public long findRelieversCountByEmployee(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked EmployeeResource find relievers count by employee Relievers--");
         long relieverCount = employeeService.findRelieversCountByEmployee(searchCriteria);

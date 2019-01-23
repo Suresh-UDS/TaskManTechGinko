@@ -668,6 +668,7 @@ public class    EmployeeService extends AbstractService {
             empId = user.getEmployee().getId();
         }
         long relieverCount =  0;
+        List<EmployeeReliever> empRel = new ArrayList<>();
         if(empId > 0 && !user.isAdmin()) {
             Employee employee = user.getEmployee();
             Set<Long> subEmpIds = new TreeSet<Long>();
