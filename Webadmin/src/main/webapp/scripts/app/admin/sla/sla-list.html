@@ -554,7 +554,7 @@
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                    <tr ng-repeat="esc in slas.slaesc | orderBy :esc.level">
+                                                                    <tr ng-repeat="esc in slas.slaesc | orderBy:['level']">
                                                                         <td>Level {{esc.level}}</td>
                                                                         <td>{{esc.hours}}</td>
                                                                         <td>{{esc.minutes}}</td>

@@ -464,41 +464,66 @@ angular.module('timeSheetApp')
         $('input#dateFilterFrom').on('dp.change', function(e){
 
             if(e.date._d > $scope.selectedToDateSer) {
-            		$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            		$scope.selectedFromDate = "";
-            		$scope.selectedFromDateSer = "";
+            		$scope.fromErrMsg = 'From date cannot be greater than To date';
+                    alert($scope.fromErrMsg);
+                    $('input#dateFilterFrom').data('DateTimePicker').clear();
+            		$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            		$scope.selectedFromDateSer = new Date();
+                     $('input#dateFilterFrom').val($scope.selectedFromDate);
+
+                     // root scope (searchCriteria)
+                     $rootScope.searchFilterCriteria.selectedFromDate = new Date();
+
+                     // retaining list search value.
+                     getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                     $scope.refreshReport();
             		return false;
-            }else {
+            }else if ((e.date._d < $scope.selectedToDateSer)) {
+
                 $scope.selectedFromDateSer = new Date(e.date._d);
                 $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
 
-                /** root scope (searchCriteria) **/
+                // root scope (searchCriteria)
                 $rootScope.searchFilterCriteria.selectedFromDate = new Date(e.date._d);
 
-                /** retaining list search value.**/
+                // retaining list search value.
                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
                 $scope.refreshReport();
+
             }
+
+
         });
 
         $('input#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
-
-            console.log(e.date._d);
+            
             if($scope.selectedFromDateSer > e.date._d) {
-            		$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            		$scope.selectedToDate = "";
-            		$scope.selectedToDateSer = "";
+            		$scope.toErrMsg = 'To date cannot be lesser than From date';
+                    alert($scope.toErrMsg);
+                    $('input#dateFilterTo').data('DateTimePicker').clear();
+            		$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            		$scope.selectedToDateSer = new Date() ;
+                    $('input#dateFilterTo').val($scope.selectedToDate);
+
+                    // root scope (searchCriteria)
+                    $rootScope.searchFilterCriteria.selectedToDate = new Date();
+
+                    // retaining list search value.
+                    getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                    $scope.refreshReport();
+
             		return false;
-            }else {
+            }else if($scope.selectedFromDateSer < e.date._d) {
             	$scope.selectedToDateSer = new Date(e.date._d);
                 $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
 
-                /** root scope (searchCriteria) **/
+                // root scope (searchCriteria)
                 $rootScope.searchFilterCriteria.selectedToDate = new Date(e.date._d);
 
-                /** retaining list search value.**/
+                // retaining list search value.
                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
                 $scope.refreshReport();
