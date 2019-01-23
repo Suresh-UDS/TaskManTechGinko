@@ -9,8 +9,8 @@ export interface ApplicationConfig
 
 export const AppConfig: ApplicationConfig={
     Url: "http://52.221.57.9:8088/",
-    // Url: "http://10.0.0.8:8088/",
-   /* Url: "https://taskmanadmin.uds.in/"*/
+    // Url: "http://13.232.248.92:8088/",
+    // Url: "https://taskmanadmin.uds.in/"
     // Url: "http://10.0.0.7:8088/",
     // Url: "https://taskmanadmin.uds.in/",
     // Url: "http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/", // - Dev Server

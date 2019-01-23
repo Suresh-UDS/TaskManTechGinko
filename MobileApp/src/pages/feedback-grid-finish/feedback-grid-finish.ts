@@ -41,7 +41,7 @@ export class FeedbackGridFinish {
 
   }
 
-  start(userName,userCode)
+  start()
   {
 
     this.component.showLoader("Saving Feedback");
@@ -53,8 +53,8 @@ export class FeedbackGridFinish {
 
     this.feedbackTransaction = {
       results:this.questions,
-      reviewerName:userName,
-      reviewerCode:userCode,
+      reviewerName:"Anonymous",
+      reviewerCode:"Anonymous",
       siteId:this.navParams.data.fb.siteId,
       siteName:this.navParams.data.fb.siteName,
       projectId:this.navParams.data.fb.projectId,
@@ -65,7 +65,7 @@ export class FeedbackGridFinish {
       floor:this.navParams.data.fb.floor,
       zone:this.navParams.data.fb.zone,
       remarks:this.remarks,
-      overallFeedback:this.overallFeedback
+      overallFeedback:true
     };
 
     console.log(this.feedbackTransaction);

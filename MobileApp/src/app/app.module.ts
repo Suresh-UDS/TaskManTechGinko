@@ -358,8 +358,10 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
       ExpenseDetails,
       AddExpense,
     AddMaterial,
+
     // WheelSelector
     FeedbackGridFinish
+
 
   ],
   providers: [
