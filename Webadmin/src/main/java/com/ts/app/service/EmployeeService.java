@@ -5,6 +5,7 @@ import com.ts.app.domain.*;
 import com.ts.app.ext.api.FaceRecognitionService;
 import com.ts.app.repository.*;
 import com.ts.app.rule.EmployeeFilter;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,8 +20,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,7 @@ import java.util.*;
  */
 @Service
 @Transactional
-public class    EmployeeService extends AbstractService {
+public class EmployeeService extends AbstractService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
@@ -119,7 +118,7 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private AmazonS3Utils amazonS3utils;
-    
+
     @Inject
     private EmployeeFilter employeeFilter;
 
@@ -659,6 +658,35 @@ public class    EmployeeService extends AbstractService {
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
 
+    public long findRelieversCountByEmployee(SearchCriteria searchCriteria){
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
+        long relieverCount =  0;
+        List<EmployeeReliever> empRel = new ArrayList<>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(subEmpList, DateUtil.convertToSQLDate(searchCriteria.getFromDate()), DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+        }else {
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()), DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+        }
+
+        return relieverCount;
+    }
+
     public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
         List<EmployeeReliever> entities = null;
         Pageable pageRequest = null;
@@ -670,7 +698,7 @@ public class    EmployeeService extends AbstractService {
         return mapperUtil.toModelList(entities, EmployeeRelieverDTO.class);
     }
 
-    public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
+    public List<EmployeeDTO> findBySiteId(long userId, long siteId) {
         List<EmployeeDTO> employeeDtos = null;
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
@@ -1308,8 +1336,8 @@ public class    EmployeeService extends AbstractService {
             endCal.set(Calendar.MINUTE, 59);
             endCal.set(Calendar.SECOND, 0);
 
-            java.sql.Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
-            java.sql.Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
+            Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
+            Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
 
 
             log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
@@ -1512,7 +1540,7 @@ public class    EmployeeService extends AbstractService {
     		if(CollectionUtils.isNotEmpty(subEmpList)) {
         		List<Employee> employee = employeeRepository.findAllByNonIds(subEmpList);
         		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
-    		}	
+    		}
 		}
 
     	return resp;

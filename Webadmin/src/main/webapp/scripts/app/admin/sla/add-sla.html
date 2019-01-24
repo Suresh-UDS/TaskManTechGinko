@@ -249,7 +249,7 @@
 														<td><span class="tag label label-info"
 															ng-repeat="cat in slas.category">{{cat}}</span></td>
 														<td><span class="tag label label-default"
-															ng-repeat="slaEsc in slas.slaesc">Level
+															ng-repeat="slaEsc in slas.slaesc | orderBy:['level']">Level
 																{{slaEsc.level}}</span></td>
 														<td class="text-right">
 															<!--<a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
@@ -441,7 +441,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="esc in slaEscalationList">
+									<tr ng-repeat="esc in slaEscalationList | orderBy:['level']">
 										<td>Level {{esc.level}}</td>
 										<td>{{esc.hours}}</td>
 										<td>{{esc.minutes}}</td>
