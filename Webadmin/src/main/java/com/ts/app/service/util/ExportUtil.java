@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.ts.app.domain.*;
 import com.ts.app.repository.EmployeeRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -57,19 +58,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeAttendanceReport;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.MaterialTransactionType;
-import com.ts.app.domain.PurchaseRequestStatus;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.User;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.MailService;
@@ -140,7 +130,7 @@ public class ExportUtil {
 
 	private String[] INVENTORY_TRANS_HEADER = { "ID", "ITEM NAME", "ITEM CODE", "CLIENT", "SITE", "STORE STOCK", "UOM", "QUANTITY", "INDENT NUMBER", "PURCHASE NUMBER", "TRANSACTION DATE", "STATUS"};
 
-	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "RATING", "REMARKS", "QUESTION", "ANSWER", "ITEM REMARKS" };
+	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "QUESTION", "ANSWER", "ITEM RATING", "ITEM REMARKS", "RATING", "REMARKS" };
 
 	private String[] QUOTATION_HEADER = { "ID", "CLIENT NAME", "SITE NAME", "QUOTATION NAME", "TITLE", "SENDBY USERNAME", "SUBMITTED DATE", "APPROVEDBY USERNAME", "APPROVED DATE", "STATUS", "MODE", "GRAND TOTAL"};
 
@@ -2793,60 +2783,39 @@ public class ExportUtil {
                             dataRow.createCell(7).setCellValue(transaction.getBlock());
                             dataRow.createCell(8).setCellValue(transaction.getFloor());
                             dataRow.createCell(9).setCellValue(transaction.getZone());
-                            dataRow.createCell(10).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
-                            dataRow.createCell(11).setCellValue(transaction.getRemarks());
+                            dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+                            dataRow.createCell(15).setCellValue(transaction.getRemarks());
                             if(CollectionUtils.isNotEmpty(transaction.getResults())) {
                                 List<FeedbackTransactionResultDTO> results = transaction.getResults();
                                 int size = CollectionUtils.isNotEmpty(results) ? results.size() : 0;
                                 int cnt = 0;
                                 for(FeedbackTransactionResultDTO result : results) {
 
-                                    if (result.getAnswerType().equals("0")) {
-                                        if(!result.getAnswer().equals("false")) {
+                                    if ((result.getAnswerType().equals(FeedbackAnswerType.YESNO) && result.getAnswer().equalsIgnoreCase("false") && (result.getScoreType().equalsIgnoreCase("yes:1")) ||
+                                        (result.getAnswerType().equals(FeedbackAnswerType.YESNO) && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("no:1")) ||
+                                        (result.getAnswerType().equals(FeedbackAnswerType.RATING) && Float.parseFloat(result.getAnswer())<5))
+                                        ) {
 
                                             cnt++;
-                                            dataRow.createCell(12).setCellValue(result.getQuestion());
-                                            dataRow.createCell(13).setCellValue(result.getAnswer());
-                                            dataRow.createCell(14).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                            dataRow.createCell(10).setCellValue(result.getQuestion());
+                                            dataRow.createCell(11).setCellValue(result.getAnswerType().equals(FeedbackAnswerType.YESNO)?result.getAnswer():"");
+                                            dataRow.createCell(12).setCellValue(result.getAnswerType().equals(FeedbackAnswerType.RATING)?result.getAnswer():"");
+                                            dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
                                             if(cnt < size) {
                                                 dataRow = xssfSheet.createRow(rowNum++);
-                                                dataRow.createCell(0).setCellValue(transaction.getId());
-                                                dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
-                                                dataRow.createCell(2).setCellValue(transaction.getReviewerName());
-                                                dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
-                                                dataRow.createCell(4).setCellValue(transaction.getProjectName());
-                                                dataRow.createCell(5).setCellValue(transaction.getSiteName());
-                                                dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
-                                                dataRow.createCell(7).setCellValue(transaction.getBlock());
-                                                dataRow.createCell(8).setCellValue(transaction.getFloor());
-                                                dataRow.createCell(9).setCellValue(transaction.getZone());
-                                                dataRow.createCell(10).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
-                                                dataRow.createCell(11).setCellValue(transaction.getRemarks());
+//                                                dataRow.createCell(0).setCellValue(transaction.getId());
+//                                                dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
+//                                                dataRow.createCell(2).setCellValue(transaction.getReviewerName());
+//                                                dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
+//                                                dataRow.createCell(4).setCellValue(transaction.getProjectName());
+//                                                dataRow.createCell(5).setCellValue(transaction.getSiteName());
+//                                                dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
+//                                                dataRow.createCell(7).setCellValue(transaction.getBlock());
+//                                                dataRow.createCell(8).setCellValue(transaction.getFloor());
+//                                                dataRow.createCell(9).setCellValue(transaction.getZone());
+//                                                dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+//                                                dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                             }
-                                        }
-                                    }else{
-                                        if(result.getAnswer().equals("true")){
-
-                                            cnt++;
-                                            dataRow.createCell(12).setCellValue(result.getQuestion());
-                                            dataRow.createCell(13).setCellValue(result.getAnswer());
-                                            dataRow.createCell(14).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
-                                            if(cnt < size) {
-                                                dataRow = xssfSheet.createRow(rowNum++);
-                                                dataRow.createCell(0).setCellValue(transaction.getId());
-                                                dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
-                                                dataRow.createCell(2).setCellValue(transaction.getReviewerName());
-                                                dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
-                                                dataRow.createCell(4).setCellValue(transaction.getProjectName());
-                                                dataRow.createCell(5).setCellValue(transaction.getSiteName());
-                                                dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
-                                                dataRow.createCell(7).setCellValue(transaction.getBlock());
-                                                dataRow.createCell(8).setCellValue(transaction.getFloor());
-                                                dataRow.createCell(9).setCellValue(transaction.getZone());
-                                                dataRow.createCell(10).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
-                                                dataRow.createCell(11).setCellValue(transaction.getRemarks());
-                                            }
-                                        }
                                     }
 
 
