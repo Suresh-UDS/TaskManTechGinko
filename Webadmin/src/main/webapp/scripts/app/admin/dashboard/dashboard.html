@@ -302,7 +302,7 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-2 col-lg-2 col-sm-3">
                                 <a ui-sref="attendances" ng-click="dbdFilter('Present');">
                                     <div class="card greenBg cardWithbg">
                                         <div class="card-header">
@@ -315,7 +315,7 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-2 col-lg-2 col-sm-3">
                                 <a ui-sref="employees" ng-click="dbdFilter('Absent');">
                                     <div class="card lightRedBg cardWithbg">
                                         <div class="card-header">
@@ -330,15 +330,29 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-md-3 col-lg-3 col-sm-4">
+                            <div class="col-md-2 col-lg-2 col-sm-3">
                                 <a ui-sref="employees" ng-click="dbdFilter('Left');">
-                                    <div class="card yellowBg cardWithbg">
+                                    <div class="card skyblueBg cardWithbg">
                                         <div class="card-header">
                                             <i class="material-icons">exit_to_app</i>
                                         </div>
                                         <div class="card-content">
                                             <h4>Left</h4>
                                             <h3>{{leftCount ? leftCount : 0}}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-sm-4">
+                                <a>
+                                    <div class="card yellowBg cardWithbg">
+                                        <div class="card-header">
+                                            <i class="material-icons">compare_arrows
+                                            </i>
+                                        </div>
+                                        <div class="card-content">
+                                            <h4>Reliever</h4>
+                                            <h3>{{relieverCnt ? relieverCnt : 0}}</h3>
                                         </div>
                                     </div>
                                 </a>

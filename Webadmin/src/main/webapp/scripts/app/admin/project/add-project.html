@@ -129,7 +129,7 @@
                                                     <label class="control-label">First Name</label>
                                                     <input id='projectContactFirstName' ng-model="project.contactFirstName"
                                                            class='form-control InputTxtCaps' name='projectContactFirstName'  type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="2" autofocus />
+                                                           ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="2" autofocus />
                                                     <div ng-show="form.$submitted || form.projectContactFirstName.$touched || form.projectContactFirstName.$dirty">
                                                         <div ng-show="form.projectContactFirstName.$dirty || form.projectContactFirstName.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -138,7 +138,7 @@
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.projectContactFirstName.$error.minlength">
-                                                                Contact first name is required to be at least 2 character.
+                                                                Contact first name is required to be at least 1 character.
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.projectContactFirstName.$error.maxlength">
@@ -157,16 +157,12 @@
                                                     <label class="control-label">Last Name</label>
                                                     <input id='projectContactLastName' ng-model="project.contactLastName"
                                                            class='form-control InputTxtCaps' name='projectContactLastName' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="3" autofocus />
+                                                           ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="3" autofocus />
                                                     <div ng-show="form.$submitted || form.projectContactLastName.$touched || form.projectContactLastName.$dirty">
                                                         <div ng-show="form.projectContactLastName.$dirty || form.projectContactLastName.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.projectContactLastName.$error.required">
                                                                 Contact last name is required.
-                                                            </p>
-                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
-                                                               ng-show="form.projectContactLastName.$error.minlength">
-                                                                Contact last name is required to be at least 2 character.
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.projectContactLastName.$error.maxlength">
