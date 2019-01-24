@@ -42,49 +42,45 @@ public class AttendanceSpecification implements Specification<Attendance>{
     @Override
     public Predicate toPredicate(Root<Attendance> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         List<Predicate> predicates = new ArrayList<>();
-        log.debug("EmpSpecification toPredicate - searchCriteria projectId -" + searchCriteria.getProjectId());
+        log.debug("AttSpecification toPredicate - searchCriteria projectId -" + searchCriteria.getProjectId());
         if (searchCriteria.getProjectId() != 0) {
             predicates.add(builder.equal(root.get("site").get("project").get("id"), searchCriteria.getProjectId()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria siteId -" + searchCriteria.getSiteId());
+        log.debug("AttSpecification toPredicate - searchCriteria siteId -" + searchCriteria.getSiteId());
         if (searchCriteria.getSiteId() != 0) {
             predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria emp Name -" + searchCriteria.getName());
+        log.debug("AttSpecification toPredicate - searchCriteria emp Name -" + searchCriteria.getName());
         if (searchCriteria.getName() != null && searchCriteria.getName() != "") {
             predicates.add(builder.like(builder.lower(root.get("employee").get("name")),
                 "%" + searchCriteria.getName().toLowerCase() + "%"));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria employeeID -" + searchCriteria.getEmployeeEmpId());
+        log.debug("AttSpecification toPredicate - searchCriteria employeeID -" + searchCriteria.getEmployeeEmpId());
         if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
             predicates.add(builder.equal(root.get("employee").get("empId"), searchCriteria.getEmployeeEmpId()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria isLeft -" + searchCriteria.isLeft());
-        if (searchCriteria.isLeft()) {
-            predicates.add(builder.equal(root.get("isLeft"), true));
-        }
-        log.debug("EmpSpecification toPredicate - searchCriteria projectName -" + searchCriteria.getProjectName());
+        log.debug("AttSpecification toPredicate - searchCriteria projectName -" + searchCriteria.getProjectName());
         if(searchCriteria.getProjectName() != null && searchCriteria.getProjectName() != "") {
             predicates.add(builder.equal(root.get("site").get("project").get("name"), searchCriteria.getProjectName()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria siteName -" + searchCriteria.getSiteName());
+        log.debug("AttSpecification toPredicate - searchCriteria siteName -" + searchCriteria.getSiteName());
         if(searchCriteria.getSiteName() != null && searchCriteria.getSiteName() != "") {
             predicates.add(builder.equal(root.get("site").get("name"), searchCriteria.getSiteName()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria region -" + searchCriteria.getRegion());
+        log.debug("AttSpecification toPredicate - searchCriteria region -" + searchCriteria.getRegion());
         if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
         	predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
         }
-        log.debug("EmpSpecification toPredicate - searchCriteria branch -" + searchCriteria.getBranch());
+        log.debug("AttSpecification toPredicate - searchCriteria branch -" + searchCriteria.getBranch());
         if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
         	predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
         }
 
         if(searchCriteria.getCheckInDateTimeFrom() != null) {
-            log.debug("Employee checkInDate from -" + searchCriteria.getCheckInDateTimeFrom());
+            log.debug("AttSpecification checkInDate from -" + searchCriteria.getCheckInDateTimeFrom());
             log.debug("StartDate" +startDate);
             log.debug("EndDate" +endDate);
-            predicates.add(builder.between(root.get("checkInTime"), startDate, endDate));
+            predicates.add(builder.between(root.get("checkInTime"), searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo()));
         }
 
         predicates.add(builder.equal(root.get("active"), "Y"));
@@ -92,7 +88,7 @@ public class AttendanceSpecification implements Specification<Attendance>{
         query.orderBy(builder.desc(root.get("createdDate")));
 
         List<Predicate> orPredicates = new ArrayList<>();
-        log.debug("EmpSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
+        log.debug("AttSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
 
         if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
             orPredicates.add(builder.equal(root.get("employee").get("user").get("id"), searchCriteria.getUserId()));
@@ -111,7 +107,7 @@ public class AttendanceSpecification implements Specification<Attendance>{
             }
         }
 
-        log.debug("EmpSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
+        log.debug("AttSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
         if(searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){
             orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
         }
