@@ -3,9 +3,9 @@ module.exports = {
 	db:{
 		url:'mongodb://localhost:27017/quotation_svc',
 		//url:'mongodb://ec2-52-221-245-74.ap-southeast-1.compute.amazonaws.com:27017/delivery',
-		schema : '/../app/schema'
-		//user:'admin',
-		//password:'Tgadmin123#'
+		schema : '/../app/schema',
+		user:'clssmongo',
+		password:'i0ps2gal'
 	},
 
 	server:{
@@ -22,9 +22,9 @@ module.exports = {
 			secureConnection: true,
 			port: 465
 		},
-		username :'karthickkumararajak@gmail.com',
-		password :'0838010059',
-		from:'Team UDS'
+		username :'timesheettestuser1@gmail.com',
+		password :'Test123#',
+        from:'UDS <no-reply@uds.com>'
 	},
 
 	pushService : {
@@ -41,6 +41,9 @@ module.exports = {
             gcm_id: 110710812821
         }
 
+	},
+	url : {
+		quotation_view: 'http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/view-quotation'
 	}
 
 };

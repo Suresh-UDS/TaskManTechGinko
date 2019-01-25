@@ -1,9 +1,10 @@
+
 <div class="crud-form"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
 
 		<div class="row">
-            <div class="col-mod-12">
+            <!-- <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
                     <strong>Project saved!</strong>
                 </div>
@@ -14,11 +15,11 @@
                 <div class="alert alert-danger" ng-show="errorProjectExists">
                     <strong>Project already registered!</strong> Please choose another one.
                 </div>
-            </div>
+            </div> -->
 			<div class="col-md-12">
 				<div class="form-container table-container cardsCon">
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveProject()"  class="form-horizontal">
+						ng-submit="conform('save')"  class="form-horizontal">
 
                         <div class="row">
                             <div class="col-md-6">
@@ -31,27 +32,27 @@
 
                                             <div class="col-md-10">
                                                 <div class="form-group">
-                                                    <label class="control-label">Name</label>
+                                                    <label class="control-label">Name<span class="red-star">*</span></label>
                                                     <input id='projectName' ng-model="project.name"
-                                                           class='form-control' name='projectName' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-                                                    <div ng-show="form.$submitted || form.projectName.$touched">
+                                                           class='form-control InputTxtCapsAll' name='projectName' type='text' value=""
+                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  tabindex="1" autofocus required/>
+                                                    <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
                                                         <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block"  style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.projectName.$error.required">
-                                                                Project name is required.
+                                                                Client name is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block"  style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.projectName.$error.minlength">
-                                                                Project name is required to be at least 2 character.
+                                                                Client name is required to be at least 2 character.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.projectName.$error.maxlength">
-                                                                Project name cannot be longer than 50 characters.
+                                                                Client name cannot be longer than 50 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.projectName.$error.pattern">
-                                                                Project name can only contain letters, digits and space.
+                                                                Client name can only contain letters, digits and space.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -61,18 +62,22 @@
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <div class="form-group">
-                                                    <label class="control-label">Address</label>
-                                                    <input id='address' ng-model="project.address" class='form-control'
+                                                    <label class="control-label">Address <span class="red-star">*</span></label>
+                                                    <input id='address' ng-model="project.address" class='form-control InputTxtCaps'
                                                            name='address' type='text' value=""
                                                            ng-maxlength=100
-                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/"/>
-                                                    <div ng-show="form.$submitted || form.address.$touched">
+                                                           ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="4" required/>
+                                                    <div ng-show="form.$submitted || form.address.$touched || form.address.$dirty">
                                                         <div ng-show="form.address.$dirty || form.address.$invalid">
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.address.$error.maxlength">
-                                                                Address cannot be longer than 50 characters.
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                               ng-show="form.address.$error.required">
+                                                                Address is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                               ng-show="form.address.$error.maxlength">
+                                                                Address cannot be longer than 100 characters.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.address.$error.pattern">
                                                                 Address can only contain letters, numbers and space.
                                                             </p>
@@ -82,6 +87,29 @@
                                             </div>
 
                                         </div>
+                                        
+                                       <div class="form-group selectcon is-empty" ng-init="loadClientGroup()">
+
+                                               <div class="row">
+                                                   <div class="col-md-10 pad-r-0px">
+                                                        <label class="control-label">Group</label>
+                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                       <select class="form-control" ng-model="selectedClientGroup" ng-options="clientgroup as clientgroup.clientgroup | uppercase for clientgroup in clientGroups"  tabindex="7">
+                                                           <option value="">Select Client Group ..</option>
+                                                       </select>
+
+                                                   </div>
+
+                                                   <div class="col-md-2 pdng-top25">
+                                                      <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                           <i class="material-icons">add</i>
+                                                       </a> -->
+                                                       <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addGroup').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                   </div>
+                                               </div>
+
+                                      
+                                       </div>
 
                                     </div>
                                 </div>
@@ -94,30 +122,29 @@
                                     <div class="panel-heading">Contact Info</div>
                                     <div class="panel-body">
 
-
                                         <div class="row">
 
-                                            <div class="col-md-10">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">First Name</label>
                                                     <input id='projectContactFirstName' ng-model="project.contactFirstName"
-                                                           class='form-control' name='projectContactFirstName' type='text' value=""
-                                                           ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-                                                    <div ng-show="form.$submitted || form.projectContactFirstName.$touched">
+                                                           class='form-control InputTxtCaps' name='projectContactFirstName'  type='text' value=""
+                                                           ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="2" autofocus />
+                                                    <div ng-show="form.$submitted || form.projectContactFirstName.$touched || form.projectContactFirstName.$dirty">
                                                         <div ng-show="form.projectContactFirstName.$dirty || form.projectContactFirstName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.projectContactFirstName.$error.required">
                                                                 Contact first name is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.projectContactFirstName.$error.minlength">
-                                                                Contact first name is required to be at least 2 character.
+                                                                Contact first name is required to be at least 1 character.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.projectContactFirstName.$error.maxlength">
                                                                 Contact first name cannot be longer than 50 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.projectContactFirstName.$error.pattern">
                                                                 Contact first name can only contain letters, digits and space.
                                                             </p>
@@ -125,29 +152,23 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Last Name</label>
                                                     <input id='projectContactLastName' ng-model="project.contactLastName"
-                                                           class='form-control' name='projectContactLastName' type='text' value=""
-                                                           ng-minlength='1' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-                                                    <div ng-show="form.$submitted || form.projectContactLastName.$touched">
+                                                           class='form-control InputTxtCaps' name='projectContactLastName' type='text' value=""
+                                                           ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="3" autofocus />
+                                                    <div ng-show="form.$submitted || form.projectContactLastName.$touched || form.projectContactLastName.$dirty">
                                                         <div ng-show="form.projectContactLastName.$dirty || form.projectContactLastName.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.projectContactLastName.$error.required">
                                                                 Contact last name is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.projectContactLastName.$error.minlength">
-                                                                Contact last name is required to be at least 2 character.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.projectContactLastName.$error.maxlength">
                                                                 Contact last name cannot be longer than 50 characters.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.projectContactLastName.$error.pattern">
                                                                 Contact last name can only contain letters, digits and space.
                                                             </p>
@@ -157,57 +178,51 @@
                                             </div>
 
                                         </div>
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Phone</label>
                                                     <input id='phone' ng-model="project.phone"
                                                            class='form-control' name='phone' type='phone' value=""
-                                                           ng-minlength='10' ng-maxlength='10' ng-pattern="/^[0-9]*$/" autofocus required/>
-                                                    <div ng-show="form.$submitted || form.phone.$touched">
+                                                           ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9]*$/" tabindex="5" autofocus />
+                                                    <div ng-show="form.$submitted || form.phone.$touched || form.phone.$dirty">
                                                         <div ng-show="form.phone.$dirty || form.phone.$invalid">
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.phone.$error.required">
-                                                                Contact phone is required.
+                                                                Contact phone no. is required.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                               ng-show="form.phone.$error.minlength">
+                                                                Contact phone no. is required to be at least 10 numbers.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
                                                                ng-show="form.phone.$error.maxlength">
-                                                                Contact phone cannot be longer than 10 characters.
+                                                                Contact phone no. cannot be longer than 13 numbers.
                                                             </p>
-                                                            <p class="help-block" style="color:maroon"
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.phone.$error.pattern">
-                                                                Contact phone can only contain letters, digits and space.
+                                                                Contact phone no. can only contain + , - ,numbers and space.
                                                             </p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Email</label>
                                                     <input id='email' ng-model="project.email"
-                                                           class='form-control' name='email' type='email' value=""
-                                                           ng-maxlength='50' autofocus required/>
-                                                    <div ng-show="form.$submitted || form.email.$touched">
+                                                           class='form-control' name='email' type='email' value=""  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                                           tabindex="6" ng-maxlength='50' autofocus />
+                                                    <div ng-show="form.$submitted || form.email.$touched || form.email.$dirty">
                                                         <div ng-show="form.email.$dirty || form.email.$invalid">
                                                             <p class="help-block" style="color:maroon"
                                                                ng-show="form.email.$error.required">
                                                                 Contact email is required.
                                                             </p>
                                                             <p class="help-block" style="color:maroon"
-                                                               ng-show="form.email.$error.minlength">
-                                                                Contact email is required to be at least 2 character.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
-                                                               ng-show="form.email.$error.maxlength">
-                                                                Contact email cannot be longer than 50 characters.
-                                                            </p>
-                                                            <p class="help-block" style="color:maroon"
                                                                ng-show="form.email.$error.pattern">
-                                                                Contact email can only contain letters, digits and space.
+                                                                Contact email is invalid.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -227,15 +242,29 @@
 						<div class="row">
                               <div class="col-md-4 col-md-offset-8 txt-align-rgt">
                                   <div class="form-group">
-
-                                      <button class="btn btn-success" type="submit"
-                                              id="form-button-save" ng-disabled="form.$invalid">
+                                      <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" type="submit"
+                                              id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="8">
                                           <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                          <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                       </button>
+
+
+                                      <!--<button class="btn btn-danger" type="button"-->
+                                              <!--ng-click="cancelProject()" id="cancel-button">-->
+                                          <!--<i class="material-icons">close</i> Cancel-->
+                                      <!--</button>-->
+
+                                      <!--<button class="btn btn-danger" type="button"
+                                              ng-click="conform('cancel')" id="cancel-button" ng-disabled="btnDisable">
+                                          <i class="material-icons">close</i> Discard
+                                      </button>-->
+
                                       <button class="btn btn-danger" type="button"
-                                              ng-click="cancelProject()" id="cancel-button">
-                                          <i class="material-icons">close</i> Cancel
+                                              ng-click="conform('cancel')" id="cancel-button" ng-disabled="btnDisable" tabindex="9">
+                                              <i class="material-icons">close</i> Cancel
                                       </button>
+
+
 
                                   </div>
                               </div>
@@ -447,5 +476,58 @@
         </div>
     </div>
 
-
 </div>
+
+
+<!-- Add asset group dialog -->
+
+<div id="addGroup" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Client Group</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addGroupForm">
+                    <div class="row">
+                        <div class="col-md-12">
+	                        <div class="form-group">
+			                    <label class="control-label">Client Group<span class="red-star">*</span></label>
+	                            <input class="" id="assetgroupName" ng-model="clientGroup.clientgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
+	                            ng-pattern="/^[A-Za-z0-9\s]*$/" />
+	                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched || addGroupForm.assetgroupName.$dirty">
+	                                <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
+	                                    <p class="help-block" style="color:maroon"
+	                                       ng-show="addGroupForm.assetgroupName.$error.required">
+	                                       Client Group is required.
+	                                    </p>
+	                                    <p class="help-block" style="color:maroon"
+	                                       ng-show="addGroupForm.assetgroupName.$error.maxlength">
+	                                        Client Group cannot be longer than 250 characters.
+	                                    </p>
+	                                    <p class="help-block" style="color:maroon"
+	                                       ng-show="addGroupForm.assetgroupName.$error.pattern">
+	                                       Client Group can only contain letters, digits and space.
+	                                    </p>
+	                                </div>
+	                            </div>
+	                        </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit" ng-click="addClientGroup()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addGroupForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset group dialog -->

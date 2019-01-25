@@ -3,7 +3,7 @@
 angular.module('timeSheetApp')
     .factory('ChecklistComponent', function ChecklistComponent(Checklist,$http,ChecklistDelete) {
         return {
-        	createChecklist: function (checklist, callback) {
+        	createChecklist: function (checklist, callback) { 
                 var cb = callback || angular.noop;
                 console.log('checklist -' + checklist.name);	
                 return Checklist.save(checklist,
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
                         return cb(checklist);
                     },
                     function (err) {
-                        this.logout();
+                        //this.logout();
                         return cb(err);
                     }.bind(this)).$promise;
             },

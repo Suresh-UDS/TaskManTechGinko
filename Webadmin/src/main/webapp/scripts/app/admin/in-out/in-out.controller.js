@@ -9,7 +9,7 @@ angular.module('timeSheetApp')
         $scope.errorUserExists = null;
         $scope.end = new Date();
 
-        $timeout(function (){angular.element('[ng-model="name"]').focus();});
+        //$timeout(function (){angular.element('[ng-model="name"]').focus();});
         $scope.hide = false;
 
 
@@ -452,8 +452,8 @@ angular.module('timeSheetApp')
             }
 
         };
-        
-        
+
+
         $scope.loadImagesNew = function(employeeEmpId, images) {
         	if(images && images.length > 0) {
         		for(var x=0;x<4;x++) {
@@ -474,7 +474,7 @@ angular.module('timeSheetApp')
                     	ele.setAttribute('src',"//placehold.it/250x250");
                 	}
         		}
-        		
+
         	}
 
         };

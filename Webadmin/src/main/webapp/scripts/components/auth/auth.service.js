@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .factory('Auth', function Auth($rootScope, $state, $q, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish) {
+    .factory('Auth', function Auth($rootScope, $state, $q, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish, $http) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -122,6 +122,14 @@ angular.module('timeSheetApp')
                 }, function (err) {
                     return cb(err);
                 }).$promise;
+            },
+
+            changeNewPassword:function(changePasswordData,callback){
+                var  cb = callback || angular.noop;
+                return $http.post('api/user/change_password',changePasswordData).then(function (response) {
+                    console.log(response);
+                    return response;
+                })
             }
         };
     });

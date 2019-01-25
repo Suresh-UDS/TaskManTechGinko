@@ -8,7 +8,8 @@
     "angular-jk-rating-stars": "^1.0.8",
     "angular1-star-rating": "^1.2.11",
     "bower": "^1.8.2",
-    "chart.js": "^2.7.2"
+    "chart.js": "^2.7.2",
+    "ui-select": "^0.19.8"
   },
   "devDependencies": {
     "browser-sync": "2.9.6",

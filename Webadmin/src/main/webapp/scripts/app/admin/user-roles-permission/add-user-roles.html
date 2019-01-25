@@ -3,7 +3,7 @@
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="loadingAuto();">
 	<div class="" ng-controller="UserRolesController">
 		<div class="row" >
-			<div class="col-md-12">
+			<!-- <div class="col-md-12">
 
 				<div class="alert alert-success" ng-show="success">
 					<strong>User Role saved!</strong>
@@ -20,7 +20,7 @@
 					one.
 				</div>
 
-			</div>
+			</div> -->
             <div class="col-md-8">
                 <!--<h2 class="title">Add User Role</h2>-->
             </div>
@@ -29,7 +29,7 @@
 				<div class="form-container table-container">
 					<label>* Mantatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="saveUserRole()" show-validation class="form-horizontal">
+						ng-submit="conform('save')"  class="form-horizontal">
 
                        <div class="row">
                            <div class="col-md-8 col-md-offset-2">
@@ -40,13 +40,19 @@
 
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label">Role Name <span class="red-star">*</span> </label>
-                                                   <input type="text" class="form-control" ng-model="userRole.name"
+                                                   <label class="control-label">Role Name<span class="red-star">*</span> </label>
+                                                   <input type="text" class="form-control InputTxtCapsAll" ng-model="userRole.name"
                                                           name="RoleName"  autofocus
                                                           required autocomplete="off">
+                                                    <div ng-show="form.$submitted || form.RoleName.$touched">
+                                                        <div ng-show="form.RoleName.$dirty || form.RoleName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.RoleName.$error.required">
+                                                                Id is required.
+                                                            </p>
 
-
-
+                                                        </div>
+                                                    </div>
                                                </div>
                                            </div>
 
@@ -56,7 +62,7 @@
                                        		<div class="col-md-12">
                                                <div class="form-group">
                                                    <label class="control-label">Description </label>
-                                                   <input type="text" class="form-control" name="Description" ng-model="userRole.description">
+                                                   <input type="text" class="form-control InputTxtCaps" name="Description" ng-model="userRole.description">
 
                                                </div>
                                            	</div>
@@ -67,7 +73,7 @@
                                            <div class="col-md-6">
                                                <div class="form-group">
                                                    <label class="control-label">Role Level   </label>
-                                                   <input type="number" class="form-control" ng-model="userRole.roleLevel">
+                                                   <input type="number" class="form-control InputTxtCaps" ng-model="userRole.roleLevel">
 
 
                                                </div>
@@ -102,14 +108,22 @@
 
                                            <div class="col-md-12 txt-align-rgt">
                                                <div class="form-group">
-                                                   <button class="btn btn-success" type="submit"
-                                                           id="form-button-save">
-                                                      <span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span> Save
+                                                   <!--<button class="btn btn-success" type="submit"-->
+                                                           <!--id="form-button-save" ng-disabled="form.RoleName.$invalid">-->
+                                                      <!--<span class="btn-label">-->
+                                            <!--<i class="material-icons">check</i>-->
+                                        <!--</span> Save-->
+                                                   <!--</button>-->
+
+
+                                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                                           type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                                                       <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                                       <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                                                    </button>
-                                                   <button class="btn btn-danger" type="button"
-                                                           ng-click="cancelUserRole()" id="cancel-button">
+
+                                                   <button class="btn btn-danger" type="button" ng-disabled="btnDisable"
+                                                           ng-click="conform('cancel')" id="cancel-button">
                                                        <i class="material-icons">close</i>Cancel
                                                    </button>
                                                </div>

@@ -1,23 +1,11 @@
 package com.ts.app.domain;
 
-import java.io.Serializable;
-import java.util.Set;
-
-import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "checklist")
@@ -46,8 +34,7 @@ public class Checklist extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "projectId", nullable = true)
     private Project project;
 
-	@OneToMany(mappedBy = "checklist", cascade = {CascadeType.ALL})
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN) 
+	@OneToMany(mappedBy = "checklist", cascade = {CascadeType.ALL}, orphanRemoval=true)
 	private Set<ChecklistItem> items;
 
 	

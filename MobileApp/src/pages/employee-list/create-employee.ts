@@ -11,6 +11,8 @@ import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 import {EmployeeListPage} from "./employee-list";
 
+declare var demo;
+
 /**
  * Generated class for the EmployeeList page.
  *
@@ -63,15 +65,24 @@ export class CreateEmployeePage {
       this.sitePlace="Site"
     this.employeeService.getAllDesignations().subscribe(
         response=>{
-            console.log("all Designations");
-            console.log(response);
-            this.designations = response;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log("all Designations");
+                console.log(response);
+                this.designations = response;
+            }
         }
     );
 
     this.employeeService.getAllEmployees().subscribe(
         response=>{
-            this.manager = response;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                this.manager = response;
+            }
+
         }
     )
 
@@ -109,9 +120,15 @@ export class CreateEmployeePage {
       this.component.showLoader('Getting Clients..');
       this.siteService.getAllProjects().subscribe(
           response=>{
-              console.log(response);
-              this.projects = response;
-              this.component.closeLoader();
+              if(response.errorStatus){
+                  this.component.closeAll();
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+              }else{
+                  console.log(response);
+                  this.projects = response;
+                  this.component.closeLoader();
+              }
+
           },err=>{
               console.log(err);
               this.component.closeLoader();
@@ -125,21 +142,25 @@ export class CreateEmployeePage {
       this.projectDetails = project;
       this.siteService.findSitesByProject(projectId).subscribe(
           response=>{
-          console.log(response);
+              if(response.errorStatus){
+                  demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+              }else{
+                  console.log(response);
 
-          if(response.length !==0)
-          {
-              this.sites = response;
-              this.sitePlace="Site";
-              this.siteSelect=false;
-          }
-          else
-          {
-              this.sites = [];
-              this.sitePlace="No Site";
-              this.siteSelect=true;
-          }
-              this.component.closeLoader();
+                  if(response.length !==0)
+                  {
+                      this.sites = response;
+                      this.sitePlace="Site";
+                      this.siteSelect=false;
+                  }
+                  else
+                  {
+                      this.sites = [];
+                      this.sitePlace="No Site";
+                      this.siteSelect=true;
+                  }
+                  this.component.closeLoader();
+              }
 
           },err=>{
               console.log(err);
@@ -197,11 +218,16 @@ export class CreateEmployeePage {
         this.component.showLoader('Creating Employee');
         this.employeeService.createEmployee(this.employee).subscribe(
             response=>{
-                console.log("Employee Creation success response")
-                console.log(response)
-                this.component.closeLoader();
-                this.component.showToastMessage('Employee Created','bottom');
-                this.navCtrl.setRoot(EmployeeListPage);
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log("Employee Creation success response")
+                    console.log(response)
+                    this.component.closeLoader();
+                    this.component.showToastMessage('Employee Created','bottom');
+                    this.navCtrl.setRoot(EmployeeListPage);
+                }
             },err=>{
                 console.log("Employee creation failure response");
                 console.log(err);
@@ -213,7 +239,11 @@ export class CreateEmployeePage {
     }
     else
     {
-      if(!this.firstname)
+      if(!this.eId)
+      {
+          this.eMsg = "eId";
+      }
+       else if(!this.firstname)
       {
         this.eMsg = "firstname";
       }
@@ -221,36 +251,25 @@ export class CreateEmployeePage {
       {
         this.eMsg = "lastname";
       }
+      else if(!this.designation){
+          this.eMsg ="designation";
+      }
       else if(!this.number)
       {
         this.eMsg = "number";
       }
-      else if(!this.mail)
-      {
-        this.eMsg = "mail";
-      }
-      else if(!this.eId)
-      {
-        this.eMsg = "eId";
-      }
-      else if(!this.address)
-      {
-        this.eMsg = "address";
-      }
-      else if(!this.designation){
-          this.eMsg ="Designation";
-      }else if(!this.selectedProject){
-          this.eMsg ="Project";
+      else if(!this.selectedProject){
+          this.eMsg ="project";
       }else if(!this.selectedSite){
-          this.eMsg ="Site";
-      }else if(!this.manager){
-          this.eMsg ="Manager";
+          this.eMsg ="site";
+      }else if(!this.selectedManager){
+          this.eMsg ="manager";
       }
       else
       {
         this.eMsg = "all";
       }
-      this.component.showToastMessage(this.msg,'bottom');
+      this.component.showToastMessage("Enter "+this.eMsg,'bottom');
     }
   }
 

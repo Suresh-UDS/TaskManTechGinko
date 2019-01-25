@@ -2,8 +2,13 @@ package com.ts.app.web.rest.dto;
 
 import com.ts.app.domain.AssetStatus;
 import com.ts.app.domain.AssetType;
+import com.ts.app.domain.IndentStatus;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRequestStatus;
 
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +18,7 @@ public class SearchCriteria extends Paginator {
 
 	private String jobTitle;
 
-	private String AssetTitle;
+	private String assetTitle;
 
 	private AssetType assetType;
 
@@ -118,18 +123,200 @@ public class SearchCriteria extends Paginator {
 	private double lat;
 
 	private double lng;
-	
+
 	private boolean report;
-	
+
 	private String jobTypeName;
-	
+
 	private String ticketStatus;
-	
+
+	private String ticketTitle;
+
+	private String ticketDescription;
+
 	private boolean admin;
-	
+
 	private boolean list;
-	
+
 	private String quotationTitle;
+
+	private String quotationCreatedBy;
+
+	private String quotationApprovedBy;
+
+	private String quotationStatus;
+
+	private Date quotationCreatedDate;
+
+	private Date quotationSubmittedDate;
+
+	private Date quotationApprovedDate;
+
+	private long manufacturerId;
+
+	private String manufacturerName;
+
+	private String assetTypeName;
+
+	private String warrantyTypeName;
+
+	private String assetGroupName;
+
+	private String assetName;
+
+	private String vendorName;
+
+	private long assetId;
+
+	private List<Long> siteIds;
+
+	private boolean notCheckedOut;
+
+	private String maintenanceType;
+
+	private String assetCode;
+
+	private Date acquiredDate;
+
+	private ZonedDateTime readingFromDate;
+
+	private ZonedDateTime readingToDate;
+
+	private String paramName;
+
+	private Date assetCreatedDate;
+
+	private String materialName;
+
+	private String itemCode;
+
+	private Date materialCreatedDate;
+
+	private Timestamp transactionDate;
+
+	private String itemGroup;
+
+	private MaterialTransactionType transactionType;
+
+	private long materialId;
+
+	private Timestamp transactionFromDate;
+
+	private Timestamp transactionToDate;
+
+	private Timestamp requestedDate;
+
+	private Timestamp issuedDate;
+
+	private String indentRefNumber;
+
+	private String purchaseRefNumber;
+
+	private Timestamp approvedDate;
+
+	private PurchaseRequestStatus requestStatus;
+
+	private IndentStatus indentStatus;
+
+	private String expenseCategory;
+
+	private long expenseId;
+
+	private String expenseMode;
+
+	private Timestamp expenseFromDate;
+
+	private Timestamp expenseToDate;
+
+	private Timestamp creditedFromDate;
+
+	private Timestamp creditedToDate;
+
+	private int roleLevel;
+
+	private String module;
+
+	private String action;
+
+	private String branch;
+
+	private String region;
+
+	private long branchId;
+
+	private long regionId;
+
+	private long jobId;
+
+	private boolean quotationIsSubmitted;
+
+	private boolean quotationIsArchived;
+
+	private boolean quotationIsRejected;
+
+	private boolean quotationIsDrafted;
+
+	private boolean quotationIsApproved;
+
+	private String linkType;
+
+	private boolean left;
+
+	private String processType;
+
+	private String severity;
+
+	private Date slaCreatedDate;
+
+	private String category;
+
+	public String getModule() {
+		return module;
+	}
+
+	public void setModule(String module) {
+		this.module = module;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getWarrantyTypeName() {
+		return warrantyTypeName;
+	}
+
+	public void setWarrantyTypeName(String warrantyTypeName) {
+		this.warrantyTypeName = warrantyTypeName;
+	}
+
+	public Date getAcquiredDate() {
+		return acquiredDate;
+	}
+
+	public void setAcquiredDate(Date acquiredDate) {
+		this.acquiredDate = acquiredDate;
+	}
+
+	public String getAssetGroupName() {
+		return assetGroupName;
+	}
+
+	public void setAssetGroupName(String assetGroupName) {
+		this.assetGroupName = assetGroupName;
+	}
+
+	public String getAssetCode() {
+		return assetCode;
+	}
+
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
+	}
 
 	public long getId() {
 		return id;
@@ -352,7 +539,7 @@ public class SearchCriteria extends Paginator {
 	public void setOverdueStatus(boolean overdueStatus) {
 		this.overdueStatus = overdueStatus;
 	}
-	
+
 	/*public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("userId="+ userId);
@@ -372,8 +559,9 @@ public class SearchCriteria extends Paginator {
     public String toString() {
         final StringBuilder sb = new StringBuilder("SearchCriteria{");
         sb.append("id=").append(id);
+        sb.append(", currPage='").append(getCurrPage()).append('\'');
         sb.append(", jobTitle='").append(jobTitle).append('\'');
-        sb.append(", AssetTitle='").append(AssetTitle).append('\'');
+        sb.append(", assetTitle='").append(assetTitle).append('\'');
         sb.append(", assetType=").append(assetType);
         sb.append(", assetStatus=").append(assetStatus);
         sb.append(", employeeId=").append(employeeId);
@@ -446,13 +634,13 @@ public class SearchCriteria extends Paginator {
         this.assetType = assetType;
     }
 
-    public String getAssetTitle() {
-        return AssetTitle;
-    }
+	public String getAssetTitle() {
+		return assetTitle;
+	}
 
-    public void setAssetTitle(String assetTitle) {
-        AssetTitle = assetTitle;
-    }
+	public void setAssetTitle(String assetTitle) {
+		this.assetTitle = assetTitle;
+	}
 
 	public long getUserRoleId() {
 		return userRoleId;
@@ -697,5 +885,496 @@ public class SearchCriteria extends Paginator {
 	public void setQuotationTitle(String quotationTitle) {
 		this.quotationTitle = quotationTitle;
 	}
-    
+
+	public String getQuotationCreatedBy() {
+		return quotationCreatedBy;
+	}
+
+	public void setQuotationCreatedBy(String quotationCreatedBy) {
+		this.quotationCreatedBy = quotationCreatedBy;
+	}
+
+	public String getQuotationApprovedBy() {
+		return quotationApprovedBy;
+	}
+
+	public void setQuotationApprovedBy(String quotationApprovedBy) {
+		this.quotationApprovedBy = quotationApprovedBy;
+	}
+
+	public String getQuotationStatus() {
+		return quotationStatus;
+	}
+
+	public void setQuotationStatus(String quotationStatus) {
+		this.quotationStatus = quotationStatus;
+	}
+
+	public Date getQuotationCreatedDate() {
+		return quotationCreatedDate;
+	}
+
+	public void setQuotationCreatedDate(Date quotationCreatedDate) {
+		this.quotationCreatedDate = quotationCreatedDate;
+	}
+
+	public Date getQuotationApprovedDate() {
+		return quotationApprovedDate;
+	}
+
+	public void setQuotationApprovedDate(Date quotationApprovedDate) {
+		this.quotationApprovedDate = quotationApprovedDate;
+	}
+
+	public Date getQuotationSubmittedDate() {
+		return quotationSubmittedDate;
+	}
+
+	public void setQuotationSubmittedDate(Date quotationSubmittedDate) {
+		this.quotationSubmittedDate = quotationSubmittedDate;
+	}
+
+	public long getManufacturerId() {
+		return manufacturerId;
+	}
+
+	public void setManufacturerId(long manufacturerId) {
+		this.manufacturerId = manufacturerId;
+	}
+
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
+	}
+
+	public String getAssetTypeName() {
+		return assetTypeName;
+	}
+
+	public void setAssetTypeName(String assetTypeName) {
+		this.assetTypeName = assetTypeName;
+	}
+
+	public String getAssetName() {
+		return assetName;
+	}
+
+	public void setAssetName(String assetName) {
+		this.assetName = assetName;
+	}
+
+	public String getVendorName() {
+		return vendorName;
+	}
+
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+
+	public long getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(long assetId) {
+		this.assetId = assetId;
+	}
+
+
+	public List<Long> getSiteIds() {
+		return siteIds;
+	}
+
+	public void setSiteIds(List<Long> siteIds) {
+		this.siteIds = siteIds;
+	}
+
+
+    public boolean isNotCheckedOut() {
+        return notCheckedOut;
+    }
+
+    public void setNotCheckedOut(boolean notCheckedOut) {
+        this.notCheckedOut = notCheckedOut;
+    }
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
+
+	public ZonedDateTime getReadingFromDate() {
+		return readingFromDate;
+	}
+
+	public void setReadingFromDate(ZonedDateTime readingFromDate) {
+		this.readingFromDate = readingFromDate;
+	}
+
+	public ZonedDateTime getReadingToDate() {
+		return readingToDate;
+	}
+
+	public void setReadingToDate(ZonedDateTime readingToDate) {
+		this.readingToDate = readingToDate;
+	}
+
+	public String getParamName() {
+		return paramName;
+	}
+
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
+	}
+
+	public Date getAssetCreatedDate() {
+		return assetCreatedDate;
+	}
+
+	public void setAssetCreatedDate(Date assetCreatedDate) {
+		this.assetCreatedDate = assetCreatedDate;
+	}
+
+	public String getMaterialName() {
+		return materialName;
+	}
+
+	public void setMaterialName(String materialName) {
+		this.materialName = materialName;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public Date getMaterialCreatedDate() {
+		return materialCreatedDate;
+	}
+
+	public void setMaterialCreatedDate(Date materialCreatedDate) {
+		this.materialCreatedDate = materialCreatedDate;
+	}
+
+	public Timestamp getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Timestamp transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public MaterialTransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(MaterialTransactionType transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public String getItemGroup() {
+		return itemGroup;
+	}
+
+	public void setItemGroup(String itemGroup) {
+		this.itemGroup = itemGroup;
+	}
+
+	public int getRoleLevel() {
+		return roleLevel;
+	}
+
+	public void setRoleLevel(int roleLevel) {
+		this.roleLevel = roleLevel;
+	}
+
+	public long getMaterialId() {
+		return materialId;
+	}
+
+	public void setMaterialId(long materialId) {
+		this.materialId = materialId;
+	}
+
+	public Timestamp getTransactionFromDate() {
+		return transactionFromDate;
+	}
+
+	public void setTransactionFromDate(Timestamp transactionFromDate) {
+		this.transactionFromDate = transactionFromDate;
+	}
+
+	public Timestamp getTransactionToDate() {
+		return transactionToDate;
+	}
+
+	public void setTransactionToDate(Timestamp transactionToDate) {
+		this.transactionToDate = transactionToDate;
+	}
+
+	public String getIndentRefNumber() {
+		return indentRefNumber;
+	}
+
+	public void setIndentRefNumber(String indentRefNumber) {
+		this.indentRefNumber = indentRefNumber;
+	}
+
+	public Timestamp getRequestedDate() {
+		return requestedDate;
+	}
+
+	public void setRequestedDate(Timestamp requestedDate) {
+		this.requestedDate = requestedDate;
+	}
+
+	public Timestamp getIssuedDate() {
+		return issuedDate;
+	}
+
+	public void setIssuedDate(Timestamp issuedDate) {
+		this.issuedDate = issuedDate;
+	}
+
+	public String getPurchaseRefNumber() {
+		return purchaseRefNumber;
+	}
+
+	public void setPurchaseRefNumber(String purchaseRefNumber) {
+		this.purchaseRefNumber = purchaseRefNumber;
+	}
+
+	public Timestamp getApprovedDate() {
+		return approvedDate;
+	}
+
+	public void setApprovedDate(Timestamp approvedDate) {
+		this.approvedDate = approvedDate;
+	}
+
+	public long getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(long jobId) {
+		this.jobId = jobId;
+	}
+
+	public PurchaseRequestStatus getRequestStatus() {
+		return requestStatus;
+	}
+
+	public void setRequestStatus(PurchaseRequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
+	}
+
+	public IndentStatus getIndentStatus() {
+		return indentStatus;
+	}
+
+	public void setIndentStatus(IndentStatus indentStatus) {
+		this.indentStatus = indentStatus;
+	}
+
+
+    public String getExpenseCategory() {
+        return expenseCategory;
+    }
+
+    public void setExpenseCategory(String expenseCategory) {
+        this.expenseCategory = expenseCategory;
+    }
+
+    public long getExpenseId() {
+        return expenseId;
+    }
+
+    public void setExpenseId(long expenseId) {
+        this.expenseId = expenseId;
+    }
+
+    public String getExpenseMode() {
+        return expenseMode;
+    }
+
+    public void setExpenseMode(String expenseMode) {
+        this.expenseMode = expenseMode;
+    }
+
+    public Timestamp getExpenseFromDate() {
+        return expenseFromDate;
+    }
+
+    public void setExpenseFromDate(Timestamp expenseFromDate) {
+        this.expenseFromDate = expenseFromDate;
+    }
+
+    public Timestamp getExpenseToDate() {
+        return expenseToDate;
+    }
+
+    public void setExpenseToDate(Timestamp expenseToDate) {
+        this.expenseToDate = expenseToDate;
+    }
+
+    public Timestamp getCreditedFromDate() {
+        return creditedFromDate;
+    }
+
+    public void setCreditedFromDate(Timestamp creditedFromDate) {
+        this.creditedFromDate = creditedFromDate;
+    }
+
+    public Timestamp getCreditedToDate() {
+        return creditedToDate;
+    }
+
+    public void setCreditedToDate(Timestamp creditedToDate) {
+        this.creditedToDate = creditedToDate;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public long getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(long branchId) {
+        this.branchId = branchId;
+    }
+
+    public long getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(long regionId) {
+        this.regionId = regionId;
+    }
+
+	public boolean isQuotationIsSubmitted() {
+		return quotationIsSubmitted;
+	}
+
+	public void setQuotationIsSubmitted(boolean quotationIsSubmitted) {
+		this.quotationIsSubmitted = quotationIsSubmitted;
+	}
+
+	public boolean isQuotationIsArchived() {
+		return quotationIsArchived;
+	}
+
+	public void setQuotationIsArchived(boolean quotationIsArchived) {
+		this.quotationIsArchived = quotationIsArchived;
+	}
+
+	public boolean isQuotationIsRejected() {
+		return quotationIsRejected;
+	}
+
+	public void setQuotationIsRejected(boolean quotationIsRejected) {
+		this.quotationIsRejected = quotationIsRejected;
+	}
+
+	public boolean isQuotationIsDrafted() {
+		return quotationIsDrafted;
+	}
+
+	public void setQuotationIsDrafted(boolean quotationIsDrafted) {
+		this.quotationIsDrafted = quotationIsDrafted;
+	}
+
+	public boolean isQuotationIsApproved() {
+		return quotationIsApproved;
+	}
+
+	public void setQuotationIsApproved(boolean quotationIsApproved) {
+		this.quotationIsApproved = quotationIsApproved;
+	}
+
+
+    public String getTicketTitle() {
+        return ticketTitle;
+    }
+
+    public void setTicketTitle(String ticketTitle) {
+        this.ticketTitle = ticketTitle;
+    }
+
+    public String getTicketDescription() {
+        return ticketDescription;
+    }
+
+    public void setTicketDescription(String ticketDescription) {
+        this.ticketDescription = ticketDescription;
+    }
+
+    public String getLinkType() {
+        return linkType;
+    }
+
+    public void setLinkType(String linkType) {
+        this.linkType = linkType;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public String getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(String processType) {
+        this.processType = processType;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public Date getSlaCreatedDate() {
+        return slaCreatedDate;
+    }
+
+    public void setSlaCreatedDate(Date slaCreatedDate) {
+        this.slaCreatedDate = slaCreatedDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

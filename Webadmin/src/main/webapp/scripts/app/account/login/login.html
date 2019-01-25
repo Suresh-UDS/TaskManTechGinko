@@ -1,109 +1,110 @@
 
 
-<div class="row" ng-init="loadPageTop()">
-    <div class="col-md-4 col-sm-6 col-md-offset-3 col-sm-offset-3" style="margin-top: 15%;">
-        <form method="#" action="#" role="form" ng-submit="login($event)">
-            <div class="card card-login card-hidden">
-                <div class="alert alert-danger" ng-show="authenticationError">
-                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
-                </div>
-                <div class="card-header text-center" data-background-color="orange">
-                    <h4 class="card-title">Login</h4>
-                    <!--<div class="social-line">-->
-                        <!--<a href="#btn" class="btn btn-just-icon btn-simple">-->
-                            <!--<i class="fa fa-facebook-square"></i>-->
-                        <!--</a>-->
-                        <!--<a href="#pablo" class="btn btn-just-icon btn-simple">-->
-                            <!--<i class="fa fa-twitter"></i>-->
-                        <!--</a>-->
-                        <!--<a href="#eugen" class="btn btn-just-icon btn-simple">-->
-                            <!--<i class="fa fa-google-plus"></i>-->
-                        <!--</a>-->
-                    <!--</div>-->
-                </div>
-                <!--<p class="category text-center">-->
-                    <!--Or Be Classical-->
-                <!--</p>-->
-                <div class="card-content">
-                    <div ng-show="resLoader" class="text-center" >
-                        <!-- <img src="/assets/img/spinner.gif">Login… -->
-                       <span>Login </span><span  loader-css="ball-pulse"></span>
+<div class="LoginPageCon" ng-init="loadPageTop()">
 
+    <div class="row mar0px">
+        <div class="col-lg-3 col-md-3 col-sm-12 loginPage"  >
+            <a href="#" class="simple-text logo-mini black LogoCon">
+                <img src="assets/img/logo/logo.png" class="LoginLogo" alt="UDS Logo">
+            </a>
+            <!--<a href="#" class="simple-text logo-normal black">-->
+            <!--<img src="assets/img/logo/logo.jpg" alt="UDS Logo">-->
+            <!--</a>-->
+
+        </div>
+        <div class="alert alert-danger col-lg-6 col-md-6 col-sm-8 col-xs-10 margn-top20 ErrorCon txt-align-center" ng-show="authenticationError">
+            <strong>Failed to sign in!</strong> Please check your credentials and try again.
+        </div>
+    </div>
+
+    <div class="row mar0px">
+
+        <span class="flotingIcons icon-1">
+             <img src="assets/img/icons/ICon4.png" alt="Small Icon">
+        </span>
+        <!--<span class="flotingIcons icon-2">-->
+             <!--<img src="assets/img/icons/Icon-1.png" alt="Small Icon">-->
+        <!--</span>-->
+        <span class="flotingIcons icon-3">
+             <img src="assets/img/icons/ICON-5.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-4">
+             <img src="assets/img/icons/13.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-5">
+             <img src="assets/img/icons/15.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-6">
+             <img src="assets/img/icons/ICON-2.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-7">
+             <img src="assets/img/icons/ICON-7.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-8">
+             <img src="assets/img/icons/ICON--9.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-9">
+             <img src="assets/img/icons/ICON-10.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-10">
+             <img src="assets/img/icons/Icon-1.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-11">
+             <img src="assets/img/icons/12.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-12">
+             <img src="assets/img/icons/icon-3.png" alt="Small Icon">
+        </span>
+        <span class="flotingIcons icon-13">
+             <img src="assets/img/icons/ICON-6.png" alt="Small Icon">
+        </span>
+
+        <div class="col-lg-4 col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-4 col-lg-offset-4" style="margin-top: 6%;">
+            <form name="form" role="form" ng-submit="login($event)">
+                <div class="card card-login card-hidden">
+                    <div class="card-header text-center" data-background-color="orange">
+                        <h4 class="card-title">Login</h4>
                     </div>
-                    <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="material-icons">face</i>
-                                            </span>
-                        <div class="form-group" >
-                            <label class="control-label">User Name</label>
-                            <input type="text" id="username"  ng-model="username" class="form-control" required>
+                    <div class="card-content">
+                        <div ng-show="resLoader" class="text-center" >
+                            <!-- <img src="/assets/img/spinner.gif">Login… -->
+                            <span>Please wait Logging in... </span><span  loader-css="ball-pulse"></span>
+
                         </div>
-                    </div>
+                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">person_outline</i>
+                                            </span>
+                            <div class="form-group" >
+                                <label class="control-label">User Name</label>
+                                <input type="text" id="username"  ng-model="username" class="form-control" required>
+                            </div>
+                        </div>
 
-                    <div class="input-group">
+                        <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">lock_outline</i>
                                             </span>
-                        <div class="form-group">
-                            <label class="control-label">Password</label>
-                            <input type="password" id="password"
-                                   ng-model="password" class="form-control" required>
+                            <div class="form-group">
+                                <label class="control-label">Password</label>
+                                <input type="password" id="password"
+                                       ng-model="password" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="form-group pad-btm0 rememberMe">
+                                <label for="rememberMe">
+                                    <input type="checkbox" id="rememberMe" ng-model="rememberMe" checked >
+                                    <span>Remember me</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="input-group">
-
-                        <div class="form-group rememberMe">
-                            <label for="rememberMe">
-                                <input type="checkbox" id="rememberMe" ng-model="rememberMe" checked >
-                                <span>Remember me</span>
-                            </label>
-                        </div>
-
+                    <div class="footer text-center">
+                        <button type="submit" class="btn btn-success btn-wd btn-lg">Sign in</button>
                     </div>
                 </div>
-                <div class="footer text-center">
-                    <button type="submit" class="btn btn-success btn-wd btn-lg">Sign in</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
-
-<!--<div>-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-4 col-md-offset-4">-->
-            <!--<h1>Sign in</h1>-->
-
-            <!--<div class="alert alert-danger" ng-show="authenticationError">-->
-                <!--<strong>Failed to sign in!</strong> Please check your credentials and try again.-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-md-4 col-md-offset-4">-->
-            <!--<form class="form" role="form" ng-submit="login($event)">-->
-                <!--<div class="form-group">-->
-                    <!--<label for="username">Login</label>-->
-                    <!--<input type="text" class="form-control" id="username"  ng-model="username" placeholder="Your Username">-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="password">Password</label>-->
-                    <!--<input type="password" class="form-control" id="password"-->
-                           <!--ng-model="password" placeholder="Your Password">-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="rememberMe">-->
-                        <!--<input type="checkbox" id="rememberMe" ng-model="rememberMe" checked>-->
-                        <!--<span>Remember me</span>-->
-                    <!--</label>-->
-                <!--</div>-->
-                <!--<button type="submit" class="btn btn-primary">Sign in</button>-->
-            <!--</form>-->
-            <!--&lt;!&ndash; <p></p>-->
-            <!--<div class="alert alert-warning">-->
-                <!--<a class="alert-link" href="#/reset/request">Did you forget your password?</a>-->
-            <!--</div>-->
-            <!--<div class="alert alert-warning">-->
-                <!--You don't have an account yet? <a class="alert-link" href="#/register">Register a new account</a>-->
-            <!--</div> &ndash;&gt;-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->

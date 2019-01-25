@@ -1,6 +1,7 @@
 package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ShiftDTO extends BaseDTO implements Serializable {
 
@@ -22,6 +23,10 @@ public class ShiftDTO extends BaseDTO implements Serializable {
 	private long projectId;
 	
 	private String projectName;
+	
+	private Date startDateTime;
+	
+	private Date endDateTime;
 	
 	public Long getId() {
 		return id;
@@ -77,6 +82,22 @@ public class ShiftDTO extends BaseDTO implements Serializable {
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	public Date getStartDateTime() {
+		return startDateTime;
+	}
+
+	public void setStartDateTime(Date startDateTime) {
+		this.startDateTime = startDateTime;
+	}
+
+	public Date getEndDateTime() {
+		return endDateTime;
+	}
+
+	public void setEndDateTime(Date endDateTime) {
+		this.endDateTime = endDateTime;
 	}
 
 }

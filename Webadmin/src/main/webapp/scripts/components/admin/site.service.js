@@ -25,6 +25,12 @@ angular.module('timeSheetApp')
 					  return response.data;
 				  });
 			},
+
+			findShifts: function(id,date){
+				  return $http.get('api/site/'+id + '/shifts/' + date).then(function (response) {
+					  return response.data;
+				  });
+			},
 			updateSite: function (site, callback) {
 				var cb = callback || angular.noop;
 
@@ -64,7 +70,7 @@ angular.module('timeSheetApp')
 			importSiteFile: function(file){
 				var fileFormData = new FormData();
 				fileFormData.append('siteFile', file);
-				return $http.post('api/site/import', fileFormData, {
+				return $http.post('api/import/site', fileFormData, {
 					transformRequest: angular.identity,
 					headers: {'Content-Type': undefined}
 
@@ -79,6 +85,74 @@ angular.module('timeSheetApp')
 					return $http.get('api/site/import/'+fileName+"/status").then(function (response) {
 						return response.data;
 					});
-			}
+			},
+
+            employeeSiteChange: function(file){
+                var fileFormData = new FormData();
+                fileFormData.append('siteFile', file);
+                return $http.post('api/change/site/employee', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+
+                }).then(function (response) {
+                    return response.data;
+                });
+
+            },
+
+            addRegion: function (region) {
+                return $http.post('api/region',region).then(function (response) {
+                    return response;
+                })
+            },
+
+            addBranch: function(branch){
+			    return $http.post('api/branch',branch).then(function (response) {
+                    return response;
+                })
+            },
+
+            getAllRegions : function () {
+                return $http.get('api/region').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getAllBranches : function () {
+                return $http.get('api/branch').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getRegionByProject:function(projectId){
+			    return $http.get('api/region/projectId/'+projectId).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getBranchByProject: function (projectId,regionId) {
+                return $http.get('api/branch/projectId/'+projectId+'/region/'+regionId).then(function (response) {
+                    return response.data;
+                })
+            },
+            
+            getBranchByProjectAndRegionName: function (projectId,region) {
+                return $http.get('api/branch/projectId/'+projectId+'/regionName/'+region).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getSitesByRegion: function (projectId, region) {
+                return $http.post('api/project/region/'+region+'/projectId/'+projectId).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getSitesByBranch: function (projectId, region,branch) {
+                return $http.get('api/project/branch/'+branch+'/region/'+region+'/projectId/'+projectId).then(function (response) {
+                    return response.data;
+                })
+
+            }
 		};
 	});

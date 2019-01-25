@@ -1,20 +1,10 @@
 package com.ts.app.domain;
 
-import java.io.Serializable;
-import java.sql.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.sql.Date;
 
 @Entity
 @Table(name = "ticket")
@@ -56,30 +46,42 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to_id", nullable = true)
     private Employee assignedTo;
-    
+
     private Date assignedOn;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "closed_by_id", nullable = true)
     private Employee closedBy;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "asset_id", nullable = true)
+    private Asset asset;
+
     private Date closedOn;
-    
+
     private String reportingTo;
 
     private String image;
 
     private String comments;
+    
+    private String remarks;
 
     private String status;
+    
+    private int escalationStatus;
 
     private String type;
 
     private String severity;
-    
+
     private String category;
-    
+
     private String quotationId;
+
+    private boolean pendingAtUDS;
+
+    private boolean pendingAtClient;
 
     public Long getId() {
         return id;
@@ -152,8 +154,16 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
+    
+    public String getRemarks() {
+		return remarks;
+	}
 
-    public String getReportingTo() {
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getReportingTo() {
         return reportingTo;
     }
 
@@ -177,7 +187,15 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
         this.status = status;
     }
 
-    public String getType() {
+	public int getEscalationStatus() {
+		return escalationStatus;
+	}
+
+	public void setEscalationStatus(int escalationStatus) {
+		this.escalationStatus = escalationStatus;
+	}
+
+	public String getType() {
         return type;
     }
 
@@ -249,7 +267,27 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.quotationId = quotationId;
 	}
 
-	
-    
-	
+	public Asset getAsset() {
+		return asset;
+	}
+
+	public void setAsset(Asset asset) {
+		this.asset = asset;
+	}
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
+
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
 }

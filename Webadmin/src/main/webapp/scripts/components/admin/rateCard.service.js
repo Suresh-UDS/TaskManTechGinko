@@ -70,7 +70,7 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-            
+
             createQuotation: function(quotation) {
                 return $http.post('api/rateCard/quotation', quotation).then(function (response) {
                     console.log("Saving Quotation");
@@ -78,7 +78,7 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
-            
+
             findQuotation: function(id) {
                 return $http.get('api/rateCard/quotation/id/' + id).then(function (response) {
                     console.log("Retrieving Quotation");
@@ -86,7 +86,15 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
-                       
+
+            findQuotationImages: function(quotationId,imageId){
+                return $http.get('api/quotation/image/'+quotationId+'/'+imageId).then(function (response) {
+                    console.log("Quotation images response");
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+
 
             getAllQuotations: function(criteria){
                 return $http.post('api/rateCard/quotation/search', criteria).then(function (response) {
@@ -108,7 +116,23 @@ angular.module('timeSheetApp')
                     console.log(response.data);
                     return response.data;
                 })
+            },
+             upload: function(quotationId,quotationImage) {
+                console.log(quotationImage);
+                 var fileFormData = new FormData();
+                 fileFormData.append('quotationFile', quotationImage);
+                 fileFormData.append('quotationId', quotationId);
+                 return $http.post('api/quotation/image/upload', fileFormData, {
+                     transformRequest: angular.identity,
+                     headers: {'Content-Type': undefined}
+
+                 }).then(function (response) {
+                     return response.data;
+                 });
+
             }
+
+
 
         };
     });

@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-site', {
 		parent : 'manage',
 		url : '/add-site',
-		controller : 'SiteController',
+		//controller : 'SiteController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add Site'
@@ -20,8 +20,8 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-site', {
 		parent : 'manage',
-		url : '/edit-site:id',
-		controller : 'SiteController',
+		url : '/edit-site/:id',
+		//controller : 'SiteController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit Site'
@@ -37,8 +37,8 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-site', {
 		parent : 'manage',
-		url : '/view-site:id',
-		controller : 'SiteController',
+		url : '/view-site/:id',
+		//controller : 'SiteController',
 		data : {
 			authorities : [],
 			pageTitle : 'View Site'

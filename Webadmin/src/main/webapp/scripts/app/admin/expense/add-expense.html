@@ -1,0 +1,381 @@
+<div class="crud-form"
+     data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div  ng-init="initLoad();loadingAuto();">
+
+
+        <div class="col-md-8">
+            <!--<h2 class="title">Add Site</h2>-->
+        </div>
+
+
+        <!--<div class="card-header" data-background-color="red">-->
+        <!--<h4 class="title">Add Site</h4>-->
+        <!--<p class="category"></p>-->
+        <!--</div>-->
+
+        <div class="cardsCon addSiteCon">
+            <form ng-show="!success" name="form" role="form" novalidate
+                  ng-submit="expenseData()">
+                <div class="card margin-TB-5 tablecard">
+
+                    <div class="card-content">
+                        <h3 class="HeadingTxt">Location</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Client <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" name="project" class="form-control" required>
+                                                <option value="">Select Client...</option>
+                                            </select>
+
+                                            <div ng-show="form.$submitted || form.project.$touched || form.project.$dirty">
+                                                <div ng-show="form.project.$dirty || form.project.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.project.$error.required"> Please Select Project to Continue...</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Site <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="getLatestEntry(selectedSite)" class="form-control" ng-click="checkProject()" required>
+                                                <option value="">Select Site...</option>
+                                            </select>
+
+
+                                            <div ng-show="form.$submitted || form.site.$touched || form.site.$dirty">
+                                                <div ng-show="form.site.$dirty || form.site.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.site.$error.required"> Please Select Site to Continue...</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="HeadingTxt">Expense Info</h3>
+                        <div class="row">
+
+                            <div class="col-md-3">
+
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">TransactionMode  <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-model="transactionMode" class="form-control" onselect="changeType()" required>
+                                                <option value="">Select Type...</option>
+                                                <option value="credit">Credit</option>
+                                                <option value="debit">Debit</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label class="control-label">Date <span class="red-star">*</span></label>
+                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                    <input type="text" class="form-control dateTimePicker" ng-model="selectedDate"  id="selectedDate" placeholder="{{selectedDate | date:'dd/MMM/yyyy'}}" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3" ng-if="transactionMode == 'debit'">
+
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Expense Category  <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options="category.name for category in expenseCategories" ng-change="selectCategory(selectedCategory)" ng-model="selectedCategory" class="form-control">
+                                                <option value="">Select Category...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group no-padding" >
+                                    <div class="dropdown">
+                                        <div class="form-group">
+                                            <label class="control-label">Select Payment type  <span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select class="form-control" ng-model="selectedPaymentType">
+                                                <option value="CASH">Cash </option>
+                                                <option value="CARD">Card</option>
+                                                <option value="NETBANKING">Net Banking</option>
+                                                <option value="CHEQUE">Cheque</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Currency </label>
+                                    <!--<select ng-options="currency.code for currency in currencies track by currency.code" ng-model="selectedCurrency" class="form-control">-->
+                                        <!--<option value="">Select Currency...</option>-->
+                                    <!--</select>-->
+
+                                    <input class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" ng-model="selectedCurrency" disabled>
+
+                                    <span class="material-input"></span></div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Amount <span class="red-star">*</span></label>
+                                    <input ng-model="selectedAmount" type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+
+                                    <span class="material-input"></span></div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group   is-empty">
+                                    <label class="control-label">Receipt No <span class="red-star">*</span></label>
+                                    <input type="number" ng-model="receiptNumber" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+
+                                    <span class="material-input"></span></div>
+                            </div>
+
+                            <div class="col-md-1">
+                                <div class="checkbox">
+                                    <label style="padding-top: 23px;">
+                                        <input type="checkbox" ng-model="billable" name="billable"> Billable
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <div class="checkbox">
+                                    <label style="padding-top: 23px;">
+                                        <input type="checkbox" ng-model="reimbursable" name="reimbursable"> Reimbursable
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group is-empty">
+                                    <label class="control-label">Description  </label>
+                                    <textarea class="form-control" ng-model="description" placeholder="Description here...." rows="7"></textarea>
+                                    <span class="material-input"></span></div>
+                            </div>
+
+
+                        </div>
+
+                        <h3 class="HeadingTxt">Upload documents </h3>
+                        <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="row">
+
+                                        <div class="col-md-11">
+                                            <div class="form-group">
+                                                <label class="control-label">File Title</label>
+                                                <input id='fileTitle'
+                                                       ng-model="uploadExpenseFile.title"
+                                                       class='form-control'
+                                                       name='fileTitle'
+                                                       type='text'
+
+                                                />
+                                                <div ng-show="form.$submitted || form.fileTitle.$touched">
+                                                    <div
+                                                        ng-show="form.fileTitle.$dirty || form.fileTitle.$invalid">
+                                                        <p class="help-block" style="color:maroon"
+                                                           ng-show="form.fileTitle.$error.required">
+                                                            File title is required.
+                                                        </p>
+                                                        <!-- <p class="help-block" style="color:maroon"
+                                                           ng-show="importClientForm.fileTitle.$error.maxlength">
+                                                            File title cannot be longer than 250 characters.
+                                                        </p> -->
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group label-floating is-empty is-fileinput row">
+                                                <div class="col-md-6 pdng-top13">
+                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedFile" name="expenseFile" tabindex="0" aria-invalid="false"  onchange="angular.element(this).scope().uploadfileValidation(this.files)">
+                                                    <div ng-show="form.$submitted || form.clientFile.$touched">
+                                                        <div
+                                                            ng-show="form.expenseFile.$dirty || form.expenseFile.$invalid">
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="form.expenseFile.$error.required">
+                                                                File  is required.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:999;background:#fff;color:maroon"
+                                                               ng-show="fileNotValid">
+                                                                doc,docx,xls,xlsx,csv,txt,pdf files only accepted.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="fileSizeHigh">
+                                                                File size 15MB below only accepted.
+                                                            </p>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-md-6">-->
+                                                    <!--<button class="btn btn-success" tabindex="0" ng-click="uploadExpenseFile()" ng-disabled="importClientForm.$invalid || fileNotValid || fileSizeHigh">-->
+                                                                                    <!--<span class="btn-label">-->
+                                                                                        <!--<i class="material-icons">file_upload</i>-->
+                                                                                    <!--</span>Upload Docs-->
+                                                    <!--</button>-->
+
+                                                <!--</div>-->
+                                                <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                                     <span class="card-title">Status - {{clientImportMsg()}}</span>
+                                                 </div> -->
+                                                <span class="material-input"></span></div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="row" >
+
+                                        <div class="col-md-11">
+                                            <div class="form-group">
+                                                <label class="control-label">Photo Title</label>
+                                                <input id='fileTitle'
+                                                       ng-model="uploadExpensePhoto.title"
+                                                       class='form-control'
+                                                       name='photoTitle'
+                                                       type='text'
+
+                                                />
+                                                <div ng-show="form.$submitted || form.photoTitle.$touched">
+                                                    <div
+                                                        ng-show="form.photoTitle.$dirty || form.photoTitle.$invalid">
+                                                        <p class="help-block" style="color:maroon"
+                                                           ng-show="form.photoTitle.$error.required">
+                                                            Photo title is required.
+                                                        </p>
+                                                        <!-- <p class="help-block" style="color:maroon"
+                                                           ng-show="importClientForm1.photoTitle.$error.maxlength">
+                                                            Photo title cannot be longer than 250 characters.
+                                                        </p> -->
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group label-floating is-empty is-fileinput row">
+                                                <div class="col-md-6 pdng-top13">
+                                                    <input type="file" class="form-control ng-pristine ng-valid ng-touched" style="opacity:100;position:relative" file-model="" ng-model="selectedPhotoFile" name="clientFile1" tabindex="0" aria-invalid="false" onchange="angular.element(this).scope().uploadImage(this.files)" >
+                                                    <div ng-show="form.$submitted || form.clientFile1.$touched">
+                                                        <div
+                                                            ng-show="form.clientFile1.$dirty || form.clientFile1.$invalid">
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="form.clientFile1.$error.required">
+                                                                Photo  is required.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:999;background:#fff;color:maroon"
+                                                               ng-show="imgNotValid">
+                                                                jpg,jpeg,png files only accepted.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="imgSizeHigh">
+                                                                File size 15MB below only accepted.
+                                                            </p>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <!--<div class="col-md-6">-->
+                                                    <!--<button class="btn btn-success" tabindex="0" ng-click="uploadExpensePhotoFile()"  ng-disabled="importClientForm1.$invalid || imgNotValid || imgSizeHigh">-->
+                                                                                    <!--<span class="btn-label">-->
+                                                                                        <!--<i class="material-icons">file_upload</i>-->
+                                                                                    <!--</span>Upload Photos-->
+                                                    <!--</button>-->
+
+                                                <!--</div>-->
+                                                <!--  <div class="col-md-12" ng-hide="!clientImportMsg()">
+                                                     <span class="card-title">Status - {{clientImportMsg()}}</span>
+                                                 </div> -->
+                                                <span class="material-input"></span></div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <button type="submit" ng-click="cancelExpense()"
+                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+
+                        <button type="submit"
+                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                            <i class="material-icons">check</i>
+                                        </span>Add Expense</button>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+
+    </div>
+
+
+
+</div>

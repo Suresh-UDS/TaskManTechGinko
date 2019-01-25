@@ -23,6 +23,8 @@ public abstract class BaseDTO {
 	private long userId;
 	
 	private String active;
+	
+	private boolean errorStatus;
 
 	public String getCreatedBy() {
 		return createdBy;
@@ -103,6 +105,14 @@ public abstract class BaseDTO {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public boolean isErrorStatus() {
+		return errorStatus;
+	}
+
+	public void setErrorStatus(boolean errorStatus) {
+		this.errorStatus = errorStatus;
 	}
 
 	

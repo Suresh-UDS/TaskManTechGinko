@@ -17,14 +17,19 @@ spring:
         restart:
             enabled: true
         livereload:
-            enabled: false # we use Grunt + BrowserSync for livereload
+            enabled: true # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: admin
+        password: root
+        #username: UDSTaskMan
+        #password: Rd32018Uds
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -37,13 +42,14 @@ spring:
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
-        host: smtp.gmail.com
+        host: smtp.office365.com
         port: 587
-        username: timesheettestuser1@gmail.com
-        password: Test123#
+        username: taskmanfms@uds.in
+        password: Ta$k@1234
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
+            mail.smtp.ssl.enable: true
             mail.smtp.starttls.enable: true
             mail.smtp.port: 587
             mail.debug: true
@@ -59,24 +65,61 @@ liquibase:
 
 server:
     port: 8088
+    compression: on
+    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
 
 upload:
     file:
          path: /opt/uploads
 export:
     file:
-         path: /opt/exports
+         path: /opt/uploads
 qrcode:
     file:
          path: /opt/qrcode
+locationQRCode:
+    file:
+        path: /opt/location/qrcode
 attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
     file:
         path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+    musterroll:
+        report:
+            template:
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift: 
+        startTime: 09:00
+        endTime: 17:00                    
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket
+extensionImg: jpeg,jpg,png
+extensionFile: pdf,xlsx,xls,docs,doc,csv,txt
+
 import:
     file:
         path:
             new: /opt/imports/new
             completed: /opt/imports/completed
+asset:
+   file:
+       path: D:\asset\uploads\site
+   weekly:
+       template:
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
+multipart:
+   maxFileSize: 15MB
+   maxRequestSize: 15MB
+
 max:
     user: 10
     userGroup: 2
@@ -108,47 +151,123 @@ reports:
         url: http://localhost:8088/#/job-reports
     attendance-report:
         url: http://localhost:8088/#/attendance-reports
+    asset-report:
+        url: http://localhost:8088/#/asset-report
+    vendor-report:
+        url: http://localhost:8088/#/vendor-report
+
+url:
+    ticket-view: http://localhost:8088/#/view-ticket/
+    quotation-view: http://localhost:8088/#/view-quotation/
+    job-view: http://localhost:8088/#/view-job/
+
+#facedetection:
+#    api:
+#        url: https://api.kairos.com/detect
+#        enrollUrl: https://api.kairos.com/enroll
+#        verifyUrl: https://api.kairos.com/verify
+#        apiKey: a6ae8363069107177e06c3ca3f76a66b
+#        apiId: 2f2877f2
 
 facedetection:
     api:
-        url: https://api.kairos.com/detect
-        enrollUrl: https://api.kairos.com/enroll
-        verifyUrl: https://api.kairos.com/verify
-        apiKey: a6ae8363069107177e06c3ca3f76a66b
-        apiId: 2f2877f2
+        url: https://centralindia.api.cognitive.microsoft.com/face/v1.0/
+        apiKey: 61fc8cb300e0431286708ae4c74f2860
+        groupId: employee-test
+        personId: f77b54d1-2458-4887-badf-54bc06351ce3
 
 locationService:
-#   url: http://locahost:8000/api/site/location
-#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
    url: http://localhost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+#   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
 
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://localhost:8001/api
+#   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/api
+    url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8001/api
 
 pushService:
    url: http://localhost:9000/
 
+AWS:
+   s3-url: https://s3.ap-south-1.amazonaws.com
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
+   s3-secretKey: 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
+   s3-bucketName: fms-taskman
+   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
+   s3-bucketEnv: dev/
+   s3-asset-path: assets/
+   s3-qrcode-path: qrcode/
+   s3-attendance-path: attendance/
+   s3-ticket-path : tickets/
+   s3-quotation-path : quotations/
+   s3-enroll-path : employeeEnroll/
+   s3-checkin-path : attendanceCheckIns/
+   s3-checkout-path : attendanceCheckOuts/
+   s3-checkinout-path : checkInOutImages/
+   s3-checklist-path : checkListImages/
+   s3-locationqr-path : locationQrCodes/
+
 scheduler:
+   job:
+      creationPolicy: monthly
    dailyJob:
-      enabled: true
+      enabled: false
       creation: monthly
    weeklyJob:
-      enabled: true
+      enabled: false
    monthlyJob:
-      enabled: true
+      enabled: false
+   quarterlyJob:
+      enabled: false
+   yearlyJob:
+      enabled: false
+      creation: daily
+   fortnightlyJob:
+      enabled: false
+      creation: daily
+   halfyearlyJob:
+      enabled: false
+      creation: yearly
    overdueJob:
       enabled: false
    eodJobReport:
-      enabled: true
+      enabled: false
    attendanceDetailReport:
-      enabled: true
+      enabled: false
    attendanceConsolidatedReport:
-      enabled: true
+      enabled: false
+   feedbackreport:
+      enabled: false 
+   attendanceMusterRollReport:
+      enabled: false   
+   dayWiseJobReport:
+      enabled: false 
+   dayWiseTicketReport:
+      enabled: false
+   dayWiseQuotationReport:
+      enabled: false 
+   dayWiseAttendanceReport:
+      enabled: false 
 
 default.user.password: uds12345
 
+google:
+   drive:
+      api:
+          callback:
+              host: localhost
+              port: 8080
+              
+influxdb:
+   url: http://127.0.0.1:8086
+   username: root
+   password: root
+   dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
+              
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
@@ -159,7 +278,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 256M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskman.uds.com
+        from: taskmanfms@uds.in
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
@@ -171,3 +290,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: TimeSheet
+    datasource:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048

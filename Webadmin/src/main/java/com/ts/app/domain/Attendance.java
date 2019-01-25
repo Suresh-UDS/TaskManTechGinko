@@ -1,16 +1,8 @@
 package com.ts.app.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "attendance")
@@ -36,9 +28,11 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	private String checkOutImage;
 
 	private double longitudeIn;
+
 	private double longitudeOut;
 
 	private double latitudeIn;
+
 	private double latitudeOut;
 
 	private String attendanceIn;
@@ -47,17 +41,31 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	private String action;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	private boolean offline;
+
+	private boolean late;
+
+	private String remarks;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "siteId", nullable = false)
 	private Site site;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "employeeId", nullable = false)
 	private Employee employee;
-	
+
 	private String shiftStartTime;
-	
+
 	private String shiftEndTime;
+
+	private boolean notCheckedOut;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "continuedAttendanceId", referencedColumnName = "id", nullable = true)
+	private Attendance continuedAttendance;
+
+	private boolean lateAttendance;
 
 	public Long getId() {
 		return id;
@@ -182,6 +190,45 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 	public void setShiftEndTime(String shiftEndTime) {
 		this.shiftEndTime = shiftEndTime;
 	}
-    
-    
+
+	public boolean isNotCheckedOut() {
+		return notCheckedOut;
+	}
+
+	public void setNotCheckedOut(boolean notCheckedOut) {
+		this.notCheckedOut = notCheckedOut;
+	}
+
+
+    public boolean isOffline() {
+        return offline;
+    }
+
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
+
+	public Attendance getContinuedAttendance() {
+		return continuedAttendance;
+	}
+
+	public void setContinuedAttendance(Attendance continuedAttendance) {
+		this.continuedAttendance = continuedAttendance;
+	}
+
+    public boolean isLate() {
+        return late;
+    }
+
+    public void setLate(boolean late) {
+        this.late = late;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 }

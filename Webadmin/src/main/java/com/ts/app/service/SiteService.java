@@ -1,10 +1,11 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -16,23 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.Shift;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.ShiftDTO;
-import com.ts.app.web.rest.dto.SiteDTO;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing Site information.
@@ -51,6 +37,12 @@ public class SiteService extends AbstractService {
 
 	@Inject
 	private ProjectRepository projectRespository;
+
+	@Inject
+    private RegionRepository regionRepository;
+
+	@Inject
+    private BranchRepository branchRepository;
 
 //	@Inject
 //	private JobManagementService jobService;
@@ -77,6 +69,24 @@ public class SiteService extends AbstractService {
         		shifts.add(shift);
         }
         site.setShifts(shifts);
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDto.getRegion())){   //Branch not Available
+
+            Region region = isRegionSaved(siteDto.getRegion(),siteDto.getProjectId());
+
+            if(region!=null && region.getId()>0){
+                siteDto.setRegion(region.getName());
+
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDto.getBranch())){
+                    Branch branch = isBranchSaved(siteDto.getBranch(),siteDto.getProjectId(),region.getId());
+
+                    if(branch!=null && branch.getId()>0){
+                        siteDto.setBranch(branch.getName());
+                    }
+                }
+            }
+
+        }
+
 		site = siteRepository.save(site);
 		log.debug("Created Information for Site: {}", site);
 		//update the site location by calling site location service
@@ -89,6 +99,7 @@ public class SiteService extends AbstractService {
 		log.debug("Inside Update");
 		Site siteUpdate = siteRepository.findOne(site.getId());
 		mapToEntity(site,siteUpdate);
+		log.debug("REgion and branch in update site - "+siteUpdate.getBranch()+" - "+siteUpdate.getRegion());
 		siteUpdate.setProject(projectRespository.findOne(site.getProjectId()));
 		siteRepository.saveAndFlush(siteUpdate);
         //update the site location by calling site location service
@@ -98,13 +109,30 @@ public class SiteService extends AbstractService {
 	private void mapToEntity(SiteDTO siteDTO, Site site) {
 		site.setName(siteDTO.getName());
 		site.setAddress(siteDTO.getAddress());
+		site.setCity(siteDTO.getCity());
 		site.setCountry(siteDTO.getCountry());
+		site.setPinCode(siteDTO.getPinCode());
 		site.setState(siteDTO.getState());
 		site.setAddressLat(siteDTO.getAddressLat());
 		site.setAddressLng(siteDTO.getAddressLng());
 		site.setStartDate(siteDTO.getStartDate());
 		site.setEndDate(siteDTO.getEndDate());
 		site.setRadius(siteDTO.getRadius());
+		log.debug("Site region and branch - "+siteDTO.getRegion() + " - "+siteDTO.getBranch());
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDTO.getRegion())){   //Branch not Available
+            log.debug("site and region found");
+
+            Region region = isRegionSaved(siteDTO.getRegion(),siteDTO.getProjectId());
+            if(region!=null && region.getId()>0){
+                site.setRegion(region.getName());
+                if(org.apache.commons.lang3.StringUtils.isNotEmpty(siteDTO.getBranch())){
+                    Branch branch = isBranchSaved(siteDTO.getBranch(),siteDTO.getProjectId(),region.getId());
+                    if(branch!=null && branch.getId()>0){
+                        site.setBranch(branch.getName());
+                    }
+                }
+            }
+        }
 		List<Shift> shiftEntities = site.getShifts();
 		if(CollectionUtils.isNotEmpty(shiftEntities)) {
 			shiftEntities.clear();
@@ -124,7 +152,7 @@ public class SiteService extends AbstractService {
 	private SiteDTO mapToModel(Site site, boolean includeShifts) {
 		SiteDTO siteDTO = new SiteDTO();
 		siteDTO.setId(site.getId());
-		siteDTO.setName(site.getName());
+		siteDTO.setName(org.apache.commons.lang3.StringUtils.upperCase(site.getName()));
 		siteDTO.setAddress(site.getAddress());
 		siteDTO.setCountry(site.getCountry());
 		siteDTO.setState(site.getState());
@@ -190,11 +218,14 @@ public class SiteService extends AbstractService {
 		List<Site> entities = new ArrayList<Site>();
 		if(empId > 0 && !user.isAdmin()) {
 			Employee employee = user.getEmployee();
-			List<Long> subEmpIds = new ArrayList<Long>();
+			Set<Long> subEmpIds = new TreeSet<Long>();
 			subEmpIds.add(empId);
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
-				subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+				int levelCnt = 1;
+				subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+				List<Long> subEmpList = new ArrayList<Long>();
+				subEmpList.addAll(subEmpIds);
 				log.debug("List of subordinate ids -"+ subEmpIds);
 			}
 			entities = siteRepository.findAll(subEmpIds);
@@ -222,14 +253,17 @@ public class SiteService extends AbstractService {
 		List<Site> entities =  new ArrayList<Site>();
 		if(empId > 0 && !user.isAdmin()) {
 			Employee employee = user.getEmployee();
-			List<Long> subEmpIds = new ArrayList<Long>();
+			Set<Long> subEmpIds = new TreeSet<Long>();
 			subEmpIds.add(empId);
+			List<Long> subEmpList = new ArrayList<Long>();
 			if(employee != null) {
 				Hibernate.initialize(employee.getSubOrdinates());
-				subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
-				log.debug("List of subordinate ids -"+ subEmpIds);
+				int levelCnt = 1;
+				subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+				subEmpList.addAll(subEmpIds);
+				log.debug("List of subordinate ids -"+ subEmpList);
 			}
-			entities = siteRepository.findSites(projectId, subEmpIds);
+			entities = siteRepository.findSites(projectId, subEmpList);
 		}else {
 			entities = siteRepository.findSites(projectId);
 		}
@@ -251,6 +285,36 @@ public class SiteService extends AbstractService {
 			Hibernate.initialize(entity.getShifts());
 		}
 		return mapperUtil.toModel(entity, SiteDTO.class);
+	}
+
+	public List<ShiftDTO> findShifts(long id, Date date) {
+		List<ShiftDTO> shiftDtos = new ArrayList<ShiftDTO>();
+		Site entity = siteRepository.findOne(id);
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		cal.setTime(date);
+		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+		endCal.setTime(date);
+		if(entity != null) {
+			Hibernate.initialize(entity.getShifts());
+			List<Shift> shifts = entity.getShifts();
+			if(CollectionUtils.isNotEmpty(shifts)) {
+				for(Shift shift : shifts) {
+					ShiftDTO shiftDto = mapperUtil.toModel(shift, ShiftDTO.class);
+					String[] startTime = shiftDto.getStartTime().split(":");
+					cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime[0]));
+					cal.set(Calendar.MINUTE, Integer.parseInt(startTime[1]));
+					cal.set(Calendar.SECOND, 0);
+					shiftDto.setStartDateTime(cal.getTime());
+					String[] endTime = shiftDto.getEndTime().split(":");
+					endCal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endTime[0]));
+					endCal.set(Calendar.MINUTE, Integer.parseInt(endTime[1]));
+					endCal.set(Calendar.SECOND, 0);
+					shiftDto.setEndDateTime(endCal.getTime());
+					shiftDtos.add(shiftDto);
+				}
+			}
+		}
+		return shiftDtos;
 	}
 
 	public List<SiteDTO> searchSiteList(SearchCriteria searchCriteria){
@@ -284,7 +348,11 @@ public class SiteService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                if (searchCriteria.isReport()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
             }
             Page<Site> page = null;
 			List<SiteDTO> transactions = null;
@@ -347,15 +415,17 @@ public class SiteService extends AbstractService {
 	}
 
 	private List<Long> findSubOrdinates(Employee employee, long empId) {
-		List<Long> subEmpIds = new ArrayList<Long>();
+		Set<Long> subEmpIds = new TreeSet<Long>();
 		subEmpIds.add(empId);
+		List<Long> subEmpList = new ArrayList<Long>();
 		if(employee != null) {
 			Hibernate.initialize(employee.getSubOrdinates());
-			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds));
+			int levelCnt = 1;
+			subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+			subEmpList.addAll(subEmpIds);
 			log.debug("List of subordinate ids -"+ subEmpIds);
-
 		}
-		return subEmpIds;
+		return subEmpList;
 	}
 
 //    public List<Long> findAllSubordinates(Employee employee, List<Long> subEmpIds) {
@@ -381,12 +451,13 @@ public class SiteService extends AbstractService {
     }
 
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		//ImportResult er = new ImportResult();
+		ImportResult er = null;
 		//fileId += ".csv";
 		if(!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}
@@ -400,5 +471,175 @@ public class SiteService extends AbstractService {
         }
     }
 
+
+    public RegionDTO createRegion(RegionDTO regionDTO) {
+	    log.debug("name - "+regionDTO.getName());
+	    log.debug("project Id - "+regionDTO.getProjectId());
+        Region region= mapperUtil.toEntity(regionDTO, Region.class);
+        regionRepository.save(region);
+        return regionDTO;
+    }
+
+    public BranchDTO createBranch(BranchDTO branchDTO) {
+        Branch branch= mapperUtil.toEntity(branchDTO, Branch.class);
+        branchRepository.save(branch);
+        return branchDTO;
+    }
+
+    public List<RegionDTO> findAllRegions() {
+//        User user = userRepository.findOne(userId);
+        List<Region> regions = regionRepository.findAll();
+
+        return mapperUtil.toModelList(regions, RegionDTO.class);
+    }
+
+    public List<BranchDTO> findAllBranches() {
+//        User user = userRepository.findOne(userId);
+        List<Branch> branches = branchRepository.findAll();
+        return mapperUtil.toModelList(branches, BranchDTO.class);
+    }
+
+    public List<RegionDTO> findRegionByProject(long projectId){
+
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
+        //long userGroupId = user.getUserGroup().getId();
+        List<Region> entities =  new ArrayList<Region>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            entities = regionRepository.findSiteRegions(projectId, subEmpList);
+        }else {
+            entities = regionRepository.findRegionNameByProject(projectId);
+        }
+//        List<RegionDTO> values = new ArrayList<RegionDTO>();
+//        if(CollectionUtils.isNotEmpty(entities)) {
+//            for(String region : entities) {
+//                 RegionDTO regionDTO = regionRepository.findByName(region)
+//                values.add(siteDto);
+//            }
+//        }
+
+	    return mapperUtil.toModelList(entities, RegionDTO.class);
+    }
+
+    public List<BranchDTO> findBranchByProject(long projectId, long regionId){
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
+
+        List<Branch> branches =  new ArrayList<Branch>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            branches = branchRepository.findSiteBranches(projectId, subEmpList, regionId);
+        }else {
+            branches = branchRepository.findBranchByProjectAndRegion(projectId, regionId);
+        }
+        return mapperUtil.toModelList(branches, BranchDTO.class);
+    }
+
+    public List<BranchDTO> findBranchByProjectAndRegionName(long projectId, String region){
+        List<Branch> branches = branchRepository.findBranchByProjectAndRegionName(projectId,region);
+
+        return mapperUtil.toModelList(branches, BranchDTO.class);
+    }
+
+
+    public List<SiteDTO> findSitesByRegion(long projectId, String region){
+        List<Site> sites = siteRepository.findSitesByRegion(projectId,region);
+
+        return mapperUtil.toModelList(sites,SiteDTO.class);
+    }
+
+    public List<SiteDTO> findSitesByRegionAndBranch(long projectId, String region, String branch){
+        List<Site> sites = siteRepository.findSitesByRegionAndBranch(projectId,region, branch);
+
+        return mapperUtil.toModelList(sites,SiteDTO.class);
+    }
+
+    public Region isRegionSaved(String region, Long projectId){
+        log.debug("REgion from site import - before "+region);
+
+        Region region1 = regionRepository.findByName(region,projectId);
+
+        if(region1!=null && region1.getId()>0){
+            return region1;
+
+        }else{
+            RegionDTO regionDTO = new RegionDTO();
+            regionDTO.setName(region);
+            regionDTO.setProjectId(projectId);
+            RegionDTO regionDTO1 = createRegion(regionDTO);
+
+            log.debug("REgion from site import - "+regionDTO1.getName());
+
+            return mapperUtil.toEntity(regionDTO1,Region.class);
+        }
+
+    }
+
+    public Branch isBranchSaved(String branch, Long projectId, Long regionId){
+        Branch branch1 = branchRepository.findByName(branch,projectId,regionId);
+
+        if(branch1!=null && branch1.getId()>0){
+            return branch1;
+
+        }else{
+            BranchDTO branchDTO = new BranchDTO();
+            branchDTO.setName(branch);
+            branchDTO.setProjectId(projectId);
+            branchDTO.setRegionId(regionId);
+            BranchDTO branchDTO1 = createBranch(branchDTO);
+
+            return mapperUtil.toEntity(branchDTO1,Branch.class);
+        }
+
+    }
+
+    public boolean isDuplicate(RegionDTO regionDTO) {
+
+    	List<Long> results = regionRepository.findByRegion(regionDTO.getName(), regionDTO.getProjectId());
+
+        if(!results.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isDuplicate(BranchDTO branchDTO) {
+
+    	List<Branch> results = branchRepository.findBranchByProjectAndRegionId(branchDTO.getProjectId(), branchDTO.getRegionId(), branchDTO.getName());
+
+        if(!results.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
 }

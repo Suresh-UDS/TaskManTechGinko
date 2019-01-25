@@ -18,6 +18,10 @@ import {ArchivedQuotationPage} from "../quotation/archivedQuotations";
 import {DraftedQuotationPage} from "../quotation/draftedQuotations";
 import {SubmittedQuotationPage} from "../quotation/submittedQuotations";
 import {QuotationService} from "../service/quotationService";
+import {ViewJobPage} from "../jobs/view-job";
+import {CompleteJobPage} from "../jobs/completeJob";
+
+declare  var demo;
 
 /**
  * Generated class for the EmployeeList page.
@@ -31,6 +35,7 @@ import {QuotationService} from "../service/quotationService";
   templateUrl: 'employee-detail.html',
 })
 export class EmployeeDetailPage {
+  isLoading:boolean;
 
   empDetail:any;
   categories:any;
@@ -53,6 +58,10 @@ export class EmployeeDetailPage {
   archivedQuotationPage:ArchivedQuotationPage;
   draftedQuotationsPage:DraftedQuotationPage;
   submittedQuotationsPage:SubmittedQuotationPage;
+
+
+  page:1;
+  pageSort:15;
   constructor(public navCtrl: NavController,public myService:authService, public component:componentService,public navParams: NavParams, private  authService: authService, public camera: Camera,
               private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
               private geoFence:Geofence, private jobService: JobService, private attendanceService: AttendanceService, private quotationService: QuotationService) {
@@ -63,7 +72,6 @@ export class EmployeeDetailPage {
     this.approvedQuotationsCount=0;
     this.submittedQuotationsCount=0;
     this.archivedQuotationsCount=0;
-    this.getQuotations();
     this.draftedQuotations=[];
     this.approvedQuotations=[];
     this.submittedQuotations=[];
@@ -117,12 +125,16 @@ export class EmployeeDetailPage {
   loadJobs()
   {
     this.component.showLoader('Getting All Jobs');
-    var search={empId:this.empDetail.id};
+    this.isLoading=true;
+    var search={employeeId:this.empDetail.id};
     this.jobService.getJobs(search).subscribe(response=>{
-      console.log("Job Refresher");
+        this.component.closeLoader();
+        this.isLoading=false;
+        console.log("Job Refresher");
       console.log(response);
-      this.jobs = response;
-      this.component.closeLoader();
+      this.jobs = response.transactions;
+        console.log(this.jobs);
+        console.log(this.jobs.length);
     })
   }
 
@@ -151,10 +163,15 @@ export class EmployeeDetailPage {
   {
     this.component.showLoader('Getting Attendance');
     this.attendanceService.getSiteAttendances(this.empDetail.id).subscribe(response=>{
-      console.log("Loader Attendance");
-      console.log(response);
-      this.attendances = response.json();
-      this.component.closeLoader();
+        if(response.errorStatus){
+            this.component.closeAll();
+            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+        }else{
+            console.log("Loader Attendance");
+            console.log(response);
+            this.attendances = response;
+            this.component.closeLoader();
+        }
     })
   }
 
@@ -162,10 +179,15 @@ export class EmployeeDetailPage {
     this.component.showLoader('Getting All Jobs');
     var search={empId:this.empDetail.id};
     this.jobService.getJobs(search).subscribe(response=>{
-      console.log("All jobs of current user");
-      console.log(response);
-      this.jobs = response;
-      this.component.closeLoader();
+        if(response.errorStatus){
+            this.component.closeAll();
+            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+        }else{
+            console.log("All jobs of current user");
+            console.log(response);
+            this.jobs = response;
+            this.component.closeLoader();
+        }
     })
   }
 
@@ -189,39 +211,48 @@ export class EmployeeDetailPage {
   }
 
   getQuotations(){
-    this.quotationService.getQuotations().subscribe(
+      var searchCriteria={
+        currPage:this.page,
+          pageSort:this.pageSort
+      };
+    this.quotationService.getQuotations(searchCriteria).subscribe(
         response=>{
-          console.log(response);
-
-          this.quotations=[];
-          this.quotations = response;
-          console.log(this.quotations)
-          for(var i=0; i<this.quotations.length;i++){
-            if(this.quotations[i].isDrafted == true){
-              console.log("drafted");
-              console.log(this.quotations[i].isDrafted)
-              this.draftedQuotationsCount++;
-              this.draftedQuotations.push(this.quotations[i]);
-            }else if(this.quotations[i].isArchived == true){
-              console.log("archived");
-              console.log(this.quotations[i].isArchived)
-              this.archivedQuotations.push(this.quotations[i]);
-              this.archivedQuotationsCount++;
-            }else if(this.quotations[i].isApproved == true){
-              console.log("approved");
-              console.log(this.quotations[i].isApproved)
-              this.approvedQuotations.push(this.quotations[i]);
-              this.approvedQuotationsCount++;
-            }else if(this.quotations[i].isSubmitted == true){
-              console.log("submitted");
-              console.log(this.quotations[i].isSubmitted)
-              this.submittedQuotations.push(this.quotations[i]);
-              this.submittedQuotationsCount++;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
             }else{
-              console.log("all false");
-              console.log(this.quotations[i].isDrafted)
+                console.log(response);
+
+                this.quotations=[];
+                this.quotations = response;
+                console.log(this.quotations)
+                for(var i=0; i<this.quotations.length;i++){
+                    if(this.quotations[i].isDrafted == true){
+                        console.log("drafted");
+                        console.log(this.quotations[i].isDrafted)
+                        this.draftedQuotationsCount++;
+                        this.draftedQuotations.push(this.quotations[i]);
+                    }else if(this.quotations[i].isArchived == true){
+                        console.log("archived");
+                        console.log(this.quotations[i].isArchived)
+                        this.archivedQuotations.push(this.quotations[i]);
+                        this.archivedQuotationsCount++;
+                    }else if(this.quotations[i].isApproved == true){
+                        console.log("approved");
+                        console.log(this.quotations[i].isApproved)
+                        this.approvedQuotations.push(this.quotations[i]);
+                        this.approvedQuotationsCount++;
+                    }else if(this.quotations[i].isSubmitted == true){
+                        console.log("submitted");
+                        console.log(this.quotations[i].isSubmitted)
+                        this.submittedQuotations.push(this.quotations[i]);
+                        this.submittedQuotationsCount++;
+                    }else{
+                        console.log("all false");
+                        console.log(this.quotations[i].isDrafted)
+                    }
+                }
             }
-          }
+
         }
     )
   }
@@ -257,5 +288,17 @@ export class EmployeeDetailPage {
     item.setElementClass("active-sliding", false);
     item.setElementClass("active-slide", false);
     item.setElementClass("active-options-right", false);
+  }
+
+  viewJob(job)
+  {
+    console.log("========view job ===========");
+    console.log(job);
+    this.navCtrl.push(ViewJobPage,{job:job})
+  }
+
+  compeleteJob(job)
+  {
+    this.navCtrl.push(CompleteJobPage,{job:job})
   }
 }

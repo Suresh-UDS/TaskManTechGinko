@@ -24,13 +24,13 @@
                         <ion-row>
                             <ion-col col-6>
                                 <ion-item class="padding-left0 inline-block align-right" no-lines >
-                                    <ion-radio  value="true" class="q-radio" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">Yes</ion-radio>
+                                    <ion-radio  value="true" class="q-radio" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">Yes</ion-radio>
                                     <label item-right class="" >Yes</label>
                                 </ion-item>
                             </ion-col>
                             <ion-col col-6>
                                 <ion-item class="padding-left0 inline-block align-left" no-lines>
-                                    <ion-radio value="false" class="q-radio" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">No</ion-radio>
+                                    <ion-radio value="false" class="q-radio" (ionSelect)="  q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">No</ion-radio>
                                     <label item-right class="">No&nbsp;</label>
                                 </ion-item>
                             </ion-col>
@@ -38,24 +38,33 @@
                     </ion-list>
                     <ion-list radio-group [(ngModel)]="q.answer" class="margin-auto width-full q-type2 padding-left10"  *ngIf="q.answerType=='RATING'">
                         <ion-item class="inline-block width18" align-center no-lines >
-                            <ion-radio  value="1" class="true a" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">1</ion-radio>
+                            <ion-radio  value="1" class="true a" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">1</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18" align-center no-lines>
-                            <ion-radio value="2" class="true b" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">2</ion-radio>
+                            <ion-radio value="2" class="true b" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">2</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18 " align-center no-lines>
-                            <ion-radio  value="3" class="true c" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">3</ion-radio>
+                            <ion-radio  value="3" class="true c" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">3</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18" align-center no-lines>
-                            <ion-radio value="4" class="true d" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">4</ion-radio>
+                            <ion-radio value="4" class="true d" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">4</ion-radio>
                         </ion-item>
                         <ion-item class="inline-block width18" align-center no-lines>
-                            <ion-radio value="5" class="true e" (ionSelect)="questions?.length-1!=i?next():submitFeedback()">5</ion-radio>
+                            <ion-radio value="5" class="true e" (ionSelect)=" q.remarksRequired? '' : questions?.length-1!=i?next():submitFeedback()">5</ion-radio>
                         </ion-item>
+                    </ion-list>
+                    <ion-list *ngIf=" q.remarksRequired ">
+                        <ion-item class="text-item">
+                            <ion-textarea text-center placeholder="Enter Comments" margin-top="" [(ngModel)]=" q.remarks " class="text-border" rows="1" maxLength="500"></ion-textarea>
+                        </ion-item>
+                        <button class="btn btn-warning btn-wd btn-lg" (click)="questions?.length-1!=i?next():submitFeedback()">
+                            <span *ngIf="questions?.length-1!=i">Next</span>
+                            <span *ngIf="questions?.length-1==i">Submit</span>
+                        </button>
                     </ion-list>
                 </ion-item>
             </ion-col>
-            <ion-col col-1 class="ver-center">
+            <ion-col col-1 class="ver-center" *ngIf=" !q.remarksRequired ">
                 <button float-right ion-button clear color="primary" class="btnNext padding0" (click)="questions?.length-1!=i?next():submitFeedback()" >
                     <i class="material-icons q-arrow">keyboard_arrow_right</i>
                 </button>

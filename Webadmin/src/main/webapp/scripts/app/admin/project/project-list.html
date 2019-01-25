@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div class="ListingPageCon1" ng-init="loadProjectsList();initLoad();">
 
     <!--<div class="row TopButtonsCon">-->
         <!--<div class="col-md-12 txt-align-rgt">-->
@@ -8,58 +8,50 @@
     <!--</div>-->
 
     <div class="row">
+
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 txt-align-lft">
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning  add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i>Clear filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
+                <i class="material-icons">keyboard_return</i>Dashboard
+                <div class="ripple-container"></div>
+            </button>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 txt-align-rgt">
+
+
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+                    {{searchCriteras.projectName}}
+                </span>
+            </span>
+    </div>
+
+    <div class="row">
         <div class="col-md-12">
             <div class="card margin-TB-5 tablecard appModuleCard">
 
                 <div class="card-content">
-                    <div class="row" ng-init="loadProjectsList();">
-                        <div class="col-md-12">
-                            <div class="card formcard FilterCard">
-                                <div class="card-content">
-                                     <form name="searchForm"  ng-submit="searchFilter();" novalidate >
 
-                                        <div class="row" >
-                                            <div class="col-xs-12 col-md-4">
-                                                <div class="form-group no-padding" >
-                                                    <div class="dropdown">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Select Client</label>
-                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList">
-                                                                <option value="">Select Client...</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                             <div class="col-xs-12 col-md-8 pad10px">
-                                                <div class="floatR form-group pull-right">
-                                                    <button type="submit" class="btn btn-circle blue-clr">
-                                                        <i class="material-icons">search</i>
-                                                    </button>
-                                                    <button ui-sref="add-project" has-permission="Client:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                                                        <i class="material-icons">add</i>
-                                                    </button>
-                                                    <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                                                        <i class="material-icons">refresh</i>
-                                                    </button>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                         </div>
-                    </div>
-                </div>
-
-
-
-
-                <div class="table-responsive tablecard">
-                        <table class="table table-striped table-hover">
-
+                    <div class="table-responsive tablecard">
+                        <table class="table table-hover withSortingIcons">
                             <thead>
                             <tr>
                                 <th width="6%">ID
@@ -71,7 +63,7 @@
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th>Name
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
@@ -92,7 +84,7 @@
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                   </th>
+                                </th>
                                 <th width="15%">Contact Person
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''">
@@ -102,7 +94,7 @@
                                             <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                   </th>
+                                </th>
                                 <th>Phone
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
@@ -112,7 +104,7 @@
                                              <i  class="fa fa-caret-down"></i>
                                          </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th>Email
 
                                     <span class="sortingIcons">
@@ -123,7 +115,7 @@
                                               <i  class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                    </th>
+                                </th>
                                 <th class="disabled-sorting text-right">Actions</th>
                             </tr>
                             </thead>
@@ -131,16 +123,17 @@
                             <tbody>
                             <tr ng-repeat="project in projects">
                                 <td>{{project.id}}</td>
-                                <td>{{project.name}}</td>
-                               <td>{{project.address}}</td>
-                               <td>{{project.contactFirstName}} {{project.contactLastName}}</td>
-                               <td>{{project.phone}}</td>
-                               <td>{{project.email}}</td>
+                                <td>{{project.name | uppercase}}</td>
+                                <td>{{project.address}}</td>
+                                <td>{{project.contactFirstName}} {{project.contactLastName}}</td>
+                                <td>{{project.phone}}</td>
+                                <td class="lowercase">{{project.email}}</td>
                                 <td class="text-right">
 
-                                    <a  ng-class="{active: $state.includes('admin')}"  has-permission="Project:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a title="View" ng-class="{active: $state.includes('admin')}"  has-permission="Client:View" ui-sref="view-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                    <a title="Edit" ng-class="{active: $state.includes('admin')}"  has-permission="Client:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                    <!-- <a ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"  ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
+                                    <!-- <a ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
 
 
                                 </td>
@@ -153,6 +146,22 @@
                         </table>
 
                     </div>
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="projectsLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
                 </div>
                 <!-- end content-->
             </div>
@@ -161,19 +170,6 @@
         <!-- end col-md-12 -->
     </div>
     <!-- end row -->
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="projects">
-
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="projectsLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
     <!-- Pagination directive start -->
 
@@ -234,3 +230,47 @@
 
 
 
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm" role="form" ng-submit="searchFilter();"  novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-7">
+                            <div class="form-group" >
+                                <div class="dropdown">
+                                    <label class="label-control" >Client</label>
+
+                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                    <ui-select ng-model="client.selected"  ng-disabled="disabled">
+									  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+									  <ui-select-choices repeat="client in clients | filter: $select.search" null-option="allClients" loose-null>
+									    <span ng-bind-html="client.name | highlight: $select.search"></span>
+									  </ui-select-choices>
+									</ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="1">Cancel</button>
+                    <button type="submit" name="submit" class="btn btn-success btn-simple" tabindex="2">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

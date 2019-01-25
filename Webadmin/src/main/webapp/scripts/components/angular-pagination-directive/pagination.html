@@ -6,19 +6,19 @@
        
         <ul ng-if="pager.pages.length" class="pagination pagination-warning">
             <li class="paging-first" ng-class="{disabled:pager.currentPage === 1}">
-                <a ng-click="setPage(1)">First</a>
+                <a ng-click="(pager.currentPage != 1) && setPage(1)">First</a>
             </li>
             <li class="prev" ng-class="{disabled:pager.currentPage === 1}">
-                <a ng-click="setPage(pager.currentPage - 1)"><i id="first" class="fa fa-angle-left"></i></a>
+                <a ng-click="(pager.currentPage != 1) && setPage(pager.currentPage - 1)"><i id="first" class="fa fa-angle-left"></i></a>
             </li>
             <li class="paging" ng-repeat="page in pager.pages" ng-class="{active:pager.currentPage === page}">
-                <a ng-click="setPage(page)">{{page}}</a>
+                <a ng-click="(pager.currentPage != page) && setPage(page)">{{page}}</a>
             </li>                
             <li class="next" ng-class="{disabled:pager.currentPage === pager.totalPages}" >
-                <a ng-click="setPage(pager.currentPage + 1)"><i id="last" class="fa fa-angle-right"></i></a>
+                <a ng-click="(pager.currentPage != pager.totalPages) && setPage(pager.currentPage + 1)"><i id="last" class="fa fa-angle-right"></i></a>
             </li>
             <li class="paging-last" ng-class="{disabled:pager.currentPage === pager.totalPages}">
-                <a ng-click="setPage(pager.totalPages)">Last</a>
+                <a ng-click="(pager.currentPage != pager.totalPages) && setPage(pager.totalPages)">Last</a>
             </li>
         </ul>
     </div>

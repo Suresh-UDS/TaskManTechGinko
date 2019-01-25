@@ -2,7 +2,6 @@ package com.ts.app.web.rest.dto;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 
 public class FeedbackDTO extends BaseDTO implements Serializable {
@@ -24,6 +23,10 @@ public class FeedbackDTO extends BaseDTO implements Serializable {
     private List<FeedbackQuestionDTO> questions;
 
     private String displayType;
+
+    private String remarks;
+
+    private boolean remarksRequired;
 
     public long getId() {
         return id;
@@ -88,5 +91,21 @@ public class FeedbackDTO extends BaseDTO implements Serializable {
 
     public void setDisplayType(String displayType) {
         this.displayType = displayType;
+    }
+
+    public boolean isRemarksRequired() {
+        return remarksRequired;
+    }
+
+    public void setRemarksRequired(boolean remarksRequired) {
+        this.remarksRequired = remarksRequired;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

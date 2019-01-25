@@ -22,7 +22,8 @@ export class CreateQuotationPage {
                 type:any,
                 uom:any,
                 name:any;
-                cost:any
+                cost:any;
+                number:any;
             }
             ]
     };
@@ -60,7 +61,8 @@ export class CreateQuotationPage {
                     type:'',
                     uom:'',
                     name:'',
-                    cost:''
+                    cost:'',
+                    number:''
                 }
             ]
         };
@@ -113,7 +115,7 @@ export class CreateQuotationPage {
                 "description":this.description
             }
             console.log(quotation)
-            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation,quotationImg:this.takenImages});
+            this.navCtrl.push(CreateQuotationPage2,{quotationDetails:quotation});
         }
         else
         {
@@ -142,7 +144,8 @@ export class CreateQuotationPage {
             type:'',
             uom:'',
             name:'',
-            cost:''
+            cost:'',
+            number:''
         };
 
         rateCard.type = type.name;

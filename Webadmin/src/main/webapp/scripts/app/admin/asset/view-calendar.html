@@ -1,0 +1,37 @@
+ <div class="content" ng-init="loadCalendar();">
+    <div class="container-fluid">
+        <!--<div class="header text-center">-->
+            <!--<h3 class="title">Asset Schedule  </h3>-->
+            <!--&lt;!&ndash; <p class="category">Handcrafted by our friends from-->
+                <!--<a target="_blank" href="https://fullcalendar.io/">FullCalendar.io</a>. Please checkout their-->
+                <!--<a href="https://fullcalendar.io/docs/" target="_blank">full documentation.</a>-->
+            <!--</p> &ndash;&gt;-->
+        <!--</div>-->
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="card card-calendar">
+                    <div class="card-content" class="ps-child">
+                        <div id="fullCalendar"></div>
+                        <!-- <div id="calendar"></div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           <div class="col-md-12 txt-align-rgt">
+               <div class="form-group">
+                   <button class="btn" type="button"
+                           ng-click="backToView()" id="cancel-button">
+                        Back
+                   </button>
+               </div>
+           </div>
+       </div>
+    </div>
+</div>
+
+
+<!--<div id="eventContent" title="Event Details">-->
+    <!--<div id="eventInfo"></div>-->
+    <!--<p><strong><a id="eventLink" target="_blank">Read More</a></strong></p>-->
+<!--</div>-->

@@ -1,10 +1,16 @@
 <ion-header no-border="" class="bg-white" padding-top="">
-  <ion-navbar transparent >
-    <button ion-button menuToggle>
-      <ion-icon name="menu" class="fnt-18"></ion-icon>
-    </button>
+  <ion-navbar transparent hideBackButton>
+      <ion-buttons left="">
+          <button (click)="goBack()" ion-button clear="" color="primary">
+              <i class="material-icons">keyboard_arrow_left</i>
+          </button>
+      </ion-buttons>
+
+    <!--<button ion-button menuToggle>-->
+      <!--<ion-icon name="menu" class="fnt-18"></ion-icon>-->
+    <!--</button>-->
     <ion-title text-center="">
-        <img src="img/logo.png"  alt="feedback image" width="10%">
+        <img src="img/logo.png"  alt="feedback image" class="logo-img">
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -12,12 +18,12 @@
 <ion-content class="FeedbackQuesCon bg-white" id="scrollDiv">
 
    <div class="SelectFeedback">
-       <ion-row padding>
+       <ion-row no-padding>
            <ion-col col-12 text-center="">
                <img src="img/feedback.png"  alt="feedback image" width="30%">
            </ion-col>
        </ion-row>
-       <ion-row>
+       <ion-row no-padding>
            <ion-col col-2 col-sm-2>
 
            </ion-col>

@@ -1,12 +1,10 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,28 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Feedback;
-import com.ts.app.domain.FeedbackMapping;
-import com.ts.app.domain.FeedbackQuestion;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.FeedbackMappingRepository;
-import com.ts.app.repository.FeedbackRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.FeedbackDTO;
-import com.ts.app.web.rest.dto.FeedbackMappingDTO;
-import com.ts.app.web.rest.dto.FeedbackQuestionDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Service class for managing feedback question information.
@@ -182,7 +163,8 @@ public class FeedbackService extends AbstractService {
 			List<FeedbackDTO> transitems = null;
 			List<Feedback> feedbackList = null;
 			if(searchCriteria.getProjectId() > 0 || searchCriteria.getSiteId() > 0) {
-				feedbackList = feedbackRepository.findBySite(searchCriteria.getProjectId(), searchCriteria.getSiteId());
+				log.debug("SearchCriteria" +searchCriteria.getProjectId()+ "" +searchCriteria.getSiteId());
+				page = feedbackRepository.findBySite(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
 			}else {
 				if(user.isAdmin()) {
 					page = feedbackRepository.findAll(pageRequest);
@@ -230,23 +212,31 @@ public class FeedbackService extends AbstractService {
 		if(feedbackMappingDto.getId() > 0) {
 			updateFeedbackMapping(feedbackMappingDto);
 		}else {
-			FeedbackMapping feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
-
-			if(feedbackMappingDto.getProjectId() > 0) {
-				Project project = projectRepository.findOne(feedbackMappingDto.getProjectId());
-				feedbackMapping.setProject(project);
+			List<FeedbackMapping> feedbackMappings = feedbackMappingRepository.findOneByLocation(feedbackMappingDto.getSiteId(), feedbackMappingDto.getBlock(), feedbackMappingDto.getFloor(), feedbackMappingDto.getZone()); 
+			FeedbackMapping feedbackMapping = CollectionUtils.isNotEmpty(feedbackMappings)  ? feedbackMappings.get(0) : null;
+			if(feedbackMapping == null) {
+				feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
+	
+				if(feedbackMappingDto.getProjectId() > 0) {
+					Project project = projectRepository.findOne(feedbackMappingDto.getProjectId());
+					feedbackMapping.setProject(project);
+				}else {
+					feedbackMapping.setProject(null);
+				}
+				if(feedbackMappingDto.getSiteId() > 0) {
+					Site site = siteRepository.findOne(feedbackMappingDto.getSiteId());
+					feedbackMapping.setSite(site);
+				}else {
+					feedbackMapping.setSite(null);
+				}
+				Feedback feedback = feedbackRepository.findOne(feedbackMappingDto.getFeedback().getId());
+				feedbackMapping.setFeedback(feedback);
+				feedbackMapping.setActive(Feedback.ACTIVE_YES);
 			}else {
-				feedbackMapping.setProject(null);
+				Feedback feedback = feedbackRepository.findOne(feedbackMappingDto.getFeedback().getId());
+				feedbackMapping.setFeedback(feedback);
+				feedbackMapping.setActive(Feedback.ACTIVE_YES);
 			}
-			if(feedbackMappingDto.getSiteId() > 0) {
-				Site site = siteRepository.findOne(feedbackMappingDto.getSiteId());
-				feedbackMapping.setSite(site);
-			}else {
-				feedbackMapping.setSite(null);
-			}
-			Feedback feedback = feedbackRepository.findOne(feedbackMappingDto.getFeedback().getId());
-			feedbackMapping.setFeedback(feedback);
-			feedbackMapping.setActive(Feedback.ACTIVE_YES);
 	        feedbackMapping = feedbackMappingRepository.save(feedbackMapping);
 			log.debug("Created Information for Feedback: {}", feedbackMapping);
 			feedbackMappingDto = mapperUtil.toModel(feedbackMapping, FeedbackMappingDTO.class);
@@ -297,10 +287,13 @@ public class FeedbackService extends AbstractService {
 
 			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<FeedbackMapping> page = null;
-			List<FeedbackMappingDTO> transitems = null;
+			List<FeedbackMapping> allFeedbackList = new ArrayList<FeedbackMapping>();
+			List<FeedbackMappingDTO> transactions = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
 					page = feedbackMappingRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+				}else if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) { 
+					page = feedbackMappingRepository.findByClientAndSite(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
 				}
 			}else {
 
@@ -320,9 +313,18 @@ public class FeedbackService extends AbstractService {
 
 			}
 			if(page != null) {
-				transitems = mapperUtil.toModelList(page.getContent(), FeedbackMappingDTO.class);
-				if(CollectionUtils.isNotEmpty(transitems)) {
-					buildSearchResultForMapping(searchCriteria, page, transitems,result);
+				log.debug("Size of page" +page.getSize());
+				allFeedbackList.addAll(page.getContent());
+				if(transactions ==  null) { 
+					transactions = new ArrayList<FeedbackMappingDTO>();
+				}
+				for(FeedbackMapping feedbackMapping : allFeedbackList) {
+					log.debug("Feedback mapping list" +feedbackMapping);
+					transactions.add(mapperUtil.toModel(feedbackMapping, FeedbackMappingDTO.class));
+        		}
+//				transitems = mapperUtil.toModelList(page.getContent(), FeedbackMappingDTO.class);
+				if(CollectionUtils.isNotEmpty(transactions)) {
+					buildSearchResultForMapping(searchCriteria, page, transactions, result);
 				}
 			}
 		}

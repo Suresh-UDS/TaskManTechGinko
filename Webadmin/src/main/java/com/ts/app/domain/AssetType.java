@@ -1,19 +1,50 @@
 package com.ts.app.domain;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Created by karth on 7/1/2017.
  */
-public enum AssetType {
-    HOUSEKEEPING(1),
-    ELECTRICAL(2),
-    AC(3),
-    CARPENTRY(4),
-    PESTCONTROL(5),
-    PLUMBING(6);
+@Entity
+@Table(name = "asset_type")
+@Cacheable(true)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class AssetType extends AbstractAuditingEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private int value;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    private AssetType(int val){
-        value = val;
-    }
+	@NotNull
+	@Size(min = 1, max = 250)
+	@Column(length = 250, nullable = false)
+	private String name;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+
 }

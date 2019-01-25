@@ -86,6 +86,8 @@ public class CheckInOutDTO extends BaseDTO {
 
 	private String remarks;
 
+	private boolean completeJob;
+
 	private List<CheckInOutImageDTO> checkInOutImages;
 
 
@@ -442,4 +444,11 @@ public class CheckInOutDTO extends BaseDTO {
 	}
 
 
+    public boolean isCompleteJob() {
+        return completeJob;
+    }
+
+    public void setCompleteJob(boolean completeJob) {
+        this.completeJob = completeJob;
+    }
 }

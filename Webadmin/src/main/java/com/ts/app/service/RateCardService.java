@@ -1,13 +1,15 @@
 package com.ts.app.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,24 +27,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.RateCard;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.User;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.RateCardRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.RateCardDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Service class for exposing rate card related operations.
@@ -66,19 +54,34 @@ public class RateCardService extends AbstractService {
 	private UserRepository userRepository;
 
 	@Inject
-	private SiteRepository siteRepository;
+	private ManufacturerRepository siteRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private TicketRepository ticketRepository;
+
+	@Inject
+	private FileUploadHelper fileUploadHelper;
+
+	@Inject
+	private AmazonS3Utils amazonS3Utils;
+
+	@Value("${AWS.s3-cloudfront-url}")
+	private String cloudFrontUrl;
+
+	@Value("${AWS.s3-bucketEnv}")
+	private String bucketEnv;
+
+	@Value("${AWS.s3-quotation-path}")
+	private String quotationFilePath;
 
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
@@ -221,7 +224,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
-	
+
 	public Object findAllTypes() {
 
         log.debug("Find all rate card types");
@@ -256,7 +259,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  rateCardDetails;
 	}
-	
+
 	public QuotationDTO saveQuotation(QuotationDTO quotationDto, long currUserId) {
 
         log.debug("Quotation creation");
@@ -264,7 +267,7 @@ public class RateCardService extends AbstractService {
         try{
         		//get the user details
         		User currUser = userRepository.findOne(currUserId);
-        		
+
         		//calculate the total cost
         		List<RateCardDTO> rateCardDetails = quotationDto.getRateCardDetails();
         		if(CollectionUtils.isNotEmpty(rateCardDetails)) {
@@ -276,7 +279,7 @@ public class RateCardService extends AbstractService {
         		}else {
         			return quotationDto;
         		}
-        	
+
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
@@ -321,23 +324,41 @@ public class RateCardService extends AbstractService {
 
             log.debug("quotation save  end point"+quotationSvcEndPoint);
             String url = quotationSvcEndPoint+"/quotation/create";
-            if(quotationDto.getMode().equalsIgnoreCase("create")) {
-            		quotationDto.setCreatedByUserId(currUserId);
+
+	    		Setting quotationAlertSetting = null;
+			List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION, quotationDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				quotationAlertSetting = settings.get(0);
+			}
+			Setting overdueEmails = null;
+			settings = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_QUOTATION_EMAILS, quotationDto.getSiteId());
+			if(CollectionUtils.isNotEmpty(settings)) {
+				overdueEmails = settings.get(0);
+			}
+			String alertEmailIds =  "";
+			if(overdueEmails != null) {
+			    log.debug("Overdue email ids found"+overdueEmails.getSettingValue());
+				alertEmailIds = overdueEmails.getSettingValue();
+			}else{
+			    log.debug("Overdue email ids not found");
+	        }
+			if(quotationDto.getMode().equalsIgnoreCase("create")) {
+	        		quotationDto.setCreatedByUserId(currUserId);
 	        		quotationDto.setCreateByUserName(currUser.getLogin());
-                request.put("createdByUserId", quotationDto.getCreatedByUserId());
-                request.put("createdByUserName", quotationDto.getCreateByUserName());
-            }
+	            request.put("createdByUserId", quotationDto.getCreatedByUserId());
+	            request.put("createdByUserName", quotationDto.getCreateByUserName());
+	        }
             if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("edit")) {
             		url = quotationSvcEndPoint+"/quotation/edit";
-            }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("submit")) {
-				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
-				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
-				String alertEmailIds =  "";
-				if(overdueEmails != null) {
-					alertEmailIds = overdueEmails.getSettingValue();
-				}
-
-            		url = quotationSvcEndPoint+"/quotation/send";
+            }else if(quotationDto.getMode().equalsIgnoreCase("submit")) {
+            		if(!StringUtils.isEmpty(quotationDto.get_id())) {
+            			url = quotationSvcEndPoint+"/quotation/send";
+            		}else {
+	    	        		quotationDto.setCreatedByUserId(currUserId);
+	    	        		quotationDto.setCreateByUserName(currUser.getLogin());
+        	            request.put("createdByUserId", quotationDto.getCreatedByUserId());
+        	            request.put("createdByUserName", quotationDto.getCreateByUserName());
+            		}
             		quotationDto.setDrafted(false);
             		quotationDto.setSubmitted(true);
             		quotationDto.setSentByUserId(currUserId);
@@ -345,16 +366,13 @@ public class RateCardService extends AbstractService {
                 request.put("sentByUserId", quotationDto.getSentByUserId());
                 request.put("sentByUserName", quotationDto.getSentByUserName());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
+                        log.debug("Alert email while sending quotation request"+alertEmailIds);
                 		request.put("clientEmailId", alertEmailIds);
-				}
+				}else{
+                    log.debug("Alert emails not found while sending quotation");
+                }
 
             }else if(!StringUtils.isEmpty(quotationDto.get_id()) && quotationDto.getMode().equalsIgnoreCase("approve")) {
-				Setting quotationAlertSetting = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE, quotationDto.getSiteId());
-				Setting overdueEmails = settingRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_OVERDUE_EMAILS, quotationDto.getSiteId());
-				String alertEmailIds =  "";
-				if(overdueEmails != null) {
-					alertEmailIds = overdueEmails.getSettingValue();
-				}
 
             		url = quotationSvcEndPoint+"/quotation/approve";
             		quotationDto.setSubmitted(false);
@@ -378,6 +396,8 @@ public class RateCardService extends AbstractService {
 	            //save quotation id in ticket
 	            if(qresp != null) {
 	            		String serialId = qresp.getString("_id");
+	            		log.debug("Quotation id"+serialId);
+	            		quotationDto.set_id(serialId);
 	            		Ticket ticket = ticketRepository.findOne(quotationDto.getTicketId());
 	            		if(ticket != null) {
 	            			ticket.setQuotationId(serialId);
@@ -422,7 +442,7 @@ public class RateCardService extends AbstractService {
 
         return  quotationList;
     }
-    
+
     public Object getQuotation(long serialId) {
 
         log.debug("get Quotation");
@@ -456,6 +476,163 @@ public class RateCardService extends AbstractService {
 
 	public Object getQuotations(SearchCriteria searchCriteria) {
 
+        log.debug("get Quotations"+searchCriteria);
+        Object quotationList = "";
+		User user = userRepository.findOne(searchCriteria.getUserId());
+		List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+		if(user != null) {
+			Employee employee = user.getEmployee();
+			if(employee != null) {
+				projectSites = employee.getProjectSites();
+			}
+		}
+		List<Long> siteIds = null;
+		if(searchCriteria.getSiteId() == 0) {
+			siteIds = new ArrayList<Long>();
+			if(CollectionUtils.isNotEmpty(projectSites)) {
+				for(EmployeeProjectSite projSite : projectSites) {
+					siteIds.add(projSite.getSite().getId());
+				}
+			}
+		}
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+
+            headers.setAll(map);
+
+            log.debug("Parameters - "+searchCriteria.isQuotationIsApproved() + " "+searchCriteria.isQuotationIsArchived()+ " "+ searchCriteria.isQuotationIsDrafted());
+
+            JSONObject request = new JSONObject();
+            request.put("projectId",searchCriteria.getProjectId());
+            request.put("siteId",searchCriteria.getSiteId());
+            request.put("id",searchCriteria.getId());
+            request.put("title",searchCriteria.getQuotationTitle());
+            request.put("createdBy",searchCriteria.getQuotationCreatedBy());
+
+            if(searchCriteria.getQuotationCreatedDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
+
+            }
+
+            if(searchCriteria.getFromDate()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
+
+            }
+
+            if(searchCriteria.getCheckInDateTimeFrom()!=null){
+                df.setTimeZone(tz);
+                String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+                String toDate = df.format(searchCriteria.getToDate());
+                request.put("createdDate", createdDate);
+                request.put("toDate", toDate);
+
+            }
+
+            request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
+            request.put("status",searchCriteria.getQuotationStatus());
+            request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
+            request.put("approvedDate", searchCriteria.getQuotationApprovedDate());
+            request.put("isSubmitted", searchCriteria.isQuotationIsSubmitted());
+            request.put("isArchived", searchCriteria.isQuotationIsArchived());
+            request.put("isRejected", searchCriteria.isQuotationIsRejected());
+            request.put("isDrafted", searchCriteria.isQuotationIsDrafted());
+            request.put("isApproved", searchCriteria.isQuotationIsApproved());
+            request.put("currPage", searchCriteria.getCurrPage());
+            request.put("columnName", searchCriteria.getColumnName());
+            request.put("sortByAsc", searchCriteria.isSortByAsc());
+            request.put("sortNum", searchCriteria.getSort());
+            request.put("siteIds", siteIds);
+            log.debug("Request body " + request.toString());
+            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
+            log.debug("Response freom push service "+ response.getStatusCode());
+            log.debug("response from push service"+response.getBody());
+//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
+            quotationList = response.getBody();
+
+        }catch(Exception e) {
+            log.error("Error while calling location service ", e);
+            e.printStackTrace();
+        }
+
+//		List<RateCard> entities = new ArrayList<RateCard>();
+//		entities = rateCardRepository.findAll();
+//		return mapperUtil.toModelList(entities, RateCardDTO.class);
+        return  quotationList;
+    }
+
+    public Object getAllQuotations() {
+	    Object quotations = "";
+	    try{
+	        RestTemplate restTemplate = new RestTemplate();
+	        MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+	        jackson2HttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+	        restTemplate.getMessageConverters().add(jackson2HttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            headers.setAll(map);
+
+            HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+            log.debug("Rate card service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/quotations/findAll", String.class);
+            log.debug("Response from quotation srv status "+response.getStatusCode()+ " response " +response.getBody());
+            quotations = response.getBody();
+        } catch (Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+	    return quotations;
+    }
+
+    public Object getLastModifiedResult() {
+        Object lastModResults = "";
+        try{
+            RestTemplate restTemplate = new RestTemplate();
+            MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+            jackson2HttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            restTemplate.getMessageConverters().add(jackson2HttpMessageConverter);
+
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+            headers.setAll(map);
+
+            log.debug("Quotation service end point"+quotationSvcEndPoint);
+            ResponseEntity<?> response = restTemplate.getForEntity(quotationSvcEndPoint+"/lastmodified/quotations", String.class);
+            log.debug("Response from quotation srv status "+response.getStatusCode()+ " response " +response.getBody());
+            lastModResults = response.getBody();
+        } catch (Exception e) {
+            log.error("Error while calling Quotations service ", e);
+            e.printStackTrace();
+        }
+        return lastModResults;
+    }
+
+	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
+
         log.debug("get Quotations");
         Object quotationList = "";
 
@@ -470,23 +647,27 @@ public class RateCardService extends AbstractService {
             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
             headers.setAll(map);
-            
+
             JSONObject request = new JSONObject();
-            request.put("projectId",searchCriteria.getProjectId());
-            request.put("siteId",searchCriteria.getSiteId());
-            request.put("id",searchCriteria.getId());
-            request.put("title",searchCriteria.getQuotationTitle());
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
+            String toDate = df.format(searchCriteria.getToDate());
+            request.put("createdDate", createdDate);
+            request.put("toDate", toDate);
+            request.put("siteIds", siteIds);
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
+            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/summary", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
             quotationList = response.getBody();
 
         }catch(Exception e) {
-            log.error("Error while calling location service ", e);
+            log.error("Error while calling Quotations service ", e);
             e.printStackTrace();
         }
 
@@ -518,6 +699,7 @@ public class RateCardService extends AbstractService {
 
             JSONObject request = new JSONObject();
             request.put("_id",quotation.get_id());
+            request.put("status", "Approved");
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);
@@ -537,7 +719,7 @@ public class RateCardService extends AbstractService {
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  approvedQuotation;
     }
-    
+
     public Object rejectQuotation(QuotationDTO quotation) {
         log.debug("reject Quotations");
         Object approvedQuotation = "";
@@ -560,6 +742,7 @@ public class RateCardService extends AbstractService {
 
             JSONObject request = new JSONObject();
             request.put("_id",quotation.get_id());
+            request.put("status","Rejected");
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);
@@ -586,6 +769,56 @@ public class RateCardService extends AbstractService {
 		RateCard entity = rateCardRepository.findOne(id);
 		return mapperUtil.toModel(entity, RateCardDTO.class);
 	}
+
+	@Transactional
+    public QuotationDTO uploadFile(QuotationDTO quotationDTO) throws JSONException {
+
+        log.debug("Employee list from check in out images"+quotationDTO.getId());
+        //Attendance attendanceImage = attendanceRepository.findOne(attendanceDto.getId());
+        quotationDTO = amazonS3Utils.uploadQuotationFile(quotationDTO.getId(), quotationDTO.getQuotationFile(), System.currentTimeMillis(), quotationDTO);
+        quotationDTO.setQuotationFileName(quotationDTO.getQuotationFileName());
+        quotationDTO.setUrl(quotationDTO.getUrl());
+        updateImageName(quotationDTO.getId(), quotationDTO.getQuotationFileName());
+
+		return quotationDTO;
+	}
+
+	public String updateImageName(String quotationId, String quotationImageName) throws JSONException {
+        log.debug("update image rest function");
+        RestTemplate restTemplate = new RestTemplate();
+        MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+
+        headers.setAll(map);
+
+        JSONObject request = new JSONObject();
+        request.put("quotationId",quotationId);
+        request.put("quotationImage",quotationImageName);
+
+        log.debug("quotation save  end point"+quotationSvcEndPoint);
+        String url = quotationSvcEndPoint+"/quotation/uploadImage";
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
+        log.debug("Request entity quotation image name update service"+requestEntity);
+        ResponseEntity<?> response = restTemplate.postForEntity(url, requestEntity, String.class);
+        log.debug("Response image name update service"+ response.getStatusCode());
+        log.debug("response from image name update service"+response.getBody());
+
+	    return "Success";
+    }
+
+	public String getQuotationImage(String quotationId, String imageId) {
+        String quotationFileUrl = null;
+        log.debug("Quotation Image service"+quotationId+" "+imageId);
+        quotationFileUrl = cloudFrontUrl + bucketEnv + quotationFilePath + imageId;
+        return quotationFileUrl;
+
+    }
 
     public SearchResult<RateCardDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
     	log.debug("search Criteria",searchCriteria);
@@ -665,7 +898,6 @@ public class RateCardService extends AbstractService {
         result.setTransactions(transactions);
         return;
     }
-
 
 
 }

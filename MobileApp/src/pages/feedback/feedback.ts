@@ -8,6 +8,7 @@ import {InitFeedbackPage} from "./init-feedback";
 import {FeedbackService} from "../service/feedbackService";
 import {FeedbackZone} from "./feedbackZone";
 import {InitFeedbackZone} from "./init-feedback-zone";
+import {SelectFeedbackPage} from "./select-feedback";
 declare  var demo ;
 @Component({
   selector: 'page-feedback',
@@ -76,7 +77,8 @@ export class FeedbackPage {
                 this.questions = null;
                 this.component.closeLoader();
                 demo.showSwal('feedback-success','Thank you!','For your Feedback');
-                this.navCtrl.setRoot(InitFeedbackZone,{feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+                // this.navCtrl.setRoot(InitFeedbackZone,{feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
+                this.navCtrl.setRoot(SelectFeedbackPage,{fb:this.navParams.data.fb,feedback:this.navParams.data.feedback,project:this.navParams.data.project,site:this.navParams.data.site,location:this.navParams.data.location});
             },err=>{
                 console.log("error in saving feedback");
                 this.component.closeLoader();

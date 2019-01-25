@@ -12,9 +12,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
-import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,9 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AmazonS3Service;
+import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
 import com.ts.app.service.SchedulerService;
@@ -44,6 +45,22 @@ import com.ts.app.service.util.CacheUtil;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.CheckInOutDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.ExportResponse;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.GraphResponse;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.JobChecklistDTO;
+import com.ts.app.web.rest.dto.JobDTO;
+import com.ts.app.web.rest.dto.LocationDTO;
+import com.ts.app.web.rest.dto.NotificationLogDTO;
+import com.ts.app.web.rest.dto.Paginator;
+import com.ts.app.web.rest.dto.PriceDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 /**
  * REST controller for managing the Site information.
@@ -71,13 +88,19 @@ public class JobManagementResource {
 	private SchedulerService schedulerService;
 
 	@Inject
-	private ImportUtil importUtil;
+	private ImportService importService;
 
 	@Inject
 	private CacheUtil cacheUtil;
 
 	@Inject
 	private ReportUtil reportUtil;
+
+	@Inject
+	private AmazonS3Service amazonSerivce;
+
+	@Inject
+	private AmazonS3Service amazonService;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,12 +121,12 @@ public class JobManagementResource {
 		log.debug("Job request parameter - "+ request.getParameter("sendNotification"));
 		log.debug("Job save response - "+ response);
 
-		if(response != null) {
+		if(response != null && response.getId() > 0) {
 			String sendNotification = request.getParameter("sendNotification");
-			if(StringUtils.isNotBlank(sendNotification)) {
+//			if(StringUtils.isNotBlank(sendNotification)) {
 				boolean isNotification = Boolean.parseBoolean(sendNotification);
 				log.debug("Job save isNotification - "+ isNotification);
-				if(isNotification) { //SEND PUSH notification for the users connected to the site.
+//				if(isNotification) { //SEND PUSH notification for the users connected to the site.
 					long siteId = jobDTO.getSiteId();
 					log.debug("Job save siteId - "+ siteId);
 					List<User> users = userService.findUsers(siteId);
@@ -119,10 +142,14 @@ public class JobManagementResource {
 						pushService.send(userIds, message);
 						//jobService.saveNotificationLog(response.getId(), SecurityUtils.getCurrentUserId(), users, siteId, message);
 					}
-				}
-			}
+//				}
+//			}
 		}
-		return new ResponseEntity<>(response,HttpStatus.CREATED);
+		if(response != null && response.getId() > 0) {
+			return new ResponseEntity<>(response,HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@RequestMapping(path="/job/{id}",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -130,25 +157,29 @@ public class JobManagementResource {
 	public ResponseEntity<?> updateJob(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request, @PathVariable("id") Long id) {
 		if(jobDTO.getId() == 0) jobDTO.setId(id);
 		log.debug("Job Details in updateJob = "+ jobDTO);
-		JobDTO response = jobService.updateJob(jobDTO);
+		long userId = SecurityUtils.getCurrentUserId();
+		JobDTO response = jobService.updateJob(jobDTO, userId);
         if(response != null) {
-
-            long siteId = response.getSiteId();
-            List<User> users = userService.findUsers(siteId);
-            if(CollectionUtils.isNotEmpty(users)) {
-                if (StringUtils.isNotEmpty(response.getStatus())
-                		&& response.getStatus().equalsIgnoreCase("OUTOFSCOPE")) {
-                    long userIds[] = new long[users.size()];
-                    int ind = 0;
-                    for (User user : users) {
-                        userIds[ind] = user.getId();
-                        ind++;
-                    }
-                    String message = "Job -" + response.getTitle() + "of site-" + response.getSiteName() + "is marked as Out of Scope";
-                    pushService.send(userIds, message);
-                    jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
-                }
-            }
+        		if(StringUtils.isEmpty(response.getErrorMessage())) {
+	            long siteId = response.getSiteId();
+	            List<User> users = userService.findUsers(siteId);
+	            if(CollectionUtils.isNotEmpty(users)) {
+	                if (StringUtils.isNotEmpty(response.getStatus())
+	                		&& response.getStatus().equalsIgnoreCase("OUTOFSCOPE")) {
+	                    long userIds[] = new long[users.size()];
+	                    int ind = 0;
+	                    for (User user : users) {
+	                        userIds[ind] = user.getId();
+	                        ind++;
+	                    }
+	                    String message = "Job -" + response.getTitle() + "of site-" + response.getSiteName() + "is marked as Out of Scope";
+	                    pushService.send(userIds, message);
+	                    jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
+	                }
+	            }
+        		}else {
+        			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        		}
         }
 		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
@@ -160,7 +191,8 @@ public class JobManagementResource {
 
 	@RequestMapping(path="/job/employee", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<EmployeeDTO> getAsssignableEmployee(){
-		return jobService.getAsssignableEmployee();
+		long userId = SecurityUtils.getCurrentUserId();
+		return jobService.getAsssignableEmployee(userId);
 	}
 
 	@RequestMapping(path="/job/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -176,26 +208,50 @@ public class JobManagementResource {
 	}
 
 	@RequestMapping(path="/job/{id}/complete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
-		JobDTO response = jobService.completeJob(id);
-		if(response != null) {
-			long siteId = response.getSiteId();
-			List<User> users = userService.findUsers(siteId);
-			if(CollectionUtils.isNotEmpty(users)) {
-				long userIds[] = new long[users.size()];
-				int ind = 0;
-				for(User user : users) {
-					userIds[ind] = user.getId();
-					ind++;
-				}
-				String message = "Job -"+ response.getTitle() + " completed for site-" + response.getSiteName();
-				pushService.send(userIds, message);
-				jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
-			}
-		}
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+    public ResponseEntity<?> completeJob(@PathVariable("id") Long id){
+		long userId = SecurityUtils.getCurrentUserId();
+        JobDTO response = jobService.completeJob(id, userId);
+        if(response != null && !response.isErrorStatus()) {
+            long siteId = response.getSiteId();
+            List<User> users = userService.findUsers(siteId);
+            if(CollectionUtils.isNotEmpty(users)) {
+                long userIds[] = new long[users.size()];
+                int ind = 0;
+                for(User user : users) {
+                    userIds[ind] = user.getId();
+                    ind++;
+                }
+                String message = "Job -"+ response.getTitle() + " completed for site-" + response.getSiteName();
+                pushService.send(userIds, message);
+                jobService.saveNotificationLog(id, SecurityUtils.getCurrentUserId(), users, siteId, message);
+            }
+        }else {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
+    @RequestMapping(path="/job/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveJobAndCheckList(@RequestBody JobDTO jobDTO, HttpServletRequest request){
+    		long userId = SecurityUtils.getCurrentUserId();
+        JobDTO response = jobService.saveJobAndCheckList(jobDTO, userId);
+        if(response.isErrorStatus()) {
+        		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/checklist/update",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateChecklist(@RequestBody JobChecklistDTO jobChecklistDTO){
+        long userId = SecurityUtils.getCurrentUserId();
+        JobChecklist response = jobService.updateCheckList(jobChecklistDTO);
+        if(response.getId()<=0){
+            jobChecklistDTO.setErrorStatus(true);
+            jobChecklistDTO.setErrorMessage("Error in saving Checklist..");
+            return new ResponseEntity<Object>(jobChecklistDTO,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
 
 	@RequestMapping(value = "/jobs/search",method = RequestMethod.POST)
@@ -288,11 +344,21 @@ public class JobManagementResource {
 	public SearchResult<JobDTO> searchJobsForEmployee(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<JobDTO> result = null;
 		if(searchCriteria != null) {
-			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
+			jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria.getJobStatus());
 			result = jobService.findBySearchCrieria(searchCriteria,false);
 		}
 		return result;
 	}
+
+    @RequestMapping(value = "/location/jobs/search",method = RequestMethod.POST)
+    public SearchResult<JobDTO> searchJobsByLocation(@RequestBody SearchCriteria searchCriteria) {
+        SearchResult<JobDTO> result = null;
+        if(searchCriteria != null) {
+            jobService.updateJobStatus(searchCriteria.getSiteId(), searchCriteria   .getJobStatus());
+            result = jobService.findBySearchCrieria(searchCriteria,false);
+        }
+        return result;
+    }
 
     @RequestMapping(value = "/employee/jobs/search/selectedDate",method = RequestMethod.POST)
     public SearchResult<JobDTO> findByDateSelected(@RequestBody SearchCriteria searchCriteria) {
@@ -316,55 +382,15 @@ public class JobManagementResource {
 	}
 
 
-    //Asset
-    @RequestMapping(path="/asset",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<?> saveAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request) {
-        log.debug("Asset DTO save request ="+ assetDTO);
-        AssetDTO response = jobService.saveAsset(assetDTO);
-        log.debug("Asset save response - "+ response);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
 
-    @RequestMapping(value = "/assets/search",method = RequestMethod.POST)
-    public List<AssetDTO> findAllAssets(HttpServletRequest request) {
-        log.info("--Invoked Location.findAll --");
-        return jobService.findAllAssets();
-    }
-
-    @RequestMapping(path="/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId){
-        return jobService.getSiteAssets(siteId);
-    }
-
-    @RequestMapping(path="/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public AssetDTO getAsset(@PathVariable("id") Long id){
-        return jobService.getAssetDTO(id);
-    }
-
-    @RequestMapping(path="/asset/code/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public AssetDTO getAssetByCode(@PathVariable("code") String code){
-        return jobService.getAssetByCode(code);
-    }
-
-    @RequestMapping(path="/asset/{id}",method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request, @PathVariable("id") Long id) {
-        if(assetDTO.getId()==null) assetDTO.setId(id);
-        log.debug("Asset Details in updateAsset = "+ assetDTO);
-        AssetDTO response = jobService.updateAsset(assetDTO);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
-    }
-
-    @RequestMapping(value = "/asset/{id}/qrcode", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-    public String generateAssetQRCode(@PathVariable("id") long assetId) {
-        return jobService.generateAssetQRCode(assetId);
-    }
 
 	@RequestMapping(path="/jobs/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ImportResult> importJobData(@RequestParam("jobFile") MultipartFile file){
 		Calendar cal = Calendar.getInstance();
-		ImportResult result = importUtil.importJobData(file, cal.getTimeInMillis());
+		ImportResult result = importService.importJobData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+	    		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+	    }
 		return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
 	}
 
@@ -381,7 +407,7 @@ public class JobManagementResource {
 					result.setMsg("Completed importing");
 					break;
 				case "FAILED" :
-					result.setMsg("Failed to import. Please try again");
+					//result.setMsg("Failed to import. Please try again");
 					break;
 				default :
 					result.setMsg("Completed importing");
@@ -406,12 +432,20 @@ public class JobManagementResource {
 
     @RequestMapping(value = "/job/export",method = RequestMethod.POST)
     public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
-	    //log.debug("JOB EXPORT STARTS HERE **********");
+	    log.debug("JOB EXPORT STARTS HERE **********"+searchCriteria.isReport());
         ExportResponse resp = new ExportResponse();
         if(searchCriteria != null) {
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            searchCriteria.setReport(true);
             SearchResult<JobDTO> result = jobService.findBySearchCrieria(searchCriteria, true);
             List<JobDTO> results = result.getTransactions();
+            for (JobDTO job:result.getTransactions()){
+                    log.debug("Location from search result ------- "+job.getBlock());
+            }
+
+            for (JobDTO job: results){
+                log.debug("Location from list result ------- "+job.getBlock());
+            }
             resp.addResult(jobService.generateReport(results, searchCriteria));
 
            // log.debug("RESPONSE FOR OBJECT resp *************"+resp);
@@ -465,5 +499,24 @@ public class JobManagementResource {
         log.info("--Invoked findCheckInOut By JobId--"+jobId);
         return jobService.findCheckInOutByJob(jobId);
     }
+
+    @RequestMapping(value="/uploadAttendanceCheckIn", method= RequestMethod.GET)
+    public void uploadAttendance() {
+    	amazonSerivce.uploadExistingCheckin();
+    }
+
+    @RequestMapping(value = "/job/uploadExisting/checklistImg", method = RequestMethod.POST)
+    public String uploadExistingChecklist() {
+    	log.debug("Existing checklist image upload to AWS s3");
+    	return jobService.uploadExistingChecklistImg();
+    }
+
+    @RequestMapping(value = "/getFilesFromAws", method = RequestMethod.GET)
+    public void getFilesFromS3() {
+    	log.debug("Get All Files from AWS S3");
+    	amazonService.getAllFiles();
+    }
+
+
 
 }

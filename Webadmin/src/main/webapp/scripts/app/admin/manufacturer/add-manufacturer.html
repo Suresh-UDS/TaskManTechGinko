@@ -1,0 +1,332 @@
+<div class="crud-form" ng-init="initLoad();"
+    data-unique-hash="a2ad475d60b22954085c657a73309b8f">
+    <div class="" >
+        <div class="row">
+            <!-- <div class="col-mod-12">
+                <div class="alert alert-success" ng-show="success">
+                    <strong>Manufacturer saved!</strong>
+                </div>
+
+                <div class="alert alert-danger" ng-show="error">
+                    <strong>Manufacturer Not Saved!</strong> Please try again later.
+                </div>
+                <div class="alert alert-danger" ng-show="errorAssetExists">
+                    <strong>Manufacturer already registered!</strong> Please choose another one.
+                </div>
+            </div> -->
+            <div class="col-md-12">
+                <div class="">
+                    <div class="">
+                        <form  name="formSave" role="form" novalidate
+                                ng-submit="conform('save')"
+                                onClick="" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Manufacturer Details</div>
+                                    <div class="panel-body" style="min-height: 370px;">
+
+                                        <div class="row" ng-init="loadAllAssetTypes()">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group selectcon is-empty">
+                                                    <div class="row">
+                                                        <div class="col-md-10 pad-r-0px">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Type <span class="red-star">*</span></label>
+                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes" name="assetTypeName"
+                                                                        required tabindex="1">
+                                                                    <option value="">Select Asset Type ..</option>
+                                                                </select>
+
+                                                                <div ng-show="form.$submitted || form.assetTypeName.$touched">
+                                                                    <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
+                                                                        <p class="help-block" style="color:maroon"
+                                                                           ng-show="form.assetTypeName.$error.required">
+                                                                            Asset Type is required.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 pdng-top25">
+                                                            <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                <i class="material-icons">add</i>
+                                                            </a> -->
+                                                            <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
+                                                    <input id='manufacturerName' ng-model="manufacturer.name" name="manufacturerName"
+                                                           class='form-control InputTxtCapsAll' name='manufacturerName' type='text' value=""
+                                                           ng-minlength='5' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required tabindex="3" />
+
+                                                    <div ng-show="formSave.$submitted || formSave.manufacturerName.$touched">
+                                                        <div ng-show="formSave.manufacturerName.$dirty || formSave.manufacturerName.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="formSave.manufacturerName.$error.required">
+                                                                Manufacturer name is required.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="formSave.manufacturerName.$error.minlength">
+                                                                Manufacturer name is required to be at least 5 character.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="formSave.manufacturerName.$error.maxlength">
+                                                                Manufacturer name cannot be longer than 250 characters.
+                                                            </p>
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="formSave.manufacturerName.$error.pattern">
+                                                                Manufacturer name can only contain letters, digits and space.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Contact First Name</label>
+                                                    <input id='contactName' ng-model="manufacturer.contactFirstName"
+                                                           class='form-control InputTxtCaps' name='contactName' type='text' value=""
+                                                    tabindex="5" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Contact Last Name</label>
+                                                    <input id='lastName' ng-model="manufacturer.contactLastName"
+                                                           class='form-control InputTxtCaps' name='lastName' type='text' value=""
+                                                   tabindex="6" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Phone No</label>
+                                                    <input id='mobNum' ng-model="manufacturer.phone"
+                                                           class='form-control' name='phone' ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" type='text' value=""
+                                                    tabindex="9" />
+                                                    <div ng-show="formSave.$submitted || formSave.phone.$touched">
+                                                          <div ng-show="formSave.phone.$dirty || formSave.phone.$invalid">
+                                                           
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                               ng-show="formSave.phone.$error.minlength">
+                                                                phone no. is required to be at least 10 numbers.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
+                                                               ng-show="formSave.phone.$error.maxlength">
+                                                               phone no. cannot be longer than 13 numbers.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="formSave.phone.$error.pattern">
+                                                               phone no. can only contain + , - ,numbers and space.
+                                                            </p>
+                                                          </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Email</label>
+                                                    <input id='email' ng-model="manufacturer.email"
+                                                           class='form-control' name='email' pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50" type='email' value=""
+                                                   tabindex="10" />
+                                                   <div ng-show="formSave.$submitted || formSave.email.$touched">
+                                                     <div ng-show="formSave.email.$dirty || formSave.email.$invalid">
+                                                          <p class="help-block" style="color:maroon"
+                                                             ng-show="formSave.email.$error.pattern">
+                                                              email is invalid.
+                                                          </p>
+                                                          <p class="help-block" style="color: maroon"
+                                                            ng-show="formSave.email.$error.maxlength"
+                                                            translate-value-max="255">Email cannot be longer than 50
+                                                             characters.</p>
+                                                      </div>
+                                                   </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Address Details</div>
+                                    <div class="panel-body" style="min-height: 370px;">
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Line 1</label>
+                                                    <input id='line1' ng-model="manufacturer.addressLine1"
+                                                           class='form-control InputTxtCaps' name='line1' type='text' value=""
+                                                    tabindex="2" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Line 2</label>
+                                                    <input id='line2' ng-model="manufacturer.addressLine2"
+                                                           class='form-control InputTxtCaps' name='line2' type='text' value=""
+                                                   tabindex="4" />
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">City</label>
+                                                    <input id='City' ng-model="manufacturer.city"
+                                                           class='form-control InputTxtCaps' name='City' type='text' value=""
+                                                    tabindex="7" />
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">State</label>
+                                                    <input id='state' ng-model="manufacturer.state"
+                                                           class='form-control InputTxtCaps' name='state' type='text' value=""
+                                                   tabindex="8" />
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Pin Code</label>
+                                                    <input id='pinCode' ng-model="manufacturer.pincode"
+                                                           class='form-control' name='pinCode' ng-pattern='/^[0-9]{1,6}$/' type='text' value=""
+                                                    tabindex="11" />
+                                                    <div ng-show="formSave.$submitted || formSave.pinCode.$touched">
+	                                                    <div ng-show="formSave.pinCode.$dirty || formSave.pinCode.$invalid">
+	                                                    <p class="help-block" style="color:maroon"
+	                                                       ng-show="form.pinCode.$error.required">
+	                                                        Pin code is required.
+	                                                    </p>
+	                                                    <p class="help-block" style="color:maroon"
+	                                                       ng-show="formSave.pinCode.$error.pattern">
+	                                                        Pin code is invalid.
+	                                                    </p>
+	                                                    </div>
+                                                  </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">Country</label>
+                                                    <input id='country' ng-model="manufacturer.country"
+                                                           class='form-control InputTxtCaps' name='country' type='text' value=""
+                                                    tabindex="12" />
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-8 txt-align-rgt">
+                                <div class="form-group">
+
+                                    <!--<button class="btn btn-success" type="submit"-->
+                                            <!--id="form-button-save" ng-disabled="formSave.$invalid">-->
+                                        <!--<span class="btn-label"><i class="material-icons">check</i></span> Save-->
+                                    <!--</button>-->
+                                    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+                                            type="submit" id="form-button-save" ng-disabled="formSave.$invalid || btnDisable" tabindex="13">
+                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                    </button>
+                                    <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                            id="cancel-button" ng-disabled="btnDisable" ng-click="conform('cancel')" tabindex="14">
+                                        <i class="material-icons" >close</i> Cancel
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+             </div>
+
+         </div>
+    </div>
+
+</div>
+</div>
+
+<!-- Add asset type dialog -->
+
+<div id="addAssetType" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Asset Type</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addAssetTypeForm">
+                    <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true" ng-maxlength='250'
+                                   ng-pattern="/^[A-Za-z0-9\s]*$/"
+                            />
+                            <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.AssetType.$touched">
+                                <div ng-show="addAssetTypeForm.AssetType.$dirty || addAssetTypeForm.AssetType.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="form.AssetType.$error.required">
+                                        Asset Type is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.maxlength">
+                                        Asset Type cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addAssetTypeForm.AssetType.$error.pattern">
+                                        Asset Type can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                            <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset type dialog -->

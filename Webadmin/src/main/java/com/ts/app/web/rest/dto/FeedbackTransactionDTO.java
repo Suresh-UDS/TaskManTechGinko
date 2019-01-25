@@ -178,5 +178,16 @@ public class FeedbackTransactionDTO extends BaseDTO implements Serializable {
 	public void setOverallFeedback(boolean overallFeedback) {
 		this.overallFeedback = overallFeedback;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("id ="+ id);
+		sb.append(", site id ="+ siteId);
+		sb.append(", site name ="+ siteName);
+		sb.append(", block ="+ block);
+		sb.append(", floor ="+ floor);
+		sb.append(", zone ="+ zone);
+		return sb.toString();
+	}
     
 }

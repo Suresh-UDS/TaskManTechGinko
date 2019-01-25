@@ -1,0 +1,55 @@
+page-inventory-master {
+.shadow
+{
+  box-shadow: 0 1px 1px 1px #CCD;
+}
+  .brdr-radius
+  {
+    border-radius:15px !important;
+  }
+  .toolbar-title-md {
+    padding: 0 43px !important;
+    font-size: 2rem !important;
+    font-weight: 500 !important;
+    color: #424242 !important;
+  }
+  .padding-right0
+  {
+    padding-right:0px !important;
+  }
+  .padding-left0{
+    padding-left:0px !important;
+  }
+  .margin-top10
+  {
+    margin-top:10px !important;
+  }
+  .card .card-content {
+    padding: 15px 21px !important;
+    position: relative;
+  }
+  .table-responsive {
+    width: 100%;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #ddd;
+    margin-bottom:0px !important;
+  }
+  ion-card img {
+    width: 100% !important;
+    height:80px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .label
+  {
+    padding:3px 12px !important;
+  }
+}

@@ -1,6 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div ng-controller="SiteController" ng-init="initLoad();loadingStart();">
+    <div  ng-init="loadPageTop();loadingStart();">
 
 
         <div class="col-md-8">
@@ -14,8 +14,8 @@
             <!--</div>-->
 
            <div class="cardsCon addSiteCon">
-               <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveSite()">
+               <form ng-show="!success" ng-submit="conform('save',form.$invalid)" name="form" role="form" novalidate
+                     >
 
                    <div class="row">
 
@@ -23,8 +23,8 @@
 
 
                            <div class="panel panel-default">
-                               <div class="panel-heading">Details</div>
-                               <div class="panel-body">
+                               <div class="panel-heading">Site Details</div>
+                               <div class="panel-body DownArrowCon" style="min-height: 330px;">
 
                                    <div class="row">
 
@@ -38,56 +38,120 @@
                                                       autofocus  required autocomplete="off"/> -->
 
                                               <label class="control-label">Select Client<span class="red-star">*</span></label>
-                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select name='projectName'
-                                                      class="form-control " ng-model="selectedProject"  ng-options="project as project.name for project in projectsList" autofocus  required >
-                                                        <option value="">Select Client...</option>
-                                                    </select>
-                                               <div ng-show="form.$submitted || form.projectName.$touched">
+                                                
+                                               <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                        
+                                               <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
+
+												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegionsList(SelectClient.selected);">
+
+												   <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
+												  </ui-select-choices>
+												</ui-select>
+
+                                               <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
                                                    <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
                                                        <p class="help-block" style="color:maroon"
                                                           ng-show="form.projectName.$error.required">
                                                            Client name is required.
                                                        </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.minlength">
-                                                           Client name is required to be at least 2 character.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.maxlength">
-                                                           Client name cannot be longer than 50 characters.
-                                                       </p>
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.projectName.$error.pattern">
-                                                           Client name can only contain letters, digits and space.
-                                                       </p>
+                                                     
                                                    </div>
                                                </div>
 
 
                                            </div>
                                        </div>
+
+                                       <div class="col-md-10">
+                                           <div class="form-group">
+                                               <label class="control-label">Region</label>
+                                               <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                               <select name='region'
+                                                       class="form-control " ng-model="selectedRegion" ng-change="loadBranch(SelectClient.selected.id)"  ng-options="region.name for region in regionList" tabindex="4"    >
+                                                   <option value="">Select Region...</option>
+                                               </select>
+                                               <!--<div ng-show="form.$submitted || form.region.$touched">-->
+                                                   <!--<div ng-show="form.region.$dirty || form.region.$invalid">-->
+                                                       <!--<p class="help-block" style="color:maroon"-->
+                                                          <!--ng-show="form.region.$error.required">-->
+                                                           <!--Region is required.-->
+                                                       <!--</p>-->
+                                                   <!--</div>-->
+                                               <!--</div>-->
+                                           </div>
+                                       </div>
+                                       <div class="col-md-2" style="padding: 18px 0 0 0;">
+                                           <!-- <a href="javascript:void(0);"  data-toggle="collapse" data-parent="#accordian" data-target="#addRegion" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                               <i class="material-icons">add</i>
+                                           </a> -->
+                                           <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addRegion').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                       </div>
+
+                                       <!-- <div class="col-md-12 collapse" id="addRegion">
+                                           <div class="">
+                                               <input class="inputDescBox" id='regionName' ng-model="regionDetails.name"
+                                                      name='region' type='text' value=""/>
+                                               <a class="btn btn-success"  ng-click="addRegion()">Add</a>
+                                           </div>
+                                       </div> -->
+
+                                       <div class="col-md-10">
+                                           <div class="form-group">
+                                               <label class="control-label">Branch</label>
+                                               <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                               <select name='branch'
+                                                       class="form-control " ng-model="selectedBranch"  ng-options="branch.name for branch in branchList" tabindex="6" >
+                                                   <option value="">Select Branch...</option>
+                                               </select>
+                                               <!--<div ng-show="form.$submitted || form.region.$touched">-->
+                                               <!--<div ng-show="form.region.$dirty || form.region.$invalid">-->
+                                               <!--<p class="help-block" style="color:maroon"-->
+                                               <!--ng-show="form.region.$error.required">-->
+                                               <!--Region is required.-->
+                                               <!--</p>-->
+                                               <!--</div>-->
+                                               <!--</div>-->
+                                           </div>
+                                       </div>
+                                       <div class="col-md-2" style="padding: 18px 0 0 0;">
+                                          <!--  <a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addBranch" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                               <i class="material-icons">add</i>
+                                           </a> -->
+                                           <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addBranch').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                       </div>
+
+                                       <!-- <div class="col-md-12 collapse" id="addBranch">
+                                           <div class="">
+                                               <input class="inputDescBox" id='branchName' ng-model="branchDetails.name"
+                                                      name='region' type='text' value=""/>
+                                               <a class="btn btn-success"  ng-click="addBranch()">Add</a>
+                                           </div>
+                                       </div> -->
+
+
                                        <div class="col-md-12">
                                            <div class="form-group">
                                                <label class="control-label">Site Name<span class="red-star">*</span> </label>
-                                               <input id='siteName' ng-model="site.name" class='form-control'
+                                               <input id='siteName' ng-model="site.name" class='form-control InputTxtCapsAll'
                                                       name='siteName' type='text' value=""
-                                                      ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
-                                               <div ng-show="form.$submitted || form.siteName.$touched">
+                                                      ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="7"  required/>
+                                               <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
                                                    <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                           ng-show="form.siteName.$error.required">
                                                            Site name is required.
                                                        </p>
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                           ng-show="form.siteName.$error.minlength">
                                                            Site name is required to be at least 5 character.
                                                        </p>
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                           ng-show="form.siteName.$error.maxlength">
                                                            Site name cannot be longer than 50 characters.
                                                        </p>
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                           ng-show="form.siteName.$error.pattern">
                                                            Site name can only contain letters, digits and space.
                                                        </p>
@@ -96,44 +160,100 @@
                                            </div>
                                        </div>
 
+
+
                                    </div>
                                    <div class="row">
                                        <div class="col-md-12">
                                            <div class="form-group ">
                                                <label class="control-label">Address<span class="red-star">*</span> </label>
-                                               <input id='siteAddress' ng-model="site.address" class='form-control'
+                                               <input id='siteAddress' ng-model="site.address" class='form-control InputTxtCaps'
                                                       name='address' type='text' value=""
-                                                      ng-minlength=1 autofocus required/>
-                                               <div ng-show="form.$submitted || form.address.$touched">
+                                                      ng-minlength=1 tabindex="8"  required/>
+                                               <div ng-show="form.$submitted || form.address.$touched || form.address.$dirty">
                                                    <div ng-show="form.address.$dirty || form.address.$invalid">
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                           ng-show="form.address.$error.required">
                                                            Address is required.
                                                        </p>
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                           ng-show="form.address.$error.minlength">
                                                            Address to be at least 5 character.
                                                        </p>
 
                                                    </div>
                                                </div>
-
-
-
                                            </div>
                                        </div>
                                    </div>
                                    <div class="row">
                                        <div class="col-md-6">
                                            <div class="form-group">
-                                               <label class="control-label">State</label>
-                                               <input type="text" ng-model="site.state" class="form-control">
+                                               <label class="control-label">City <span class="red-star">*</span></label>
+                                               <input type="text" name="city" ng-model="site.city" class="form-control InputTxtCaps" tabindex="9" required>
+                                               <div ng-show="form.$submitted || form.city.$touched || form.city.$dirty">
+                                                   <div ng-show="form.city.$dirty || form.city.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.city.$error.required">
+                                                           City is required.
+                                                       </p>
+                                                   </div>
+                                               </div>
                                            </div>
                                        </div>
                                        <div class="col-md-6">
                                            <div class="form-group">
-                                               <label class="control-label">Country</label>
-                                               <input type="text" ng-model="site.country" class="form-control">
+                                               <label class="control-label">State <span class="red-star">*</span></label>
+                                               <!-- <input type="text" ng-model="site.state" class="form-control InputTxtCaps"> -->
+                                               <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select name='stateName'
+                                                  class="form-control " ng-model="site.state"  ng-options="stateName for stateName in stateNames" tabindex="10"   required >
+                                                    <option value="">Select State...</option>
+                                                </select>
+                                                <div ng-show="form.$submitted || form.stateName.$touched || form.stateName.$dirty">
+                                                   <div ng-show="form.stateName.$dirty || form.stateName.$invalid">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.stateName.$error.required">
+                                                           State is required.
+                                                       </p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       
+                                   </div>
+                                   <div class="row">
+                                       
+                                       <div class="col-md-6">
+                                           <div class="form-group">
+                                               <label class="control-label">Pin Code<span class="red-star">*</span></label>
+                                               <input type="text" name="pinCode" ng-model="site.pinCode" ng-pattern='/^[0-9]{6}$/' class="form-control InputTxtCaps" tabindex="11" required>
+                                               <div ng-show="form.$submitted || form.pinCode.$touched || form.pinCode.$dirty">
+                                                   <div ng-show="form.pinCode.$dirty || form.pinCode.$invalid">
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                          ng-show="form.pinCode.$error.required">
+                                                           Pin code is required.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                          ng-show="form.pinCode.$error.pattern">
+                                                           Pin code is invalid.
+                                                       </p>
+                                                   </div>
+                                               </div> 
+                                           </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                           <div class="form-group">
+                                               <label class="control-label">Country <span class="red-star">*</span></label>
+                                               <input type="text" name="country" ng-model="site.country" class="form-control InputTxtCaps" tabindex="12" required>
+                                               <div ng-show="form.$submitted || form.country.$touched || form.country.$dirty">
+                                                   <div ng-show="form.country.$dirty || form.country.$invalid || form.country.$dirty">
+                                                       <p class="help-block" style="color:maroon"
+                                                          ng-show="form.country.$error.required">
+                                                           Country is required.
+                                                       </p>
+                                                   </div>
+                                               </div>
                                            </div>
                                        </div>
                                    </div>
@@ -147,20 +267,24 @@
 
 
                            <div class="panel panel-default">
-                               <div class="panel-heading">Location</div>
-                               <div class="panel-body">
+                               <div class="panel-heading">Location Details</div>
+                               <div class="panel-body" style="min-height: 330px;">
 
                                    <div class="row">
                                        <div class="col-md-6">
                                            <div class="form-group  ">
                                                <label class="control-label">Site Location (Latitude)<span class="red-star">*</span> </label>
                                                <input type="text" class="form-control"   name='latitude'
-                                                      ng-model="site.addressLat" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
-                                               <div ng-show="form.$submitted || form.latitude.$touched">
+                                                      ng-model="site.addressLat" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' tabindex="2"  required autocomplete="off"/>
+                                               <div ng-show="form.$submitted || form.latitude.$touched || form.latitude.$dirty">
                                                    <div ng-show="form.latitude.$dirty || form.latitude.$invalid">
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                           ng-show="form.latitude.$error.required">
                                                            Latitude is required.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                           ng-show="form.latitude.$error.pattern">
+                                                            Latitude is invalid.
                                                        </p>
                                                    </div>
                                                </div>
@@ -172,14 +296,18 @@
                                        <div class="col-md-6">
                                            <div class="form-group  ">
                                                <label class="control-label">Site Location (Longitude)<span class="red-star">*</span> </label>
-                                               <input type="text" class="form-control"   name='siteLocation'
-                                                      ng-model="site.addressLng" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
-                                               <div ng-show="form.$submitted || form.siteLocation.$touched">
-                                                   <div ng-show="form.siteLocation.$dirty || form.siteLocation.$invalid">
-                                                       <p class="help-block" style="color:maroon"
-                                                          ng-show="form.siteLocation.$error.required">
+                                               <input type="text" class="form-control"   name='longitude'
+                                                      ng-model="site.addressLng" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' tabindex="3"  required autocomplete="off"/>
+                                               <div ng-show="form.$submitted || form.longitude.$touched || form.longitude.$dirty">
+                                                   <div ng-show="form.longitude.$dirty || form.longitude.$invalid">
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                          ng-show="form.longitude.$error.required">
                                                            Longitude is required.
                                                        </p>
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                           ng-show="form.longitude.$error.pattern">
+                                                            Longitude is invalid.
+                                                        </p>
 
                                                    </div>
                                                </div>
@@ -192,13 +320,17 @@
                                            <div class="form-group ">
                                                <label class="control-label">Geo Fence Radius (in Kms.)<span class="red-star">*</span> </label>
                                                <input type="text" class="form-control"   name='radius'
-                                                      ng-model="site.radius"  required autocomplete="off"/>
-                                               <div ng-show="form.$submitted || form.radius.$touched">
+                                                      ng-model="site.radius" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' tabindex="5"  required autocomplete="off"/>
+                                               <div ng-show="form.$submitted || form.radius.$touched || form.radius.$dirty">
                                                    <div ng-show="form.radius.$dirty || form.radius.$invalid">
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                           ng-show="form.radius.$error.required">
                                                            Radius is required.
                                                        </p>
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                           ng-show="form.radius.$error.pattern">
+                                                            Radius is invalid.
+                                                        </p>
 
                                                    </div>
                                                </div>
@@ -222,90 +354,112 @@
                             <div class="panel-body">
 
                               <div class="row">
-                     
+
   									            <div class="col-md-4">
-  				
+
   				                        <!--<div class="form-group label-floating">-->
   				                        <!--<label class="control-label">Date</label>-->
   				                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
-  				
+
   				                        <!--</div>-->
-  				
+
   				                        <div class="form-group">
   				                            <label class="label-control">From Time</label>
-  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftFrom"  placeholder="{{shiftFrom | date:'hh:mm a'}}"/>
-  				
+  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+  				                            <input type="text" class="form-control timepicker"  id="shiftFrom" value="" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" tabindex="13" autocomplete="off" />
+
+
+                                      <div
+                                          ng-show="sStatus">
+                                          <p class="help-block" style="color: maroon">From time is required</p>
+                                      </div>
+
+
   				                        </div>
-  				
+
   				                    </div>
   				                    <div class="col-md-4">
-  				
+
   				                        <div class="form-group">
   				                            <label class="label-control">To Time</label>
-  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftTo"  placeholder="{{shiftTo | date:'hh:mm a'}}"/>
-  				
-  				                        </div>
-  				
-  				                    </div>    
-  				                    
-  				                    <div class="col-md-3">
+  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+  				                            <input type="text" class="form-control timepicker"  id="shiftTo" value="" ng-model="newShiftItem.endTimeDup" placeholder="hh:mm" tabindex="14"  autocomplete="off" />
 
-  			                            <button class="btn btn-success margn-top20" ng-click="addShiftItem($event)">
-  			                                <span class="btn-label">
+
+                                      <div
+                                          ng-show="eStatus">
+                                          <p class="help-block" style="color: maroon">To time is required</p>
+                                      </div>
+
+  				                        </div>
+
+  				                    </div>
+
+  				                    <div class="col-md-4">
+
+  			                            <button type="button" class="btn btn-success margn-top20" ng-click="addShiftItem($event)" tabindex="15">
+  			                                <span class="btn-label" >
   			                                    <i class="material-icons">add</i>
+                                                Add
   			                                </span>
-  			                                Add
+
   			                            </button>
-  			
-  			                        </div>               
+
+  			                        </div>
                      				</div>
+                            <div
+                                ng-show="dupStatus">
+                                <p class="help-block" style="color: maroon">Shift already exists.</p>
+                            </div>
                             <div class="row">
                               <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="">Items</label>
                                     <ul class="listOfActions list-group">
                                         <li class="list-group-item justify-content-between" ng-repeat=" item in shiftItems" ng-bind-html-unsafe="item.text">
-                                            {{item.startTime}} - {{item.endTime}}
+                                            {{item.startTime | date:'hh:mm a'}} - {{item.endTime | date:'hh:mm a'}}
                                             <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
                                         </li>
                                     </ul>
                                 </div>
                               </div>
                             </div>
-                   			</div>	   
-                   		</div>		
+                   			</div>
+                   		</div>
                    	</div>
                   </div>
 
                    <div class="row">
-
                        <div class="col-md-12">
+                           <button type="button" ng-click="conform('cancel')"
+                                   id="cancel-button" ng-disabled="btnDisable"  class="btn btn-danger pull-right" tabindex="17">
+                                   <i class="material-icons">close</i> Cancel
+                           </button>
+
+                           <!--<button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')"-->
+                                   <!--type="submit" id="form-button-save" ng-disabled="form.$invalid ">-->
+                               <!--<span class="btn-label"><i class="material-icons">check</i></span> Save-->
+                               <!--<i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>-->
+                           <!--</button>-->
 
 
-                           <button type="submit" ng-click="cancelSite()"
-                                   id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
-
-                           <button type="submit" type="submit"
-                                   id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Create site</button>
-
+                           <button type="submit"   id="form-button-save"
+                                   ng-disabled="form.$invalid || btnDisable"  class="btn btn-success ld ld-over-inverse pull-right"
+                                   ng-class="{'running':saveLoad}" tabindex="16">
+                           <span class="btn-label"><i class="material-icons">check</i></span> Create site
+                           <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                           </button>
                            <div class="clearfix"></div>
                        </div>
 
                    </div>
-
-
-
                </form>
            </div>
 
 
     </div>
 
-    <div class="">
+<!--     <div class="">
         <div class="row">
             <div class="col-mod-12">
                 <div class="alert alert-success" ng-show="success">
@@ -328,7 +482,7 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
 
 
 </div>
@@ -548,3 +702,177 @@
 <!--</div>-->
 
 <!--</div>-->
+
+<!-- Add region dialog -->
+
+<div id="addRegion" class="add-input-modal modal fade rModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Region</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addRegionForm" role="form" ng-submit="addRegion();" novalidate>
+                    
+                            <div class="row">
+	                              <div class="col-md-12">
+		                              <div class="form-group">
+	                                      <label class="control-label">Client<span class="red-star">*</span></label>
+	                                      <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+			                              <select class=" form-control " ng-model="regionSelectedProject" 
+			                              ng-options="project as project.name for project in projectsList track by project.name" 
+			                              name="projectName" ng-required="true" >
+		                                       <option value="">Select Client...</option>
+		                                   </select>
+		                                   <div ng-show="addRegionForm.$submitted || addRegionForm.projectName.$touched || addRegionForm.projectName.$dirty">
+		                                       <div ng-show="addRegionForm.projectName.$dirty || addRegionForm.projectName.$invalid">
+		                                           <p class="help-block" style="color:maroon"
+		                                              ng-show="addRegionForm.projectName.$error.required">
+		                                               Client name is required.
+		                                           </p>
+		
+		                                       </div>
+		                                   </div>
+		                              </div>
+	                               </div>
+                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+	                                <div class="form-group">
+		                                <label class="control-label">Region<span class="red-star">*</span></label>
+		                                <input class="form-control InputTxtCapsAll" id="addRegionInput" ng-model="clientRegion"   name="region" type="text" value="" ng-required="true" ng-maxlength='250'
+                                   ng-pattern="/^[A-Za-z0-9\s]*$/" />
+			                            <div ng-show="addRegionForm.$submitted || addRegionForm.region.$touched">
+			                                <div ng-show="addRegionForm.region.$dirty || addRegionForm.region.$invalid">
+			                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+			                                       ng-show="form.region.$error.required">
+			                                        Region is required.
+			                                    </p>
+			                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+			                                       ng-show="addRegionForm.region.$error.maxlength">
+			                                        Region cannot be longer than 250 characters.
+			                                    </p>
+			                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+			                                       ng-show="addRegionForm.region.$error.pattern">
+			                                        Region can only contain letters, digits and space.
+			                                    </p>
+			                                </div>
+			                            </div>
+		                            </div>
+	                            </div>
+                             </div>
+                     <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit"   class="btn btn-success" name="add" value="Add"  ng-disabled="addRegionForm.$invalid || btnDisable">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add region dialog -->
+
+<!-- Add branch dialog -->
+
+<div id="addBranch" class="add-input-modal modal fade bModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Branch</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addBranchForm" role="form" ng-submit="addBranch()" novalidate>
+                    <div class="row">
+                      <div class="col-md-12">
+                       <div class="form-group">
+                              <label class="control-label">Client<span class="red-star">*</span></label>
+                              <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                        <select class=" form-control " ng-model="branchSelectedProject"  ng-change="loadDepSitesList();loadRegions(branchSelectedProject.id);"
+                        ng-options="project as project.name for project in projectsList track by project.name" 
+                        name="projectName" ng-required="true" >
+                                <option value="">Select Client...</option>
+                            </select>
+                            <div ng-show="addBranchForm.$submitted || addBranchForm.projectName.$touched || addBranchForm.projectName.$dirty">
+                                <div ng-show="addBranchForm.projectName.$dirty || addBranchForm.projectName.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addBranchForm.projectName.$error.required">
+                                        Client name is required.
+                                    </p>
+
+                                </div>
+                            </div>
+                       </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                       <div class="col-md-12">
+                           <div class="form-group">
+                                  <label class="control-label">Region<span class="red-star">*</span></label>
+                                  <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                          <select name='region'
+                                                  class="form-control" name="regName" ng-model="selectedRegionOne"   
+                                                  ng-options="region.name for region in regions track by region.name"    >
+                                              <option value="">Select Region...</option>
+                                          </select>
+                                <div ng-show="addBranchForm.$submitted || addBranchForm.regName.$touched || addBranchForm.regName.$dirty">
+                                    <div ng-show="addBranchForm.regName.$dirty || addBranchForm.regName.$invalid">
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="addBranchForm.regName.$error.required">
+                                            Region name is required.
+                                        </p>
+
+                                    </div>
+                                </div>
+                           </div>
+                         </div>
+                       </div>
+                            <div class="row">
+                                <div class="col-md-12">
+	                                <div class="form-group">
+		                                <label class="control-label">Branch<span class="red-star">*</span></label>
+		                                <input class="form-control InputTxtCapsAll" id="addBranchInput" ng-model="regionBranch"   name="branch" type="text" value="" ng-required="true" ng-maxlength='250'
+                                   ng-pattern="/^[A-Za-z0-9\s]*$/" />
+			                            <div ng-show="addBranchForm.$submitted || addBranchForm.branch.$touched">
+			                                <div ng-show="addBranchForm.branch.$dirty || addBranchForm.branch.$invalid">
+			                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+			                                       ng-show="addBranchForm.$error.required">
+			                                        Branch is required.
+			                                    </p>
+			                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+			                                       ng-show="addBranchForm.branch.$error.maxlength">
+			                                        Branch cannot be longer than 250 characters.
+			                                    </p>
+			                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+			                                       ng-show="addBranchForm.branch.$error.pattern">
+			                                        Branch can only contain letters, digits and space.
+			                                    </p>
+			                                </div>
+			                            </div>
+		                            </div>
+	                            </div>
+                             </div>
+                    
+                     <div class="row">
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit"   class="btn btn-success"  name="add" value="Add" ng-disabled="addBranchForm.$invalid || btnDisable">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add branch dialog -->

@@ -1060,7 +1060,7 @@ demo = {
 
     },
 
-    initFullCalendar: function() {
+    /*initFullCalendar: function() {
         $calendar = $('#fullCalendar');
 
         today = new Date();
@@ -1100,9 +1100,21 @@ demo = {
 
                 // on select we show the Sweet Alert modal with an input
                 swal({
-                    title: 'Create an Event',
+                    title: 'Create an Schedule',
                     html: '<div class="form-group">' +
-                        '<input class="form-control" placeholder="Event Title" id="input-field">' +
+                        '<input type "text" class="form-control" placeholder="Schedule Title" id="input-title">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "text" class="form-control" placeholder="Weekly" id="input-frq" >' +
                         '</div>',
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
@@ -1111,7 +1123,9 @@ demo = {
                 }).then(function(result) {
 
                     var eventData;
-                    event_title = $('#input-field').val();
+                    event_title = $('#input-title').val();
+                    event_desc = $('#input-desc').val();
+                    event_frq = $('#input-frq').val();
 
                     if (event_title) {
                         eventData = {
@@ -1132,67 +1146,114 @@ demo = {
 
             // color classes: [ event-blue | event-azure | event-green | event-orange | event-red ]
             events: [{
-                    title: 'All Day Event',
+                    title: 'Vaccum Cleaner',
                     start: new Date(y, m, 1),
                     className: 'event-default'
                 },
                 {
                     id: 999,
-                    title: 'Repeating Event',
+                    title: 'Ac maintenance',
                     start: new Date(y, m, d - 4, 6, 0),
                     allDay: false,
                     className: 'event-rose'
                 },
                 {
                     id: 999,
-                    title: 'Repeating Event',
+                    title: 'washing machine maintenance',
                     start: new Date(y, m, d + 3, 6, 0),
                     allDay: false,
                     className: 'event-rose'
                 },
                 {
-                    title: 'Meeting',
+                    title: 'Electrical maintenance',
                     start: new Date(y, m, d - 1, 10, 30),
                     allDay: false,
                     className: 'event-green'
                 },
                 {
-                    title: 'Lunch',
+                    title: 'Ac maintenance',
                     start: new Date(y, m, d + 7, 12, 0),
                     end: new Date(y, m, d + 7, 14, 0),
                     allDay: false,
                     className: 'event-red'
                 },
                 {
-                    title: 'Md-pro Launch',
+                    title: 'Electrical maintenance',
                     start: new Date(y, m, d - 2, 12, 0),
                     allDay: true,
                     className: 'event-azure'
                 },
                 {
-                    title: 'Birthday Party',
+                    title: 'Vaccum Cleaner',
                     start: new Date(y, m, d + 1, 19, 0),
                     end: new Date(y, m, d + 1, 22, 30),
                     allDay: false,
                     className: 'event-azure'
                 },
                 {
-                    title: 'Click for Creative Tim',
+                    title: 'Job details 1',
                     start: new Date(y, m, 21),
                     end: new Date(y, m, 22),
-                    url: 'http://www.creative-tim.com/',
+                    url: 'http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088',
                     className: 'event-orange'
                 },
                 {
-                    title: 'Click for Google',
+                    title: 'Job details 2',
                     start: new Date(y, m, 21),
                     end: new Date(y, m, 22),
-                    url: 'http://www.creative-tim.com/',
+                    url: 'http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088',
                     className: 'event-orange'
                 }
-            ]
+            ],
+
+            eventClick: function(calEvent, jsEvent, view) {
+
+            //alert('Event: ' + calEvent.title);
+            if(calEvent.start !=''){
+                var d = new Date(calEvent.start);
+                var inputFdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var inputFdate= '';
+            }
+            if(calEvent.end !=null){
+               var d = new Date(calEvent.end);
+                var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }else{
+              var d = new Date(calEvent.start);
+              var inputTdate=d.toLocaleString(); // 7/25/2016, 1:35:07 PM
+            }
+
+            swal({
+                    title: 'View schedule',
+                    html: '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
+                        '</div>'+
+                        '<div class="form-group">' +
+                        '<input type "readonly" class="form-control" placeholder="Weekly" id="input-frq" value="">' +
+                        '</div>',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-danger',
+                    buttonsStyling: false
+                });
+
+            // change the border color just for fun
+            $(this).css('border-color', 'red');
+
+          }
+
+
         });
-    },
+    },*/
 
     showNotification: function(from, align, type,msg) {
 
@@ -1202,8 +1263,26 @@ demo = {
 
         }, {
             type: type,
+            delay: 500,
             //timer: 98000,
-            //timer: 3000,
+            timer: 1200,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    },
+    
+    showNotificationLonger: function(from, align, type,msg) {
+
+        $.notify({
+            icon: "notifications",
+            message: msg
+
+        }, {
+            type: type,
+            delay: 500,
+            timer: 300000,
             placement: {
                 from: from,
                 align: align

@@ -7,9 +7,8 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content create-padding>
             <div class="row">
-                <div class="col-md-10">
                     <div class="card">
                         <div class="card-content">
                             <ion-row padding>
@@ -37,29 +36,28 @@
                             </ion-row>
                         </div>
                     </div>
-                </div>
             </div>
 
-    <div class="margin-tp25 white-bg padding10">
-        <ion-row class="margin0">
-            <ion-col col-6 class="label-on-left">
-                <p class="line-height">Photo (Before)</p>
-            </ion-col>
-            <ion-col col-6 text-right>
-                <button class="ion-button" round (click)="viewCamera()" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">
-                <img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">
-            </ion-col>
-        </ion-row>
-    </div>
+    <!--<div class="margin-tp25 white-bg padding10">-->
+        <!--<ion-row class="margin0">-->
+            <!--<ion-col col-6 class="label-on-left">-->
+                <!--<p class="line-height">Photo (Before)</p>-->
+            <!--</ion-col>-->
+            <!--<ion-col col-6 text-right>-->
+                <!--<button class="ion-button" round (click)="viewCamera()" class="camera-btn"><ion-icon name="ios-camera"></ion-icon></button>-->
+            <!--</ion-col>-->
+        <!--</ion-row>-->
+        <!--<ion-row>-->
+            <!--<ion-col col-3 *ngFor="let image of takenImages;let i of index" class="">-->
+                <!--<img [src]="image" class="job-img margin-bottom25" (click)="viewImage(i,image)">-->
+            <!--</ion-col>-->
+        <!--</ion-row>-->
+    <!--</div>-->
 </ion-content>
 
 <ion-footer>
     <ion-toolbar class="align-center" >
-        <button class="btn btn-warning center margin-auto" type="submit" (click)="saveQuotation(title,description)">
+        <button has-permission="QuotationCreate" class="btn btn-warning center margin-auto width38" type="submit" (click)="saveQuotation(title,description)">
             Next<ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en" ng-app="timeSheetApp" class="no-js" ng-class='{ noScroll: noscroll }'>
 
 <head>
     <meta charset="utf-8" />
@@ -9,6 +9,15 @@
     <title>Taskman Uds</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
+
+    <!-- Excel view & download css  start -->
+
+    <link rel="stylesheet" type="text/css" href="bower_components/devextreme/css/dx.spa.css" />
+    <link rel="stylesheet" type="text/css" href="bower_components/devextreme/css/dx.common.css" />
+    <link rel="dx-theme" data-theme="generic.light" href="bower_components/devextreme/css/dx.light.css" />
+
+    <!-- Excel view & download css end -->
+
     <!-- Bootstrap core CSS     -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <!--  Material Dashboard CSS    -->
@@ -17,13 +26,21 @@
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
 
+
+    <!-- Loading CSS-->
+    <link rel="stylesheet" type="text/css" href="/assets/css/loading.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/loading-btn.css"/>
+
+
     <!--  Feedback rating css    -->
     <link href="bower_components/angular-jk-rating-stars/dist/jk-rating-stars.css" rel="stylesheet" />
     <link href="scripts/components/angular-js-star-rating-directive/css/style.css" rel="stylesheet" />
-   
+
     <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick.css">
     <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick-theme.css">
 
+    <!--UI-Select CSS-->
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">
     <!-- Custom CSS     -->
     <link href="assets/css/custom.css" rel="stylesheet" />
 
@@ -37,16 +54,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/loaders.css/0.1.2/loaders.min.css" />
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
 
+    <!--  Full Calendar css  -->
+    <!-- <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.min.css"> -->
 
 
 </head>
 
-<body ng-app="timeSheetApp" ng-switch="isLoggedIn">
-    <div class="wrapper">
+<body  ng-switch="isLoggedIn" class="sidebar-mini">
+
+    <div ng-hide="!loginView" class="container-fluid" >
+        <!-- Initial Loader gif -->
+        <div class="loaderCenter">
+            <img src="/assets/img/progress.gif">
+            <h4>Application Loading.. Please Wait...</h4>
+        </div>
+    </div>
+
+    <div ng-show="loginView" class="LoginPageView">
+        <!-- Login start -->
+        <div  ui-view="login" ng-cloak="" class="LoginPageView" ></div>
+        <!-- Login end -->
+    </div>
+
+    <div class="wrapper" ng-hide="loginView">
             <!-- Left menu start -->
             <div  ui-view="navbar" ng-cloak="" ></div>
             <!-- Left menu end -->
-
         <div class="main-panel" id="loadPage" >
 
             <!-- Header start -->
@@ -54,14 +87,14 @@
             <!-- Header end -->
 
 
-            <div class="content" >
+            <div class="content">
                 <div class="container-fluid">
 
                     <!-- Page Loader gif -->
                     <img src="/assets/img/progress.gif" class="pageCenter" >
 
                     <!-- Content body start -->
-                    <div  ui-view="content"></div>
+                    <div  ui-view="content" ng-cloak=""></div>
                     <!-- Content body end -->
 
                 </div>
@@ -71,16 +104,20 @@
             <!-- Footer end -->
         </div>
 
-        
-
     </div>
+
     <div class="overlay"></div>
+
+
 
     <!-- bower:js -->
     <script src="bower_components/modernizr/modernizr.js"></script>
     <!--<script src="bower_components/jquery/dist/jquery.js"></script>-->
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
+    <!-- Local storage start -->
+    <script src="scripts/components/storage-service/storage-service.js"></script>
     <!--<script src="bower_components/angular-animate/angular-animate.js"></script>-->
     <!--<script src="bower_components/angular-messages/angular-messages.js"></script>-->
     <!--<script src="bower_components/angular-material/angular-material.js"></script>-->
@@ -91,7 +128,7 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <!--<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>-->
     <script src="bower_components/json3/lib/json3.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
@@ -104,10 +141,12 @@
     <script src="bower_components/chart.js/dist/Chart.min.js"></script>
     <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
 
-    <!-- Rating  -->
-    <!-- <script src="bower_components/angular1-star-rating/dist/index.js"></script> -->
-    <script src="bower_components/slick-carousel/slick/slick.js"></script>
-    <script src="bower_components/angular-slick/dist/slick.js"></script>
+    <script src="bower_components/highcharts/highcharts.js"></script>
+
+
+
+    <!--UI-Select- js -->
+    <script src="bower_components/angular-ui-select/dist/select.js"></script>
 
     <!--  Feedback rating js    -->
     <script src="/assets/js/prefixfree.min.js" type="text/javascript"></script>
@@ -118,6 +157,13 @@
     <!-- Pagination script -->
     <script src="scripts/components/angular-pagination-directive/js/index.js"></script>
 
+    <!-- EnterDirective script -->
+    <!--<script src="scripts/components/enterDirective/enterDirective.js"></script>-->
+
+    <!-- Excel view & download script -->
+    <script src="scripts/components/angular-excel-grid/index.js"></script>
+    <script src="scripts/components/angular-excel-grid/data.js"></script>
+
 
     <!-- endbower -->
 
@@ -127,6 +173,20 @@
     <script src="scripts/components/angular-google-maps.min.js"></script>
 
     <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
+
+    <!-- jquery:min js -->
+    <!--<script src="/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>-->
+
+    <!-- jquery:min js -->
+    <script src="assets/js/jquery.min.js"></script>
+
+    <!-- Rating  -->
+    <!-- <script src="bower_components/angular1-star-rating/dist/index.js"></script> -->
+    <script src="bower_components/slick-carousel/slick/slick.js"></script>
+    <!-- <script src="bower_components/angular-slick/dist/slick.js"></script> -->
+
+	<!--  CSRF -->
+	<script src="bower_components/spring-security-csrf-token-interceptor/dist/spring-security-csrf-token-interceptor.min.js"></script>
 
     <script src="scripts/app/app.js"></script>
     <script src="scripts/app/app.constants.js"></script>
@@ -154,6 +214,24 @@
     <script src="scripts/components/admin/price.service.js"></script>
 
     <script src="scripts/components/admin/asset.services.js"></script>
+    <script src="scripts/components/admin/manufacturer.services.js"></script>
+    <script src="scripts/components/admin/services/manufacturer-res.service.js"></script>
+
+    <script src="scripts/components/admin/vendor.services.js"></script>
+    <script src="scripts/components/admin/services/vendor-res.service.js"></script>
+
+    <script src="scripts/components/admin/parameterConfig.services.js"></script>
+    <script src="scripts/components/admin/services/parameterConfig-res.service.js"></script>
+
+    <script src="scripts/components/admin/parameter.services.js"></script>
+    <script src="scripts/components/admin/services/parameter-res.service.js"></script>
+
+    <script src="scripts/components/admin/parameterUOM.services.js"></script>
+    <script src="scripts/components/admin/services/parameterUOM-res.service.js"></script>
+
+    <script src="scripts/components/admin/assetType.services.js"></script>
+    <script src="scripts/components/admin/services/assetType-res.service.js"></script>
+    <script src="scripts/components/admin/services/asset-res.service.js"></script>
 
     <script src="scripts/components/admin/services/project-res.service.js"></script>
     <script src="scripts/components/admin/services/projects.service.js"></script>
@@ -165,13 +243,20 @@
     <script src="scripts/components/admin/services/employees.service.js"></script>
     <script src="scripts/components/admin/user.service.js"></script>
     <script src="scripts/components/user/users.service.js"></script>
-    <script src="scripts/components/admin/services/user-res.service.js"></script>
+   <!--  <script src="scripts/components/admin/services/user-res.service.js"></script> -->
     <script src="scripts/components/admin/services/attendance-res.service.js"></script>
     <!-- <script src="scripts/components/admin/services/attendance.service.js"></script> -->
     <script src="scripts/components/admin/attendance.service.js"></script>
     <script src="scripts/components/admin/ticket.service.js"></script>
 
+    <script src="scripts/components/admin/services/sla.service.js"></script>
+    <script src="scripts/components/admin/services/sla.res.service.js"></script>
+	<script src="scripts/components/admin/sla.service.js"></script>
     <script src="scripts/components/admin/rateCard.service.js"></script>
+
+    <script src="scripts/components/admin/services/expense.service.js"></script>
+    <script src="scripts/components/admin/services/expense.res.service.js"></script>
+    <script src="scripts/components/admin/expense.service.js"></script>
 
     <script src="scripts/components/admin/usergroup.service.js"></script>
     <script src="scripts/components/admin/services/usergroup-res.service.js"></script>
@@ -185,7 +270,7 @@
     <script src="scripts/components/admin/services/device-res.service.js"></script>
     <script src="scripts/components/admin/services/devices.service.js"></script>
     <script src="scripts/components/map.directive.js"></script>
-    
+
 
     <script src="scripts/components/admin/moduleaction.service.js"></script>
     <script src="scripts/components/admin/services/moduleaction-res.service.js"></script>
@@ -195,13 +280,27 @@
     <script src="scripts/components/admin/services/role-permission-res.service.js"></script>
     <script src="scripts/components/admin/services/role-permission.service.js"></script>
 
-    <script src="scripts/components/admin/ratecard.service.js"></script>
+    <!-- <script src="scripts/components/admin/ratecard.service.js"></script> -->
     <script src="scripts/components/admin/services/ratecard-res.service.js"></script>
     <script src="scripts/components/admin/services/ratecard.service.js"></script>
 
     <script src="scripts/components/admin/checklist.service.js"></script>
     <script src="scripts/components/admin/services/checklist-res.service.js"></script>
     <script src="scripts/components/admin/services/checklist.service.js"></script>
+
+	<script src="scripts/components/admin/services/ticket-res.service.js"></script>
+
+	<script src="scripts/components/admin/services/inventory-res.service.js"></script>
+	<script src="scripts/components/admin/inventory.service.js"></script>
+
+	<script src="scripts/components/admin/services/inventoryTrans-res.service.js"></script>
+	<script src="scripts/components/admin/inventory-transaction.service.js"></script>
+
+	<script src="scripts/components/admin/services/indent-res.service.js"></script>
+    <script src="scripts/components/admin/indent.service.js"></script>
+
+    <script src="scripts/components/admin/services/purchase-res.service.js"></script>
+    <script src="scripts/components/admin/purchase.service.js"></script>
 
     <script src="scripts/components/admin/feedback.service.js"></script>
     <script src="scripts/components/admin/services/feedback.service.js"></script>
@@ -236,6 +335,8 @@
     <script src="scripts/app/account/activate/activate.controller.js"></script>
     <script src="scripts/app/account/login/login.js"></script>
     <script src="scripts/app/account/login/login.controller.js"></script>
+    <script src="scripts/app/admin/change-password/change-password.js"></script>
+    <script src="scripts/app/admin/change-password/change-password.controller.js"></script>
     <script src="scripts/app/account/password/password.js"></script>
     <script src="scripts/app/account/password/password.controller.js"></script>
     <script src="scripts/app/account/password/password.directive.js"></script>
@@ -277,6 +378,27 @@
     <script src="scripts/app/admin/inventory/inventory-transaction-list.js"></script>
     <script src="scripts/app/admin/inventory/inventory-transaction.js"></script>
 
+    <script src="scripts/app/admin/sla/sla.controller.js"></script>
+    <script src="scripts/app/admin/sla/sla-list.js"></script>
+    <script src="scripts/app/admin/sla/sla.js"></script>
+
+    <script src="scripts/app/admin/expense/expense.controller.js"></script>
+    <script src="scripts/app/admin/expense/expense-list.js"></script>
+    <script src="scripts/app/admin/expense/expense.js"></script>
+
+    <script src="scripts/app/admin/indent/indent.controller.js"></script>
+    <script src="scripts/app/admin/indent/indent-list.js"></script>
+    <script src="scripts/app/admin/indent/indent.js"></script>
+
+    <script src="scripts/app/admin/expense/budget.controller.js"></script>
+    <script src="scripts/app/admin/expense/budget-list.js"></script>
+    <script src="scripts/app/admin/expense/budget.js"></script>
+
+
+    <script src="scripts/app/admin/purchase-requisition/purchase-requisition.controller.js"></script>
+    <script src="scripts/app/admin/purchase-requisition/purchase-requisition-list.js"></script>
+    <script src="scripts/app/admin/purchase-requisition/purchase-requisition.js"></script>
+
     <script src="scripts/app/admin/site/site.controller.js"></script>
     <script src="scripts/app/admin/site/site-list.js"></script>
     <script src="scripts/app/admin/site/site.js"></script>
@@ -292,10 +414,19 @@
 
     <script src="scripts/app/admin/user-roles-permission/module-actions.controller.js"></script>
     <script src="scripts/app/admin/user-roles-permission/role-permission.controller.js"></script>
-    <script src="scripts/app/admin/user-roles-permission/ratecard.controller.js"></script>
+    <!-- <script src="scripts/app/admin/user-roles-permission/ratecard.controller.js"></script> -->
 
     <script src="scripts/app/admin/asset/asset.controller.js"></script>
     <script src="scripts/app/admin/asset/asset.js"></script>
+
+    <script src="scripts/app/admin/manufacturer/manufacturer.controller.js"></script>
+    <script src="scripts/app/admin/manufacturer/manufacturer.js"></script>
+
+    <script src="scripts/app/admin/vendor/vendor.controller.js"></script>
+    <script src="scripts/app/admin/vendor/vendor.js"></script>
+
+    <script src="scripts/app/admin/parameterConfig/parameterConfig.controller.js"></script>
+    <script src="scripts/app/admin/parameterConfig/parameterConfig.js"></script>
 
     <script src="scripts/app/admin/dashboard/dashboard.controller.js"></script>
     <script src="scripts/app/admin/dashboard/dashboard.js"></script>
@@ -307,7 +438,7 @@
 
     <script src="scripts/app/admin/employee/attendance.controller.js"></script>
     <script src="scripts/app/admin/employee/attendance-list.js"></script>
-    <script src="scripts/app/admin/employee/attendance.js"></script>
+    <!-- <script src="scripts/app/admin/employee/attendance.js"></script> -->
 
     <script src="scripts/app/admin/location/location.controller.js"></script>
     <script src="scripts/app/admin/location/location.js"></script>
@@ -334,6 +465,12 @@
     <script src="scripts/app/admin/reports/ticket-report.controller.js"></script>
     <script src="scripts/app/admin/reports/ticket-report-list.js"></script>
 
+    <!-- <script src="scripts/app/admin/reports/feedback-report.controller.js"></script>
+    <script src="scripts/app/admin/reports/feedback-report.js"></script> -->
+
+    <script src="scripts/app/admin/reports/asset-report.controller.js"></script>
+    <script src="scripts/app/admin/reports/asset-report-list.js"></script>
+
     <script src="scripts/app/admin/in-out/in-out-list.js"></script>
     <script src="scripts/app/admin/in-out/in-out.controller.js"></script>
     <script src="scripts/components/admin/in-out.service.js"></script>
@@ -351,9 +488,9 @@
     <script src="scripts/app/admin/usergroup/usergroup-list.js"></script>
     <script src="scripts/app/admin/usergroup/usergroup.js"></script>
 
-    <script src="scripts/app/admin/usergroup/user-roles.controller.js"></script>
+    <!-- <script src="scripts/app/admin/usergroup/user-roles.controller.js"></script>
     <script src="scripts/app/admin/usergroup/user-roles-list.js"></script>
-    <script src="scripts/app/admin/usergroup/user-roles.js"></script>
+    <script src="scripts/app/admin/usergroup/user-roles.js"></script> -->
 
     <script src="scripts/app/admin/device/device.controller.js"></script>
     <script src="scripts/app/admin/device/device-list.js"></script>
@@ -364,7 +501,7 @@
 
     <script src="scripts/app/admin/settings/settings.controller.js"></script>
     <script src="scripts/app/admin/settings/settings.js"></script>
-    <script src="scripts/app/admin/settings/settings-list.js"></script>
+    <!-- <script src="scripts/app/admin/settings/settings-list.js"></script> -->
 
     <script src="scripts/app/admin/manage.js"></script>
     <script src="scripts/app/admin/report.js"></script>
@@ -382,6 +519,14 @@
     <script src="scripts/app/admin/tickets/ticket.controller.js"></script>
     <script src="scripts/app/admin/tickets/ticket-list.js"></script>
     <script src="scripts/app/admin/tickets/ticket.js"></script>
+
+
+     <!-- Excel view & download js  start -->
+
+    <script src="bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="bower_components/devextreme/js/dx.all.js"></script>
+
+    <!-- Excel view & download js  end -->
 
 
     <div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
@@ -403,7 +548,7 @@
                             <td>&nbsp;&nbsp;</td>
                             <td><img id="photoOutImg" width="250" height="250" src="#"
                                      class="img-responsive"></td>
-                        </tr>            
+                        </tr>
 
                     </table>
 
@@ -444,11 +589,35 @@
             </div>
         </div>
     </div>
+<!--confirmation-->
+<div id="conformationModal" class="delete-confirmation modal fade">
+  <form name="form" role="form" novalidations>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{conformText == 'cancel' ? "Discard" : conformText | uppercase}}</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure want to {{conformText == 'cancel' ? "discard the changes" : conformText }}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{conformText == 'cancel' ? "No" : "Cancel" }}</button>
+                <button type="submit" class="btn btn-success delete-confirmation-button" data-dismiss="modal" ng-click="back(conformText)">{{conformText == 'cancel' ? "Yes" : "Confirm" }}</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+
+<!--confirmation-->
 
 
 </body>
 <!--   Core JS Files   -->
-<script src="/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<!-- <script src="/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script> -->
 <script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="/assets/js/material.min.js" type="text/javascript"></script>
 <script src="/assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
@@ -483,14 +652,13 @@
 <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
 <script src="/assets/js/jasny-bootstrap.min.js"></script>
 <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-<script src="/assets/js/fullcalendar.min.js"></script>
+<script src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
 <script src="/assets/js/jquery.tagsinput.js"></script>
 <!-- Material Dashboard javascript methods -->
 <script src="/assets/js/material-dashboard.js?v=1.2.1"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="/assets/js/demo.js"></script>
-
 
 
 

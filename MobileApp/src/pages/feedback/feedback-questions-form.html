@@ -10,16 +10,22 @@
 <ion-content class="FeedbackQuesCon FeedBackContainer bg-white" id="scrollDiv">
 
 
+    <ion-row class="input-group width-full" margin-top="">
+        <ion-col col-12 text-center="" margin-top="">
+            <img src="img/logo.png"  alt="feedback image" class="logo-img">
+        </ion-col>
+    </ion-row>
+
     <ion-list class="CheckboxList" padding>
 
         <ion-item *ngFor="let q of questions" no-lines>
             <ion-label *ngIf="q.answerType!='RATING'">{{q.question}}</ion-label>
-            <ion-checkbox *ngIf="q.answerType!='RATING'" [(ngModel)]="q.answer" ></ion-checkbox>
+            <ion-checkbox *ngIf="q.answerType!='RATING'" [(ngModel)]="q.answer"  class="magn-feedback"></ion-checkbox>
         </ion-item>
 
     </ion-list>
     <ion-toolbar position="bottom" transparent class="txt-center" >
-        <button class="btn btn-warning" style="width:40%;" ion-button (click)="submitFeedback()">Submit</button>
+        <button class="btn btn-warning" style="width:40%;" ion-button (click)="submitFeedback()">Continue</button>
     </ion-toolbar>
 
 

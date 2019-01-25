@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import {
     AlertController, Events, ModalController, NavController, NavParams, PopoverController,
     Select
@@ -12,6 +12,8 @@ import {QuotationService} from "../service/quotationService";
 import {SiteService} from "../service/siteService";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "./quotation-image-popover";
+import {FileTransferObject, FileTransfer, FileUploadOptions} from "@ionic-native/file-transfer";
+import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 declare var demo;
 
 
@@ -36,7 +38,7 @@ export class CreateQuotationPage2 {
     siteDetails:any;
     showRateInformation:any;
     quotation:any;
-    rates:any
+    rates:any;
 
     clientEmailId:any;
     sentByUserId:any;
@@ -58,15 +60,21 @@ export class CreateQuotationPage2 {
     openSites:any;
     viewSiteName:any;
     selectSiteIndex:any;
+    qty:any;
+
+
+    fileTransfer: FileTransferObject = this.transfer.create();
 
     constructor(public navCtrl: NavController,public camera: Camera,public modalCtrl: ModalController,public navParams:NavParams,public popoverCtrl: PopoverController, public evts: Events, public authService:authService, public alertCtrl: AlertController, public componentService:componentService,
-                private quotationService: QuotationService, private siteService: SiteService
+                private quotationService: QuotationService, private siteService: SiteService,private transfer: FileTransfer,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig
                 ) {
 
         this.takenImages = [];
         this.quotationImg=this.navParams.get('quotationImg');
        console.log(this.navParams.get('quotationDetails'));
        var quotationDetails = this.navParams.get('quotationDetails');
+       console.log("Quotation");
+       console.log(this.navParams.get('quotationDetails'));
        this.quotation=this.navParams.get('quotationDetails');
         this.rateCardType = {};
         this.rates =[];
@@ -96,19 +104,30 @@ export class CreateQuotationPage2 {
         console.log(this.selectedSite);
         this.authService.getClientDetails(site.id).subscribe(
             response=>{
-                console.log(response);
-                this.sentToUserId = response.id;
-                this.sentToUserName = response.name;
-                this.clientEmailId = response.email;
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                    this.sentToUserId = response.id;
+                    this.sentToUserName = response.name;
+                    this.clientEmailId = response.email;
+                }
+
             }
         )
     }
 
     ionViewWillEnter(){
         this.siteService.searchSite().subscribe(response=>{
-            console.log(response.json());
-            this.allSites = response.json();
-            this.selectedSite=this.allSites[0].name;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log(response);
+                this.allSites = response;
+                this.selectedSite=this.allSites[0].name;
+                this.siteDetails= this.allSites[0];
+            }
+
         })
 
         this.getRateCardTypes();
@@ -116,23 +135,38 @@ export class CreateQuotationPage2 {
 
     getSiteEmployees(siteId){
         this.siteService.searchSiteEmployee(siteId).subscribe(response=>{
-            console.log(response.json());
-            this.siteEmployees = response.json();
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log(response);
+                this.siteEmployees = response;
+            }
+
         })
     }
 
     saveQuotation(quotation){
         console.log(quotation);
         this.quotationService.createQuotation(quotation).subscribe(response=>{
-            console.log(response);
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log(response);
+            }
+
         })
     }
 
     getRateCardTypes(){
         this.quotationService.getRateCardTypes().subscribe(response=>{
-            console.log("Rate Card types");
-            console.log(this.rateCardTypes);
-            this.rateCardTypes = response;
+            if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+            }else{
+                console.log("Rate Card types");
+                console.log(this.rateCardTypes);
+                this.rateCardTypes = response;
+            }
+
         })
     }
 
@@ -164,15 +198,17 @@ export class CreateQuotationPage2 {
 
         popover.onDidDismiss(data=>
         {
-            console.log("Popover dissmiss");
+            console.log("Popover dismiss");
             if(data)
             {
+                console.log("Grand total");
                 this.rates.push(data);
-                this.grandTotal=this.grandTotal+data.total;
+                this.grandTotal=this.grandTotal+data.cost;
                 console.log(this.rates);
             }
             else
             {
+                console.log("error in grand total");
                 console.log(data);
             }
 
@@ -191,18 +227,90 @@ export class CreateQuotationPage2 {
     {
         this.index=i;
         console.log("add total");
-        this.grandTotal = Math.abs(this.grandTotal-this.rates[i].total);
-        this.rates[i].total=no*cost;
-        console.log(this.rates[i].total);
+        this.grandTotal = Math.abs(this.grandTotal-this.rates[i].cost);
+        this.rates[i].cost=no*cost;
+        console.log(this.rates[i].cost);
         console.log(no+" * "+cost );
         console.log(this.grandTotal);
-        this.grandTotal =this.grandTotal+this.rates[i].total ;
+        this.grandTotal =this.grandTotal+this.rates[i].cost ;
         console.log("add total-------:"+this.grandTotal);
 
     }
 
 
-    saveRates()
+    saveRates(mode)
+    {
+        console.log("quotation");
+        console.log(this.quotation);
+        if(this.rates.length!=0)
+        {
+
+            if(this.siteDetails){
+                console.log("Save quotation with site id");
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "clientEmailId": this.clientEmailId,
+                    "siteId":this.siteDetails.id,
+                    "projectId":this.siteDetails.projectId,
+                    "projectName":this.siteDetails.projectName,
+                    "siteName":this.siteDetails.name,
+                    "grandTotal":this.grandTotal,
+                    "mode":mode
+                };
+                if(mode == 'submit'){
+                    console.log(mode);
+                    this.quotationDetails.submitted=true;
+                    this.quotationDetails.isSubmitted=true;
+                    this.quotationDetails.isDrafted=false;
+                    this.quotationDetails.drafted=false;
+
+                }else{
+                    console.log(mode);
+                    this.quotationDetails.drafted=true;
+                    this.quotationDetails.isDrafted=true;
+                    this.quotationDetails.submitted=false;
+                    this.quotationDetails.isSubmitted=false;
+                }
+
+                this.saveQuotationDetails(this.quotationDetails)
+            }else{
+                console.log("Save Quotation without site id");
+
+
+                this.quotationDetails = {
+                    "title":this.quotation.title,
+                    "description":this.quotation.description,
+                    "rateCardDetails":this.rates,
+                    "sentByUserId":this.sentByUserId,
+                    "sentByUserName":this.sentByUserName,
+                    "sentToUserId":this.sentToUserId,
+                    "sentToUserName":this.sentToUserName,
+                    "createdByUserId":this.sentByUserId,
+                    "createdByUserName":this.sentByUserName,
+                    "grandTotal":this.grandTotal,
+                    "drafted":true
+                };
+                this.presentAlert(this.quotationDetails,'Save Without Selecting Site');
+            }
+
+
+        }
+        else
+        {
+            demo.showSwal('basic','Add Quotation')
+
+        }
+    }
+
+    submitQuotation()
     {
         if(this.rates.length!=0)
         {
@@ -226,7 +334,7 @@ export class CreateQuotationPage2 {
                     "siteName":this.siteDetails.name,
                     "grandTotal":this.grandTotal,
                     "drafted":true,
-                    "mode":"create"
+                    "mode":"submit"
                 };
 
                 this.saveQuotationDetails(this.quotationDetails)
@@ -261,19 +369,57 @@ export class CreateQuotationPage2 {
 
     saveQuotationDetails(quotationDetails)
     {
+        console.log("Quotation Details");
+        console.log(quotationDetails);
         console.log("selected site in save Rates");
-        console.log(this.selectedSite,this.rates.type);
-
+        // console.log(this.selectedSite,quotationDetails.type);
         console.log("Before saving quotation");
         console.log(quotationDetails);
         this.quotationService.createQuotation(quotationDetails).subscribe(
             response=>{
-                console.log(response);
-                this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
-                this.navCtrl.setRoot(QuotationPage);
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                    if(this.takenImages.length>0){
+                        for(let i in this.takenImages) {
+                            console.log("image loop");
+                            console.log(i);
+                            console.log(this.takenImages[i]);
+                            console.log(this.takenImages[i].file);
+                            let token_header=window.localStorage.getItem('session');
+                            let options: FileUploadOptions = {
+                                fileKey: 'quotationFile',
+                                fileName:response._id+'_quotation',
+                                headers:{
+                                    'X-Auth-Token':token_header
+                                },
+                                params:{
+                                    quotationId:response._id,
+                                }
+                            };
 
-            },err=>{
+                            this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/quotation/image/upload', options)
+                                .then((data) => {
+                                    console.log(data);
+                                    var data_response = JSON.parse(data.response);
+                                    console.log(data_response);
+                                    console.log("image upload");
+                                }, (err) => {
+                                    console.log(err);
+                                    console.log("image upload fail");
+                                })
+
+                        }
+                    }
+                    this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
+                    this.navCtrl.setRoot(QuotationPage);
+
+                }
+                },
+               err=>{
                 this.componentService.showToastMessage('Error in drafting quotation, your changes cannot be saved!','bottom');
+                console.log(err);
             }
         )
 
@@ -304,9 +450,16 @@ export class CreateQuotationPage2 {
 
         this.quotationService.editQuotation(quotationDetails).subscribe(
             response=>{
-                console.log(response);
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log("Edit Quotation");
+                    console.log(response);
+                }
 
-
+            },err=>{
+                console.log("Error in edit quotation");
+                console.log(err);
             }
         )
 
@@ -337,14 +490,14 @@ export class CreateQuotationPage2 {
 
     viewImage(index,img)
     {
-        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:'view-img',showBackdrop:true});
+        let popover = this.popoverCtrl.create(QuotationImagePopoverPage,{i:img,ind:index},{cssClass:''});
         popover.present({
 
         });
 
         popover.onDidDismiss(data=>
         {
-            this.takenImages.pop(data);
+            // this.takenImages.pop(data);
         })
     }
     viewCamera() {
@@ -359,7 +512,7 @@ export class CreateQuotationPage2 {
         this.camera.getPicture(options).then((imageData) => {
 
             console.log('imageData -' +imageData);
-            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+            imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
 
             this.takenImages.push(imageData);
 
@@ -369,9 +522,14 @@ export class CreateQuotationPage2 {
     }
     viewSite(site,i)
     {
-        this.selectedSite=site;
+        console.log("Selecting site");
+        console.log(site);
+        console.log(i);
+        this.selectedSite=site.name;
         this.siteDetails = site;
         this.openSites=true;
         this.selectSiteIndex=i;
     }
+
+
 }

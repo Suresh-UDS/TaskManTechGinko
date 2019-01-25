@@ -43,6 +43,14 @@
 {
     background-color: #FFFFFF !important;
 }
+.orange-clr{
+    color:orange !important;
+}
+.bg-none
+{
+    background:none !important;
+    box-shadow:none !important;
+}
 /*
 .segmnt
 {
@@ -79,14 +87,19 @@
 {
   font-weight: 400;
 }
+.magn-feedback
+{
+    margin: 9px 36px 9px 40px;
+}
 p.siteName {
-    font-size: 12px !important;
+    font-size: 11px !important;
     color: #000 !important;
     padding-top: 0 !important;
     white-space: pre-line !important;
     text-transform: capitalize;
     line-height: 15px;
     width:70px;
+    font-weight: 400;
 }
 .scrollCon .label
 {
@@ -110,6 +123,13 @@ button.siteBtn
   padding: 5px 10px !important;
   margin: 0 8px;
   border-top: 3px solid #FFC107;
+}
+
+
+
+.sidebar .nav li>a:hover, .sidebar .nav li>a:focus
+{
+    /*background-color: orange !important;*/
 }
 .sidebar .nav li.active>a, .sidebar .nav li.active>a i
 {
@@ -200,6 +220,12 @@ container-scroll::-webkit-scrollbar-thumb
 .margn-btom20
 {
   margin-bottom:20px;
+}
+.padding-left0{
+    padding-left:0px !important;
+}
+.padding-right0{
+    padding-right:0px !important;
 }
 .padding-left5
 {
@@ -636,7 +662,7 @@ span.EmpNameTxt
   font-family: robotoLight !important;
   text-align:left;
   margin: 0;
-  padding: 5px 0;
+  padding: 5px 2px !important;
 }
 .InitFeedbackCon .InputCon
 {
@@ -708,6 +734,10 @@ span.EmpNameTxt
 {
     float: left;
 }
+.clearfix
+{
+    clear: both;
+}
 .InputCon ion-label
 {
     color: #444444;
@@ -721,7 +751,15 @@ span.EmpNameTxt
 .select-box
 {
   max-width:100%;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid #dedede !important;
+
+}
+.max-w100
+{
+    max-width: 100% !important;
+}
+.padding-right0{
+    padding-right:0px !important;
 }
 .camera-btn
 {
@@ -744,6 +782,11 @@ span.EmpNameTxt
 .margin-bottom5
 {
   margin-bottom: 5px;
+}
+.border-none
+{
+    max-width:100% !important;
+    border-bottom:none !important;
 }
 .content-md
 {
@@ -840,17 +883,18 @@ span.EmpNameTxt
 {
   font-weight: 300 !important;
 }
-.bottom-border
+.fnt-wt-400
 {
-  border-bottom: 1px solid #eeeeee !important;
+   font-weight: 400 !important;
 }
+
 .login-bg-img
 {
  /* background: url('img/login.jpeg'); */
 }
 .width90
 {
-  width: 90%;
+  width: 90% !important;
 }
 .padding-top25
 {
@@ -914,10 +958,19 @@ a:hover, a:focus
 {
   background-image: linear-gradient(#ff9800, #ff9800), linear-gradient(#D2D2D2, #D2D2D2) !important;
 }
+.width42
+{
+    width:42% !important;
+}
+.width38
+{
+    width:38% !important;
+}
 .form-control,
 .form-group .form-control
 {
   background-image: linear-gradient(#ff9800, #ff9800), linear-gradient(#D2D2D2, #D2D2D2) !important;
+    border-bottom:none !important;
 }
 .form-group.has-error .form-control {
   background-image: linear-gradient(#f44336, #f44336), linear-gradient(#D2D2D2, #D2D2D2) !important;
@@ -994,6 +1047,29 @@ a:hover, a:focus
 {
   border-bottom: 1px solid #eeeeee;
 }
+
+.border-btm-blk
+{
+    border-bottom:1px solid #c1bcbc !important;
+}
+.LoginPageCon .full-page:before
+{
+    background-image: url(../assets/imgs/login.jpeg);
+}
+
+.border-inp
+{
+    border:1px solid #eeeeee;
+}
+.margin-top10
+{
+    margin-top:10px !important;
+}
+.margin-top25
+{
+    margin-top:25px !important;
+}
+
 p.titleTxt
 {
   font-weight:600;
@@ -1033,6 +1109,7 @@ p.titleTxt
 ion-fab-list
 {
   left:-9px !important;
+    margin: 70px -13px !important;
 }
 .empl-round
 {
@@ -1044,10 +1121,15 @@ ion-fab-list
 .view-img ion-backdrop
 {
   opacity: 0.7 !important;
+    transform: rotate(90deg) !important;
 }
 .job-img
 {
   transform: rotate(90deg);
+}
+.checklist-img
+{
+    transform: rotate(90deg);
 }
 .paddding-top20
 {
@@ -1107,7 +1189,16 @@ ion-spinner{
     -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
+.fnt-28
+{
+    font-size:28px !important;
+}
 
+
+.readingcon ion-card.valuesCard
+{
+    margin: 10px !important;
+}
 .map
 {
   height: 50%;
@@ -1122,7 +1213,15 @@ ion-spinner{
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
-
+.margin-left-right
+{
+    margin-right: 0 !important;
+    margin-left: -28px !important;
+}
+.clr-white
+{
+    color:white !important;
+}
 /* Custom radio Button */
 .cc-selector
 {
@@ -1488,6 +1587,10 @@ ion-grid .row:before
     /*padding: 6px 0 !important;*/
 /*}*/
 @media only screen and (min-width: 600px ){
+
+    .logo-img{
+        width:15% !important;
+    }
     h2
     {
         font-size: 4.4rem !important;
@@ -1621,5 +1724,60 @@ ion-grid .row:before
     {
         font-size: 16px !important;
     }
+
+   .margin-left0
+   {
+       margin-left:0px !important;
+   }
+   .gray-clr
+   {
+       background-color:#EEEEEE !important;
+   }
+    .toolbar-background-md
+    {
+        background-color:white !important;
+        border:none !important;
+    }
+
+    ion-spinner * {
+        width: 30% !important;
+        height: 28px;
+        stroke: #444;
+        fill: #222;
+    }
+
+.width80
+{
+    width:80px !important;
+    margin:auto !important;
+
 }
+.p-l-30
+{
+    padding-left:30px !important;
+}
+.p-r-30{
+    padding-right:30px !important;
+}
+<<<<<<< HEAD
+    .fab[mini] {
+        width: 32px !important;
+        height: 32px;
+        text-align: center !important;
+        margin-left: 4px !important;
+    }
+
+=======
+.mrgn-auto
+{
+    margin:auto !important;
+}
+.width30
+{
+    width:30% !important;
+}
+>>>>>>> Release-2.0-Inventory
+}
+
+
 

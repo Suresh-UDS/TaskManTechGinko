@@ -3,69 +3,257 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Job Details</ion-title>
+    <ion-title>{{jobDetails.id}}</ion-title>
   </ion-navbar>
+
+    <ion-toolbar class="toolbar">
+        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
+            <ion-segment-button value="details">Details</ion-segment-button>
+            <ion-segment-button value="checklist">Checklist</ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ViewJobsCon cardListCon"  [ngClass]="{'jobOverdueCon' : (jobDetails.status == 'OVERDUE'),
+                                    'jobCompletedCon' : (jobDetails.status == 'COMPLETED'),
+                                    'jobNormalCon' :(jobDetails.status =='OPEN' || jobDetails.status == 'ASSIGNED' || jobDetails.status == 'INPROGRESS')}">
 
-    <ion-row class="margin0 white-bg padding10">
-        <ion-col col-6 class="label-on-left">Job ID</ion-col>
+    <div [ngSwitch]="categories">
+        <ion-list *ngSwitchCase="'details'">
+          <ion-row class="margin0">
+            <ion-col col-6>
+              <ion-card class="new-card-md">
+                <ion-card-header>
+                  Job ID
+                </ion-card-header>
+                <ion-card-content>
+                  {{jobDetails.id}}
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col col-6>
+              <ion-card class="new-card-md">
+                <ion-card-header>
+                  Status
+                </ion-card-header>
+                <ion-card-content>
+
+                    <span>
+                        {{jobDetails.status}}
+                    </span>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+
+
+    <ion-card class="new-card-md">
+        <ion-card-header>
+            Job Name
+        </ion-card-header>
+        <ion-card-content>
+            {{jobDetails.title}}
+        </ion-card-content>
+    </ion-card>
+
+
+
+    <ion-card class="new-card-md">
+        <ion-card-header>
+            Description
+        </ion-card-header>
+        <ion-card-content>
+            {{jobDetails.description}}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="new-card-md">
+        <ion-card-header>
+            Employee Name
+        </ion-card-header>
+        <ion-card-content>
+            {{jobDetails.employeeName}}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="new-card-md">
+        <ion-card-header>
+            Site Name
+        </ion-card-header>
+        <ion-card-content>
+            {{jobDetails.siteName}}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-row class="margin0">
+
         <ion-col col-6>
-            <p text-right>{{jobDetails.id}}</p>
+            <ion-card class="new-card-md">
+                <ion-card-header>
+                    Planned Start Time
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.plannedStartTime | date:'MMM d, y, h:mm a'}}
+                </ion-card-content>
+            </ion-card>
         </ion-col>
-        <ion-col col-6 class="label-on-left">Job Name</ion-col>
         <ion-col col-6>
-            <p text-right>{{jobDetails.title}}</p>
+            <ion-card class="new-card-md">
+                <ion-card-header>
+                    Planned End Time
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.plannedEndTime | date:'MMM d, y, h:mm a'}}
+                </ion-card-content>
+            </ion-card>
         </ion-col>
-        <ion-col col-6 class="label-on-left">Description</ion-col>
+
+    </ion-row>
+
+
+
+
+    <ion-row class="margin0" *ngIf="jobDetails.status == 'COMPLETED' ">
+
         <ion-col col-6>
-            <p text-right>{{jobDetails.description}}</p>
+            <ion-card class="new-card-md">
+                <ion-card-header>
+                    Actual Start Time
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.actualStartTime | date:'MMM d, y, h:mm a'}}
+                </ion-card-content>
+            </ion-card>
         </ion-col>
-        <ion-col col-6 class="label-on-left">Status</ion-col>
+
         <ion-col col-6>
-            <p text-right>{{jobDetails.status}}</p>
+            <ion-card class="new-card-md">
+                <ion-card-header>
+                    Actual End Time
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.actualEndTime | date:'MMM d, y, h:mm a'}}
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+
+        <ion-col col-3 *ngFor="let image of jobDetails.images">
+            <img src="{{image.url}}" wdith="80px" height="80px" (click)="viewImage(image.url)">
         </ion-col>
     </ion-row>
 
-    <ion-row></ion-row>
+    <ion-row has-permission="TicketsView" class="margin0" *ngIf="jobDetails.ticketId>0">
 
-    <ion-row class="margin0 white-bg padding10">
-        <ion-col col-6 class="label-on-left">Employee Name</ion-col>
-        <ion-col col-6><p text-right>{{jobDetails.employeeName}}</p></ion-col>
-        <ion-col col-6 class="label-on-left">Site Name</ion-col>
-        <ion-col col-6><p text-right>{{jobDetails.siteName}}</p></ion-col>
-        <ion-col col-6 class="label-on-left">Planned Start Time</ion-col>
-        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.plannedStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
-        <ion-col col-6 class="label-on-left">Planned End Time</ion-col>
-
-        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.plannedEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
-    </ion-row>
-
-    <ion-row class="white-bg margin0 padding10" *ngIf="jobDetails.status == 'COMPLETED' ">
-        <ion-col col-6 class="label-on-left">Actual Start Time</ion-col>
-        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{jobDetails.actualStartTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
-        <ion-col col-6 class="label-on-left">Actual End Time</ion-col>
-        <ion-col col-6><p text-right><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{jobDetails.actualEndTime | date:'MMM d, y, h:mm a'}}</p></ion-col>
-        <ion-col col-3 *ngFor="let image of completedImages">
-            <img src="{{image}}" wdith="80px" height="80px" (click)="viewImage(image)">
+        <ion-col col-6>
+            <ion-card class="new-card-md">
+                <ion-card-header>
+                    Ticket Id
+                </ion-card-header>
+                <ion-card-content>
+                    {{jobDetails.ticketId}}
+                </ion-card-content>
+            </ion-card>
         </ion-col>
-    </ion-row>
-    <br>
+        <ion-col col-6>
+            <ion-card class="new-card-md">
+                <ion-card-header>
+                    Ticket Name
+                </ion-card-header>
+                <ion-card-content>
+                    {{jobDetails.ticketName}}
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
 
-    <ion-row has-permission="TicketsView" class="white-bg margin0 padding10" *ngIf="jobDetails.ticketId>0">
-        <ion-col col-6 class="label-on-left">Ticket Id</ion-col>
-        <ion-col col-6><p text-right>{{jobDetails.ticketId}}</p></ion-col>
-        <ion-col col-6 class="label-on-left">Ticket Name</ion-col>
-        <ion-col col-6><p text-right>{{jobDetails.ticketName}}</p></ion-col>
     </ion-row>
+        </ion-list>
 
+
+        <ion-list *ngSwitchCase="'checklist'">
+            <div  *ngIf="(!checkListItems || checkListItems == 0) && spinner" text-center class="margin-top25">
+                <ion-spinner name="circles"></ion-spinner>
+            </div>
+
+            <div *ngIf="(!checkListItems || checkListItems.length<=0)&& !spinner" >
+                <ion-card>
+                    <ion-card-content>
+                        <img src="assets/imgs/warning.svg">
+                        <span><p text-center>No Data Found</p></span>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+
+            <div  class="white-bg border-bottom1"  *ngFor="let list of checkListItems;let i = index">
+                <ion-grid class="padding-left0">
+                    <ion-row  no-margin class=" margin-auto">
+                        <!--<ion-col col-2>-->
+                            <!--<ion-item>-->
+                                <!--<ion-checkbox (change)="resetRemarks(i,list.completed)" [(ngModel)]="list.completed"></ion-checkbox>-->
+                            <!--</ion-item>-->
+                        <!--</ion-col>-->
+                        <ion-col col-6>
+                            <p text-left>Checklist Item:</p>
+                        </ion-col>
+                        <ion-col col-6>
+                            <p text-right="" class="clr-green" *ngIf="list.completed">{{list.checklistItemName}}</p>
+                            <p text-right=""  class="clr-red" *ngIf="!list.completed">{{list.checklistItemName}}</p>
+                        </ion-col>
+                        <!--<ion-col col-3 class="ver-center" >-->
+                            <!--<div *ngIf="list.image_1 != null" float-right="">-->
+                                <!--<button class="ion-button" round  class="camera-btn1" (click)="show(showIcon,i)"><ion-icon name="images"></ion-icon></button>-->
+                            <!--</div>-->
+                            <!--<div *ngIf="list.image_3 == null" class="margin-left15" float-right="">-->
+                                <!--<button class="ion-button" round (click)="viewCamera(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>-->
+                            <!--</div>-->
+                        <!--</ion-col>-->
+                    </ion-row>
+                    <ion-row  no-margin class=" margin-auto">
+                        <ion-col col-6>
+                            <p text-left>Remarks:</p>
+                        </ion-col>
+                        <ion-col col-6>
+                            <p text-right="" *ngIf="list.remarks">{{list.remarks}}</p>
+                            <p text-right="" *ngIf="!list.remarks">No Remarks Added</p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="no-margin margin-auto">
+                        <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
+                            <img [src]="list.imageUrl_1" class="job-img margin-bottom25" >
+                        </ion-col>
+                        <ng-template #image1>
+                            <ion-col col-4  class="margin-top25" *ngIf="list.image_1">
+                                <img [src]="list.image_1" class="job-img margin-bottom25" >
+                            </ion-col>
+                        </ng-template>
+
+                        <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">
+                            <img [src]="list.imageUrl_2" class="job-img margin-bottom25" >
+                        </ion-col>
+                        <ng-template #image2>
+                            <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
+                                <img [src]="list.image_2" class="job-img margin-bottom25" >
+                            </ion-col>
+                        </ng-template>
+
+                        <ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">
+                            <img [src]="list.imageUrl_3" class="job-img margin-bottom25" >
+                        </ion-col>
+                        <ng-template #image3>
+                            <ion-col col-4  class="margin-top25" *ngIf="list.image_3">
+                                <img [src]="list.image_3" class="job-img margin-bottom25" >
+                            </ion-col>
+                        </ng-template>
+                    </ion-row>
+                </ion-grid>
+            </div>
+        </ion-list>
+            </div>
 
 </ion-content>
 
-<ion-footer *ngIf="jobDetails.status !='COMPLETED'">
-    <ion-toolbar class="align-right" *ngIf="jobDetails.status !='COMPLETED'">
-        <button has-permission="TicketsView" *ngIf="jobDetails.ticketId>0" class="btn btn-success center pull-left" (click)="gotoTicket()" >View Ticket</button>
-        <button *ngIf="jobDetails.status !='COMPLETED'" class="btn btn-success center pull-right" type="submit" (click)="completeJob(jobDetails)">Complete Job</button>
-    </ion-toolbar>
-</ion-footer>
+<!--<ion-footer *ngIf="jobDetails.status !='COMPLETED'">-->
+    <!--<ion-toolbar class="align-right" *ngIf="jobDetails.status !='COMPLETED'">-->
+        <!--<button has-permission="TicketsView" *ngIf="jobDetails.ticketId>0" class="btn btn-success center pull-left" (click)="gotoTicket()" >View Ticket</button>-->
+        <!--<button *ngIf="jobDetails.status !='COMPLETED'" class="btn btn-success center pull-right" type="submit" (click)="completeJob(jobDetails)">Complete Job</button>-->
+    <!--</ion-toolbar>-->
+<!--</ion-footer>-->

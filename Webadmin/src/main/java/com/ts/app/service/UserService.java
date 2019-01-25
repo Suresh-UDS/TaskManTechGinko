@@ -1,16 +1,14 @@
 package com.ts.app.service;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.RandomUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.UserDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,25 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Authority;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRole;
-import com.ts.app.repository.AuthorityRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.PersistentTokenRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserGroupRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.UserRoleRepository;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.RandomUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.UserDTO;
+import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -325,6 +309,20 @@ public class UserService extends AbstractService {
 		});
 	}
 
+    public UserDTO changeNewPassword(long userId,String password) {
+	    log.debug("change password user Service userId: "+userId);
+	    log.debug("change password user Service password: "+password);
+        User user = userRepository.findOne(userId);
+        String encryptedPassword = passwordEncoder.encode(password);
+        user.setClearPassword(password);
+        user.setPassword(encryptedPassword);
+        userRepository.save(user);
+        log.debug("password changed for user"+user.getClearPassword());
+        UserDTO userDto = mapperUtil.toModel(user, UserDTO.class);
+        return userDto;
+
+    }
+
 	@Transactional(readOnly = true)
 	public Optional<User> getUserWithAuthoritiesByLogin(String login) {
 		return userRepository.findOneByLogin(login).map(u -> {
@@ -488,5 +486,6 @@ public class UserService extends AbstractService {
 		userDto.setActivated(user.getActivated());
 		return userDto;
 	}
+
 
 }

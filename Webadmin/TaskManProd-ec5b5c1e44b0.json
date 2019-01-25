@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "taskmanprod",
+  "private_key_id": "ec5b5c1e44b093249ab696b08caf6ca2c235cdbe",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCnf/MkCcaqwwPG\n6OwgUrltkDOm++dUM9WVlBgEgFA0EGACuN7o7+Sd8zdQctHvzT0ye/GejQLz7V03\nbt4ze9y3abee3JAaB2GuJogNsn9HvrOMIGFXX1IXp/Yt08hmnxgAptAnHE1yMI2n\nhHjus/N4rh621yAkNvlM2xY2SZTjhOTw+MavAvg6lfSSv6vk1qrnTz1mBO2LoqAC\nyIVSUc7JJmPPaLExeS7ejtbP9EJIeXbfTYygP68mBbvrbjwBG4T7fk+NgzLJnDny\nDep260Z2I0EJk913vpTeTOk8Hl4WabJwerGxCRazEznzbZAWKFlli068UjVroAcP\nsVLldeV3AgMBAAECggEAE5lkpWhhbzS/eeRiUMvtN5VCff0GzfL8wHJiNxCekeEC\nov7n0mDTounFJKwyxXkB+qjHFnLQkCNLn4NhC6woIOwFWNjdIbaQZvTKQbQLsaTu\nVGyrhzI3pF36b9VSozNldxoNzC3DICPvR1U4Y1H6ILpbDLDyaVpnZGdUW4jTm6WO\nFtt+/42sim42ElPXJsRU26g8VTBQmYteF1vX05BR9AmT4Q3yUv4Jb3lXB8buxzR/\nERpBu36mN5G07XCiDCtR1RKGVRmhnHpogy+Uc03JTPUEW70gOlXcyZXnMBim2jpY\nMzuK+duqWL3LblZvKT99qeVQmxAEbIK6BUKcGsRttQKBgQDgwUWkqeW0WNkZUE+o\n2we7nSMD+jw44OxQotcPO9ZNRhCOZSpACYGVC1Vjjy6L2m7qO3CDCENwDAcwYaH0\nz4fH4maCDku9nhLjcNFqHqHyl98YlA0MPmq56XQjdxBpP6vfAFhIyDLo39iR2ggq\n65X/fgBQHmBGBAGlJG5e5JHBSwKBgQC+yQsNfNI3YFGhEjOa/uA5HglwcHPnB8Cn\nhBDvgY33YGppv9g1q0j96G4pjjCBB1QIn1iLabyYGBxW/O9dSIhWlNmHgS/9Tbho\noPsVCb6IcFdPPfGlIDhktuXMsmHEVj4WSRnoIvxUTXDU/s+N3wUozSd2USSC6HTi\nz/umoAL9BQKBgQDH5Dz7YTtxtZ+IOvxOMldjTjMpQ3IyKCEk6l8ZJl/HpCvvaRw1\njf7Yvxa3kE2WhrQk0K6Va1EHIzt1lS/EmpqpdLs0qmBEiYVFET6/AfWI2/fIVUxx\nekXTiUUIkclfwggrMpRSTvOwV/22YlLnUVW7wKWonAuF2eRYqtkavnC/lwKBgCIz\nH8wXKAfNOFTLUnziW4dhnweM4Pn1Jc/hmLeWXcCOhATY4wUb40XAuJ6yYnd+vM2e\n4tx649fP2qStSqtKKUZ8AFKOEfAyUnBPCzNGP+VtXflSfVLAZ9uF/cOn5mavnwmX\nqRE31Eu4ZhWIZ+RiqiYaQIyxFv5wdSODbPT9kguRAoGBALDuiJieW+UAWWaRoDic\nsapx5Q8FuSHJKEBTmTB4hEksL6erilSg8lVCfrg0vFxYVFw1rouBw0ppn83i/KKi\n7xjTpZb4x/OvNUVzCwf/b4ZvkESDwBdACw/1w2wPGGbSWlZZbWybbiVPXaBVgxFq\n1kKu0aUG4tZZDIocE06lP/eX\n-----END PRIVATE KEY-----\n",
+  "client_email": "taskmangooglesheet@taskmanprod.iam.gserviceaccount.com",
+  "client_id": "112133092376712154285",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/taskmangooglesheet%40taskmanprod.iam.gserviceaccount.com"
+}

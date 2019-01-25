@@ -61,7 +61,7 @@
                                     <input type="text" class="form-control" placeholder="UOM" [(ngModel)]="uom" disabled>
                                 </div>
                             </ion-col>
-                            <button class="btn btn-warning pull-right margin-auto" (click)="createRateCard(rateCardDetails)" >Create</button>
+                            <button has-permission="RateCardCreate" class="btn btn-warning pull-right margin-auto" (click)="createRateCard(rateCardDetails)" >Create</button>
                             <div class="clearfix"></div>
                         </ion-row>
                 </div>

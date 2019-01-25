@@ -1,14 +1,13 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Project;
+import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
@@ -29,8 +28,11 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 //	@Query("SELECT distinct p FROM Project p join p.employees e WHERE e.id in (:empIds) and p.active = 'Y'")
 //	List<Project> findAll(@Param("empIds") List<Long> empIds);
 
-	@Query("SELECT distinct p FROM Project p join p.employeeProjSites e WHERE e.employee.id in (:empIds) and p.active = 'Y'")
+	@Query("SELECT distinct p FROM Project p join p.employeeProjSites e WHERE e.employee.id in (:empIds) and p.active = 'Y' order by p.name ASC")
 	List<Project> findAll(@Param("empIds") List<Long> empIds);
+
+	@Query("SELECT p FROM Project p where p.active='Y' order by p.name ASC ")
+    List<Project> findAll();
 
 	@Query("SELECT p FROM Project p join p.employeeProjSites e WHERE e.employee.id = :empId and p.active = 'Y'")
 	List<Project> findAllByUserGroupId(@Param("empId") long empId);
@@ -58,6 +60,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	@Query("SELECT p FROM Project p WHERE p.name like '%' || :name || '%' and p.active = 'Y'")
 	Page<Project> findAllByName(@Param("name") String name, Pageable pageRequest);
+
+	@Query(value = "SELECT p FROM Project p where p.name =:name")
+    List<Project> findNames(@Param("name") String name);
 
 	@Query("SELECT distinct p FROM Project p join p.employeeProjSites e WHERE p.name like '%' || :name || '%' and e.employee.id in (:empIds) and p.active = 'Y'")
 	Page<Project> findAllByName(@Param("name") String name, @Param("empIds") List<Long> empIds, Pageable pageRequest);

@@ -125,3 +125,6 @@ Desktop.ini
 # Gradle Wrapper
 ######################
 !gradle/wrapper/gradle-wrapper.jar
+/bin/
+/.gradle/
+/build/

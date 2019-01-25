@@ -121,7 +121,7 @@
                                             </div>
 
                                         </div>
-                                        
+
 
                                         <div class="row">
 
@@ -129,11 +129,11 @@
                                                 <div class="form-group">
 
                                                     <button class="btn btn-success" type="submit"
-                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                            id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>
                                                     <button class="btn btn-danger" type="button"
-                                                            ng-click="cancelRateCard()" id="cancel-button">
+                                                            ng-click="cancelRateCard()" id="cancel-button"  ng-disabled="btnDisable">
                                                         <i class="material-icons">close</i> Cancel
                                                     </button>
 

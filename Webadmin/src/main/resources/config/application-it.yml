@@ -20,27 +20,31 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/uds-attendance?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+#        url: jdbc:mysql://udstaskman.c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
         name:
-        username: root
-        password: Uds@2018
+        username: UDSTaskMan
+        password: Rd32018Uds
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
         show_sql: true
+        hibernate:
+            ddl-auto: update
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: true
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
-        host: smtp.gmail.com
+        host: smtp.office365.com
         port: 587
-        username: timesheettestuser1@gmail.com
-        password: Test123#
+        username: taskmanfms@uds.in
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
+            mail.smtp.ssl.enable: true
             mail.smtp.starttls.enable: true
             mail.smtp.port: 587
             mail.debug: true
@@ -66,14 +70,47 @@ export:
 qrcode:
     file:
          path: /opt/qrcode
+
+locationQRCode:
+    file:
+        path: /opt/location/qrcode
 attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
     file:
         path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+    musterroll:
+        report:
+            template:
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift:
+        startTime: 09:00
+        endTime: 17:00
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket
 import:
     file:
         path:
             new: /opt/imports/new
-            completed: /opt/imports/completed  
+            completed: /opt/imports/completed
+
+extensionImg: jpeg,jpg,png
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
+
+asset:
+   file:
+       path: /opt/asset/uploads/site
+   weekly:
+       template:
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
 max:
     user: 10
     userGroup: 2
@@ -98,7 +135,7 @@ email:
             title: Overdue job report
     compleed:
         report:
-            title: Completed job report    
+            title: Completed job report
 
 reports:
     job-report:
@@ -108,16 +145,31 @@ reports:
         url: https://taskmanadmin.uds.in/#/attendance-reports
         #url: http://ec2-13-127-100-174.ap-south-1.compute.amazonaws.com:8088/#/attendance-reports
     feedback-report:
-        url: https://taskmanadmin.uds.in/#/feedbacks        
+        url: https://taskmanadmin.uds.in/#/feedbacks
     ticket-report:
         url: https://taskmanadmin.uds.in/#/ticket-reports
+    asset-report:
+        url: https://taskmanadmin.uds.in/#/asset-report
+
+url:
+    ticket-view: https://taskmanadmin.uds.in#/view-ticket/
+    quotation-view: https://taskmanadmin.uds.in#/view-quotation/
+    job-view: https://taskmanadmin.uds.in#/view-job/
+
+#facedetection:
+#    api:
+#        url: https://api.kairos.com/detect
+#        enrollUrl: https://api.kairos.com/enroll
+#        verifyUrl: https://api.kairos.com/verify
+#        apiKey: a6ae8363069107177e06c3ca3f76a66b
+#        apiId: 2f2877f2
+
 facedetection:
     api:
-        url: https://api.kairos.com/detect
-        enrollUrl: https://api.kairos.com/enroll
-        verifyUrl: https://api.kairos.com/verify
-        apiKey: a6ae8363069107177e06c3ca3f76a66b
-        apiId: 2f2877f2
+        url: https://centralindia.api.cognitive.microsoft.com/face/v1.0/
+        apiKey: 61fc8cb300e0431286708ae4c74f2860
+        groupId: employee-prod
+        personId: f77b54d1-2458-4887-badf-54bc06351ce3
 
 locationService:
    url: http://localhost:8000/api/site/location
@@ -132,26 +184,80 @@ quotationService:
 pushService:
    url: http://localhost:9000/
 
+AWS:
+   s3-url: https://s3.ap-south-1.amazonaws.com
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
+   s3-secretKey: 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
+   s3-bucketName: fms-taskman
+   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
+   s3-bucketEnv: prod/
+   s3-asset-path: assets/
+   s3-qrcode-path: qrcode/
+   s3-attendance-path: attendance/
+   s3-ticket-path : tickets/
+   s3-quotation-path : quotations/
+   s3-enroll-path : employeeEnroll/
+   s3-checkin-path : attendanceCheckIns/
+   s3-checkout-path : attendanceCheckOuts/
+   s3-checkinout-path : checkInOutImages/
+   s3-checklist-path : checkListImages/
+   s3-locationqr-path : locationQrCodes/
+
 scheduler:
+   job:
+      creationPolicy: monthly
    dailyJob:
       enabled: true
       creation: monthly
    weeklyJob:
-      enabled: false
-      creation: monthly      
+      enabled: true
    monthlyJob:
-      enabled: false      
+      enabled: true
+      creation: monthly
+   quarterlyJob:
+      enabled: true
+   yearlyJob:
+      enabled: true
+      creation: daily
+   fortnightlyJob:
+      enabled: true
+      creation: daily
+   halfyearlyJob:
+      enabled: true
       creation: yearly
    overdueJob:
-      enabled: false   
+      enabled: true
    eodJobReport:
       enabled: false
    attendanceDetailReport:
-      enabled: true      
+      enabled: true
    attendanceConsolidatedReport:
       enabled: true
-            
-default.user.password: uds12345      
+   feedbackreport:
+      enabled: true
+   dayWiseJobReport:
+      enabled: true
+   dayWiseTicketReport:
+      enabled: true
+   dayWiseQuotationReport:
+      enabled: true
+   attendanceMusterRollReport:
+      enabled: true
+
+default.user.password: uds12345
+
+roles:
+    exclude:
+        role1: HELPDESK
+        role2: FLEX CLIENT
+        role3: FLEX SUPERVISOR
+
+google:
+   drive:
+      api:
+          callback:
+              host: taskmanadmin.uds.in
+              port: 8080
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
@@ -162,7 +268,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 512M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskmanadmin.uds.in
+        from: taskmanfms@uds.in
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
@@ -174,3 +280,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: TimeSheet
+    datasource:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048

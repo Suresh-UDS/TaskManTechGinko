@@ -1,10 +1,9 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.EmployeeHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ts.app.domain.EmployeeHistory;
+import java.util.List;
 
 public interface EmployeeHistoryRepository extends JpaRepository<EmployeeHistory, Long> {
 

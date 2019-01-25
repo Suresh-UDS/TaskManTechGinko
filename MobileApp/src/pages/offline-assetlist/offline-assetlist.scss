@@ -1,0 +1,36 @@
+page-offline-assetlist {
+  background: transparent !important;
+  ion-content {
+    background: transparent !important;
+  }
+  .transparentBody {
+    background: transparent !important;
+  }
+
+  .client-label
+  {
+    margin-bottom: 0;
+    font-size: 16px;
+    padding: 13px !important;
+    color: orange !important;
+  }
+  .check-style
+  {
+    width: 50% !important;
+    float: left;
+    border-bottom: none !important;
+  }
+  .check-style .item-inner
+  {
+    border-bottom: none !important;
+  }
+  .filter-modal
+  {
+    left: 5% !important;
+  }
+  .margin-right0
+  {
+    margin-right: 0 !important;
+  }
+
+}

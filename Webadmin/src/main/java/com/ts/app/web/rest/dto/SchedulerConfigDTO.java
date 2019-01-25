@@ -31,6 +31,8 @@ public class SchedulerConfigDTO extends BaseDTO {
 	private boolean scheduleWeeklySaturday;
 	
 	private int scheduleMonthlyDay;
+	
+	private long assetId;
 
 	public Long getId() {
 		return id;
@@ -174,6 +176,14 @@ public class SchedulerConfigDTO extends BaseDTO {
 
 	public void setScheduleMonthlyDay(int scheduleMonthlyDay) {
 		this.scheduleMonthlyDay = scheduleMonthlyDay;
+	}
+
+	public long getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(long assetId) {
+		this.assetId = assetId;
 	}
 	
 	

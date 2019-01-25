@@ -1,5 +1,7 @@
 package com.ts.app.web.rest.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +13,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private String id;
 
     private String _id;
+    
+    private long serialId;
 
     private String title;
 
@@ -51,6 +55,16 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private boolean approved;
 
     private boolean archived;
+    
+    private long totalPending;
+
+    private long totalSubmitted;
+
+    private long totalApproved;
+
+    private long totalArchived;
+    
+    private long totalCount;
 
     private Date submittedDate;
 
@@ -60,7 +74,31 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
     private String mode;
 
-    public String getId() {
+    private MultipartFile quotationFile;
+    
+    private String quotationFileName;
+    
+    private String url;
+
+    private boolean rejected;
+
+	public String getQuotationFileName() {
+		return quotationFileName;
+	}
+
+	public void setQuotationFileName(String quotationFileName) {
+		this.quotationFileName = quotationFileName;
+	}
+
+	public MultipartFile getQuotationFile() {
+		return quotationFile;
+	}
+
+	public void setQuotationFile(MultipartFile quotationFile) {
+		this.quotationFile = quotationFile;
+	}
+
+	public String getId() {
         return id;
     }
 
@@ -267,5 +305,69 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
     public void setJobId(long jobId) {
         this.jobId = jobId;
+    }
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public long getSerialId() {
+		return serialId;
+	}
+
+	public void setSerialId(long serialId) {
+		this.serialId = serialId;
+	}
+
+	public long getTotalPending() {
+		return totalPending;
+	}
+
+	public void setTotalPending(long totalPending) {
+		this.totalPending = totalPending;
+	}
+
+	public long getTotalSubmitted() {
+		return totalSubmitted;
+	}
+
+	public void setTotalSubmitted(long totalSubmitted) {
+		this.totalSubmitted = totalSubmitted;
+	}
+
+	public long getTotalApproved() {
+		return totalApproved;
+	}
+
+	public void setTotalApproved(long totalApproved) {
+		this.totalApproved = totalApproved;
+	}
+
+	public long getTotalArchived() {
+		return totalArchived;
+	}
+
+	public void setTotalArchived(long totalArchived) {
+		this.totalArchived = totalArchived;
+	}
+
+	public long getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(long totalCount) {
+		this.totalCount = totalCount;
+	}
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
     }
 }

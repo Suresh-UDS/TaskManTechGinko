@@ -1,0 +1,57 @@
+<!--
+  Generated template for the OfflinePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-content class="bg-white">
+
+  <div class="SplashLoader m-t-50" text-center>
+      <i class="material-icons">
+          wifi_off
+      </i>
+  </div>
+
+      <div text-center>
+          <h2>You're offline.</h2>
+      </div>
+      <div text-center>
+          <p>Could not connected to <b>UDS-TaskMan</b></p>
+          <p>Offline options available are,</p>
+      </div>
+
+
+<div text-center padding>
+
+        <ion-row class="margino">
+            <ion-col col-4>
+                <ion-icon name="contact" class="icon-fnt"></ion-icon>
+            </ion-col>
+            <ion-col col-4>
+                <ion-icon name="construct" class="icon-fnt"></ion-icon>
+            </ion-col>
+            <ion-col col-4>
+                <ion-icon name="construct" class="icon-fnt"></ion-icon>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="margin padding">
+            <ion-col col-4>
+                <button class="btn btn-warning padding" (click)="attendancePage()">Attendance</button>
+            </ion-col>
+            <ion-col col-4>
+                <button class="btn btn-warning width85" (click)="offlineAsset()">Asset</button>
+            </ion-col>
+            <ion-col col-4>
+                <button class="btn btn-warning" (click)="offlineJob()">Jobs</button>
+            </ion-col>
+        </ion-row>
+
+</div>
+
+    <!--<button class="btn btn-warning btn-wd btn-lg" text-center >Update App</button>-->
+
+
+</ion-content>
+

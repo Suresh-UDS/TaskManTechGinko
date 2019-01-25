@@ -1,0 +1,28 @@
+page-indent-issue {
+  .margin-btm
+  {
+    margin-bottom:0px !important;
+    padding: 14px 24px !important;
+  }
+  .gray-bg{
+    background-color:#cac8c8 !important;
+  }
+  .card .card-content {
+    padding: 5px 10px !important;
+    position: relative;
+  }
+  .fab[mini] {
+    margin: 8px;
+    width: 30px;
+    height: 30px;
+    line-height: 40px;
+    margin-top:0px !important;
+  }
+  .fab ion-icon
+  {
+    font-size:16px !important;
+  }
+  .mrgn-p {
+    margin: 0 -6px 10px !important;
+  }
+}

@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
 import {
-    ActionSheetController, Events, Item, ItemSliding, LoadingController, ModalController,
+    ActionSheetController, AlertController, Events, Item, ItemSliding, LoadingController, ModalController,
     NavController, Platform
 } from 'ionic-angular';
 import {authService} from "../service/authService";
@@ -16,6 +16,9 @@ import {CreateEmployeePage} from "../employee-list/create-employee";
 import {CompleteJobPage} from "../jobs/completeJob";
 import {ViewJobPage} from "../jobs/view-job";
 import {LoginPage} from "../login/login";
+import{SiteListPage} from "../site-list/site-list";
+import {DBService} from "../service/dbService";
+import {AttendanceService} from "../service/attendanceService";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -58,15 +61,17 @@ export class DashboardPage {
     platform:any;
     addEmployee:any;
     slideIndex:any;
+    attendance:any;
 
-  constructor(public renderer: Renderer,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController) {
+  constructor(public renderer: Renderer,public attendanceService:AttendanceService,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
       this.rateCard=CreateQuotationPage;
       this.addJob=CreateJobPage;
       this.addQuotation=CreateQuotationPage;
-      this.addEmployee=CreateEmployeePage
+      this.addEmployee=CreateEmployeePage;
+      this.attendance=SiteListPage;
 
     this.categories='overdue';
     this.selectDate=new Date();
@@ -107,53 +112,8 @@ export class DashboardPage {
           console.log("=====Platform=====:"+this.platform);
       }
 
-
-      this.events.subscribe('userType',(userType)=>{
-          console.log("user type in dashboard");
-          console.log(userType);
-          this.userType = userType;
-      })
-   // demo.initFullCalendar();
-   //  this.siteService.searchSite().subscribe(response=>
-   //  {
-   //    console.log(response);
-   //  },
-   //  error=>
-   //  {
-   //    console.log(error);
-   //  });
-
-
-    // this.employeeService.getAllEmployees().subscribe(
-    //     response=>{
-    //       console.log('ionViewDidLoad Employee list:');
-    //       console.log(response);
-    //       this.employee=response;
-    //       this.empSpinner=false;
-    //       this.component.closeLoader();
-    //     },
-    //     error=>{
-    //       console.log('ionViewDidLoad SitePage:'+error);
-    //         this.component.closeLoader();
-    //     }
-    // )
-
-    this.siteService.searchSite().subscribe(
-        response=>{
-          console.log('ionViewDidLoad SitePage:');
-          console.log(response.json()
-          );
-          this.sites=response.json();
-          this.spinner=false;
-          // this.empSpinner=true;
-          this.component.closeLoader();
-        },
-        error=>{
-          console.log('ionViewDidLoad SitePage:'+error);
-            this.component.closeLoader();
-
-        }
-    );
+    this.searchSites();
+      
     this.searchCriteria={
         checkInDateTimeFrom:new Date()
     }
@@ -223,6 +183,50 @@ export class DashboardPage {
               this.component.closeLoader();
           }
       )
+  }
+  
+  searchSite(){
+      this.siteService.searchSite().subscribe(
+          response=>{
+              console.log('ionViewDidLoad SitePage:');
+              console.log(response);
+              this.sites=response.json();
+              this.spinner=false;
+              // this.empSpinner=true;
+              this.component.closeLoader();
+          },
+          error=>{
+              console.log('ionViewDidLoad SitePage:'+error);
+              this.component.closeLoader();
+              // this.navCtrl.push(LoginPage);
+
+          }
+      );
+
+
+  }
+
+  searchSites(){
+      var searchCriteria = {
+          findAll:true,
+          currPage:1,
+          sort:10,
+          sortByAsc:true,
+          report:true
+      }
+
+      this.siteService.searchSites(searchCriteria).subscribe(
+          response=>{
+              this.sites=response.transactions;
+              this.spinner=false;
+              this.component.closeLoader();
+          },
+          error=> {
+              console.log('ionViewDidLoad SitePage:' + error);
+              this.component.closeLoader();
+
+          }
+          );
   }
 
 
@@ -295,12 +299,15 @@ export class DashboardPage {
         };
         this.searchJobs(this.searchCriteria);
         this.empSpinner=true;
-        this.siteService.searchSiteEmployee(id).subscribe(
-            response=> {
-                console.log(response.json());
-                if(response.json().length !==0)
+        var searchCriteria = {
+
+            siteId:id,
+            list:true
+        };
+        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                if(response.transactions && response.transactions.length !==0)
                 {
-                    this.employee=response.json();
+                    this.employee=response.transactions;
                     this.empSpinner=false;
                     this.empSelect=false;
                     this.selectSite=true;
@@ -434,5 +441,163 @@ export class DashboardPage {
         actionSheet.present();
     }
 
+    syncData(){
+        let alert =this.alertController.create({
+            title:'Confirm Sync',
+            message:'Network available do you wish to sync to local?',
+            buttons:[{
+                text:'Cancel',
+                role:'cancel',
+                handler:()=>{
+                    console.log('Cancel clicked');
+
+                }
+            },{
+                text:'Sync',
+                handler:()=>{
+                    this.componentService.showLoader("Data Sync")
+                    this.markOfflineAttendance().then(response=>{
+                        console.log(response);
+                        this.dbService.dropAttendance().then(
+                            response=>{
+                                this.dbService.setSites().then(data=>{
+                                    console.log(data);
+                                    this.dbService.getSite().then(response=>{
+                                        console.log(response);
+                                        this.dbService.setEmployee().then(response=>{
+                                            console.log(response);
+                                            this.componentService.closeLoader();
+                                        },err=>{
+                                            console.log(err)
+                                        })
+                                    },err=>{
+                                        console.log(err)
+                                    })
+                                },err=>{
+                                    console.log(err);
+                                })
+                        },
+                            error=>{
+                                console.log(error)
+                            })
+
+
+                    },err=>{
+                        console.log(err)
+                        this.dbService.setSites().then(data=>{
+                            console.log(data);
+                            this.dbService.getSite().then(response=>{
+                                console.log(response);
+                                this.dbService.setEmployee().then(response=>{
+                                    console.log(response);
+                                    this.componentService.closeLoader();
+                                },err=>{
+                                    console.log(err)
+                                })
+                            },err=>{
+                                console.log(err)
+                            })
+                        },err=>{
+                            console.log(err);
+                        })
+                    })
+
+                }
+            }]
+        })
+
+        alert.present();
+    }
+
+    markOfflineAttendance(){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.dbService.getAttendance().then(response=>{
+                    console.log(response);
+                    // this.componentService.closeLoader()
+                    var data:any;
+                    data = response;
+                    for(var i=0;i<data.length;i++) {
+                        console.log("=================="+data[i].siteId)
+                        console.log(data[i].offlineCheckin)
+                        if(data[i].offlineCheckin == 'true')
+                        {
+                            this.attendanceIn(data[i]).then(
+                                response=>{
+                                    console.log(response)
+                                    resolve("sss")
+                                })
+                        }
+                        else {
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                                response => {
+                                    resolve("ssss")
+                                    console.log("Offline attendance data synced to server");
+                                },
+                                error2 => {
+                                    console.log("Error in syncing attendance to server");
+                                    this.componentService.closeLoader()
+                                    this.componentService.showToastMessage("Error in syncing attendance to server","center")
+                                })
+                        }
+                    }
+                },err=>{
+                    console.log(err)
+                    reject(err)
+                })
+            }, 3000)
+
+        })
+    }
+
+
+    attendanceOut(data,id)
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                this.attendanceService.markAttendanceCheckOut(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkOutImage,id).subscribe(
+                    response => {
+                        console.log("Offline attendance data synced to server");
+                        resolve("s")
+                    },
+                    error2 => {
+                        console.log("Error in syncing attendance to server");
+                        this.componentService.closeLoader()
+                        this.componentService.showToastMessage("Error in syncing attendance to server","bottom")
+                    })
+            },3000)
+
+        })
+
+    }
+
+    attendanceIn(data)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                this.attendanceService.markAttendanceCheckIn(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkInImage).subscribe(
+                    response => {
+                        console.log("Offline attendance data synced to server");
+                        console.log(response)
+                        if(data.offlineCheckOut == 'true') {
+                            this.attendanceOut(data, response.json().id).then(
+                                response => {
+                                    resolve("Attendance checked in and checked out successfully");
+                                }
+                            )
+                        }else{
+                            resolve("Attendance checked in and checked out successfully");
+                        }
+
+                    }, error2 => {
+                        console.log("Error in syncing attendance to server");
+                        this.componentService.closeLoader()
+                        this.componentService.showToastMessage("Error in syncing attendance to server","center")
+                    })
+            }, 3000)
+
+        })
+
+    }
 
 }

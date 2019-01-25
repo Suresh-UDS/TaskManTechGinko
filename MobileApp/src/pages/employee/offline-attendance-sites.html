@@ -1,0 +1,29 @@
+<!--
+  Generated template for the SiteListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Select Site</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-list class="emp-list">
+        <ion-item *ngFor="let site of siteList;let i of index" class="bottom-border emp" >
+            <ion-icon name="podium" item-start class="icon-color"></ion-icon>
+            <p (click)="gotoEmployeeList(site)" text-left class="fnt-wt" text-capitalize>{{site.name}}</p>
+
+        </ion-item>
+    </ion-list>
+
+    <!--<ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfinite($event)">-->
+        <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
+    <!--</ion-infinite-scroll>-->
+</ion-content>

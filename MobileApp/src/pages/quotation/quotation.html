@@ -12,88 +12,172 @@
     <button has-permission="QuotationCreate" (click)="createQuotation()" ion-fab color="dark"><ion-icon name="add" class="clr-orange"></ion-icon></button>
   </ion-fab>
 
-  <ion-row class="margin0 white-bg border-btm padding10 paddding-top20" (click)="gotoDraftedQuotation()">
-        <ion-col col-2 class="ver-center">
-          <div class="q-round ver-center">
-                <button ion-button clear color="primary" class="q-round icon-round-orange">
-                  <ion-icon name="mail" class="fnt-24"></ion-icon>
-                </button>
-          </div>
-        </ion-col>
-        <ion-col col-9 class="padding-left10">
-                <div>
-                  <p text-left class="fnt-18 margin-bottom5">Drafted</p>
-                </div>
-                <div>
-                  <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
-                </div>
-        </ion-col>
-        <ion-col col-1 class="ver-center">
-                <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
-        </ion-col>
-    </ion-row>
-    <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoSubmittedQuotation()">
-        <ion-col col-2 class="ver-center">
-            <div class="q-round ver-center">
-                <button ion-button clear color="primary" class="q-round icon-round-blue">
-                    <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>
-                </button>
-            </div>
-        </ion-col>
-        <ion-col col-9 class="padding-left10">
-            <div>
-                <p text-left class="fnt-18 margin-bottom5">Submitted</p>
-            </div>
-            <div>
-                <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
-            </div>
-        </ion-col>
-        <ion-col col-1 class="ver-center">
-            <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
-        </ion-col>
-    </ion-row>
-  <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoApprovedQuotation()">
-    <ion-col col-2 class="ver-center">
-      <div class="q-round ver-center">
-        <button ion-button clear color="primary" class="q-round icon-round-green">
-          <ion-icon name="checkmark" class="fnt-24"></ion-icon>
-        </button>
-      </div>
-    </ion-col>
-    <ion-col col-9 class="padding-left10">
-      <div>
-        <p text-left class="fnt-18 margin-bottom5">Approved</p>
-      </div>
-      <div>
-        <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
-      </div>
-    </ion-col>
-    <ion-col col-1 class="ver-center">
-      <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
-    </ion-col>
-  </ion-row>
-  <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">
-    <ion-col col-2 class="ver-center">
-      <div class="q-round ver-center">
-        <button ion-button clear color="primary" class="q-round icon-round-red">
-            <i class="material-icons">archive</i>
-        </button>
-      </div>
-    </ion-col>
-    <ion-col col-9 class="padding-left10">
-      <div>
-        <p text-left class="fnt-18 margin-bottom5">Archieved</p>
-      </div>
-      <div>
-        <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>
-      </div>
-    </ion-col>
-    <ion-col col-1 class="ver-center">
-      <ion-icon class="primary-clr fnt-24" name="ios-arrow-forward-outline"></ion-icon>
-    </ion-col>
-  </ion-row>
+  <!--<div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-content">
 
 
+          <ion-row>-->
+
+   <div class="card scroll-card">
+     <div class="card-content">
+       <ion-row>
+            <ion-col col-12>
+              <p text-center>Choose Client</p>
+              <div class="SitesScrollCon">
+                <ion-scroll scrollX="true">
+                  <button class="scroll-item" ion-button round *ngFor="let p of allProjects;let i of index" (click)="getSites(p.id,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
+                    <p class="siteName">{{p.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+           </ion-col>
+       </ion-row>
+     </div>
+  </div>
+
+   <div class="card scroll-card">
+      <div class="card-content">
+        <ion-row>
+            <ion-col col-12>
+              <p text-center>Choose Site</p>
+              <div padding text-center *ngIf="siteSpinner">
+                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
+              </div>
+              <div padding text-center *ngIf="chooseClient">
+                <strong>Please Select Client</strong>
+              </div>
+              <div class="SitesScrollCon" *ngIf="showSites">
+                <ion-scroll scrollX="true">
+                  <div *ngIf="sites?.length==0" class="padding-top15">
+                    <p text-center class="clr-blk">No Data Found</p>
+                  </div>
+                  <button class="scroll-item" ion-button round  *ngFor="let site of sites;let i of index" (click)="searchQuotations(site.id,i)"  [color]="siteActive && i==index ? 'primary' : 'light'">
+                    <p class="siteName">{{site.name}}</p>
+                  </button>
+                </ion-scroll>
+              </div>
+
+            </ion-col>
+        </ion-row>
+      </div>
+   </div>
+
+
+    <!--<ion-card class="width100">
+        <ion-row class="margin-left-0 margin-right-0">
+            <ion-col col-12>
+                <div class="form-group label-floating">
+                    <label class="control-label" >Client</label>
+                    <ion-select [(ngModel)]="selectedProject" class="select-box padding-left0" placeholder="Choose Client" name="projectName" #site="ngModel" required interface="popover">
+                        <ion-option *ngFor="let p of allProjects" [value]="p.name" (ionSelect)="getSites(p.id)">{{p.name}}</ion-option>
+                    </ion-select>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="margin-left-0 margin-right-0">
+            <ion-col col-12>
+                <div class="form-group label-floating">
+                    <label class="control-label" >Site</label>
+                    <ion-select [(ngModel)]="selectedSite" class="select-box padding-left0" id="siteName" placeholder="Choose Site" name="siteName" #site="ngModel" required interface="popover">
+                        <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="searchQuotations(site.id)">{{site.name}}</ion-option>
+                    </ion-select>
+                </div>
+
+            </ion-col>
+        </ion-row>
+
+    </ion-card>-->
+   <div class="card scroll-card">
+     <div class="card-content">
+       <ion-row>
+                <ion-col col-12>
+                  <ion-row class="margin0 white-bg border-btm-dotted padding10 paddding-top20" (click)="gotoDraftedQuotation()">
+                        <ion-col col-2 class="ver-center">
+                          <div class="q-round ver-center icon-round">
+                              <button ion-button clear color="primary" class="q-round icon-round-orange">
+                                <ion-icon name="ios-mail-outline" class="fnt-24"></ion-icon>
+                              </button>
+                        </div>
+                      </ion-col>
+                      <ion-col col-9 class="padding-left10">
+                              <div>
+                                <p text-left class="fnt-18 margin-bottom5">Drafted</p>
+                              </div>
+                              <div>
+                                <span class="clr-green padding-right2">(</span><span class="clr-orange">{{draftedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+                              </div>
+                      </ion-col>
+                      <ion-col col-1 class="ver-center">
+                              <ion-icon class="grey fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+                      </ion-col>
+                  </ion-row>
+                  <ion-row class="margin0 white-bg border-btm-dotted padding10" (click)="gotoSubmittedQuotation()">
+                      <ion-col col-2 class="ver-center">
+                          <div class="q-round ver-center icon-round">
+                              <button ion-button clear color="primary" class="q-round icon-round-blue">
+                                  <ion-icon name="arrow-round-forward" class="fnt-24"></ion-icon>
+                              </button>
+                          </div>
+                      </ion-col>
+                      <ion-col col-9 class="padding-left10">
+                          <div>
+                              <p text-left class="fnt-18 margin-bottom5">Submitted</p>
+                          </div>
+                          <div>
+                              <span class="clr-green padding-right2">(</span><span class="clr-blue">{{submittedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+                          </div>
+                      </ion-col>
+                      <ion-col col-1 class="ver-center">
+                          <ion-icon class="grey fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+                      </ion-col>
+                  </ion-row>
+                <ion-row class="margin0 white-bg border-btm-dotted padding10" (click)="gotoApprovedQuotation()">
+                  <ion-col col-2 class="ver-center">
+                    <div class="q-round ver-center icon-round">
+                      <button ion-button clear color="primary" class="q-round icon-round-green">
+                        <ion-icon name="checkmark" class="fnt-24"></ion-icon>
+                      </button>
+                    </div>
+                  </ion-col>
+                  <ion-col col-9 class="padding-left10">
+                    <div>
+                      <p text-left class="fnt-18 margin-bottom5">Approved</p>
+                    </div>
+                    <div>
+                      <span class="clr-green padding-right2">(</span><span class="green">{{approvedQuotationsCount}}</span><span class="clr-green padding-left2">)</span>
+                    </div>
+                  </ion-col>
+                  <ion-col col-1 class="ver-center">
+                    <ion-icon class="grey fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="margin0 white-bg border-btm padding10" (click)="gotoArchivedQuotation()">
+                  <ion-col col-2 class="ver-center">
+                    <div class="q-round ver-center icon-round">
+                      <button ion-button clear color="primary" class="q-round icon-round-red">
+                          <i class="material-icons">archive</i>
+                      </button>
+                    </div>
+                  </ion-col>
+                  <ion-col col-9 class="padding-left10">
+                    <div>
+                      <p text-left class="fnt-18 margin-bottom5">Archieved</p>
+                    </div>
+                    <div>
+                      <span class="clr-green padding-right2">(</span><span class="clr-red">{{archivedQuotationsCount}}</span><span class="padding-left2">)</span>
+                    </div>
+                  </ion-col>
+                  <ion-col col-1 class="ver-center">
+                    <ion-icon class="grey fnt-24" name="ios-arrow-forward-outline"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+
+       </ion-row>
+     </div>
+   </div>
 
     <!--<button class="btn btn-warning btn-simple btn-wd btn-lg" (click)="createPDF()">PDF</button>-->
 <!--

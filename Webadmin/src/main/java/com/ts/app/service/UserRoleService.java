@@ -1,18 +1,5 @@
 package com.ts.app.service;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.UserRole;
 import com.ts.app.repository.UserRoleRepository;
@@ -21,7 +8,18 @@ import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.UserRoleDTO;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Service class for managing user role information.
@@ -45,6 +43,17 @@ public class UserRoleService extends AbstractService {
 		log.debug("Created Information for UserRole: {}", userRole);
 		userRoleDto = mapperUtil.toModel(userRole, UserRoleDTO.class);
 		return userRoleDto;
+	}
+
+	public boolean isDuplicate(UserRoleDTO userRoleDTO) {
+		SearchCriteria criteria = new SearchCriteria();
+		criteria.setRole(userRoleDTO.getName());
+		SearchResult<UserRoleDTO> searchResults = findBySearchCrieria(criteria);
+		List<UserRoleDTO> userRoleDTOS = searchResults.getTransactions();
+		if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+			return true;
+		}
+		return false;
 	}
 
 	public void updateUserRole(UserRoleDTO userRole) {
@@ -77,7 +86,8 @@ public class UserRoleService extends AbstractService {
 		SearchResult<UserRoleDTO> result = new SearchResult<UserRoleDTO>();
 		if(searchCriteria != null) {
 
-		    //----
+
+            //----
             Pageable pageRequest = null;
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
@@ -93,10 +103,20 @@ public class UserRoleService extends AbstractService {
 			List<UserRoleDTO> transactions = null;
 			if(!searchCriteria.isFindAll()) {
 				if(searchCriteria.getUserRoleId() != 0) {
-					page = userRoleRepository.findRoleById(searchCriteria.getUserRoleId(), pageRequest);
+
+                    page = userRoleRepository.findRoleById(searchCriteria.getUserRoleId(), pageRequest);
+				}
+				if(!StringUtils.isEmpty(searchCriteria.getRole())) {
+
+                    page = userRoleRepository.findRoleByName(searchCriteria.getRole(), pageRequest);
+				}
+				if(!StringUtils.isEmpty(searchCriteria.getRoleLevel()) && searchCriteria.getRoleLevel()>0) {
+
+                    page = userRoleRepository.findRoleByLevel(searchCriteria.getRoleLevel(), pageRequest);
 				}
 			}else {
-				page = userRoleRepository.findUserRoles(pageRequest);
+
+                page = userRoleRepository.findUserRoles(pageRequest);
 			}
 			//-----
 
@@ -104,7 +124,7 @@ public class UserRoleService extends AbstractService {
 
 
 			if(page != null) {
-				transactions = mapperUtil.toModelList(page.getContent(), UserRoleDTO.class);
+                transactions = mapperUtil.toModelList(page.getContent(), UserRoleDTO.class);
 				if(CollectionUtils.isNotEmpty(transactions)) {
 					buildSearchResult(searchCriteria, page, transactions,result);
 				}

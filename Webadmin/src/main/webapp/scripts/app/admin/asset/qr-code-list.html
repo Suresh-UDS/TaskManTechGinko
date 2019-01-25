@@ -1,0 +1,90 @@
+<div class="gc-container" ng-init="loadPageTop();qrListLoad();">
+    <div class="success-message hidden"></div>
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card tablecard">
+                <div class="card-content" ng-show="assetQrList">
+
+                    <div class="row" ng-hide="noData">
+                        <div class="col-md-12 txt-align-rgt">
+                            <button class="btn btn-success add-btn margn-tb0" ng-click="printDiv('printable')" tabindex="0">
+                                <i class="material-icons">print</i> Print
+                                <div class="ripple-container"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="printable">
+
+                        <div class="row qrcodeList" ng-repeat="qr in assetQrList">
+
+                            <div class="col-md-4">
+                                <div class="QrcodeCon">
+
+                                    <img ng-src="{{qr.url}}">
+                                    <h4><span class="txtBold">Asset Code :</span> {{qr.code}}</h4>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                                <p><span class="txtBold">Asset</span>  : {{qr.title | uppercase}}</p>
+                                <p><span class="txtBold">Type </span> : {{qr.assetType | uppercase}}</p>
+                                <p><span class="txtBold">Group</span>  : {{qr.assetGroup | uppercase}}</p>
+
+
+                            </div>
+                            <div class="col-md-4">
+
+                                <p><span class="txtBold">Site</span> : {{qr.siteName | uppercase}}</p>
+                                <p><span class="txtBold">Manufacturer</span>  : {{qr.manufacturerName | uppercase}}</p>
+                                <p><span class="txtBold">Vendor</span>  : {{qr.amcVendorName | uppercase}}</p>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+                <div class="card-content" ng-show="!assetQrList">
+                    <h3 class="txt-align-center">-- No asset selected --</h3>
+                </div>
+                <div class="card-content" ng-show="noData">
+                    <h3 class="txt-align-center">-- No data --</h3>
+                </div>
+                <!-- end content-->
+
+            </div>
+            <div class="row">
+               <div class="col-md-12 txt-align-rgt">
+                   <div class="form-group">
+                       <button class="btn" type="button"
+                                ng-click="conform('back')"  id="cancel-button">
+                            Back
+                       </button>
+                   </div>
+               </div>
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+    <!-- <div class="card margin-TB-5 txt-align-center" ng-hide="assets">
+
+        <div class="card-content">
+
+            <h3>No data Found</h3>
+
+        </div>
+
+    </div> -->
+</div>

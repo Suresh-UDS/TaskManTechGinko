@@ -1,27 +1,15 @@
 package com.ts.app.domain;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Project
@@ -46,7 +34,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String name;   
 
-    @OneToMany(mappedBy = "project",fetch=FetchType.LAZY)  
+    @OneToMany(mappedBy = "project")  
     private Set<Site> site;  
 
     @OneToMany(mappedBy = "project",fetch=FetchType.LAZY)  
@@ -77,6 +65,9 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	
 	@OneToMany(mappedBy="project", fetch = FetchType.LAZY)
 	private List<Shift> shifts;
+	
+	@Column(name = "client_group", nullable = true)
+	private String clientGroup;
 
 	public Long getId() {
 		return id;
@@ -276,6 +267,18 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	public void setEmployeeProjSites(Set<EmployeeProjectSite> employeeProjSites) {
 		this.employeeProjSites = employeeProjSites;
+	}
+
+
+
+	public String getClientGroup() {
+		return clientGroup;
+	}
+
+
+
+	public void setClientGroup(String clientGroup) {
+		this.clientGroup = clientGroup;
 	}
 
 	

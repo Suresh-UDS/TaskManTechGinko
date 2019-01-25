@@ -1,15 +1,13 @@
 package com.ts.app.web.rest.dto;
 
 
-import java.util.List;
-
-import javax.validation.constraints.Size;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ts.app.domain.Site;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * A DTO representing a Employee
@@ -65,123 +63,139 @@ public class EmployeeDTO extends BaseDTO {
     private List<EmployeeProjectSiteDTO> projectSites;
 
     private List<EmployeeLocationDTO> locations;
+    
+    private List<EmployeeRelieverDTO> relievers;
 
     private boolean isLeft;
 
     private boolean isReliever;
 
     private boolean isRelieved;
-    
+
     private boolean createUser;
-    
+
     private String phone;
-    
+
     private String email;
+
+    private boolean notCheckedOut;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
     private EmployeeDTO manager;
+
+    private long userRoleId;
+
+    private String userRoleName;
+
+    private boolean client;
+
+    private long attendanceId;
+
+    private String url;
+
+    private String faceId;
     
-	private long userRoleId;
-	
-	private String userRoleName;
+    private String region;
+    
+    private String branch;
 
-	public long getId() {
-		return id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getEmpId() {
-		return empId;
-	}
+    public String getEmpId() {
+        return empId;
+    }
 
-	public void setEmpId(String empId) {
-		this.empId = empId;
-	}
+    public void setEmpId(String empId) {
+        this.empId = empId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getQrCodeImage() {
-		return qrCodeImage;
-	}
+    public String getQrCodeImage() {
+        return qrCodeImage;
+    }
 
-	public void setQrCodeImage(String qrCodeImage) {
-		this.qrCodeImage = qrCodeImage;
-	}
+    public void setQrCodeImage(String qrCodeImage) {
+        this.qrCodeImage = qrCodeImage;
+    }
 
-	public String getDesignation() {
-		return designation;
-	}
+    public String getDesignation() {
+        return designation;
+    }
 
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 
-	public String getFullName() {
-		return fullName;
-	}
+    public String getFullName() {
+        return fullName;
+    }
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-	public long getProjectId() {
-		return projectId;
-	}
+    public long getProjectId() {
+        return projectId;
+    }
 
-	public void setProjectId(long projectId) {
-		this.projectId = projectId;
-	}
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
 
-	public String getProjectName() {
-		return projectName;
-	}
+    public String getProjectName() {
+        return projectName;
+    }
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-	public long getSiteId() {
-		return siteId;
-	}
+    public long getSiteId() {
+        return siteId;
+    }
 
-	public void setSiteId(long siteId) {
-		this.siteId = siteId;
-	}
+    public void setSiteId(long siteId) {
+        this.siteId = siteId;
+    }
 
-	public String getSiteName() {
-		return siteName;
-	}
+    public String getSiteName() {
+        return siteName;
+    }
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
-	}
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
 
-	public long getManagerId() {return managerId;}
+    public long getManagerId() {return managerId;}
 
-	public void setManagerId(long managerId) {this.managerId = managerId;}
+    public void setManagerId(long managerId) {this.managerId = managerId;}
 
-	public String getManagerName() {return managerName;}
+    public String getManagerName() {return managerName;}
 
-	public void setManagerName(String managerName) {this.managerName = managerName;}
+    public void setManagerName(String managerName) {this.managerName = managerName;}
 
-	public long getCode() {
-		return code;
-	}
+    public long getCode() {
+        return code;
+    }
 
-	public void setCode(long code) {
-		this.code = code;
-	}
+    public void setCode(long code) {
+        this.code = code;
+    }
 
-	public EmployeeDTO() {
+    public EmployeeDTO() {
     }
 
     public EmployeeDTO(Site site) {
@@ -197,61 +211,44 @@ public class EmployeeDTO extends BaseDTO {
 
 
     public boolean isCheckedIn() {
-		return checkedIn;
-	}
-
-	public void setCheckedIn(boolean checkedIn) {
-		this.checkedIn = checkedIn;
-	}
-
-	@Override
-    public String toString() {
-        String details = "EmployeeDTO{" +
-            "name='" + name +
-            "managerID -" + (manager!=null ? manager.getId() : "")+
-            "managerName-"+ (manager!=null ? manager.getName() : "");
-        StringBuffer sb = new StringBuffer();
-        sb.append(details);
-        sb.append("userId-" + getUserId() +" ");
-        if(CollectionUtils.isNotEmpty(projectSites)) {
-        		for(EmployeeProjectSiteDTO projSite : projectSites) {
-        			sb.append(projSite);
-        		}
-        }
-        return sb.toString();
+        return checkedIn;
     }
 
-	public long getJobId() {
-		return jobId;
-	}
+    public void setCheckedIn(boolean checkedIn) {
+        this.checkedIn = checkedIn;
+    }
 
-	public void setJobId(long jobId) {
-		this.jobId = jobId;
-	}
+    public long getJobId() {
+        return jobId;
+    }
 
-	public String getJobTitle() {
-		return jobTitle;
-	}
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
+    }
 
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
-	}
+    public String getJobTitle() {
+        return jobTitle;
+    }
 
-	public EmployeeDTO getManager() {
-		return manager;
-	}
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
 
-	public void setManager(EmployeeDTO manager) {
-		this.manager = manager;
-	}
+    public EmployeeDTO getManager() {
+        return manager;
+    }
 
-	public String getUserUserGroupName() {
-		return userUserGroupName;
-	}
+    public void setManager(EmployeeDTO manager) {
+        this.manager = manager;
+    }
 
-	public void setUserUserGroupName(String userUserGroupName) {
-		this.userUserGroupName = userUserGroupName;
-	}
+    public String getUserUserGroupName() {
+        return userUserGroupName;
+    }
+
+    public void setUserUserGroupName(String userUserGroupName) {
+        this.userUserGroupName = userUserGroupName;
+    }
 
 
     public String getEnrolled_face() {
@@ -310,61 +307,142 @@ public class EmployeeDTO extends BaseDTO {
     public void setRelieved(boolean relieved) {
         isRelieved = relieved;
     }
-	public List<EmployeeProjectSiteDTO> getProjectSites() {
-		return projectSites;
+    public List<EmployeeProjectSiteDTO> getProjectSites() {
+        return projectSites;
+    }
+
+    public void setProjectSites(List<EmployeeProjectSiteDTO> projectSites) {
+        this.projectSites = projectSites;
+    }
+
+    public boolean isCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(boolean createUser) {
+        this.createUser = createUser;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public long getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(long userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
+    public String getUserRoleName() {
+        return userRoleName;
+    }
+
+    public void setUserRoleName(String userRoleName) {
+        this.userRoleName = userRoleName;
+    }
+
+    public List<EmployeeLocationDTO> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<EmployeeLocationDTO> locations) {
+        this.locations = locations;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public boolean isNotCheckedOut() {
+        return notCheckedOut;
+    }
+
+    public void setNotCheckedOut(boolean notCheckedOut) {
+        this.notCheckedOut = notCheckedOut;
+    }
+
+    public boolean isClient() {
+        return client;
+    }
+
+    public void setClient(boolean client) {
+        this.client = client;
+    }
+
+
+    public long getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(long attendanceId) {
+        this.attendanceId = attendanceId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getFaceId() {
+        return faceId;
+    }
+
+    public void setFaceId(String faceId) {
+        this.faceId = faceId;
+    }
+
+	public List<EmployeeRelieverDTO> getRelievers() {
+		return relievers;
 	}
 
-	public void setProjectSites(List<EmployeeProjectSiteDTO> projectSites) {
-		this.projectSites = projectSites;
+	public void setRelievers(List<EmployeeRelieverDTO> relievers) {
+		this.relievers = relievers;
 	}
 
-	public boolean isCreateUser() {
-		return createUser;
+    public String getRegion() {
+		return region;
 	}
 
-	public void setCreateUser(boolean createUser) {
-		this.createUser = createUser;
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getBranch() {
+		return branch;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setBranch(String branch) {
+		this.branch = branch;
 	}
 
-	public long getUserRoleId() {
-		return userRoleId;
-	}
-
-	public void setUserRoleId(long userRoleId) {
-		this.userRoleId = userRoleId;
-	}
-
-	public String getUserRoleName() {
-		return userRoleName;
-	}
-
-	public void setUserRoleName(String userRoleName) {
-		this.userRoleName = userRoleName;
-	}
-
-	public List<EmployeeLocationDTO> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(List<EmployeeLocationDTO> locations) {
-		this.locations = locations;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	
+	@Override
+    public String toString() {
+        String details = "EmployeeDTO{" +
+            "name='" + name +
+            "managerID -" + (manager!=null ? manager.getId() : "")+
+            "managerName-"+ (manager!=null ? manager.getName() : "");
+        StringBuffer sb = new StringBuffer();
+        sb.append(details);
+        sb.append("userId-" + getUserId() +" ");
+        if(CollectionUtils.isNotEmpty(projectSites)) {
+            for(EmployeeProjectSiteDTO projSite : projectSites) {
+                sb.append(projSite);
+            }
+        }
+        return sb.toString();
+    }
 }

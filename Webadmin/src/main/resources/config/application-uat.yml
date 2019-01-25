@@ -1,0 +1,285 @@
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+spring:
+    profiles:
+        active: uat
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false # we use Grunt + BrowserSync for livereload
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
+        name:
+        username: root
+        password: tgadmin123#
+        #password: admin
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database: MYSQL
+        show_sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: true
+            hibernate.generate_statistics: false
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+    mail:
+        host: smtp.office365.com
+        port: 587
+        username: taskmanfms@uds.in
+        password: Ta$k@1234
+        properties:
+            mail.transport.protocol: smtp
+            mail.smtp.auth: true
+            mail.smtp.ssl.enable: true
+            mail.smtp.starttls.enable: true
+            mail.smtp.port: 587
+            mail.debug: true
+
+    messages:
+        cache-seconds: 1
+    thymeleaf:
+        cache: false
+
+liquibase:
+    contexts: dev
+    enabled: false
+
+server:
+    port: 8088
+    tomcat:
+         max-connections: 100
+         max-threads:  400
+upload:
+    file:
+         path: /opt/uploads
+export:
+    file:
+         path: /opt/exports
+qrcode:
+    file:
+         path: /opt/qrcode
+
+locationQRCode:
+    file:
+        path: /opt/location/qrcode
+attendance:
+    shiftStartLeadTime: 1
+    shiftEndLeadTime: 1
+    shiftStartGraceTime: 1
+    shiftEndGraceTime: 1
+    file:
+        path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket
+import:
+    file:
+        path:
+            new: /opt/imports/new
+            completed: /opt/imports/completed
+
+extensionImg: jpeg,jpg,png
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
+
+asset:
+   file:
+       path: /opt/asset/uploads/site
+   weekly:
+       template:
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
+multipart:
+   maxFileSize: 15MB
+   maxRequestSize: 15MB
+
+max:
+    user: 10
+    userGroup: 2
+    device: 30
+
+email:
+    notification:
+        overdue: true
+        eodReports: true
+        enabled: true
+#        schedule1: 0 0 9 * * ?
+#        schedule2: 0 0 18 * * ?
+        url: http://localhost:8088/
+    activation:
+        title: Account activation
+    reset:
+        title: Account password reset
+    report:
+        title: Job reports
+    overdue:
+        report:
+            title: Overdue job report
+    compleed:
+        report:
+            title: Completed job report
+reports:
+    job-report:
+        url: http://13.232.248.92:8088/#/job-reports
+    attendance-report:
+        url: http://13.232.248.92:8088/#/attendance-reports
+    asset-report:
+        url: http://13.232.248.92:8088/#/asset-report
+    vendor-report:
+        url: http://13.232.248.92:8088/#/vendor-report
+
+url:
+    ticket-view: http://13.232.248.92:8088/#/view-ticket/
+    quotation-view: http://13.232.248.92:8088/#/view-quotation/
+    job-view: http://13.232.248.92:8088/#/view-job/
+
+#facedetection:
+#    api:
+#        url: https://api.kairos.com/detect
+#        enrollUrl: https://api.kairos.com/enroll
+#        verifyUrl: https://api.kairos.com/verify
+#        apiKey: a6ae8363069107177e06c3ca3f76a66b
+#        apiId: 2f2877f2
+
+facedetection:
+    api:
+        url: https://centralindia.api.cognitive.microsoft.com/face/v1.0/
+        apiKey: 61fc8cb300e0431286708ae4c74f2860
+        groupId: employee-uat
+        personId: f77b54d1-2458-4887-badf-54bc06351ce3
+
+locationService:
+#   url: http://locahost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8000/api/site/location
+   proximityUrl: http://localhost:8000/api/site/nearby
+
+quotationService:
+#   url: http://locahost:8000/api/site/location
+#   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8001/api
+
+pushService:
+   url: http://localhost:9000/
+
+AWS:
+   s3-url: https://s3.ap-south-1.amazonaws.com
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
+   s3-secretKey: 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
+   s3-bucketName: fms-taskman
+   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
+   s3-bucketEnv: dev/
+   s3-asset-path: assets/
+   s3-qrcode-path: qrcode/
+   s3-attendance-path: attendance/
+   s3-ticket-path : tickets/
+   s3-quotation-path : quotations/
+   s3-enroll-path : employeeEnroll/
+   s3-checkin-path : attendanceCheckIns/
+   s3-checkout-path : attendanceCheckOuts/
+   s3-checkinout-path : checkInOutImages/
+   s3-checklist-path : checkListImages/
+   s3-locationqr-path : locationQrCodes/
+
+scheduler:
+   job:
+      creationPolicy: monthly
+   dailyJob:
+      enabled: true
+      creation: monthly
+   weeklyJob:
+      enabled: true
+   monthlyJob:
+      enabled: true
+   quarterlyJob:
+      enabled: true
+   yearlyJob:
+      enabled: true
+      creation: daily
+   fortnightlyJob:
+      enabled: true
+      creation: daily
+   halfyearlyJob:
+      enabled: true
+      creation: yearly
+   overdueJob:
+      enabled: false
+   eodJobReport:
+      enabled: true
+   attendanceDetailReport:
+      enabled: true
+   attendanceConsolidatedReport:
+      enabled: true
+   feedbackreport:
+      enabled: true
+   attendanceMusterRollReport:
+      enabled: true
+   dayWiseJobReport:
+      enabled: true
+   dayWiseTicketReport:
+      enabled: true
+   dayWiseQuotationReport:
+      enabled: true
+
+default.user.password: uds12345
+
+google:
+   drive:
+      api:
+          callback:
+              host: 13.232.248.92
+              port: 8080
+
+influxdb:
+    url: http://3.0.29.145:8086
+    username: superadmin
+    password: "*BehindWheel7"
+    dbname: dashboard
+    retention-policy: one_year_policy
+    gzip: true
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    cache: # Hibernate 2nd level cache, used by CacheConfiguration
+        timeToLiveSeconds: 3600
+        ehcache:
+            maxBytesLocalHeap: 256M
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: taskmanfms@uds.in
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        spark:
+            enabled: false
+            host: localhost
+            port: 9999
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: TimeSheet
+    datasource:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048

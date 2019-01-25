@@ -1,0 +1,154 @@
+<div class="crud-form" ng-init="loadPageTop();viewPurchaseReq();">
+
+
+    <div class="margn-top30">
+
+        <div class="row">
+
+            <div class="col-md-6 col-lg-6" >
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Location </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                <tr>
+                                    <td>Client</td>
+                                    <td>{{purchaseReqObj.projectName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Site</td>
+                                    <td>{{purchaseReqObj.siteName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>PurchaseRef Number</td>
+                                    <td>{{purchaseReqObj.purchaseRefGenNumber}}</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>{{purchaseReqObj.requestStatus}}</td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-6 col-lg-6" >
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Requester Details </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                <tr>
+                                    <td>Requester Id</td>
+                                    <td>{{purchaseReqObj.requestedById}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Requester Name</td>
+                                    <td>{{purchaseReqObj.requestedByName}}</td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-12 col-lg-12">
+                <form name="form" role="form" novalidate>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Item Details</div>
+                        <div class="panel-body TableListinput">
+
+
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Item Code</th>
+                                        <th>Item Name</th>
+                                        <th>Uom</th>
+                                        <th>Required Qty</th>
+                                        <th>Qty Approved</th>
+                                        <th width="10%">Approved Qty</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="items in purchaseReqObj.items">
+                                        <td>{{items.materialItemCode}} </td>
+                                        <td>{{items.materialName}}</td>
+                                        <td>{{items.materialUom}}</td>
+                                        <td>{{items.quantity}}</td>
+                                        <td>{{items.approvedQty ? items.approvedQty : "Nil"}}</td>
+                                        <td width="10%">
+                                            <input type="number" class="form-control" ng-model="items.currentAprQty" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <td colspan="3"></td>
+                                    <td colspan="3" class="text-right">
+                                        <button class="btn btn-success" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('APPROVED')" type="button">
+                                            Approve
+                                        </button>
+                                        <button class="btn" type="button" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('REJECTED')" id="cancel-button">
+                                            Reject
+                                            <div class="ripple-container"></div></button>
+                                    </td>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+        <div class="row" id="approveButton">
+            <div class="col-md-12 txt-align-rgt">
+                <div class="form-group">
+
+                    <button  title="Approve Purchase Requisition" ng-if="items.approvedQty"
+                             ng-click="submitPurchaseReq(purchaseReqObj.id,'Approved')"
+                             class="btn btn-info">
+                        <span class="btn-label"><i class="material-icons">done</i></span>
+                        Approve
+                    </button>
+
+                    <button  title="Reject Purchase Requisition" ng-if="items.approvedQty"
+                            ng-click="submitPurchaseReq(purchaseReqObj.id,'Rejected')"
+                             class="btn btn-info">
+                        <span class="btn-label"><i class="material-icons">done</i></span>
+                        Reject
+                    </button>
+
+                    <button class="btn btn-danger" type="button"
+                            ng-click="cancelPurchase()" id="cancel-button">
+                        <i class="material-icons"></i> Close
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

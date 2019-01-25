@@ -6,10 +6,15 @@ public class RelieverDTO extends BaseDTO {
 
     private Long employeeId;
     private Long relieverId ;
+    private long siteId;
     private String employeeEmpId;
     private String relieverEmpId;
     private Date relievedFromDate;
     private Date relievedToDate;
+    
+    private String relieverName;
+    
+    private String relieverMobile;
 
     public Long getEmployeeId() {
         return employeeId;
@@ -27,7 +32,15 @@ public class RelieverDTO extends BaseDTO {
         this.relieverId = relieverId;
     }
 
-    public String getEmployeeEmpId() {
+    public long getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(long siteId) {
+		this.siteId = siteId;
+	}
+
+	public String getEmployeeEmpId() {
         return employeeEmpId;
     }
 
@@ -58,4 +71,22 @@ public class RelieverDTO extends BaseDTO {
     public void setRelievedToDate(Date relievedToDate) {
         this.relievedToDate = relievedToDate;
     }
+
+	public String getRelieverName() {
+		return relieverName;
+	}
+
+	public void setRelieverName(String relieverName) {
+		this.relieverName = relieverName;
+	}
+
+	public String getRelieverMobile() {
+		return relieverMobile;
+	}
+
+	public void setRelieverMobile(String relieverMobile) {
+		this.relieverMobile = relieverMobile;
+	}
+    
+    
 }

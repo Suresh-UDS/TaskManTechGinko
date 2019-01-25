@@ -11,7 +11,7 @@ angular.module('timeSheetApp')
                     pageTitle: 'Sign in'
                 },
                 views: {
-                    'content@': {
+                    'login@': {
                         templateUrl: 'scripts/app/account/login/login.html',
                         controller: 'LoginController'
                     }

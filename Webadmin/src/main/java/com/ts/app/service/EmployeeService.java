@@ -1,79 +1,38 @@
 package com.ts.app.service;
 
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.ts.app.domain.*;
+import com.ts.app.ext.api.FaceRecognitionService;
+import com.ts.app.repository.*;
+import com.ts.app.rule.EmployeeFilter;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Hibernate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.CheckInOut;
-import com.ts.app.domain.CheckInOutImage;
-import com.ts.app.domain.Designation;
-import com.ts.app.domain.Device;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeHistory;
-import com.ts.app.domain.EmployeeLocation;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.EmployeeShift;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRoleEnum;
-import com.ts.app.repository.AttendanceRepository;
-import com.ts.app.repository.CheckInOutImageRepository;
-import com.ts.app.repository.CheckInOutRepository;
-import com.ts.app.repository.DesignationRepository;
-import com.ts.app.repository.DeviceRepository;
-import com.ts.app.repository.EmployeeHistoryRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.UserRoleRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.QRCodeUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.CheckInOutImageDTO;
-import com.ts.app.web.rest.dto.DesignationDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.EmployeeHistoryDTO;
-import com.ts.app.web.rest.dto.EmployeeProjectSiteDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImageDeleteRequest;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.ProjectDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.SiteDTO;
-import com.ts.app.web.rest.dto.UserDTO;
+import java.util.*;
 
 /**
  * Service class for managing employee information.
@@ -82,13 +41,13 @@ import com.ts.app.web.rest.dto.UserDTO;
 @Transactional
 public class    EmployeeService extends AbstractService {
 
-	private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
+    private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
-	@Inject
+    @Inject
     private AttendanceRepository attendanceRepository;
 
-	@Inject
-	private EmployeeRepository employeeRepository;
+    @Inject
+    private EmployeeRepository employeeRepository;
 
     @Inject
     private DeviceRepository deviceRepository;
@@ -105,58 +64,100 @@ public class    EmployeeService extends AbstractService {
     @Inject
     private CheckInOutImageRepository checkInOutImageRepository;
 
-	@Inject
-	private EmployeeHistoryRepository employeeHistoryRepository;
+    @Inject
+    private EmployeeHistoryRepository employeeHistoryRepository;
 
-	@Inject
-	private SiteRepository siteRepository;
+    @Inject
+    private SiteRepository siteRepository;
 
-	@Inject
-	private UserRepository userRepository;
+    @Inject
+    private UserRepository userRepository;
 
-	@Inject
-	private UserRoleRepository userRoleRepository;
+    @Inject
+    private UserRoleRepository userRoleRepository;
 
-	@Inject
-	private ProjectRepository projectRepository;
+    @Inject
+    private ProjectRepository projectRepository;
 
-	@Inject
-	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+    @Inject
+    private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
-	@Inject
-	private FileUploadHelper fileUploadHelper;
+    @Inject
+    private FileUploadHelper fileUploadHelper;
 
-	@Inject
-	private ExportUtil exportUtil;
+    @Inject
+    private ExportUtil exportUtil;
 
-	@Inject
-	private UserService userService;
+    @Inject
+    private UserService userService;
 
-	@Inject
-	private PushService pushService;
+    @Inject
+    private FaceRecognitionService faceRecognitionService;
 
-	@Inject
-	private MailService mailService;
+    @Inject
+    private PushService pushService;
+
+    @Inject
+    private MailService mailService;
 
     @Inject
     private JobManagementService jobManagementService;
 
-	@Inject
-	private Environment env;
+    @Inject
+    private AttendanceService attendanceService;
 
-	public EmployeeDTO findByEmpId(String empId) {
+    @Inject
+    private UserRoleService userRoleService;
+
+    @Inject
+    private EmployeeShiftRepository employeeShiftRepository;
+
+    @Inject
+    private EmployeeRelieverRepository employeeRelieverRepository;
+
+    @Inject
+    private Environment env;
+
+    @Inject
+    private AmazonS3Utils amazonS3utils;
+
+    @Inject
+    private EmployeeFilter employeeFilter;
+
+    @Value("${AWS.s3-cloudfront-url}")
+    private String cloudFrontUrl;
+
+    @Value("${AWS.s3-bucketEnv}")
+    private String bucketEnv;
+
+    @Value("${AWS.s3-enroll-path}")
+    private String enrollImagePath;
+
+    public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
-		EmployeeDTO employeeDto = null;
-		if(employee!=null) {
-			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
-		}
-		return employeeDto;
-	}
+        EmployeeDTO employeeDto = null;
+        if(employee!=null) {
+            employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
+        }
+        return employeeDto;
+    }
 
-	public EmployeeDTO createEmployeeInformation(EmployeeDTO employeeDto) {
-		// log.info("The admin Flag value is " +adminFlag);
-		log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
-        Employee existingEmployee = employeeRepository.findByEmpId(employeeDto.getEmpId());
+    public boolean isDuplicate(EmployeeDTO employeeDTO) {
+        log.debug("Empid "+employeeDTO.getEmpId());
+        SearchCriteria criteria = new SearchCriteria();
+        criteria.setEmployeeEmpId(employeeDTO.getEmpId());
+        criteria.setUserId(employeeDTO.getUserId());
+        SearchResult<EmployeeDTO> searchResults = findBySearchCrieria(criteria);
+        if(searchResults != null && CollectionUtils.isNotEmpty(searchResults.getTransactions())) {
+            return true;
+        }
+        return false;
+    }
+
+    public EmployeeDTO createEmployeeInformation(EmployeeDTO employeeDto) {
+        // log.info("The admin Flag value is " +adminFlag);
+        log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
+        /*Employee existingEmployee = employeeRepository.findByEmpId(employeeDto.getEmpId());
 		if(existingEmployee!=null && existingEmployee.getActive().equals(Employee.ACTIVE_NO)) { //existing employee update and activate
 			employeeDto.setId(existingEmployee.getId());
 		    ZoneId  zone = ZoneId.of("Asia/Singapore");
@@ -164,79 +165,105 @@ public class    EmployeeService extends AbstractService {
 		    //update and activate the existing employee.
 
 			employeeDto = updateEmployee(employeeDto, true);
-		}else {
-			employeeDto.setFullName(employeeDto.getName());
-			Employee employee = mapperUtil.toEntity(employeeDto, Employee.class);
-			log.debug("EmployeeService.createEmployeeInformation - userId - "+employee.getUser().getId());
-			employee.setUser(null);
-		    ZoneId  zone = ZoneId.of("Asia/Singapore");
-		    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-			employee.setCreatedDate(zdt);
-	        employee.setActive(Employee.ACTIVE_YES);
-	        if(employeeDto.getManagerId() > 0) {
-               Employee manager =  employeeRepository.findOne(employeeDto.getManagerId());
-               employee.setManager(manager);
+		}else {*/
+        employeeDto.setFullName(employeeDto.getName());
+        Employee employee = mapperUtil.toEntity(employeeDto, Employee.class);
+        log.debug("EmployeeService.createEmployeeInformation - userId - "+employee.getUser().getId());
+        employee.setUser(null);
+        ZoneId  zone = ZoneId.of("Asia/Singapore");
+        ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+        employee.setCreatedDate(zdt);
+        employee.setActive(Employee.ACTIVE_YES);
+        if(employeeDto.getManagerId() > 0) {
+            Employee manager =  employeeRepository.findOne(employeeDto.getManagerId());
+            employee.setManager(manager);
+        }
+        //employee = employeeRepository.save(employee);
+        Project newProj = projectRepository.findOne(employeeDto.getProjectId());
+        Site newSite = siteRepository.findOne(employeeDto.getSiteId());
+        List<Project> projects = new ArrayList<Project>();
+        projects.add(newProj);
+        List<Site> sites = new ArrayList<Site>();
+        sites.add(newSite);
+        employee.setFaceAuthorised(false);
+        employee.setFaceIdEnrolled(false);
+        employee.setLeft(false);
+        employee.setRelieved(false);
+        employee.setReliever(false);
+        List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
+        if(CollectionUtils.isNotEmpty(projectSites)) {
+            for(EmployeeProjectSite projSite : projectSites) {
+                projSite.setEmployee(employee);
             }
-	    	//employee = employeeRepository.save(employee);
-			Project newProj = projectRepository.findOne(employeeDto.getProjectId());
-			Site newSite = siteRepository.findOne(employeeDto.getSiteId());
-			List<Project> projects = new ArrayList<Project>();
-			projects.add(newProj);
-			List<Site> sites = new ArrayList<Site>();
-			sites.add(newSite);
-			employee.setFaceAuthorised(false);
-			employee.setFaceIdEnrolled(false);
-			employee.setLeft(false);
-			employee.setRelieved(false);
-			employee.setReliever(false);
-			List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
-			if(CollectionUtils.isNotEmpty(projectSites)) {
-				for(EmployeeProjectSite projSite : projectSites) {
-					projSite.setEmployee(employee);
-				}
-			}
-			List<EmployeeLocation> locations = employee.getLocations();
-			if(CollectionUtils.isNotEmpty(locations)) {
-				for(EmployeeLocation loc : locations) {
-					loc.setEmployee(employee);
-				}
-			}
+        }
+        List<EmployeeLocation> locations = employee.getLocations();
+        if(CollectionUtils.isNotEmpty(locations)) {
+            for(EmployeeLocation loc : locations) {
+                loc.setEmployee(employee);
+            }
+        }
+        if(employeeDto.getUserRoleId() > 0) {
+            UserRoleDTO userRoleDTO = userRoleService.findOne(employeeDto.getUserRoleId());
+            if(userRoleDTO.getName().startsWith("Client")) {
+                employee.setClient(true); //mark the employee as client employee
+            }
+        }
+        employee = employeeRepository.save(employee);
+        //create user if opted.
+        if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
+            UserDTO user = new UserDTO();
+            user.setLogin(employee.getEmpId());
+            user.setPassword(employee.getEmpId());
+            user.setFirstName(employee.getName());
+            user.setLastName(employee.getLastName());
+            user.setEmail(employee.getEmail());
+            user.setAdminFlag("N");
+            user.setUserRoleId(employeeDto.getUserRoleId());
+            user.setEmployeeId(employee.getId());
+            user.setActivated(true);
+            userService.createUserInformation(user);
 
-			employee = employeeRepository.save(employee);
-			//create user if opted.
-			if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
-				UserDTO user = new UserDTO();
-				user.setLogin(employee.getEmpId());
-				user.setPassword(employee.getEmpId());
-				user.setFirstName(employee.getName());
-				user.setLastName(employee.getLastName());
-				user.setEmail(employee.getEmail());
-				user.setAdminFlag("N");
-				user.setUserRoleId(employeeDto.getUserRoleId());
-				user.setEmployeeId(employee.getId());
-				user.setActivated(true);
-				userService.createUserInformation(user);
-			}
+        }
 
-			log.debug("Created Information for Employee: {}", employee);
-			employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
-		}
-		return employeeDto;
-	}
+        log.debug("Created Information for Employee: {}", employee);
+        employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
+        //}
+        return employeeDto;
+    }
 
     public DesignationDTO createDesignation(DesignationDTO designationDTO) {
         Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
-	    designationRepository.save(designation);
+        designationRepository.save(designation);
         return designationDTO;
     }
 
-	public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
-		log.debug("Inside Update");
-		log.debug("Inside Update"+employee);
-		log.debug("Inside Update"+employee.isLeft());
-		Employee employeeUpdate = employeeRepository.findOne(employee.getId());
-		Project newProj = projectRepository.findOne(employee.getProjectId());
-		Site newSite = siteRepository.findOne(employee.getSiteId());
+    public EmployeeDTO updateReliever(EmployeeDTO employee, EmployeeDTO reliever, RelieverDTO relieverDetails) {
+    		EmployeeReliever employeeReliever = new EmployeeReliever();
+    		employeeReliever.setEmployee(employeeRepository.findOne(employee.getId()));
+    		if(reliever != null) {
+    			employeeReliever.setRelieverEmployee(employeeRepository.findOne(reliever.getId()));
+    		}
+    		if(relieverDetails != null) {
+    			if(relieverDetails.getSiteId() > 0) {
+    				Site site = siteRepository.findOne(relieverDetails.getSiteId());
+    				employeeReliever.setSite(site);
+    			}
+    			employeeReliever.setStartTime(DateUtil.convertToTimestamp(relieverDetails.getRelievedFromDate()));
+    			employeeReliever.setEndTime(DateUtil.convertToTimestamp(relieverDetails.getRelievedToDate()));
+    			employeeReliever.setRelieverMobile(relieverDetails.getRelieverMobile());
+    			employeeReliever.setRelieverName(relieverDetails.getRelieverName());
+    		}
+    		employeeRelieverRepository.save(employeeReliever);
+    		return employee;
+    }
+
+    public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
+        log.debug("Inside Update");
+        log.debug("Inside Update"+employee);
+        log.debug("Inside Update"+employee.isLeft());
+        Employee employeeUpdate = employeeRepository.findOne(employee.getId());
+        Project newProj = projectRepository.findOne(employee.getProjectId());
+        Site newSite = siteRepository.findOne(employee.getSiteId());
 		/*
 		if(!projExists || !siteExists) {
 			EmployeeHistory empHist = new EmployeeHistory();
@@ -256,13 +283,13 @@ public class    EmployeeService extends AbstractService {
 		}
 		*/
 
-		employeeUpdate.setFullName(employee.getFullName());
-		employeeUpdate.setName(employee.getName());
-		employeeUpdate.setLastName(employee.getLastName());
-	    ZoneId  zone = ZoneId.of("Asia/Kolkata");
-	    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-		employeeUpdate.setLastModifiedDate(zdt);
-		employeeUpdate.setCode(employee.getCode());
+        employeeUpdate.setFullName(employee.getName());
+        employeeUpdate.setName(employee.getName());
+        employeeUpdate.setLastName(employee.getLastName());
+        ZoneId  zone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+        employeeUpdate.setLastModifiedDate(zdt);
+        employeeUpdate.setCode(employee.getCode());
         employeeUpdate.setLeft(employee.isLeft());
         employeeUpdate.setReliever(employee.isReliever());
         employeeUpdate.setRelieved(employee.isRelieved());
@@ -273,66 +300,108 @@ public class    EmployeeService extends AbstractService {
             employeeUpdate.setManager(manager);
         }
 
-		if(shouldUpdateActiveStatus) {
-			employeeUpdate.setActive(Employee.ACTIVE_YES);
-		}
-		List<EmployeeProjectSite> projectSites =  employeeUpdate.getProjectSites();
-		projectSites.clear();
-		List<EmployeeProjectSite> updatedProjSites = new ArrayList<EmployeeProjectSite>();
-		if(CollectionUtils.isNotEmpty(employee.getProjectSites())) {
-			for(EmployeeProjectSiteDTO projSiteDto : employee.getProjectSites()) {
-				EmployeeProjectSite projSite = mapperUtil.toEntity(projSiteDto, EmployeeProjectSite.class);
+        if(shouldUpdateActiveStatus) {
+            employeeUpdate.setActive(Employee.ACTIVE_YES);
+        }
+        List<EmployeeProjectSite> projectSites =  employeeUpdate.getProjectSites();
+        projectSites.clear();
+        List<EmployeeProjectSite> updatedProjSites = new ArrayList<EmployeeProjectSite>();
+        if(CollectionUtils.isNotEmpty(employee.getProjectSites())) {
+            for(EmployeeProjectSiteDTO projSiteDto : employee.getProjectSites()) {
+                EmployeeProjectSite projSite = mapperUtil.toEntity(projSiteDto, EmployeeProjectSite.class);
 //				if(CollectionUtils.isEmpty(projSite.getShifts())) {
 //					projSite.setShifts(new ArrayList<EmployeeShift>());
 //				}
-				projSite.setEmployee(employeeUpdate);
-				updatedProjSites.add(projSite);
-			}
-		}
-		employeeUpdate.getProjectSites().addAll(updatedProjSites);
-		Hibernate.initialize(employeeUpdate.getUser());
-		User user = employeeUpdate.getUser();
-		if(user != null) {
-			if(employee.isLeft() || employee.isRelieved() || employeeUpdate.getActive().equalsIgnoreCase(Employee.ACTIVE_NO)) {
-				user.setActivated(false);
-				user.setActive(Employee.ACTIVE_NO);
-			}
-			user.setFirstName(employee.getName());
-			user.setLastName(employee.getLastName());
-			user.setEmail(employeeUpdate.getEmail());
-		}
-		employeeUpdate.setUser(user);
-		employeeRepository.saveAndFlush(employeeUpdate);
-		employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
-		return employee;
-	}
+                projSite.setEmployee(employeeUpdate);
+                updatedProjSites.add(projSite);
+            }
+        }
+        employeeUpdate.getProjectSites().addAll(updatedProjSites);
+        Hibernate.initialize(employeeUpdate.getUser());
+        User user = employeeUpdate.getUser();
+        if(user != null) {
+            if(employee.isLeft() || employeeUpdate.getActive().equalsIgnoreCase(Employee.ACTIVE_NO)) {
+                user.setActivated(false);
+                user.setActive(Employee.ACTIVE_NO);
+            }
+            user.setFirstName(employee.getName());
+            user.setLastName(employee.getLastName());
+            user.setEmail(employeeUpdate.getEmail());
+        }
+        employeeUpdate.setUser(user);
+        if(employee.getUserRoleId() > 0) {
+            UserRoleDTO userRoleDTO = userRoleService.findOne(employee.getUserRoleId());
+            if(userRoleDTO.getName().startsWith("Client")) {
+                employee.setClient(true); //mark the employee as client employee
+            }
+        }
+        employeeUpdate.setDesignation(employee.getDesignation());
+        employeeRepository.saveAndFlush(employeeUpdate);
+        employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);
+        return employee;
+    }
+
+    public void updateEmployeeShifts(List<EmployeeShiftDTO> employeeShifts) {
+        if(CollectionUtils.isNotEmpty(employeeShifts)) {
+            for(EmployeeShiftDTO empShiftDto : employeeShifts) {
+                updateEmployeeShift(empShiftDto);
+            }
+        }
+    }
+
+    public EmployeeShiftDTO updateEmployeeShift(EmployeeShiftDTO employeeShift) {
+        log.debug("Inside Employee Shift Update");
+        EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(employeeShift.getId());
+        ZoneId  zone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+        employeeShiftUpdate.setLastModifiedDate(zdt);
+        //udpate site
+        Site site = siteRepository.findOne(employeeShift.getSiteId());
+        employeeShiftUpdate.setSite(site);
+        employeeShiftUpdate.setStartTime(DateUtil.convertToTimestamp(employeeShift.getStartTime()));
+        employeeShiftUpdate.setEndTime(DateUtil.convertToTimestamp(employeeShift.getEndTime()));
+        employeeShiftRepository.saveAndFlush(employeeShiftUpdate);
+        employeeShift = mapperUtil.toModel(employeeShiftUpdate, EmployeeShiftDTO.class);
+        return employeeShift;
+    }
 
 
-	public void deleteEmployee(Long id) {
-		log.debug("Inside Delete");
-		Employee employeeUpdate = employeeRepository.findOne(id);
+    public void deleteEmployee(Long id) {
+        log.debug("Inside Delete");
+        Employee employeeUpdate = employeeRepository.findOne(id);
         employeeUpdate.setActive(Employee.ACTIVE_NO);
         employeeRepository.save(employeeUpdate);
-		//employeeRepository.delete(employeeUpdate);
-	}
+        //employeeRepository.delete(employeeUpdate);
+    }
 
-	public List<SiteDTO> deleteEmployeeSite(Long id, Long siteId) {
-		log.debug("Inside delete employee site");
-		Employee employeeUpdate = employeeRepository.findOne(id);
+    public void deleteEmployeeShift(long id) {
+        log.debug("Inside Employee Shift Delete");
+        EmployeeShift employeeShiftUpdate = employeeShiftRepository.findOne(id);
+        Calendar currCal = Calendar.getInstance();
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTimeInMillis(employeeShiftUpdate.getStartTime().getTime());
+        if(currCal.before(startCal)) {
+            employeeShiftRepository.delete(employeeShiftUpdate);
+        }
+    }
+
+    public List<SiteDTO> deleteEmployeeSite(Long id, Long siteId) {
+        log.debug("Inside delete employee site");
+        Employee employeeUpdate = employeeRepository.findOne(id);
         Employee employee = employeeRepository.saveAndFlush(employeeUpdate);
-		//employeeRepository.delete(employeeUpdate);
+        //employeeRepository.delete(employeeUpdate);
         List<SiteDTO> siteDtos = null;
         return siteDtos;
-	}
+    }
 
-	public List<ProjectDTO> deleteEmployeeProject(Long id, Long projectId) {
-		log.debug("Inside delete employee project");
-		Employee employeeUpdate = employeeRepository.findOne(id);
+    public List<ProjectDTO> deleteEmployeeProject(Long id, Long projectId) {
+        log.debug("Inside delete employee project");
+        Employee employeeUpdate = employeeRepository.findOne(id);
 
         List<ProjectDTO> projDtos = null;
         return projDtos;
 
-	}
+    }
 
     @Transactional
     public CheckInOutDTO onlyCheckOut(CheckInOutDTO checkInOutDto) {
@@ -366,7 +435,7 @@ public class    EmployeeService extends AbstractService {
         checkInOut.setRemarks(checkInOutDto.getRemarks());
         checkInOut = checkInOutRepository.save(checkInOut);
         checkInOutDto.setId(checkInOut.getId());
-        JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId());
+        JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId(), checkInOutDto.getUserId());
         log.debug("onlyCheckOut - completedJob" + completedJob);
         log.debug("Transaction id "+checkInOutDto.getId());
         if(completedJob != null) {
@@ -398,13 +467,97 @@ public class    EmployeeService extends AbstractService {
     }
 
     @Transactional
+    public CheckInOutDTO saveCheckOutInfo(CheckInOutDTO checkInOutDto) {
+
+        log.debug("EmployeeService.checkOut - empId - "+checkInOutDto.getEmployeeEmpId());
+        //CheckInOut checkInOut = mapperUtil.toEntity(checkInOutDto, CheckInOut.class);
+        Timestamp zdt   = new Timestamp(System.currentTimeMillis());
+        CheckInOut checkInOut = new CheckInOut();
+
+        if (checkInOutDto.getId()>0) {
+            log.debug("Checkinout available");
+            checkInOut = checkInOutRepository.findOne(checkInOutDto.getId());
+        }
+        checkInOutDto.setCheckInDateTime(zdt);
+        checkInOut.setCheckOutDateTime(zdt);
+        Device checkoutDevice = deviceRepository.findByUniqueId(checkInOutDto.getDeviceOutUniqueId());
+//        checkInOut.setDeviceOut(checkoutDevice);
+        checkInOut.setMinsWorked(0);
+        checkInOut.setEmployee(employeeRepository.findOne(checkInOutDto.getEmployeeId()));
+        checkInOut.setProject(projectRepository.findOne(checkInOutDto.getProjectId()));
+        checkInOut.setSite(siteRepository.findOne(checkInOutDto.getSiteId()));
+        Job job = jobRepository.findOne(checkInOutDto.getJobId());
+        zdt = new  Timestamp(job.getPlannedStartTime().getTime());
+        checkInOut.setCheckInDateTime(zdt);
+        checkInOut.setJob(job);
+//        Device device = deviceRepository.findByUniqueId(checkInOutDto.getDeviceInUniqueId());
+//        log.debug("device id " + (device == null ? 0 : device.getId()));
+//        if(device != null) {
+//            checkInOut.setDeviceIn(device);
+//        }else {
+//            checkInOut.setDeviceIn(checkoutDevice);
+//        }
+//        //checkInOut.setDeviceOut(device);
+        checkInOut.setLongitudeOut(checkInOutDto.getLongitudeOut());
+        checkInOut.setLatitudeOut(checkInOutDto.getLatitudeOut());
+        checkInOut.setRemarks(checkInOutDto.getRemarks());
+        checkInOut = checkInOutRepository.save(checkInOut);
+        checkInOutDto.setId(checkInOut.getId());
+        if(checkInOutDto.isCompleteJob()){
+            //validate job completion time
+            Calendar now = Calendar.getInstance();
+            Calendar jobStartTime = Calendar.getInstance();
+            jobStartTime.setTime(job.getPlannedStartTime());
+            if(now.before(jobStartTime)) {
+                checkInOutDto.setErrorMessage("Cannot complete job before the scheduled job start time");
+                return checkInOutDto;
+            }
+
+            JobDTO completedJob = jobManagementService.onlyCompleteJob(checkInOutDto.getJobId(), checkInOutDto.getUserId());
+            log.debug("onlyCheckOut - completedJob" + completedJob);
+            log.debug("Transaction id "+checkInOutDto.getId());
+            if(completedJob != null) {
+                long siteId = completedJob.getSiteId();
+                long transactionId = checkInOutDto.getId();
+                log.debug("onlyCheckOut - completedJob siteId -" + transactionId);
+                //List<User> users = userService.findUsers(siteId);
+                Employee emp =job.getEmployee();
+                Hibernate.initialize(emp.getUser());
+                User jobUser = emp.getUser();
+                List<User> users = new ArrayList<User>();
+                users.add(jobUser);
+                log.debug("onlyCheckOut - completedJob users  -" + users);
+                if(CollectionUtils.isNotEmpty(users)) {
+                    long userIds[] = new long[users.size()];
+                    int ind = 0;
+                    for(User user : users) {
+                        userIds[ind] = user.getId();
+                        log.debug("onlyCheckOut - completedJob user id  -" + user.getId());
+                        ind++;
+                        mailService.sendCompletedJobAlert(user, completedJob.getSiteName(), completedJob.getId(), completedJob.getTitle(), null);
+                    }
+                    String message = "Job  -"+ completedJob.getTitle() + " completed for site-" + completedJob.getSiteName();
+                    log.debug("push message -"+ message);
+                    pushService.send(userIds, message);
+                    jobManagementService.saveNotificationLog(checkInOutDto.getJobId(),checkInOutDto.getUserId(), users, siteId, message);
+                }
+            }
+        }
+        log.debug("tranction Id",checkInOutDto.getId());
+        log.debug("Created check out Information for Employee: {}", checkInOut.getEmployee().getEmpId());
+
+        return checkInOutDto;
+
+    }
+
+    @Transactional
     public CheckInOutImageDTO uploadFile(CheckInOutImageDTO checkInOutImageDto) {
         log.debug("EmployeeService.uploadFile - action - "+checkInOutImageDto.getAction());
         log.debug("Employee list from check in out images"+checkInOutImageDto.getEmployeeEmpId());
-        String fileName = fileUploadHelper.uploadFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
-        checkInOutImageDto.setPhotoOut(fileName);
+        checkInOutImageDto = amazonS3utils.uploadEmployeeFile(checkInOutImageDto.getEmployeeEmpId(), checkInOutImageDto, checkInOutImageDto.getAction(), checkInOutImageDto.getPhotoOutFile(), System.currentTimeMillis());
+        checkInOutImageDto.setPhotoOut(checkInOutImageDto.getPhotoOut());
         CheckInOutImage checkInOutImage = new CheckInOutImage();
-        checkInOutImage.setPhotoOut(fileName);
+        checkInOutImage.setPhotoOut(checkInOutImageDto.getPhotoOut());
         checkInOutImage.setCheckInOut(checkInOutRepository.findOne(checkInOutImageDto.getCheckInOutId()));
         checkInOutImage.setProject(projectRepository.findOne(checkInOutImageDto.getProjectId()));
         checkInOutImage.setEmployee(employeeRepository.findOne(checkInOutImageDto.getEmployeeId()));
@@ -478,73 +631,189 @@ public class    EmployeeService extends AbstractService {
         return result;
     }
 
-	public List<EmployeeDTO> findAll(long userId) {
-		User user = userRepository.findOne(userId);
-		List<Employee> entities = null;
-		if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-			entities = employeeRepository.findAll();
-		}else {
-			List<Long> subEmpIds = null;
-			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-			entities = employeeRepository.findAllByIds(subEmpIds);
-		}
-		//return mapperUtil.toModelList(entities, EmployeeDTO.class);
-		List<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
-		if(CollectionUtils.isNotEmpty(entities)) {
-			for(Employee empEntity : entities) {
-				empList.add(mapToModel(empEntity));
-			}
-		}
-		return empList;
-	}
-
-    public List<EmployeeDTO> findAllRelievers(long userId) {
+    public List<EmployeeDTO> findAll(long userId) {
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-            entities = employeeRepository.findAllRelievers();
+            entities = employeeRepository.findAll();
         }else {
-			List<Long> subEmpIds = null;
-			subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-            entities = employeeRepository.findAllRelieversByIds(subEmpIds);
+            Set<Long> subEmpIds = null;
+            int levelCnt = 1;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+            List<Long> subEmpList = new ArrayList<Long>();
+            subEmpList.addAll(subEmpIds);
+            entities = employeeRepository.findAllByIds(subEmpList);
         }
+        //return mapperUtil.toModelList(entities, EmployeeDTO.class);
+        List<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
+        if(CollectionUtils.isNotEmpty(entities)) {
+            for(Employee empEntity : entities) {
+                empList.add(mapToModel(empEntity));
+            }
+        }
+        return empList;
+    }
+
+    public List<EmployeeDTO> findAllRelievers(long userId, long siteId) {
+        List<Employee> entities = null;
+        entities = employeeRepository.findAllRelievers(siteId);
         return mapperUtil.toModelList(entities, EmployeeDTO.class);
     }
 
+    public long findRelieversCountByEmployee(SearchCriteria searchCriteria){
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
+        long relieverCount =  0;
+        List<EmployeeReliever> empRel = new ArrayList<>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(subEmpList,DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+        }else {
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+        }
+
+        return relieverCount;
+    }
+
+    public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
+        List<EmployeeReliever> entities = null;
+        Pageable pageRequest = null;
+        pageRequest = createPageSort(searchCriteria.getCurrPage(), orderByDESC("createdDate"));
+        Page<EmployeeReliever> result = employeeRelieverRepository.findRelievers(searchCriteria.getEmployeeId(), pageRequest);
+        if(result != null && CollectionUtils.isNotEmpty(result.getContent())) {
+        		entities = result.getContent();
+        }
+        return mapperUtil.toModelList(entities, EmployeeRelieverDTO.class);
+    }
+
     public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
-    		List<EmployeeDTO> employeeDtos = null;
+        List<EmployeeDTO> employeeDtos = null;
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
         if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
             entities = employeeRepository.findBySiteId(siteId);
         }else {
-	    		List<Long> subEmpIds = null;
-	    		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpIds);
+            Set<Long> subEmpIds = null;
+            int levelCnt = 1;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+            List<Long> subEmpList = new ArrayList<Long>();
+            subEmpList.addAll(subEmpIds);
+            entities = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpList);
         }
         //return mapperUtil.toModelList(entities, EmployeeDTO.class);
-		if(CollectionUtils.isNotEmpty(entities)) {
-			employeeDtos = new ArrayList<EmployeeDTO>();
-			for(Employee emp : entities) {
-				employeeDtos.add(mapToModel(emp));
-			}
-		}
-		return employeeDtos;
+        if(CollectionUtils.isNotEmpty(entities)) {
+            employeeDtos = new ArrayList<EmployeeDTO>();
+            for(Employee emp : entities) {
+                employeeDtos.add(mapToModel(emp));
+
+            }
+        }
+        return employeeDtos;
     }
 
-	public List<EmployeeDTO> findAllEligibleManagers(long empId) {
-		List<Employee> entities = null;
-		entities = employeeRepository.findAllEligibleManagers(empId);
-		Employee self = employeeRepository.findOne(empId);
-		Set<Employee> subordinates = self.getSubOrdinates();
-		List<Employee> managers = new ArrayList<Employee>(CollectionUtils.subtract(entities, subordinates));
-		return mapperUtil.toModelList(managers, EmployeeDTO.class);
-	}
+    public SearchResult<EmployeeDTO> findWithAttendanceBySiteId(SearchCriteria searchCriteria) {
+        List<EmployeeDTO> employeeDtos = null;
+        SearchResult<EmployeeDTO> result1 = new SearchResult<EmployeeDTO>();
+        long userId = searchCriteria.getUserId();
+        long siteId = searchCriteria.getSiteId();
+        User user = userRepository.findOne(userId);
+        List<Employee> entities = null;
 
-	public EmployeeDTO findOne(Long id) {
-		Employee entity = employeeRepository.findOne(id);
-		Hibernate.initialize(entity.getProjectSites());
-		if(CollectionUtils.isNotEmpty(entity.getProjectSites())) {
+        Pageable pageRequest = null;
+        if(searchCriteria.isList()) {
+            pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+        }else {
+            pageRequest = createPageRequest(searchCriteria.getCurrPage());
+        }
+
+        Page<Employee> page = null;
+        List<EmployeeDTO> transactions = null;
+        if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+            page = employeeRepository.findBySiteId(siteId,pageRequest);
+        }else {
+            Set<Long> subEmpIds = null;
+            int levelCnt =1 ;
+            subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+            List<Long> subEmpList = new ArrayList<Long>();
+            subEmpList.addAll(subEmpIds);
+            page = employeeRepository.findBySiteIdAndEmpIds(siteId, subEmpList,pageRequest);
+        }
+        //return mapperUtil.toModelList(entities, EmployeeDTO.class);
+        if(CollectionUtils.isNotEmpty(page.getContent())) {
+            employeeDtos = new ArrayList<EmployeeDTO>();
+            for(Employee emp : page.getContent()) {
+                //EmployeeDTO employeeDTO = mapToModel(emp);
+                EmployeeDTO empDto = new EmployeeDTO();
+                empDto.setId(emp.getId());
+                empDto.setEmpId(emp.getEmpId());
+                empDto.setName(emp.getName());
+                empDto.setFullName(emp.getFullName());
+                empDto.setLastName(emp.getLastName());
+                empDto.setFaceAuthorised(emp.isFaceAuthorised());
+                empDto.setFaceIdEnrolled(emp.isFaceIdEnrolled());
+                SearchCriteria sc = new SearchCriteria();
+                sc.setEmployeeEmpId(emp.getEmpId());
+                sc.setSiteId(siteId);
+                sc.setEmployeeId(emp.getId());
+                List<AttendanceDTO> result = attendanceService.findEmpCheckInInfo(sc);
+                if(CollectionUtils.isNotEmpty(result)) {
+                    AttendanceDTO attendanceDTO = result.get(0);
+                    log.debug("Employee checked in "+result.size());
+                    empDto.setCheckedIn(true);
+                    empDto.setNotCheckedOut(attendanceDTO.isNotCheckedOut());
+                    empDto.setAttendanceId(attendanceDTO.getId());
+                    empDto.setSiteId(attendanceDTO.getSiteId());
+                    empDto.setSiteName(attendanceDTO.getSiteName());
+                }else{
+                    log.debug("Employee checked false "+result.size());
+                    empDto.setCheckedIn(false);
+                    empDto.setSiteName(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getName() : "");
+                    empDto.setSiteId(CollectionUtils.isNotEmpty(emp.getProjectSites()) ? emp.getProjectSites().get(0).getSite().getId() : 0);
+
+                }
+                employeeDtos.add(empDto);
+
+            }
+        }
+
+        if(page != null) {
+            if(employeeDtos == null) {
+                employeeDtos = new ArrayList<EmployeeDTO>();
+            }
+            if(CollectionUtils.isNotEmpty(employeeDtos)) {
+                buildSearchResult(searchCriteria, page, employeeDtos,result1);
+            }
+        }
+        return result1;
+    }
+
+    public List<EmployeeDTO> findAllEligibleManagers(long empId) {
+        List<Employee> entities = null;
+        entities = employeeRepository.findAllEligibleManagers(empId);
+        Employee self = employeeRepository.findOne(empId);
+        Set<Employee> subordinates = self.getSubOrdinates();
+        List<Employee> managers = new ArrayList<Employee>(CollectionUtils.subtract(entities, subordinates));
+        return mapperUtil.toModelList(managers, EmployeeDTO.class);
+    }
+
+    public EmployeeDTO findOne(Long id) {
+        Employee entity = employeeRepository.findOne(id);
+        Hibernate.initialize(entity.getProjectSites());
+        if(CollectionUtils.isNotEmpty(entity.getProjectSites())) {
 			/*
 			for(EmployeeProjectSite projSite : entity.getProjectSites()) {
 				Project proj =  projectRepository.findOne(projSite.getProjectId());
@@ -553,35 +822,236 @@ public class    EmployeeService extends AbstractService {
 				projSite.setSiteName(site.getName());
 			}
 			*/
-		}
-		log.debug("Employee retrieved by findOne - "+ entity );
-		EmployeeDTO dto =  mapperUtil.toModel(entity, EmployeeDTO.class);
-		Hibernate.initialize(entity.getManager());
-		if(entity.getManager() != null) {
-			dto.setManagerId(entity.getManager().getId());
-			dto.setManagerName(entity.getManager().getFullName());
-		}
-		//entity.setProjectSites(entity.getProjectSites());
-		return dto;
-	}
+        }
+        log.debug("Employee retrieved by findOne - "+ entity );
+        EmployeeDTO dto =  mapperUtil.toModel(entity, EmployeeDTO.class);
+        String enroll_url = cloudFrontUrl + bucketEnv + enrollImagePath + dto.getEnrolled_face();
+        dto.setUrl(enroll_url);
+        Hibernate.initialize(entity.getManager());
+        if(entity.getManager() != null) {
+            dto.setManagerId(entity.getManager().getId());
+            dto.setManagerName(entity.getManager().getFullName());
+        }
+        //entity.setProjectSites(entity.getProjectSites());
+        return dto;
+    }
 
-	public EmployeeDTO enrollFace(EmployeeDTO employeeDTO){
+    public EmployeeDTO enrollFace(EmployeeDTO employeeDTO) throws JSONException {
         Employee entity = employeeRepository.findOne(employeeDTO.getId());
         if (StringUtils.isEmpty(employeeDTO.getEnrolled_face())) {
-
             log.debug("Employee image not found");
-
         }else{
+            String enrollImage = employeeDTO.getEnrolled_face();
             log.debug("Employee image found");
-            entity.setEnrolled_face("data:image/jpeg;base64,"+employeeDTO.getEnrolled_face());
-            entity.setFaceIdEnrolled(true);
-            entity.setFaceAuthorised(false);
-            employeeRepository.saveAndFlush(entity);
+            long dateTime = new Date().getTime();
+            employeeDTO = amazonS3utils.uploadEnrollImage(enrollImage, employeeDTO, dateTime);
+            employeeDTO.setUrl(employeeDTO.getUrl());
+
+            log.debug("Enrolled face URL  -----------"+employeeDTO.getUrl());
+            String faceRecognitionResponse[] = faceRecognitionService.detectImage(employeeDTO.getUrl());
+
+            if(faceRecognitionResponse.length>0){
+                log.debug("Face enroll response - " +faceRecognitionResponse[0]);
+                if (faceRecognitionResponse[0] == "success"){
+
+                    String persistedFaceId;
+
+                    String personName = employeeDTO.getSiteId()+"_"+employeeDTO.getEmpId()+"_"+employeeDTO.getName();
+                    if(StringUtils.isNotEmpty(employeeDTO.getFaceId())){
+                        persistedFaceId = employeeDTO.getFaceId();
+
+                    }else{
+                        JSONObject enrollPersonResponse = faceRecognitionService.enrollPerson(personName);
+                        log.debug("Person enroll "+enrollPersonResponse);
+                        persistedFaceId = (String) enrollPersonResponse.get("personId");
+                        log.debug("Face Id"+persistedFaceId);
+                    }
+
+
+                    if(StringUtils.isNotEmpty(persistedFaceId)){
+                        entity.setFaceId(persistedFaceId);
+                        JSONObject faceEnrollResponse = faceRecognitionService.EnrollImage(employeeDTO,persistedFaceId);
+                        String enrolledFaceId = (String) faceEnrollResponse.get("persistedFaceId");
+                        if(StringUtils.isNotEmpty(enrolledFaceId)){
+                            faceRecognitionService.TainGroup();
+                            faceRecognitionService.TrainedStatus();
+                            entity.setEnrolled_face(employeeDTO.getEnrolled_face());
+                            entity.setFaceIdEnrolled(true);
+                            entity.setFaceAuthorised(false);
+                            employeeRepository.saveAndFlush(entity);
+                            employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
+                            return employeeDTO;
+
+                        }else{
+                            employeeDTO.setErrorMessage("Face not Enrolled");
+                            employeeDTO.setErrorStatus(true);
+                            return employeeDTO;
+                        }
+
+                    }else{
+                        employeeDTO.setErrorMessage("Unable to enroll Person");
+                        employeeDTO.setErrorStatus(true);
+                        return employeeDTO;
+                    }
+
+
+                }else{
+                    employeeDTO.setErrorMessage("Face not Detected");
+                    employeeDTO.setErrorStatus(true);
+                    return employeeDTO;
+
+                }
+            }else{
+                employeeDTO.setErrorMessage("Face not Detected");
+                employeeDTO.setErrorStatus(true);
+                return employeeDTO;
+            }
+
+        }
+        return employeeDTO;
+    }
+
+    public List<Employee> enrollAllEmplloyee() throws JSONException {
+        List<Employee> employees = employeeRepository.findEnrolledEmployees();
+        log.debug("Employee list length - "+employees.size());
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        int i =0;
+        for (Employee employee: employees){
+            if (employee.isFaceAuthorised() && StringUtils.isEmpty(employee.getFaceId())){
+                employeeDTO = mapperUtil.toModel(employee,EmployeeDTO.class);
+                Employee entity = employeeRepository.findOne(employeeDTO.getId());
+                String enrollImage = employeeDTO.getEnrolled_face();
+                log.debug("Employee image found");
+                long dateTime = new Date().getTime();
+                String enroll_url = cloudFrontUrl + bucketEnv + enrollImagePath + employeeDTO.getEnrolled_face();
+                employeeDTO.setUrl(enroll_url);
+
+                log.debug("Enrolled face URL  -----------"+employeeDTO.getUrl());
+                log.debug("Enrolled face URL  -----------");
+                String faceRecognitionResponse[] = faceRecognitionService.detectImage(employeeDTO.getUrl());
+
+                if(faceRecognitionResponse.length>0){
+                    log.debug("Face enroll response - " +faceRecognitionResponse[0]);
+                    if (faceRecognitionResponse[0] == "success"){
+
+                        String persistedFaceId;
+
+                        String personName = employeeDTO.getSiteId()+"_"+employeeDTO.getEmpId()+"_"+employeeDTO.getName();
+                        if(StringUtils.isNotEmpty(employeeDTO.getFaceId())){
+                            persistedFaceId = employeeDTO.getFaceId();
+
+                        }else{
+                            JSONObject enrollPersonResponse = faceRecognitionService.enrollPerson(personName);
+                            log.debug("Person enroll "+enrollPersonResponse);
+                            persistedFaceId = (String) enrollPersonResponse.get("personId");
+                            log.debug("Face Id"+persistedFaceId);
+                        }
+
+
+                        if(StringUtils.isNotEmpty(persistedFaceId)){
+                            entity.setFaceId(persistedFaceId);
+                            JSONObject faceEnrollResponse = faceRecognitionService.EnrollImage(employeeDTO,persistedFaceId);
+                            String enrolledFaceId = (String) faceEnrollResponse.get("persistedFaceId");
+                            if(StringUtils.isNotEmpty(enrolledFaceId)){
+                                faceRecognitionService.TainGroup();
+                                faceRecognitionService.TrainedStatus();
+                                entity.setEnrolled_face(employeeDTO.getEnrolled_face());
+                                entity.setFaceIdEnrolled(true);
+                                entity.setFaceAuthorised(true);
+                                employeeRepository.saveAndFlush(entity);
+                                employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
+                            }else{
+
+                                log.debug("Face not Enrolled");
+                            }
+
+                        }else{
+                            log.debug("Unable to enroll Person");
+                        }
+
+                    }else{
+                        log.debug("Face not Detected");
+                    }
+                }else{
+                    log.debug("Face not Detected");
+                }
+
+            }
+            i+=1;
+            log.debug("Success - new Face Id)+"+employeeDTO.getFaceId());
+            log.debug("Counting --------"+i);
+        }
+        return employees;
+    }
+
+    public EmployeeDTO enrollEmployeeToMicroSoft(long employeeId) throws JSONException {
+
+        Employee employee = employeeRepository.findOne(employeeId);
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+
+        if (employee.isFaceAuthorised() && StringUtils.isEmpty(employee.getFaceId())){
+            employeeDTO = mapperUtil.toModel(employee,EmployeeDTO.class);
+            Employee entity = employeeRepository.findOne(employeeDTO.getId());
+            String enrollImage = employeeDTO.getEnrolled_face();
+            log.debug("Employee image found");
+            long dateTime = new Date().getTime();
+            String enroll_url = cloudFrontUrl + bucketEnv + enrollImagePath + employeeDTO.getEnrolled_face();
+            employeeDTO.setUrl(enroll_url);
+
+            log.debug("Enrolled face URL  -----------"+employeeDTO.getUrl());
+            log.debug("Enrolled face URL  -----------");
+            String faceRecognitionResponse[] = faceRecognitionService.detectImage(employeeDTO.getUrl());
+
+            if(faceRecognitionResponse.length>0){
+                log.debug("Face enroll response - " +faceRecognitionResponse[0]);
+                if (faceRecognitionResponse[0] == "success"){
+
+                    String persistedFaceId;
+
+                    String personName = employeeDTO.getSiteId()+"_"+employeeDTO.getEmpId()+"_"+employeeDTO.getName();
+                    if(StringUtils.isNotEmpty(employeeDTO.getFaceId())){
+                        persistedFaceId = employeeDTO.getFaceId();
+
+                    }else{
+                        JSONObject enrollPersonResponse = faceRecognitionService.enrollPerson(personName);
+                        log.debug("Person enroll "+enrollPersonResponse);
+                        persistedFaceId = (String) enrollPersonResponse.get("personId");
+                        log.debug("Face Id"+persistedFaceId);
+                    }
+
+
+                    if(StringUtils.isNotEmpty(persistedFaceId)){
+                        entity.setFaceId(persistedFaceId);
+                        JSONObject faceEnrollResponse = faceRecognitionService.EnrollImage(employeeDTO,persistedFaceId);
+                        String enrolledFaceId = (String) faceEnrollResponse.get("persistedFaceId");
+                        if(StringUtils.isNotEmpty(enrolledFaceId)){
+                            faceRecognitionService.TainGroup();
+                            faceRecognitionService.TrainedStatus();
+                            entity.setEnrolled_face(employeeDTO.getEnrolled_face());
+                            entity.setFaceIdEnrolled(true);
+                            entity.setFaceAuthorised(true);
+                            employeeRepository.saveAndFlush(entity);
+                            employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
+                        }else{
+
+                            log.debug("Face not Enrolled");
+                        }
+
+                    }else{
+                        log.debug("Unable to enroll Person");
+                    }
+
+                }else{
+                    log.debug("Face not Detected");
+                }
+            }else{
+                log.debug("Face not Detected");
+            }
+
         }
 
-
-        employeeDTO = mapperUtil.toModel(entity, EmployeeDTO.class);
         return employeeDTO;
+
     }
 
     public EmployeeDTO authorizeImage(EmployeeDTO employeeDTO){
@@ -599,22 +1069,22 @@ public class    EmployeeService extends AbstractService {
         return employeeDTO;
     }
 
-	public EmployeeDTO findByUserId(Long userId){
-		Employee entity = employeeRepository.findByUserId(userId);
-		Hibernate.initialize(entity.getUser());
-		return mapperUtil.toModel(entity, EmployeeDTO.class);
-	}
+    public EmployeeDTO findByUserId(Long userId){
+        Employee entity = employeeRepository.findByUserId(userId);
+        Hibernate.initialize(entity.getUser());
+        return mapperUtil.toModel(entity, EmployeeDTO.class);
+    }
 
-	public List<EmployeeDTO> findListByUserId(Long userId){
-		List<Employee> entity = employeeRepository.findListByUserId(userId);
-		return mapperUtil.toModelList(entity, EmployeeDTO.class);
-	}
+    public List<EmployeeDTO> findListByUserId(Long userId){
+        List<Employee> entity = employeeRepository.findListByUserId(userId);
+        return mapperUtil.toModelList(entity, EmployeeDTO.class);
+    }
 
-	public EmployeeDTO validateCode(Long code) {
-		Employee entity = employeeRepository.findByCode(code);
-		EmployeeDTO empModel = null;
-		if(entity != null) {
-			empModel = mapperUtil.toModel(entity, EmployeeDTO.class);
+    public EmployeeDTO validateCode(Long code) {
+        Employee entity = employeeRepository.findByCode(code);
+        EmployeeDTO empModel = null;
+        if(entity != null) {
+            empModel = mapperUtil.toModel(entity, EmployeeDTO.class);
 //			List<CheckInOut> checkInOutExistingList = checkInOutRepository.findByEmployeeIdOrderByCheckInDateTime(empModel.getId());
 //			CheckInOut checkInOut = CollectionUtils.isNotEmpty(checkInOutExistingList) ? checkInOutExistingList.get(0) : null;
 //			if(checkInOut != null) {
@@ -626,233 +1096,351 @@ public class    EmployeeService extends AbstractService {
 //					empModel.setJobTitle(checkInOut.getJob().getTitle());
 //				}
 //			}
-		}
+        }
 
-		return empModel;
-	}
+        return empModel;
+    }
 
-	public List<EmployeeHistoryDTO> getHistory(Long empId) {
-		List<EmployeeHistory> empHistory = employeeHistoryRepository.findByEmployeeId(empId);
-		return mapperUtil.toModelList(empHistory, EmployeeHistoryDTO.class);
-	}
+    public List<EmployeeHistoryDTO> getHistory(Long empId) {
+        List<EmployeeHistory> empHistory = employeeHistoryRepository.findByEmployeeId(empId);
+        return mapperUtil.toModelList(empHistory, EmployeeHistoryDTO.class);
+    }
 
-	private Sort orderByASC(String columnName) {
-	    return new Sort(Sort.Direction.ASC, columnName);
-	}
+    private Sort orderByASC(String columnName) {
+        return new Sort(Sort.Direction.ASC, columnName);
+    }
+    //
+    private Sort orderByDESC(String columnName) {
+        return new Sort(Sort.Direction.DESC, columnName);
+    }
+
+    public SearchResult<EmployeeDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+        User user = userRepository.findOne(searchCriteria.getUserId());
+        SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
+        if(searchCriteria != null) {
+
+            Pageable pageRequest = null;
+            List<Employee> allEmpsList = new ArrayList<>();
+            Page<Employee> page = null;
+            List<EmployeeDTO> transactions = null;
+
+            if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" + sort);
+                if(searchCriteria.isList()) {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+                }else {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                }
+            } else {
+                if(searchCriteria.isList()) {
+                    Sort sort = new Sort(Sort.Direction.ASC , "name");
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+                }else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
+            }
+
+//            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+//            if(searchCriteria.getFromDate() != null) {
+//                startCal.setTime(searchCriteria.getFromDate());
+//            }
+//            startCal.set(Calendar.HOUR_OF_DAY, 0);
+//            startCal.set(Calendar.MINUTE, 0);
+//            startCal.set(Calendar.SECOND, 0);
+//            Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+//            if(searchCriteria.getToDate() != null) {
+//                endCal.setTime(searchCriteria.getToDate());
+//            }
+//            endCal.set(Calendar.HOUR_OF_DAY, 23);
+//            endCal.set(Calendar.MINUTE, 59);
+//            endCal.set(Calendar.SECOND, 0);
+
+            //searchCriteria.setFromDate(startCal.getTime());
+            //searchCriteria.setToDate(endCal.getTime());
+
+
+//            java.sql.Date startDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
+//            java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
+
+            log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+
+            boolean isClient = false;
+
+            UserRole role = null;
+
+            if(user != null) {
+                role = user.getUserRole();
+            }
+
+            if(role != null) {
+                isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+            }
+
+            List<EmployeeProjectSite> projectSites = user.getEmployee().getProjectSites();
+            List<Long> siteIds = new ArrayList<Long>();
+            if(CollectionUtils.isNotEmpty(projectSites)) {
+                for(EmployeeProjectSite projSite : projectSites) {
+                    siteIds.add(projSite.getSite().getId());
+                }
+                searchCriteria.setSiteIds(siteIds);
+            }
+
+            if(user.getEmployee() != null && !user.isAdmin()) {
+                Set<Long> subEmpIds = null;
+                int levelCnt = 1;
+                subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+                List<Long> subEmpList = new ArrayList<Long>();
+                subEmpList.addAll(subEmpIds);
+                searchCriteria.setSubordinateIds(subEmpList);
+            }else if(user.isAdmin()) {
+            	searchCriteria.setAdmin(true);
+            }
+
+//            if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
+//                if(searchCriteria.getFromDate() != null) {
+//                    page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),DateUtil.convertToZDT(searchCriteria.getFromDate()), DateUtil.convertToZDT(searchCriteria.getToDate()), isClient, pageRequest);
+//                }else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
+//                    page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), isClient, pageRequest);
+//                }else if(StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
+//                    page = employeeRepository.findByProjectSiteAndEmployeeEmpId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getEmployeeEmpId(), pageRequest);
+//                }else {
+//                    page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
+//                }
+//            }else if(searchCriteria.getSiteId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
+//                List<String> empIds = new ArrayList<String>();
+//                empIds.add(searchCriteria.getEmployeeEmpId());
+//                page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), isClient, pageRequest);;
+//            }else if(searchCriteria.getProjectId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
+//                List<String> empIds = new ArrayList<String>();
+//                empIds.add(searchCriteria.getEmployeeEmpId());
+//                page = employeeRepository.findByProjectAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getName(), isClient, pageRequest);;
+//            }else if(StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
+//                List<String> empIds = new ArrayList<String>();
+//                empIds.add(searchCriteria.getEmployeeEmpId());
+//                page = employeeRepository.findAllByEmpCodes(empIds, isClient, pageRequest);
+//            }
+//            else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
+//                if(role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+//                    page = employeeRepository.findByEmployeeName(searchCriteria.getName(), isClient, pageRequest);
+//                }else {
+//                    page = employeeRepository.findByEmployeeName(siteIds, searchCriteria.getName(), isClient, pageRequest);
+//                }
+//            }else if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
+//                log.debug(">>> find empid from service <<<");
+//                page = employeeRepository.findEmployeeId(String.valueOf(searchCriteria.getEmployeeId()), isClient, pageRequest);
+//            }
 //
-	private Sort orderByDESC(String columnName) {
-	    return new Sort(Sort.Direction.DESC, columnName);
-	}
+//            else if (searchCriteria.getProjectId() != 0) {
+//                if(searchCriteria.getFromDate() != null) {
+//                    page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), DateUtil.convertToZDT(searchCriteria.getFromDate()), DateUtil.convertToZDT(searchCriteria.getToDate()), isClient, pageRequest);
+//                }else {
+//                    page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
+//                }
+//            }else if (searchCriteria.getSiteId() != 0) {
+//                if(searchCriteria.getFromDate() != null) {
+//                    page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), DateUtil.convertToZDT(searchCriteria.getFromDate()), DateUtil.convertToZDT(searchCriteria.getToDate()), isClient, pageRequest);
+//                }else {
+//                    page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), isClient, pageRequest);
+//                }
+//            }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
+//                Set<Long> subEmpIds = null;
+//                int levelCnt = 1;
+//                subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+//                List<Long> subEmpList = new ArrayList<Long>();
+//                subEmpList.addAll(subEmpIds);
+//                page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpList, isClient, pageRequest);
+//            }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
+//                Set<Long> subEmpIds = null;
+//                int levelCnt =1;
+//                subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+//                List<Long> subEmpList = new ArrayList<Long>();
+//                subEmpList.addAll(subEmpIds);
+//                page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpList, isClient, pageRequest);
+//            }else {
+                if(role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+//                    page = employeeRepository.findAll(pageRequest);
+                    page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
+                	allEmpsList.addAll(page.getContent());
+                }else {
+//                    if(CollectionUtils.isNotEmpty(siteIds)) {
+//                        page = employeeRepository.findBySiteIds(siteIds, isClient, pageRequest);
+//                    }else {
+//                        Set<Long> subEmpIds = null;
+//                        int levelCnt = 1;
+//                        subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds, levelCnt);
+//                        List<Long> subEmpList = new ArrayList<Long>();
+//                        subEmpList.addAll(subEmpIds);
+//                        if(CollectionUtils.isNotEmpty(subEmpIds)) {
+//                            page = employeeRepository.findAllByEmpIds(subEmpList, isClient, pageRequest);
+//                        }
+//                    }
+                    page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
+                    allEmpsList.addAll(page.getContent());
+                }
 
-	public SearchResult<EmployeeDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
-		User user = userRepository.findOne(searchCriteria.getUserId());
-		SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
-		if(searchCriteria != null) {
-			Pageable pageRequest = null;
-			if(searchCriteria.isList()) {
-				pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
-			}else {
-				pageRequest = createPageRequest(searchCriteria.getCurrPage());
-			}
 
-			Page<Employee> page = null;
-			List<EmployeeDTO> transactions = null;
+                if(CollectionUtils.isNotEmpty(allEmpsList)) {
+                    //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+                    if(transactions == null) {
+                        transactions = new ArrayList<EmployeeDTO>();
+                    }
+                    List<Employee> empList =  allEmpsList;
+                    if(CollectionUtils.isNotEmpty(empList)) {
+                        for(Employee emp : empList) {
+                            User empUser = emp.getUser();
+                            if(empUser != null) {
+                                UserRole userRole = empUser.getUserRole();
+                                if(userRole != null) {
+                                    if(role != null && employeeFilter.filterByRole(searchCriteria.getModule(), searchCriteria.getAction(), role.getName(), userRole.getName())) {
+                                        transactions.add(mapToModel(emp));
+                                    }
+                                }
+                            }else {
+                                transactions.add(mapToModel(emp));
+                            }
+                        }
+                    }
+                    if(CollectionUtils.isNotEmpty(transactions)) {
+                        buildSearchResult(searchCriteria, page, transactions,result);
+                    }
+                }
+            }
+        return result;
+    }
+
+    public SearchResult<EmployeeShiftDTO> findEmpShiftBySearchCriteria(SearchCriteria searchCriteria) {
+        User user = userRepository.findOne(searchCriteria.getUserId());
+        SearchResult<EmployeeShiftDTO> result = new SearchResult<EmployeeShiftDTO>();
+        if(searchCriteria != null) {
+            Pageable pageRequest = null;
+            if(searchCriteria.isList()) {
+                pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+            }else {
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+
+            Page<EmployeeShift> page = null;
+            List<EmployeeShiftDTO> transactions = null;
 
             Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
             if(searchCriteria.getFromDate() != null) {
-            		startCal.setTime(searchCriteria.getFromDate());
+                startCal.setTime(searchCriteria.getFromDate());
             }
-	    		startCal.set(Calendar.HOUR_OF_DAY, 0);
-	    		startCal.set(Calendar.MINUTE, 0);
-	    		startCal.set(Calendar.SECOND, 0);
-	    		Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-	    		if(searchCriteria.getToDate() != null) {
-	    			endCal.setTime(searchCriteria.getToDate());
-	    		}
-	    		endCal.set(Calendar.HOUR_OF_DAY, 23);
-	    		endCal.set(Calendar.MINUTE, 59);
-	    		endCal.set(Calendar.SECOND, 0);
+            startCal.set(Calendar.HOUR_OF_DAY, 0);
+            startCal.set(Calendar.MINUTE, 0);
+            startCal.set(Calendar.SECOND, 0);
+            Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+            if(searchCriteria.getFromDate() != null) {
+                endCal.setTime(searchCriteria.getFromDate());
+            }
+            endCal.set(Calendar.HOUR_OF_DAY, 23);
+            endCal.set(Calendar.MINUTE, 59);
+            endCal.set(Calendar.SECOND, 0);
 
-	    		//searchCriteria.setFromDate(startCal.getTime());
-	    		//searchCriteria.setToDate(endCal.getTime());
+            java.sql.Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
+            java.sql.Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
 
 
-			java.sql.Date startDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
-			java.sql.Date toDate = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(endCal));
+            log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
 
-			log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-			if((searchCriteria.getSiteId() != 0 && searchCriteria.getProjectId() != 0)) {
-				if(searchCriteria.getFromDate() != null) {
-					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(),startDate, toDate, pageRequest);
-				}else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
-					page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), pageRequest);
-				}else {
-					page = employeeRepository.findBySiteIdAndProjectId(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-				}
-			}else if(searchCriteria.getSiteId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
-				List<String> empIds = new ArrayList<String>();
-				empIds.add(searchCriteria.getEmployeeEmpId());
-				page = employeeRepository.findByProjectSiteAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getName(), pageRequest);;
-			}else if(searchCriteria.getProjectId() != 0 && StringUtils.isNotEmpty(searchCriteria.getName())) {
-				List<String> empIds = new ArrayList<String>();
-				empIds.add(searchCriteria.getEmployeeEmpId());
-				page = employeeRepository.findByProjectAndEmployeeName(searchCriteria.getProjectId(), searchCriteria.getName(), pageRequest);;
-			}else if(StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
-				List<String> empIds = new ArrayList<String>();
-				empIds.add(searchCriteria.getEmployeeEmpId());
-				page = employeeRepository.findAllByEmpCodes(empIds, pageRequest);
-			}
-			else if(StringUtils.isNotEmpty(searchCriteria.getName())) {
-				page = employeeRepository.findByEmployeeName(searchCriteria.getName(), pageRequest);
-			}
-//			else if((searchCriteria.getSiteId() != 0 && searchCriteria.getEmployeeId() != 0)) {
-//				log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
-//				if(searchCriteria.getFromDate() != null) {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-//				}else {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-//				}
-//			}else if((searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0)) {
-//				if(searchCriteria.getFromDate() != null) {
-//					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-//				}else {
-//					page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-//				}
-//			}else if (searchCriteria.getEmployeeId() != 0 && searchCriteria.getProjectId() != 0 && searchCriteria.getSiteId() != 0) {
-//				if(searchCriteria.getFromDate() != null) {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate,pageRequest);
-//				}else {
-//					page = employeeRepository.findEmployeesByIdAndSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-//				}
-//            }else if (searchCriteria.getEmployeeId() != 0) {
-//			    page = employeeRepository.findByEmployeeId(searchCriteria.getEmployeeId(),pageRequest);
-//            	//page = employeeRepository.findEmployeesByIdOrSiteIdAndProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), userGroupId, pageRequest);
-//            }
-            else if (searchCriteria.getProjectId() != 0) {
-            		if(searchCriteria.getFromDate() != null) {
-            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-            		}else {
-            			page = employeeRepository.findEmployeesByIdAndSiteIdOrProjectId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-            		}
-            }else if (searchCriteria.getSiteId() != 0) {
-            		if(searchCriteria.getFromDate() != null) {
-            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), startDate, toDate, pageRequest);
-            		}else {
-            			page = employeeRepository.findEmployeesByIdAndProjectIdOrSiteId(searchCriteria.getEmployeeId(), searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-            		}
-            }else if (StringUtils.isNotEmpty(searchCriteria.getSiteName())) {
-	        		List<Long> subEmpIds = null;
-	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-	        		page = employeeRepository.findBySiteName(searchCriteria.getSiteName(), subEmpIds, pageRequest);
-            }else if (StringUtils.isNotEmpty(searchCriteria.getProjectName())) {
-	        		List<Long> subEmpIds = null;
-	        		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-	        		page = employeeRepository.findByProjectName(searchCriteria.getProjectName(), subEmpIds, pageRequest);
-//	        }
-//            else if(StringUtils.isNotEmpty(searchCriteria.getColumnName())){
-//		        	if(searchCriteria.isSortByAsc() == true){
-//		        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByASC(searchCriteria.getColumnName()));
-//			        	page = employeeRepository.findByOrder(pageable);
-//		        	}else if(searchCriteria.isSortByAsc() == false){
-//		        		Pageable pageable = createPageSort(searchCriteria.getCurrPage(), 10, orderByDESC(searchCriteria.getColumnName()));
-//			        	page = employeeRepository.findByOrder(pageable);
-//		        	}
+            boolean isClient = false;
 
-	        }else {
-	            	if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
-	            		page = employeeRepository.findAll(pageRequest);
-	            	}else {
-	            		List<EmployeeProjectSite> projectSites = user.getEmployee().getProjectSites();
-	            		if(CollectionUtils.isNotEmpty(projectSites)) {
-	            			List<Long> siteIds = new ArrayList<Long>();
-	            			for(EmployeeProjectSite projSite : projectSites) {
-	            				siteIds.add(projSite.getSite().getId());
-	            			}
-	            			page = employeeRepository.findBySiteIds(siteIds, pageRequest);
-	            		}else {
-		            		List<Long> subEmpIds = null;
-		            		subEmpIds = findAllSubordinates(user.getEmployee(), subEmpIds);
-						if(CollectionUtils.isNotEmpty(subEmpIds)) {
-		            			page = employeeRepository.findAllByEmpIds(subEmpIds, pageRequest);
-						}
-	            		}
-	            	}
+            if(user != null && user.getUserRole() != null) {
+                isClient = user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
             }
 
-			if(page != null) {
-				//transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
-				if(transactions == null) {
-					transactions = new ArrayList<EmployeeDTO>();
-				}
-				List<Employee> empList =  page.getContent();
-				if(CollectionUtils.isNotEmpty(empList)) {
-					for(Employee emp : empList) {
-						transactions.add(mapToModel(emp));
-					}
-				}
-				if(CollectionUtils.isNotEmpty(transactions)) {
-					buildSearchResult(searchCriteria, page, transactions,result);
-				}
-			}
-		}
-		return result;
-	}
+            if(searchCriteria.getSiteId() > 0) {
+                page = employeeShiftRepository.findEmployeeShiftBySiteAndDate(searchCriteria.getSiteId(), startDate, toDate, pageRequest);
+            }
 
-	public String generateQRCode(long empId) {
-		Employee empEntity = employeeRepository.findOne(empId);
-		byte[] qrCodeImage = null;
-		String qrCodeBase64 = null;
-		if(empEntity != null) {
-			String code = String.valueOf(empEntity.getEmpId());
-			qrCodeImage = QRCodeUtil.generateQRCode(code);
-			String qrCodePath = env.getProperty("qrcode.file.path");
-			String imageFileName = null;
-			if(StringUtils.isNotEmpty(qrCodePath)) {
-				imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
-				empEntity.setQrCodeImage(imageFileName);
-				employeeRepository.save(empEntity);
-			}
-			if(qrCodeImage != null && StringUtils.isNotBlank(imageFileName)) {
-				qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
-			}
-		}
-		return qrCodeBase64;
-	}
+            if(page != null) {
+                //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+                if(transactions == null) {
+                    transactions = new ArrayList<EmployeeShiftDTO>();
+                }
+                List<EmployeeShift> empShiftList =  page.getContent();
+                if(CollectionUtils.isNotEmpty(empShiftList)) {
+                    for(EmployeeShift empShift : empShiftList) {
+                        transactions.add(mapToModel(empShift));
+                    }
+                }
+                if(CollectionUtils.isNotEmpty(transactions)) {
+                    buildEmployeeShiftSearchResult(searchCriteria, page, transactions,result);
+                }
+            }
+        }
+        return result;
+    }
 
-	private void buildSearchResult(SearchCriteria searchCriteria, Page<Employee> page, List<EmployeeDTO> transactions, SearchResult<EmployeeDTO> result) {
-		if(page != null) {
-			result.setTotalPages(page.getTotalPages());
-		}
-		result.setCurrPage(page.getNumber() + 1);
-		result.setTotalCount(page.getTotalElements());
+    public String generateQRCode(long empId) {
+        Employee empEntity = employeeRepository.findOne(empId);
+        byte[] qrCodeImage = null;
+        String qrCodeBase64 = null;
+        if(empEntity != null) {
+            String code = String.valueOf(empEntity.getEmpId());
+            qrCodeImage = QRCodeUtil.generateQRCode(code);
+            String qrCodePath = env.getProperty("qrcode.file.path");
+            String imageFileName = null;
+            if(StringUtils.isNotEmpty(qrCodePath)) {
+                imageFileName = fileUploadHelper.uploadQrCodeFile(code, qrCodeImage);
+                empEntity.setQrCodeImage(imageFileName);
+                employeeRepository.save(empEntity);
+            }
+            if(qrCodeImage != null && StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+        }
+        return qrCodeBase64;
+    }
+
+    private void buildSearchResult(SearchCriteria searchCriteria, Page<Employee> page, List<EmployeeDTO> transactions, SearchResult<EmployeeDTO> result) {
+        if(page != null) {
+            result.setTotalPages(page.getTotalPages());
+        }
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
         result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
         result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
 
-		result.setTransactions(transactions);
-		return;
-	}
+        result.setTransactions(transactions);
+        return;
+    }
 
-	public ExportResult export(List<EmployeeDTO> transactions) {
-		//return exportUtil.writeToCsvFile(transactions, null);
+    private void buildEmployeeShiftSearchResult(SearchCriteria searchCriteria, Page<EmployeeShift> page, List<EmployeeShiftDTO> transactions, SearchResult<EmployeeShiftDTO> result) {
+        if(page != null) {
+            result.setTotalPages(page.getTotalPages());
+        }
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+        result.setTransactions(transactions);
+        return;
+    }
+
+    public ExportResult export(List<EmployeeDTO> transactions) {
+        //return exportUtil.writeToCsvFile(transactions, null);
         log.debug("ready to EXPORT EXCEL-------->");
         return exportUtil.writeToExcelFile(transactions,null);
-	}
+    }
 
-	public ExportResult getExportStatus(String fileId) {
-		ExportResult er = new ExportResult();
-		fileId += ".xlsx";
-		if(!StringUtils.isEmpty(fileId)) {
-			String status = exportUtil.getExportStatus(fileId);
-			er.setFile(fileId);
-			//er.setEmpId(empId);
-			er.setStatus(status);
-		}
-		return er;
-	}
+    public ExportResult getExportStatus(String fileId) {
+        ExportResult er = new ExportResult();
+        fileId += ".xlsx";
+        if(!StringUtils.isEmpty(fileId)) {
+            String status = exportUtil.getExportStatus(fileId);
+            er.setFile(fileId);
+            //er.setEmpId(empId);
+            er.setStatus(status);
+        }
+        return er;
+    }
 
-	public byte[] getExportFile(String fileName) {
-		return exportUtil.readEmployeeExportExcelFile(fileName);
-	}
+    public byte[] getExportFile(String fileName) {
+        return exportUtil.readEmployeeExportExcelFile(fileName);
+    }
 
 
     public List<DesignationDTO> findAllDesignations() {
@@ -863,25 +1451,101 @@ public class    EmployeeService extends AbstractService {
     }
 
     private EmployeeDTO mapToModel(Employee employee) {
-    		EmployeeDTO empDto = new EmployeeDTO();
-    		empDto.setId(employee.getId());
-    		empDto.setEmpId(employee.getEmpId());
-    		empDto.setName(employee.getName());
-    		empDto.setFullName(employee.getFullName());
-    		empDto.setLastName(employee.getLastName());
-    		empDto.setPhone(employee.getPhone());
-    		empDto.setEmail(employee.getEmail());
-    		empDto.setActive(employee.getActive());
-    		empDto.setFaceAuthorised(employee.isFaceAuthorised());
-    		empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
-    		empDto.setDesignation(employee.getDesignation());
-    		empDto.setEnrolled_face(employee.getEnrolled_face());
-    		empDto.setLeft(employee.isLeft());
-    		empDto.setReliever(employee.isReliever());
-    		empDto.setRelieved(employee.isRelieved());
-    		empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProject().getName() : "");
-    		empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
-    		return empDto;
+        EmployeeDTO empDto = new EmployeeDTO();
+        empDto.setId(employee.getId());
+        empDto.setEmpId(employee.getEmpId());
+        empDto.setName(employee.getName());
+        empDto.setFullName(employee.getFullName());
+        empDto.setLastName(employee.getLastName());
+        empDto.setPhone(employee.getPhone());
+        empDto.setEmail(employee.getEmail());
+        empDto.setActive(employee.getActive());
+        empDto.setFaceAuthorised(employee.isFaceAuthorised());
+        empDto.setFaceIdEnrolled(employee.isFaceIdEnrolled());
+        empDto.setDesignation(employee.getDesignation());
+        empDto.setEnrolled_face(employee.getEnrolled_face());
+        empDto.setUrl(cloudFrontUrl + bucketEnv + enrollImagePath + employee.getEnrolled_face());
+        empDto.setLeft(employee.isLeft());
+        empDto.setReliever(employee.isReliever());
+        empDto.setRelieved(employee.isRelieved());
+        empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProject().getName() : "");
+        empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
+        empDto.setClient(employee.isClient());
+        return empDto;
+    }
+
+    public String uploadEmpExistingImage() {
+        // TODO Auto-generated method stub
+        int currPage = 1;
+        int pageSize = 100;
+        Pageable pageRequest = createPageRequest(currPage, pageSize);
+        Page<Employee> empResult = employeeRepository.findByImage(pageRequest);
+        List<Employee> empEntity = empResult.getContent();
+        while(CollectionUtils.isNotEmpty(empEntity)) {
+            log.debug("Length of empEntity List" +empEntity.size());
+            for(Employee employee : empEntity) {
+                if(employee.getEnrolled_face() != null) {
+                    if(employee.getEnrolled_face().indexOf("data:image") == 0) {
+                        String base64String = employee.getEnrolled_face().split(",")[1];
+                        long dateTime = new Date().getTime();
+                        boolean isBase64 = Base64.isBase64(base64String);
+                        try {
+//							EmployeeDTO emp = mapperUtil.toModel(employee, EmployeeDTO.class);
+                            if(isBase64){
+                                employee = amazonS3utils.uploadExistingEnrollImage(employee.getEnrolled_face(), employee, dateTime);
+                            }
+                        }catch(Exception e) {
+                            log.debug("Error while mapping employee" + employee.getId() +" - "+employee.getName());
+                        }
+                    }
+                }
+            }
+            employeeRepository.save(empEntity);
+            currPage++;
+            pageRequest = createPageRequest(currPage, pageSize);
+            empResult = employeeRepository.findAll(pageRequest);
+            empEntity = empResult.getContent();
+        }
+
+        return "Upload Employee enroll image successfully";
+    }
+
+    private EmployeeShiftDTO mapToModel(EmployeeShift employeeShift) {
+        EmployeeShiftDTO empShiftDto = new EmployeeShiftDTO();
+        empShiftDto.setId(employeeShift.getId());
+        empShiftDto.setEmployeeId(employeeShift.getEmployee().getId());
+        empShiftDto.setEmployeeEmpId(employeeShift.getEmployee().getEmpId());
+        empShiftDto.setEmployeeFullName(employeeShift.getEmployee().getFullName());
+        Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        startCal.setTimeInMillis(employeeShift.getStartTime().getTime());
+        empShiftDto.setStartTime(startCal.getTime());
+        Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+        endCal.setTimeInMillis(employeeShift.getEndTime().getTime());
+        empShiftDto.setEndTime(endCal.getTime());
+        empShiftDto.setSiteId(employeeShift.getSite().getId());
+        empShiftDto.setSiteName(employeeShift.getSite().getName());
+        return empShiftDto;
+    }
+
+    public List<EmployeeDTO> getEmpAttendanceList(SearchCriteria searchCriteria) {
+    	List<EmployeeDTO> resp = new ArrayList<>();
+    	Set<Long> empIds = new TreeSet<Long>();
+    	List<Long> subEmpList = new ArrayList<Long>();
+    	SearchResult<AttendanceDTO> attnLists = attendanceService.findBySearchCrieria(searchCriteria);
+		if(CollectionUtils.isNotEmpty(attnLists.getTransactions())) {
+			for(AttendanceDTO attnList : attnLists.getTransactions()) {
+    			if(attnList.getEmployeeId() > 0) {
+    				empIds.add(attnList.getEmployeeId());
+    			}
+    		}
+    		subEmpList.addAll(empIds);
+    		if(CollectionUtils.isNotEmpty(subEmpList)) {
+        		List<Employee> employee = employeeRepository.findAllByNonIds(subEmpList);
+        		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
+    		}
+		}
+
+    	return resp;
     }
 
 }

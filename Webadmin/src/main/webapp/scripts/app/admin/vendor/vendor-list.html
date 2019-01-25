@@ -1,0 +1,668 @@
+<div ng-init="loadVendors()">
+
+
+    <div class="row" >
+        <div class="col-md-6 txt-align-lft">
+
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i> Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+        <div class="col-md-6 txt-align-rgt">
+            <button class="btn btn-success add-btn margn-tb0"   ui-sref="add-vendor" has-permission="Vendor:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
+            </button>
+
+            <button class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"  title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">import_contacts</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>
+
+
+            <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
+            <div class="downloaderMd" ng-show="downloader"></div>
+        </div>
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.vendorId !=0 && searchCriteras.vendorId !=null">
+                    Vendor: {{searchCriteras.vendorName}}
+                </span>
+
+            </span>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card margin-TB-5 tablecard appModuleCard">
+
+                <div class="card-content">
+
+                    <div class="table-responsive tablecard">
+                        <table class="table table-hover withSortingIcons">
+
+                            <thead>
+                            <tr>
+
+                                <th width="15%">Vendor  Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="15%">First Name
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''" >
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="15%">Last Name
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('contactLastName')" ng-class="isActiveAsc == 'contactLastName' ? 'active' : ''" >
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('contactLastName')" ng-class="isActiveDesc == 'contactLastName' ? 'active' : ''">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+
+                                <th width="">Phone
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('phone')" ng-class="isActiveDesc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                </th>
+                                <th>Address</th>
+                                <th class="disabled-sorting text-right" width="10%">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+								<tr ng-repeat="vendor in vendors" repeat-done="initDataTables()">
+									<td>{{vendor.name | uppercase}}</td>
+	                                <td>{{vendor.contactFirstName}} </td>
+                                    <td>{{vendor.contactLastName}}</td>
+								   	<td>{{vendor.phone}}</td>
+								   	<td>{{vendor.addressLine1}} {{vendor.addressLine2}} {{vendor.city}} {{vendor.state}}</td>
+	                                 <td class="text-right hoverMe">
+
+                                         <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+                                         <div class="HoverBx">
+                                             <a data-toggle="modal" title="View Vendor"  data-target="#RightModal-View" ng-click="getVendorDetails(vendor.id, 'view')"  has-permission="Vendor:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                             <!--  <a data-toggle="modal"  data-target="#RightModal-Edit" ng-click="getVendorDetails(vendor.id, 'edit')"  has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a> -->
+                                             <a  ui-sref="edit-vendor({ id: vendor.id })"  title="Edit Vendor" has-permission="Vendor:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                             <a  has-permission="Vendor:Delete" title="Delete Vendor" class="btn btn-simple btn-danger" ng-click="deleteConfirm(vendor.id)" onClick="$('#deleteVendor').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+
+                                         </div>
+
+
+	                                 </td>
+
+								</tr>
+
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="vendorsLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
+
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+    <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+
+
+</div>
+
+<!-- <div class="modal right fade" id="RightModal-Add" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew Modalwith600" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Add Vendor Details</h4>
+            </div>
+
+            <div class="modal-body">
+
+			<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveVendor()"
+						onClick="" class="form-horizontal">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Vendor Details</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Vendor Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="vendor.name"
+                                                   class='form-control' name='name' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="vendor.contactFirstName"
+                                                   class='form-control' name='contactFirstName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='contactName' ng-model="vendor.contactLastName"
+                                                   class='form-control' name='contactLastName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="vendor.phone"
+                                                   class='form-control' name='phone' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input id='email' ng-model="vendor.email"
+                                                   class='form-control' name='email' type='email' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Line 1</label>
+                                            <input id='line1' ng-model="vendor.addressLine1"
+                                                   class='form-control' name='line1' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Line 2</label>
+                                            <input id='line2' ng-model="vendor.addressLine2"
+                                                   class='form-control' name='line2' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">City</label>
+                                            <input id='City' ng-model="vendor.city"
+                                                   class='form-control' name='City' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">State</label>
+                                            <input id='state' ng-model="vendor.state"
+                                                   class='form-control' name='state' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Pin Code</label>
+                                            <input id='pinCode' ng-model="vendor.pincode"
+                                                   class='form-control' name='pinCode' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Country</label>
+                                            <input id='country' ng-model="vendor.country"
+                                                   class='form-control' name='country' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-8 txt-align-rgt">
+                        <div class="form-group">
+
+                            <button class="btn btn-success" type="submit"
+                                    id="form-button-save" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Save
+                            </button>
+                            <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                    id="cancel-button">
+                                <i class="material-icons">close</i> Cancel
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+			</form>
+
+            </div>
+
+        </div> modal-content
+    </div> modal-dialog
+</div>End Add modal -->
+
+<!-- <div class="modal right fade" id="RightModal-Edit" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Edit Vendor  Details</h4>
+            </div>
+
+            <div class="modal-body">
+
+			<form ng-show="!success" name="form" role="form" novalidate
+						ng-submit="saveVendor()"
+						onClick="" class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Vendor Details</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Vendor Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="vendor.name"
+                                                   class='form-control' name='name' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="vendor.contactFirstName"
+                                                   class='form-control' name='contactFirstName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='contactName' ng-model="vendor.contactLastName"
+                                                   class='form-control' name='contactLastName' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="vendor.phone"
+                                                   class='form-control' name='phone' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input id='email' ng-model="vendor.email"
+                                                   class='form-control' name='email' type='email' value=""
+                                                   ng-minlength='2' ng-maxlength='50' autofocus />
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Line 1</label>
+                                            <input id='line1' ng-model="vendor.addressLine1"
+                                                   class='form-control' name='line1' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Line 2</label>
+                                            <input id='line2' ng-model="vendor.addressLine2"
+                                                   class='form-control' name='line2' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">City</label>
+                                            <input id='City' ng-model="vendor.city"
+                                                   class='form-control' name='City' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">State</label>
+                                            <input id='state' ng-model="vendor.state"
+                                                   class='form-control' name='state' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Pin Code</label>
+                                            <input id='pinCode' ng-model="vendor.pincode"
+                                                   class='form-control' name='pinCode' type='number' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Country</label>
+                                            <input id='country' ng-model="vendor.country"
+                                                   class='form-control' name='country' type='text' value=""
+                                                   ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 txt-align-rgt">
+                        <div class="form-group">
+
+                            <button class="btn btn-success" type="submit"
+                                    id="form-button-update" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Update
+                            </button>
+                            <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                    id="cancel-button">
+                                <i class="material-icons">close</i> Close
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+			</form>
+            </div>
+
+        </div> modal-content
+    </div>modal-dialog
+</div>End Edit modal  -->
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">View Vendor  Details - {{vendor.name | uppercase}} ({{vendor.id}}) </h4>
+            </div>
+
+            <div class="modal-body ViewContentPageCon">
+
+                <div class="titleCon margn-btm-12">
+                    <h3>{{vendor.name | uppercase}}</h3>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Vendor  Details</div>
+                            <div class="panel-body" style="min-height: 350px;">
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Vendor  Name</td>
+                                            <td>{{vendor.name | uppercase}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact First Name</td>
+                                            <td>{{vendor.contactFirstName}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Contact Last Name</td>
+                                            <td>{{vendor.contactLastName}}</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>Phone No</td>
+                                            <td>{{vendor.phone}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td>{{vendor.email}}</td>
+
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body" style="min-height: 350px;">
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Line 1 </td>
+                                            <td class="caps">{{vendor.addressLine1}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Line 2</td>
+                                            <td class="caps">{{vendor.addressLine2}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>City</td>
+                                            <td class="caps">{{vendor.city}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>State</td>
+                                            <td class="caps">{{vendor.state}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pin Code</td>
+                                            <td>{{vendor.pincode}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Country</td>
+                                            <td class="caps">{{vendor.country}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 txt-align-rgt">
+                        <button class="btn btn-default" type="button"
+                                data-dismiss="modal" id="close-button-right">
+                            Close
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->
+
+<div class="row">
+
+    <div id="deleteVendor" data-backdrop="false" class="modal fade deleteModal"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to delete the Vendor?<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="deleteVendor()"
+                        class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm" role="form" ng-submit = "searchFilter()"  novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-8">
+                            <div class="form-group no-padding" >
+                                <div class="dropdown">
+                                    <div class="form-group">
+                                        <label class="label-control">Search Vendor Name</label>
+                                        
+                                        <span ng-show="vendorFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!vendorFilterDisable && !vendorsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                               
+	                                    <ui-select ng-model="vendorsListOne.selected"  ng-disabled="vendorFilterDisable">
+										  <ui-select-match placeholder="Select Vendor..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+										  <ui-select-choices repeat="vendorsListOne in vendorsLists | filter: $select.search"  null-option="allVendors" loose-null>
+										    <span ng-bind-html="vendorsListOne.name | highlight: $select.search"></span>
+										  </ui-select-choices>
+										</ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="1">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"    tabindex="2">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

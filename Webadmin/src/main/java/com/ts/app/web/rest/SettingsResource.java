@@ -1,26 +1,21 @@
 package com.ts.app.web.rest;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.ApplicationVersionControl;
+import com.ts.app.service.SettingsService;
+import com.ts.app.web.rest.dto.SettingsDTO;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.service.SettingsService;
-import com.ts.app.web.rest.dto.SettingsDTO;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * REST controller for managing the Settings information.
@@ -43,7 +38,7 @@ public class SettingsResource {
 	 * POST /settings -> save the settings.
 	 */
 	@RequestMapping(value = "/settings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed 
+	@Timed
 	public ResponseEntity<?> saveSettings(@Valid @RequestBody SettingsDTO settingsDTO, HttpServletRequest request) {
 		log.info("Inside the saveSettings -");
 		SettingsDTO settingsUpdated = null;
@@ -63,6 +58,16 @@ public class SettingsResource {
 		SettingsDTO settings = settingsService.findAll(projId, siteId);
 		return settings;
 	}
+
+    @RequestMapping(value = "/version/application", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<ApplicationVersionControl> findVersion(HttpServletRequest request) {
+        log.info("Inside the find Version -");
+
+        List<ApplicationVersionControl> applicationVersionControls = settingsService.findApplicationVersionCode();
+
+        return applicationVersionControls;
+    }
 
 
 }

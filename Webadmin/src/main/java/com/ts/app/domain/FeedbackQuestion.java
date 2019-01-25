@@ -1,19 +1,8 @@
 package com.ts.app.domain;
 
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "feedback_questions")
@@ -30,19 +19,25 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
 
     @Column(name = "question")
     private String question;
-    
+
+    @Column(name = "remarks_required")
+    private boolean remarksRequired;
+
     @Column(name = "answer_type")
     private FeedbackAnswerType answerType;
 
     @ManyToOne()
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
-    
+
     @Column(name = "score_type")
     private String scoreType;
-    
+
     @Column(name ="image")
     private String image;
+
+    @Column(name="remarks")
+    private String remarks;
 
     public long getId() {
         return id;
@@ -91,5 +86,21 @@ public class FeedbackQuestion extends AbstractAuditingEntity implements Serializ
 	public void setImage(String image) {
 		this.image = image;
 	}
-    
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+
+    public boolean isRemarksRequired() {
+        return remarksRequired;
+    }
+
+    public void setRemarksRequired(boolean remarksRequired) {
+        this.remarksRequired = remarksRequired;
+    }
 }

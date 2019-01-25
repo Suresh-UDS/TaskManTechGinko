@@ -1,3 +1,12 @@
-page-home {
-
+page-quotation {
+  .form-group.label-static label.control-label, .form-group.label-floating.is-focused label.control-label, .form-group.label-floating:not(.is-empty) label.control-label {
+    top: -23px !important;
+    left: 2px !important;
+    font-size: 11px !important;
+    line-height: 1.0714285718 !important;
+  }
+  .icon-round{
+    width: 80% !important;
+    height: 80% !important;
+  }
 }

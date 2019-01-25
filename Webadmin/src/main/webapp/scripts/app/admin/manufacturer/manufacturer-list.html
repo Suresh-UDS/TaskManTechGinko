@@ -1,0 +1,816 @@
+<div ng-init="initLoad()">
+
+
+    <div class="row" ng-init="loadManufacturers();loadAllAssetTypes()">
+        <div class="col-md-6 txt-align-lft">
+
+            <button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear Filter
+                <div class="ripple-container"></div>
+            </button>
+
+        </div>
+        <div class="col-md-6 txt-align-rgt">
+
+
+
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-manufacturer" has-permission="Manufacturer:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+                <i class="material-icons">add</i> Add
+                <div class="ripple-container"></div>
+            </button>
+
+
+
+        </div>
+
+
+
+    </div>
+    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
+            <span class="AppliedFilterTxtCon">
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.assetTypeId !=0 && searchCriteras.assetTypeId !=null">
+                    Asset Type: {{searchCriteras.assetTypeName}}
+                </span>
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.manufacturerName">
+                    Manufacturer: {{searchCriteras.manufacturerName}}
+                </span>
+            </span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card margin-TB-5 tablecard appModuleCard">
+
+                <div class="card-content">
+                    <!--<div class="row" >-->
+                        <!--<div class="col-md-12">-->
+                            <!--<div class="card formcard FilterCard">-->
+                                <!--<div class="card-content">-->
+                                    <!--<form name="searchForm"  ng-submit="searchFilter();" novalidate >-->
+
+                                        <!--<div class="row" ng-init="loadAllAssetTypes()">-->
+                                            <!--<div class="col-xs-12 col-md-4">-->
+                                                <!--<div class="form-group no-padding" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<div class="form-group">-->
+                                                            <!--<label class="control-label">Select Asset Type</label>-->
+                                                            <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+														<!--<select class="form-control " ng-model="searchAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes">-->
+                                                        		<!--<option value="">Select Asset Type...</option>-->
+                                                    		<!--</select>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="col-xs-12 col-md-4">-->
+                                                <!--<div class="form-group no-padding" >-->
+                                                    <!--<div class="dropdown">-->
+                                                        <!--<div class="form-group">-->
+                                                            <!--<label class="control-label">Name</label>-->
+                                                            <!--<input id='name'-->
+                                                                   <!--class='form-control'-->
+                                                                   <!--name='name'-->
+                                                                   <!--ng-model="searchName"-->
+                                                                   <!--type='text' value=""-->
+                                                            <!--/>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <!--<div class="col-xs-12 col-md-4 pad10px">-->
+                                                <!--<div class="floatR form-group pull-right">-->
+                                                    <!--<button type="submit" class="btn btn-circle blue-clr">-->
+                                                        <!--<i class="material-icons">search</i>-->
+                                                    <!--</button>-->
+                                                    <!--&lt;!&ndash; data-target="#RightModal-Add" &ndash;&gt;-->
+                                                    <!--<button data-toggle="modal" ui-sref="add-manufacturer"   class="btn btn-circle green-clr">-->
+                                                        <!--<i class="material-icons">add</i>-->
+                                                    <!--</button>-->
+                                                    <!--<button ng-click="refreshPage()"  class="btn btn-circle orange-clr">-->
+                                                        <!--<i class="material-icons">refresh</i>-->
+                                                    <!--</button>-->
+                                                <!--</div>-->
+                                                <!--<div class="clearfix"></div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</form>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
+
+                    <div class="table-responsive tablecard">
+                        <table class="table table-hover withSortingIcons">
+
+                            <thead>
+                            <tr>
+                                <th width="20%">Asset Type
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('assetType')" ng-class="isActiveAsc == 'assetType' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('assetType')" ng-class="isActiveDesc == 'assetType' ? 'active' : ''" >
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="20%">Manufacturer  Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('name')" ng-class="isActiveAsc == 'name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('name')" ng-class="isActiveDesc == 'name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th width="20%">Person Name
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('contactFirstName')" ng-class="isActiveAsc == 'contactFirstName' ? 'active' : ''" >
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('contactFirstName')" ng-class="isActiveDesc == 'contactFirstName' ? 'active' : ''">
+                                            <i  class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+
+                                <th width="15%">Phone
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('phone')" ng-class="isActiveAsc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('phone')" ng-class="isActiveDesc == 'phone' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                </th>
+                                <th width="15%">Email
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('email')" ng-class="isActiveAsc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                         <span ng-click="columnDescOrder('email')" ng-class="isActiveDesc == 'email' ? 'active' : ''">
+                                             <i  class="fa fa-caret-down"></i>
+                                         </span>
+                                    </span>
+                                </th>
+                                <th class="disabled-sorting text-right" width="10%">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+							<tr ng-repeat="manufacturer in manufacturers" repeat-done="initDataTables()">
+								<td>{{manufacturer.assetType}}</td>
+								<td>{{manufacturer.name | uppercase}}</td>
+                                	<td>{{manufacturer.contactFirstName}} {{manufacturer.contactLastName}}</td>
+							   	<td>{{manufacturer.phone}}</td>
+							   	<td>{{manufacturer.email}}</td>
+                                 <td class="text-right hoverMe">
+
+                                     <a   title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+
+                                     <div class="HoverBx">
+
+                                         <a data-toggle="modal"  title="View" data-target="#RightModal-View" ng-click="getManufacturerDetails(manufacturer.id, 'view')"  has-permission="Manufacturer:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                         <!-- data-target="#RightModal-Edit"  ng-click="getManufacturerDetails(manufacturer.id, 'edit')"-->
+                                         <a data-toggle="modal" title="Edit"  ui-sref="edit-manufacturer({ id: manufacturer.id })"    has-permission="Manufacturer:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+
+                                         <a  has-permission="Manufacturer:Delete" title="Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(manufacturer.id)" onClick="$('#deleteManufacturer').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+
+                                     </div>
+
+
+                                 </td>
+
+							</tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="txt-align-center LoaderCon"  ng-hide="manufacturersLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
+
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+    <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+</div>
+
+<!-- <div class="modal right fade" id="RightModal-Add" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew Modalwith600" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Add Manufacturer Details</h4>
+            </div>
+
+            <div class="modal-body">
+
+			<form ng-show="!success" name="formSave" role="form" novalidate
+						ng-submit="saveManufacturer()"
+						onClick="" class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Manufacturer Details</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Asset Type<span class="red-star">*</span></label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                  			<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes" name="assetType" required>
+                                             	<option value="">Select Asset Type...</option>
+											</select>
+                                            <div ng-show="formSave.$submitted || formSave.assetType.$touched">
+                                                <div ng-show="formSave.assetType.$dirty || formSave.assetType.$invalid">
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formSave.assetType.$error.required">
+                                                        Asset type is required.
+                                                    </p>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="manufacturer.name" name="manufacturerName"
+                                                   class='form-control' name='manufacturerName' type='text' value=""
+                                                   ng-minlength='5' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required/>
+
+                                            <div ng-show="formSave.$submitted || formSave.manufacturerName.$touched">
+                                                <div ng-show="formSave.manufacturerName.$dirty || formSave.manufacturerName.$invalid">
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formSave.manufacturerName.$error.required">
+                                                        Manufacturer name is required.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formSave.manufacturerName.$error.minlength">
+                                                        Manufacturer name is required to be at least 5 character.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formSave.manufacturerName.$error.maxlength">
+                                                        Manufacturer name cannot be longer than 250 characters.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formSave.manufacturerName.$error.pattern">
+                                                        Manufacturer name can only contain letters, digits and space.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="manufacturer.contactFirstName"
+                                                   class='form-control' name='contactName' type='text' value=""
+                                                    />
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='lastName' ng-model="manufacturer.contactLastName"
+                                                   class='form-control' name='lastName' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="manufacturer.phone"
+                                                   class='form-control' name='mobNum' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input id='email' ng-model="manufacturer.email"
+                                                   class='form-control' name='email' type='email' value=""
+                                                    />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Line 1</label>
+                                            <input id='line1' ng-model="manufacturer.addressLine1"
+                                                   class='form-control' name='line1' type='text' value=""
+                                                   />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Line 2</label>
+                                            <input id='line2' ng-model="manufacturer.addressLine2"
+                                                   class='form-control' name='line2' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">City</label>
+                                            <input id='City' ng-model="manufacturer.city"
+                                                   class='form-control' name='City' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">State</label>
+                                            <input id='state' ng-model="manufacturer.state"
+                                                   class='form-control' name='state' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Pin Code</label>
+                                            <input id='pinCode' ng-model="manufacturer.pincode"
+                                                   class='form-control' name='pinCode' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Country</label>
+                                            <input id='country' ng-model="manufacturer.country"
+                                                   class='form-control' name='country' type='text' value=""
+                                                    />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-8 txt-align-rgt">
+                        <div class="form-group">
+
+                            <button class="btn btn-success" type="submit"
+                                    id="form-button-save" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Save
+                            </button>
+                            <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                    id="cancel-button">
+                                <i class="material-icons">close</i> Cancel
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+			</form>
+
+            </div>
+
+        </div> modal-content
+    </div> modal-dialog
+</div> End Add modal  -->
+
+<!-- <div class="modal right fade" id="RightModal-Edit" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">Edit Manufacturer Details</h4>
+            </div>
+
+            <div class="modal-body">
+				<form ng-show="!success" name="formEdit" role="form" novalidate
+						ng-submit="saveManufacturer()"
+						onClick="" class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Manufacturer Details</div>
+                            <div class="panel-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                       <div class="form-group">
+                                            <label class="control-label">Asset Type<span class="red-star">*</span></label>
+
+                                  			<select class="form-control " ng-model="selectedAssetType"  ng-options="assetType as assetType.name for assetType in assetTypes track by name" name="assetType" required>
+                                             	<option value="">Select Asset Type...</option>
+											</select>
+                                            <div ng-show="formEdit.$submitted || formEdit.assetType.$touched">
+                                                <div ng-show="formEdit.assetType.$dirty || formEdit.assetType.$invalid">
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formEdit.assetType.$error.required">
+                                                        Asset type is required.
+                                                    </p>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
+                                            <input id='manufacturerName' ng-model="manufacturer.name"
+                                                   class='form-control' name='manufacturerName' type='text' value=""
+                                                   required/>
+                                            <div ng-show="formEdit.$submitted || formEdit.manufacturerName.$touched">
+                                                <div ng-show="formEdit.manufacturerName.$dirty || formEdit.manufacturerName.$invalid">
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formEdit.manufacturerName.$error.required">
+                                                        Manufacturer name is required.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formEdit.manufacturerName.$error.minlength">
+                                                        Manufacturer name is required to be at least 5 character.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formEdit.manufacturerName.$error.maxlength">
+                                                        Manufacturer name cannot be longer than 250 characters.
+                                                    </p>
+                                                    <p class="help-block" style="color:maroon"
+                                                       ng-show="formEdit.manufacturerName.$error.pattern">
+                                                        Manufacturer name can only contain letters, digits and space.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact First Name</label>
+                                            <input id='contactName' ng-model="manufacturer.contactFirstName"
+                                                   class='form-control' name='contactFirstName' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Contact Last Name</label>
+                                            <input id='firstName' ng-model="manufacturer.contactLastName"
+                                                   class='form-control' name='contactLastName' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Phone No</label>
+                                            <input id='mobNum' ng-model="manufacturer.phone"
+                                                   class='form-control' name='phone' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Email</label>
+                                            <input id='email' ng-model="manufacturer.email"
+                                                   class='form-control' name='email' type='email' value=""
+                                                    />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Address Details</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Line 1</label>
+                                            <input id='line1' ng-model="manufacturer.addressLine1"
+                                                   class='form-control' name='line1' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Line 2</label>
+                                            <input id='line2' ng-model="manufacturer.addressLine2"
+                                                   class='form-control' name='line2' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">City</label>
+                                            <input id='City' ng-model="manufacturer.city"
+                                                   class='form-control' name='City' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">State</label>
+                                            <input id='state' ng-model="manufacturer.state"
+                                                   class='form-control' name='state' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Pin Code</label>
+                                            <input id='pinCode' ng-model="manufacturer.pincode"
+                                                   class='form-control' name='pinCode' type='text' value=""
+                                                    />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Country</label>
+                                            <input id='country' ng-model="manufacturer.country"
+                                                   class='form-control' name='country' type='text' value=""
+                                                    />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 txt-align-rgt">
+                        <div class="form-group">
+
+                            <button class="btn btn-success" type="submit"
+                                    id="form-button-update" ng-disabled="form.$invalid">
+                                <span class="btn-label"><i class="material-icons">check</i></span> Update
+                            </button>
+                            <button class="btn btn-danger"  data-dismiss="modal" aria-label="Close" type="button"
+                                    id="cancel-button">
+                                <i class="material-icons">close</i> Close
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+			</form>
+
+            </div>
+
+        </div>modal-content
+    </div>modal-dialog
+</div>End Edit modal  -->
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">View Manufacturer Details - {{manufacturer.name | uppercase}}</h4>
+            </div>
+
+            <div class="modal-body ViewContentPageCon">
+                <div class="titleCon margn-btm-12">
+                    <h3>{{manufacturer.name | uppercase}}</h3>
+                </div>
+
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="panel panel-default">
+                          <div class="panel-heading">Manufacturer Details</div>
+                          <div class="panel-body" style="min-height:350px;">
+                              <div class="table-responsive">
+                                  <table class="table">
+                                      <tbody>
+                                      <tr>
+                                          <td>Asset Type</td>
+                                          <td>{{manufacturer.assetType}}</td>
+                                      </tr>
+                                      <tr>
+                                          <td>Manufacturer Name</td>
+                                          <td>{{manufacturer.name | uppercase}}</td>
+                                      </tr>
+                                      <tr>
+                                          <td>Contact First Name</td>
+                                          <td>{{manufacturer.contactFirstName}}</td>
+
+                                      </tr>
+                                      <tr>
+                                          <td>Contact Last Name</td>
+                                          <td>{{manufacturer.contactLastName}}</td>
+
+                                      </tr>
+                                      <tr>
+                                          <td>Phone No</td>
+                                          <td>{{manufacturer.phone}}</td>
+
+                                      </tr>
+                                      <tr>
+                                          <td>Email</td>
+                                          <td>{{manufacturer.email}}</td>
+
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="panel panel-default">
+                          <div class="panel-heading">Address Details</div>
+                          <div class="panel-body" style="min-height:350px;">
+                              <div class="table-responsive">
+                                  <table class="table">
+                                      <tbody>
+                                      <tr>
+                                          <td>Line 1 </td>
+                                          <td class="caps">{{manufacturer.addressLine1}}</td>
+                                      </tr>
+                                      <tr>
+                                          <td>Line 2</td>
+                                          <td class="caps">{{manufacturer.addressLine2}}</td>
+
+                                      </tr>
+                                      <tr>
+                                          <td>City</td>
+                                          <td class="caps">{{manufacturer.city}}</td>
+
+                                      </tr>
+                                      <tr>
+
+                                          <td>State</td>
+                                          <td class="caps">{{manufacturer.state}}</td>
+
+                                      </tr>
+                                      <tr>
+
+                                          <td>Pin Code</td>
+                                          <td>{{manufacturer.pincode}}</td>
+
+                                      </tr>
+                                      <tr>
+
+                                          <td>Country</td>
+                                          <td class="caps">{{manufacturer.country}}</td>
+
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12 txt-align-rgt">
+                      <button class="btn btn-default" type="button"
+                              data-dismiss="modal" id="close-button-right">
+                          Close
+                      </button>
+                  </div>
+              </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->
+
+<div class="row">
+
+    <div id="deleteManufacturer" data-backdrop="false" class="modal fade deleteModal"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to delete the Vendor?<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="deleteManufacturer()"
+                        class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- BasicFilterModal -->
+<div class="modal fade BasicFilterModal FilterModalCon" id="basicFilter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm" role="form" ng-submit = "searchFilter()"  novalidate >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Basic Filter</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-6">
+                            <div class="form-group no-padding" >
+                                <div class="dropdown">
+                                    <div class="form-group">
+                                        <label class="control-label">Select Asset Type</label>
+                                       
+                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                               
+	                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
+										  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
+										  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>
+										    <span ng-bind-html="assetTypesListOne.name | highlight: $select.search"></span>
+										  </ui-select-choices>
+										</ui-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <div class="form-group no-padding" >
+                                <div class="dropdown">
+                                    <div class="form-group">
+                                        <label class="control-label">Manufacturer Name</label>
+                                        <input id='name'
+                                               class='form-control'
+                                               name='name'
+                                               ng-model="searchName"
+                                               type='text' value=""
+                                        tabindex="1" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="2">Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"   tabindex="3">Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--  End Modal -->

@@ -1,0 +1,75 @@
+<!--
+  Generated template for the Transaction page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{categoryType}} - Transactions</ion-title>
+  </ion-navbar>
+
+
+</ion-header>
+<ion-content>
+
+
+  <div id="transactionPage" class="MainExpenseContainer transactionPage">
+
+    <ion-card *ngFor="let items of trans_list" >
+
+      <ion-card-content>
+
+        <h3 class="currentBls" text-center>Debit Amount: <span class="green">{{items.debitAmount}}</span></h3>
+
+        <ion-list >
+          <ion-item>
+            Date
+            <ion-note item-end class="dark">{{items.expenseDate}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Receipt No
+            <ion-note item-end class="dark">{{items.receiptNumber}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Description
+            <ion-note item-end class="dark">{{items.description}}</ion-note>
+          </ion-item>
+
+          <ion-item>
+            Billable
+            <ion-note item-end class="dark">{{items.billable}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Reimbursable
+            <ion-note item-end class="dark">{{items.reimbursable}}</ion-note>
+          </ion-item>
+          <ion-item>
+            Payment type
+            <ion-note item-end class="dark">{{items.paymentType}}</ion-note>
+          </ion-item>
+
+            <!--<ion-item class="form-group label-floating">
+                <div *ngFor="let image of items.expenseDocumentList;let i of index" >
+                    <img src="{{image.fileUrl}}" class="job-img margin-bottom25" (click)="viewImage(i,image.fileUrl)">
+                </div>
+            </ion-item>-->
+
+          <ion-row>
+            <ion-col col-3 *ngFor="let image of items.expenseDocumentList;let i of index">
+              <img src="{{image.fileUrl}}" class="job-img margin-bottom25" (click)="viewImage(i,image.fileUrl)">
+            </ion-col>
+          </ion-row>
+
+        </ion-list>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+
+</ion-content>

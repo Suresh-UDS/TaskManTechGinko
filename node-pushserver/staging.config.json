@@ -1,0 +1,40 @@
+{
+    "webPort": 8081,
+
+    "mongodbUrl": "mongodb://localhost:27017/timesheet",
+
+    "db" : {
+        "url":"mongodb://localhost:27017/timesheet",
+        "password":""
+    },
+
+    "gcm": {
+        "apiKey": "AIzaSyBlD6sd1ojndK5X5Nk7FZdApA5xVqGqM6k"
+    },
+
+    "apn": {
+        "connection": {
+            "gateway": "gateway.sandbox.push.apple.com",
+            "cert": "/path/to/cert.pem",
+            "key": "/path/to/key.pem"
+        },
+        "feedback": {
+            "address": "feedback.sandbox.push.apple.com",
+            "cert": "/path/to/cert.pem",
+            "key": "/path/to/key.pem",
+            "interval": 43200,
+            "batchFeedback": true
+        }
+    },
+
+    "oneSignal": {
+        "customer" : {
+            "appId": "be468c76-586a-4de1-bd19-fc6d9512e5ca",
+            "apiKey": "ODE2Y2NmNDAtOTU4Zi00Y2JkLWIwNjItNzk0YzM2ZDhiZGZk",
+            "host": "onesignal.com",
+            "port": 443,
+            "path": "/api/v1/notifications",
+            "method":"POST"
+        }
+    }
+}

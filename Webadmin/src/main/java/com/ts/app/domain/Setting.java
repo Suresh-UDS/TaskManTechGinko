@@ -1,19 +1,12 @@
 package com.ts.app.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * 
@@ -55,6 +48,8 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
 
     @Size(min = 1, max = 2500)
     private String description;
+    
+    private boolean clientGroupAlert;
 
     public long getId() {
         return id;
@@ -108,6 +103,12 @@ public class Setting extends AbstractAuditingEntity implements Serializable {
 	}
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
+	}
+	public boolean isClientGroupAlert() {
+		return clientGroupAlert;
+	}
+	public void setClientGroupAlert(boolean clientGroupAlert) {
+		this.clientGroupAlert = clientGroupAlert;
 	}
 	
 }

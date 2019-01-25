@@ -1,11 +1,18 @@
 package com.ts.app.domain;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import java.io.Serializable;
 
 @Entity
 @Table(name = "notification_log")
@@ -41,6 +48,10 @@ public class NotificationLog extends AbstractAuditingEntity implements Serializa
 	private String message;
 
 	private boolean isRead;
+	
+	private String event;
+	
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -96,6 +107,22 @@ public class NotificationLog extends AbstractAuditingEntity implements Serializa
 
 	public void setJob(Job job) {
 		this.job = job;
+	}
+
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 

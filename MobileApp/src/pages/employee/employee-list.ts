@@ -11,6 +11,13 @@ import {SiteService} from "../service/siteService";
 import {AttendanceService} from "../service/attendanceService";
 import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {LocationAccuracy} from "@ionic-native/location-accuracy";
+import {LocationProvider} from "../../providers/location-provider";
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+
+declare  var demo ;
+
 
 /**
  * Generated class for the EmployeeList page.
@@ -20,332 +27,371 @@ import {AttendanceViewPage} from "../attendance-view/attendance-view";
  */
 
 @Component({
-  selector: 'page-employee-list',
-  templateUrl: 'employee-list.html',
+    selector: 'page-employee-list',
+    templateUrl: 'employee-list.html',
 })
 export class EmployeeList {
+    isLoading:boolean;
+    employeeList:any;
+    userGroup:any;
+    employeeId:any;
+    employeeFullName: any;
+    employeeEmpId:any;
+    lattitude:any;
+    longitude:any;
+    checkedIn:any;
+    site:any;
+    attendanceId:any;
+    loader:any;
+    page:1;
+    totalPages:0;
+    pageSort:15;
+    count=0;
 
-  employeeList:any;
-  userGroup:any;
-  employeeId:any;
-  employeeFullName: any;
-  employeeEmpId:any;
-  lattitude:any;
-  longitude:any;
-  checkedIn:any;
-  site:any;
-  attendanceId:any;
-  loader:any;
-  constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
-              private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-              private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
+    fakeEmployeeList: Array<any> = new Array(12);
+    constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
+                private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
+                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService,
+                private diagonistic:Diagnostic, public locationProvider: LocationProvider,public backgroundGeolocation: BackgroundGeolocation) {
 
         this.lattitude = 0;
         this.longitude = 0;
 
-    this.site = this.navParams.get('site');
+        this.site = this.navParams.get('site');
 
-  }
-
-  viewList(i)
-  {
-    this.navCtrl.push(AttendanceListPage);
-  }
-
-  showSuccessToast(msg){
-    this.component.showToastMessage(msg,'bottom');
-  }
-
-  showLoader(msg){
-    this.loader = this.loadingCtrl.create({
-      content:msg
-    });
-    this.loader.present();
-  }
-
-  closeLoader(){
-      this.loader.dismiss();
-  }
-
-  closeAll(){
-      this.loader.dismissAll();
-  }
-
-  getAttendances(site){
-    this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
-      console.log(response.json());
-      this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
-    })
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SiteListPage');
-    var options={
-        timeout:3000
     }
-      this.geolocation.getCurrentPosition(options).then((response)=>{
-          console.log("Current location");
-          console.log(response);
-          this.lattitude = response.coords.latitude;
-          this.longitude = response.coords.longitude;
-      }).catch((error)=>{
-          console.log("error in getting current location");
-          this.lattitude = 0;
-          this.longitude = 0;
-      });
-  }
 
-  getEmployeeAttendance(employeeId){
-    this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
-      response=>{
-        console.log(response);
-        this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
-      }
-    )
-  }
+    viewList(i)
+    {
+        this.navCtrl.push(AttendanceListPage);
+    }
 
 
-  ionViewWillEnter(){
-
-    this.siteService.searchSiteEmployee(this.site.id).subscribe(response=>{
-      console.log(response.json());
-      this.employeeList = response.json();
-      this.userGroup = window.localStorage.getItem('userGroup');
-      this.employeeId = window.localStorage.getItem('employeeId');
-      this.employeeFullName = window.localStorage.getItem('employeeFullName');
-      this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-      for(let employee of this.employeeList) {
-        this.attendanceService.getAttendances(employee.id,this.site.id).subscribe(
-          response =>{
+    getAttendances(site){
+        this.attendanceService.getSiteAttendances(site.id).subscribe(response=>{
             console.log(response.json());
-            var result = response.json()
-            if(result[0]){
-              console.log("already checked in ");
-              employee.checkedIn = true;
-              employee.attendanceId = result[0].id;
+            this.navCtrl.push(AttendanceListPage,{'attendances':response.json()});
+        })
+    }
+
+    stop(){
+        this.locationProvider.stopTracking();
+    }
+
+    ionViewDidLoad() {
+
+        console.log("Location on enter");
+        this.locationProvider.startTracking();
+    }
+
+    getEmployeeAttendance(empId){
+
+        this.navCtrl.push(AttendanceListPage,{siteId:this.site.id,empId:empId});
+    }
+
+
+    ionViewWillEnter(){
+
+        console.log("Attendnace page location availability");
+        this.diagonistic.getLocationMode().then((isAvailable)=>{
+            console.log(isAvailable);
+            if(isAvailable == 'location_off'){
+                this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+
+                    if (canRequest) {
+                        // the accuracy option will be ignored by iOS
+                        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+                            () => console.log('Request successful'),
+                            error => {console.log('Error requesting location permissions', error);
+                                demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
+                                this.navCtrl.pop();
+                            }
+                        );
+                    }
+                });
             }else{
-              console.log("Not yet checked in ");
-              employee.checkedIn = false;
+                this.component.showToastMessage('GPS Available','bottom');
+                this.getEmployees();
+
             }
-          }
+        }).catch((e)=>{
+            demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
+            this.navCtrl.pop();
+        });
+
+    }
+
+    isEmployeeCheckedIn(employeeId){
+        this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
+            response =>{
+                console.log(response.json());
+                var result = response.json();
+                if(result[0]){
+                    console.log("already checked in ");
+                    console.log(result[0].notCheckedOut);
+                    if(result[0].notCheckedOut){
+                        console.log("Not checked out true");
+                        this.checkedIn = false;
+                    }else{
+                        console.log("Not checked out false");
+
+                        this.checkedIn = true;
+
+                    }
+
+                }else{
+                    console.log("Not yet checked in ");
+                    this.checkedIn = false;
+                }
+            }
         );
-      }
-    })
+    }
 
-  }
+    viewCamera(employee,mode,attendanceMode)
+    {
+        const options: CameraOptions = {
+            quality: 30,
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            mediaType: this.camera.MediaType.PICTURE,
+            cameraDirection:1
+        };
 
-  isEmployeeCheckedIn(employeeId){
-    this.attendanceService.getAttendances(employeeId,this.site.id).subscribe(
-      response =>{
-        console.log(response.json());
-        var result = response.json()
-        if(result[0]){
-          console.log("already checked in ");
-          this.checkedIn = true;
+        this.camera.getPicture(options).then((imageData) => {
+            let base64Image = 'data:image/jpeg;base64,' + imageData;
+            var employeeName = employee.fullName+employee.empId;
+            this.component.showLoader("Getting Face..")
+            this.checkProximity(this.site.id,base64Image,mode,attendanceMode,employee);
+            // this.enrollFace(employee,base64Image);
+            // this.navCtrl.push(AttendanceViewPage,imageData)
+        }, (err) => {
+            console.log("Location error");
+            this.lattitude = 0;
+            this.longitude = 0;
+
+            var msg= "Please try again...";
+            this.component.showToastMessage(msg,'bottom');
+        })
+    }
+
+    enrollFace(employee,imageData){
+        var employeeName = employee.fullName+employee.empId;
+        employee.enrolled_face = imageData;
+        this.employeeService.enrollFace(employee).subscribe(
+            response=>{
+                console.log("Enroll face result");
+                console.log(response);
+            }
+        )
+    }
+
+    checkProximity(siteId,imageData,mode,attendanceMode,employee){
+
+        this.component.closeAll();
+        this.component.showLoader("Getting Location...");
+
+        var lat = Number(localStorage.getItem('lat'));
+        var lng = Number(localStorage.getItem('lng'));
+
+        if(lat && lat>0){
+            this.locationProvider.stopTracking();
+            this.attendanceService.checkSiteProximity(siteId,lat,lng).subscribe(
+                response=> {
+                    this.component.closeAll();
+                    this.locationProvider.stopTracking();
+                    this.verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData);
+                    // demo.showSwal('feedback-success','Success','Face Enrolled Successfully');
+
+                },error=>{
+                    console.log("errors");
+                    setTimeout(()=>{
+                        var lat = Number(localStorage.getItem('lat'));
+                        var lng = Number(localStorage.getItem('lng'));
+
+                        if(lat && lat>0){
+                            this.locationProvider.stopTracking();
+                            this.attendanceService.checkSiteProximity(siteId,lat,lng).subscribe(
+                                response=> {
+                                    this.component.closeAll();
+                                    this.locationProvider.stopTracking();
+                                    this.verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData);
+                                    // demo.showSwal('feedback-success','Success','Face Enrolled Successfully');
+
+                                },error2 => {
+                                    this.component.closeAll();
+                                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
+                                });
+                        }
+                    },2000);
+                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
+                    // this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+                })
+        }else{
+            this.component.closeAll();
+            console.log("error in getting current location");
+            demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
+            // this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+
+        }
+
+    }
+
+    verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData){
+        let base64Image = 'data:image/jpeg;base64,' + imageData;
+        var employeeName = employee.fullName+employee.empId;
+        // this.component.showLoader('Detecting Face');
+        if(mode === 'enroll'){
+            this.component.closeAll();
+            this.component.showLoader('Enrolling Face Id');
+            employee.enrolled_face = imageData;
+            this.employeeService.enrollFace(employee).subscribe(response=>{
+                this.component.closeAll();
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    var verificationResponse = response;
+                    console.log(verificationResponse);
+                    // this.component.showToastMessage('Face Enrolled successfully..','bottom');
+                    demo.showSwal('feedback-success','Success','Face Enrolled Successfully');
+
+                }
+
+            },error=>{
+                this.component.closeAll();
+                var msg='Error in Detecting Face..';
+                this.component.showLoader(msg);
+                console.log("Error");
+                console.log(error)
+            })
 
         }else{
-          console.log("Not yet checked in ");
-          this.checkedIn = false;
+            this.component.closeAll();
+            if(attendanceMode == 'checkIn'){
+
+                this.markAttendance(employee,lat,lng,imageData);
+
+            }else{
+                this.markAttendanceCheckOut(employee,lat,lng,imageData);
+            }
+
         }
-      }
-    );
-  }
-
-  viewCamera(employee,mode,attendanceMode)
-  {
-    const options: CameraOptions = {
-      quality: 30,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      cameraDirection:1
-    };
-
-    this.camera.getPicture(options).then((imageData) => {
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      var employeeName = employee.fullName+employee.empId;
-        this.checkProximity(this.site.id,this.lattitude,this.longitude,imageData,mode,attendanceMode,employee);
-      // this.navCtrl.push(AttendanceViewPage,imageData)
-    }, (err) => {
-      console.log("Location error");
-      this.lattitude = 0;
-      this.longitude = 0;
-
-      var msg= "Please try again...";
-      this.showSuccessToast(msg);
-    })
-  }
-
-  checkProximity(siteId,lat,lng,imageData,mode,attendanceMode,employee){
-      this.attendanceService.checkSiteProximity(siteId,lat,lng).subscribe(
-          response=> {
-              this.showLoader('Verifying Location..');
-              this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
-
-          },error=>{
-              console.log("errors");
-              this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
-
-          })
-  }
-
-  verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData){
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-      var employeeName = employee.fullName+employee.empId;
-      this.showLoader('Detecting Face');
-      this.authService.detectFace(this.employeeFullName,imageData).subscribe(response=>{
-              console.log("response in site list");
-              console.log(response.json());
-              var detectResponse = response.json();
-              this.closeLoader();
-              if(detectResponse.images && detectResponse.images[0].status === 'Complete'){
-                  if(mode === 'enroll'){
-                      this.showLoader('Enrolling Face Id');
-                      this.authService.enrollFace(employeeName,imageData).subscribe(response=>{
-                          var verificationResponse = response.json();
-                          employee.imageData = imageData;
-                          this.employeeService.markEnrolled(employee).subscribe(response=>{
-                              console.log("face Id marked to database");
-                              this.closeLoader();
-                              var msg='Face Id enrolled Successfully';
-                              this.showSuccessToast(msg);
-                          },error=>{
-                              this.closeLoader();
-                              var msg='Error in enrolling Face Id..';
-                              this.showSuccessToast(msg);
-                              console.log("Error in enrolling Face Id..");
-                              console.log(error)
-                          });
-
-                      },error=>{
-                          this.closeLoader();
-                          var msg='Error in Detecting Face..';
-                          this.showSuccessToast(msg);
-                          console.log("Error");
-                          console.log(error)
-                      })
-
-                  }else{
-
-                      if(attendanceMode == 'checkIn'){
-                          this.showLoader('Verifying Face');
-                          this.authService.verifyUser(employeeName,imageData).subscribe(response=>{
-                              console.log("Face verification response");
-                              console.log(response.json());
-                              this.closeLoader();
-                              var verificationResponse = response.json();
-                              if(verificationResponse && verificationResponse.images){
-                                  if(verificationResponse.images[0].transaction.confidence >=0.75){
-                                      console.log(this.lattitude);
-                                      console.log(this.longitude);
-                                      this.closeLoader();
-                                      this.showLoader('Marking Attendance');
-                                      this.markAttendance(employee,imageData);
-                                  }else{
-                                      this.closeLoader();
-                                      this.showLoader('Marking Attendance');
-                                      this.markAttendance(employee,imageData);
-                                  }
-                              }else{
-                                  this.closeLoader();
-                                  var msg = "Unable to verify face, Marking Attendance";
-                                  this.showSuccessToast(msg);
-                                  this.markAttendance(employee,imageData);
-                              }
-                          },error=>{
-                              this.closeLoader();
-                              var msg="Unable to verify face, Marking Attendance";
-                              this.showSuccessToast(msg);
-                              this.markAttendance(employee,imageData);
-
-                          })
-
-                      }else{
-                          this.showLoader('Verifying Face');
-                          this.authService.verifyUser(employeeName,imageData).subscribe(response=>{
-                              console.log("Face verification response");
-                              console.log(response.json());
-                              var verificationResponse = response.json();
-                              if(verificationResponse && verificationResponse.images){
-                                  if(verificationResponse.images[0].transaction.confidence >=0.75){
-                                      console.log(this.lattitude);
-                                      console.log(this.longitude);
-                                      this.closeLoader();
-                                      this.showLoader('Marking Attendance');
-                                      this.markAttendanceCheckOut(employee,imageData);
-                                  }else{
-                                      this.closeLoader();
-                                      this.showLoader('Marking Attendance');
-                                      this.markAttendanceCheckOut(employee,imageData);
-                                  }
-                              }else{
-                                  this.closeLoader();
-                                  var msg = "Unable to verify face, Marking Attendance";
-                                  this.showSuccessToast(msg);
-                                  this.markAttendanceCheckOut(employee,imageData);
-                              }
-                          },error=>{
-                              this.closeLoader();
-                              var msg="Unable to verify face, Marking Attendance";
-                              this.showSuccessToast(msg);
-                              this.markAttendanceCheckOut(employee,imageData);
-                          })
-                      }
-
-                  }
-
-              }else{
-                  console.log("error in detecting face");
-                  this.closeLoader();
-                  var msg = "Face not Detected, please try again..";
-                  this.showSuccessToast(msg);
-              }
 
 
-          },error=>{
-              console.log("errors");
-          this.closeLoader();
-          console.log(error.json());
-              if(error.json().status == "false"){
-                  var msg= "Face not detected, please try again..";
-                  this.showSuccessToast(msg);
-                  this.closeLoader();
-              }
-          }
-      )
-  }
+    }
 
-  markAttendance(employee,imageData){
-      this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,this.lattitude,this.longitude,imageData).subscribe(response=>{
-          console.log(response.json());
-          this.closeAll();
-          if(response && response.status === 200){
-              var msg='Face Verified and Attendance marked Successfully';
-              this.showSuccessToast(msg);
-          }
-      },error=>{
-          var msg = 'Attendance Not Marked';
-          console.log(error);
-          this.showSuccessToast(msg);
-          this.closeAll();
-      })
-  }
+    markAttendance(employee,lat,lng,imageData){
+        this.component.showLoader("Marking Attendance...");
+        this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,lat,lng,imageData).subscribe(response=>{
+            this.component.closeAll();
+            this.getEmployees();
+            if(response.errorStatus){
+                var msg='Face Verified and Attendance marked Successfully';
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
+            }else{
+                this.getEmployees();
+                demo.showSwal('feedback-success','Success','Face Verified and Attendance marked Successfully');
 
-  markAttendanceCheckOut(employee,imageData){
-      this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,this.lattitude,this.longitude,imageData,employee.attendanceId).subscribe(response=>{
-          console.log(response.json());
-          this.closeAll();
-          if(response && response.status === 200){
-              var msg='Face Verified and Attendance marked Successfully';
-              this.showSuccessToast(msg);
-          }
-      },error=>{
-          var msg = 'Attendance Not Marked';
-          console.log(error);
-          this.showSuccessToast(msg);
-          this.closeAll();
-      })
-  }
+            }
+        },error=>{
+            this.component.closeAll();
+            var msg = 'Attendance Not Marked';
+            demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',msg);
+            console.log(error);
+
+        })
+    }
+
+    markAttendanceCheckOut(employee,lat,lng,imageData){
+        this.component.showLoader("Marking Attendance...");
+        this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,lat,lng,imageData,employee.attendanceId).subscribe(response=>{
+            this.component.closeAll();
+            this.getEmployees();
+            if(response.errorStatus){
+                var msg='Face Verified and Attendance marked Successfully';
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
+            }else{
+                this.getEmployees();
+                demo.showSwal('feedback-success','Success','Face Verified and Attendance marked Successfully');
+
+            }
+        },error=>{
+            this.component.closeAll();
+            var msg = 'Attendance Not Marked';
+            demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',msg);
+            console.log(error);
+        })
+    }
+
+    getEmployees(){
+        this.isLoading=true;
+        var searchCriteria = {
+            currPage:this.page,
+            pageSort: this.pageSort,
+            siteId:this.site.id
+        };
+        this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+            this.isLoading=false;
+            this.employeeList = response.transactions;
+            this.page = response.currPage;
+            this.totalPages = response.totalPages;
+            this.userGroup = window.localStorage.getItem('userGroup');
+            this.employeeId = window.localStorage.getItem('employeeId');
+            this.employeeFullName = window.localStorage.getItem('employeeFullName');
+            this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+        })
+    }
+
+    doInfinite(infiniteScroll){
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchCriteria ={
+            currPage:this.page+1,
+            siteId:this.site.id
+        };
+        if(this.page>this.totalPages){
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.component.showToastMessage('All Employees Loaded', 'bottom');
+
+        }else{
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(()=>{
+                this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(
+                    response=>{
+                        console.log('ionViewDidLoad Employee list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for(var i=0;i<response.transactions.length;i++){
+                            this.employeeList.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.component.closeAll();
+                    },
+                    error=>{
+                        console.log('ionViewDidLoad Employee Page:'+error);
+                    }
+                )
+
+                infiniteScroll.complete();
+            },1000);
+        }
+
+
+    }
+
+    enrollAllFaces(){
+        this.employeeService.enrollAllFaces().subscribe(
+            response=>{
+                console.log(response);
+                this.component.closeAll();
+            }
+        )
+    }
 
 
 }

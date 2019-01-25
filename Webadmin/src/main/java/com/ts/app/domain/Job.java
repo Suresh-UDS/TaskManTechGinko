@@ -3,8 +3,20 @@ package com.ts.app.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -50,7 +62,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assetId")
+    @JoinColumn(name = "assetId", nullable = true)
     private Asset asset;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -59,6 +71,9 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 
 	private String comments;
 	private JobStatus status;
+	
+	private int escalationStatus;
+	
 	private JobType type;
 
 	private boolean relieved;
@@ -73,6 +88,7 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private Date actualStartTime;
 	private Date actualEndTime;
 	private int actualHours;
+	private int actualMinutes;
 
 	private String schedule;
 	private Date scheduleEndDate;
@@ -95,6 +111,11 @@ public class Job extends AbstractAuditingEntity implements Serializable{
 	private boolean completedDueEmailAlert;
 
 	private String frequency;
+	private String duration;
+
+	private boolean pendingAtUDS;
+
+	private boolean pendingAtClient;
 
     @OneToMany(mappedBy ="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<JobChecklist> checklistItems;
@@ -108,7 +129,18 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     private String floor;
 
     private String zone;
+    
+    private String maintenanceType;
+    
+    @OneToMany(mappedBy="job", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<JobMaterial> jobMaterials;
 
+	public String getDuration() {
+		return duration;
+	}
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -369,4 +401,48 @@ public class Job extends AbstractAuditingEntity implements Serializable{
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
+	public int getActualMinutes() {
+		return actualMinutes;
+	}
+	public void setActualMinutes(int actualMinutes) {
+		this.actualMinutes = actualMinutes;
+	}
+
+	public String getMaintenanceType() {
+		return maintenanceType;
+	}
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
+    
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
+    
+	public int getEscalationStatus() {
+		return escalationStatus;
+	}
+	public void setEscalationStatus(int escalationStatus) {
+		this.escalationStatus = escalationStatus;
+	}
+	public Set<JobMaterial> getJobMaterials() {
+		return jobMaterials;
+	}
+	public void setJobMaterials(Set<JobMaterial> jobMaterials) {
+		this.jobMaterials = jobMaterials;
+	}
+	
+    
 }

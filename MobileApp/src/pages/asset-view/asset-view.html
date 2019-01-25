@@ -9,32 +9,1076 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Asset Details</ion-title>
+
+    <ion-title text-capitalize>{{assetDetails.title}}</ion-title>
+      <ion-buttons right [ngSwitch]="true" >
+          <div  *ngIf="assetDetails.ppms" >
+              <button ion-button icon-only class="padding-right10"  *ngSwitchCase=" categories === 'ppm' " (click)="showCalendar()">
+                  <ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10" ></ion-icon>
+              </button>
+          </div>
+      </ion-buttons>
+
   </ion-navbar>
+    <ion-toolbar class="tool-bar">
+        <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800" (ionChange)="segmentChange(categories,fab)">
+            <ion-segment-button value="details" >Details</ion-segment-button>
+            <ion-segment-button value="ppm" (ionSelect)="getAssetPPMSchedule()">PPM </ion-segment-button>
+            <ion-segment-button value="amc" (ionSelect)="getAssetAMCSchedule()">AMC </ion-segment-button>
+            <ion-segment-button value="config" (ionSelect)="getAssetConfig()">Config </ion-segment-button>
+            <ion-segment-button value="readings" (ionSelect)="getReading(readingSearchCriteria)">Reading</ion-segment-button>
+            <ion-segment-button value="ppmjobs" (ionSelect)="getPpmJobs(jobSearchCriteria)">PPMJobs</ion-segment-button>
+            <ion-segment-button value="amcJobs" (ionSelect)="getAmcJobs(jobSearchCriteria)">AMC jobs</ion-segment-button>
+            <ion-segment-button value="tickets" (ionSelect)="getTickets(ticketSearchCriteria)">Tickets</ion-segment-button>
+            <ion-segment-button value="statusHistory" (ionSelect)="statusHistory(assetDetails.id)">Status History</ion-segment-button>
+            <ion-segment-button value="siteHistory" (ionSelect)="siteHistory(assetDetails.id)" >Site-Transfer History</ion-segment-button>
+            <ion-segment-button value="inventoryTransaction" (ionSelect)="getMaterials(assetDetails)">Spares</ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+    <div [ngSwitch]="true">
+
+        <ion-list *ngSwitchCase=" categories === 'jobs' || categories === 'tickets' ||categories === 'readings'" no-margin="" style="background-color:#dfdfdf; ">
+
+          <div class="card scroll-card">
+            <div class="card-content" style="padding: 5px 20px !important;">
+              <ion-row>
+                <ion-col col-12>
+                  <ion-row no-margin class="" no-padding="" >
+                    <ion-col col-5 class="margin-right15 row" style="text-align: left" (click)="selectFromDate()">
+                      <ion-col col-2  class="padding-bottom1 ">
+                        <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 green"></ion-icon>
+                      </ion-col>
+                      <ion-col col-10 class="padding-top-bottom0">
+                        <p padding-left no-margin class="scroll-heading">From date</p>
+                        <p padding-left no-margin="">{{ fromDate | date:'dd/MM/yyyy' }}</p>
+                      </ion-col>
+                    </ion-col>
+                    <ion-col col-5 class="margin-right-15 row todate-align"  (click)="selectToDate()">
+                      <ion-col col-2  class="padding-bottom1">
+                        <ion-icon ios="ios-calendar" md="md-calendar"  class="fnt-24 red"></ion-icon>
+                      </ion-col>
+                      <ion-col col-10 class="padding-top-bottom0">
+                        <p padding-left no-margin class="scroll-heading">To date</p>
+                        <p padding-left no-margin="">{{ toDate | date:'dd/MM/yyyy' }}</p>
+                      </ion-col>
+                    </ion-col>
+                    <ion-col col-2 class="">
+                      <button ion-button round class="color-white search-button" (click)="dateSearch(fromDate,toDate,categories)" [disabled]="!viewButton">
+                        <ion-icon name="search" class="fnt-30"></ion-icon>
+                      </button>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </div>
+          </div>
+        </ion-list>
+
+    </div>
+
 </ion-header>
 
+<ion-content>
 
-<ion-content padding>
-
-  <ion-list>
-
-
-    <ion-row class="margin0 white-bg padding10">
-      <ion-col col-6 class="label-on-left">Name</ion-col>
-      <ion-col col-6>
-        <p text-right>{{assetDetails.name}}</p>
-      </ion-col>
-      <ion-col col-6 class="label-on-left">Asset Group</ion-col>
-      <ion-col col-6>
-        <p text-right>{{assetDetails.assetGroup}}</p>
-      </ion-col>
-      <ion-col col-6 class="label-on-left">Status</ion-col>
-      <ion-col col-6>
-        <p text-right>{{assetDetails.status}}</p>
-      </ion-col>
-    </ion-row>
+    <ion-fab right bottom mini  margin-bottom="" #fab>
+        <button ion-fab color="dark">
+            <ion-icon name="md-add" class="clr-orange"></ion-icon>
+        </button>
+        <ion-fab-list side="top" fab-list-margin class="margin-left-right">
+        <!--<ion-fab-list side="top" fab-list-margin class="margin-left-right" [ngSwitch]="categories">-->
 
 
-  </ion-list>
+                <ion-label class="margin0 bg-orange" color="dark">Mark Breakdown</ion-label>
+                <!--<ion-label class="margin0 bg-orange" color="dark" *ngSwitchCase =" 'details' ">Mark Breakdown</ion-label>-->
+                <button ion-fab color="primary" (click)="markBreakDown(assetDetails)">
+                    <ion-icon name="close-circle" class="fnt-28  clr-white" ></ion-icon>
+                </button>
 
+            <ion-label class="margin0 bg-orange" color="dark">Reading</ion-label>
+            <button ion-fab color="primary" (click)="getReadings()">
+                <ion-icon name="speedometer" class="fnt-28  clr-white" ></ion-icon>
+            </button>
+
+            <ion-label class="margin0 bg-orange" color="dark">Inventory</ion-label>
+            <button ion-fab color="primary" (click)="openTransaction()">
+                <ion-icon name="md-add" class="fnt-28  clr-white"></ion-icon>
+            </button>
+
+
+            <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>-->
+            <!--<button ion-fab color="primary" (click)="createJob()" *ngSwitchCase =" 'jobs' ">-->
+                <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
+            <!--</button>-->
+
+            <ion-label class="margin0 bg-orange"  color="dark">Image</ion-label>
+            <!--<ion-label class="margin0 bg-orange"  color="dark"  *ngSwitchCase =" 'details' ">Image</ion-label>-->
+            <button ion-fab color="primary" (click)="addAssetImage()">
+                <ion-icon name="camera" class="fnt-28  clr-white"></ion-icon>
+            </button>
+
+            <ion-label color="dark" class="margin0 bg-orange">Ticket</ion-label>
+            <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'tickets' ">Ticket</ion-label>-->
+            <button ion-fab color="primary" (click)="createTicket()">
+                <ion-icon name="ios-construct-outline" class="fnt-28 clr-white"></ion-icon>
+            </button>
+
+        </ion-fab-list>
+    </ion-fab>
+
+    <!--<ion-fab top right edge mini>-->
+        <!--<button ion-fab color="dark">-->
+            <!--<ion-icon name="md-add" class="clr-orange"></ion-icon>-->
+        <!--</button>-->
+
+    <!--</ion-fab>-->
+
+
+
+
+
+
+
+    <!--<ion-fab right bottom mini (click)="getReadings()"  margin>-->
+        <!--<ion-label color="light" class="margin0 bg-orange">Reading</ion-label>-->
+        <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+            <!--&lt;!&ndash;<i class="material-icons">network_check</i>&ndash;&gt;-->
+            <!--<ion-icon name="speedometer" class="fnt-35"></ion-icon>-->
+            <!--&lt;!&ndash;<i class="fa fa-tachometer-alt"></i>&ndash;&gt;-->
+        <!--</button>-->
+    <!--</ion-fab>-->
+
+<div [ngSwitch]="categories" margin-top>
+    <ion-list *ngSwitchCase="'details'" class="assetview-padding" >
+        <!--<ion-fab left bottom mini (click)="addAssetImage()"   >-->
+            <!--<ion-label color="light" class="margin0 bg-orange " padding-right padding-left>Add</ion-label>-->
+            <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+                <!--<ion-icon name="camera"></ion-icon>-->
+            <!--</button>-->
+        <!--</ion-fab>-->
+      <div class="card">
+         <div class="panel-heading card-header-md-clr-orange cards-header">Asset Details</div>
+
+          <div class="card-content table-responsive padding-top0">
+              <ion-row class="margin0 white-bg">
+                  <ion-col col-6 class="label-on-left" no-padding>Name</ion-col>
+                  <ion-col col-6 no-padding>
+                      <p text-right *ngIf="assetDetails.title==null">N/A</p>
+                      <p text-right>{{assetDetails.title}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding>Code</ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.code==null">N/A</p>
+                    <p text-right>{{assetDetails.code}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Group
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.assetGroup==null">N/A</p>
+                    <p text-right>{{assetDetails.assetGroup}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Type
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.assetType==null">N/A</p>
+                    <p text-right>{{assetDetails.assetType}}</p>
+                  </ion-col>
+              </ion-row>
+          </div>
+      </div>
+
+      <div class="card">
+          <div class="panel-heading card-header-md-clr-orange cards-header">Asset Location</div>
+
+          <div class="card-content table-responsive padding-top0">
+              <ion-row class="margin0 white-bg">
+                  <!--<ion-col col-6 class="label-on-left" no-padding="">-->
+                      <!--Client-->
+                  <!--</ion-col>-->
+                  <!--<ion-col col-6 no-padding="">-->
+                      <!--<p text-right>{{assetDetails.clientName}}</p>-->
+                  <!--</ion-col>-->
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Site
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.siteName==null">N/A</p>
+                    <p text-right>{{assetDetails.siteName}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Block
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.block==null">N/A</p>
+                    <p text-right>{{assetDetails.block}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Floor
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.floor==null">N/A</p>
+                    <p text-right>{{assetDetails.floor}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Zone
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.zone==null">N/A</p>
+                    <p text-right>{{assetDetails.zone}}</p>
+                  </ion-col>
+              </ion-row>
+          </div>
+      </div>
+
+      <div class="card">
+          <div class="panel-heading card-header-md-clr-orange cards-header">Manufacturer Details</div>
+          <div class="card-content table-responsive padding-top0">
+              <ion-row class="margin0 white-bg">
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Manufacturer
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.manufacturerName==null">N/A</p>
+                    <p text-right>{{assetDetails.manufacturerName}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Model Number
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.modelNumber==null">N/A</p>
+                    <p text-right>{{assetDetails.modelNumber}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Serial
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.serialNumber==null">N/A</p>
+                    <p text-right>{{assetDetails.serialNumber}}</p>
+                  </ion-col>
+                  <ion-col col-5 class="label-on-left" no-padding="">
+                      Acquired Date
+                  </ion-col>
+                  <ion-col col-7 no-padding="">
+                    <p text-right *ngIf="assetDetails.acquiredDate==null">N/A</p>
+                    <p text-right>{{assetDetails.acquiredDate | date:'MMM d, y, h:mm a' }}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Purchase Price
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.purchasePrice==null">N/A</p>
+                    <p text-right>{{assetDetails.purchasePrice}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Current Price
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.currentPrice==null">N/A</p>
+                    <p text-right>{{assetDetails.currentPrice}}</p>
+                  </ion-col>
+                  <ion-col col-6 class="label-on-left" no-padding="">
+                      Estimated Dispose Price
+                  </ion-col>
+                  <ion-col col-6 no-padding="">
+                    <p text-right *ngIf="assetDetails.estimatedDisposePrice==null">N/A</p>
+                    <p text-right>{{assetDetails.estimatedDisposePrice}}</p>
+                  </ion-col>
+              </ion-row>
+          </div>
+      </div>
+      <div class="card">
+          <div class="panel-heading card-header-md-clr-orange cards-header">AMC Vendor Details</div>
+          <div class="card-content table-responsive padding-top0">
+                  <ion-row class="margin0 white-bg">
+                      <ion-col col-6 class="label-on-left" no-padding="jk">
+                          Vendor
+                      </ion-col>
+                      <ion-col col-6 no-padding="">
+                        <p text-right *ngIf="assetDetails.warrantyType==null">N/A</p>
+                        <p text-right>{{assetDetails.warrantyType}}</p>
+                      </ion-col>
+                      <ion-col col-6 class="label-on-left" no-padding="jk">
+                          Warranty Type
+                      </ion-col>
+                      <ion-col col-6 no-padding="">
+                        <p text-right *ngIf="assetDetails.warrantyType==null">N/A</p>
+                        <p text-right>{{assetDetails.warrantyType}}</p>
+                      </ion-col>
+                      <ion-col col-5 class="label-on-left" no-padding="">
+                          Warranty End Date
+                      </ion-col>
+                      <ion-col col-7 no-padding="">
+                        <p text-right *ngIf="assetDetails.warrantyExpiryDate==null">N/A</p>
+                        <p text-right>{{assetDetails.warrantyExpiryDate | date:'MMM d, y, h:mm a' }}</p>
+                      </ion-col>
+                  </ion-row>
+          </div>
+      </div>
+
+
+
+    </ion-list>
+    <ion-list *ngSwitchCase="'ppm'" class="assetview-padding">
+
+
+        <!--<div float-right  *ngIf="assetDetails.ppms" padding>-->
+            <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10 margn-btom20"(click)="showCalendar()"></ion-icon>-->
+        <!--</div>-->
+
+        <div  *ngIf="(!assetDetails.ppms || assetDetails.ppms.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+
+        <div class="card cardWithRadius">
+        <div  *ngFor="let ppm of assetDetails.ppms;let k=index" >
+
+            <div class="padding-left16 padding-top5" >
+                <ion-row class="margin0 margin-top40">
+                    <ion-col col-2 class="ver-center">
+                        <button ion-button clear color="primary" class="">
+                            <ion-icon name="md-clock" class="green fnt-40"></ion-icon>
+                            <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
+                            <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
+                        </button>
+                    </ion-col>
+                    <ion-col col-7="" class="padding-left5 border-btm">
+                        <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{ ppm.title }}</p>
+                            <p text-left class="margin0">{{ ppm.status ? ppm.status : "Status" }}</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-3 class="border-btm">
+                        <p text-left class="margin0 clr-orange"> {{ ppm.frequencyPrefix }} </p>
+                        <p text-left class="margin0 clr-orange"> {{ ppm.frequency }} </p>
+                    </ion-col>
+                </ion-row>
+            </div>
+
+            <ion-item class="item-fnt padding-left0 item-md" >
+                <!--<div class="padding-left16">-->
+
+                <div text-capitalize >
+                    <ion-row class="margin0">
+                        <ion-col col-6 class="padding-right5">
+                            <div>
+                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ ppm.startDate }} </p>
+                            </div>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div>
+                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ ppm.endDate }} </p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <!--</div>-->
+            </ion-item>
+
+        </div>
+        </div>
+
+      <div text-center="" class="no-data" *ngIf=" (!assetDetails.ppms || assetDetails.ppms.length < 0) && !spinner ">
+        <ion-card>
+          <img src="assets/imgs/warning.svg">
+          <span><p text-center>No Data Found</p></span>
+        </ion-card>
+      </div>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'amc'" class="assetview-padding">
+        <!--<div float-right  *ngIf="assetDetails.amcs" class="margn-btom20">-->
+            <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10"(click)="showCalendar()"></ion-icon>-->
+        <!--</div>-->
+        <div  *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center="" *ngIf="(!assetDetails.amcs || assetDetails.amcs.length < 0) && !spinner" class="no-data">
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+        <div  class="card cardWithRadius" *ngFor="let amc of assetDetails.amcs;let k=index" >
+
+            <div class="padding-left16 padding-top5" >
+                <ion-row class="margin0 margin-top40">
+
+                    <ion-col col-2 class="ver-center">
+                        <button ion-button clear color="primary" class="">
+                            <ion-icon name="md-clock" class="blue fnt-40"></ion-icon>
+                            <!--<ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>-->
+                            <!--<ion-icon ios="ios-calendar" md="md-calendar" ></ion-icon>-->
+                        </button>
+                    </ion-col>
+                    <ion-col col-7="" class="padding-left5 border-btm">
+                        <div class=" padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{ amc.title }}</p>
+                            <p text-left class="margin0">{{ amc.status ? amc.status : "Status" }}</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-3 class="border-btm">
+                        <p text-left class="margin0 clr-orange"> {{ amc.frequencyPrefix }} </p>
+                        <p text-left class="margin0 clr-orange"> {{ amc.frequency }} </p>
+                    </ion-col>
+                </ion-row>
+            </div>
+
+            <ion-item #item class="item-fnt padding-left0" >
+                <!--<div class="padding-left16">-->
+
+                <div text-capitalize >
+                    <ion-row class="margin0">
+                        <ion-col col-6 class="padding-right5">
+                            <div>
+                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ amc.startDate }} </p>
+                            </div>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div>
+                                <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{ amc.endDate }} </p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                <!--</div>-->
+            </ion-item>
+
+
+        </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'config'" class="assetview-padding" >
+
+        <div  *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center="" *ngIf="(!assetDetails.config || assetDetails.config.length == 0) && !spinner" class="no-data">
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+        <div class="card cardWithRadius border-btm" *ngFor=" let config of assetDetails.config;let i=index; " >
+            <div class="padding-top5">
+                <ion-row class="margin0">
+                    <ion-col col-2 class="ver-center">
+                        <button ion-button clear color="primary" class="">
+                            <i class="fa fa-cog fnt-40"></i>
+                        </button>
+                    </ion-col>
+                    <ion-col col-10 class="border-up">
+                        <div class="ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{ config.assetType }}</p>
+                            <p text-left class="margin0">{{ config.assetTitle }}</p>
+                        </div>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row no-margin="" >
+                    <ion-col col-3>
+                        <p class="margin0" text-center="">{{ config.lastModifiedDate  | date : 'shortDate' }}</p>
+                        <p class="margin0 clr-orange fnt-12" text-center="">Date</p>
+                    </ion-col>
+                    <ion-col col-6>
+                        <div class="">
+                            <p text-center class="margin0" text-uppercase	>{{ config.name }}</p>
+                            <p text-center class="margin0 clr-orange fnt-12">Name</p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-3 >
+                        <div class="">
+                            <p text-center class="margin0" text-uppercase	>{{ config.uom }}</p>
+                            <p text-center class="margin0 clr-orange fnt-12">Uom</p>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </div>
+
+
+            <!--<div class="card" *ngFor="let config of assetDetails.config">-->
+                <!--<div class="card-content table-responsive padding-top0">-->
+                    <!--<ion-row class="margin0 white-bg">-->
+                        <!--<ion-col col-6 class="label-on-left" no-padding>Title</ion-col>-->
+                        <!--<ion-col col-6 no-padding>-->
+                            <!--<p text-right>{{config.assetTitle}}</p>-->
+                        <!--</ion-col>-->
+                        <!--<ion-col col-6 class="label-on-left" no-padding>Name</ion-col>-->
+                        <!--<ion-col col-6 no-padding="">-->
+                            <!--<p text-right>{{config.name}}</p>-->
+                        <!--</ion-col>-->
+                        <!--<ion-col col-6 class="label-on-left" no-padding="">-->
+                            <!--Uom-->
+                        <!--</ion-col>-->
+                        <!--<ion-col col-6 no-padding="">-->
+                            <!--<p text-right>{{config.uom}}</p>-->
+                        <!--</ion-col>-->
+                        <!--<ion-col col-6 class="label-on-left" no-padding="">-->
+                            <!--Type-->
+                        <!--</ion-col>-->
+                        <!--<ion-col col-6 no-padding="">-->
+                            <!--<p text-right>{{config.assetType}}</p>-->
+                        <!--</ion-col>-->
+                    <!--</ion-row>-->
+                <!--</div>-->
+            <!--</div>-->
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'ppmjobs'"  class="assetview-padding" style="margin-top: 90px !important">
+
+
+        <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
+            <!--<ion-label color="light" class="margin0 bg-orange" padding-left=" " padding-right="">Job</ion-label>-->
+            <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+                <!--<ion-icon name="add"></ion-icon>-->
+            <!--</button>-->
+        <!--</ion-fab>-->
+        <div  *ngIf="(!assetDetails.ppmJobs || assetDetails.ppmJobs.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+
+        <div text-center="" *ngIf="(!assetDetails.jobs || assetDetails.jobs?.length<0) && !spinner" class="no-data" margin-top>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+        <ion-refresher (ionRefresh)="doRefresh($event,'ppmJobs')">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <div  class="white-bg" *ngFor="let job of PPMJobs" >
+
+            <div class="padding-left16 padding-top5">
+                <ion-row class="margin0">
+
+                    <ion-col col-2 class="ver-center">
+                        <button ion-button clear color="primary" class="icon-round ion-circle-icons"
+                                [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                        </button>
+                    </ion-col>
+                    <ion-col col-8 class="padding-left5">
+                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{job.title}}</p>
+                            <p text-left class="margin0">{{job.employeeName}}</p>
+                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
+                                <span>
+                                    <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
+                                    <!--<p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>-->
+
+                                </span>
+                            </p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2 class="padding-left0 ver-center">
+                        <div class="padding-bottom5">
+                            <button ion-button clear color="primary" (tap)="open(slidingItem, item ,count)">
+                                <i class="material-icons">more_horiz</i>
+                            </button>
+                        </div>
+                    </ion-col>
+                    <!--
+                    <ion-col col-1>
+                        <p (click)="open(ItemSliding,Item)">f</p>
+                    </ion-col>
+                    -->
+
+                </ion-row>
+            </div>
+            <ion-item-sliding #slidingItem>
+
+                <ion-item #item class="item-fnt padding-left0" >
+                    <!--<div class="padding-left16">-->
+
+                    <div text-capitalize >
+                        <ion-row class="margin0">
+                            <ion-col col-6 class="padding-right5">
+                                <div *ngIf="job.status =='COMPLETED'">
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                                <div *ngIf="job.status !='COMPLETED'">
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                            <ion-col col-6>
+                                <div *ngIf="job.status =='COMPLETED'">
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                                <div *ngIf="job.status !='COMPLETED'">
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                          </ion-col>
+                        </ion-row>
+                    </div>
+                    <!--</div>-->
+                </ion-item>
+
+                <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
+                    <div>
+                        <!--<button has-permission="JobsView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>-->
+                        <button ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                    <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
+                    <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                    <!--</div>-->
+                    <div >
+                        <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                    <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
+                        <button  ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                </ion-item-options>
+            </ion-item-sliding>
+
+        </div>
+
+        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="jobPpmScroll($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'amcJobs'"  padding-left="" padding-right="" style="margin-top: 56px">
+
+
+        <!--<ion-fab left bottom mini (click)="createJob()"  margin>-->
+        <!--<ion-label color="light" class="margin0 bg-orange" padding-left=" " padding-right="">Job</ion-label>-->
+        <!--<button ion-fab color="primary" class="margin-auto margin-top5">-->
+        <!--<ion-icon name="add"></ion-icon>-->
+        <!--</button>-->
+        <!--</ion-fab>-->
+        <div  *ngIf="(!AMCJobs || AMCJobs.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+
+        <div text-center="" *ngIf="(!AMCJobs || AMCJobs?.length<0) && !spinner" class="no-data" margin-top>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+        <ion-refresher (ionRefresh)="doRefresh($event,'jobs')">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+        <div  class="white-bg" *ngFor="let job of AMCJobs" >
+
+            <div class="padding-left16 padding-top5">
+                <ion-row class="margin0">
+
+                    <ion-col col-2 class="ver-center">
+                        <button ion-button clear color="primary" class="icon-round ion-circle-icons"
+                                [ngClass]="{'icon-round-red' : (job.status == 'OVERDUE'),
+                                                          'icon-round-green' : (job.status == 'COMPLETED'),
+                                                          'icon-round-blue' :(job.status =='OPEN' || job.status == 'ASSIGNED' || job.status == 'INPROGRESS')}">
+                            <ion-icon name="ios-construct-outline" class="fnt-24"></ion-icon>
+                        </button>
+                    </ion-col>
+                    <ion-col col-6 class="padding-left5">
+                        <div class="border-btm padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{job.title}}</p>
+                            <p text-left class="margin0">{{job.employeeName}}</p>
+                            <p text-left class="margin0">{{job.siteProjectName}} - {{job.siteName}} -
+                                <span>
+                                    <!--<button ion-button round text-capitalize [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'blue' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</button>-->
+                            <!--<p text-uppercase text-right class="margin0 display-inline" [ngClass]="{'blue' : (job.maintenanceType) == 'amc', 'green' : (job.maintenanceType) == 'ppm' }">{{job.maintenanceType}}</p>-->
+
+                            </span>
+                            </p>
+                        </div>
+                    </ion-col>
+                    <ion-col col-2 class="padding-left0 ver-center">
+                        <div class="padding-bottom5">
+                            <button ion-button clear color="primary" (tap)="open(slidingItem, item ,count)">
+                                <i class="material-icons">more_horiz</i>
+                            </button>
+                        </div>
+                    </ion-col>
+                    <!--
+                    <ion-col col-1>
+                        <p (click)="open(ItemSliding,Item)">f</p>
+                    </ion-col>
+                    -->
+
+                </ion-row>
+            </div>
+            <ion-item-sliding #slidingItem>
+
+                <ion-item #item class="item-fnt padding-left0" >
+                    <!--<div class="padding-left16">-->
+
+                    <div text-capitalize >
+                        <ion-row class="margin0">
+                            <ion-col col-6 class="padding-right5">
+                                <div *ngIf="job.status =='COMPLETED'">
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.actualStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                                <div *ngIf="job.status !='COMPLETED'">
+                                    <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{job.plannedStartTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                            <ion-col col-6>
+                                <div *ngIf="job.status =='COMPLETED'">
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.actualEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                                <div *ngIf="job.status !='COMPLETED'">
+                                    <p text-right class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="red padding-right10"></ion-icon>{{job.plannedEndTime | date:'MMM d, y, h:mm a' }} </p>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                    </div>
+                    <!--</div>-->
+                </ion-item>
+
+                <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
+                    <div>
+                        <button has-permission="JobsView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                    <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
+                    <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
+                    <!--</div>-->
+                    <div >
+                        <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                    <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
+                        <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                    </div>
+                </ion-item-options>
+            </ion-item-sliding>
+
+        </div>
+
+        <ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="jobAmcScroll($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'tickets'" style="margin-top : 90px !important;" class="assetview-padding ticket-card">
+
+        <div   *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div text-center *ngIf="(!assetDetails.tickets || assetDetails.tickets.length < 0) && !spinner" class="no-data">
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+        <ion-refresher (ionRefresh)="doRefresh($event,'tickets')">
+            <ion-refresher-content>
+
+            </ion-refresher-content>
+        </ion-refresher>
+
+      <div class="TicketsListCon">
+
+        <ion-list>
+          <ion-item  *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)" text-capitalize>
+            <ion-icon *ngIf="ticket.status=='Open'"  class="sky-blue"  name="ios-alert-outline" item-start></ion-icon>
+            <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" name="ios-checkmark-circle-outline" item-start></ion-icon>
+            <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" name="ios-help-circle-outline" item-start></ion-icon>
+
+            <h2 text-left>{{ticket.title}}</h2>
+            <p text-left class="TicketPara">{{ticket.createdDate | date:'MMM d, y, h:mm a' }}  <br> Created by <strong>{{ticket.createdBy}} </strong> </p>
+            <ion-note item-end>
+              {{ticket.status}}
+            </ion-note>
+          </ion-item>
+        </ion-list>
+
+      </div>
+
+        <!--<div  class="card cardWithRadius" *ngFor="let ticket of assetDetails.tickets" (click)="viewTicket(ticket)">
+            <div class="padding-left16 padding-top5">
+                <ion-row class="margin0 border-btm">
+                    <ion-col col-3 class="ver-center">
+                        <ion-icon *ngIf="ticket.status=='Open'" style="color:red" ios="ios-alert" md="md-alert" class="fnt-24"></ion-icon>
+                        <ion-icon *ngIf="ticket.status=='Closed'" style="color:green" ios="ios-checkmark-circle" md="md-checkmark-circle" class="fnt-24"></ion-icon>
+                        <ion-icon *ngIf="ticket.status=='OnGoing' || ticket.status =='Assigned'" style="color: orangered" ios="ios-help-circle" md="md-help-circle" class="fnt-24"></ion-icon>
+                    </ion-col>
+                    <ion-col col-6 class="padding-left5">
+                        <div class="padding-bottom5 ln-ght20" text-capitalize>
+                            <p text-left class="margin0">{{ticket.title}}</p>
+                            <p float-left class="margin0">{{ticket.status}}</p>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+
+           &lt;!&ndash; <ion-item #item class="item-fnt padding-left0">
+                &lt;!&ndash;<div class="padding-left16">&ndash;&gt;
+                <div text-capitalize >
+                    <ion-row class="margin0">
+                        <ion-col col-6 class="padding-right5">
+                            <div>
+                                <p text-left class="fnt-12"><ion-icon ios="ios-calendar" md="md-calendar" class="green padding-right10"></ion-icon>{{ticket.createdDate | date:'MMM d, y, h:mm a' }} </p>
+                            </div>
+                        </ion-col>
+                        <ion-col col-6 class="padding-right5">
+                            <div >
+                                <p text-right class="fnt-12"><ion-icon ios="ios-contact" md="md-contact" class="green padding-right10"></ion-icon>{{ticket.createdBy}} </p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </div>
+                &lt;!&ndash;</div>&ndash;&gt;
+            </ion-item>&ndash;&gt;
+
+        </div>-->
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'readings'" class="assetview-padding" style="margin-top:90px !important;">
+
+        <div  *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+        <div *ngIf="(!assetDetails.reading || assetDetails.reading.length < 0) && !spinner" class="no-data" text-center>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+      <!--<div *ngIf="assetDetails.reading">
+        <ion-card *ngFor="let readings of assetDetails.reading">
+          <ion-row>
+            <ion-col col-6 style="text-align: center;">
+              <p style="color: #ff9800">Date</p>
+              <p>{{readings.createdDate|date:'dd/MM/YYYY'}}</p>
+              <p>{{readings.createdDate|date : 'hh:mm a'}}</p>
+            </ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Type</p>
+              <p>{{readings.name}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-12 style="text-align: center; font-weight: 400 ; color: #ff9800">Consumption</ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Initial Value</p>
+              <p>{{readings.initialValue}}</p>
+            </ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Final Value</p>
+              <p>{{readings.finalValue}}</p>
+            </ion-col>
+            <ion-col col-12  style="text-align: center;">
+              <p *ngIf="readings.consumption">{{readings.consumption}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">Readings</p>
+              <p *ngIf="readings.value>0">NA</p>
+              <p>{{readings.value}}</p>
+            </ion-col>
+            <ion-col col-6  style="text-align: center;">
+              <p style="color: #ff9800">UOM</p>
+              <p>{{readings.uom}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+
+      </div>-->
+
+
+
+
+        <div *ngIf="assetDetails.reading">
+            <div class="card-content card cardWithRadius" >
+                <div class="table-responsive">
+                    <table class="table table-scroll">
+                        <thead>
+                        <tr>
+                            <th class="text-center clr-orange">Date</th>
+                            <th class="text-center clr-orange" >Type</th>
+                            <th class="text-center clr-orange" >Consumption</th>
+                            <th class="text-center clr-orange">Reading</th>
+                            <th class="text-center clr-orange">Uom</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let readings of assetDetails.reading">
+                                <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
+                                <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
+                                <td class="text-center">{{readings.name}}</td>
+                                <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}
+                                    <p class="clr-orange">Initial Value:<span class="clr-black">{{readings.initialValue}}</span></p>
+                                    <p class="clr-orange">Final Value:<span class="clr-black">{{readings.finalValue}}</span></p>
+                                </td>
+                                <td class="text-center" *ngIf="readings.value>0">NA</td>
+                                <td text-center>{{readings.value}}</td>
+                                <td class="text-center">{{readings.uom}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+
+            </div>
+        <ion-infinite-scroll *ngIf="page<totalPages" (ionInfinite)="readingScroll($event)">
+            <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+    </ion-list>
+
+
+    <ion-list *ngSwitchCase="'statusHistory'" class="assetview-padding" >
+        <div  *ngIf="(!status||status.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+        <div *ngIf="(!status || status.length < 0) && !spinner" class="no-data" text-center>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+      <div>
+        <p style="text-align: center">Status History</p>
+      </div>
+        <div *ngFor="let statusHistory of status">
+            <ion-card class="shadow brdr-radius card">
+                <ion-card-content style="margin-top: 8px !important;">
+                    <ion-row class="margin0 border-btm">
+                        <ion-col col-12>
+                            <p text-capitalize class="margin0" text-center>{{statusHistory.assetTitle}}</p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row no-margin>
+                        <ion-col col-6>
+                            <p class="margin0" text-center>{{statusHistory.status}}</p>
+                            <p class="margin0 clr-orange fnt-12" text-center>Status</p>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div class="">
+                                <p text-center class="margin0" text-uppercase>{{statusHistory.lastModifiedDate|date : 'MM/dd/yy HH:MM'}}</p>
+                                <p text-center class="margin0 clr-orange fnt-12">On</p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
+        </div>
+
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'siteHistory'" class="assetview-padding">
+        <div  *ngIf="(!assetDetails.site || assetDetails.site.length == 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+
+        <div *ngIf="(!site || site.length< 0) && !spinner" class="no-data"  text-center>
+          <ion-card>
+            <img src="assets/imgs/warning.svg">
+            <span><p text-center>No Data Found</p></span>
+          </ion-card>
+        </div>
+
+      <div>
+        <p style="text-align: center">Site Transfer History</p>
+      </div>
+        <div *ngFor="let history of site">
+            <ion-card class="shadow brdr-radius card">
+                <ion-card-content>
+                    <ion-row class="margin0 border-btm">
+                        <ion-col col-12>
+                            <p text-capitalize class="margin0" text-center>{{history.assetTitle}}</p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row no-margin>
+                        <ion-col col-6>
+                            <p class="margin0" text-center>{{history.siteName}}</p>
+                            <p class="margin0 clr-orange fnt-12" text-center>Site name</p>
+                        </ion-col>
+                        <ion-col col-6>
+                            <div class="">
+                                <p text-center class="margin0" text-uppercase>{{history.lastModifiedDate|date : 'MM/dd/yy HH:MM'}}</p>
+                                <p text-center class="margin0 clr-orange fnt-12">On</p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </ion-list>
+
+
+    <ion-list *ngSwitchCase="'inventoryTransaction'" class="assetview-padding" style="margin-top:18px">
+        <div  *ngIf="(!jobMaterials ||jobMaterials.length < 0) && spinner" text-center class="margin-top25">
+            <ion-spinner name="circles"></ion-spinner>
+        </div>
+        <div *ngIf="(!jobMaterials || jobMaterials.length < 0) && !spinner"  text-center>
+            <ion-card text-center>
+                <ion-card-content>
+                    No Data found
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <div class="white-bg col-md-8 padding-right0 margin-top10" *ngFor="let m of assetMaterial">
+            <div *ngFor="let j of m.jobMaterials" class="padding-top5 white-bg col-md-8 padding-right0 margin-top10">
+
+                    <ion-row class="margin0">
+                        <ion-col col-6>
+                            Job Id:
+                        </ion-col>
+                        <ion-col col-6>
+                            #{{j.jobId}}
+                        </ion-col>
+                        <ion-col col-6>
+                            Material Name:
+                        </ion-col>
+                        <ion-col col-6>
+                            {{j.materialName}}
+                        </ion-col>
+                        <ion-col col-6>
+                            Code:
+                        </ion-col>
+                        <ion-col col-6>
+                            {{j.materialCode}}
+                        </ion-col>
+                        <ion-col col-6>
+                            Group:
+                        </ion-col>
+                        <ion-col col-6>
+                            {{j.materialGroup}}
+                        </ion-col>
+                        <ion-col col-6>
+                            Quantity:
+                        </ion-col>
+                        <ion-col col-6>
+                            {{j.materialQuantity}}
+                        </ion-col>
+                        <ion-col col-6>
+                            Uom:
+                        </ion-col>
+                        <ion-col col-6>
+                            {{j.materialUom}}
+                        </ion-col>
+                    </ion-row>
+            </div>
+        </div>
+    </ion-list>
+
+
+
+</div>
 </ion-content>

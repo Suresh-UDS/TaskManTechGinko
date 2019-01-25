@@ -1,0 +1,36 @@
+<div class=""  ng-init="qrcodePage()">
+
+
+    <div class="card PrintQrcodecard">
+        <div class="card-content">
+            <div class="row">
+                <div class="col-md-12 txt-align-rgt">
+                    <button type="button" class="btn btn-success" ng-click="printDiv('printable')" >
+                        <i class="material-icons">print</i>Print
+                    </button>
+                </div>
+                <div class="col-md-12 txt-align-center" id="printable">
+                    <h3>Qr Code Image</h3>
+
+                    <img ng-src="{{qr_img}}" width="250" height="250" 
+                         class="img-responsive">
+
+                    <div class="QrcodeInfo">
+                        <p>{{qrInfoDetails.siteName | uppercase}} - {{qrInfoDetails.block | uppercase}} - {{qrInfoDetails.floor | uppercase }} - {{qrInfoDetails.zone | uppercase}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12 txt-align-rgt">
+                    <button class="btn btn-default" type="button"
+                            ng-click="back('cancel')" id="close-button-right">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -13,22 +13,30 @@
         </div>
 
     </div>
-
+    <form name="form" role="form" novalidate>
     <div class="row">
         <div class="col-md-12">
             <div class="card margin-TB-5" >
 
-                <div class="card-content">
+                <div class="card-content DownArrowCon">
 
 					<div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Client<span class="red-star">*</span> </label>
                                  <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control " ng-model="selectedProject"  ng-change="loadSites()"  ng-options="project as project.name for project in projects track by project.id">
+                                <select class="form-control " ng-model="selectedProject" name="project"  ng-change="loadSites()"  ng-options="project as project.name for project in projects track by project.id" ng-required="true">
                                     <option value="">Please select Client...</option>
                                 </select>
+                                <div ng-show="form.$submitted || form.project.$touched">
+                                    <div ng-show="form.project.$dirty || form.project.$invalid">
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.project.$error.required">
+                                            Client is required.
+                                        </p>
 
+                                    </div>
+                                </div>
 
 
                             </div>
@@ -42,11 +50,18 @@
                                 <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                 <!--required >-->
                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select class="form-control " ng-model="selectedSite"   ng-options="site as site.name for site in sites track by site.id">
+                                <select class="form-control " ng-model="selectedSite" name="site"  ng-options="site as site.name for site in sites track by site.id" ng-required="true">
                                     <option value="">Please select Site...</option>
                                 </select>
+                                <div ng-show="form.$submitted || form.site.$touched">
+                                    <div ng-show="form.site.$dirty || form.site.$invalid">
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.site.$error.required">
+                                            site is required.
+                                        </p>
 
-
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -57,12 +72,12 @@
                                 <div>
                                     <div class="radio radio-inline">
                                         <label>
-                                            <input type="radio" name="displayType" id="displayType" ng-model="feedbackItem.displayType" ng-click="qType()" value="form" required ng-checked="true" > Form
+                                            <input type="radio" name="displayType1" id="displayType1" ng-model="feedbackItem.displayType" ng-click="qType()" value="form" required > Form
                                         </label>
                                     </div>
                                     <div class="radio radio-inline">
                                         <label>
-                                            <input type="radio" name="displayType" id="displayType"  ng-model="feedbackItem.displayType" ng-click="qType()"  value="wizard" required > Wizard/Slider
+                                            <input type="radio" name="displayType2" id="displayType2"  ng-model="feedbackItem.displayType" ng-click="qType()"  value="wizard" required > Wizard/Slider
                                         </label>
                                     </div>
                                 </div>
@@ -76,19 +91,28 @@
 
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Title</label>
-                                <input type="text" class="form-control" ng-model="feedbackItem.name">
+                                <input type="text" class="form-control InputTxtCapsAll" ng-model="feedbackItem.name">
                             </div>
 
                         </div>
                         <div class="col-md-8">
 
                             <div class="form-group pdng-top15">
-                                <label class="control-label">Question</label>
-                                <input type="text" class="form-control" ng-model="newFeedbackItem.question">
+                                <label class="control-label">Question<span class="red-star">*</span></label>
+                                <input type="text" class="form-control InputTxtCaps" name="question" ng-model="newFeedbackItem.question" ng-required="true">
+                                <div ng-show="form.$submitted || form.question.$touched">
+                                    <div ng-show="form.question.$dirty || form.question.$invalid">
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.question.$error.required">
+                                            Question is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                             <div class="form-group pdng-top15">
                                 <label class="control-label">Answer Type</label>
                                 <div>
@@ -133,7 +157,11 @@
                             </div>
 
                         </div>
-
+                        <div class="col-md-4" ng-if="feedbackItem.displayType == 'wizard' " >
+                            <div class="form-group pdng-top15">
+                                <input type="checkbox"  name="remarks" ng-change="remarksAdded(newFeedbackItem.remarksRequired)"  ng-model="newFeedbackItem.remarksRequired" value=true  required  ng-checked="feedbackItem.remarksRequired"> Remarks Required
+                            </div>
+                        </div>
 
 
                         <div class="col-md-2" style="text-align: right">
@@ -157,7 +185,7 @@
 
                         <div class="form-group">
 
-                            <label class="">Items</label>
+                            <label class="">Questions</label>
 
                             <ul class="listOfActions list-group">
 
@@ -179,7 +207,7 @@
 	                                       id="form-button-save">
 	                                  <span class="btn-label">
 	                        <i class="material-icons">check</i>
-	                   		 </span> Save
+	                   		 </span> <span ng-if="isEdit == 'yes'">Update</span><span ng-if="isEdit == 'no'">Save</span>
 	                               </button>
 	                               <button class="btn btn-danger" type="button"
 	                                       ng-click="cancelFeedbackQuestions()" id="cancel-button">
@@ -197,6 +225,7 @@
             </div>
         </div>
     </div>
+    </form>
 
 
 
@@ -208,7 +237,7 @@
                 <div class="card-content">
 
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-hover withSortingIcons">
                             <thead>
                             <tr>
                                 <th>ID
@@ -274,25 +303,25 @@
                         </table>
 
                     </div>
+                    <div class="txt-align-center LoaderCon"  ng-hide="feedbackMasterListLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="card margin-TB-5 txt-align-center" ng-hide="feedbackMasterList">
-
-        <div class="card-content">
-
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="feedbackMasterListLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
 
      <!-- Pagination directive start -->

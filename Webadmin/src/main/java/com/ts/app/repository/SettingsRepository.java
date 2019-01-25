@@ -1,13 +1,12 @@
 package com.ts.app.repository;
 
-import java.util.List;
-
+import com.ts.app.domain.Setting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.Setting;
+import java.util.List;
 
 /**
  * 
@@ -20,10 +19,13 @@ public interface SettingsRepository extends JpaRepository<Setting, Long>,JpaSpec
     Setting findSettingByKey(@Param("key") String key);
 
     @Query("SELECT s from Setting s where s.settingKey = :key and s.projectId = :projectId")
-    Setting findSettingByKeyAndProjectId(@Param("key") String key,@Param("projectId") long projectId);
+    List<Setting> findSettingByKeyAndProjectId(@Param("key") String key,@Param("projectId") long projectId);
 
     @Query("SELECT s from Setting s where s.settingKey = :key and s.siteId = :siteId")
-    Setting findSettingByKeyAndSiteId(@Param("key") String key,@Param("siteId") long siteId);
+    List<Setting> findSettingByKeyAndSiteId(@Param("key") String key,@Param("siteId") long siteId);
+
+    @Query("SELECT s from Setting s where s.settingKey = :key and (s.siteId = :siteId or s.projectId = :projectId)")
+    List<Setting> findSettingByKeyAndSiteIdOrProjectId(@Param("key") String key,@Param("siteId") long siteId,@Param("projectId") long projectId);
 
     @Query("SELECT s from Setting s where s.projectId = :projectId")
     List<Setting> findSettingByProjectId(@Param("projectId") long projectId);

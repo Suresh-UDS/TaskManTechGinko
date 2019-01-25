@@ -1,39 +1,7 @@
 package com.ts.app.web.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.domain.PersistentToken;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRole;
 import com.ts.app.repository.PersistentTokenRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.CustomUserDetails;
@@ -45,8 +13,29 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.KeyAndPasswordDTO;
 import com.ts.app.web.rest.dto.UserDTO;
-import com.ts.app.web.rest.dto.UserRoleDTO;
 import com.ts.app.web.rest.util.TokenUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -155,7 +144,7 @@ public class AccountResource {
 		*/
 		UserDTO userDto = userService.getUserWithAuthorities();
 		if(userDto != null) {
-			return new ResponseEntity<>(userDto, HttpStatus.OK); 
+			return new ResponseEntity<>(userDto, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -233,6 +222,8 @@ public class AccountResource {
 					.ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
 		});
 	}
+
+
 
 	@RequestMapping(value = "/account/reset_password/init", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@Timed

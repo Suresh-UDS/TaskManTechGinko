@@ -19,7 +19,7 @@
 
                 <div class="form-container table-container">
                     <form ng-show="!success" name="form" role="form" novalidate
-                          ng-submit=""  class="form-horizontal">
+                          ng-submit="saveFeedbackMapping()"  class="form-horizontal">
 
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
@@ -49,7 +49,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">    
+                                        <div class="row">
                                             <div class="col-md-6 col-md-offset-3">
                                                 <div class="form-group">
                                                     <label class="control-label">Site<span class="red-star">*</span> </label>
@@ -87,7 +87,7 @@
                                                     <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                     <!--required >-->
                                                     <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" name="block" ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as block for  block in  blocks" required>
+                                                    <select class="form-control" name="block" ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks" required>
                                                         <option value="">Select Block...</option>
                                                     </select>
                                                     <div ng-show="form.$submitted || form.block.$touched">
@@ -102,7 +102,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">    
+                                        <div class="row">
                                             <div class="col-md-6 col-md-offset-3">
                                                 <div class="form-group">
                                                     <label class="control-label">Floor<span class="red-star">*</span> </label>
@@ -112,7 +112,7 @@
                                                     <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                     <!--required >-->
                                                     <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " name="floor" ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as floor for floor in floors" required>
+                                                    <select class="form-control " name="floor" ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors" required>
                                                         <option value="">Select Floor...</option>
                                                     </select>
                                                     <div ng-show="form.$submitted || form.floor.$touched">
@@ -141,7 +141,7 @@
                                                     <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                     <!--required >-->
                                                     <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control " name="zone" ng-model="selectedZone"  ng-options="zone as zone for zone in zones" required> 
+                                                    <select class="form-control " name="zone" ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones" required>
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                     <div ng-show="form.$submitted || form.zone.$touched">
@@ -159,8 +159,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">    
-                                            
+                                        <div class="row">
+
                                             <div class="col-md-6 col-md-offset-3">
                                                 <div class="form-group">
                                                     <label class="control-label">Feedback Name<span class="red-star">*</span> </label>
@@ -196,12 +196,12 @@
                                             <div class="col-md-9 txt-align-rgt">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success" type="submit" ng-click="saveFeedbackMapping()"
-                                                            id="form-button-save" ng-disabled="form.$invalid">
+                                                    <button class="btn btn-success ld ld-over-inverse" type="submit" 
+                                                            id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>
                                                     <button class="btn btn-danger" type="button"
-                                                            ng-click="cancelFeedbackMapping()" id="cancel-button">
+                                                            ng-click="cancelFeedbackMapping()" id="cancel-button" ng-disabled="btnDisable">
                                                         <i class="material-icons">close</i> Cancel
                                                     </button>
 

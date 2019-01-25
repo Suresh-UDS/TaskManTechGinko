@@ -1,5 +1,8 @@
 package com.ts.app.web.rest.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class TicketDTO extends BaseDTO {
@@ -13,9 +16,15 @@ public class TicketDTO extends BaseDTO {
 
     private String siteName;
 
+    private long projectId;
+
+    private String projectName;
+
     private long employeeId;
 
     private String employeeName;
+    
+    private String employeeLastName;
 
     private String employeeEmpId;
 
@@ -30,29 +39,54 @@ public class TicketDTO extends BaseDTO {
     private String zone;
 
     private long jobId;
-    
+
     private String quotationId;
 
     private String jobName;
 
     private String severity;
-    
+
     private long assignedToId;
-    
+
     private String assignedToName;
     
+    private String assignedToLastName;
+
     private Date assignedOn;
-    
+
     private long closedById;
-    
+
     private String closedByName;
     
+    private String closedByLastName;
+
     private Date closedOn;
-    
+
     private String comments;
     
+    private String remarks;
+
     private String category;
 
+    private String image;
+
+    private MultipartFile imageFile;
+    
+    private String url;
+
+    private boolean pendingAtUDS;
+
+    private boolean pendingAtClient;
+    
+    private String assetTitle;
+    
+    private long assetId;
+
+    private String branch;
+
+    private String region;
+
+    private ZonedDateTime createdDate;
 
     public long getId() {
         return id;
@@ -237,6 +271,15 @@ public class TicketDTO extends BaseDTO {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+	
+	
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 
 	public String getCategory() {
 		return category;
@@ -254,6 +297,125 @@ public class TicketDTO extends BaseDTO {
 		this.quotationId = quotationId;
 	}
 
-	
-    
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public MultipartFile getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(MultipartFile imageFile) {
+		this.imageFile = imageFile;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
+
+	public String getAssetTitle() {
+		return assetTitle;
+	}
+
+	public void setAssetTitle(String assetTitle) {
+		this.assetTitle = assetTitle;
+	}
+
+	public long getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(long assetId) {
+		this.assetId = assetId;
+	}
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
+	}
+
+	public String getAssignedToLastName() {
+		return assignedToLastName;
+	}
+
+	public void setAssignedToLastName(String assignedToLastName) {
+		this.assignedToLastName = assignedToLastName;
+	}
+
+	public String getClosedByLastName() {
+		return closedByLastName;
+	}
+
+	public void setClosedByLastName(String closedByLastName) {
+		this.closedByLastName = closedByLastName;
+	}
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    @Override
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    @Override
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
 }

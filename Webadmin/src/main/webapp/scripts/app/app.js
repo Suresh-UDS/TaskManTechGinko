@@ -1,41 +1,77 @@
 'use strict';
 
-angular.module('timeSheetApp', ['LocalStorageModule',
+angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.filter',
                'ui.bootstrap', 'ui.bootstrap.datetimepicker', // for modal dialogs
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
-     'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model',
+     'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
-     'angular-star-rating-new','paginations'])
+     'angular-star-rating-new','paginations','excelGrid'
+     //,'spring-security-csrf-token-interceptor' 
+     ])
 
-    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
+    .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION,$timeout) {
+
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $rootScope.loginView = true;
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
+        $rootScope.stateValue ="";
+        $rootScope.resLoader=false;
+        $rootScope.searchCriterias={};
+        $rootScope.searchFilterCriteria = {};
+        $rootScope.isDashboard = false;
+
+        /** @reatin - retaining scope value.**/
+
+        $rootScope.retain=0;
+
        /* Principal.identity().then(function(response)
              {
-                 console.log('current user' +JSON.stringify(response.login));
+               //console.log('current user' +JSON.stringify(response.login));
                  $rootScope.accountName = response.login;
              });*/
+
         $rootScope.logout = function () {
             Auth.logout();
             $state.go('login');
+            $rootScope.resLoader=false;
         };
+
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
-            console.log("state change start")
+          //console.log("state change start")
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
+
                 $rootScope.isLoggedIn = true;
             }
 
         });
-        console.log('current state - ' +JSON.stringify($state));
+
+         $rootScope.backToDashboard = function () {
+            if($rootScope.isDashboard){
+               $state.go('dashboard');
+            }
+        };
+
+        //Dashboard back btn function
+        $rootScope.dbFilterBtn = function (){
+         $rootScope.isDashboard = false;
+         /*$timeout.cancel($rootScope.attendGraphTimeout);
+         $timeout.cancel($rootScope.jobGraphTimeout);
+         $timeout.cancel($rootScope.ticketGraphTimeout);
+         $timeout.cancel($rootScope.ticketSingleGraphTimeout);
+         $timeout.cancel($rootScope.quotGraphTimeout);*/
+        }
+
+
+      //console.log('current state - ' +JSON.stringify($state));
         $rootScope.isLoggedIn = true;
 
         $rootScope.stateDetails = $state;
         $rootScope.pageTile;
+
         $rootScope.logoutUser = function () {
             Auth.logout();
             $rootScope.isLoggedIn = false;
@@ -60,42 +96,57 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             }
             $window.document.title = titleKey;
             $rootScope.pageTitle = titleKey;
-            console.log(toState.name)
+          //console.log(toState.name)
             if(toState.name == 'login'){
                 $rootScope.isLoggedIn = false;
             }
             if(toState.name !='dashboard'){
-                console.log("Not Dashboard");
+              //console.log("Not Dashboard");
                 $rootScope.isChartsDisplayed = true;
-                console.log($rootScope.isChartsDisplayed);
+              //console.log($rootScope.isChartsDisplayed);
             }else{
-                console.log("Not Dashboard");
+              //console.log("Not Dashboard");
                 $rootScope.isChartsDisplayed = false;
-                console.log($rootScope.isChartsDisplayed);
+              //console.log($rootScope.isChartsDisplayed);
 
             }
 
 
         });
 
-        $rootScope.back = function() {
+        $rootScope.retainUrl = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
+                $rootScope.inits();
+                if($rootScope.stateValue != ""){
+                    $rootScope.stateValue;
+                    $(".content").removeClass("remove-mr");
+                    $(".main-panel").removeClass("remove-hght");
+                    //$state.go($rootScope.stateValue);
+                    window.location = window.location.href+$rootScope.stateValue;
+                }
+                else{
                 $state.go('dashboard');
+            }
+
+              $rootScope.stateValue ="";
             } else {
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
 
+        $rootScope.noscroll = false;
 
         // Page Loader Function
 
         $rootScope.loadingAuto = function(){
-            $scope.loadingStart();
-            $scope.loadtimeOut = $timeout(function(){
+            $rootScope.loadingStart();
+            $rootScope.loadtimeOut = $timeout(function(){
 
             //console.log("Calling loader stop");
-            $('.pageCenter').hide();$('.overlay').hide();
+            $('.pageCenter').hide();
+            $('.overlay').hide();
+            $rootScope.noscroll = false;
 
         }, 2000);}
 
@@ -103,26 +154,53 @@ angular.module('timeSheetApp', ['LocalStorageModule',
 
          $('.pageCenter').show();
          $('.overlay').show();
+            $rootScope.noscroll = true;
+
+
+        }
+        $rootScope.overlayShow = function(){
+
+         $('.overlay').show();
+
+        }
+        $rootScope.overlayHide = function(){
+
+         $('.overlay').hide();
 
         }
 
         $rootScope.loadingStop = function(){
-            
-            console.log("Calling loader");
+
+          //console.log("Calling loader");
 
             $('.pageCenter').hide();
             $('.overlay').hide();
-                    
+            $rootScope.noscroll = false;
+
+
+
         }
 
         //Loading Page go to top position
 
         $rootScope.loadPageTop = function(){
 
-            $("#loadPage").animate({scrollTop: 0}, 2000);
+            $("#loadPage").animate({scrollTop: 0}, 0);
         }
 
-       
+        //Perfect scroll bar INIT
+
+         $rootScope.initScrollBar = function(){
+
+          //console.log("-- Calling scrollbar -- ");
+
+             $('.sidebar .sidebar-wrapper').perfectScrollbar();
+         }
+
+
+
+        // $rootScope.initScrollBar();
+
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider,  httpRequestInterceptorCacheBusterProvider,uiGmapGoogleMapApiProvider) {
     	uiGmapGoogleMapApiProvider.configure({
@@ -139,6 +217,11 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $stateProvider.state('site', {
             'abstract': true,
             views: {
+
+                'login@': {
+                    templateUrl: 'scripts/app/account/login/login.html',
+                    controller: 'LoginController'
+                },
                 'header@': {
                     templateUrl: 'scripts/components/header/header.html',
                     controller: 'HeaderController'
@@ -161,7 +244,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             }
         });
 
-        
+
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');
         $httpProvider.interceptors.push('authExpiredInterceptor');
@@ -172,6 +255,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
         $httpProvider.defaults.cache = false;
 
     })
+
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
@@ -181,7 +265,13 @@ angular.module('timeSheetApp', ['LocalStorageModule',
             is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
             pattern: /bool|true|0|1/
         });
-    }]);;
+    }])
+
+    .filter('trusted', ['$sce', function ($sce) {
+	    return function(url) {
+	        return $sce.trustAsResourceUrl(url);
+	    };
+    }]);
 
     angular.module('App.filters', []).filter('zpad', function() {
     	return function(input, n) {
@@ -193,5 +283,7 @@ angular.module('timeSheetApp', ['LocalStorageModule',
     		return (zeros + input).slice(-1 * n)
     	};
     });
+
+
 
 

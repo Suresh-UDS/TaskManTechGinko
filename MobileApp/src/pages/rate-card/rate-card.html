@@ -2,7 +2,7 @@
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
-    </button>
+      </button>
     <ion-title>Rate Cards</ion-title>
   </ion-navbar>
 </ion-header>
@@ -13,27 +13,35 @@
         <button mini has-permission="RateCardCreate" (click)="createRate()"  ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
-    <div class="table-responsive">
+    <div class="table-responsive" *ngIf="rateCards">
 
         <table class="table">
             <thead>
                <tr>
-                   <th>Type</th>
-                   <th>Name</th>
-                   <th>UOM </th>
-                   <th>Price</th>
+                   <th class="clr-orange">TYPE</th>
+                   <th class="clr-orange">NAME</th>
+                   <th class="clr-orange">UOM </th>
+                   <th class="clr-orange">PRICE</th>
                </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let rate of rateCards">
-                <td>{{rate.type}}</td>
-                <td>{{rate.title}}</td>
-                <td>{{rate.uom}}</td>
-                <td>{{rate.cost}}</td>
-            </tr>
+                <tr *ngFor="let rate of rateCards">
+                    <td>{{rate.type}}</td>
+                    <td>{{rate.title}}</td>
+                    <td>{{rate.uom}}</td>
+                    <td>{{rate.cost}}</td>
+                </tr>
             </tbody>
         </table>
 
+    </div>
+    <div *ngIf="!rateCards" >
+        <ion-card>
+            <ion-card-content>
+               <img src="assets/imgs/warning.svg">
+               <span><p text-center>No Data Found</p></span>
+            </ion-card-content>
+        </ion-card>
     </div>
 
     <!--<button class="btn btn-fill" onclick="demo.showSwal('success-message','Welcome','You clicked Button')">Try me!</button>-->

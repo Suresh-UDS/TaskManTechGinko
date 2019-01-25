@@ -11,6 +11,8 @@ import {QuotationService} from "../service/quotationService";
 export class QuotationPopoverPage {
   rateCardTypes:any;
   name:any;
+  title:any;
+  unitPrice:any;
   type:any;
   cost:any;
   selectedType:any;
@@ -21,7 +23,8 @@ export class QuotationPopoverPage {
   constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, public authService:authService,public viewCtrl: ViewController,
               private quotationService:QuotationService
               ) {
-    this.addrates={type:'',name:'',no:1,cost:0,uom:'',total:0}
+    // this.addrates={type:'',name:'',qty:1,cost:0,uom:'',total:0}
+    this.addrates={type:'',title:'',qty:1,unitPrice:0,uom:'',cost:0}
   }
   ionViewWillEnter(){
     this.getRateCardTypes();
@@ -41,9 +44,16 @@ export class QuotationPopoverPage {
   addRates()
   {
 
-    if(this.name && this.cost && this.type)
+    if(this.name && this.unitPrice && this.type)
     {
-      this.addrates={type:this.type,name:this.name,no:1,cost:this.cost,uom:this.selectedUOM,total:this.cost};
+      this.addrates={
+          type:this.type,
+          title:this.name,
+          qty:1,
+          unitPrice:this.unitPrice,
+          uom:this.selectedUOM,
+          cost:this.unitPrice
+      };
       console.log(this.addrates);
       // this.navCtrl.push(CreateQuotationPage2,{rates:this.addrates})
       this.viewCtrl.dismiss(this.addrates);

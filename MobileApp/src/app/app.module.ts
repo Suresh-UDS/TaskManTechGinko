@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import {FabContainer, IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {HttpModule} from "@angular/http";
 import {HttpClient} from "../pages/Interceptor/HttpClient";
 import { MyApp } from './app.component';
@@ -58,10 +58,11 @@ import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
-
+import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
+import{InventoryMaster} from "../pages/inventory-master/inventory-master";
+import{ExpenseDetails} from"../pages/expense-details/expense-details";
 import {CreateEmployeePage} from "../pages/employee-list/create-employee";
 import {OneSignal} from "@ionic-native/onesignal";
-// import {GoogleMaps} from "@ionic-native/google-maps";
 import {Toast} from "@ionic-native/toast";
 import {AppConfig, MY_CONFIG_TOKEN} from "../pages/service/app-config";
 import {AttendanceService} from "../pages/service/attendanceService";
@@ -70,6 +71,7 @@ import {FeedbackService} from "../pages/service/feedbackService";
 import {JobService} from "../pages/service/jobService";
 import {QuotationService} from "../pages/service/quotationService";
 import {SiteService} from "../pages/service/siteService";
+import {AssetService} from "../pages/service/assetService";
 import {JobPopoverPage} from "../pages/jobs/job-popover";
 import {BatteryStatus, BatteryStatusResponse} from "@ionic-native/battery-status";
 import {FeedbackDashboardPage} from "../pages/feedback/feedback-dashboard";
@@ -77,9 +79,9 @@ import {QuotationImagePopoverPage} from "../pages/quotation/quotation-image-popo
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { NativeAudio } from '@ionic-native/native-audio';
 import {SelectFeedbackPage} from "../pages/feedback/select-feedback";
-
 import {FeedbackZone} from "../pages/feedback/feedbackZone";
-
+import {Splash} from "../pages/splash/splash";
+import {SplashLogo} from "../pages/splash-logo/splash-logo";
 import {InitFeedbackZone} from "../pages/feedback/init-feedback-zone";
 import {WizardFeedbackEntry} from "../pages/feedback/wizard-feedback-entry";
 import {FeedbackQuestionsForm} from "../pages/feedback/feedback-questions-form";
@@ -90,9 +92,59 @@ import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
 import {AssetList} from "../pages/asset-list/asset-list";
-import {AssetView} from "../pages/asset-view/asset-view";
 import {AssetFilter} from "../pages/asset-list/asset-filter";
-import {QRScanner,QRScannerStatus} from "@ionic-native/qr-scanner";
+import {AssetView} from "../pages/asset-view/asset-view";
+import {QRScanner} from "@ionic-native/qr-scanner";
+import {ScanQRAsset} from "../pages/asset-list/scanQR-asset";
+import {ScanQR} from "../pages/jobs/scanQR";
+import {IonicImageViewerModule} from "ionic-img-viewer";
+import {DatePicker} from "@ionic-native/date-picker";
+import{GetAssetReading} from "../pages/asset-view/get-asset-reading";
+import{GetAssetReadings} from "../pages/asset-view/get-asset-readings/get-asset-readings";
+import{CalenderPage} from "../pages/calender-page/calender-page";
+import{UpdateApp} from "../pages/update-app/update-app";
+import{AddExpense} from "../pages/expense/add-expense/add-expense";
+import{EmployeeFilter} from "../pages/employee-list/employee-filter/employee-filter";
+import {JobFilter} from "../pages/jobs/job-filter/job-filter";
+import{SQLite} from "@ionic-native/sqlite";
+import {DBService} from "../pages/service/dbService";
+import {Network} from "@ionic-native/network";
+import {Diagnostic} from "@ionic-native/diagnostic";
+import {Market} from "@ionic-native/market";
+import {Checklist} from "../pages/checklist/checklist";
+import {OfflinePage} from "../pages/offline-page/offline-page";
+import {OfflineAttendanceSites} from "../pages/employee/offline-attendance-sites";
+import{OfflineAssetList} from "../pages/offline-assetlist/offline-assetlist";
+import{OfflineAsset} from "../pages/offline-asset/offline-asset";
+import{OfflineGetassetreadings} from "../pages/offline-getassetreadings/offline-getassetreadings";
+import {OfflineAttendance} from "../pages/employee/offline-attendance";
+import{ChangePassword} from "../pages/change-password/change-password";
+import{LocationAccuracy} from "@ionic-native/location-accuracy";
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import {LocationProvider} from "../providers/location-provider";
+import {OfflineCompleteJob} from "../pages/offline-complete-job/offline-complete-job";
+import {OfflineJobs} from "../pages/offline-jobs/offline-jobs";
+import{ForgotPassword} from "../pages/forgot-password/forgot-password";
+import{InventoryFilter} from "../pages/inventory-filter/inventory-filter";
+import{AddInventoryTransaction} from "../pages/add-inventory-transaction/add-inventory-transaction";
+import {InventoryService} from "../pages/service/inventoryService";
+import {ExpenseService} from "../pages/service/expenseService";
+import{AutoCompleteModule} from "ionic2-auto-complete";
+import {PurchaseRequisitionService} from "../pages/service/PurchaseRequisitionService";
+import {ExpensePage} from "../pages/expense/expense";
+import {TransactionPage} from "../pages/expense/transaction";
+import {Indent} from "../pages/indent/indent";
+import{IndentView} from "../pages/indent-view/indent-view";
+import {InventoryTransaction} from "../pages/inventorytransaction/inventorytransaction";
+import{IndentList} from "../pages/indent-list/indent-list";
+import{IndentIssue} from "../pages/indent-issue/indent-issue";
+import{AddMaterial} from "../pages/add-material/add-material";
+import{SelectSearchableModule} from "ionic-select-searchable";
+import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-finish";
+// import { PhotoViewer } from '@ionic-native/photo-viewer';
+
+// import{IonicImageViewerModule} from "ionic-img-viewer";
+
 
 @NgModule({
   declarations: [
@@ -155,17 +207,60 @@ import {QRScanner,QRScannerStatus} from "@ionic-native/qr-scanner";
       AssetList,
       AssetView,
       AssetFilter,
+      ScanQRAsset,
+      ScanQR,
+      ScanQRAsset,
+      JobFilter,
+      TicketFilter,
+      Splash,
+      SplashLogo,
+      EmployeeFilter,
+      GetAssetReading,
+      GetAssetReadings,
+      CalenderPage,
+      Checklist,
+      OfflinePage,
+      OfflineAttendanceSites,
+      OfflineAsset,
+      OfflineAssetList,
+      OfflineGetassetreadings,
+      OfflineAttendance,
+      ChangePassword,
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword,
+    OfflineCompleteJob,
+    OfflineJobs,
+    FeedbackGridFinish,
+      // PhotoViewer
+      InventoryFilter,
+      AddInventoryTransaction,
+    ExpensePage,
+    TransactionPage,
+      Indent,
+      IndentView,
+    InventoryTransaction,
+      IndentList,
+      IndentIssue,
+      ExpenseDetails,
+      AddExpense,
+    AddMaterial
   ],
   imports: [
     BrowserModule,
     HttpModule,
     DatePickerModule,
     BrowserAnimationsModule,
+    SelectSearchableModule,
+
     IonicModule.forRoot(MyApp,{
-        backButtonText: '',
+        backButtonText
+            : '',
         backButtonIcon: 'ios-arrow-back',
         iconMode: 'md'
     }),
+    IonicImageViewerModule,
+      // PhotoViewer,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -225,9 +320,46 @@ import {QRScanner,QRScannerStatus} from "@ionic-native/qr-scanner";
       Ticket,
       CreateTicket,
       ViewTicket,
-      AssetList,
       AssetView,
-      AssetFilter
+      AssetList,
+      AssetFilter,
+      JobFilter,
+      TicketFilter,
+      EmployeeFilter,
+      GetAssetReading,
+      Splash,
+      SplashLogo,
+      ScanQR,
+      ScanQRAsset,
+      GetAssetReadings,
+      CalenderPage,
+      Checklist,
+      OfflinePage,
+      OfflineAttendanceSites,
+      OfflineAssetList,
+      OfflineAsset,
+      OfflineGetassetreadings,
+      OfflineAttendance,
+      ChangePassword,
+      InventoryMaster,
+      UpdateApp,
+      ForgotPassword,
+    OfflineCompleteJob,
+    OfflineJobs,
+      InventoryFilter,
+      AddInventoryTransaction,
+    ExpensePage,
+    TransactionPage,
+      Indent,
+      IndentView,
+    InventoryTransaction,
+      IndentList,
+      IndentIssue,
+      ExpenseDetails,
+      AddExpense,
+    AddMaterial,
+    // WheelSelector
+    FeedbackGridFinish
   ],
   providers: [
     StatusBar,
@@ -240,6 +372,8 @@ import {QRScanner,QRScannerStatus} from "@ionic-native/qr-scanner";
     JobService,
     QuotationService,
     SiteService,
+    AssetService,
+    DBService,
     authService,
     HttpClient,
     Geolocation,
@@ -254,8 +388,20 @@ import {QRScanner,QRScannerStatus} from "@ionic-native/qr-scanner";
     Toast,
     FileTransfer,
     File,
+    DatePicker,
     AppVersion,
     QRScanner,
+    FabContainer,
+    Diagnostic,
+    SQLite,
+    Network,
+    Market,
+    LocationAccuracy,
+    BackgroundGeolocation,
+    LocationProvider,
+    InventoryService,
+    ExpenseService,
+    PurchaseRequisitionService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

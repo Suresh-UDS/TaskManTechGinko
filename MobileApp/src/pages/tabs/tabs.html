@@ -1,7 +1,7 @@
 <ion-tabs  tabsPlacement="bottom" color="primary">
   <ion-tab tabTitle="Dashboard" [root]="DashboardTab"  tabIcon="ios-podium-outline" tabsHideOnSubPages="true"></ion-tab>
   <ion-tab tabTitle="Quotation" has-permission="QuotationList" [root]="QuotationTab"  tabIcon="md-paper" tabsHideOnSubPages="true"></ion-tab>
-  <ion-tab tabTitle="Employee" has-permission="EmployeeList" [root]="EmployeeListTab" *ngIf="userType === 'ADMIN' || userType === 'CLIENT' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'"  tabIcon="list-box" tabsHideOnSubPages="true"></ion-tab>
+  <!--<ion-tab tabTitle="Employee" has-permission="EmployeeList" [root]="EmployeeListTab" tabIcon="list-box" tabsHideOnSubPages="true"></ion-tab>-->
 </ion-tabs>
 
 

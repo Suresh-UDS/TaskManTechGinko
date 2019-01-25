@@ -1,33 +1,51 @@
 
+<div class="row" ng-init="initLoad();init();">
+    <div class="col-md-6 txt-align-lft">
+
+    </div>
+    <div class="col-md-6 txt-align-rgt">
+
+        <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-rateCard" has-permission="RateCard:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <i class="material-icons">add</i> Add
+            <div class="ripple-container"></div>
+        </button>
+
+        <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+            <i class="material-icons">refresh</i> Reload
+            <div class="ripple-container"></div>
+        </button>
+
+    </div>
+</div>
 
 
-<div class="row"  ng-init="initLoad()">
+<div class="row">
 
     <div class="col-md-12">
         <div class="card margin-TB-5 tablecard appModuleCard">
 
             <div class="card-content">
 
-                <div class="row" ng-init="init()">
-                    <div class="col-md-8">
-                        <!--<h2 class="title">Rate Cards</h2>-->
-                    </div>
-                    <div class="col-md-4 txt-align-rgt">
+                <!--<div class="row">-->
+                    <!--<div class="col-md-8">-->
+                        <!--&lt;!&ndash;<h2 class="title">Rate Cards</h2>&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="col-md-4 txt-align-rgt">-->
 
-                        <button ui-sref="add-rateCard" has-permission="RateCard:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">
-                            <i class="material-icons">add</i>
-                        </button>
-                        <button ng-click="refreshPage()" class="btn btn-circle orange-clr">
-                            <i class="material-icons">refresh</i>
-                        </button>
+                        <!--<button ui-sref="add-rateCard" has-permission="RateCard:Create"  ng-class="{active: $state.includes('admin')}"  class="btn btn-circle green-clr">-->
+                            <!--<i class="material-icons">add</i>-->
+                        <!--</button>-->
+                        <!--<button ng-click="refreshPage()" class="btn btn-circle orange-clr">-->
+                            <!--<i class="material-icons">refresh</i>-->
+                        <!--</button>-->
 
-                        <!--<button ui-sref="add-rateCard"  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>-->
-                        <!--<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>-->
-                    </div>
-                </div>
+                        <!--&lt;!&ndash;<button ui-sref="add-rateCard"  ng-class="{active: $state.includes('admin')}" class="btn btn-success align-left"> <i class="material-icons padding-right5">add</i>ADD<div class="ripple-container"></div></button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<button ng-click="refreshPage()" class="btn btn-warning align-left"> <i class="material-icons padding-right5">refresh</i>Reload<div class="ripple-container"></div></button>&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
 
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-hover withSortingIcons">
                         <thead>
                         <tr>
                             <th>Type</th>
@@ -46,7 +64,7 @@
                             <td>{{rateCard.uom}}</td>
                             <td class="text-right">
                                 <a  ng-class="{active: $state.includes('admin')}"  ng-click="loadRateCard(rateCard)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
-                                <!--<a  ng-class="{active: $state.includes('admin')}" has-authority="ROLE_ADMIN"data-toggle="modal" data-target="#RightModal-edit"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>-->
+                                <!--<a  ng-class="{active: $state.includes('admin')}" data-toggle="modal" data-target="#RightModal-edit"  class="btn btn-simple btn-success"><i class="material-icons">edit</i></a>-->
                                 <a ng-class="{active: $state.includes('admin')}"  ng-click="deleteConfirm(rateCard)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
                             </td>
 

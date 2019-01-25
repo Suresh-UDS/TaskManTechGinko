@@ -13,15 +13,9 @@
         <div class="logo">
           <p text-center>{{userName}}</p>
         </div>
-        <div class="sidebar-wrapper">
-          <ul class="nav">
-            <li menuClose (click)="gotoDashboard()" class="active" >
-                <a>
-                    <i class="material-icons">dashboard</i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
-            <li #menu menuClose *ngFor="let p of pages" id={{p.permission}} has-permission={{p.permission}} (click)="openPage(p)" [ngClass]="{'active':p.active}"  >
+        <div class="sidebar-wrapper sideMenuList">
+          <ul class="nav navList">
+            <li #menu menuClose *ngFor="let p of pages" id={{p.permission}} has-permission={{p.permission}} (click)="openPage(p)" [ngClass]="{'active':p.active}" >
               <a>
                 <i class="material-icons">{{p.icon}}</i>
                 <p>{{p.title}}</p>

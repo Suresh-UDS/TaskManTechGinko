@@ -1,0 +1,249 @@
+page-view-job{
+  ion-toolbar {
+    //padding: 4px 0 0 0 !important;
+    min-height: 42px !important;
+    padding:0px !important;
+  }
+  ion-segment {
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 42px;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+
+    ion-segment-button.segment-button {
+      display: inline-block;
+      min-width: 100px;
+      width: auto;
+    }
+  }
+
+  .label-on-left {
+    padding-bottom: 10px !important;
+  }
+
+  .primary-border-bottom {
+    border-bottom: 1px solid orange;
+  }
+  .padding-bottom1 {
+    padding-bottom: 1px !important;
+  }
+  .fnt-40 {
+    font-size: 40px !important;
+  }
+  .border-up {
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .padding-left-right20 {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  ion-input {
+    border-bottom: 1px solid #CCC;
+
+  }
+  .has-refresher > .scroll-content {
+    border-top: none !important;
+  }
+
+  //(job . maintenanceType) == 'amc' {
+  //  .blue {
+  //    border: 1px solid #00bcd4 !important;
+  //    padding: 4px !important;
+  //    border-radius: 15px !important;
+  //    color: white !important;
+  //    background-color: #00bcd4 !important;
+  //  }
+  //
+  //}(job . maintenanceType) == 'ppm' {
+  //  .green{
+  //    border: 1px solid green !important;
+  //    padding: 4px !important;
+  //    border-radius: 15px !important;
+  //    color: white !important;
+  //    background-color: green !important;
+  //  }
+  //}
+
+  .fnt-bold
+  {
+    font-weight:bold !important;
+  }
+  .shadow
+  {
+    box-shadow: 0 1px 1px 1px #CCD;
+  }
+  .brdr-radius
+  {
+    border-radius:15px !important;
+  }
+  .p-r-l-0
+  {
+    padding-right:0px !important;
+    padding-left:10px !important;
+  }
+  ion-card img {
+    width: 100% !important;
+    height:80px !important;
+  }
+  ion-card-content {
+    padding: 0px 32px !important;
+    position: relative !important;
+    vertical-align: center !important;
+  }
+  .card-md
+  {
+    width:100% !important;
+  }
+  .border-btm
+  {
+    border-bottom:1px solid #ccc !important;
+  }
+  .border-inp
+  {
+    border:1px solid black !important;
+  }
+  .margin-top30
+  {
+    margin-top:30px !important;
+  }
+  .le-checkbox {
+    appearance: none;
+    position: absolute;
+    top:50%;
+    left:5px;
+    transform:translateY(-50%);
+    background-color: #F44336;
+    width:30px;
+    height:30px;
+    border-radius:40px;
+    margin:0px;
+    outline: none;
+    transition:background-color .5s;
+  }
+  .le-checkbox:before {
+    content:'';
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(45deg);
+    background-color:#ffffff;
+    width:20px;
+    height:5px;
+    border-radius:40px;
+    transition:all .5s;
+  }
+
+  .le-checkbox:after {
+    content:'';
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(-45deg);
+    background-color:#ffffff;
+    width:20px;
+    height:5px;
+    border-radius:40px;
+    transition:all .5s;
+  }
+  .le-checkbox:checked {
+    background-color:#4CAF50;
+  }
+  .le-checkbox:checked:before {
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) translate(-4px,3px) rotate(45deg);
+    background-color:#ffffff;
+    width:12px;
+    height:5px;
+    border-radius:40px;
+  }
+  //.le-checkbox:checked:before{
+  //  content:'Not Done';
+  //}
+
+  .le-checkbox:checked:after {
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) translate(3px,2px) rotate(-45deg);
+    background-color:#ffffff;
+    width:16px;
+    height:5px;
+    border-radius:40px;
+  }
+  input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus {
+    outline:none !important;
+  }
+  //.le-checkbox:checked:after{
+  //  content:'Done';
+
+
+
+
+  .checkbox-md .checkbox-checked
+  {
+    border-color: green !important;
+    background: #FFF !important;
+  }
+  .checkbox-md .checkbox-checked .checkbox-inner
+  {
+    border-color: green !important;
+    width: 8px;
+    height: 14px;
+    left: 7px;
+    top:1px;
+  }
+  .checkbox-md .checkbox-icon
+  {
+    border-radius: 18px;
+    width: 25px;
+    height: 25px;
+    border-color: red;
+    //background: url(../img/close.png) no-repeat center;
+
+  }
+  .text-border
+  {
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    background-color: rgb(238, 238, 238);
+  }
+  .text-item .item-inner
+  {
+    padding-right: 0 !important;
+  }
+
+  .camera-btn1
+  {
+    background-color: orange;
+    color: #FFFFFF;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+  .border-bottom1
+  {
+    border-bottom: 1px solid #ccc;
+  }
+  .list-md .item-input:last-child,.list-md .item-block .item-inner,.item-md.item-block .item-inner
+  {
+    border-bottom: none !important;
+  }
+  .item-md
+  {
+    padding-left:0px !important;
+  }
+
+.clr-green
+{
+  color:green !important;
+}
+}

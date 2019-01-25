@@ -1,0 +1,413 @@
+<div ng-init="initLoad()">
+
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default" style="min-height: 200px;">
+
+                            <div class="panel-heading">
+                                Parameter Details
+                            </div>
+                            <div class="panel-body">
+                               <!--  ng-show="!success" -->
+							<form  name="form" role="form" novalidate
+										ng-submit="conform('save')"
+										onClick="" class="form-horizontal">
+
+                                <div class="row" >
+
+                                    <div class="col-md-4">
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetTypes()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Asset Type<span class="red-star">*</span></label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" name="selectedAssetType" ng-model="selectedAssetType" ng-options="assetype as assetype.name for assetype in assetTypes track by assetype.name" required>
+                                                        <option value="">Select Asset Type ..</option>
+                                                    </select>
+                                                    <div ng-show="form.$submitted  || form.selectedAssetType.$touched">
+                                                        <div ng-show="form.selectedAssetType.$dirty || form.selectedAssetType.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.selectedAssetType.$error.required">
+                                                                Asset Type is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a> -->
+
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="collapse"  id="addAssetType">
+                                                <div class="">
+                                                    <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParams()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Select Parameter</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters track by parameter.name">
+                                                        <option value="">Select parameter ..</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                   <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addParameter" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a> -->
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addParameter').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="collapse" id="addParameter">
+                                                <div class="">
+                                                    <input class="input-desc" id="parameterName" ng-model="assetParam.name"   name="parameterName" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addAssetParam()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParamUoms()">
+                                            <div class="row">
+                                                <div class="col-md-10 pad-r-0px">
+                                                    <label class="control-label">Select Units</label>
+                                                    <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom">
+                                                        <option value="">Select units ..</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 ">
+                                                    <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                        <i class="material-icons">add</i>
+                                                    </a> -->
+                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="collapse" id="addUnits">
+                                                <div class="">
+                                                    <input class="input-desc" id="parameterUOMName" ng-model="parameterUOM.uom"   name="parameterUOMName" type="text" value=""/>
+                                              <a class="btn btn-success"  ng-click="addParameterUOM()">Add</a>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row" >
+
+                                    <div class="col-md-6">
+                                        <div class="form-group selectcon is-empty" ng-init="loadAllRules()">
+
+                                            <label class="control-label">Rules</label>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select class="form-control" ng-model="selectedRule" ng-options="rule for rule in readingRules track by selectedRule">
+                                                <option value="">Select Rule ..</option>
+                                            </select>
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+
+                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
+                                              <label class="control-label">Threshold</label>
+                                          <input id='threshold'
+                                                 ng-model="selectedThreshold"
+                                                 class='form-control'
+                                                 name='threshold'
+                                                 type='text' value=""
+                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
+                                                  />
+                                          </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="checkbox">
+                                            <label style="padding-top: 23px;">
+                                                <input type="checkbox" name="terms" ng-model="alertRequired.value"> Alert Required
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row">
+
+
+
+                                    <div class="col-md-3">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="terms" ng-model="validationRequired.value"> Validation Required
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="terms" ng-model="consumptionMonitoringRequired.value" > Consumption Monitoring Required
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 txt-align-rgt" ng-switch="isEdit">
+                                        <!--<button class="btn btn-success" type="submit" ng-switch-when="false"-->
+                                                <!--id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">-->
+                                            <!--<span class="btn-label"><i class="material-icons">add</i></span> Add-->
+                                        <!--</button>-->
+                                        <button class="btn btn-success ld ld-over-inverse" ng-switch-when="false" ng-class="{'running':saveLoad}"
+                                                type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled">
+                                            <span class="btn-label"><i class="material-icons">check</i></span> Save
+                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                        </button>
+                                        <!--<button class="btn btn-success" type="submit" ng-switch-when="true"-->
+                                                <!--id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">-->
+                                            <!--<span class="btn-label"><i class="material-icons">save</i></span> Update-->
+                                        <!--</button>-->
+                                        <button class="btn btn-success ld ld-over-inverse" ng-switch-when="true" ng-class="{'running':saveLoad}"
+                                                type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisabled">
+                                            <span class="btn-label"><i class="material-icons">check</i></span> Update
+                                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                        </button>
+                                        <button class="btn btn-danger" type="button"
+                                                ng-disabled="btnDisabled"  ng-click="conform('cancel')" id="cancel-button">
+                                            <i class="material-icons">close</i> Cancel
+                                        </button>
+                                    </div>
+
+                                </div>
+
+							</form>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="panel panel-default" style="min-height: 200px;">
+
+                            <div class="panel-heading">
+                                Parameters
+                            </div>
+                            <div class="panel-body" ng-init="loadParameterConfigs();">
+
+                                <div class="table-responsive tablecard">
+                                    <table class="table table-striped">
+
+                                        <thead>
+                                        <tr>
+                                            <th>Asset Type</th>
+                                            <th>Parameter</th>
+                                            <th>Unit</th>
+                                            <th>Consumption Monitoring Required</th>
+                                            <th class="text-right" >Actions</th>
+                                        </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                        	<tr ng-repeat="parameterConfig in parameterConfigs" repeat-done="initDataTables()">
+											<td>{{parameterConfig.assetType}}</td>
+											<td>{{parameterConfig.name}}</td>
+			                                	<td>{{parameterConfig.uom}}</td>
+										   	<td>
+										   		<div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="Consumption" ng-model="parameterConfig.consumptionMonitoringRequired" disabled >
+                                                    </label>
+                                                </div>
+                                             </td>
+			                                 <td class="text-right">
+                                                <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="Config:Edit"  title="Edit"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+			                                 	<a  has-permission="Config:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" title="Delete" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
+			                                 </td>
+
+										</tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="card margin-TB-5 txt-align-center" ng-hide="parameterConfigs">
+
+                    <div class="card-content">
+                        <div class="" style="text-align:center;padding: 10px 0;" >
+                            <div loader-css="ball-pulse"></div>
+                        </div>
+
+                        <h3 >Loading, please wait...</h3>
+
+                    </div>
+
+                </div>
+
+                <div class="card margin-TB-5 txt-align-center" ng-show="noData">
+
+                    <div class="card-content">
+
+                        <h3>No data Found</h3>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Pagination directive start -->
+
+                <pagination-new></pagination-new>
+
+                <!-- Pagination directive end -->
+
+
+</div>
+<div class="row">
+
+    <div id="deleteModal" data-backdrop="false" class="modal fade"
+        tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to delete the Parameter Configuration?<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="deleteParameterConfig()"
+                        class="btn btn-danger text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Add asset type dialog -->
+
+<div id="addAssetType" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Asset Type</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addAssetTypeForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input class="" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value="" ng-required="true"/>
+                        </div>
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit" ng-click="addAssetType()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addAssetTypeForm.$invalid">
+
+                        </div>
+
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset type dialog -->
+
+<!-- Add asset param dialog -->
+
+<div id="addParameter" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Asset Param</h4>
+            </div>
+            <div class="modal-body">
+
+                <form name="addParameterForm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input class="" id="parameterName" ng-model="assetParam.name"   name="parameterName" type="text" value="" ng-required="true"/>
+                        </div>
+                        <div class="col-md-12 txt-align-center">
+                            <input type="submit" ng-click="addAssetParam()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addParameterForm.$invalid">
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add asset param dialog -->
+
+<!-- Add parameterUOM dialog -->
+
+<div id="addUnits" class="add-input-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Parameter Unit</h4>
+            </div>
+            <div class="modal-body">
+
+              <form name="addUnitForm">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <input class="input-desc" id="parameterUOMName" ng-model="parameterUOM.uom"   name="parameterUOMName" type="text" value="" ng-required="true"/>
+                      </div>
+                      <div class="col-md-12 txt-align-center">
+                          <input type="submit" ng-click="addParameterUOM()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addUnitForm.$invalid">
+                      </div>
+
+                  </div>
+              </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Add parameterUOM dialog -->

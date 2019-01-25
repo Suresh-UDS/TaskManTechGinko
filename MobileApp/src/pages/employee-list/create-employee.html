@@ -27,12 +27,12 @@
               <ion-col col-12>
                   <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='eId'}">
                       <label class="control-label">Employee Id</label>
-                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="number" #id="ngModel" required [ngClass]="{'has-error': id.errors || eMsg=='all'|| eMsg=='eId'}">
-                      <div *ngIf="id.errors && (id.dirty || id.touched)" class="error-msg">
+                      <input class="form-control" type="text" [(ngModel)]="eId" id="eId" name="eId" #empId="ngModel" required [ngClass]="{'has-error': empId.errors || eMsg=='all'|| eMsg=='eId'}">
+                      <div *ngIf="empId.errors && (empId.dirty || empId.touched)" class="error-msg">
 
                       </div>
 
-                      <div *ngIf="id.errors && (id.untouched )" class="error-msg">
+                      <div *ngIf="empId.errors && (empId.untouched )" class="error-msg">
 
                       </div>
                   </div>
@@ -40,7 +40,6 @@
 
 
             <ion-col col-12>
-
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='firstname'}">
                 <label class="control-label">First Name</label>
                 <input class="form-control" type="text" [(ngModel)]="firstname" id="firstname" name="firstname" #fname="ngModel" required [ngClass]="{'has-error': fname.errors || eMsg=='all'|| eMsg=='firstname'}">
@@ -52,11 +51,9 @@
 
                 </div>
               </div>
-
             </ion-col>
 
             <ion-col col-12>
-
               <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='lastname'}">
                 <label class="control-label">Last Name</label>
                 <input class="form-control" type="text" [(ngModel)]="lastname" id="lastname" name="lastname" #lname="ngModel" required [ngClass]="{'has-error': lname.errors || eMsg=='all'|| eMsg=='lastname'}">
@@ -68,14 +65,20 @@
 
                 </div>
               </div>
-
             </ion-col>
 
               <ion-col col-12>
                   <div class="form-group">
-                      <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="designation" class="select-box padding-left0" id="selectedDesignation" placeholder="Choose Designation" name="selectedDesignation"  required >
+                      <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="designation" class="select-box padding-left0" id="selectedDesignation" placeholder="Choose Designation" name="selectedDesignation" #design="ngModel" required [ngClass]="{'select-error': eMsg=='designation'}">
                           <ion-option *ngFor="let designation of designations" [value]="designation.designation" (ionSelect)="setDesignations(designation)">{{designation.designation}}</ion-option>
                       </ion-select>
+                      <div *ngIf="design.errors && (design.dirty || design.touched)" class="error-msg">
+
+                      </div>
+
+                      <div *ngIf="design.errors && (design.untouched )" class="error-msg">
+
+                      </div>
                   </div>
               </ion-col>
 
@@ -95,27 +98,50 @@
 
               <ion-col col-12>
                   <div class="form-group">
-                      <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject" class="select-box padding-left0" id="selectedProject" placeholder="Choose Project" name="selectedProject" #selectedPeoject="ngModel" required >
+                      <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedProject" class="select-box padding-left0" id="selectedProject" placeholder="Choose Project" name="selectedProject" #project="ngModel" required [ngClass]="{'select-error': eMsg=='project'}">
                           <ion-option *ngFor="let project of projects" [value]="project.name" (ionSelect)="getSites(project.id,project.name,project)">{{project.name}}</ion-option>
                       </ion-select>
+                      <div *ngIf="project.errors && (project.dirty || project.touched)" class="error-msg">
+
+                      </div>
+
+                      <div *ngIf="project.errors && (project.untouched )" class="error-msg">
+
+                      </div>
                   </div>
               </ion-col>
 
               <ion-col col-12>
                   <div class="form-group">
-                      <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite" class="select-box padding-left0" id="siteName" [disabled]="siteSelect" [placeholder]="sitePlace" name="siteName" #site="ngModel" required>
+                      <ion-select [selectOptions]="selectOptions" interface="popover" [(ngModel)]="selectedSite" class="select-box padding-left0" id="siteName" [disabled]="siteSelect" [placeholder]="sitePlace" name="siteName" #site="ngModel" required [ngClass]="{'select-error': eMsg=='site'}">
                           <ion-option *ngFor="let site of sites" [value]="site.name" (ionSelect)="addProjectSites(site)">{{site.name}}</ion-option>
                       </ion-select>
+                      <div *ngIf="site.errors && (site.dirty || site.touched)" class="error-msg">
+
+                      </div>
+
+                      <div *ngIf="site.errors && (site.untouched )" class="error-msg">
+
+                      </div>
                   </div>
               </ion-col>
 
               <ion-col col-12>
                   <div class="form-group">
-                      <ion-select [selectOptions]="selectOptions" interface="popover" [selectOptions]="selectOptions" [(ngModel)]="selectedManager" class="select-box padding-left0" id="selectedManager" placeholder="Choose Manager" name="selectedManager"  required >
+                      <ion-select [selectOptions]="selectOptions" interface="popover" [selectOptions]="selectOptions" [(ngModel)]="selectedManager" class="select-box padding-left0" id="selectedManager" placeholder="Choose Manager" name="selectedManager"  #manag="ngModel" required [ngClass]="{'select-error': eMsg=='manager'}" >
                           <ion-option *ngFor="let manager of manager" (ionSelect)="selectManager(manager)" [value]="manager.name" >{{manager.name}}</ion-option>
                       </ion-select>
+                      <div *ngIf="manag.errors && (manag.dirty || manag.touched)" class="error-msg">
+
+                      </div>
+
+                      <div *ngIf="manag.errors && (manag.untouched )" class="error-msg">
+
+                      </div>
                   </div>
               </ion-col>
+
+              <!--/-->
 
               <!--<ion-col col-12>-->
               <!--<div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='mail'}">-->

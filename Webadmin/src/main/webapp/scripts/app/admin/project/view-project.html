@@ -1,127 +1,103 @@
-<div class="crud-form" >
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
+<div class="crud-form ViewContentPageCon" >
 
-				<div class="titleCon">
-                    <!--<h3>View Project</h3>-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="titleCon margn-btm-12">
+                <h3>{{project.name | uppercase}}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" ng-init="loadProject()">
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Client Name and Location</div>
+                        <div class="panel-body" style="min-height: 225px;">
+
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>{{project.id}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Client Name</td>
+                                        <td>{{project.name | uppercase}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Address</td>
+                                        <td >{{project.address}}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Client Group</td>
+                                        <td >{{project.clientGroup}}</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-				<div class="form-container table-container" ng-init="loadProject()">
-					<form ng-show="!success" name="form" role="form"
-						class="form-horizontal">
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> ID </label>
-							<div class="col-sm-2">
-								<input id='projectID' ng-model="project.id" class='form-control'
-									name='projectID' type='text' maxlength='50' readonly />
-							</div>
-						</div>
 
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> Name </label>
-							<div class="col-sm-5">
-								<input id='projectName' ng-model="project.name"
-									class='form-control' name='projectName' type='text'
-									maxlength='50' readonly/>
-							</div>
-						</div>
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> Country </label>
-							<div class="col-sm-5">
-								<input id='country' ng-model="project.country" class='form-control'
-									name='country' type='text' value=""
-									readonly/>
-							</div>
-						</div>
+                <div class="col-md-6 col-lg-6">
 
-<!--
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> State </label>
-							<div class="col-sm-5">
-								<input id='state' ng-model="project.state" class='form-control'
-									name='state' type='text' value=""
-									readonly
-									/>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Contact Info</div>
+                        <div class="panel-body" style="min-height: 225px;">
 
-							</div>
-							</div>
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> Address </label>
-							<div class="col-sm-5">
-								<textarea id='projectName' ng-model="project.address"
-									class='form-control'
-									name='address' readonly
-									ng-maxlength='2500' >
-									</textarea>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <td>First Name</td>
+                                        <td><span style="text-transform: capitalize" ng-if='project.contactFirstName'>{{project.contactFirstName}}</span><span ng-if='!project.contactFirstName'>-</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Name</td>
+                                        <td><span style="text-transform: capitalize" ng-if='project.contactLastName'>{{project.contactLastName}}</span><span ng-if='!project.contactLastName'>-</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone</td>
+                                        <td><span ng-if='project.phone'>{{project.phone}}</span><span ng-if='!project.phone'>-</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td><span ng-if='project.email'>{{project.email}}</span><span ng-if='!project.email'>-</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
 
-							</div>
-						</div>
+                        </div>
+                    </div>
 
-						<div class="form-group ">
-							<label class="col-sm-3 control-label">Phone</label>
-							<div class="col-sm-5">
-								<input ng-model="project.phone"
-									class='form-control'
-									name='phone'
-								readonly >
-									</input>
+                </div>
 
-							</div>
-						</div>
-
-						<div class="form-group ">
-							<label class="col-sm-3 control-label">Email</label>
-							<div class="col-sm-5">
-								<input ng-model="project.email"
-									class='form-control'
-									name='email'
-									readonly >
-									</input>
-							  </div>
-						</div>
-
-						<div class="form-group ">
-							<label class="col-sm-3 control-label">Start Date</label>
-							<div class="col-sm-5">
-								<input ng-model="project.startDate"
-									class='form-control' datetime-picker="dd-MMM-yyyy HH:mm"
-									name='startDate' readonly
-							 >
-									</input>
+            </div>
 
 
-							</div>
-						</div>
 
-						<div class="form-group ">
-							<label class="col-sm-3 control-label">End Date</label>
-							<div class="col-sm-5">
-								<input ng-model="project.endDate"
-									class='form-control'
-									name='endDate' readonly datetime-picker="dd-MMM-yyyy HH:mm"
-									 >
-									</input>
-							</div>
-						</div>
- -->
+            <div class="row">
 
-						<!-- Start of hidden inputs -->
-						<!-- End of hidden inputs -->
+                <div class="col-md-12 txt-align-rgt">
+                    <button class="btn btn-default" type="button"
+                            ng-click="back('cancel')" id="close-button-right">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-						<div class="form-group">
-							<div class="col-sm-offset-3 col-sm-7">
-								<button class="btn btn-default close-button-right b10" type="button"
-									ng-click="cancelProject()" id="close-button-right">
-									<i class="fa fa-warning"></i> Back
-								</button>
-							</div>
-						</div>
 
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
 
 </div>

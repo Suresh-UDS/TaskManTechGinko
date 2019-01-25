@@ -1,0 +1,80 @@
+<!--
+  Generated template for the AssetList page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title text-center>Offline Asset List</ion-title>
+    <!--<ion-buttons right>-->
+      <!--<button ion-button class="fnt-black" icon-only (click)="openFilters()" class="padding-right10" *ngIf="open">-->
+        <!--<i class="fa fa-filter fnt-24"></i>-->
+      <!--</button>-->
+    <!--</ion-buttons>-->
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <!--<button ion-button full (click)="setDataSync()">Data Sync</button>-->
+
+  <!--<ion-fab right bottom (click)="openFilters()"   >-->
+  <!--<button ion-fab color="primary"> <ion-icon name="funnel"></ion-icon></button>-->
+  <!--</ion-fab>-->
+
+  <ion-fab bottom right  (click)="scanQR()" >
+    <button ion-fab color="primary"> <i class="fa fa-qrcode clr-white fnt-24"></i></button>
+  </ion-fab>
+
+  <ion-list>
+
+
+
+    <!--<ion-refresher (ionRefresh)="doRefresh($event)">-->
+      <!--<ion-refresher-content></ion-refresher-content>-->
+    <!--</ion-refresher>-->
+    <div *ngIf="assetList?.length<0">
+      <ion-card>
+        <ion-card-content>
+          No Asset
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ion-item *ngFor="let asset of assetList" (click)="viewAsset(asset)" class="">
+
+      <ion-thumbnail *ngIf="asset.qrCodeImage" item-start class="">
+        <img [src]=asset.qrCodeImage imageViewer/>
+      </ion-thumbnail>
+      <ion-thumbnail *ngIf="!asset.qrCodeImage" item-start class="">
+        <img src="assets/imgs/placeholder.png" imageViewer/>
+      </ion-thumbnail>
+      <p text-left="" class="padding-bottom5">{{asset.title}}</p>
+      <p text-left="" class="fnt-12">{{asset.code}}</p>
+      <button ion-button clear item-end  >
+        <ion-icon name="md-eye"></ion-icon>
+      </button>
+
+
+
+
+      <!--<ion-thumbnail item-start>-->
+      <!--<img [src]=asset.img imageViewer/>-->
+      <!--</ion-thumbnail>-->
+      <!--<h2>{{asset.name}}</h2>-->
+      <!--<p>{{asset.assetGroup}}</p>-->
+      <!--<button ion-button clear item-end  >-->
+      <!--<ion-icon name="md-eye"></ion-icon>-->
+      <!--</button>-->
+    </ion-item>
+    <!--<ion-infinite-scroll *ngIf="page<totalPages"  (ionInfinite)="doInfiniteAllJobs($event)">-->
+    <!--<ion-infinite-scroll-content></ion-infinite-scroll-content>-->
+    <!--</ion-infinite-scroll>-->
+  </ion-list>
+
+
+</ion-content>

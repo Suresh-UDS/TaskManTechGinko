@@ -1,16 +1,22 @@
 package com.ts.app.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Authority;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.User;
+import com.ts.app.repository.*;
+import com.ts.app.security.AuthoritiesConstants;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.MailService;
+import com.ts.app.service.UserService;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.RandomUtil;
+import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
+import com.ts.app.web.rest.util.HeaderUtil;
+import com.ts.app.web.rest.util.PaginationUtil;
+import com.ts.app.web.rest.util.UserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,36 +29,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Authority;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.User;
-import com.ts.app.repository.AuthorityRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.UserGroupRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.UserRoleRepository;
-import com.ts.app.security.AuthoritiesConstants;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.MailService;
-import com.ts.app.service.UserService;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.RandomUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.UserDTO;
-import com.ts.app.web.rest.errors.TimesheetException;
-import com.ts.app.web.rest.util.HeaderUtil;
-import com.ts.app.web.rest.util.PaginationUtil;
-import com.ts.app.web.rest.util.UserUtil;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  * REST controller for managing users.
@@ -289,6 +272,20 @@ public class UserResource {
 		}
 		return result;
 	}
+
+    @RequestMapping(value = "/user/change_password", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changeNewPassword(@RequestBody KeyAndPasswordDTO keyAndPasswordDTO){
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        UserDTO userDto = null;
+        if(user !=null){
+            userDto = userService.changeNewPassword(SecurityUtils.getCurrentUserId(), keyAndPasswordDTO.getNewPassword());
+            userDto.setMessage("Username Changed");
+             
+            return new ResponseEntity<Object>(userDto,HttpStatus.OK);
+        }
+         
+        return new ResponseEntity<Object>(userDto,HttpStatus.SERVICE_UNAVAILABLE);
+    }
 
 
 

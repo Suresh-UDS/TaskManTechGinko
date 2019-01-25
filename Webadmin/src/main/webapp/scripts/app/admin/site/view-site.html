@@ -1,107 +1,154 @@
-<div class="crud-form" ng-init="initLoad()">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-                <div class="titleCon">
-                    <!--<h3>View Site</h3>-->
+<div class="crud-form ViewContentPageCon" ng-init="loadPageTop();">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="titleCon margn-btm-12">
+                <h3>{{site.name | uppercase}}</h3>
+            </div>
+
+
+            <div class="panel panel-default" ng-init="loadSite()">
+                <div class="panel-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-lg-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Site Details</div>
+                                <div class="panel-body" style="min-height: 310px;">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>{{site.id}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Client Name</td>
+                                                <td  ng-if="site.projectName">{{site.projectName | uppercase}}</td>
+                                            </tr>
+
+                                            <tr ng-if="site.region">
+                                                <td>Region</td>
+                                                <td  ng-if="site.region">{{site.region | uppercase}}</td>
+                                            </tr>
+
+                                            <tr ng-if="site.branch">
+                                                <td>Branch</td>
+                                                <td  ng-if="site.branch">{{site.branch | uppercase}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Site Name</td>
+                                                <td  ng-if="site.name"> {{site.name | uppercase}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Address</td>
+                                                <td ng-if="site.address">{{site.address | capitalize}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>City</td>
+                                                <td ng-if="site.city">{{site.city | uppercase }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>State</td>
+                                                <td ng-if="site.state">{{site.state | uppercase }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pin Code</td>
+                                                <td>{{site.pinCode}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Country</td>
+                                                <td ng-if="site.country">{{site.country | uppercase}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Location Details</div>
+                                <div class="panel-body" style="min-height: 310px;">
+
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <td>Site Location (Latitude)</td>
+                                                <td>{{site.addressLat}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Site Location (Longitude)</td>
+                                                <td>{{site.addressLng}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Geo Fence Radius (in Kms.)</td>
+                                                <td>{{site.radius}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 col-lg-6">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Shift Timings Details</div>
+                                <div class="panel-body" style="min-height: 250px;">
+
+                                    <div class="table table-bordered">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <td>From Time</td>
+                                                <td>To Time</td>
+                                            </tr>
+                                            <tr  ng-repeat=" item in shiftItems">
+                                                <td>{{item.startTime | date:'hh:mm a'}}</td>
+                                                <td>{{item.endTime | date:'hh:mm a'}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" align="center" ng-show="!shiftItems">No Shifts</td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12 txt-align-rgt">
+                            <button class="btn btn-default" type="button"
+                                    ng-click="back('cancel')" id="close-button-right">
+                                Back
+                            </button>
+                        </div>
+                    </div>
                 </div>
-				<div class="form-container table-container" ng-init="loadSite()">
-					<form ng-show="!success" name="form" role="form" class="form-horizontal">
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> ID </label>
-							<div class="col-sm-9">
-								<input id='siteID' ng-model="site.id" class='form-control'
-									name='siteID' type='text' maxlength='50' readonly />
-							</div>
-						</div>
-
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> Name </label>
-							<div class="col-sm-9">
-								<input id='siteName' ng-model="site.name" class='form-control'
-									name='siteName' type='text' maxlength='50' readonly/>
-							</div>
-						</div>
-
-						<div class="form-group ">
-							<label class="col-sm-3 control-label"> Project </label>
-							<div class="col-sm-9">
-								<input id='projectName' ng-model="site.projectName" class='form-control'
-									name='projectName' type='text' maxlength='50' readonly/>
-							</div>
-						</div>
-
-						<!--<div class="form-group ">-->
-							<!--<label class="col-sm-3 control-label"> Country </label>-->
-							<!--<div class="col-sm-5">-->
-								<!--<input id='country' ng-model="site.country" class='form-control'-->
-									<!--name='country' type='text' value=""-->
-									<!--ng-maxlength=50-->
-									<!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/" readonly="readonly"/>-->
-							<!--</div>-->
-						<!--</div>-->
-						<!--<div class="form-group ">-->
-							<!--<label class="col-sm-3 control-label"> State </label>-->
-							<!--<div class="col-sm-5">-->
-								<!--<input id='state' ng-model="site.state" class='form-control'-->
-									<!--name='state' type='text' value=""-->
-									<!--ng-maxlength=50 readonly="readonly"-->
-									<!--/>-->
-
-							<!--</div>-->
-							<!--</div>-->
-							<!--<div class="form-group ">-->
-							<!--<label class="col-sm-3 control-label"> Address </label>-->
-							<!--<div class="col-sm-5">-->
-								<!--<textarea id='siteName' ng-model="site.address"-->
-									<!--class='form-control'-->
-									<!--name='address' readonly="readonly"-->
-									<!--ng-maxlength='2500' >-->
-									<!--</textarea>-->
+            </div>
 
 
-							<!--</div>-->
-						<!--</div>-->
-						<!--<div class="form-group ">-->
-							<!--<label class="col-sm-3 control-label">Start Date</label>-->
-							<!--<div class="col-sm-5">-->
-								<!--<input ng-model="site.startDate"-->
-									<!--class='form-control'-->
-									<!--name='startDate' readonly="readonly"-->
-									<!--datetime-picker="dd-MMM-yyyy HH:mm"-->
-							 <!--&gt;-->
-									<!--</input>-->
-
-							<!--</div>-->
-						<!--</div>-->
-
-						<!--<div class="form-group ">-->
-							<!--<label class="col-sm-3 control-label">End Date</label>-->
-							<!--<div class="col-sm-5">-->
-								<!--<input ng-model="site.endDate"-->
-									<!--class='form-control'-->
-									<!--name='endDate' readonly="readonly"-->
-									<!--datetime-picker="dd-MMM-yyyy HH:mm"-->
-									 <!--&gt;-->
-									<!--</input>-->
-						<!--</div>-->
-                        <!--</div>    -->
-
-						<!-- Start of hidden inputs -->
-						<!-- End of hidden inputs -->
-
-						<div class="form-group">
-							<div class="col-sm-offset-3 col-sm-7">
-								<button class="btn btn-default close-button-right b10" type="button"
-									ng-click="cancelSite()" id="close-button-right">
-									<i class="fa fa-warning"></i> Back
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+        </div>
+    </div>
 
 </div>

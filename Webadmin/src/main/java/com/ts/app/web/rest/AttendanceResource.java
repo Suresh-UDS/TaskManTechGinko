@@ -1,38 +1,25 @@
 package com.ts.app.web.rest;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AttendanceService;
 import com.ts.app.service.EmployeeService;
 import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResponse;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import com.ts.app.web.rest.dto.*;
 import com.ts.app.web.rest.errors.TimesheetException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * REST controller for managing the Attendance information
@@ -87,6 +74,12 @@ public class AttendanceResource {
 
     }
 
+    @RequestMapping(value = "/attendance/{id}/addRemarks", method = RequestMethod.POST)
+    public AttendanceDTO addRemarks(@PathVariable("id") long attendanceId,@RequestBody String remarks) {
+
+	    return attendanceService.addRemarks(attendanceId,remarks);
+    }
+
     @RequestMapping(value = "/attendance/image/upload", method = RequestMethod.POST)
     public ResponseEntity<?> upload(@RequestParam("employeeEmpId") String employeeEmpId, @RequestParam("employeeId") long employeeId, @RequestParam("attendanceId") long attendanceId, @RequestParam("action") String action, @RequestParam("photoOutFile") MultipartFile file) {
        log.debug("Request Params for attendance"+employeeId+" "+ attendanceId+" "+action+ " "+employeeEmpId);
@@ -119,7 +112,12 @@ public class AttendanceResource {
 		return attendanceService.findOne(id);
 	}
 
-    @RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
+	@RequestMapping(value = "/attendance/employee/{empId}", method = RequestMethod.GET)
+	public AttendanceDTO getEmployeeCurrentAttendance(@PathVariable("empId") Long empId) {
+		return attendanceService.findCurrentCheckInByEmpId(empId);
+	}
+
+	@RequestMapping(value = "/attendance/search",method = RequestMethod.POST)
     public SearchResult<AttendanceDTO> searchAttendance(@RequestBody SearchCriteria searchCriteria) {
         SearchResult<AttendanceDTO> result = null;
         log.debug("Search Attendance- "+searchCriteria.getCheckInDateTimeFrom());
@@ -217,5 +215,30 @@ public class AttendanceResource {
 		response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
+	
+	@RequestMapping(value = "/attendance/uploadExistingCheckInImages", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadExistingCheckInImage() { 
+		log.debug("Upload Existing Img to AWS s3");
+		String result = "";
+		try { 
+			result = attendanceService.uploadExistingCheckInImage();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while uploading checkInImage to S3" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/attendance/uploadExistingCheckOutImages", method = RequestMethod.POST)
+	public ResponseEntity<?> uploadExistingCheckOutImage() { 
+		log.debug("Upload Existing Img to AWS s3");
+		String result = "";
+		try { 
+			result = attendanceService.uploadExistingCheckOutImage();
+		} catch(Exception e) { 
+			throw new TimesheetException("Error while uploading checkOutImage to S3" +e);
+		}
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
+
 
 }

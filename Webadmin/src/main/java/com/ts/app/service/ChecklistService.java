@@ -1,14 +1,13 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.ChecklistItemRepository;
+import com.ts.app.repository.ChecklistRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,23 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Checklist;
-import com.ts.app.domain.ChecklistItem;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.repository.ChecklistItemRepository;
-import com.ts.app.repository.ChecklistRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.*;
 
 
 /**
@@ -101,7 +86,7 @@ public class ChecklistService extends AbstractService {
 	public void updateChecklist(ChecklistDTO checklist) {
 		log.debug("Inside Update");
 		Checklist checklistUpdate = checklistRepository.findOne(checklist.getId());
-		//checklistUpdate.getItems().clear();
+		checklistUpdate.setName(checklist.getName());
 		//checklistUpdate = checklistRepository.save(checklistUpdate);
 		List<ChecklistItemDTO> itemDtos = checklist.getItems();
 		List<ChecklistItem> items = new ArrayList<ChecklistItem>();
@@ -192,12 +177,12 @@ public class ChecklistService extends AbstractService {
 	}
 	
 	public ImportResult getImportStatus(String fileId) {
-		ImportResult er = new ImportResult();
+		ImportResult er = null;
 		//fileId += ".csv";
 		if(!StringUtils.isEmpty(fileId)) {
-			String status = importUtil.getImportStatus(fileId);
-			er.setFile(fileId);
-			er.setStatus(status);
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
 		}
 		return er;
 	}

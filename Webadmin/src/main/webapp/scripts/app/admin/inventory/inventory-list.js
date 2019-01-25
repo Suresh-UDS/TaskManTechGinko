@@ -6,10 +6,10 @@ angular.module('timeSheetApp')
             .state('inventory-list', {
                 parent: 'manage',
                 url: '/inventory-list',
-                controller: 'InventoryController',
+               //controller: 'InventoryController',
                 data: {
                     authorities: [],
-                    pageTitle: 'inventory List'
+                    pageTitle: 'Master List'
                 },
                 views: {
                     'content@': {

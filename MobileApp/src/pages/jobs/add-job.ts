@@ -9,8 +9,10 @@ import {AttendanceService} from "../service/attendanceService";
 import {SiteService} from "../service/siteService";
 import {EmployeeService} from "../service/employeeService";
 
+declare var demo;
+
 @Component({
-  selector: 'page-add-job',
+  selector: 'page-job',
   templateUrl: 'add-job.html'
 })
 export class CreateJobPage {
@@ -42,15 +44,23 @@ export class CreateJobPage {
     empPlace:any;
     msg:any;
     ticket:any;
+    assetDetails:any;
+    category:any;
     constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) {
         this.jobDetails=this.navParams.get('job');
+        this.assetDetails = this.navParams.get('assetDetails')
         console.log(this.navParams.get('ticketDetails'));
         if(this.navParams.get('ticketDetails')){
             this.ticket = this.navParams.get('ticketDetails');
+            this.getEmployee(this.ticket.siteId)
         }
         this.jobService.loadCheckLists().subscribe(
             response=>{
-                console.log(response);
+                if(response.errorStatus){
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log(response);
+                }
 
             }
         )
@@ -64,20 +74,26 @@ export class CreateJobPage {
         if(this.ticket){
             this.title = this.ticket.title;
             this.description = this.ticket.description;
+            this.siteName = this.ticket.siteId;
         }
 
         this.component.showLoader('Getting All Sites');
         this.siteService.searchSite().subscribe(
             response=>{
-                console.log('ionViewDidLoad Add jobs');
+                if(response.errorStatus){
+                    this.component.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                }else{
+                    console.log('ionViewDidLoad Add jobs');
+                    console.log(response);
+                    this.sites=response;
+                    this.component.closeAll();
+                }
 
-                console.log(response.json());
-                this.sites=response.json();
-                this.component.closeLoader();
             },
             error=>{
                 console.log('ionViewDidLoad SitePage:'+error);
-                this.component.closeLoader();
+                this.component.closeAll();
                 if(error.type==3)
                 {
                     this.msg='Server Unreachable'
@@ -90,23 +106,30 @@ export class CreateJobPage {
     }
     addJob()
     {
-        if(this.title && this.description && this.siteName && this.employ && this.startDate && this.startTime && this.endDate && this.endTime)
+
+        if(this.title && this.description && this.siteName && this.employ && this.startDate && this.endDate)
         {
+            this.component.showLoader("Creating job");
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
-            console.log( this.siteId);
-            var sDate = moment(this.startDate).format("MM/DD/YYYY");
-            var sTime = moment(this.startTime).format("hh:mm A");
+            var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
+            var EDate = new Date(this.endDate);
 
-            var startDateTimeMoment = moment(sDate+' '+sTime,"MM/DD/YYYY hh:mm A");
-            var eDate = moment(this.endDate).format("MM/DD/YYYY");
-            var eTime = moment(this.endTime).format("hh:mm A");
-            var endDateTimeMoment = moment(eDate+' '+eTime,"MM/DD/YYYY hh:mm A");
-            this.plannedStartTime = startDateTimeMoment.toDate();
-            this.plannedStartTime = this.plannedStartTime.toISOString();
-            this.plannedEndTime = endDateTimeMoment.toDate().toISOString();
-            this.plannedHours = 2;
-            this.userId=localStorage.getItem('employeeUserId')
+            this.startTime = moment(this.startDate).subtract(5,'hours').toDate();
+            this.endTime = moment(this.endDate).subtract(5,'hours').toDate();
+
+
+            this.plannedStartTime =moment(this.startTime).subtract(30,'minutes').toDate();
+            this.plannedEndTime= moment(this.endTime).subtract(30,'minutes').toDate();
+
+
+            var momentStartTime = moment(this.plannedStartTime);
+            var momentEndTime = moment(this.plannedEndTime);
+            var duration = moment.duration(momentStartTime.diff(momentEndTime));
+            var hours = duration.asHours();
+            this.plannedHours = Math.abs(hours);
+
+            this.userId=localStorage.getItem('employeeUserId');
             this.newJob={
                 "title":this.title,
                 "description":this.description,
@@ -119,22 +142,68 @@ export class CreateJobPage {
                 "employeeId":this.employ,
                 "userId":this.userId,
                 "locationId":1,
+                "active":'Y',
+                "jobType":this.category,
+
 
             };
 
             if(this.ticket){
                 this.newJob={
-                    "ticketId":this.ticket.id
+                    "title":this.title,
+                    "description":this.description,
+                    "plannedStartTime":this.plannedStartTime,
+                    "plannedEndTime":this.plannedEndTime,
+                    "plannedHours":this.plannedHours,
+                    "jobStatus":"ASSIGNED",
+                    "comments":"test",
+                    "siteId":this.siteId,
+                    "employeeId":this.employ,
+                    "userId":this.userId,
+                    "locationId":1,
+                    "ticketId":this.ticket.id,
+                    "active":'Y',
+                    "jobType":this.category,
+                }
+            }
+            else if(this.assetDetails)
+            {
+                this.newJob={
+                    "title":this.title,
+                    "description":this.description,
+                    "plannedStartTime":this.plannedStartTime,
+                    "plannedEndTime":this.plannedEndTime,
+                    "plannedHours":this.plannedHours,
+                    "jobStatus":"ASSIGNED",
+                    "comments":"test",
+                    "siteId":this.siteId,
+                    "employeeId":this.employ,
+                    "userId":this.userId,
+                    "locationId":1,
+                    "assetId":this.assetDetails.id,
+                    "active":'Y',
+                    "jobType":this.category,
                 }
             }
 
 
+
+
             this.jobService.createJob(this.newJob).subscribe(
                 response=> {
-                console.log(response);
-                this.navCtrl.setRoot(JobsPage);
+                    if(response.errorStatus){
+                        console.log("errorstatus",response.errorMessage);
+                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                      this.component.closeAll();
+                    }else{
+                        this.component.closeAll();
+                        console.log(response);
+                        this.navCtrl.setRoot(JobsPage);
+                    }
+
                 },
                 error=>{
+                    this.component.closeAll();
                     console.log(error);
                     if(error.type==3)
                     {
@@ -211,6 +280,8 @@ export class CreateJobPage {
         if(id)
         {
         console.log('ionViewDidLoad Add jobs employee');
+
+        console.log(this.siteName);
 
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);

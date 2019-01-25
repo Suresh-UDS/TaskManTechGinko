@@ -20,7 +20,7 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        #url: jdbc:mysql://52.77.216.21:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
         url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
@@ -37,13 +37,14 @@ spring:
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     mail:
-        host: smtp.gmail.com
+        host: smtp.office365.com
         port: 587
-        username: timesheettestuser1@gmail.com
-        password: Test123#
+        username: taskmanfms@uds.in
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
+            mail.smtp.ssl.enable: true
             mail.smtp.starttls.enable: true
             mail.smtp.port: 587
             mail.debug: true
@@ -59,6 +60,11 @@ liquibase:
 
 server:
     port: 8088
+    tomcat:
+         max-connections: 100
+         max-threads:  400
+    compression: on
+    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
 
 upload:
     file:
@@ -69,14 +75,51 @@ export:
 qrcode:
     file:
          path: /opt/qrcode
+
+locationQRCode:
+    file:
+        path: /opt/location/qrcode
 attendance:
+    shiftStartLeadTime: 60
+    shiftEndLeadTime: 60
+    shiftStartGraceTime: 60
+    shiftEndGraceTime: 60
     file:
         path:  /opt/attendance
+    template:
+        path: /opt/template/Attendance_Report_Format.xlsx
+    musterroll:
+        report:
+            template:
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+    generalShift:
+        startTime: 09:00
+        endTime: 17:00
+quotation:
+    file:
+        path:  /opt/quotation
+ticket:
+    file:
+        path:  /opt/ticket
 import:
     file:
         path:
             new: /opt/imports/new
-            completed: /opt/imports/completed        
+            completed: /opt/imports/completed
+
+extensionImg: jpeg,jpg,png
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
+
+asset:
+   file:
+       path: /opt/asset/uploads/site
+   weekly:
+       template:
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
+multipart:
+   maxFileSize: 15MB
+   maxRequestSize: 15MB
+
 max:
     user: 10
     userGroup: 2
@@ -104,17 +147,39 @@ email:
             title: Completed job report
 reports:
     job-report:
-        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/job-reports
+        url: http://52.221.57.9:8088/#/job-reports
     attendance-report:
-        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/attendance-reports
+        url: http://52.221.57.9:8088/#/attendance-reports
+    feedback-report:
+        url: http://52.221.57.9:8088/#/feedbacksList
+    asset-report:
+        url: http://52.221.57.9:8088/#/asset-report
+    vendor-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
+    pr-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/pr-report
+    inventory-report:
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/inventory-report
+
+url:
+    ticket-view: http://52.221.57.9:8088/#/view-ticket/
+    quotation-view: http://52.221.57.9:8088/#/view-quotation/
+    job-view: http://52.221.57.9:8088/#/view-job/
+
+#facedetection:
+#    api:
+#        url: https://api.kairos.com/detect
+#        enrollUrl: https://api.kairos.com/enroll
+#        verifyUrl: https://api.kairos.com/verify
+#        apiKey: a6ae8363069107177e06c3ca3f76a66b
+#        apiId: 2f2877f2
 
 facedetection:
     api:
-        url: https://api.kairos.com/detect
-        enrollUrl: https://api.kairos.com/enroll
-        verifyUrl: https://api.kairos.com/verify
-        apiKey: a6ae8363069107177e06c3ca3f76a66b
-        apiId: 2f2877f2
+        url: https://centralindia.api.cognitive.microsoft.com/face/v1.0/
+        apiKey: 61fc8cb300e0431286708ae4c74f2860
+        groupId: employee-dev
+        personId: f77b54d1-2458-4887-badf-54bc06351ce3
 
 locationService:
 #   url: http://locahost:8000/api/site/location
@@ -125,12 +190,35 @@ locationService:
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-   url: http://localhost:8001/api
+    url: http://localhost:8001/api
+#   url: http://52.221.57.9:8001/api
 
 pushService:
    url: http://localhost:9000/
 
+AWS:
+   s3-url: https://s3.ap-south-1.amazonaws.com
+   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
+   s3-secretKey: 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
+   s3-bucketName: fms-taskman
+   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
+   s3-bucketEnv: dev/
+   s3-asset-path: assets/
+   s3-qrcode-path: qrcode/
+   s3-attendance-path: attendance/
+   s3-ticket-path : tickets/
+   s3-quotation-path : quotations/
+   s3-enroll-path : employeeEnroll/
+   s3-checkin-path : attendanceCheckIns/
+   s3-checkout-path : attendanceCheckOuts/
+   s3-checkinout-path : checkInOutImages/
+   s3-checklist-path : checkListImages/
+   s3-locationqr-path : locationQrCodes/
+   s3-expenseDocument-path: expenseDocuments/
+
 scheduler:
+   job:
+      creationPolicy: monthly
    dailyJob:
       enabled: true
       creation: monthly
@@ -138,6 +226,17 @@ scheduler:
       enabled: true
    monthlyJob:
       enabled: true
+   quarterlyJob:
+      enabled: true
+   yearlyJob:
+      enabled: true
+      creation: daily
+   fortnightlyJob:
+      enabled: true
+      creation: daily
+   halfyearlyJob:
+      enabled: true
+      creation: yearly
    overdueJob:
       enabled: true
    eodJobReport:
@@ -146,8 +245,39 @@ scheduler:
       enabled: true
    attendanceConsolidatedReport:
       enabled: true
+   feedbackreport:
+      enabled: true
+   attendanceMusterRollReport:
+      enabled: true
+   dayWiseJobReport:
+      enabled: true
+   dayWiseTicketReport:
+      enabled: true
+   dayWiseQuotationReport:
+      enabled: true
 
 default.user.password: uds12345
+
+roles:
+    exclude:
+        role1: Help Desk
+        role2: Client
+        role3: Supervisor
+
+google:
+   drive:
+      api:
+          callback:
+              host: ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com
+              port: 8080
+
+influxdb:
+   url: http://3.0.29.145:8086
+   username: superadmin
+   password: "*BehindWheel7"
+   dbname: dashboard
+   retention-policy: one_year_policy
+   gzip: true
 
 # ===================================================================
 # JHipster specific properties
@@ -159,7 +289,7 @@ jhipster:
         ehcache:
             maxBytesLocalHeap: 256M
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: no-reply@taskman.uds.com
+        from: taskmanfms@uds.in
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
@@ -171,3 +301,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: TimeSheet
+    datasource:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048

@@ -1,28 +1,23 @@
 package com.ts.app.repository;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.ts.app.domain.Job;
+import com.ts.app.domain.JobType;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobType;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.web.rest.dto.SearchCriteria;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.*;
 
 public class JobSpecification implements Specification<Job> {
+
 		SearchCriteria searchCriteria;
 		private boolean isAdmin;
 		private final Logger log = LoggerFactory.getLogger(JobSpecification.class);
@@ -37,6 +32,9 @@ public class JobSpecification implements Specification<Job> {
         @Override
         public Predicate toPredicate(Root<Job> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
             List<Predicate> predicates = new ArrayList<>();
+            if(searchCriteria.getJobId()!=0){
+                predicates.add(builder.equal(root.get("id"), searchCriteria.getJobId()));
+        }
             log.debug("JobSpecification toPredicate - searchCriteria projectid -"+ searchCriteria.getProjectId());
             if(searchCriteria.getProjectId()!=0){
                     predicates.add(builder.equal(root.get("site").get("project").get("id"), searchCriteria.getProjectId()));
@@ -44,6 +42,23 @@ public class JobSpecification implements Specification<Job> {
             log.debug("JobSpecification toPredicate - searchCriteria siteId -"+ searchCriteria.getSiteId());
             if(searchCriteria.getSiteId()!=0){
                     predicates.add(builder.equal(root.get("site").get("id"),  searchCriteria.getSiteId()));
+            }
+
+            log.debug("JobSpecification toPredicate - searchCriteria locationId -"+ searchCriteria.getLocationId());
+            if(searchCriteria.getLocationId()!=0){
+                predicates.add(builder.equal(root.get("location").get("id"),  searchCriteria.getLocationId()));
+            }
+            log.debug("JobSpecification toPredicate - searchCriteria block -"+ searchCriteria.getBlock());
+            if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getBlock())){
+                predicates.add(builder.equal(root.get("block"),  searchCriteria.getBlock()));
+            }
+            log.debug("JobSpecification toPredicate - searchCriteria floor -"+ searchCriteria.getFloor());
+            if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getFloor())){
+                predicates.add(builder.equal(root.get("floor"),  searchCriteria.getFloor()));
+            }
+            log.debug("JobSpecification toPredicate - searchCriteria zone -"+ searchCriteria.getZone());
+            if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getZone())){
+                predicates.add(builder.equal(root.get("zone"),  searchCriteria.getZone()));
             }
             log.debug("JobSpecification toPredicate - searchCriteria jobstatus -"+ searchCriteria.getJobStatus());
             if(searchCriteria.getJobStatus()!=null){
@@ -63,12 +78,30 @@ public class JobSpecification implements Specification<Job> {
 
             if(searchCriteria.getEmployeeId()!=0 && !searchCriteria.isAdmin()){
         			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
-        		}
+        	}
+            
+            if(searchCriteria.getEmployeeId()!=0 && searchCriteria.isAdmin()){
+    			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
+            }
 
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
-        			predicates.add(builder.equal(root.get("type"),  JobType.valueOf(searchCriteria.getJobTypeName())));
+        			predicates.add(builder.equal(root.get("type"),  JobType.getType(searchCriteria.getJobTypeName())));
         		}
+            /*if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) && searchCriteria.getAssetId() != 0 ) { 
+            	predicates.add(builder.and(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()), builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId())));
+            }*/
+            
+            log.debug("JobSpecification toPredicate - searchCriteria assetId -"+ searchCriteria.getAssetId());
+            if(searchCriteria.getAssetId() != 0) { 
+            		predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
+            }
 
+            log.debug("JobSpecification toPredicate - searchCriteria maintenanceType -"+ searchCriteria.getMaintenanceType());
+            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
+            		predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
+            		predicates.add(builder.isNotNull(root.get("parentJob")));
+            }
+            
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
 		            	//Date plannedDate = (Date)root.get("plannedStartTime");
@@ -83,7 +116,11 @@ public class JobSpecification implements Specification<Job> {
 		            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
 		            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-		            	checkInDateTo.setTime(checkInDate);
+		            	if(searchCriteria.getCheckInDateTimeTo() != null) {
+			        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+			        	}else {
+			        		checkInDateTo.setTime(checkInDate);
+			        	}
 
 		            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 		            	checkInDateTo.set(Calendar.MINUTE,59);
@@ -95,6 +132,8 @@ public class JobSpecification implements Specification<Job> {
 		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 	            	}
 	        	}
+
+    		predicates.add(builder.equal(root.get("active"), "Y"));
 
     		query.orderBy(builder.desc(root.get("id")));
             //Predicate firstStage = builder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -111,6 +150,14 @@ public class JobSpecification implements Specification<Job> {
 	                		orPredicates.add(root.get("employee").get("id").in(searchCriteria.getSubordinateIds()));
 	                }
 	            }
+	            if(!isAdmin)
+	            {
+	            if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){
+	            		Predicate path = root.get("site").get("id").in(searchCriteria.getSiteIds());
+	        			orPredicates.add(path);
+	            }
+	            }
+
             //}
 	        log.debug("JobSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
             if(searchCriteria.getSiteId() == 0 && CollectionUtils.isNotEmpty(searchCriteria.getSubordinateIds())){

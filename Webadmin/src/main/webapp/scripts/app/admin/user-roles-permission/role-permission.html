@@ -19,7 +19,7 @@
                             <div class="form-group">
                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                 <select ng-model="selectedUserRole" ng-change="selectRole()"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
-                                ng-options="role as role.name for role in userRoles">
+                                ng-options="role as (role.name | uppercase) for role in userRoles">
                                     <option value="">Select Roles...</option>
                                 </select>
 
@@ -58,7 +58,7 @@
                 <div class="card-content">
 
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-hover">
                             <thead>
                             <tr>
                                 <th>Module Name</th>
@@ -67,9 +67,9 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat=" moduleAction in moduleActions">
-                               <td>{{moduleAction.name}}</td>
+                               <td>{{moduleAction.name | uppercase}}</td>
                                <td>
-                                   <div class="checkbox checkbox-inline" style="width:18%;" ng-repeat=" action in moduleAction.moduleActions">
+                                   <div class="checkbox checkbox-inline" style="width:12%;margin: 0;" ng-repeat=" action in moduleAction.moduleActions">
                                        <label>
                                            <input ng-model="action.selected" type="checkbox" name="action"   value="action.id" ng-change="checkPermission(moduleAction.id, moduleAction.name, action.id, action.name)" >{{action.name}}
                                        </label>
@@ -82,23 +82,26 @@
                         </table>
 
                     </div>
+                    <div class="txt-align-center LoaderCon"  ng-hide="moduleActionsLoader">
+
+                        <div class="pad-TB-30">
+                            <div loader-css="ball-pulse"></div>
+                            <h3 >Loading, please wait...</h3>
+                        </div>
+
+                    </div>
+
+                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                        <h3>No data Found</h3>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="card margin-TB-5 txt-align-center" ng-hide="moduleActions">
 
-        <div class="card-content">
-            <div class="" style="text-align:center;padding: 10px 0;" ng-hide="moduleActionsLoader">
-                <div loader-css="ball-pulse"></div>
-            </div>
-
-            <h3>No data Found</h3>
-
-        </div>
-
-    </div>
 
 
     <!-- <div class="row">

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-transparent navbar-absolute TopNavbar" ng-switch="isLoggedIn" ng-hide="loginView">
+<nav class="navbar navbar-transparent navbar-absolute TopNavbar" ng-switch="isLoggedIn" ng-init="initscrollbar();inits();" >
     <div class="container-fluid">
         <div class="navbar-minimize">
             <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon no-padding">
@@ -25,36 +25,36 @@
             <p class="hidden-lg hidden-md">Dashboard</p>
             </a>
             </li>
+            <!--<li class="dropdown">-->
+                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+                <!--<i class="material-icons white">notifications</i>-->
+                <!--<span class="notification">2</span>-->
+                <!--<p class="hidden-lg hidden-md">-->
+                <!--Notifications-->
+                <!--<b class="caret"></b>-->
+                <!--</p>-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li>-->
+                <!--<a href="#">User responded to your email</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">You have 2 new tasks</a>-->
+                <!--</li>-->
+    <!---->
+                <!--</ul>-->
+            <!--</li>-->
             <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="material-icons white">notifications</i>
-            <span class="notification">2</span>
-            <p class="hidden-lg hidden-md">
-            Notifications
-            <b class="caret"></b>
-            </p>
-            </a>
-            <ul class="dropdown-menu">
-            <li>
-            <a href="#">User responded to your email</a>
-            </li>
-            <li>
-            <a href="#">You have 2 new tasks</a>
-            </li>
-
-            </ul>
-            </li>
-            <li class="dropdown">
-               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+               <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="material-icons white">person</i>
-                        
+
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-switch-when="true">
-			              <a ui-sref="#" >   
+			              <a href="javascript:void(0);" >
                              <i class="material-icons">account_circle</i>
 			                 <span class="sidebar-normal">{{accountNames}}</span>
-			              </a>  
+			              </a>
 			             </li>
 			             <li ng-switch-when="false">
 			                <a ui-sref="login" >
@@ -63,25 +63,33 @@
 			                    <span class="sidebar-normal">Login</span>
 			                </a>
 			            </li>
+                        <li ng-switch-when="true">
+                            <a ui-sref="changePassword">
+                                <!--<span class="sidebar-mini">L</span>-->
+                                <i class="material-icons">lock</i>
+                                <span class="sidebar-normal" >Change Password</span>
+                            </a>
+
+                        </li>
 			             <li ng-switch-when="true">
-	                      <a ng-click="logout()">
+	                      <a href="javascript:void(0);" ng-click="logout()">
 	                        <!--<span class="sidebar-mini">L</span>-->
                             <i class="material-icons">power_settings_new</i>
 	                        <span class="sidebar-normal" >Logout</span>
-	                      </a>       
-			 
+	                      </a>
+
 			             </li>
-			            
-                        
+
+
                     </ul>
-            
+
             </li>
             <li class="separator hidden-lg hidden-md"></li>
             </ul>
-            
-  
+
+
 
         </div>
-        
+
     </div>
 </nav>

@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('add-project', {
                 parent: 'manage',
                 url: '/add-project',
-                controller: 'ProjectController',
+                //controller: 'ProjectController',
                 data: {
                     authorities: [],
                     pageTitle: 'Add Client'
@@ -23,8 +23,8 @@ angular.module('timeSheetApp')
             })       
         .state('edit-project', {
             parent: 'manage',
-            url: '/edit-project:id',
-            controller: 'ProjectController',
+            url: '/edit-project/:id',
+            //controller: 'ProjectController',
             data: {
                 authorities: [],
                 pageTitle: 'Edit Client'
@@ -41,8 +41,8 @@ angular.module('timeSheetApp')
             }
         }).state('view-project', {
             parent: 'manage',
-            url: '/view-project:id',
-            controller: 'ProjectController',
+            url: '/view-project/:id',
+           // controller: 'ProjectController',
             data: {
                 authorities: [],
                 pageTitle: 'View Client'

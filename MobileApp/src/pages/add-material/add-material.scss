@@ -1,0 +1,37 @@
+page-add-material {
+  .fab[mini] {
+    margin: 8px;
+    width: 35px;
+    height: 35px;
+    line-height: 40px;
+  }
+  .fab ion-icon
+  {
+    font-size:19px !important;
+  }
+  .bg-gray
+  {
+    background:none !important;
+  }
+  .item-md
+  {
+    padding-left:0px !important;
+  }
+  .list-md .item-input:last-child {
+    /* border-bottom: 1px solid #dedede; */
+    border-bottom:none !important;
+  }
+  .select-searchable
+  {
+    max-width:100% !important;
+  }
+  .text-input-md {
+    margin: 13px 8px !important;
+    padding: 0 !important;
+    width: calc(100% - 0px - 0px) !important;
+  }
+  .text-input
+  {
+    width: calc(100% - 0px) !important;
+  }
+}

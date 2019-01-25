@@ -1,12 +1,13 @@
 package com.ts.app.web.rest.dto;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.domain.util.StringUtil;
+
+import java.util.Date;
+import java.util.List;
 
 public class JobDTO extends BaseDTO {
 
@@ -47,7 +48,7 @@ public class JobDTO extends BaseDTO {
 	private Date actualStartTime;
 	private Date actualEndTime;
 	private int actualHours;
-
+	private int actualMinutes;
 
 	private JobStatus jobStatus;
 	private JobType jobType;
@@ -69,10 +70,20 @@ public class JobDTO extends BaseDTO {
 	private boolean scheduled;
 
 	private String frequency;
-
+	private String duration;
 	private List<JobChecklistDTO> checklistItems;
 
 	private List<CheckInOutImageDTO> images;
+
+	private long checkInOutId;
+
+	private long parentJobId;
+
+	private Job parentJob;
+
+	private boolean pendingAtUDS;
+
+	private boolean pendingAtClient;
 
 	@JsonIgnoreProperties
 	private String block;
@@ -82,7 +93,17 @@ public class JobDTO extends BaseDTO {
 
 	@JsonIgnoreProperties
 	private String zone;
+	
+	private String maintenanceType;
+	
+	private List<JobMaterialDTO> jobMaterials;
 
+	public String getDuration() {
+		return duration;
+	}
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -92,8 +113,8 @@ public class JobDTO extends BaseDTO {
 	public String getDescription() {
 		return description;
 	}
-	public void setDescription(String desc) {
-		this.description = desc;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public Date getPlannedStartTime() {
 		return plannedStartTime;
@@ -177,12 +198,7 @@ public class JobDTO extends BaseDTO {
 	public void setSiteProjectName(String siteProjectName) {
 		this.siteProjectName = siteProjectName;
 	}
-	public String getDesc() {
-		return description;
-	}
-	public void setDesc(String desc) {
-		this.description = desc;
-	}
+
 	public Date getActualStartTime() {
 		return actualStartTime;
 	}
@@ -406,4 +422,65 @@ public class JobDTO extends BaseDTO {
     public void setTicketName(String ticketName) {
         this.ticketName = ticketName;
     }
+	public int getActualMinutes() {
+		return actualMinutes;
+	}
+	public void setActualMinutes(int actualMinutes) {
+		this.actualMinutes = actualMinutes;
+	}
+
+
+    public long getCheckInOutId() {
+        return checkInOutId;
+    }
+
+    public void setCheckInOutId(long checkInOutId) {
+        this.checkInOutId = checkInOutId;
+    }
+	
+    public String getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(String maintenanceType) {
+		this.maintenanceType = maintenanceType;
+	}
+	
+    public long getParentJobId() {
+        return parentJobId;
+    }
+
+    public void setParentJobId(long parentJobId) {
+        this.parentJobId = parentJobId;
+    }
+
+    public Job getParentJob() {
+        return parentJob;
+    }
+
+    public void setParentJob(Job parentJob) {
+        this.parentJob = parentJob;
+    }
+
+    public boolean isPendingAtUDS() {
+        return pendingAtUDS;
+    }
+
+    public void setPendingAtUDS(boolean pendingAtUDS) {
+        this.pendingAtUDS = pendingAtUDS;
+    }
+
+    public boolean isPendingAtClient() {
+        return pendingAtClient;
+    }
+
+    public void setPendingAtClient(boolean pendingAtClient) {
+        this.pendingAtClient = pendingAtClient;
+    }
+	public List<JobMaterialDTO> getJobMaterials() {
+		return jobMaterials;
+	}
+	public void setJobMaterials(List<JobMaterialDTO> jobMaterials) {
+		this.jobMaterials = jobMaterials;
+	}
 }

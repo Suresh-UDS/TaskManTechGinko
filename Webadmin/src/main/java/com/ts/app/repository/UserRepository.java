@@ -1,16 +1,15 @@
 package com.ts.app.repository;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-
+import com.ts.app.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ts.app.domain.User;
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data JPA repository for the User entity.
@@ -46,6 +45,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' order by u.id")
 	Page<User> findByLogin(@Param("userLogin") String userLogin, Pageable pageRequest);
+
+    @Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' order by u.id")
+    User findByLogin(@Param("userLogin") String userLogin);
+
 
     @Query("SELECT u FROM User u WHERE u.login like '%' || :userLogin || '%' or u.firstName like '%' || :userFirstName || '%' or u.lastName like '%' || :userLastName || '%' or u.email like '%' || :userEmail || '%' or u.userRole.id = :userRoleId")
     Page<User> findByLoginOrFirsNameOrLastNameOrRole(@Param("userLogin") String userLogin,@Param("userFirstName") String userFirstName,@Param("userLastName") String userLastName,@Param("userEmail") String email,@Param("userRoleId") long userRoleId, Pageable pageRequest);

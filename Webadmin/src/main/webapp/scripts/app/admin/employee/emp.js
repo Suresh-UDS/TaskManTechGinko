@@ -4,7 +4,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	$stateProvider.state('add-employee', {
 		parent : 'manage',
 		url : '/add-employee',
-		controller : 'EmployeeController',
+		//controller : 'EmployeeController',
 		data : {
 			authorities : [],
 			pageTitle : 'Add Employee'
@@ -20,8 +20,8 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('edit-employee', {
 		parent : 'manage',
-		url : '/edit-employee:id',
-		controller : 'EmployeeController',
+		url : '/edit-employee/:id',
+		//controller : 'EmployeeController',
 		data : {
 			authorities : [],
 			pageTitle : 'Edit Employee'
@@ -37,8 +37,8 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-employee', {
 		parent : 'manage',
-		url : '/view-employee:id',
-		controller : 'EmployeeController',
+		url : '/view-employee/:id',
+		//controller : 'EmployeeController',
 		data : {
 			authorities : [],
 			pageTitle : 'View Employee'
@@ -55,7 +55,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('view-employee-hist', {
 		parent : 'manage',
 		url : '/view-employee-hist/:id',
-		controller : 'EmployeeController',
+		//controller : 'EmployeeController',
 		data : {
 			authorities : [],
 			pageTitle : 'View Employee History'
@@ -72,7 +72,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 	}).state('employee-location', {
         parent : 'manage',
         url : '/employee-location',
-        controller : 'EmployeeController',
+        //controller : 'EmployeeController',
         data : {
             authorities : [],
             pageTitle : 'Employee Location'

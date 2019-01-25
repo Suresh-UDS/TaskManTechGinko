@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('tickets', {
                 parent: 'manage',
                 url: '/tickets',
-                controller: 'TicketController',
+                //controller: 'TicketController',
                 data: {
                     authorities: [],
                     pageTitle: 'Tickets'

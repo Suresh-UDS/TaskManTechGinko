@@ -10,7 +10,7 @@ registerTemplates();
 
 
 function registerTemplates(){
-    var templateDir = path.join(__dirname+'../../', 'templates/');
+    var templateDir = path.join('/home/ec2-user/QuotationService/', 'templates/');
     // var templateDir = path.join('D:/usha/ionic/FMS-NEW/QuotationService/templates/');
 
     fs.readdirSync(templateDir).forEach(function (file) {
@@ -37,12 +37,23 @@ function getContent(template,data){
 
 function sendMail(from,to,subject,template,data){
     // logger.info("sending mail - template - "+template);
-    data.logo = './config/logo.png';
+    data.logo = 'http://uds.in/images/logo.jpg';
     mailer.sendMail({
         from: from,
         to: to,
         subject: subject,
         html: getContent(template,data)
+    });
+}
+
+function sendMailWithAttachments(from,to,subject,template,data,attachments){
+    data.logo = 'http://uds.in/images/logo.jpg';
+    mailer.sendMail({
+        from: from,
+        to: to,
+        subject: subject,
+        html: getContent(template,data),
+        attachments:attachments
     });
 }
 
@@ -52,13 +63,19 @@ function sendMail(from,to,subject,template,data){
 var defaultFrom = config.mailer.from;
 module.exports = {
     submitQuotation: function(emailId, data) {
-        sendMail( config.mailer.from,
+console.log("sending email ids:- ",emailId);         console.log("Data:- ",data._id);
+        sendMailWithAttachments( config.mailer.from,
             emailId,
             'Quotation Submitted',
             'submit_quotation_template',
-            {clientName: data.sentToUserName,
+            {clientName: data.projectName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName})
+                createdByUserName:data.createdByUserName, url:config.url.quotation_view + data._id},
+            {
+                filename: 'quotation.pdf',
+                path: './templates/'+data._id+'.pdf',
+                contentType: 'application/pdf'
+            })
     },
     approveQuotation: function(emailId, data) {
         sendMail( config.mailer.from,
@@ -67,7 +84,7 @@ module.exports = {
             'approved_quotation_template',
             {clientName: data.sentToUserName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName})
+                createdByUserName:data.createdByUserName,url:config.url.quotation_view + data._id})
     },
 
     rejectQuotation: function(emailId, data) {
@@ -77,7 +94,7 @@ module.exports = {
             'rejected_quotation_template',
             {clientName: data.sentToUserName,
                 siteName: data.siteName,
-                createdByUserName:data.createdByUserName})
+                createdByUserName:data.createdByUserName,url:config.url.quotation_view + data._id})
     },
 
     getPdfDetail:function (data,callback) {
@@ -101,7 +118,7 @@ module.exports = {
                 path: './templates/output.pdf',
                 contentType: 'application/pdf'
             }]
-        });
+        }, (err, info) => {});
     }
 
 };

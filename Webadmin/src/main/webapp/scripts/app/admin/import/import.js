@@ -6,7 +6,7 @@ angular.module('timeSheetApp')
             .state('imports', {
                 parent: 'manage',
                 url: '/imports',
-                controller: 'ImportController',
+                //controller: 'ImportController',
                 data: {
                     authorities: [],
                     pageTitle: 'Import'

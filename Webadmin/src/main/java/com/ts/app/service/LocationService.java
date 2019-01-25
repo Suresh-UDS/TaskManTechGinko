@@ -1,35 +1,26 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.LocationRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.EmployeeLocation;
-import com.ts.app.domain.Feedback;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeLocationDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.*;
 
 /**
  * Service class for managing location information.
@@ -49,8 +40,23 @@ public class LocationService extends AbstractService {
 	@Inject
 	private LocationRepository locationRepository;
 
+    @Inject
+    private Environment env;
+
+    @Inject
+    private FileUploadHelper fileUploadHelper;
+
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+	@Inject
+	private ImportUtil importUtil;
+	
+	@Inject
+	private AmazonS3Utils s3ServiceUtils;
+	
+	@Inject
+	private UserRepository userRepository;
 
 	public LocationDTO saveLocation(LocationDTO locationDto) {
 
@@ -99,6 +105,17 @@ public class LocationService extends AbstractService {
 		return mapperUtil.toModel(entity, LocationDTO.class);
 	}
 
+    public LocationDTO findId(Long siteId, String block, String floor, String zone) {
+        List<Location> entity = locationRepository.findByAll(siteId,block,floor,zone);
+        Location locationEntity = entity.get(0);
+        return mapperUtil.toModel(locationEntity, LocationDTO.class);
+    }
+
+    public List<LocationDTO> findIds(Long siteId, String block, String floor, String zone) {
+        List<Location> entity = locationRepository.findByAll(siteId,block,floor,zone);
+        return mapperUtil.toModelList(entity, LocationDTO.class);
+    }
+
 	public List<String> findBlocks(long projectId, long siteId) {
 		if(projectId > 0) {
 			return locationRepository.findBlocks(projectId, siteId);
@@ -123,8 +140,44 @@ public class LocationService extends AbstractService {
 		}
 	}
 
-	public SearchResult<LocationDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
+	public SearchResult<LocationDTO>  findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<LocationDTO> result = new SearchResult<LocationDTO>();
+		if(searchCriteria != null) {
+			log.debug("findBYSearchCriteria search criteria -"+ (searchCriteria.getJobStatus() != null && searchCriteria.getJobStatus().equals(JobStatus.OVERDUE)));
+
+			User user = userRepository.findOne(searchCriteria.getUserId());
+			Employee employee = user.getEmployee();
+
+			//log.debug(""+employee.getEmpId());
+
+			Set<Long> subEmpIds = new TreeSet<Long>();
+			if(employee != null && !user.isAdmin()) {
+				searchCriteria.setDesignation(employee.getDesignation());
+				Hibernate.initialize(employee.getSubOrdinates());
+				/*
+				Set<Employee> subs = employee.getSubOrdinates();
+				log.debug("List of subordinates -"+ subs);
+				if(CollectionUtils.isNotEmpty(subs)){
+					subEmpIds = new ArrayList<Long>();
+				}
+				for(Employee sub : subs) {
+					subEmpIds.add(sub.getId());
+				}
+				*/
+				int levelCnt = 1;
+				findAllSubordinates(employee, subEmpIds, levelCnt);
+	        		List<Long> subEmpList = new ArrayList<Long>();
+	        		subEmpList.addAll(subEmpIds);
+				
+				log.debug("List of subordinate ids -"+ subEmpIds);
+				if(CollectionUtils.isEmpty(subEmpList)) {
+					subEmpList.add(employee.getId());
+				}
+				searchCriteria.setSubordinateIds(subEmpList);
+			}else if(user.isAdmin()){
+				searchCriteria.setAdmin(true);
+			}
+			log.debug("SearchCriteria ="+ searchCriteria);
 		if(searchCriteria != null) {
 
 		    //----
@@ -154,11 +207,11 @@ public class LocationService extends AbstractService {
 			List<LocationDTO> transitems = null;
 			if(!searchCriteria.isFindAll()) {
 				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
-					page = locationRepository.findByZone(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+					page = locationRepository.findByZone(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getFloor())) {
-					page = locationRepository.findByFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
+					page = locationRepository.findByFloor(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
 				}else if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
-					page = locationRepository.findByBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+					page = locationRepository.findByBlock(searchCriteria.getProjectId(), searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
 				}else if(searchCriteria.getSiteId() > 0) {
 					if(searchCriteria.getEmployeeId() > 0) {
 						List<EmployeeLocation> empLocs  = locationRepository.findBySiteAndEmployee(searchCriteria.getSiteId(), searchCriteria.getEmployeeId());
@@ -183,7 +236,16 @@ public class LocationService extends AbstractService {
 					page = locationRepository.findByProject(searchCriteria.getProjectId(), pageRequest);
 				}
 			}else {
-				page = locationRepository.findAll(pageRequest);
+				if(user.getUserRole().getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
+					page = locationRepository.findAll(pageRequest);
+				}else {
+					List<Long> siteIds = new ArrayList<Long>();
+	            		List<EmployeeProjectSite> sites = employee.getProjectSites();
+	            		for(EmployeeProjectSite site : sites) {
+	            			siteIds.add(site.getSite().getId());
+	            		}
+	            		page = locationRepository.findBySites(siteIds, pageRequest);
+				}
 			}
 			if(page != null) {
 				transitems = mapperUtil.toModelList(page.getContent(), LocationDTO.class);
@@ -192,6 +254,7 @@ public class LocationService extends AbstractService {
 				}
 			}
 		}
+	}
 		return result;
 	}
 
@@ -220,4 +283,85 @@ public class LocationService extends AbstractService {
 		result.setTransactions(transactions);
 		return;
 	}
+
+	public ImportResult getImportStatus(String fileId) {
+		ImportResult er = null;
+		//fileId += ".csv";
+		if(!StringUtils.isEmpty(fileId)) {
+			er = importUtil.getImportResult(fileId);
+			//er.setFile(fileId);
+			//er.setStatus(status);
+		}
+		return er;
+	}
+
+    public Map<String, Object> generateLocationQRCode(long location, long siteId) {
+        Location loc = locationRepository.findOne(location);
+//        long siteId = asset.getSite().getId();
+        log.debug("Selected location"+loc.getId());
+        LocationDTO locDTO = new LocationDTO();
+        byte[] qrCodeImage = null;
+//        String qrCodeBase64 = null;
+        Map<String, Object> qrCodeObject = new HashMap<>();
+        if (loc != null) {
+        		String codeName = siteId+"_"+loc.getBlock()+"_"+loc.getFloor()+"_"+loc.getZone();
+        		qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+            String qrCodePath = env.getProperty("AWS.s3-locationqr-path");
+//            String imageFileName = null;
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
+            	
+//                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
+//                loc.setQrCodeImage(imageFileName);
+//                locationRepository.save(loc);
+            	locDTO = s3ServiceUtils.uploadLocationQrCodeFile(codeName, qrCodeImage, locDTO);
+				qrCodeObject.put("code", codeName);
+				qrCodeObject.put("url", locDTO.getUrl());
+				qrCodeObject.put("imageName", locDTO.getQrCodeImage());
+				loc.setQrCodeImage(locDTO.getQrCodeImage());
+				locationRepository.save(loc);
+            }
+//            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+//                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+//            }
+        }
+        log.debug("*****************"+loc.getId());
+        return qrCodeObject;
+    }
+
+    public String generateQRCode(String block, String floor, String zone, long siteId) {
+        byte[] qrCodeImage = null;
+        String qrCodeBase64 = null;
+            String codeName = siteId+"_"+block+"_"+floor+"_"+zone;
+            
+            qrCodeImage = QRCodeUtil.generateQRCode(codeName);
+            String qrCodePath = env.getProperty("locationQRCode.file.path");
+            String imageFileName = null;
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
+                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
+//                loc.setQrCodeImage(imageFileName);
+//                locationRepository.save(loc);
+            }
+            if (qrCodeImage != null && org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+//        log.debug("*****************"+loc.getId());
+//        return getQRCode(loc.getId());
+        return  qrCodeBase64;
+    }
+
+    public String getQRCode(long locationId) {
+        log.debug(">>> get QR Code <<<");
+        Location loc = locationRepository.findOne(locationId);
+        log.debug(loc.getQrCodeImage());
+        String qrCodeBase64 = null;
+        String imageFileName = null;
+        if (loc != null) {
+            imageFileName = loc.getQrCodeImage();
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFileName)) {
+                qrCodeBase64 = fileUploadHelper.readQrCodeFile(imageFileName);
+            }
+        }
+        qrCodeBase64 = qrCodeBase64 + "." + loc.getId();
+        return qrCodeBase64;
+    }
 }

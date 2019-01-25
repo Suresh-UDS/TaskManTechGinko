@@ -637,16 +637,28 @@ demo = {
                 text: txt,
                 buttonsStyling: false,
                 confirmButtonClass: "btn btn-success",
-                type: "success"
+                type: "success",
             }).catch(swal.noop)
 
+        }else if(type == 'success-message-and-ok'){
+
+            swal({
+                title: title,
+                text: txt,
+                showCancelButton: false,
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                confirmButtonText: 'Ok',
+                buttonsStyling: false
+            }).catch(swal.noop)
         }else if (type == 'feedback-success') {
               swal({
                   title: title,
                   text: txt,
                   buttonsStyling: false,
                   confirmButtonClass: "btn btn-success",
-                  type: "success"
+                  type: "success",
+                  timer:3000
               }).catch(swal.noop)
 
          } else if (type == 'warning-message-and-confirmation')
@@ -659,7 +671,8 @@ demo = {
                 confirmButtonClass: 'btn btn-success',
                 cancelButtonClass: 'btn btn-danger',
                 confirmButtonText: 'Yes',
-                buttonsStyling: false
+                buttonsStyling: false,
+                timer:3000
             }).then(function() {
                 swal({
                     title: 'Deleted!',
@@ -676,7 +689,6 @@ demo = {
             swal({
                 title: title,
                 text: txt,
-                type: 'warning',
                 showCancelButton: false,
                 confirmButtonClass: 'btn btn-danger',
                 cancelButtonClass: 'btn btn-danger',
