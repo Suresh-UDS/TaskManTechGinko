@@ -191,7 +191,7 @@ angular.module('timeSheetApp')
 		{
 			/** @reatin - retaining scope value.**/
 			$rootScope.retain=1;
-			$scope.updatedTicket()
+			$scope.updatedTicket();
 		}
 	};
 
@@ -1063,7 +1063,9 @@ angular.module('timeSheetApp')
 			$scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
 			$(".fade").removeClass("modal-backdrop");
 			$('#reopenModalNew').modal('hide');
-			$state.reload();
+			//$state.reload();
+			$rootScope.retain=1;
+            $scope.searchFilter();
 
 		});
 	}

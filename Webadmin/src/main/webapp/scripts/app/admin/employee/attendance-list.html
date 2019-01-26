@@ -181,7 +181,7 @@
                                 <label ng-show="attendance.late">Late</label>
                                 </td>
                                 <td ng-if="attendance.checkInImage">
-                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
+                                    <a id="images" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
                                         <img ng-src={{attendance.checkInImgUrl}} width="30px" height="30px"/>
                                     </a>
                                 </td>
@@ -192,7 +192,7 @@
 
                                 <td>{{attendance.checkOutTime | date:'dd/MM/yyyy @ h:mma'}}</td>
 
-                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)" >
+                                <td ng-if="attendance.checkOutImage"><a id="images" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)" >
                                     <img ng-src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>
                                 </a>
                                 </td>
@@ -546,7 +546,7 @@
 
 				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}
-													      <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													      <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -569,7 +569,7 @@
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-														      <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														      <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -593,7 +593,7 @@
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
-													      <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													      <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -616,7 +616,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site...">{{$select.selected.name}}
-													    <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													    <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -708,4 +708,37 @@
 </div>
 
 
-<!-- -->
+<!-- Attendance image modal start -->
+
+<div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table >
+                    <thead>
+                    <tr >
+                        <th style="text-align: center">Enrolled Image</th>
+                        <th>&nbsp;&nbsp;</th>
+                        <th style="text-align: center">Attendance Image</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td><img id="photoEnrolled" ng-src="{{enrollImg}}" style="width:250px;height:150px;"
+                                 class="img-responsive"></td>
+                        <td>&nbsp;&nbsp;</td>
+                        <td><img id="photoOutImg" ng-src="{{attenImg}}" style="width:250px;height:150px;"
+                                 class="img-responsive"></td>
+                    </tr>
+
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Attendance image modal end -->
