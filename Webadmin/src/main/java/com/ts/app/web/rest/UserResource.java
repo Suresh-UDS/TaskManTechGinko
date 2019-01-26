@@ -267,8 +267,8 @@ public class UserResource {
 	public SearchResult<UserDTO> searchUsers(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<UserDTO> result = null;
 		if(searchCriteria != null) {
-			long loggedInUserId = SecurityUtils.getCurrentUserId();
-			result = userService.findBySearchCrieria(searchCriteria, loggedInUserId);
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			result = userService.findBySearchCrieria(searchCriteria);
 		}
 		return result;
 	}

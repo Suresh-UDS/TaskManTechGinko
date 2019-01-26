@@ -362,10 +362,10 @@ angular.module('timeSheetApp')
 
 		if($scope.searchRole) {
 			$scope.searchCriteria.userRoleId = $scope.searchRole.id;
-			$scope.searchCriteria.userRoleName = $scope.searchRole.name;
+			$scope.searchCriteria.userRole = $scope.searchRole.name;
 		}else{
 			$scope.searchCriteria.userRoleId = null;
-			$scope.searchCriteria.userRoleName = null;
+			$scope.searchCriteria.userRole = null;
 		}
 
 

@@ -270,6 +270,8 @@ public class SearchCriteria extends Paginator {
 
 	private String category;
 
+	private String userRole;
+
 	public String getModule() {
 		return module;
 	}
@@ -1376,5 +1378,13 @@ public class SearchCriteria extends Paginator {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 }

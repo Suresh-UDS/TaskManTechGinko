@@ -409,7 +409,7 @@ public class UserService extends AbstractService {
     }
 
 
-    public SearchResult<UserDTO> findBySearchCrieria(SearchCriteria searchCriteria, long loggedInUserId) {
+    public SearchResult<UserDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 		SearchResult<UserDTO> result = new SearchResult<UserDTO>();
 		if (searchCriteria != null) {
 
@@ -425,16 +425,15 @@ public class UserService extends AbstractService {
 			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
 			Page<User> page = null;
 			List<UserDTO> transactions = null;
+
 			if (!searchCriteria.isFindAll()) {
 				if (searchCriteria.getUserId() != 0) {
-					page = userRepository.findUsersById(searchCriteria.getUserId(), pageRequest);
-				}else {
-					page = userRepository.findByLoginOrFirsNameOrLastNameOrRole(searchCriteria.getUserLogin(),searchCriteria.getUserFirstName(),
-												searchCriteria.getUserLastName(),searchCriteria.getUserEmail(), searchCriteria.getUserRoleId(), pageRequest);
+					page = userRepository.findAll(new UserSpecification(searchCriteria,true), pageRequest);
 				}
 			} else {
-				page = userRepository.findUsers(loggedInUserId, pageRequest);
+				page = userRepository.findAll(new UserSpecification(searchCriteria,true),pageRequest);
 			}
+
 			if (page != null) {
 				// transactions = mapperUtil.toModelList(page.getContent(), UserDTO.class);
 				transactions = new ArrayList<UserDTO>();
