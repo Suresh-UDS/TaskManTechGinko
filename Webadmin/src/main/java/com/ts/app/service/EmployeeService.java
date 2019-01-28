@@ -737,8 +737,8 @@ public class    EmployeeService extends AbstractService {
                 }
                 page = employeeRelieverRepository.findRelieversByEmployee(subEmpList,DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
             }else {
-//            page = employeeRelieverRepository.findAllRelieversByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
-                page = employeeRelieverRepository.findAll(pageRequest);
+                page = employeeRelieverRepository.findAllRelieversByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
+//                page = employeeRelieverRepository.findAll(pageRequest);
             }
 
             allTransactionsList.addAll(page.getContent());
