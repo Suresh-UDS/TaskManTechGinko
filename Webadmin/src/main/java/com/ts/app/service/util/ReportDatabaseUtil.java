@@ -624,8 +624,8 @@ public class ReportDatabaseUtil {
                 AbsentCnt += attnStatusPoint.getAbsentCount() > 0 ? attnStatusPoint.getAbsentCount() : 0;
 
                 statusCounts.put("Left", LeftCnt);
-                statusCounts.put("Present", PresentCnt);
                 statusCounts.put("Absent", AbsentCnt);
+                statusCounts.put("Present", PresentCnt);
 
                 statusPoints.put(myDate, statusCounts);
 
@@ -670,17 +670,19 @@ public class ReportDatabaseUtil {
                         totalLeftCnts.add(leftCnt);
                         leftstatus.setData(totalLeftCnts);
                     }
-                    if (categoryWiseCount.containsKey("Present")) {
-                        int presentCnt = categoryWiseCount.get("Present");
-                        presentstatus.setName("Present");
-                        totalPresentCnts.add(presentCnt);
-                        presentstatus.setData(totalPresentCnts);
-                    }
+
                     if (categoryWiseCount.containsKey("Absent")) {
                         int absentCnt = categoryWiseCount.get("Absent");
                         absentstatus.setName("Absent");
                         totalAbsentCnts.add(absentCnt);
                         absentstatus.setData(totalAbsentCnts);
+                    }
+
+                    if (categoryWiseCount.containsKey("Present")) {
+                        int presentCnt = categoryWiseCount.get("Present");
+                        presentstatus.setName("Present");
+                        totalPresentCnts.add(presentCnt);
+                        presentstatus.setData(totalPresentCnts);
                     }
 
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -1521,7 +1523,8 @@ public class ReportDatabaseUtil {
     public JSONArray getAverageTicketAgeMonthly() {
         // TODO Auto-generated method stub
         InfluxDB influxdb = connectDatabase();
-        String query = "select count(statusCount) as statusCount from TicketReport group by month, category";
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String query = "select count(statusCount) as statusCount from TicketReport where year="+ year +" group by month, category";
         List<TicketStatusMeasurement> statsLists = reportDatabaseService.getTicketPoints(influxdb, query, dbName);
 
         JSONArray pArray = new JSONArray();
@@ -1532,99 +1535,100 @@ public class ReportDatabaseUtil {
             monthAry.put(month.getMonths()); //[1,2,....]
         }
 
-        JSONArray statusArray = new JSONArray();
-
         Map<String, Series> tempStatusMap = new ConcurrentHashMap<>();
 
         List<Integer> dataAry = new ArrayList<>();
 
-        for (TicketStatusMeasurement ticketStatusMeasurementObj : statsLists) {
+        if(statsLists.size() > 0) {
 
-            String mesMonthObj = ticketStatusMeasurementObj.getMonth();
-            String mesCatName = ticketStatusMeasurementObj.getCategory();
-            int mesStatusCtn = ticketStatusMeasurementObj.getStatusCount();
+            for (TicketStatusMeasurement ticketStatusMeasurementObj : statsLists) {
 
-            if (StringUtils.isNotEmpty(mesMonthObj)) {
+                String mesMonthObj = ticketStatusMeasurementObj.getMonth();
+                String mesCatName = ticketStatusMeasurementObj.getCategory();
+                int mesStatusCtn = ticketStatusMeasurementObj.getStatusCount();
 
-                try {
-                    if (dataAry.size() <= 0) {
-                        for (int i = 0; i < 12; i++) {
-                            dataAry.add(0);
-                        }
-                    }
+                if (StringUtils.isNotEmpty(mesMonthObj)) {
 
-                    if (MapUtils.isNotEmpty(tempStatusMap)) {
-                        Iterator<Entry<String, Series>> temStatCheckMap = tempStatusMap.entrySet().iterator();
-
-                        while (temStatCheckMap.hasNext()) {
-                            Entry<String, Series> mapStatus = temStatCheckMap.next();
-                            if (mapStatus.getKey().equalsIgnoreCase(mesCatName)) {
-                                Series statusOb = mapStatus.getValue();
-                                List<Integer> dataList = statusOb.getData();
-                                Months mon = Months.valueOf(mesMonthObj);
-                                dataList.set(mon.getMonths(), mesStatusCtn);
-                            }else{
-                                JSONObject symbol = new JSONObject();
-
-                                List<Integer> newAry = new ArrayList<>();
-                                for (int i = 0; i < 12; i++) {
-                                    newAry.add(0);
-                                }
-                                Series staObj = new Series();
-                                staObj.setName(mesCatName);
-                                staObj.setName(mesCatName);
-                                symbol.put("symbol", "square");
-                                staObj.setMarker(symbol);
-                                Months a=Months.valueOf(mesMonthObj);
-                                newAry.set(a.getMonths(), mesStatusCtn);
-                                staObj.setData(newAry);
-                                tempStatusMap.put(mesCatName, staObj);
+                    try {
+                        if (dataAry.size() <= 0) {
+                            for (int i = 0; i < 12; i++) {
+                                dataAry.add(0);
                             }
                         }
-                    } else {
-                        JSONObject symbol = new JSONObject();
-                        Series staObj = new Series();
-                        staObj.setName(mesCatName);
-                        symbol.put("symbol", "diamond");
-                        staObj.setMarker(symbol);
-                        Months a=Months.valueOf(mesMonthObj);
-                        dataAry.set(a.getMonths(), mesStatusCtn);
-                        staObj.setData(dataAry);
-                        tempStatusMap.put(mesCatName, staObj);
 
+                        if (MapUtils.isNotEmpty(tempStatusMap)) {
+                            Iterator<Entry<String, Series>> temStatCheckMap = tempStatusMap.entrySet().iterator();
+
+                            while (temStatCheckMap.hasNext()) {
+                                Entry<String, Series> mapStatus = temStatCheckMap.next();
+                                if (mapStatus.getKey().equalsIgnoreCase(mesCatName)) {
+                                    Series statusOb = mapStatus.getValue();
+                                    List<Integer> dataList = statusOb.getData();
+                                    Months mon = Months.valueOf(mesMonthObj);
+                                    dataList.set(mon.getMonths(), mesStatusCtn);
+                                }else{
+                                    JSONObject symbol = new JSONObject();
+
+                                    List<Integer> newAry = new ArrayList<>();
+                                    for (int i = 0; i < 12; i++) {
+                                        newAry.add(0);
+                                    }
+                                    Series staObj = new Series();
+                                    staObj.setName(mesCatName);
+                                    staObj.setName(mesCatName);
+                                    symbol.put("symbol", "square");
+                                    staObj.setMarker(symbol);
+                                    Months a=Months.valueOf(mesMonthObj);
+                                    newAry.set(a.getMonths(), mesStatusCtn);
+                                    staObj.setData(newAry);
+                                    tempStatusMap.put(mesCatName, staObj);
+                                }
+                            }
+                        } else {
+                            JSONObject symbol = new JSONObject();
+                            Series staObj = new Series();
+                            staObj.setName(mesCatName);
+                            symbol.put("symbol", "diamond");
+                            staObj.setMarker(symbol);
+                            Months a=Months.valueOf(mesMonthObj);
+                            dataAry.set(a.getMonths(), mesStatusCtn);
+                            staObj.setData(dataAry);
+                            tempStatusMap.put(mesCatName, staObj);
+
+                        }
+
+
+                    } catch (Exception e) {
+                        log.error("Error while iterating ",e);
                     }
 
 
-                } catch (Exception e) {
-                    log.error("somthing problem",e);
                 }
 
-
             }
 
-        }
 
+            Set<Map.Entry<String, Series>> tempStsMap = tempStatusMap.entrySet();
 
-        Set<Map.Entry<String, Series>> tempStsMap = tempStatusMap.entrySet();
-
-        for (Map.Entry<String, Series> tempStsMapEntry : tempStsMap) {
-            try{
-                JSONObject statusObj = new JSONObject();
+            for (Map.Entry<String, Series> tempStsMapEntry : tempStsMap) {
+                try{
+                    JSONObject statusObj = new JSONObject();
 //                JSONObject pObj = new JSONObject();
 
-                Series seriesObj = tempStsMapEntry.getValue();
-                statusObj.put("name", seriesObj.getName());
-                statusObj.put("data", seriesObj.getData());
-                statusObj.put("marker", seriesObj.getMarker());
+                    Series seriesObj = tempStsMapEntry.getValue();
+                    statusObj.put("name", seriesObj.getName());
+                    statusObj.put("data", seriesObj.getData());
+                    statusObj.put("marker", seriesObj.getMarker());
 //                pObj.put("status", statusObj);
-                pArray.put(statusObj);
-            } catch (Exception e) {
-                log.error("Error while map", e);
+                    pArray.put(statusObj);
+                } catch (Exception e) {
+                    log.error("Error while map", e);
+                }
+
             }
 
+
         }
-
-
 
         return pArray;
 

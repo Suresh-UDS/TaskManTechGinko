@@ -290,7 +290,11 @@ angular.module('timeSheetApp')
         $scope.loadAvgTicketGraph = function() {
             DashboardComponent.getAvgTicketMonthly().then(function (data) {
                 console.log("Ticket Avg Monthly" +JSON.stringify(data));
-                $scope.ticketAvgSeries = data;
+                if(data.length > 0) {
+                    $scope.ticketAvgSeries = data;
+                }else{
+                    $scope.ticketAvgSeries = [{name : "No data in this year", data: [0,0,0,0,0,0,0,0,0,0,0,0], marker: {symbol: "circle"}}];
+                }
             });
         }
 
@@ -1262,11 +1266,11 @@ angular.module('timeSheetApp')
                             data: [0]
                        },
                        {
-                           name: "Present",
+                           name: "Absent",
                            data: [0]
                        },
                        {
-                           name: "Absent",
+                           name: "Present",
                            data: [0]
                        }];
                    $rootScope.attendGraph();
@@ -1532,7 +1536,7 @@ angular.module('timeSheetApp')
                 },
                 yAxis: {
                     title: {
-                        text: 'Ticket Count'
+                        text: 'Category Ticket Count'
                     },
                     labels: {
                         formatter: function () {
