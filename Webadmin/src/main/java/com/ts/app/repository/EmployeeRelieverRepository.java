@@ -25,8 +25,14 @@ public interface EmployeeRelieverRepository extends JpaRepository<EmployeeReliev
 	@Query("SELECT count(er) FROM EmployeeReliever er where er.employee.id in :empIds and er.startTime>= :startTime and er.endTime<= :endTime")
     public long findRelieverCountByEmployee(@Param("empIds")List<Long> empIds, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
+    @Query("SELECT er FROM EmployeeReliever er where er.employee.id in :empIds and er.startTime>= :startTime and er.endTime<= :endTime")
+    public Page<EmployeeReliever> findRelieversByEmployee(@Param("empIds")List<Long> empIds, @Param("startTime") Date startTime, @Param("endTime") Date endTime, Pageable pageRequest);
+
     @Query("SELECT count(er) FROM EmployeeReliever er where er.startTime>= :startTime and er.endTime<= :endTime")
     public long findRelieverCountByEmployee(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    @Query("SELECT er FROM EmployeeReliever er where er.startTime>= :startTime and er.endTime<= :endTime")
+    public Page<EmployeeReliever> findAllRelieversByEmployee(@Param("startTime") Date startTime, @Param("endTime") Date endTime, Pageable pageRequest);
 
 
 }
