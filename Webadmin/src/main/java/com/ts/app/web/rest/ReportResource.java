@@ -10,6 +10,7 @@ import com.ts.app.service.SchedulerService;
 import com.ts.app.service.util.ReportDatabaseUtil;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -274,7 +275,7 @@ public class ReportResource {
     
     @RequestMapping(value = "/getAvgTicket/monthly", method = RequestMethod.GET)
     public ResponseEntity<?> getAveticketMonthly() {
-        List<ChartModelEntity> response = reportDatabaseUtil.getAverageTicketAgeMonthly();
+        JSONArray response = reportDatabaseUtil.getAverageTicketAgeMonthly();
     	return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
