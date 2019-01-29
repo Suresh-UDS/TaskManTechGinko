@@ -99,8 +99,8 @@ public class SchedulerService extends AbstractService {
 	@Inject
 	private AssetRepository assetRepository;
 
-//	@Inject
-//	private ReportDatabaseUtil reportDatabaseUtil;
+	@Inject
+	private ReportDatabaseUtil reportDatabaseUtil;
 
 
 	public SearchResult<SchedulerConfigDTO> getSchedulerConfig() {
@@ -993,25 +993,25 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.sendDaywiseReportEmail(cal.getTime(), isOnDemand, 0);
 	}
 
-//    @Scheduled(cron="0 */5 * * * ?")
-//	public void createJobPoints() {
-//        reportDatabaseUtil.deleteOrUpdateJobPoints();
-//    }
+    @Scheduled(cron="0 */5 * * * ?")
+	public void createJobPoints() {
+        reportDatabaseUtil.deleteOrUpdateJobPoints();
+    }
 
-//    @Scheduled(cron="0 */5 * * * ?")
-//    public void createTicketPoints() {
-//        reportDatabaseUtil.deleteOrUpdateTicketPoints();
-//    }
+    @Scheduled(cron="0 */5 * * * ?")
+    public void createTicketPoints() {
+        reportDatabaseUtil.deleteOrUpdateTicketPoints();
+    }
 
-//    @Scheduled(cron="0 */5 * * * ?")
-//    public void createAttnPoints() {
-//        reportDatabaseUtil.deleteOrUpdateAttnPoints();
-//    }
+    @Scheduled(cron="0 */5 * * * ?")
+    public void createAttnPoints() {
+        reportDatabaseUtil.deleteOrUpdateAttnPoints();
+    }
 
-//    @Scheduled(cron="0 */5 * * * ?")
-//    public void createQuotePoints() {
-//        reportDatabaseUtil.deleteOrUpdateQuotePoints();
-//    }
+    @Scheduled(cron="0 */5 * * * ?")
+    public void createQuotePoints() {
+        reportDatabaseUtil.deleteOrUpdateQuotePoints();
+    }
 
 
 

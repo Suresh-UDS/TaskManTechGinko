@@ -13,24 +13,24 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.concurrent.TimeUnit;
 
-//@Configuration
+@Configuration
 public class ReportDatabaseConfiguration {
 	
 	private final Logger log = LoggerFactory.getLogger(ReportDatabaseConfiguration.class);
 	
-//	@Value("${influxdb.url}")
+	@Value("${influxdb.url}")
 	private String url;
 	
-//	@Value("${influxdb.username}")
+	@Value("${influxdb.username}")
 	private String username;
 	
-//	@Value("${influxdb.password}")
+	@Value("${influxdb.password}")
 	private String password;
 	
-//	@Value("${influxdb.dbname}")
+	@Value("${influxdb.dbname}")
 	private String databaseName;
 
-//	@Value("${influxdb.retention-policy}")
+	@Value("${influxdb.retention-policy}")
 	private String retentionPolicy;
 	
 	@Bean
