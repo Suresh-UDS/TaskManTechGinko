@@ -53,6 +53,7 @@ angular.module('timeSheetApp')
 			$scope.selectPlannedStartTime;
 			$scope.btnDisable = false;
 			$scope.scheduleView = true;
+			$scope.onceJob = false;
 
 			/** Ui-select scopes **/
 			$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -871,6 +872,7 @@ angular.module('timeSheetApp')
 						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
 						if($scope.job.schedule == 'ONCE'){
 							$scope.job.scheduleEndDate = "";
+							$scope.onceJob = true;
 						}else{
 							$scope.job.scheduleEndDate = data.scheduleEndDate;
 						}

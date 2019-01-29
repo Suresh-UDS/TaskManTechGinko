@@ -1,5 +1,6 @@
 package com.ts.app.repository;
 
+import com.ts.app.domain.Branch;
 import com.ts.app.domain.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
