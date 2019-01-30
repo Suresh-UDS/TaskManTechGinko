@@ -1090,6 +1090,8 @@ angular.module('timeSheetApp')
             DashboardComponent.getTotalQuoteCounts(searchCriteria).then(function (data) {
                 console.log("Quotations Total Counts" +JSON.stringify(data));
                 $scope.loadingStop();
+                
+                /*
                 if(data.length > 0) {
                     $scope.overAllQuotationCount = data[0].totalQuotations;
                     $scope.waitingQuotationCount = data[0].waitingForApproveCnts;
@@ -1103,11 +1105,26 @@ angular.module('timeSheetApp')
                     $scope.approvedQuotationCount = 0;
                     $scope.rejectedQuotationCount = 0;
                 }
-
+                */
+                
+                if(data) {
+                    $scope.overAllQuotationCount = data.totalCount;
+                    $scope.waitingQuotationCount = data.totalSubmitted;
+                    $scope.pendingQuotationCount = data.totalPending;
+                    $scope.approvedQuotationCount = data.totalApproved;
+                    $scope.rejectedQuotationCount = data.totalRejected;
+                }else {
+                		$scope.overAllQuotationCount = 0;
+                    $scope.waitingQuotationCount = 0;
+                    $scope.pendingQuotationCount = 0;
+                    $scope.approvedQuotationCount = 0;
+                    $scope.rejectedQuotationCount = 0;
+                }
+                
                 if(jQuery.isEmptyObject($scope.selectedProject)== true &&
-                jQuery.isEmptyObject($scope.selectedSite)== true &&
-                jQuery.isEmptyObject($scope.selectedRegion)== true &&
-                jQuery.isEmptyObject($scope.selectedBranch)== true){
+                		jQuery.isEmptyObject($scope.selectedSite)== true &&
+                		jQuery.isEmptyObject($scope.selectedRegion)== true &&
+                		jQuery.isEmptyObject($scope.selectedBranch)== true){
                     $scope.loadingStop();
                 }
 

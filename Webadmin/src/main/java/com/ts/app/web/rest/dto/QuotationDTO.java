@@ -61,6 +61,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
     private long totalSubmitted;
 
     private long totalApproved;
+    
+    private long totalRejected;
 
     private long totalArchived;
     
@@ -224,6 +226,14 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
+	}
+	
+	public long getTotalRejected() {
+		return totalRejected;
+	}
+
+	public void setTotalRejected(long totalRejected) {
+		this.totalRejected = totalRejected;
 	}
 
 	public boolean isArchived() {

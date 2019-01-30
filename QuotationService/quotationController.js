@@ -735,15 +735,23 @@ module.exports = {
                         }else{
                             quotationSummary.totalSubmitted = 0;
                         }
-                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){ 
+                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isRejected: true}).exec(function(err, result){
                             if(result && result.length > 0) {
-                                quotationSummary.totalArchived = result.length;
+                                quotationSummary.totalRejected = result.length;
                             }else{
-                                quotationSummary.totalArchived = 0;
+                                quotationSummary.totalRejected = 0;
                             }
+                            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){
+                                if(result && result.length > 0) {
+                                    quotationSummary.totalArchived = result.length;
+                                }else{
+                                    quotationSummary.totalArchived = 0;
+                                }
 
-                            res.send(200, quotationSummary);
+                                res.send(200, quotationSummary);
+                            });
                         });
+
                     });
                 });
             });

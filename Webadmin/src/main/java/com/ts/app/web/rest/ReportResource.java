@@ -1,25 +1,46 @@
 package com.ts.app.web.rest;
 
-import com.ts.app.domain.*;
-import com.ts.app.domain.Measurements.JobStatusMeasurement;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.ReportDatabaseService;
-import com.ts.app.service.ReportService;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.SchedulerService;
-import com.ts.app.service.util.ReportDatabaseUtil;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.util.*;
+import com.ts.app.domain.AttendanceReportCounts;
+import com.ts.app.domain.AttendanceStatusReport;
+import com.ts.app.domain.ChartModelEntity;
+import com.ts.app.domain.JobReportCounts;
+import com.ts.app.domain.JobStatusReport;
+import com.ts.app.domain.TicketReportCounts;
+import com.ts.app.domain.TicketStatusReport;
+import com.ts.app.domain.Measurements.JobStatusMeasurement;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.ReportDatabaseService;
+import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.service.SchedulerService;
+import com.ts.app.service.SiteService;
+import com.ts.app.service.util.ReportDatabaseUtil;
+import com.ts.app.web.rest.dto.QuotationDTO;
+import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SiteDTO;
 
 
 /**
@@ -38,7 +59,7 @@ public class ReportResource {
 	@Lazy
 	private SchedulerHelperService schedulerHelperService;
 
-	@Inject
+	//@Inject
     private ReportDatabaseUtil reportDatabaseUtil;
 
 	@Inject
@@ -46,6 +67,9 @@ public class ReportResource {
 
 	@Inject
     private SchedulerService schedulerService;
+	
+	@Inject
+	private SiteService siteService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
@@ -238,8 +262,25 @@ public class ReportResource {
 
     @RequestMapping(value = "/reports/quotations/count", method = RequestMethod.POST)
     public ResponseEntity<?> getQuotationCountByToday(@RequestBody SearchCriteria searchCriteria) {
-        List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
-        return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
+    		if(searchCriteria.getSiteId() == 0) {
+    			List<SiteDTO> sites = null;
+    			if(StringUtils.isNotEmpty(searchCriteria.getBranch())) {
+    				sites = siteService.findSitesByRegionAndBranch(searchCriteria.getProjectId(), searchCriteria.getRegion(), searchCriteria.getBranch());
+    			}else if(StringUtils.isNotEmpty(searchCriteria.getRegion())) {
+    				sites = siteService.findSitesByRegion(searchCriteria.getProjectId(), searchCriteria.getRegion());
+    			}
+    			if(!CollectionUtils.isEmpty(sites)) {
+    				List<Long> siteIds = new ArrayList<Long>();
+    				for(SiteDTO site : sites) {
+    					siteIds.add(site.getId());
+    				}
+    				searchCriteria.setSiteIds(siteIds);
+    			}
+    		}
+    		QuotationDTO quotationSummary = reportService.getQuotationCountSummary(searchCriteria);
+    		return new ResponseEntity<>(quotationSummary, HttpStatus.OK);
+        //List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
+        //return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/reports/attendance", method = RequestMethod.GET)
