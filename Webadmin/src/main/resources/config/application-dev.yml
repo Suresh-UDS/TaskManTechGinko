@@ -272,7 +272,7 @@ google:
               port: 8080
 
 influxdb:
-   url: http://localhost:8086
+   url: http://18.136.79.137:8086
    username: superadmin
    password: "*BehindWheel7"
    dbname: dashboard
