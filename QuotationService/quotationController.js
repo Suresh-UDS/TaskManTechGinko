@@ -786,7 +786,7 @@ module.exports = {
         quotCriterias.title={$regex:req.body.title,$options:"i"};
        
       }
-      if(req.body.siteIds.length > 0){
+      if(req.body.siteIds && req.body.siteIds.length > 0){
         quotCriterias.siteId = {$in: req.body.siteIds};
       }
       if(req.body.createdBy){
