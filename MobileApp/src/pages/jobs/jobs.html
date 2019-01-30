@@ -160,7 +160,7 @@
             </div>
 
             <div  class="white-bg" *ngFor="let job of allJobs" >
-                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' && job.schedule==null ||job.parentJobId <=0">
+                <div class="padding-left16 padding-top5" *ngIf="job.parentJobId <=0 && job.schedule=='ONCE' && job.scheduled == true ">
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">

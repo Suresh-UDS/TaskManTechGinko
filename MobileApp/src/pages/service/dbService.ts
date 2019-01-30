@@ -161,7 +161,7 @@ export class DBService {
                 this.siteService.searchSite().subscribe(
                     response => {
                         console.log("Get site response");//
-                        sites = response.json();
+                        sites = response;
                         console.log(sites)//
                         if (sites.length > 0) {
                             for (var i = 0; i < sites.length; i++) {
