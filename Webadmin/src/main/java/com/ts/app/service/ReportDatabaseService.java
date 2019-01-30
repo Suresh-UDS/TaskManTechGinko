@@ -157,7 +157,7 @@ public class ReportDatabaseService {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        
+
         SimpleDateFormat monthFmt = new SimpleDateFormat("MMM");
         SimpleDateFormat yearFmt = new SimpleDateFormat("YYYY");
         String month = monthFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
@@ -343,7 +343,7 @@ public class ReportDatabaseService {
         influxDB.disableBatch();
         influxDB.close();
     }
-    
+
     public void addTicketAvg(List<TicketStatusMeasurement> ticketStats) throws Exception {
     	InfluxDB influxDB = connectDatabase();
     	BatchPoints batchPoints = BatchPoints
@@ -377,7 +377,7 @@ public class ReportDatabaseService {
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
         return resultMapper.toPOJO(queryResult, TicketAvgStatus.class);
 	}
-	
+
 	@Async
 	public void deleteQuery(InfluxDB connection, String query, String dbName) {
 		 Query queryObject = new Query(query, dbName);

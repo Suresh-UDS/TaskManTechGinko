@@ -1744,15 +1744,25 @@ angular.module('timeSheetApp')
 				$scope.searchSite = null;
 				$scope.sitesListOne.selected=$scope.searchSite;
 			}
-			if($rootScope.searchFilterCriteria.attendFromDate) {
-				$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.attendFromDate;
-			}
+			// if($rootScope.searchFilterCriteria.attendFromDate) {
+			// 	$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.attendFromDate;
+			// }
+            //
+			// if($rootScope.searchFilterCriteria.attendToDate) {
+			// 	$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.attendToDate;
+			// }
+            console.log($rootScope.searchFilterCriteria.empFromDate);
+			console.log($rootScope.searchFilterCriteria.empToDate);
+            if($rootScope.searchFilterCriteria.empFromDate) {
+                $scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.empFromDate;
+            }
 
-			if($rootScope.searchFilterCriteria.attendToDate) {
-				$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.attendToDate;
-			}
+            if($rootScope.searchFilterCriteria.empToDate) {
+                $scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.empToDate;
+            }
 
-			/* Root scope (search criteria) end*/
+
+            /* Root scope (search criteria) end*/
 		} else{
 			if($scope.client.selected && $scope.client.selected.id !=0){
 

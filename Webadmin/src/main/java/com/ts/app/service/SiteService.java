@@ -2,13 +2,12 @@ package com.ts.app.service;
 
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.ImportUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -501,18 +500,71 @@ public class SiteService extends AbstractService {
     }
 
     public List<RegionDTO> findRegionByProject(long projectId){
-	    List<Region> regions = regionRepository.findRegionByProject(projectId);
 
-	    return mapperUtil.toModelList(regions, RegionDTO.class);
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
+        //long userGroupId = user.getUserGroup().getId();
+        List<Region> entities =  new ArrayList<Region>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            entities = regionRepository.findSiteRegions(projectId, subEmpList);
+        }else {
+            entities = regionRepository.findRegionNameByProject(projectId);
+        }
+//        List<RegionDTO> values = new ArrayList<RegionDTO>();
+//        if(CollectionUtils.isNotEmpty(entities)) {
+//            for(String region : entities) {
+//                 RegionDTO regionDTO = regionRepository.findByName(region)
+//                values.add(siteDto);
+//            }
+//        }
+
+	    return mapperUtil.toModelList(entities, RegionDTO.class);
     }
 
-    public List<BranchDTO> findBranchByProject(long projectId,long regionId){
-        List<Branch> branches = branchRepository.findBranchByProjectAndRegion(projectId,regionId);
+    public List<BranchDTO> findBranchByProject(long projectId, long regionId){
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        Hibernate.initialize(user.getEmployee());
+        long empId = 0;
+        if(user.getEmployee() != null) {
+            empId = user.getEmployee().getId();
+        }
 
+        List<Branch> branches =  new ArrayList<Branch>();
+        if(empId > 0 && !user.isAdmin()) {
+            Employee employee = user.getEmployee();
+            Set<Long> subEmpIds = new TreeSet<Long>();
+            subEmpIds.add(empId);
+            List<Long> subEmpList = new ArrayList<Long>();
+            if(employee != null) {
+                Hibernate.initialize(employee.getSubOrdinates());
+                int levelCnt = 1;
+                subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                subEmpList.addAll(subEmpIds);
+                log.debug("List of subordinate ids -"+ subEmpList);
+            }
+            branches = branchRepository.findSiteBranches(projectId, subEmpList, regionId);
+        }else {
+            branches = branchRepository.findBranchByProjectAndRegion(projectId, regionId);
+        }
         return mapperUtil.toModelList(branches, BranchDTO.class);
     }
 
-    public List<BranchDTO> findBranchByProjectAndRegionName(long projectId,String region){
+    public List<BranchDTO> findBranchByProjectAndRegionName(long projectId, String region){
         List<Branch> branches = branchRepository.findBranchByProjectAndRegionName(projectId,region);
 
         return mapperUtil.toModelList(branches, BranchDTO.class);

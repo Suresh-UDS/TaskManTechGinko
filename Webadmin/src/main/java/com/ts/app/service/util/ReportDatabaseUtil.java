@@ -200,10 +200,10 @@ public class ReportDatabaseUtil {
             cal.set(Calendar.MINUTE, 0);
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
-            
+
             String month = monthFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
             String year  = yearFmt.format(ticketReportList.getFormattedDate()).toUpperCase();
-            
+
             if(ticketReportList.getAssignedOn() != null) {
                 assignedOn.setTime(ticketReportList.getAssignedOn());
                 cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -1458,7 +1458,7 @@ public class ReportDatabaseUtil {
         return chartModelEntities;
 
     }
-    
+
     public List<ChartModelEntity> getAverageTicketAge() {
     	InfluxDB connection = connectDatabase();
     	Calendar cal = Calendar.getInstance();
@@ -1483,19 +1483,19 @@ public class ReportDatabaseUtil {
         String query3 = "select mean(counts) as avgCount from TicketAvgStatus group by category";
         List<TicketAvgStatus> list = new ArrayList<>();
         try {
-        	list = reportDatabaseService.getTicketAvgPoints(connection, query3, dbName);  
+        	list = reportDatabaseService.getTicketAvgPoints(connection, query3, dbName);
         } catch(Exception e) {
         	e.printStackTrace();
         }
-        
+
         String delQuery = "drop measurement TicketAvgStatus";
         reportDatabaseService.deleteQuery(connection, delQuery, dbName);
-        
+
         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
         ChartModelEntity chartModelEntity = new ChartModelEntity();
         List<String> categoryList = new ArrayList<>();
         List<AverageStatus> categoryStatusCnts = new ArrayList<>();
-  
+
         for(TicketAvgStatus ent : list) {
           AverageStatus status = new AverageStatus();
           String category = ent.getCategory();
@@ -1510,16 +1510,16 @@ public class ReportDatabaseUtil {
         chartModelEntities.add(chartModelEntity);
     	return chartModelEntities;
     }
-	
+
 	public List<ChartModelEntity> getAverageTicketAgeMonthly() {
 		// TODO Auto-generated method stub
 		InfluxDB influxdb = connectDatabase();
 		String query = "select count(statusCount) as statusCount from TicketReport group by month, category";
 		List<TicketStatusMeasurement> statsLists = reportDatabaseService.getTicketPoints(influxdb, query, dbName);
-       
+
         Map<String, Map<String, Status>> statusPoints = new HashMap<>();
         Map<String, Status> statusCounts = null;
-        
+
         List<ChartModelEntity> chartModelEntities = new ArrayList<>();
         List<Integer> totalCnts = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(statsLists)) {
@@ -1543,7 +1543,7 @@ public class ReportDatabaseUtil {
                 	Cnts.add(statsList.getStatusCount());
                 	status.setData(Cnts);
                 }
-                
+
                 statusCounts.put(statsList.getCategory(), status);
                 statusPoints.put(month, statusCounts);
 
@@ -1551,36 +1551,36 @@ public class ReportDatabaseUtil {
             log.debug("job status points map count" +statusPoints.toString());
 
         }
-        
-        
+
+
         if(!statusPoints.isEmpty()) {
             Set<Map.Entry<String,Map<String,Status>>> entrySet = statusPoints.entrySet();
             List<Map.Entry<String, Map<String,Status>>> list = new ArrayList<Map.Entry<String, Map<String,Status>>>(entrySet);
             ChartModelEntity chartModelEntity = new ChartModelEntity();
             List<String> categoryList = new ArrayList<>();
             List<Status> categoryStatusCnts = new ArrayList<>();
-   
-            for(Map.Entry<String, Map<String, Status>> ent : list) {  
+
+            for(Map.Entry<String, Map<String, Status>> ent : list) {
                 String category = ent.getKey();
                 categoryList.add(category);
-               
+
                 Map<String, Status> categoryWiseCount = statusPoints.get(category);  // Jun: { AC: 5, ELEC: 4, CLE:41}
                 Set<Map.Entry<String,Status>> catSet = categoryWiseCount.entrySet();  // { AC: 5, ELEC: 4, CLE:41 }
                 for(Map.Entry<String,Status> catList : catSet) {
-              
+
                 	if(categoryWiseCount.containsKey(catList.getKey())) {  // AC
                 		List<Integer> catCnts = new ArrayList<>();   // [5, 4, 41]
                 		Status newStats = categoryWiseCount.get(catList.getKey());
                 		catCnts.add(newStats.getData().get(0));
                 		newStats.setData(catCnts);
                 		categoryStatusCnts.add(newStats); // {name: AC, data: [5, ] }
-                		
+
                 	}else {
                 		categoryWiseCount = new HashMap<>();
                 	}
-                	
+
                 }
-                
+
             }
 //
             chartModelEntity.setX(categoryList);
@@ -1588,7 +1588,7 @@ public class ReportDatabaseUtil {
             chartModelEntities.add(chartModelEntity);
             log.debug("Formatted JSON for jobs" +chartModelEntities.toString());
         }
-        
+
         return chartModelEntities;
 
 	}

@@ -592,7 +592,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 
-	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceDetailReportSchedule() {
 		log.info("Attendance detailed report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
@@ -600,7 +600,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), false, true, false);
 	}
 
-	@Scheduled(cron = "0 0 9 1 * ?")
+//	@Scheduled(cron = "0 0 9 1 * ?")
 	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceMusterrollReportSchedule() {
 		log.info("Attendance muster roll report scheduler invoked");
@@ -616,20 +616,20 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
 	}
 
-	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+//	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void attendanceCheckOutTask() {
 		log.info("Attendance auto check out scheduler invoked");
 		schedulerHelperService.autoCheckOutAttendance();
 	}
 
-	@Scheduled(cron="0 0 9 * * ?")
+//	@Scheduled(cron="0 0 9 * * ?")
 	public void warrantyExpireAlert() {
 		schedulerHelperService.sendWarrantyExpireAlert();
 		schedulerHelperService.sendSchedulePPMJobsAlert();
 		schedulerHelperService.sendScheduleAMCJobsAlert();
 	}
 
-	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
+//	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
 	public void feedbackDetailReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		//cal.add(Calendar.DAY_OF_YEAR, -1);
@@ -803,15 +803,15 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */5 * * * ?")
+//	@Scheduled(cron = "0 */5 * * * ?")
 	public void slaTicketEscalationNotification()
 	{
 		String mailStatus = "";
 		log.debug(">>> Tickets ");
 		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
-		String subject = "test";
-		String content = "Escalation mail for ticket";
+//		String subject = "test";
+//		String content = "Escalation mail for ticket";
 		for(SlaConfig slaConfig : slaConfigs)
 		{
 			List<Ticket> tickets = new ArrayList<Ticket>();
@@ -829,6 +829,12 @@ public class SchedulerService extends AbstractService {
 						hours += eschours;
 						for(Ticket ticket : tickets)
 						{
+						    String siteName = ticket.getSite().getName();
+
+						    String url = env.getProperty("url.ticket-view");
+
+						    url += ticket.getId();
+
 							for(String cat : category)
 							{
 								if(cat.equalsIgnoreCase(ticket.getCategory()));
@@ -841,7 +847,7 @@ public class SchedulerService extends AbstractService {
 											if(slaConfig.getSeverity().equals(ticket.getSeverity()))
 											{
 												try {
-													mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+													mailService.sendEscalationEmail(email,siteName,slaEscalationConfig.getLevel(),ticket.getId(),url,ticket.getTitle(),ticket.getDescription());
 												} catch (Exception e) {
 													// TODO Auto-generated catch block
 													e.printStackTrace();
@@ -895,8 +901,8 @@ public class SchedulerService extends AbstractService {
 		log.debug(">>> Job Escalation ");
 		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
-		String subject = "test";
-		String content = "Escalation mail for job";
+//		String subject = "test";
+//		String content = "Escalation mail for job";
 		for(SlaConfig slaConfig : slaConfigs)
 		{
 			List<Job> jobs = new ArrayList<Job>();
@@ -914,6 +920,10 @@ public class SchedulerService extends AbstractService {
 						hours += eschours;
 						for(Job job : jobs)
 							{
+                                String url = env.getProperty("url.job-view");
+                                url += job.getId();
+
+                                String site = job.getSite().getName();
 							for(String cat : category)
 							{
 								if(job.getType() !=  null)
@@ -927,7 +937,7 @@ public class SchedulerService extends AbstractService {
 										{
 											try
 											{
-												mailStatus = mailService.sendEscalationEmail(email,subject,content,false,false,"empty");
+												mailService.sendEscalationEmail(email,site,slaEscalationConfig.getLevel(),job.getId(),url,job.getTitle(),job.getDescription());
 											}
 											catch (Exception e)
 											{
@@ -975,7 +985,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 
-	@Scheduled(cron="0 */30 * * * ?")
+//	@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		log.info("Daywise report scheduler invoked");
 		Calendar cal = Calendar.getInstance();

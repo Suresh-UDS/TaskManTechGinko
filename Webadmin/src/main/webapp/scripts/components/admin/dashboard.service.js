@@ -21,11 +21,11 @@ angular.module('timeSheetApp')
                 });
             },
 
-            // loadAttendanceReport: function (siteId,selectedDate,endDate) {
-            //     return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
-            //         return response.data;
-            //     });
-            // },
+            loadAttendanceReportBySite: function (siteId,selectedDate,endDate) {
+                return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
+                    return response.data;
+                });
+            },
 
             loadAllProjects: function(){
                 return $http.get('api/project').then(function(response){
@@ -93,6 +93,12 @@ angular.module('timeSheetApp')
 
             getTotalQuoteCounts : function (searchCriteria) {
                 return $http.post('api/reports/quotations/count', searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
+
+            getRelieverCounts : function (searchCriteria) {
+                return $http.post('api/reliever/count', searchCriteria).then(function (response) {
                     return response.data;
                 });
             }

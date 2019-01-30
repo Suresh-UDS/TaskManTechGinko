@@ -68,43 +68,57 @@ angular.module('timeSheetApp')
             $scope.loadAllSites();
             $scope.loadAllEmployee();
             $scope.loadAllAttendanceCounts();
-            $scope.loadQuotationReportChart();
-            $scope.loadQuotationReportCounts();
+            // $scope.loadQuotationReportCounts();
             $scope.loadJobReport();
             $scope.loadingStart();
             $scope.loadChartData();
-            $scope.loadTicketStatusFromInflux();
-            $scope.loadAttendanceStatusCounts();
-            $scope.loadTicketAgeChart();
-
-            DashboardComponent.loadAllJobsByCategoryCnt().then(function (data) {
-                console.log("All jobs by category count " +JSON.stringify(data));
-                if(data.length > 0) {
-                    $scope.pieSeries = [];
-                    data.map(function (item) {
-                        if(item) {
-                            var seriesData = {};
-                            seriesData.name = item.type;
-                            seriesData.y = item.categoryCount;
-                            $scope.pieSeries.push(seriesData);
-                        }
-                    })
-                }
-                console.log($scope.pieSeries);
-                $scope.ready = true;
-            });
-
-            DashboardComponent.loadAllJobsByStatusCnt().then(function (data) {
-                console.log("All jobs by status count per date" +JSON.stringify(data));
-                if(data.length > 0) {
-                    $scope.jobStackChart = data[0];
-                    $scope.jobStackXSeries = $scope.jobStackChart.x;
-                    $scope.jobStackYSeries = $scope.jobStackChart.status;
-                    console.log($scope.jobStackChart.status);
-                    $rootScope.jobGraph();
-                }
-            });
+            // $scope.loadTicketStatusFromInflux();
+            // $scope.loadCharts();
         };
+
+        // Load Charts function
+        $scope.loadCharts = function(){
+            // $scope.loadQuotationReportChart();
+            // $scope.loadAllJobsByCategoryCntFunc();
+            // $scope.loadAllJobsByStatusCntFunc();
+            // $scope.loadTicketAgeChart();
+            // $scope.loadAttendanceStatusCounts();
+        };
+
+        $scope.loadAllJobsByCategoryCntFunc = function(){
+          DashboardComponent.loadAllJobsByCategoryCnt().then(function (data) {
+              console.log("All jobs by category count " +JSON.stringify(data));
+              if(data.length > 0) {
+                  $scope.pieSeries = [];
+                  data.map(function (item) {
+                      if(item) {
+                          var seriesData = {};
+                          seriesData.name = item.type;
+                          seriesData.y = item.categoryCount;
+                          $scope.pieSeries.push(seriesData);
+                      }
+                  })
+              }
+              console.log($scope.pieSeries);
+              $scope.ready = true;
+          });
+        }
+
+        $scope.loadAllJobsByStatusCntFunc = function(){
+           DashboardComponent.loadAllJobsByStatusCnt().then(function (data) {
+               console.log("All jobs by status count per date" +JSON.stringify(data));
+               if(data.length > 0) {
+                   $scope.jobStackChart = data[0];
+                   $scope.jobStackXSeries = $scope.jobStackChart.x;
+                   $scope.jobStackYSeries = $scope.jobStackChart.status;
+                   console.log($scope.jobStackChart.status);
+                   $rootScope.jobGraph();
+                   $scope.jobChart.showLoading();
+                   $timeout(function(){$scope.jobChart.hideLoading();},8000);
+               }
+
+           });
+        }
 
         $scope.loadJobs = function(siteId){
             var siteId = 176;
@@ -148,33 +162,33 @@ angular.module('timeSheetApp')
             $scope.startDate = new Date($scope.selectedFromDateSer);
             $scope.endDate =  new Date($scope.selectedToDateSer);
             // var last = new Date(date.getTime() - (days * 24 * 60 * 60 * 1000));
-            // $scope.startDate = $scope.startDate.getDate()+'-0'+($scope.startDate.getUTCMonth()+1)+'-'+$scope.startDate.getFullYear();
-            // $scope.endDate = $scope.endDate.getDate()+'-0'+($scope.endDate.getMonth()+1)+'-'+$scope.endDate.getFullYear();
-            // console.log("Startdate---"+$scope.startDate);
-            // console.log("EndDate---"+$scope.endDate);
-            // $scope.selectedFromDateSer.setHours(0,0,0,0);
-            // $scope.selectedToDateSer.setHours(23,59,59,0);
-            // $scope.startDate = $scope.selectedFromDateSer.getDate() + '-' + ($scope.selectedFromDateSer.getMonth() +1) + '-' + $scope.selectedFromDateSer.getFullYear();
-            // console.log("Startdate---"+$scope.startDate);
-            // $scope.endDate = $scope.selectedToDateSer.getDate() + '-' + ($scope.selectedToDateSer.getMonth() +1) + '-' + $scope.selectedToDateSer.getFullYear();
-            // console.log("EndDate---"+$scope.endDate);
+            $scope.startDate = $scope.startDate.getDate()+'-0'+($scope.startDate.getUTCMonth()+1)+'-'+$scope.startDate.getFullYear();
+            $scope.endDate = $scope.endDate.getDate()+'-0'+($scope.endDate.getMonth()+1)+'-'+$scope.endDate.getFullYear();
+            console.log("Startdate---"+$scope.startDate);
+            console.log("EndDate---"+$scope.endDate);
+            $scope.selectedFromDateSer.setHours(0,0,0,0);
+            $scope.selectedToDateSer.setHours(23,59,59,0);
+            $scope.startDate = $scope.selectedFromDateSer.getDate() + '-' + ($scope.selectedFromDateSer.getMonth() +1) + '-' + $scope.selectedFromDateSer.getFullYear();
+            console.log("Startdate---"+$scope.startDate);
+            $scope.endDate = $scope.selectedToDateSer.getDate() + '-' + ($scope.selectedToDateSer.getMonth() +1) + '-' + $scope.selectedToDateSer.getFullYear();
+            console.log("EndDate---"+$scope.endDate);
 
-            $scope.formatFromDate = $scope.selectedFromDateSer;
-            $scope.formatToDate =  $scope.selectedToDateSer;
+            // $scope.formatFromDate = $scope.selectedFromDateSer;
+            // $scope.formatToDate =  $scope.selectedToDateSer;
 
             if(siteId){
 
-                $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.formatFromDate,$scope.formatToDate);
+                $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.startDate,$scope.endDate);
 
             }else if(region && branch){
-                $scope.loadChartDataByBranch(projectId,region,branch,$scope.formatFromDate,$scope.formatToDate);
+                $scope.loadChartDataByBranch(projectId,region,branch,$scope.startDate,$scope.endDate);
 
             }else if(region){
-                $scope.loadChartDataByRegion(projectId,region,$scope.formatFromDate,$scope.formatToDate);
+                $scope.loadChartDataByRegion(projectId,region,$scope.startDate,$scope.endDate);
 
             }else if(projectId){
 
-                $scope.loadChartDataByProjectId(projectId,$scope.formatFromDate,$scope.formatToDate);
+                $scope.loadChartDataByProjectId(projectId,$scope.startDate,$scope.endDate);
 
             }
 
@@ -186,15 +200,20 @@ angular.module('timeSheetApp')
             searchCriteria.projectId = projectId;
             searchCriteria.fromDate = startDate;
             searchCriteria.toDate = endDate;
-            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
+            // TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
+            //     /*console.log("Dashboard ticket data_________");
+            //     console.log(response);
+            //     console.log(response.closedTicketCounts["0-3"]);
+            //     console.log(response.openTicketCounts);*/
+            //     $scope.loadTicketCounts(response);
+            //     // $scope.constructChartData(response);
+            // });
+            DashboardComponent.loadTicketChartDataByProject(searchCriteria.projectId, searchCriteria.fromDate, searchCriteria.toDate).then(function(response){  // old dashboard
                 /*console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts);*/
-                $scope.loadTicketCounts(response);
-                // $scope.constructChartData(response);
-
-
+                $scope.constructChartData(response);
             });
         };
 
@@ -204,15 +223,21 @@ angular.module('timeSheetApp')
             searchCriteria.siteId = siteId;
             searchCriteria.fromDate = startDate;
             searchCriteria.toDate = endDate;
-            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
+            // TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
+            //     /*console.log("Dashboard ticket data_________");
+            //     console.log(response);
+            //     console.log(response.closedTicketCounts["0-3"]);
+            //     console.log(response.openTicketCounts);*/
+            //     $scope.loadTicketCounts(response);
+            //     // $scope.constructChartData(response);
+            // });
+            DashboardComponent.loadTicketChartData(searchCriteria.siteId, searchCriteria.fromDate, searchCriteria.toDate).then(function(response){      // old dashboard
                 /*console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
                 console.log(response.openTicketCounts);*/
-                $scope.loadTicketCounts(response);
-                // $scope.constructChartData(response);
-
-
+                // $scope.loadTicketCounts(response);
+                $scope.constructChartData(response);
             });
         };
 
@@ -226,14 +251,22 @@ angular.module('timeSheetApp')
             searchCriteria.region = region;
             searchCriteria.fromDate = startDate;
             searchCriteria.toDate = endDate;
-            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
-               /* console.log("Dashboard ticket data_________");
-                console.log(response);
-                console.log(response.closedTicketCounts["0-3"]);
-                console.log(response.openTicketCounts);*/
-                $scope.loadTicketCounts(response);
-                // $scope.constructChartData(response);
-
+            // TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
+            //    /* console.log("Dashboard ticket data_________");
+            //     console.log(response);
+            //     console.log(response.closedTicketCounts["0-3"]);
+            //     console.log(response.openTicketCounts);*/
+            //     $scope.loadTicketCounts(response);
+            //     // $scope.constructChartData(response);
+            //
+            // });
+            DashboardComponent.loadTicketChartDataByRegion(searchCriteria.projectId, searchCriteria.region, searchCriteria.fromDate, searchCriteria.toDate).then(function(response){    // old dashboard
+                /* console.log("Dashboard ticket data_________");
+                 console.log(response);
+                 console.log(response.closedTicketCounts["0-3"]);
+                 console.log(response.openTicketCounts);*/
+                // $scope.loadTicketCounts(response);
+                $scope.constructChartData(response);
             });
         };
 
@@ -245,14 +278,22 @@ angular.module('timeSheetApp')
             searchCriteria.fromDate = startDate;
             searchCriteria.toDate = endDate;
             searchCriteria.branch = branch;
-            TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
-                /*console.log("Dashboard ticket data_________");
-                console.log(response);
-                console.log(response.closedTicketCounts["0-3"]);
-                console.log(response.openTicketCounts)*/;
-                $scope.loadTicketCounts(response);
-                // $scope.constructChartData(response);
-
+            // TicketComponent.getTicketsCountsByStatus(searchCriteria).then(function(response){
+            //     /*console.log("Dashboard ticket data_________");
+            //     console.log(response);
+            //     console.log(response.closedTicketCounts["0-3"]);
+            //     console.log(response.openTicketCounts)*/;
+            //     $scope.loadTicketCounts(response);
+            //     // $scope.constructChartData(response);
+            //
+            // });
+            DashboardComponent.loadTicketChartDataByBranch(searchCriteria.projectId, searchCriteria.region, searchCriteria.fromDate, searchCriteria.toDate, searchCriteria.branch).then(function(response){    // old dashboard
+                /* console.log("Dashboard ticket data_________");
+                 console.log(response);
+                 console.log(response.closedTicketCounts["0-3"]);
+                 console.log(response.openTicketCounts);*/
+                // $scope.loadTicketCounts(response);
+                $scope.constructChartData(response);
             });
         };
 
@@ -310,132 +351,132 @@ angular.module('timeSheetApp')
             $scope.overAllTicketsTotalCount=$scope.openTicketsTotalCount+$scope.closedTicketsTotalCount;
 
 
-            if($scope.openTicketsTotalCount > 0) {
-
-	            var ctx = document.getElementById("bar1").getContext('2d');
-	            $scope.myChart = new Chart(ctx, {
-	                type: 'bar',
-	                data: {
-	                    labels:$scope.openTicketsLabels ,
-	                    datasets: [{
-	                        // label: '# of Votes',
-	                        data:$scope.openTicketsCountArray ,
-	                        backgroundColor: [
-	                            'rgba(255, 99, 132, 0.2)',
-	                            'rgba(54, 162, 235, 0.2)',
-	                            'rgba(255, 206, 86, 0.2)',
-	                            'rgba(75, 192, 192, 0.2)',
-	                            'rgba(153, 102, 255, 0.2)'
-	                        ],
-	                        borderColor: [
-	                            'rgba(255,99,132,1)',
-	                            'rgba(54, 162, 235, 1)',
-	                            'rgba(255, 206, 86, 1)',
-	                            'rgba(75, 192, 192, 1)',
-	                            'rgba(153, 102, 255, 1)'
-	                        ],
-	                        borderWidth: 1
-	                    }]
-	                },
-	                options: {
-	                    scales: {
-	                        yAxes: [{
-	                            ticks: {
-	                                beginAtZero:true
-	                            }
-	                        }]
-	                    }
-	                }
-	            });
-
-            }else {
-            		document.getElementById("openTicketPanel").style.display = 'none';
-            }
-
-
-            if($scope.closedTicketsTotalCount > 0) {
-
-	            var ctx2 = document.getElementById("bar2").getContext('2d');
-	            $scope.myChart = new Chart(ctx2, {
-	                type: 'bar',
-	                data: {
-	                    labels:$scope.closedTicketsLabels ,
-	                    datasets: [{
-	                        // label: '# of Votes',
-	                        data:$scope.closedTicketsCountArray ,
-	                        backgroundColor: [
-	                            'rgba(255, 99, 132, 0.2)',
-	                            'rgba(54, 162, 235, 0.2)',
-	                            'rgba(255, 206, 86, 0.2)',
-	                            'rgba(75, 192, 192, 0.2)',
-	                            'rgba(153, 102, 255, 0.2)'
-	                        ],
-	                        borderColor: [
-	                            'rgba(255,99,132,1)',
-	                            'rgba(54, 162, 235, 1)',
-	                            'rgba(255, 206, 86, 1)',
-	                            'rgba(75, 192, 192, 1)',
-	                            'rgba(153, 102, 255, 1)'
-	                        ],
-	                        borderWidth: 1
-	                    }]
-	                },
-	                options: {
-	                    scales: {
-	                        yAxes: [{
-	                            ticks: {
-	                                beginAtZero:true
-	                            }
-	                        }]
-	                    }
-	                }
-	            });
-            }else {
-            		document.getElementById("closedTicketPanel").style.display = 'none';
-            }
-
-            if($scope.overAllTicketsTotalCount > 0) {
-
-	            var ctx3 = document.getElementById("bar3").getContext('2d');
-	            $scope.myChart = new Chart(ctx3, {
-	                type: 'bar',
-	                data: {
-	                    labels:$scope.overallTicketLabels ,
-	                    datasets: [{
-	                        // label: '# of Votes',
-	                        data:$scope.overAllTicketsCountArray ,
-	                        backgroundColor: [
-	                            'rgba(255, 99, 132, 0.2)',
-	                            'rgba(54, 162, 235, 0.2)',
-	                            'rgba(255, 206, 86, 0.2)',
-	                            'rgba(75, 192, 192, 0.2)',
-	                            'rgba(153, 102, 255, 0.2)'
-	                        ],
-	                        borderColor: [
-	                            'rgba(255,99,132,1)',
-	                            'rgba(54, 162, 235, 1)',
-	                            'rgba(255, 206, 86, 1)',
-	                            'rgba(75, 192, 192, 1)',
-	                            'rgba(153, 102, 255, 1)'
-	                        ],
-	                        borderWidth: 1
-	                    }]
-	                },
-	                options: {
-	                    scales: {
-	                        yAxes: [{
-	                            ticks: {
-	                                beginAtZero:true
-	                            }
-	                        }]
-	                    }
-	                }
-	            });
-            }else {
-            		document.getElementById("overallTicketPanel").style.display = 'none';
-            }
-
-
+            // if($scope.openTicketsTotalCount > 0) {
+            //
+	        //     var ctx = document.getElementById("bar1").getContext('2d');
+	        //     $scope.myChart = new Chart(ctx, {
+	        //         type: 'bar',
+	        //         data: {
+	        //             labels:$scope.openTicketsLabels ,
+	        //             datasets: [{
+	        //                 // label: '# of Votes',
+	        //                 data:$scope.openTicketsCountArray ,
+	        //                 backgroundColor: [
+	        //                     'rgba(255, 99, 132, 0.2)',
+	        //                     'rgba(54, 162, 235, 0.2)',
+	        //                     'rgba(255, 206, 86, 0.2)',
+	        //                     'rgba(75, 192, 192, 0.2)',
+	        //                     'rgba(153, 102, 255, 0.2)'
+	        //                 ],
+	        //                 borderColor: [
+	        //                     'rgba(255,99,132,1)',
+	        //                     'rgba(54, 162, 235, 1)',
+	        //                     'rgba(255, 206, 86, 1)',
+	        //                     'rgba(75, 192, 192, 1)',
+	        //                     'rgba(153, 102, 255, 1)'
+	        //                 ],
+	        //                 borderWidth: 1
+	        //             }]
+	        //         },
+	        //         options: {
+	        //             scales: {
+	        //                 yAxes: [{
+	        //                     ticks: {
+	        //                         beginAtZero:true
+	        //                     }
+	        //                 }]
+	        //             }
+	        //         }
+	        //     });
+            //
+            // }else {
+            // 		document.getElementById("openTicketPanel").style.display = 'none';
+            // }
+            //
+            //
+            // if($scope.closedTicketsTotalCount > 0) {
+            //
+	        //     var ctx2 = document.getElementById("bar2").getContext('2d');
+	        //     $scope.myChart = new Chart(ctx2, {
+	        //         type: 'bar',
+	        //         data: {
+	        //             labels:$scope.closedTicketsLabels ,
+	        //             datasets: [{
+	        //                 // label: '# of Votes',
+	        //                 data:$scope.closedTicketsCountArray ,
+	        //                 backgroundColor: [
+	        //                     'rgba(255, 99, 132, 0.2)',
+	        //                     'rgba(54, 162, 235, 0.2)',
+	        //                     'rgba(255, 206, 86, 0.2)',
+	        //                     'rgba(75, 192, 192, 0.2)',
+	        //                     'rgba(153, 102, 255, 0.2)'
+	        //                 ],
+	        //                 borderColor: [
+	        //                     'rgba(255,99,132,1)',
+	        //                     'rgba(54, 162, 235, 1)',
+	        //                     'rgba(255, 206, 86, 1)',
+	        //                     'rgba(75, 192, 192, 1)',
+	        //                     'rgba(153, 102, 255, 1)'
+	        //                 ],
+	        //                 borderWidth: 1
+	        //             }]
+	        //         },
+	        //         options: {
+	        //             scales: {
+	        //                 yAxes: [{
+	        //                     ticks: {
+	        //                         beginAtZero:true
+	        //                     }
+	        //                 }]
+	        //             }
+	        //         }
+	        //     });
+            // }else {
+            // 		document.getElementById("closedTicketPanel").style.display = 'none';
+            // }
+            //
+            // if($scope.overAllTicketsTotalCount > 0) {
+            //
+	        //     var ctx3 = document.getElementById("bar3").getContext('2d');
+	        //     $scope.myChart = new Chart(ctx3, {
+	        //         type: 'bar',
+	        //         data: {
+	        //             labels:$scope.overallTicketLabels ,
+	        //             datasets: [{
+	        //                 // label: '# of Votes',
+	        //                 data:$scope.overAllTicketsCountArray ,
+	        //                 backgroundColor: [
+	        //                     'rgba(255, 99, 132, 0.2)',
+	        //                     'rgba(54, 162, 235, 0.2)',
+	        //                     'rgba(255, 206, 86, 0.2)',
+	        //                     'rgba(75, 192, 192, 0.2)',
+	        //                     'rgba(153, 102, 255, 0.2)'
+	        //                 ],
+	        //                 borderColor: [
+	        //                     'rgba(255,99,132,1)',
+	        //                     'rgba(54, 162, 235, 1)',
+	        //                     'rgba(255, 206, 86, 1)',
+	        //                     'rgba(75, 192, 192, 1)',
+	        //                     'rgba(153, 102, 255, 1)'
+	        //                 ],
+	        //                 borderWidth: 1
+	        //             }]
+	        //         },
+	        //         options: {
+	        //             scales: {
+	        //                 yAxes: [{
+	        //                     ticks: {
+	        //                         beginAtZero:true
+	        //                     }
+	        //                 }]
+	        //             }
+	        //         }
+	        //     });
+            // }else {
+            // 		document.getElementById("overallTicketPanel").style.display = 'none';
+            // }
+            //
+            //
 
 
             $scope.overAllTicketsCountArray.push(response.totalNewTicketCount);
@@ -464,44 +505,78 @@ angular.module('timeSheetApp')
         $('input#dateFilterFrom').on('dp.change', function(e){
 
             if(e.date._d > $scope.selectedToDateSer) {
-            		$scope.showNotifications('top','center','danger','From date cannot be greater than To date');
-            		$scope.selectedFromDate = "";
-            		$scope.selectedFromDateSer = "";
+            		$scope.fromErrMsg = 'From date cannot be greater than To date';
+                    alert($scope.fromErrMsg);
+                    $('input#dateFilterFrom').data('DateTimePicker').clear();
+            		$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            		$scope.selectedFromDateSer = new Date();
+                     $('input#dateFilterFrom').val($scope.selectedFromDate);
+
+                     // root scope (searchCriteria)
+                     $rootScope.searchFilterCriteria.selectedFromDate = new Date();
+
+                     // retaining list search value.
+                     getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                     $scope.refreshReport();
+
+                     $scope.loadCharts();
+
             		return false;
-            }else {
+            }else if ((e.date._d < $scope.selectedToDateSer)) {
+
                 $scope.selectedFromDateSer = new Date(e.date._d);
                 $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
 
-                /** root scope (searchCriteria) **/
+                // root scope (searchCriteria)
                 $rootScope.searchFilterCriteria.selectedFromDate = new Date(e.date._d);
 
-                /** retaining list search value.**/
+                // retaining list search value.
                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
                 $scope.refreshReport();
+
+                $scope.loadCharts();
+
             }
+
+
         });
 
         $('input#dateFilterTo').on('dp.change', function(e){
-            console.log(e.date);
 
-            console.log(e.date._d);
             if($scope.selectedFromDateSer > e.date._d) {
-            		$scope.showNotifications('top','center','danger','To date cannot be lesser than From date');
-            		$scope.selectedToDate = "";
-            		$scope.selectedToDateSer = "";
+            		$scope.toErrMsg = 'To date cannot be lesser than From date';
+                    alert($scope.toErrMsg);
+                    $('input#dateFilterTo').data('DateTimePicker').clear();
+            		$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+            		$scope.selectedToDateSer = new Date() ;
+                    $('input#dateFilterTo').val($scope.selectedToDate);
+
+                    // root scope (searchCriteria)
+                    $rootScope.searchFilterCriteria.selectedToDate = new Date();
+
+                    // retaining list search value.
+                    getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
+
+                    $scope.refreshReport();
+
+                    $scope.loadCharts();
+
             		return false;
-            }else {
+            }else if($scope.selectedFromDateSer < e.date._d) {
             	$scope.selectedToDateSer = new Date(e.date._d);
                 $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
 
-                /** root scope (searchCriteria) **/
+                // root scope (searchCriteria)
                 $rootScope.searchFilterCriteria.selectedToDate = new Date(e.date._d);
 
-                /** retaining list search value.**/
+                // retaining list search value.
                 getLocalDbStorage.updateSearch($rootScope.searchFilterCriteria);
 
                 $scope.refreshReport();
+
+                $scope.loadCharts();
             }
 
         });
@@ -586,22 +661,26 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
 
             var searchCriteria = {};
-            searchCriteria.siteId = 0;
-            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;*/
+            // searchCriteria.siteId = 0;
+            // relieverCriteria.fromDate = $scope.selectedFromDateSer;
+            // relieverCriteria.toDate = $scope.selectedToDateSer;
             searchCriteria.fromDate = new Date;
             searchCriteria.toDate = new Date;
-            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
-                console.log(data);
-                // $scope.totalEmployeeCount = data.totalEmployees;
-                $scope.employeeCount = data.totalEmployees;
-                $scope.presentCount = data.totalPresent;
-                $scope.absentCount = data.totalAbsent;
-                $scope.leftCount = data.totalLeft;
+            DashboardComponent.getRelieverCounts(searchCriteria).then(function (data) {
+               console.log("Employee Reliever cnts :" +JSON.stringify(data));
+               $scope.relieverCnt = data;
                 $scope.loadingStop();
+            });
 
-
-            })
+            // DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+            //     console.log(data);
+            //     // $scope.totalEmployeeCount = data.totalEmployees;
+            //     $scope.employeeCount = data.totalEmployees;
+            //     $scope.presentCount = data.totalPresent;
+            //     $scope.absentCount = data.totalAbsent;
+            //     $scope.leftCount = data.totalLeft;
+            //     $scope.loadingStop();
+            // });
 
         };
 
@@ -615,6 +694,8 @@ angular.module('timeSheetApp')
                     $scope.quoteStackYSeries = $scope.quoteStackChart.status;
                     console.log($scope.quoteStackChart.status);
                     $rootScope.quotGraph();
+                    $scope.quotationStackChart.showLoading();
+                    $timeout(function(){$scope.quotationStackChart.hideLoading();},5000);
                 }else{
                     $scope.quoteStackXSeries = "";
                     $scope.quoteStackYSeries = [
@@ -635,6 +716,8 @@ angular.module('timeSheetApp')
                             data: [0]
                         }];
                     $rootScope.quotGraph();
+                    $scope.quotationStackChart.showLoading();
+                    $timeout(function(){$scope.quotationStackChart.hideLoading();},5000);
                 }
 
             });
@@ -678,7 +761,6 @@ angular.module('timeSheetApp')
 
             }
 
-
         };
 
         $scope.refreshReport = function() {
@@ -712,12 +794,13 @@ angular.module('timeSheetApp')
                 }else{
         		    $scope.loadJobReport();
                     $scope.loadAllAttendanceCounts();
-                    $scope.loadTicketStatusCounts();
+                    // $scope.loadTicketStatusCounts();
                     $scope.loadQuotationReportCounts();
                 }
             // $scope.loadAllAttendanceCounts();
         		// $scope.loadJobReport();
             // $scope.myChart.update();
+
         };
 
         $scope.LoadFilterProjects = function(){
@@ -743,6 +826,8 @@ angular.module('timeSheetApp')
     			$scope.loadRegions($scope.selectedProject.id);
     			$scope.loadSites($scope.selectedProject.id,null,null);
                 $scope.loadChartData($scope.selectedProject.id,null,null,null);
+
+                $scope.loadCharts();
 
             }else{
                 $rootScope.searchFilterCriteria.projectId = null;
@@ -784,6 +869,8 @@ angular.module('timeSheetApp')
                 $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,null);
                 $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,null,null);
 
+                $scope.loadCharts();
+
             }else{
                     $rootScope.searchFilterCriteria.regionId = null;
                     $rootScope.searchFilterCriteria.region = null;
@@ -820,6 +907,8 @@ angular.module('timeSheetApp')
                 $scope.loadSites($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name);
                 $scope.loadChartData($scope.selectedProject.id,$scope.selectedRegion.name,$scope.selectedBranch.name,null);
 
+               $scope.loadCharts();
+
             }else{
                $rootScope.searchFilterCriteria.branchId = null;
                $rootScope.searchFilterCriteria.branch = null;
@@ -837,10 +926,14 @@ angular.module('timeSheetApp')
         	if($scope.selectedSite) {
 
         		/** root scope (searchCriteria) **/
-        		$rootScope.searchFilterCriteria.regionId = $scope.selectedRegion.id;
-                $rootScope.searchFilterCriteria.region = $scope.selectedRegion.name;
-                $rootScope.searchFilterCriteria.branchId = $scope.selectedBranch.id;
-                $rootScope.searchFilterCriteria.branch = $scope.selectedBranch.name;
+        		if($scope.selectedRegion){
+        		  $rootScope.searchFilterCriteria.regionId = $scope.selectedRegion.id;
+                  $rootScope.searchFilterCriteria.region = $scope.selectedRegion.name;
+        		}
+        		if($scope.selectedBranch){
+        		  $rootScope.searchFilterCriteria.branchId = $scope.selectedBranch.id;
+                  $rootScope.searchFilterCriteria.branch = $scope.selectedBranch.name;
+        		}
         		$rootScope.searchFilterCriteria.projectId = $scope.selectedProject.id;
                 $rootScope.searchFilterCriteria.projectName = $scope.selectedProject.name;
                 $rootScope.searchFilterCriteria.siteId = $scope.selectedSite.id;
@@ -853,6 +946,8 @@ angular.module('timeSheetApp')
     			$scope.refreshReportBySite();
                 $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
                 console.log('Root search values',$rootScope.searchFilterCriteria);
+
+                $scope.loadCharts();
 
             }else{
                  $rootScope.searchFilterCriteria.siteId = null;
@@ -873,18 +968,24 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
-            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;*/
-            searchCriteria.fromDate = new Date;
-            searchCriteria.toDate = new Date;
-            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
-            console.log(data);
-            $scope.employeeCount = data.totalEmployees;
-            $scope.presentCount = data.totalPresent;
-            $scope.absentCount = data.totalAbsent;
-            $scope.leftCount = data.totalLeft;
-
-            })
+            searchCriteria.fromDate = new Date();
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            // searchCriteria.fromDate = new Date;
+            // searchCriteria.toDate = new Date;
+            // DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+            // console.log(data);
+            //     $scope.employeeCount = data.totalEmployees;
+            //     $scope.presentCount = data.totalPresent;
+            //     $scope.absentCount = data.totalAbsent;
+            //     $scope.leftCount = data.totalLeft;
+            // });
+            DashboardComponent.loadAttendanceReportByProject(searchCriteria.projectId, searchCriteria.fromDate, searchCriteria.toDate).then(function(data){
+                console.log(data);
+                $scope.employeeCount = data.totalEmployeeCount;
+                $scope.presentCount = data.presentEmployeeCount;
+                $scope.absentCount = data.absentEmployeeCount;
+                // $scope.leftCount = data.totalLeft;
+            });
 
         };
 
@@ -896,19 +997,25 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
-            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;*/
             searchCriteria.fromDate = new Date();
-            searchCriteria.toDate = new Date();
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            // searchCriteria.fromDate = new Date();
+            // searchCriteria.toDate = new Date();
             searchCriteria.region = $scope.selectedRegion.name;
-            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+            // DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+            //     console.log(data);
+            //     $scope.employeeCount = data.totalEmployees;
+            //     $scope.presentCount = data.totalPresent;
+            //     $scope.absentCount = data.totalAbsent;
+            //     $scope.leftCount = data.totalLeft;
+            // });
+            DashboardComponent.loadAttendanceReportByRegion(searchCriteria.projectId, searchCriteria.region, searchCriteria.fromDate, searchCriteria.toDate).then(function(data){
                 console.log(data);
-                $scope.employeeCount = data.totalEmployees;
-                $scope.presentCount = data.totalPresent;
-                $scope.absentCount = data.totalAbsent;
-                $scope.leftCount = data.totalLeft;
-
-            })
+                $scope.employeeCount = data.totalEmployeeCount;
+                $scope.presentCount = data.presentEmployeeCount;
+                $scope.absentCount = data.absentEmployeeCount;
+                // $scope.leftCount = data.totalLeft;
+            });
 
         };
 
@@ -920,20 +1027,27 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
             var searchCriteria = {};
             searchCriteria.projectId = $scope.selectedProject.id;
-            /*searchCriteria.fromDate = $scope.selectedFromDateSer;
-            searchCriteria.toDate = $scope.selectedToDateSer;*/
             searchCriteria.fromDate = new Date();
-            searchCriteria.toDate = new Date();
+            searchCriteria.toDate = $scope.selectedToDateSer;
+            //searchCriteria.fromDate = new Date();
+            //searchCriteria.toDate = new Date();
             searchCriteria.region = $scope.selectedRegion.name;
             searchCriteria.branch = $scope.selectedBranch.name;
-            DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
-                console.log(data);
-                $scope.employeeCount = data.totalEmployees;
-                $scope.presentCount = data.totalPresent;
-                $scope.absentCount = data.totalAbsent;
-                $scope.leftCount = data.totalLeft;
+            // DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+            //     console.log(data);
+            //     $scope.employeeCount = data.totalEmployees;
+            //     $scope.presentCount = data.totalPresent;
+            //     $scope.absentCount = data.totalAbsent;
+            //     $scope.leftCount = data.totalLeft;
+            // });
 
-            })
+            DashboardComponent.loadAttendanceReportByBranch(searchCriteria.projectId, searchCriteria.region, searchCriteria.branch, searchCriteria.fromDate, searchCriteria.toDate).then(function(data){
+                console.log(data);
+                $scope.employeeCount = data.totalEmployeeCount;
+                $scope.presentCount = data.presentEmployeeCount;
+                $scope.absentCount = data.absentEmployeeCount;
+                // $scope.leftCount = data.totalLeft;
+            });
 
         };
 
@@ -946,18 +1060,24 @@ angular.module('timeSheetApp')
             if($scope.selectedSite && $scope.selectedSite.id){
                 var searchCriteria = {};
                 searchCriteria.siteId = $scope.selectedSite.id;
-                /*searchCriteria.fromDate = $scope.selectedFromDateSer;
-                searchCriteria.toDate = $scope.selectedToDateSer;*/
                 searchCriteria.fromDate = new Date();
-                searchCriteria.toDate = new Date();
-            	DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+                searchCriteria.toDate = $scope.selectedToDateSer;
+                //searchCriteria.fromDate = new Date();
+                //searchCriteria.toDate = new Date();
+            	// DashboardComponent.loadAttendanceReport(searchCriteria).then(function(data){
+                //     console.log(data);
+                //     $scope.employeeCount = data.totalEmployees;
+                //     $scope.presentCount = data.totalPresent;
+                //     $scope.absentCount = data.totalAbsent;
+                //     $scope.leftCount = data.totalLeft;
+                // });
+                DashboardComponent.loadAttendanceReportBySite(searchCriteria.siteId, searchCriteria.fromDate, searchCriteria.toDate).then(function(data){
                     console.log(data);
-                    $scope.employeeCount = data.totalEmployees;
-                    $scope.presentCount = data.totalPresent;
-                    $scope.absentCount = data.totalAbsent;
-                    $scope.leftCount = data.totalLeft;
-
-                })
+                    $scope.employeeCount = data.totalEmployeeCount;
+                    $scope.presentCount = data.presentEmployeeCount;
+                    $scope.absentCount = data.absentEmployeeCount;
+                    // $scope.leftCount = data.totalLeft;
+                });
             }
 
 
@@ -996,22 +1116,35 @@ angular.module('timeSheetApp')
 	        	}
 	        	$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
 	        	$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
+	        	$scope.searchCriteria.graphRequest = true;
 
 	        	console.log('job report search criteria -' , JSON.stringify($scope.searchCriteria));
 
-                JobComponent.getTotalCounts(searchCriteria).then(function (data) {
+                JobComponent.generateReport(searchCriteria).then(function (data) {
                     console.log("Job Total Counts" +JSON.stringify(data));
                     $scope.loadingStop();
-                    if(data.length > 0) {
-                        $scope.result.totalJobCount = data[0].totalCounts;
-                        $scope.result.assignedJobCount = data[0].assignedCounts;
-                        $scope.result.overdueJobCount = data[0].overdueCounts;
-                        $scope.result.completedJobCount = data[0].completedCounts;
-                    } else {
-                        $scope.result.totalJobCount = 0;
-                        $scope.result.assignedJobCount = 0;
-                        $scope.result.overdueJobCount = 0;
-                        $scope.result.completedJobCount = 0;
+                    // if(data.length > 0) {
+                    //     $scope.result.totalJobCount = data[0].totalCounts;
+                    //     $scope.result.assignedJobCount = data[0].assignedCounts;
+                    //     $scope.result.overdueJobCount = data[0].overdueCounts;
+                    //     $scope.result.completedJobCount = data[0].completedCounts;
+                    // } else {
+                    //     $scope.result.totalJobCount = 0;
+                    //     $scope.result.assignedJobCount = 0;
+                    //     $scope.result.overdueJobCount = 0;
+                    //     $scope.result.completedJobCount = 0;
+                    // }
+
+                    $scope.result.assignedJobCount = 0;                             // old job dashboard counts
+                    $scope.result.completedJobCount = 0;
+                    $scope.result.overdueJobCount = 0;
+                    $scope.result.totalJobCount = 0;
+
+                    for(var i = 0; i < data.length; i++) {
+                        $scope.result.assignedJobCount += data[i].assignedJobCount;
+                        $scope.result.completedJobCount += data[i].completedJobCount;
+                        $scope.result.overdueJobCount += data[i].overdueJobCount;
+                        $scope.result.totalJobCount += data[i].totalJobCount;
                     }
 
                     if(jQuery.isEmptyObject($scope.selectedProject)== true &&
@@ -1162,6 +1295,8 @@ angular.module('timeSheetApp')
                     $scope.ticketStackXSeries = $scope.ticketStackChart.x;
                     $scope.ticketStackYSeries = $scope.ticketStackChart.status;
                     $rootScope.ticketGraph();
+                    $scope.ticketsChart.showLoading();
+                    $timeout(function(){$scope.ticketsChart.hideLoading();},5000);
                 }
 
             });
@@ -1175,6 +1310,8 @@ angular.module('timeSheetApp')
                     $scope.ticketAgeXSeries = $scope.ticketAgeChart.x;
                     $scope.ticketAgeYSeries = $scope.ticketAgeChart.avgStatus;
                     $rootScope.ticketSingleGraph();
+                    $scope.ticketSingleStackChart.showLoading();
+                    $timeout(function(){$scope.ticketSingleStackChart.hideLoading();},8000);
                 }
 
             });
@@ -1188,6 +1325,8 @@ angular.module('timeSheetApp')
                    $scope.attnStackXSeries = $scope.attnStackChart.x;
                    $scope.attnStackYSeries = $scope.attnStackChart.status;
                    $rootScope.attendGraph();
+                   $scope.attendsChart.showLoading();
+                   $timeout(function(){$scope.attendsChart.hideLoading();},8000);
                }else{
                    $scope.attnStackXSeries = "";
                    $scope.attnStackYSeries = [
@@ -1196,14 +1335,16 @@ angular.module('timeSheetApp')
                             data: [0]
                        },
                        {
-                           name: "Present",
+                           name: "Absent",
                            data: [0]
                        },
                        {
-                           name: "Absent",
+                           name: "Present",
                            data: [0]
                        }];
                    $rootScope.attendGraph();
+                   $scope.attendsChart.showLoading();
+                   $timeout(function(){$scope.attendsChart.hideLoading();},8000);
                }
 
             });
@@ -1260,7 +1401,7 @@ angular.module('timeSheetApp')
 
         $rootScope.jobGraph = function () {
         	console.log('job chart',$scope.jobStackYSeries);
-          Highcharts.chart('jobStackedCharts', {
+         $scope.jobChart = Highcharts.chart('jobStackedCharts', {
               chart: {
                   type: 'column'
               },
@@ -1336,7 +1477,7 @@ angular.module('timeSheetApp')
         }]
 
         $rootScope.attendGraph = function () {
-         Highcharts.chart('AttendanceStackedCharts', {
+        $scope.attendsChart = Highcharts.chart('AttendanceStackedCharts', {
              chart: {
                  type: 'column'
              },
@@ -1392,7 +1533,7 @@ angular.module('timeSheetApp')
         //$rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
 
         $rootScope.ticketGraph = function () {
-         Highcharts.chart('ticketStackedCharts', {
+         $scope.ticketsChart = Highcharts.chart('ticketStackedCharts', {
              chart: {
                  type: 'column'
              },
@@ -1448,86 +1589,86 @@ angular.module('timeSheetApp')
 
 
 
-        Highcharts.chart('catgAgeTicketsCharts', {
-            chart: {
-                type: 'spline'
-            },
-            title: {
-                text: 'Monthly Tickets'
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            },
-            yAxis: {
-                title: {
-                    text: 'Average Ticket Age'
-                },
-                labels: {
-                    formatter: function () {
-                        return this.value;
-                    }
-                }
-            },
-            tooltip: {
-                crosshairs: true,
-                shared: true
-            },
-            plotOptions: {
-                spline: {
-                    marker: {
-                        radius: 4,
-                        lineColor: '#666666',
-                        lineWidth: 1
-                    }
-                }
-            },
-            series: [{
-                name: 'Ac',
-                marker: {
-                    symbol: 'square'
-                },
-                data: [7.5, 7.9, 5.5, 17.5, 20.2, 24.5, 29.2, {
-                    y: 26.5
-                }, 32.3, 33.3, 38.9, 44.6]
-
-            },{
-                name: 'CLEANING',
-                marker: {
-                    symbol: 'circle'
-                },
-                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {
-                    y: 26.5
-                }, 23.3, 18.3, 13.9, 9.6]
-
-            },{
-                name: 'PLUMBING',
-                marker: {
-                    symbol: 'square'
-                },
-                data: [2.0, 9.9, 11.5, 17.5, 23.2, 27.5, 29.2, {
-                    y: 26.5
-                    // marker: {
-                    //     symbol: 'url(https://www.highcharts.com/samples/graphics/sun.png)'
-                    // }
-                }, 33.3, 40.3, 43.9, 12.6]
-
-            }, {
-                name: 'ELECTRICAL',
-                marker: {
-                    symbol: 'diamond'
-                },
-                data: [{
-                    y: 3.9
-                }, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-            }]
-        });
+        // $scope.ticketsAgeChart = Highcharts.chart('catgAgeTicketsCharts', {
+        //     chart: {
+        //         type: 'spline'
+        //     },
+        //     title: {
+        //         text: 'Monthly Tickets'
+        //     },
+        //     subtitle: {
+        //         text: ''
+        //     },
+        //     xAxis: {
+        //         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        //             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        //     },
+        //     yAxis: {
+        //         title: {
+        //             text: 'Average Ticket Age'
+        //         },
+        //         labels: {
+        //             formatter: function () {
+        //                 return this.value;
+        //             }
+        //         }
+        //     },
+        //     tooltip: {
+        //         crosshairs: true,
+        //         shared: true
+        //     },
+        //     plotOptions: {
+        //         spline: {
+        //             marker: {
+        //                 radius: 4,
+        //                 lineColor: '#666666',
+        //                 lineWidth: 1
+        //             }
+        //         }
+        //     },
+        //     series: [{
+        //         name: 'Ac',
+        //         marker: {
+        //             symbol: 'square'
+        //         },
+        //         data: [7.5, 7.9, 5.5, 17.5, 20.2, 24.5, 29.2, {
+        //             y: 26.5
+        //         }, 32.3, 33.3, 38.9, 44.6]
+        //
+        //     },{
+        //         name: 'CLEANING',
+        //         marker: {
+        //             symbol: 'circle'
+        //         },
+        //         data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {
+        //             y: 26.5
+        //         }, 23.3, 18.3, 13.9, 9.6]
+        //
+        //     },{
+        //         name: 'PLUMBING',
+        //         marker: {
+        //             symbol: 'square'
+        //         },
+        //         data: [2.0, 9.9, 11.5, 17.5, 23.2, 27.5, 29.2, {
+        //             y: 26.5
+        //             // marker: {
+        //             //     symbol: 'url(https://www.highcharts.com/samples/graphics/sun.png)'
+        //             // }
+        //         }, 33.3, 40.3, 43.9, 12.6]
+        //
+        //     }, {
+        //         name: 'ELECTRICAL',
+        //         marker: {
+        //             symbol: 'diamond'
+        //         },
+        //         data: [{
+        //             y: 3.9
+        //         }, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        //     }]
+        // });
 
         $rootScope.ticketSingleGraph = function(){
-           Highcharts.chart('ticketSingleStackedCharts', {
+           $scope.ticketSingleStackChart = Highcharts.chart('ticketSingleStackedCharts', {
                chart: {
                    type: 'column'
                },
@@ -1801,7 +1942,7 @@ angular.module('timeSheetApp')
         // var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
 
          $rootScope.quotGraph = function () {
-            Highcharts.chart('quotationStackedCharts', {
+           $scope.quotationStackChart = Highcharts.chart('quotationStackedCharts', {
                 chart: {
                     type: 'column'
                 },
@@ -1903,6 +2044,13 @@ angular.module('timeSheetApp')
              $rootScope.searchFilterCriteria.empStatus = filter;
 
         }
+
+        $scope.dbdEmpFilter = function() {
+            $rootScope.searchFilterCriteria.isDashboard = true;
+            $rootScope.searchFilterCriteria.empFromDate = $rootScope.searchFilterCriteria.selectedFromDate;
+            $rootScope.searchFilterCriteria.empToDate = $rootScope.searchFilterCriteria.selectedToDate;
+        }
+
         $scope.dbdFilter = function(filter){
 
              $rootScope.searchFilterCriteria.isDashboard = true;
@@ -2012,7 +2160,6 @@ angular.module('timeSheetApp')
 
         }
         /* Localstorage (Retain old values while edit page to list) end */
-
 
     })
 
