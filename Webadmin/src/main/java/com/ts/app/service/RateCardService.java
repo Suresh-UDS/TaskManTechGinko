@@ -83,6 +83,9 @@ public class RateCardService extends AbstractService {
 	@Value("${AWS.s3-quotation-path}")
 	private String quotationFilePath;
 
+	@Inject
+    private SiteService siteService;
+
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
 
@@ -489,11 +492,24 @@ public class RateCardService extends AbstractService {
 		List<Long> siteIds = null;
 		if(searchCriteria.getSiteId() == 0) {
 			siteIds = new ArrayList<Long>();
-			if(CollectionUtils.isNotEmpty(projectSites)) {
-				for(EmployeeProjectSite projSite : projectSites) {
-					siteIds.add(projSite.getSite().getId());
-				}
-			}
+            List<SiteDTO> sites = null;
+			if(searchCriteria.getRegion() == null && searchCriteria.getRegion() == "") {
+                if(CollectionUtils.isNotEmpty(projectSites)) {
+                    for(EmployeeProjectSite projSite : projectSites) {
+                        siteIds.add(projSite.getSite().getId());
+                    }
+                }
+            }else if(org.apache.commons.lang.StringUtils.isNotEmpty(searchCriteria.getBranch())){
+                sites = siteService.findSitesByRegionAndBranch(searchCriteria.getProjectId(), searchCriteria.getRegion(), searchCriteria.getBranch());
+            }else if(org.apache.commons.lang.StringUtils.isNotEmpty(searchCriteria.getRegion())) {
+                sites = siteService.findSitesByRegion(searchCriteria.getProjectId(), searchCriteria.getRegion());
+            }
+            if(!CollectionUtils.isEmpty(sites)) {
+                siteIds = new ArrayList<Long>();
+                for(SiteDTO site : sites) {
+                    siteIds.add(site.getId());
+                }
+            }
 		}
 
         try {
@@ -632,10 +648,8 @@ public class RateCardService extends AbstractService {
     }
 
 	public Object getQuotationSummary(SearchCriteria searchCriteria, List<Long> siteIds) {
-
         log.debug("get Quotations");
         Object quotationList = "";
-
         try {
             RestTemplate restTemplate = new RestTemplate();
             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();

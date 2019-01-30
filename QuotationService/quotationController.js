@@ -786,8 +786,8 @@ module.exports = {
         quotCriterias.title={$regex:req.body.title,$options:"i"};
        
       }
-      if(req.body.status){
-        //quotCriterias.status={$regex:'^'+req.body.status,$options:"si"};
+      if(req.body.siteIds > 0){
+        quotCriterias.siteId = {$in: req.body.siteIds};
       }
       if(req.body.createdBy){
         quotCriterias.createdByUserName={$regex:'^'+req.body.createdBy,$options:"si"};

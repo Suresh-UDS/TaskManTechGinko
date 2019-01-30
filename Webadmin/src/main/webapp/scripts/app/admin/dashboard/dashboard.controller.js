@@ -68,7 +68,7 @@ angular.module('timeSheetApp')
             $scope.loadAllSites();
             $scope.loadAllEmployee();
             $scope.loadAllAttendanceCounts();
-            // $scope.loadQuotationReportCounts();
+            $scope.loadQuotationReportCounts();
             $scope.loadJobReport();
             $scope.loadingStart();
             $scope.loadChartData();
@@ -287,7 +287,7 @@ angular.module('timeSheetApp')
             //     // $scope.constructChartData(response);
             //
             // });
-            DashboardComponent.loadTicketChartDataByBranch(searchCriteria.projectId, searchCriteria.region, searchCriteria.fromDate, searchCriteria.toDate, searchCriteria.branch).then(function(response){    // old dashboard
+            DashboardComponent.loadTicketChartDataByBranch(searchCriteria.projectId, searchCriteria.region, searchCriteria.branch, searchCriteria.fromDate, searchCriteria.toDate, searchCriteria.branch).then(function(response){    // old dashboard
                 /* console.log("Dashboard ticket data_________");
                  console.log(response);
                  console.log(response.closedTicketCounts["0-3"]);
@@ -350,6 +350,7 @@ angular.module('timeSheetApp')
             $scope.closedTicketsLabels.push(">-11");
             $scope.overAllTicketsTotalCount=$scope.openTicketsTotalCount+$scope.closedTicketsTotalCount;
 
+            $scope.assignedTicketTotalCount = response.totalAssignedTicketCount;
 
             // if($scope.openTicketsTotalCount > 0) {
             //
@@ -488,6 +489,7 @@ angular.module('timeSheetApp')
             $scope.overallTicketData = $scope.overAllTicketsCountArray;
             $scope.openTicketsData = $scope.openTicketsCountArray;
             $scope.closedTicketsData = $scope.closedTicketsCountArray;
+            $scope.loadingStop();
 
         }
 
@@ -1119,7 +1121,7 @@ angular.module('timeSheetApp')
 	        	$scope.searchCriteria.graphRequest = true;
 
 	        	console.log('job report search criteria -' , JSON.stringify($scope.searchCriteria));
-
+            // $scope.loadingStop();
                 JobComponent.generateReport(searchCriteria).then(function (data) {
                     console.log("Job Total Counts" +JSON.stringify(data));
                     $scope.loadingStop();
@@ -1215,7 +1217,8 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.consolidated = true;
 
 
-            $scope.searchCriteria.fromDate = $scope.selectedFromDateSer;
+            // $scope.searchCriteria.fromDate = $scope.selectedFromDateSer;
+            $scope.searchCriteria.quotationCreatedDate = $scope.selectedFromDateSer;
             $scope.searchCriteria.toDate = $scope.selectedToDateSer;
 
             console.log('quotation report search criteria -' , JSON.stringify($scope.searchCriteria));
@@ -1247,13 +1250,13 @@ angular.module('timeSheetApp')
                     $scope.approvedQuotationCount = data.totalApproved;
                     $scope.rejectedQuotationCount = data.totalRejected;
                 }else {
-                		$scope.overAllQuotationCount = 0;
+                    $scope.overAllQuotationCount = 0;
                     $scope.waitingQuotationCount = 0;
                     $scope.pendingQuotationCount = 0;
                     $scope.approvedQuotationCount = 0;
                     $scope.rejectedQuotationCount = 0;
                 }
-                
+
                 if(jQuery.isEmptyObject($scope.selectedProject)== true &&
                 		jQuery.isEmptyObject($scope.selectedSite)== true &&
                 		jQuery.isEmptyObject($scope.selectedRegion)== true &&
@@ -2047,8 +2050,8 @@ angular.module('timeSheetApp')
 
         $scope.dbdEmpFilter = function() {
             $rootScope.searchFilterCriteria.isDashboard = true;
-            $rootScope.searchFilterCriteria.empFromDate = $rootScope.searchFilterCriteria.selectedFromDate;
-            $rootScope.searchFilterCriteria.empToDate = $rootScope.searchFilterCriteria.selectedToDate;
+            // $rootScope.searchFilterCriteria.empFromDate = $rootScope.searchFilterCriteria.selectedFromDate;
+            // $rootScope.searchFilterCriteria.empToDate = $rootScope.searchFilterCriteria.selectedToDate;
         }
 
         $scope.dbdFilter = function(filter){
