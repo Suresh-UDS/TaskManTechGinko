@@ -114,6 +114,8 @@ angular.module('timeSheetApp')
 
 	$rootScope.exportStatusObj  ={};
 
+	$scope.NewEmployee= {};
+
 	/** Ui-select scopes **/
 	$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
 	$scope.client = {};
@@ -582,6 +584,7 @@ angular.module('timeSheetApp')
 		$scope.loadAllManagers();
 		$scope.loadProjects();
 		$scope.loadDesignations();
+		$scope.loadUserRoles();
 	}
 
 
@@ -860,15 +863,13 @@ angular.module('timeSheetApp')
 	}
 
 	$scope.loadDesignations = function () {
-
+        $scope.designations ="";
 		console.log("Loading all designations")
 		EmployeeComponent.findAllDesginations().then(function (data) {
 			$scope.designations = data;
-
 			//console.log("Loading all Designations" ,$scope.designations);
 
-
-		})
+		});
 	}
 
 	$scope.loadSites = function () {
@@ -904,6 +905,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.loadAllEmployees = function () {
+	    $scope.allEmployees ="";
 		if(!$scope.allEmployees) {
 			EmployeeComponent.findAll().then(function (data) {
 				//console.log(data);
@@ -1028,15 +1030,20 @@ angular.module('timeSheetApp')
 					designation:$scope.designation
 			};
 			EmployeeComponent.createDesignation(designationDetails).then(function (response) {
-
-
 				//console.log(response);
-
 				$scope.designation= null;
 				$scope.showNotifications('top','center','success','Designation Added Successfully');
 				$scope.loadDesignations();
-
-			})
+			}).catch(function(response){
+			    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                    $scope.errorEmployeeExists = true;
+                    $scope.errorMessage = response.data.description;
+                    $scope.showNotifications('top','center','danger', 'Designation already exists!.. Please choose another one');
+                } else {
+                    $scope.error = 'ERROR';
+                    $scope.showNotifications('top','center','danger', 'Designation Not Saved!.. Please try again later.');
+                }
+			});
 		}else{
 
 			//console.log("Desgination not entered");
@@ -1097,6 +1104,7 @@ angular.module('timeSheetApp')
 			if($scope.locationList) {
 				$scope.employee.locations = $scope.locationList;
 			}
+
 			EmployeeComponent.createEmployee($scope.employee).then(function () {
 				$scope.saveLoad = false;
 				$scope.success = 'OK';
@@ -1212,7 +1220,8 @@ angular.module('timeSheetApp')
 		}else if ($scope.markLeftOptions == 'assign'){
 			//console.log("assign and mark left");
 			EmployeeComponent.updateEmployee(employee).then(function(data){
-				EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.transferringEmployee,new Date())
+			    console.log('reliever emp',$scope.NewEmployee);
+				EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.NewEmployee,new Date());
 				//console.log("Assign jobs to another employee and transfer this employee");
 				$scope.showNotifications('top','center','success','Employee Successfully Marked Left');
 				$scope.search();
@@ -1242,13 +1251,14 @@ angular.module('timeSheetApp')
 			var empId = parseInt($stateParams.id);
 			EmployeeComponent.findOne(empId).then(function (data) {
 
-				//console.log('employee data -');
-				//console.log(data);
+				console.log('employee data -');
+				console.log(data);
 
 				$scope.employee = data;
 				if($scope.employee){
 					$scope.title = $scope.employee.name +' '+ $scope.employee.lastName;
 					$scope.projectSiteList = $scope.employee.projectSites;
+					$scope.locationList = $scope.employee.locations;
 					$scope.employee.code = pad($scope.employee.code , 4);
 					$scope.SelectedDesig = {designation:$scope.employee.designation};
 					$scope.loadSelectedProject($scope.employee.projectId);
@@ -1304,6 +1314,7 @@ angular.module('timeSheetApp')
 				$scope.loadSelectedManager($scope.employee.managerId);
 				$scope.loadSelectedRole($scope.employee.userRoleId);
 				$scope.empSitesList = $scope.employee.projectSites;
+				$scope.selectedRole = {id:userRoleId,name:$scope.employee.userRoleName}
 				$scope.loadingStop();
 			});
 			EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
@@ -1492,6 +1503,13 @@ angular.module('timeSheetApp')
 		$scope.employee.projectId = $scope.selectedProject.id;
 		$scope.employee.siteId = $scope.selectedSite.id;
 		$scope.employee.managerId = $scope.selectedManager ? $scope.selectedManager.id : 0;
+		if($scope.selectedRole) {
+            $scope.employee.userRoleId = $scope.selectedRole.id;
+            $scope.employee.userRoleName = $scope.selectedRole.name;
+        }
+        if($scope.locationList) {
+            $scope.employee.locations = $scope.locationList;
+        }
 		if($scope.projectSiteList && $scope.projectSiteList.length > 0) {
 			$scope.employee.projectSites = $scope.projectSiteList;
 		}else {
@@ -2795,6 +2813,10 @@ angular.module('timeSheetApp')
 	 * Ui select allow-clear modified function end
 	 *
 	 * */
+
+	 $scope.clearFields =function(){
+     $scope.NewEmployee = "";
+	 }
 
 
 });

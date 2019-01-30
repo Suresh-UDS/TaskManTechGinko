@@ -260,131 +260,144 @@ angular.module('timeSheetApp')
 			if($scope.moduleActions && $scope.permissions) {
 
 				var permAppModules = $scope.permissions.applicationModules;
+                if($scope.permissions.applicationModules != 0){
+                    for(var i=0; i < $scope.moduleActions.length; i++) {
+                        // $scope.moduleActions.forEach(function(module) {
+                        var module = $scope.moduleActions[i];
+                        //console.log('module - ' + JSON.stringify(module));
+                        var permModuleMatch = false;
 
-				for(var i=0; i < $scope.moduleActions.length; i++) {
-					// $scope.moduleActions.forEach(function(module) {
-					var module = $scope.moduleActions[i];
-					//console.log('module - ' + JSON.stringify(module));
-					var permModuleMatch = false;
-					for(var j=0; j < permAppModules.length; j++) {
-						var permModule = permAppModules[j];
-						//console.log('perm module - ' + JSON.stringify(permModule));
-						// permAppModules.forEach(function(permModule) {
+                        for(var j=0; j< permAppModules.length; j++) {
+                            var permModule = permAppModules[j];
+                            //console.log('perm module - ' + JSON.stringify(permModule));
+                            // permAppModules.forEach(function(permModule) {
 
-						if(module.name && (module.name.toUpperCase() === permModule.name.toUpperCase())) {
-							permModuleMatch = true;
-							console.log('module match - ' + module.name);
-							var permActions = permModule.moduleActions;
-							var modActions = module.moduleActions;
-							//console.log('permActions - ' + JSON.stringify(permActions) +', modActions -' + JSON.stringify(modActions));
-							for(var k=0; k < modActions.length; k++) {
-								var action = modActions[k];
-								console.log('action - ' + JSON.stringify(action));
-								// modActions.forEach(function(action) {
-								var permActionMatch = false;
-								for(var l=0; l < permActions.length; l++) {
-									var permAction = permActions[l];
-									console.log('perm action- ' + JSON.stringify(permAction));
-									// permActions.forEach(function(permAction)
-									// {
+                            if(module.name && (module.name.toUpperCase() === permModule.name.toUpperCase())) {
+                                permModuleMatch = true;
+                                console.log('module match - ' + module.name);
+                                var permActions = permModule.moduleActions;
+                                var modActions = module.moduleActions;
+                                //console.log('permActions - ' + JSON.stringify(permActions) +', modActions -' + JSON.stringify(modActions));
+                                for(var k=0; k < modActions.length; k++) {
+                                    var action = modActions[k];
+                                    console.log('action - ' + JSON.stringify(action));
+                                    // modActions.forEach(function(action) {
+                                    var permActionMatch = false;
+                                    for(var l=0; l < permActions.length; l++) {
+                                        var permAction = permActions[l];
+                                        console.log('perm action- ' + JSON.stringify(permAction));
+                                        // permActions.forEach(function(permAction)
+                                        // {
 
-									if(action.name.toUpperCase() == (permAction.name.toUpperCase())) {
-										console.log('action match found -' + action.name);
-										permActionMatch = true;
-										console.log('action in scope - ' + $scope.moduleActions[i].moduleActions[k].name);
-										$scope.moduleActions[i].moduleActions[k].selected = true;
-										if($scope.selectedPermissions && $scope.selectedPermissions.length > 0) {
-											var selPerms = $scope.selectedPermissions;
-											var selPermMatch = false;
-											for(var p=0; p < selPerms.length; p++) {
-												if(selPerms[p].name.toUpperCase() === module.name.toUpperCase()) {
-													selPermMatch = true;
-													var selPermActions = selPerms[p].moduleActions;
-													if(selPermActions) {
-														var selActionMatch = false;
-														for(var a=0; a < selPermActions.length; a++) {
-															console.log('selected permission action = ' + selPermActions[a].name.toUpperCase());
-															console.log('master permission action = ' + permAction.name.toUpperCase());
-															console.log(selPermActions[a].name.toUpperCase() == (permAction.name.toUpperCase()))
-															if(selPermActions[a].name.toUpperCase() == (permAction.name.toUpperCase())) {
-																selActionMatch = true;
-																break;
-															}
-														}
-														if(!selActionMatch) {
-															var action = {
-																	"id" : permAction.id,
-																	"name" : permAction.name
-															}
+                                        if(action.name.toUpperCase() == (permAction.name.toUpperCase())) {
+                                            console.log('action match found -' + action.name);
+                                            permActionMatch = true;
+                                            console.log('action in scope - ' + $scope.moduleActions[i].moduleActions[k].name);
+                                            $scope.moduleActions[i].moduleActions[k].selected = true;
+                                            if($scope.selectedPermissions && $scope.selectedPermissions.length > 0) {
+                                                var selPerms = $scope.selectedPermissions;
+                                                var selPermMatch = false;
+                                                for(var p=0; p < selPerms.length; p++) {
+                                                    if(selPerms[p].name.toUpperCase() === module.name.toUpperCase()) {
+                                                        selPermMatch = true;
+                                                        var selPermActions = selPerms[p].moduleActions;
+                                                        if(selPermActions) {
+                                                            var selActionMatch = false;
+                                                            for(var a=0; a < selPermActions.length; a++) {
+                                                                console.log('selected permission action = ' + selPermActions[a].name.toUpperCase());
+                                                                console.log('master permission action = ' + permAction.name.toUpperCase());
+                                                                console.log(selPermActions[a].name.toUpperCase() == (permAction.name.toUpperCase()))
+                                                                if(selPermActions[a].name.toUpperCase() == (permAction.name.toUpperCase())) {
+                                                                    selActionMatch = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if(!selActionMatch) {
+                                                                var action = {
+                                                                        "id" : permAction.id,
+                                                                        "name" : permAction.name
+                                                                }
 
-															selPermActions.push(action);
-															selPerms[p].moduleActions = selPermActions;
-														}
-													}else {
-														var actions = [];
-														var action = {
-																"id" : action.id,
-																"name" : action.name
-														}
-														actions.push(action);
-													}
-													break;
-												}
+                                                                selPermActions.push(action);
+                                                                selPerms[p].moduleActions = selPermActions;
+                                                            }
+                                                        }else {
+                                                            var actions = [];
+                                                            var action = {
+                                                                    "id" : action.id,
+                                                                    "name" : action.name
+                                                            }
+                                                            actions.push(action);
+                                                        }
+                                                        break;
+                                                    }
 
-											}
-											if(!selPermMatch) { //if the selectedPermissions array does not contain the module
-												var actions = [];
-												var action = {
-														"id" : action.id,
-														"name" : action.name
-												}
-												actions.push(action);
-												var permission = {
-														"id" : module.id,
-														"name" : module.name,
-														"moduleActions" : actions
+                                                }
+                                                if(!selPermMatch) { //if the selectedPermissions array does not contain the module
+                                                    var actions = [];
+                                                    var action = {
+                                                            "id" : action.id,
+                                                            "name" : action.name
+                                                    }
+                                                    actions.push(action);
+                                                    var permission = {
+                                                            "id" : module.id,
+                                                            "name" : module.name,
+                                                            "moduleActions" : actions
 
-												}
+                                                    }
 
-												$scope.selectedPermissions.push(permission);
-											}
-										}else {  //if the selectedPermissions array is empty
-											var actions = [];
-											var action = {
-													"id" : action.id,
-													"name" : action.name
-											}
-											actions.push(action);
+                                                    $scope.selectedPermissions.push(permission);
+                                                }
+                                            }else {  //if the selectedPermissions array is empty
+                                                var actions = [];
+                                                var action = {
+                                                        "id" : action.id,
+                                                        "name" : action.name
+                                                }
+                                                actions.push(action);
 
-											var permission = {
-													"id" : module.id,
-													"name" : module.name,
-													"moduleActions" : actions
+                                                var permission = {
+                                                        "id" : module.id,
+                                                        "name" : module.name,
+                                                        "moduleActions" : actions
 
-											}
+                                                }
 
-											$scope.selectedPermissions.push(permission);
+                                                $scope.selectedPermissions.push(permission);
 
-										}
-										break;
-									}else {
-										$scope.moduleActions[i].moduleActions[k].selected = false;
-									}
+                                            }
+                                            break;
+                                        }else {
+                                            $scope.moduleActions[i].moduleActions[k].selected = false;
+                                        }
 
-								}
+                                    }
 
-							}
-							break;
-						}else {
-							var modActions = module.moduleActions;
-							for(var k=0; k < modActions.length; k++) {
-								$scope.moduleActions[i].moduleActions[k].selected = false;
-							}
-						}
-					}
+                                }
+                                break;
+                            }else {
+                                var modActions = module.moduleActions;
+                                for(var k=0; k < modActions.length; k++) {
+                                    $scope.moduleActions[i].moduleActions[k].selected = false;
+                                }
+                            }
+                        }
 
-				}
-				console.log('permissions - ' + JSON.stringify($scope.selectedPermissions));
+
+                    }
+                    console.log('permissions - ' + JSON.stringify($scope.selectedPermissions));
+                    $scope.rolePermissionLoadingStop();
+                }else{
+                    var searchCriteria = {
+                            "findAll" : true
+                    }
+                  ModuleActionComponent.search(searchCriteria).then(function (data) {
+                  	$scope.moduleActions = data.transactions;
+                  	$scope.rolePermissionLoadingStop();
+                  });
+                }
+
 
 			}
 
@@ -400,7 +413,7 @@ angular.module('timeSheetApp')
 			$scope.pages.endInd = data.totalCount > 100  ? (data.currPage) * 100 : data.totalCount ;
 			$scope.pages.totalCnt = data.totalCount;
 			$scope.hide = true;
-			$scope.rolePermissionLoadingStop();
+
 		}).catch(function(){
 			$scope.rolePermissionLoadingStop();
 		});
@@ -505,7 +518,7 @@ angular.module('timeSheetApp')
 
 		//console.log("Calling loader");
 		$('.pageTopCenter').hide();
-		$('.pageCenter').removeClass('pageTopCenter'); 
+		$('.pageCenter').removeClass('pageTopCenter');
 		$('.overlay').hide();
 		$scope.noscroll = false;
 
