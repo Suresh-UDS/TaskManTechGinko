@@ -2027,6 +2027,13 @@ angular.module('timeSheetApp')
              $rootScope.searchFilterCriteria.empStatus = filter;
 
         }
+
+        $scope.dbdEmpFilter = function() {
+            $rootScope.searchFilterCriteria.isDashboard = true;
+            $rootScope.searchFilterCriteria.empFromDate = $rootScope.searchFilterCriteria.selectedFromDate;
+            $rootScope.searchFilterCriteria.empToDate = $rootScope.searchFilterCriteria.selectedToDate;
+        }
+
         $scope.dbdFilter = function(filter){
 
              $rootScope.searchFilterCriteria.isDashboard = true;
