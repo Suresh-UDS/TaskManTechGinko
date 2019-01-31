@@ -119,7 +119,7 @@ public class ExportUtil {
 //        "SHIFT CONTINUED", "LATE CHECK IN" };
 
 	private String[] TICKET_HEADER = { "ID", "SITE", "ISSUE", "DESCRIPTION","STATUS", "PENDING STATUS","CATEGORY", "SEVERITY", "INITIATOR",
-			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON" };
+			"INITIATED ON", "ASSIGNED TO", "ASSIGNED ON", "CLOSED BY", "CLOSED ON", "REMARKS", "COMMENTS" };
 	private String[] ASSET_HEADER = { "ID", "ASSET CODE", "NAME", "ASSET TYPE", "ASSET GROUP", "CLIENT", "SITE", "BLOCK", "FLOOR", "ZONE", "STATUS"};
 
 	private String[] VENDOR_HEADER = { "ID", "NAME", "CONTACT FIRSTNAME", "CONTACT LASTNAME", "PHONE", "EMAIL", "ADDRESSLINE1", "ADDRESSLINE2", "CITY", "COUNTRY", "STATE", "PINCODE"};
@@ -2365,11 +2365,20 @@ public class ExportUtil {
 					dataRow.createCell(7).setCellValue(transaction.getSeverity());
 					dataRow.createCell(8).setCellValue(transaction.getCreatedBy());
 					dataRow.createCell(9).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
-					dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() + " " + transaction.getAssignedToLastName() : "");
+                    if (StringUtils.isNotBlank(transaction.getAssignedToLastName())){
+                            dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() + " " + transaction.getAssignedToLastName() : "");
+                    }else{
+                        dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() : "");
+                    }
 					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
-					dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
-					dataRow.createCell(13).setCellValue(
-							transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
+                    if(StringUtils.isNotBlank(transaction.getAssignedToLastName())){
+                        dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
+                    }else{
+                        dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName()  : "");
+                    }
+					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
+					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getRemarks())? transaction.getRemarks():"");
+					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getComments())? transaction.getComments():"");
 				}
 
 //				for (int i = 0; i < TICKET_HEADER.length; i++) {

@@ -36,7 +36,7 @@
                                                <!---->
                                              <!--</div>-->
                                                 <div class="wizard-navigation" >
-                                                    <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div> 
+                                                    <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
                                                         <li class="step">
                                                             <a href=".general" data-toggle="tab" >General</a>
@@ -1153,8 +1153,8 @@
                                                                                                     </div>
                                                                                                 </td> -->
                                                                                                 <td class="text-right">
-                                                                                                    <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                                                                   <a  has-permission="Config:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)" onClick="$('#deleteModalConfig').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                                    <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')"  has-permission="AssetConfig:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                                                                   <a  has-permission="AssetConfig:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)" onClick="$('#deleteModalConfig').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container"></div></a>
                                                                                                 </td>
 
                                                                                             </tr>
@@ -2535,7 +2535,7 @@
                                 </div>
                             </div>
                          </div>
-                     </div>  
+                     </div>
                      <div class="row">
                         <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addParameterUOM()" data-dismiss="modal" class="btn btn-success" name="add" value="Add" ng-disabled="addUnitsForm.$invalid">

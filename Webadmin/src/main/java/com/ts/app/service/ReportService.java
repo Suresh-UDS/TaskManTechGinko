@@ -1,9 +1,14 @@
 package com.ts.app.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.service.util.DateUtil;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.ReportResult;
+import com.ts.app.web.rest.dto.SearchCriteria;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -15,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.ZoneId;
@@ -47,6 +53,9 @@ public class ReportService extends AbstractService {
 
     @Inject
     private TicketRepository ticketRepository;
+
+    @Inject
+    private RateCardService quotationService;
 
     @PersistenceContext
 	private EntityManager manager;
@@ -835,6 +844,26 @@ public class ReportService extends AbstractService {
         return resultVal != null ? resultVal.longValue() : 0;
 
     }
+
+    public QuotationDTO getQuotationCountSummary(SearchCriteria sc) {
+        QuotationDTO quotationSummary = new QuotationDTO();
+        log.debug("SiteIds" +sc.getSiteIds());
+        Object quotationSum = quotationService.getQuotationSummary(sc, sc.getSiteIds());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.findAndRegisterModules();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+        try {
+            quotationSummary = mapper.readValue((String) quotationSum,
+                new TypeReference<QuotationDTO>() {
+                });
+        } catch (IOException e) {
+            log.error("Error while converting quotation results to objects", e);
+        }
+        return quotationSummary;
+    }
+
+
 
 
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ts.app.domain.EmployeeReliever;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -423,6 +424,13 @@ public class EmployeeResource {
         log.info("--Invoked EmployeeResource find relievers count by employee Relievers--");
         long relieverCount = employeeService.findRelieversCountByEmployee(searchCriteria);
         return relieverCount;
+    }
+
+    @RequestMapping(value = "/relieversList", method = RequestMethod.POST)
+    public SearchResult<EmployeeRelieverDTO> findRelieversByEmployee(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked EmployeeResource find relievers by employee Relievers--");
+        SearchResult<EmployeeRelieverDTO> relievers = employeeService.findRelieversByEmployee(searchCriteria);
+        return relievers;
     }
 
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.POST)
