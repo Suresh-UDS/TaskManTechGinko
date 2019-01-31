@@ -521,8 +521,31 @@ angular.module('timeSheetApp')
 
 
 	$scope.removeProjectSite = function(ind) {
+
+        //Removing project and site values
+	    $scope.deleteProjSite = $scope.projectSiteList[ind];
+
+	    //alert(JSON.stringify($scope.deleteProjSite));
 		$scope.projectSiteList.splice(ind,1);
 		//alert($scope.projectSiteList.length);
+         //alert($scope.locationList.length);
+        // Location(s) remove based on project and site
+         var locationIndex = $scope.locationList.length - 1;
+		for (var i = locationIndex; i >= 0; i--){
+              //alert($scope.locationList[i].projectId);
+		   if ($scope.locationList[i].projectId == $scope.deleteProjSite.projectId
+                 && $scope.locationList[i].siteId == $scope.deleteProjSite.siteId) {
+                  //alert("Pid:"+ $scope.locationList[i].projectId + "," + $scope.locationList[i].siteId);
+                     $scope.locationList.splice(i, 1);
+                     //break;
+           }
+           $scope.selectedProject = null;
+           $scope.selectedSite = null;
+           $scope.selectedBlock = null;
+           $scope.selectedFloor = null;
+           $scope.selectedZone = null;
+		}
+
 
 		if($scope.projectSiteList.length == 0) {
 			//document.getElementById("form-button-save").disabled = true;
@@ -538,6 +561,21 @@ angular.module('timeSheetApp')
 			//console.log('selected block -' + $scope.selectedBlock);
 			//console.log('selected floor -' + $scope.selectedFloor);
 			//console.log('selected zone -' + $scope.selectedZone);
+
+            // Client info validations
+			function isProj(Proj) {
+                return Proj.projectId === $scope.selectedProject.id;
+            }
+            function isSite(Site) {
+                return Site.siteId === $scope.selectedSite.id;
+            }
+			$scope.checkProj = $scope.projectSiteList.find(isProj);
+			$scope.checkSite = $scope.projectSiteList.find(isSite);
+
+			if(!$scope.checkProj && !$scope.checkSite){
+             $scope.showNotifications('top','center','warning','Please add  represent client and site first..!!');
+             return;
+			}
 			var loc = {
 					"block" : $scope.selectedBlock,
 					"floor" : $scope.selectedFloor,
@@ -565,8 +603,8 @@ angular.module('timeSheetApp')
 			$scope.dupZone = $scope.locationList.find(isZone);
 
 			if(($scope.dupBlock && $scope.dupFloor && $scope.dupZone)){
-
-				return;
+             $scope.showNotifications('top','center','warning','Location already exist..!!');
+             return;
 			}
 
 			$scope.locationList.push(loc);
