@@ -2455,4 +2455,11 @@ ul.ckLstDot li:before {
 
  /* Highchart custom loader css end */
 
+ [type=checkbox]:not(:checked) {
+     position: unset !important;
+     opacity: 1 !important;
+     pointer-events: visible !important;
+
+ }
+
 

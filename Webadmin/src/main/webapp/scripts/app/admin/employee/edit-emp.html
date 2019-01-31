@@ -306,7 +306,7 @@
                                                             <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                             <!--required >-->
                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles track by role.name" name="UserRole" required tabindex="3">
+                                                            <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles track by role.name" name="UserRole" ng-disabled="true" required tabindex="3">
                                                                 <option value="">Select role...</option>
                                                             </select>
 

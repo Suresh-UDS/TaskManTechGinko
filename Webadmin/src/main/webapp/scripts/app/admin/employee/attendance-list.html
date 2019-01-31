@@ -202,7 +202,7 @@
 
                                 <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}</td>
                                 <td align="center">
-                                    <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
+                                    <a id="maps" href="javascript:void(0);" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
                                         <img ng-src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
                                     </a>
                                 </td>
@@ -427,14 +427,14 @@
                             <!--<div class="form-group" >-->
 
                                 <!--<span class="form-control-feedback calender-mid-icon"><i class="material-icons">date_range</i></span>-->
-                                <!--<input  type="text" class="form-control datepicker" id="dateFilterFrom" ng-model="selectedDateFrom" autocomplete="off" />-->
+                                <!--<input  type="text" class="form-control datepicker" onkeydown="return false"id="dateFilterFrom" ng-model="selectedDateFrom" autocomplete="off" />-->
                             <!--</div>-->
                         <!--</div>-->
                         <!--<div class="col-xs-12 col-md-3">-->
                             <!--<div class="form-group" >-->
 
                                 <!--<span class="form-control-feedback calender-mid-icon"><i class="material-icons">date_range</i></span>-->
-                                <!--<input  type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedDateTo" autocomplete="off" />-->
+                                <!--<input  type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterTo" ng-model="selectedDateTo" autocomplete="off" />-->
                             <!--</div>-->
                         <!--</div>-->
                         <!--<div class="col-xs-12 col-md-3">-->
@@ -652,14 +652,14 @@
                                             <div class="form-group" >
 
                                                 <span class="form-control-feedback calender-mid-icon"><i class="material-icons">date_range</i></span>
-                                                <input  type="text" class="form-control datepicker" id="dateFilterFrom" ng-model="selectedDateFrom" autocomplete="off" />
+                                                <input  type="text" class="form-control datepicker" onkeydown="return false"id="dateFilterFrom" ng-model="selectedDateFrom" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-md-3">
                                             <div class="form-group" >
 
                                                 <span class="form-control-feedback calender-mid-icon"><i class="material-icons">date_range</i></span>
-                                                <input  type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedDateTo" autocomplete="off" />
+                                                <input  type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterTo" ng-model="selectedDateTo" autocomplete="off" />
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-md-3">
