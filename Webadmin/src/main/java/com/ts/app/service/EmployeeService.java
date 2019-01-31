@@ -1548,4 +1548,8 @@ public class    EmployeeService extends AbstractService {
     	return resp;
     }
 
+    public List<EmployeeDTO> getEmployeeWithoutLeft(List<Long> empIds) {
+        List<Employee> emp = employeeRepository.findWithoutLeftEmp(empIds);
+        return mapperUtil.toModelList(emp, EmployeeDTO.class);
+    }
 }

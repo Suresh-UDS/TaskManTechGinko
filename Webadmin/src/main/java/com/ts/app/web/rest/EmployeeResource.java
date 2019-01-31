@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.ts.app.domain.Employee;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -665,6 +666,13 @@ public class EmployeeResource {
         	response = employeeService.getEmpAttendanceList(searchCriteria);
     	}
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/left", method = RequestMethod.POST)
+    public List<EmployeeDTO> getWithoutLeftEmployee(@RequestBody SearchCriteria searchCriteria) {
+        List<EmployeeDTO> empList = null;
+        empList = employeeService.getEmployeeWithoutLeft(searchCriteria.getEmpIds());
+        return empList;
     }
 
 
