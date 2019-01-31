@@ -525,6 +525,12 @@ angular.module('timeSheetApp')
 
 				return;
 			}else{
+			    $scope.sStatus = false;
+                $scope.eStatus = false;
+                if($scope.newShiftItem.startTime == $scope.newShiftItem.endTime){
+                 $scope.showNotifications('top','center','warning','Please avoid same from time,to time..');
+                 return;
+                }
 
 				//console.log(shiftFrom,shiftTo);
 
@@ -552,15 +558,13 @@ angular.module('timeSheetApp')
 				$scope.shiftItems.push($scope.newShiftItem);
 				//console.log('shiftItems - '+ JSON.stringify($scope.shiftItems));
 				$scope.newShiftItem = {};
-				$scope.sStatus = false;
-				$scope.eStatus = false;
 				$('input#shiftFrom').data('DateTimePicker').clear();
 				$('input#shiftTo').data('DateTimePicker').clear();
 			}
 		}else{
-			$scope.sStatus = false;
-			$scope.eStatus = false;
 
+			$scope.sStatus = true;
+			$scope.eStatus = true;
 
 		}
 	}
