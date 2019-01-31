@@ -59,7 +59,7 @@ public class ReportDatabaseUtil {
 
 //    @Inject
 //    private ReportDatabaseConfiguration reportDatabaseConfiguration;
-
+//
 //    @Inject
 //    private ReportDatabaseJobRepository reportDatabaseJobRepository;
 //
@@ -581,14 +581,14 @@ public class ReportDatabaseUtil {
 //
 //        return chartModelEntities;
 //    }
-//
-////    public List<AttendanceStatusMeasurement> getAttncounts() {
-////        InfluxDB influxDB = connectDatabase();
-////        String query = "select sum(statusCount) as presentCount, count(distinct(employeeId)) as empCount from AttendanceReport where checkInTime != 0 and time > now() - 30d group by time(1d)";
-////        List<AttendanceStatusMeasurement> attnStatusPoints = reportDatabaseService.getAttendancePoints(influxDB, query, dbName);
-////        return attnStatusPoints;
-////    }
-//
+
+//    public List<AttendanceStatusMeasurement> getAttncounts() {
+//        InfluxDB influxDB = connectDatabase();
+//        String query = "select sum(statusCount) as presentCount, count(distinct(employeeId)) as empCount from AttendanceReport where checkInTime != 0 and time > now() - 30d group by time(1d)";
+//        List<AttendanceStatusMeasurement> attnStatusPoints = reportDatabaseService.getAttendancePoints(influxDB, query, dbName);
+//        return attnStatusPoints;
+//    }
+
 //    public List<ChartModelEntity> getAttnTotalCounts() {
 //        InfluxDB connection = connectDatabase();
 //        String query = "select sum(statusCount) as presentCount, count(distinct(employeeId)) as empCount from AttendanceReport where " +
@@ -1593,7 +1593,7 @@ public class ReportDatabaseUtil {
 //
 //	}
 //
-//
+
 
 
 

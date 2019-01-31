@@ -51,10 +51,10 @@ public class LocationService extends AbstractService {
 
 	@Inject
 	private ImportUtil importUtil;
-	
+
 	@Inject
 	private AmazonS3Utils s3ServiceUtils;
-	
+
 	@Inject
 	private UserRepository userRepository;
 
@@ -78,16 +78,32 @@ public class LocationService extends AbstractService {
 				location.setSite(null);
 			}
 			location.setActive(Feedback.ACTIVE_YES);
-	        location = locationRepository.save(location);
-			log.debug("Created Information for Feedback: {}", location);
-			locationDto = mapperUtil.toModel(location, LocationDTO.class);
+			if(duplicateCheck(location)){
+                locationDto.setErrorMessage("Duplicate Location, Given Block, Floor and Zone details are available in site - "+location.getSite().getName());
+                locationDto.setErrorStatus(true);
+            }else{
+                location = locationRepository.save(location);
+                log.debug("Created Information for Feedback: {}", location);
+                locationDto = mapperUtil.toModel(location, LocationDTO.class);
+            }
+
 		}
 
 
 		return locationDto;
 	}
 
-	public void updateLocation(LocationDTO locationDto) {
+    private boolean duplicateCheck(Location location) {
+	    List<Location> dupliateLocations = new ArrayList<Location>();
+           dupliateLocations =  locationRepository.findByAll(location.getSite().getId(),location.getBlock(),location.getFloor(),location.getZone());
+           if(dupliateLocations.size()>0){
+               return true;
+           }else{
+               return false;
+           }
+    }
+
+    public void updateLocation(LocationDTO locationDto) {
 		log.debug("Inside Update");
 		Location locationUpdate = locationRepository.findOne(locationDto.getId());
 		locationRepository.save(locationUpdate);
@@ -168,7 +184,7 @@ public class LocationService extends AbstractService {
 				findAllSubordinates(employee, subEmpIds, levelCnt);
 	        		List<Long> subEmpList = new ArrayList<Long>();
 	        		subEmpList.addAll(subEmpIds);
-				
+
 				log.debug("List of subordinate ids -"+ subEmpIds);
 				if(CollectionUtils.isEmpty(subEmpList)) {
 					subEmpList.add(employee.getId());
@@ -309,7 +325,7 @@ public class LocationService extends AbstractService {
             String qrCodePath = env.getProperty("AWS.s3-locationqr-path");
 //            String imageFileName = null;
             if (org.apache.commons.lang3.StringUtils.isNotEmpty(qrCodePath)) {
-            	
+
 //                imageFileName = fileUploadHelper.uploadQrCodeFile(codeName, qrCodeImage);
 //                loc.setQrCodeImage(imageFileName);
 //                locationRepository.save(loc);
@@ -332,7 +348,7 @@ public class LocationService extends AbstractService {
         byte[] qrCodeImage = null;
         String qrCodeBase64 = null;
             String codeName = siteId+"_"+block+"_"+floor+"_"+zone;
-            
+
             qrCodeImage = QRCodeUtil.generateQRCode(codeName);
             String qrCodePath = env.getProperty("locationQRCode.file.path");
             String imageFileName = null;

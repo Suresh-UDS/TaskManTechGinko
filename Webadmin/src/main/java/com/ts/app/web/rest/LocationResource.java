@@ -52,12 +52,13 @@ public class LocationResource {
         LocationDTO createdLocation = null;
         try {
             createdLocation  = locationService.saveLocation(locationDTO);
+            log.debug("Created Location - "+createdLocation.getBlock());
         }catch (Exception e) {
             String msg = "Error while creating location, please check the information";
             throw new TimesheetException(e, locationDTO);
 
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<LocationDTO>(createdLocation,HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/locations", method = RequestMethod.GET)
@@ -121,16 +122,16 @@ public class LocationResource {
 //    public String generateAssetQRCode(@PathVariable("id") long locationId, @PathVariable("siteId") long siteId) {
 //        return locationService.generateLocationQRCode(locationId, siteId);
 //    }
-    
+
     @RequestMapping(value = "/location/{id}/qrcode/{siteId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Map<String, Object> generateLocationQRCode(@PathVariable("id") long locationId, @PathVariable("siteId") long siteId) {
 		Map<String, Object> result = null;
-		try { 
+		try {
 			result = locationService.generateLocationQRCode(locationId, siteId);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while generating Location QR-Code" + e);
 		}
-		
+
 		return result;
 	}
 
