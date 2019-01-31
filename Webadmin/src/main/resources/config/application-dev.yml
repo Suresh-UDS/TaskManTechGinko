@@ -21,7 +21,8 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://54.169.54.254:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
         username: root
         password: tgadmin123#
@@ -272,7 +273,7 @@ google:
               port: 8080
 
 influxdb:
-   url: http://3.0.29.145:8086
+   url: http://18.136.79.137:8086
    username: superadmin
    password: "*BehindWheel7"
    dbname: dashboard

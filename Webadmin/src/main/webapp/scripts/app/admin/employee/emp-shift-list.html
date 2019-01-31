@@ -124,7 +124,7 @@
                                                  <!--<div class="dropdown">-->
      					                            <!--<label class="label-control">Date</label>-->
      					                            <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
-     					                            <!--<input type="text" class="form-control datepicker"  id="searchDate"  ng-model="searchDate"/>-->
+     					                            <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="searchDate"  ng-model="searchDate"/>-->
                                                  <!--</div>-->
                                              <!--</div>-->
                                          <!--</div>-->
@@ -630,14 +630,14 @@
                         <div class="col-md-6">
                             <div class="form-group" >
                                 <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="relieverDateFrom" value={{now}} placeholder="From Date" />
+                                <input id="dateFilterFrom" type="text" class="form-control datepicker" onkeydown="return false"ng-model="relieverDateFrom" value={{now}} placeholder="From Date" />
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group" >
                                 <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="relieverDateTo"  value={{now}} placeholder="To Date" />
+                                <input id="dateFilterTo" type="text" class="form-control datepicker" onkeydown="return false"ng-model="relieverDateTo"  value={{now}} placeholder="To Date" />
                             </div>
                         </div>
                 </div>
@@ -1180,7 +1180,7 @@
                                 <div class="dropdown">
                                     <label class="label-control">Date</label>
                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="selectedDate"  ng-model="selectedDate" autocomplete="off" />
+                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="selectedDate"  ng-model="selectedDate" autocomplete="off" />
                                 </div>
                             </div>
                         </div>

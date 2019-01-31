@@ -261,18 +261,18 @@ public class ReportResource {
         return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/callschedule/service", method = RequestMethod.GET)
-    public String callScheduleServ() {
-            schedulerService.createJobPoints();
-	    return "schedule service called...";
-    }
-    
+//    @RequestMapping(value = "/callschedule/service", method = RequestMethod.GET)
+//    public String callScheduleServ() {
+//            schedulerService.createJobPoints();
+//	    return "schedule service called...";
+//    }
+
     @RequestMapping(value = "/getAvgTicket", method = RequestMethod.GET)
     public ResponseEntity<?> getAveticket() {
     	List<ChartModelEntity> response = reportDatabaseUtil.getAverageTicketAge();
     	return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/getAvgTicket/monthly", method = RequestMethod.GET)
     public ResponseEntity<?> getAveticketMonthly() {
         JSONArray response = reportDatabaseUtil.getAverageTicketAgeMonthly();

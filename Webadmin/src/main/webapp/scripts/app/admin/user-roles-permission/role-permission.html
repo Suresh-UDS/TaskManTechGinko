@@ -19,7 +19,7 @@
                             <div class="form-group">
                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                 <select ng-model="selectedUserRole" ng-change="selectRole()"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
-                                ng-options="role as (role.name | uppercase) for role in userRoles">
+                                ng-options="role as (role.name | uppercase) for role in userRoles | orderBy:'name'">
                                     <option value="">Select Roles...</option>
                                 </select>
 

@@ -426,6 +426,13 @@ public class EmployeeResource {
         return relieverCount;
     }
 
+    @RequestMapping(value = "/relieversList", method = RequestMethod.POST)
+    public SearchResult<EmployeeRelieverDTO> findRelieversByEmployee(@RequestBody SearchCriteria searchCriteria) {
+        log.info("--Invoked EmployeeResource find relievers by employee Relievers--");
+        SearchResult<EmployeeRelieverDTO> relievers = employeeService.findRelieversByEmployee(searchCriteria);
+        return relievers;
+    }
+
     @RequestMapping(value = "/employee/relievers", method = RequestMethod.POST)
     public List<EmployeeRelieverDTO> findRelievers(@RequestBody SearchCriteria searchCriteria) {
         log.info("--Invoked EmployeeResource.findRelievers--");

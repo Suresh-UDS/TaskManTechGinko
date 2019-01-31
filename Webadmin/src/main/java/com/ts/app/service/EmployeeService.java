@@ -689,6 +689,89 @@ public class    EmployeeService extends AbstractService {
         return relieverCount;
     }
 
+    public SearchResult<EmployeeRelieverDTO> findRelieversByEmployee(SearchCriteria searchCriteria){
+
+        SearchResult<EmployeeRelieverDTO> result = new SearchResult<>();
+        Pageable pageRequest = null;
+        if(searchCriteria != null) {
+
+            if (!org.springframework.util.StringUtils.isEmpty(searchCriteria.getColumnName())) {
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" + sort);
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                if (searchCriteria.isReport()) {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+                } else {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), PagingUtil.PAGE_SIZE, sort);
+                }
+            } else {
+                if (searchCriteria.isList()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
+            }
+
+            Page<EmployeeReliever> page = null;
+            List<EmployeeReliever> allTransactionsList = new ArrayList<EmployeeReliever>();
+            List<EmployeeRelieverDTO> transactions = null;
+
+            User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+            Hibernate.initialize(user.getEmployee());
+            long empId = 0;
+            if(user.getEmployee() != null) {
+                empId = user.getEmployee().getId();
+            }
+
+            if(empId > 0 && !user.isAdmin()) {
+                Employee employee = user.getEmployee();
+                Set<Long> subEmpIds = new TreeSet<Long>();
+                subEmpIds.add(empId);
+                List<Long> subEmpList = new ArrayList<Long>();
+                if(employee != null) {
+                    Hibernate.initialize(employee.getSubOrdinates());
+                    int levelCnt = 1;
+                    subEmpIds.addAll(findAllSubordinates(employee, subEmpIds, levelCnt));
+                    subEmpList.addAll(subEmpIds);
+                    log.debug("List of subordinate ids -"+ subEmpList);
+                }
+                page = employeeRelieverRepository.findRelieversByEmployee(subEmpList,DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
+            }else {
+                page = employeeRelieverRepository.findAllRelieversByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
+//                page = employeeRelieverRepository.findAll(pageRequest);
+            }
+
+            allTransactionsList.addAll(page.getContent());
+
+            if(CollectionUtils.isNotEmpty(allTransactionsList)) {
+                if(transactions == null) {
+                    transactions = new ArrayList<EmployeeRelieverDTO>();
+                }
+                for(EmployeeReliever relieverTrans : allTransactionsList) {
+                    transactions.add(mapperUtil.toModel(relieverTrans, EmployeeRelieverDTO.class));
+                }
+                buildSearchResultTransax(searchCriteria, page, transactions,result);
+            }
+        }
+
+        return result;
+    }
+
+    private void buildSearchResultTransax(SearchCriteria searchCriteria, Page<EmployeeReliever> page,
+                                          List<EmployeeRelieverDTO> transactions, SearchResult<EmployeeRelieverDTO> result) {
+        // TODO Auto-generated method stub
+        if (page != null) {
+            result.setTotalPages(page.getTotalPages());
+        }
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10 ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+        result.setTransactions(transactions);
+        return;
+    }
+
     public List<EmployeeRelieverDTO> findRelievers(SearchCriteria searchCriteria) {
         List<EmployeeReliever> entities = null;
         Pageable pageRequest = null;

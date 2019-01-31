@@ -87,7 +87,7 @@
                                             </div>
 
                                         </div>
-                                        
+
                                        <div class="form-group selectcon is-empty" ng-init="loadClientGroup()">
 
                                                <div class="row">
@@ -108,7 +108,7 @@
                                                    </div>
                                                </div>
 
-                                      
+
                                        </div>
 
                                     </div>
@@ -185,7 +185,7 @@
                                                     <label class="control-label">Phone</label>
                                                     <input id='phone' ng-model="project.phone"
                                                            class='form-control' name='phone' type='phone' value=""
-                                                           ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9]*$/" tabindex="5" autofocus />
+                                                           ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9\s&-/]*$/" tabindex="5" autofocus />
                                                     <div ng-show="form.$submitted || form.phone.$touched || form.phone.$dirty">
                                                         <div ng-show="form.phone.$dirty || form.phone.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
@@ -500,15 +500,15 @@
 	                            ng-pattern="/^[A-Za-z0-9\s]*$/" />
 	                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched || addGroupForm.assetgroupName.$dirty">
 	                                <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
-	                                    <p class="help-block" style="color:maroon"
+	                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
 	                                       ng-show="addGroupForm.assetgroupName.$error.required">
 	                                       Client Group is required.
 	                                    </p>
-	                                    <p class="help-block" style="color:maroon"
+	                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
 	                                       ng-show="addGroupForm.assetgroupName.$error.maxlength">
 	                                        Client Group cannot be longer than 250 characters.
 	                                    </p>
-	                                    <p class="help-block" style="color:maroon"
+	                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
 	                                       ng-show="addGroupForm.assetgroupName.$error.pattern">
 	                                       Client Group can only contain letters, digits and space.
 	                                    </p>

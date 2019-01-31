@@ -291,10 +291,19 @@ angular.module('timeSheetApp')
             DashboardComponent.getAvgTicketMonthly().then(function (data) {
                 console.log("Ticket Avg Monthly" +JSON.stringify(data));
                 if(data.length > 0) {
+
                     $scope.ticketAvgSeries = data;
+                    $rootScope.ticketsAgeChartGraph();
+                    $scope.ticketsAgeChart.showLoading();
+                    $timeout(function(){$scope.ticketsAgeChart.hideLoading();},5000);
                 }else{
+
                     $scope.ticketAvgSeries = [{name : "No data in this year", data: [0,0,0,0,0,0,0,0,0,0,0,0], marker: {symbol: "circle"}}];
+                    $rootScope.ticketsAgeChartGraph();
+                    $scope.ticketsAgeChart.showLoading();
+                    $timeout(function(){$scope.ticketsAgeChart.hideLoading();},5000);
                 }
+
             });
         }
 
@@ -1519,7 +1528,7 @@ angular.module('timeSheetApp')
        //$rootScope.ticketGraphTimeout = $timeout($rootScope.ticketGraph(),1000);
 
 
-        $timeout(function () {
+        $rootScope.ticketsAgeChartGraph = function () {
             $scope.ticketsAgeChart = Highcharts.chart('catgAgeTicketsCharts', {
                 chart: {
                     type: 'spline'
@@ -1559,7 +1568,7 @@ angular.module('timeSheetApp')
                 },
                 series: $scope.ticketAvgSeries
             });
-        },1500);
+        };
 
         $rootScope.ticketSingleGraph = function(){
            $scope.ticketSingleStackChart = Highcharts.chart('ticketSingleStackedCharts', {

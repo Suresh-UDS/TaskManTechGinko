@@ -304,6 +304,12 @@ angular.module('timeSheetApp')
                 return $http.get('api/employee/shift/importstatus/'+fileName+"/status").then(function (response) {
                     return response.data;
                 });
+            },
+
+            getEmpRelievers : function (searchCriteria) {
+                return $http.post('api/relieversList', searchCriteria).then(function (response) {
+                    return response.data;
+                });
             }
 
         };

@@ -21,11 +21,11 @@ angular.module('timeSheetApp')
                 });
             },
 
-            // loadAttendanceReport: function (siteId,selectedDate,endDate) {
-            //     return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
-            //         return response.data;
-            //     });
-            // },
+            loadAttendanceReportBySite: function (siteId,selectedDate,endDate) {
+                return $http.get('api/reports/attendance/site/'+siteId+'/selectedDate/'+selectedDate).then(function (response) {
+                    return response.data;
+                });
+            },
 
             loadAllProjects: function(){
                 return $http.get('api/project').then(function(response){

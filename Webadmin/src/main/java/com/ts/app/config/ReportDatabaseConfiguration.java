@@ -15,24 +15,24 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ReportDatabaseConfiguration {
-	
+
 	private final Logger log = LoggerFactory.getLogger(ReportDatabaseConfiguration.class);
-	
+
 	@Value("${influxdb.url}")
 	private String url;
-	
+
 	@Value("${influxdb.username}")
 	private String username;
-	
+
 	@Value("${influxdb.password}")
 	private String password;
-	
+
 	@Value("${influxdb.dbname}")
 	private String databaseName;
 
 	@Value("${influxdb.retention-policy}")
 	private String retentionPolicy;
-	
+
 	@Bean
 	public InfluxDB initializeInfluxDbConnection() {
 
@@ -48,7 +48,7 @@ public class ReportDatabaseConfiguration {
             .retryOnConnectionFailure(true);
 
 		InfluxDB influxDb = InfluxDBFactory.connect(url, username, password, client);
-		
+
 		Pong response = influxDb.ping();
         if (response.getVersion().equalsIgnoreCase("unknown")) {
             log.error("Error pinging server.");
@@ -73,9 +73,9 @@ public class ReportDatabaseConfiguration {
         }
 
         influxDb.setLogLevel(InfluxDB.LogLevel.BASIC);
-       
+
         return influxDb;
-		
+
 	}
 
 }

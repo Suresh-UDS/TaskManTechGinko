@@ -9,10 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.*;
 
 public class EmployeeSpecification implements Specification<Employee> {
@@ -34,48 +31,75 @@ public class EmployeeSpecification implements Specification<Employee> {
     public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         List<Predicate> predicates = new ArrayList<>();
         log.debug("EmpSpecification toPredicate - searchCriteria projectId -" + searchCriteria.getProjectId());
+        Join<Object, Object> projectSiteJoin = null;
+
         if (searchCriteria.getProjectId() != 0) {
-            predicates.add(builder.equal(root.join("projectSites").get("project").get("id"), searchCriteria.getProjectId()));
+            projectSiteJoin = root.join("projectSites");
+            predicates.add(builder.equal(projectSiteJoin.get("project").get("id"), searchCriteria.getProjectId()));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria siteId -" + searchCriteria.getSiteId());
         if (searchCriteria.getSiteId() != 0) {
-            predicates.add(builder.equal(root.join("projectSites").get("site").get("id"), searchCriteria.getSiteId()));
+            if(projectSiteJoin == null) {
+                projectSiteJoin = root.join("projectSites");
+            }
+            predicates.add(builder.equal(projectSiteJoin.get("site").get("id"), searchCriteria.getSiteId()));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria emp Name -" + searchCriteria.getName());
         if (searchCriteria.getName() != null && searchCriteria.getName() != "") {
             predicates.add(builder.like(builder.lower(root.get("name")),
                 "%" + searchCriteria.getName().toLowerCase() + "%"));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria Designation -" + searchCriteria.getDesignation());
         if (searchCriteria.getDesignation() != null && searchCriteria.getDesignation() !="") {
             predicates.add(builder.like(builder.lower(root.get("designation")),
                 "%" + searchCriteria.getDesignation().toLowerCase() + "%"));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria employeeID -" + searchCriteria.getEmployeeEmpId());
         if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
             predicates.add(builder.equal(root.get("empId"), searchCriteria.getEmployeeEmpId()));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria isLeft -" + searchCriteria.isLeft());
         if (searchCriteria.isLeft()) {
             predicates.add(builder.equal(root.get("isLeft"), true));
         }else {
         	predicates.add(builder.equal(root.get("isLeft"), false));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria projectName -" + searchCriteria.getProjectName());
         if(searchCriteria.getProjectName() != null && searchCriteria.getProjectName() != "") {
-            predicates.add(builder.equal(root.join("projectSites").get("project").get("name"), searchCriteria.getProjectName()));
+            if(projectSiteJoin == null) {
+                projectSiteJoin = root.join("projectSites");
+            }
+            predicates.add(builder.equal(projectSiteJoin.get("project").get("name"), searchCriteria.getProjectName()));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria siteName -" + searchCriteria.getSiteName());
         if(searchCriteria.getSiteName() != null && searchCriteria.getSiteName() != "") {
-            predicates.add(builder.equal(root.join("projectSites").get("site").get("name"), searchCriteria.getSiteName()));
+            if(projectSiteJoin == null) {
+                projectSiteJoin = root.join("projectSites");
+            }
+            predicates.add(builder.equal(projectSiteJoin.get("site").get("name"), searchCriteria.getSiteName()));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria region -" + searchCriteria.getRegion());
         if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
-        	predicates.add(builder.equal(root.join("projectSites").get("site").get("region"), searchCriteria.getRegion()));
+            if(projectSiteJoin == null) {
+                projectSiteJoin = root.join("projectSites");
+            }
+        	predicates.add(builder.equal(projectSiteJoin.get("site").get("region"), searchCriteria.getRegion()));
         }
+
         log.debug("EmpSpecification toPredicate - searchCriteria branch -" + searchCriteria.getBranch());
         if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
-        	predicates.add(builder.equal(root.join("projectSites").get("site").get("branch"), searchCriteria.getBranch()));
+            if(projectSiteJoin == null) {
+                projectSiteJoin = root.join("projectSites");
+            }
+        	predicates.add(builder.equal(projectSiteJoin.get("site").get("branch"), searchCriteria.getBranch()));
         }
 
         if(searchCriteria.getFromDate() != null) {
@@ -110,8 +134,15 @@ public class EmployeeSpecification implements Specification<Employee> {
                 orPredicates.add(root.get("id").in(searchCriteria.getSubordinateIds()));
             }
         }
+
         if(!isAdmin) {
-            if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){ Predicate path = root.get("projectSites").get("site").get("id").in(searchCriteria.getSiteIds());orPredicates.add(path); }
+            if(CollectionUtils.isNotEmpty(searchCriteria.getSiteIds())){
+                if(projectSiteJoin == null) {
+                    projectSiteJoin = root.join("projectSites");
+                }
+                Predicate path = projectSiteJoin.get("site").get("id").in(searchCriteria.getSiteIds());
+                orPredicates.add(path);
+            }
         }
 
         log.debug("EmpSpecification toPredicate - searchCriteria subordinateIds -"+ searchCriteria.getSubordinateIds());
