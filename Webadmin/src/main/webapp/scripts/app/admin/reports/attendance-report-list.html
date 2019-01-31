@@ -101,7 +101,7 @@
                                                     <!--<div class="form-group">-->
                                                         <!--<label class="label-control">From date</label>-->
                                                         <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
-                                                        <!--<input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />-->
+                                                        <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterFrom"  ng-model="selectedDateFrom" />-->
 
                                                     <!--</div>-->
                                                <!--</div>-->
@@ -113,7 +113,7 @@
                                                     <!--<div class="form-group">-->
                                                         <!--<label class="label-control">To date</label>-->
                                                         <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
-                                                        <!--<input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>-->
+                                                        <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterTo"   ng-model="selectedDateTo"/>-->
 
                                                     <!--</div>-->
 
@@ -307,7 +307,7 @@
                                 <td>{{attendance.siteName}}</td>
                                 <td>{{attendance.checkInTime | date:'MM/dd/yyyy @ h:mma'}}</td>
                                 <td ng-if="attendance.checkInImage">
-                                    <a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
+                                    <a id="images" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">
                                         <img ng-src={{attendance.checkInImgUrl}} width="30px" height="30px"/>
                                     </a>
                                 </td>
@@ -317,7 +317,7 @@
 
                                 <td>{{attendance.checkOutTime | date:'MM/dd/yyyy @ h:mma'}}</td>
 
-                                <td ng-if="attendance.checkOutImage"><a id="images" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)">
+                                <td ng-if="attendance.checkOutImage"><a id="images" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)">
                                     <img ng-src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>
                                 </a>
                                 </td>
@@ -325,7 +325,7 @@
                                     <img ng-src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
                                 <td align="center">
-                                    <a id="maps" href="#" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
+                                    <a id="maps" href="javascript:void(0);" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
                                         <img ng-src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
                                     </a>
                                 </td>
@@ -498,7 +498,7 @@
                                 <div class="form-group">
                                     <label class="label-control">From date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off"  />
+                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterFrom"  ng-model="selectedDateFrom" autocomplete="off"  />
 
                                 </div>
                             </div>
@@ -510,7 +510,7 @@
                                 <div class="form-group">
                                     <label class="label-control">To date</label>
                                     <span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
+                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterTo"   ng-model="selectedDateTo" autocomplete="off" />
 
                                 </div>
 
@@ -522,15 +522,15 @@
                                      <label class="label-control">Client</label>
                                      <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                      <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                             
+
 				                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 									  <ui-select-match placeholder="Select clients..." >{{$select.selected.name}}
-									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
 									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
-					
+
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>
 									</ui-select>
@@ -548,10 +548,10 @@
                                        <label class="label-control">Region</label>
                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                
+
 	                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 									  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-									    <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									    <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
@@ -569,10 +569,10 @@
 		                              <label class="label-control">Branch</label>
 		                               <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 		                               <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-		                               
+
 		                               <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 									  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
-									    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
@@ -580,7 +580,7 @@
 									    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 									  </ui-select-choices>
 									</ui-select>
-									<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span> 
+									<span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
 					           </div>
                           </div>
                         </div>
@@ -591,10 +591,10 @@
                                    <label class="label-control">Site</label>
                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 	                               <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-	                            
+
 	                               <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 									  <ui-select-match placeholder="Select site...">{{$select.selected.name}}
-									     <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+									     <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
@@ -697,7 +697,7 @@
                                 <!--<div class="form-group dateFilterCon">-->
                                     <!--<label class="label-control">From date</label>-->
                                     <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
-                                    <!--<input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedDateFrom" />-->
+                                    <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterFrom"  ng-model="selectedDateFrom" />-->
 
                                 <!--</div>-->
                             <!--</div>-->
@@ -709,7 +709,7 @@
                                 <!--<div class="form-group dateFilterCon">-->
                                     <!--<label class="label-control">To date</label>-->
                                     <!--<span class="form-control-feedback calender-big-icon"><i class="material-icons">date_range</i></span>-->
-                                    <!--<input type="text" class="form-control datepicker"  id="dateFilterTo"   ng-model="selectedDateTo"/>-->
+                                    <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterTo"   ng-model="selectedDateTo"/>-->
 
                                 <!--</div>-->
 
