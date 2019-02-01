@@ -411,7 +411,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Acquired Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" ng-model="assetEdit.acquiredDate1" class="form-control datepicker"  id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}" tabindex="12" />
+                                                                                    <input type="text" ng-model="assetEdit.acquiredDate1" class="form-control datepicker" onkeydown="return false" id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}" tabindex="12" />
 
                                                                                 </div>
 
@@ -641,7 +641,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">From Date</label>
                                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                                <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="assetEdit.warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off" tabindex="18" />
+                                                                                                <input type="text" class="form-control datepicker" onkeydown="return false" id="warFromDate" ng-model ="assetEdit.warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off" tabindex="18" />
                                                                                                 <!-- <div ng-show="form.$submitted || form.warFromDate.$touched"> -->
                                                                                                     <!-- <div
                                                                                                         ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
@@ -666,7 +666,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">To Date</label>
                                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                                <input type="text" class="form-control datepicker"  id="warToDate" ng-model ="assetEdit.warToDate1" name="warToDate" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="19" />
+                                                                                                <input type="text" class="form-control datepicker" onkeydown="return false" id="warToDate" ng-model ="assetEdit.warToDate1" name="warToDate" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="19" />
                                                                                                <!--  <div ng-show="form.$submitted || form.warToDate.$touched"> -->
                                                                                                     <!-- <div
                                                                                                         ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
@@ -1036,7 +1036,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input  type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  ng-model="ppmFrom" placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"  name="PpmFrom" required />
+                                                                            <input  type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterPpmFrom"  ng-model="ppmFrom" placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"  name="PpmFrom" required />
                                                                             <div ng-show="form3.$submitted || form3.PpmFrom.$touched || form3.PpmFrom.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
@@ -1056,7 +1056,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}" autocomplete="off"  name ="PpmTo" required />
+                                                                            <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterPpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}" autocomplete="off"  name ="PpmTo" required />
                                                                             <div ng-show="form3.$submitted || form3.PpmTo.$touched || form3.PpmTo.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
@@ -1370,7 +1370,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"required />
+                                                                        <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"required />
                                                                         <div ng-show="form4.$submitted || form4.AmcFrom.$touched || form4.AmcFrom.$dirty">
                                                                             <div
                                                                                 ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
@@ -1390,7 +1390,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}" autocomplete="off" required />
+                                                                        <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}" autocomplete="off" required />
                                                                         <div ng-show="form4.$submitted || form4.AmcTo.$touched || form4.AmcTo.$dirty">
                                                                             <div
                                                                                 ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
@@ -1946,8 +1946,8 @@
                                                                                          </div>
                                                                                      </td> -->
                                                                                     <td class="text-right">
-                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')" href="javascript:void(0);"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                                                        <a  has-permission="Config:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')" href="javascript:void(0);"  has-permission="AssetConfig:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                                                        <a  has-permission="AssetConfig:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
 
                                                                                 </tr>
