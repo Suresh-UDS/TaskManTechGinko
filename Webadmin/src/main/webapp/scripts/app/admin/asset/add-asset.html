@@ -933,14 +933,14 @@
                                                                             <div class="" style="float:left;width:90%;" ng-init="loadAllRules()">
                                                                                 <label class="control-label">Select Rule </label>
                                                                                 <span class="form-control-feedback d-arrow-icon" style="padding-right: 85px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="rule | uppercase for rule in readingRules"  aria-invalid="false" required>
+                                                                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="rule" ng-options="rule | uppercase for rule in readingRules"  aria-invalid="false">
                                                                                 <option value="" class="" selected="selected">Select Rule ..</option>
                                                                                 </select>
-                                                                                <!-- <div ng-show="form6.$submitted || form6.param.$touched">
-                                                                                    <div ng-show="form6.param.$dirty || form6.param.$invalid">
+                                                                                <!-- <div ng-show="form6.$submitted || form6.rule.$touched">
+                                                                                    <div ng-show="form6.rule.$dirty || form6.rule.$invalid">
                                                                                         <p class="help-block" style="color:maroon"
-                                                                                           ng-show="form6.param.$error.required">
-                                                                                            Parameter is required.
+                                                                                           ng-show="form6.rule.$error.required">
+                                                                                            Rule is required.
                                                                                         </p>
 
                                                                                     </div>
@@ -1388,7 +1388,7 @@
         				                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
         				                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-        				                                                    <input type="text" class="form-control timepicker padng-right30"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" name="ppmJobStartTime" required/>
+        				                                                    <input type="text" class="form-control timepicker padng-right30" onkeydown="return false"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" placeholder="{{ppmJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" name="ppmJobStartTime" required/>
 
         																   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched || form3.ppmJobStartTime.$dirty">
                                                                                 <div
@@ -1745,7 +1745,7 @@
         				                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
         				                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-        				                                                    <input type="text" class="form-control timepicker padng-right30"  id="amcJobStartTime"  ng-model="amcJobStartTime" name="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
+        				                                                    <input type="text" class="form-control timepicker padng-right30" onkeydown="return false"  id="amcJobStartTime"  ng-model="amcJobStartTime" name="amcJobStartTime" placeholder="{{amcJobStartTime | date:'dd/MM/yyyy hh:mm a'}}" autocomplete="off" required/>
 
         																   <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched || form4.amcJobStartTime.$dirty">
                                                                                 <div
