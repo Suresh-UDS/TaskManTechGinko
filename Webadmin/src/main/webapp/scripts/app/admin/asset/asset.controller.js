@@ -2671,12 +2671,25 @@ angular.module('timeSheetApp')
 			}
 
 			$scope.deleteAssetConfig = function(id) {
-				$rootScope.loadingStart();
+				$scope.loadingStart();
 				AssetComponent.deleteConfigById($scope.deleteParamConId).then(function(data){
 					//console.log(data);
 					$scope.assetParameters = data;
-					$scope.assetConfig();
-					$rootScope.loadingStop();
+					$scope.parameterConfig = {};
+                    $scope.parameter = null;
+                    $scope.selectedAssetType = null;
+                    $scope.selectedParameter = null;
+                    $scope.selectedParameterUOM = null;
+                    $scope.selectedRule = null;
+                    $scope.selectedThreshold =null;
+                    $scope.validationRequired = false;
+                    $scope.consumptionMonitoringRequired = false;
+                    $scope.alertRequired = false;
+                    $scope.selectedMinValue = null;
+                    $scope.selectedMaxValue = null;
+                    $scope.isEdit = false;
+                    $scope.assetConfig();
+					$scope.loadingStop();
 
 				});
 			}

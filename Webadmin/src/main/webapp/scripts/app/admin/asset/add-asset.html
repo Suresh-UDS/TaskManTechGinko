@@ -1158,6 +1158,9 @@
                                                                                                 </td>
 
                                                                                             </tr>
+                                                                                            <tr>
+                                                                                                <td colspan="8" align="center" ng-if="assetParameters.length == 0">No asset param Found</td>
+                                                                                            </tr>
 
                                                                                         </tbody>
                                                                                     </table>
@@ -1290,7 +1293,7 @@
 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name | uppercase for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                     <option value="">Select Employees...</option>
@@ -1648,7 +1651,7 @@
 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"   ng-options="emp as emp.name | uppercase for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                                <select class="form-control " ng-model="selectedEmployee"   ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                     <option value="">Select Employees...</option>

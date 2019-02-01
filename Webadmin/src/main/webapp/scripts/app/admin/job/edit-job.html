@@ -152,7 +152,7 @@
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select required class="form-control " ng-model="selectedEmployee"
-                                                        ng-options="emp as emp.name for emp in employees track by emp.id" ng-change="checkSite();" tabindex="8">
+                                                                ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" ng-change="checkSite();" tabindex="8">
                                                             <option value="">Select Employees...</option>
                                                         </select>
 
