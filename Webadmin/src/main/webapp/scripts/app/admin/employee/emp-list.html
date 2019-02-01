@@ -319,7 +319,7 @@
                                         <button ng-disabled="employee.left" title="Mark Left"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#leftModal" data-dismiss="#leftModal"
-                                                ng-click="employeeDetails(employee.id);loadAllEmployees();"
+                                                ng-click="employeeDetails(employee.id);$scope.markLeftEmployee(employee.id);"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i style="color: #942a25" class="fas fa-user-times"></i>
                                         </button>
@@ -771,7 +771,7 @@
                                     <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!allEmployees"><i class="ld ld-ring ld-spin" ></i></span>
                                     <select
                                         class="form-control siteList" ng-model="NewEmployee"
-                                        ng-options="emp as emp.fullName for emp in allEmployees" ng-disabled="!allEmployees">
+                                        ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="!allEmployees">
                                         <option value="">Select Employee..</option>
                                     </select>
                                 </div>

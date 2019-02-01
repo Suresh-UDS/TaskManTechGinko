@@ -1233,6 +1233,18 @@ angular.module('timeSheetApp')
 
 	};
 
+	$scope.markLeftEmployee= function(id){
+        if(id > 0){
+            $scope.markLeftEmployeeArray = "";
+            EmployeeComponent.markLftEmp({empIds:[id]}).then(function (data) {
+                //console.log(data);
+                $scope.markLeftEmployeeArray = data;
+            });
+
+        }
+
+    };
+
 	$scope.updateEmployeeLeft= function(employee){
 
 		//console.log("Current Employee");
