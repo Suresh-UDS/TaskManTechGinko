@@ -1118,7 +1118,7 @@ angular.module('timeSheetApp')
 	        	}
 	        	$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
 	        	$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-	        	$scope.searchCriteria.graphRequest = true;
+	        	$scope.searchCriteria.graphRequest = false;
 
 	        	console.log('job report search criteria -' , JSON.stringify($scope.searchCriteria));
             // $scope.loadingStop();
