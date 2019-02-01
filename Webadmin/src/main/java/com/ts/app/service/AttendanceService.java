@@ -822,7 +822,7 @@ public class AttendanceService extends AbstractService {
                         	boolean isAdmin = true;
                         	searchCriteria.setAdmin(isAdmin);
 //                            page = attendanceRepository.findByCheckInTime(startDate, toDate, pageRequest);
-                            page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin, startDate, toDate), pageRequest);
+                            page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin), pageRequest);
                         } else {
                         	boolean isAdmin = false;
                         	searchCriteria.setAdmin(isAdmin);
@@ -847,7 +847,7 @@ public class AttendanceService extends AbstractService {
                                 searchCriteria.setSubordinateIds(subEmpList);
                             }
                             
-                            page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin, startDate, toDate), pageRequest);
+                            page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin), pageRequest);
 
                         }
                     }

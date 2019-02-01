@@ -22,8 +22,6 @@ public class AttendanceSpecification implements Specification<Attendance>{
 
     SearchCriteria searchCriteria;
     private boolean isAdmin;
-    private Date startDate;
-    private Date endDate;
     
     private final Logger log = LoggerFactory.getLogger(AttendanceSpecification.class);
 
@@ -32,11 +30,9 @@ public class AttendanceSpecification implements Specification<Attendance>{
      * @param isAdmin
      *            - to identify the request from admin site
      */
-    public AttendanceSpecification(SearchCriteria searchCriteria, boolean isAdmin, Date startDate, Date endDate) {
+    public AttendanceSpecification(SearchCriteria searchCriteria, boolean isAdmin) {
         this.searchCriteria = searchCriteria;
         this.isAdmin = isAdmin;
-        this.startDate = startDate;
-        this.endDate = endDate;
     }
 
     @Override
@@ -78,8 +74,6 @@ public class AttendanceSpecification implements Specification<Attendance>{
 
         if(searchCriteria.getCheckInDateTimeFrom() != null) {
             log.debug("AttSpecification checkInDate from -" + searchCriteria.getCheckInDateTimeFrom());
-            log.debug("StartDate" +startDate);
-            log.debug("EndDate" +endDate);
             predicates.add(builder.between(root.get("checkInTime"), searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo()));
         }
 

@@ -669,6 +669,27 @@ public class    EmployeeService extends AbstractService {
         }
         long relieverCount =  0;
         List<EmployeeReliever> empRel = new ArrayList<>();
+        Calendar startCal = Calendar.getInstance();
+
+        if (searchCriteria.getCheckInDateTimeFrom() != null) {
+            startCal.setTime(searchCriteria.getFromDate());
+        }
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        startCal.set(Calendar.SECOND, 0);
+        searchCriteria.setFromDate(startCal.getTime());
+        Calendar endCal = Calendar.getInstance();
+        if (searchCriteria.getCheckInDateTimeTo() != null) {
+            endCal.setTime(searchCriteria.getToDate());
+        }
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        endCal.set(Calendar.SECOND, 0);
+        searchCriteria.setToDate(endCal.getTime());
+
+        java.sql.Timestamp startDate = new java.sql.Timestamp(searchCriteria.getFromDate().getTime());
+        java.sql.Timestamp toDate = new java.sql.Timestamp(searchCriteria.getToDate().getTime());
+
         if(empId > 0 && !user.isAdmin()) {
             Employee employee = user.getEmployee();
             Set<Long> subEmpIds = new TreeSet<Long>();
@@ -681,9 +702,9 @@ public class    EmployeeService extends AbstractService {
                 subEmpList.addAll(subEmpIds);
                 log.debug("List of subordinate ids -"+ subEmpList);
             }
-            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(subEmpList,DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(subEmpList, startDate, toDate);
         }else {
-            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()));
+            relieverCount = employeeRelieverRepository.findRelieverCountByEmployee(startDate, toDate);
         }
 
         return relieverCount;
@@ -723,6 +744,27 @@ public class    EmployeeService extends AbstractService {
                 empId = user.getEmployee().getId();
             }
 
+            Calendar startCal = Calendar.getInstance();
+
+            if (searchCriteria.getCheckInDateTimeFrom() != null) {
+                startCal.setTime(searchCriteria.getFromDate());
+            }
+            startCal.set(Calendar.HOUR_OF_DAY, 0);
+            startCal.set(Calendar.MINUTE, 0);
+            startCal.set(Calendar.SECOND, 0);
+            searchCriteria.setFromDate(startCal.getTime());
+            Calendar endCal = Calendar.getInstance();
+            if (searchCriteria.getCheckInDateTimeTo() != null) {
+                endCal.setTime(searchCriteria.getToDate());
+            }
+            endCal.set(Calendar.HOUR_OF_DAY, 23);
+            endCal.set(Calendar.MINUTE, 59);
+            endCal.set(Calendar.SECOND, 0);
+            searchCriteria.setToDate(endCal.getTime());
+
+            java.sql.Timestamp startDate = new java.sql.Timestamp(searchCriteria.getFromDate().getTime());
+            java.sql.Timestamp toDate = new java.sql.Timestamp(searchCriteria.getToDate().getTime());
+
             if(empId > 0 && !user.isAdmin()) {
                 Employee employee = user.getEmployee();
                 Set<Long> subEmpIds = new TreeSet<Long>();
@@ -735,9 +777,9 @@ public class    EmployeeService extends AbstractService {
                     subEmpList.addAll(subEmpIds);
                     log.debug("List of subordinate ids -"+ subEmpList);
                 }
-                page = employeeRelieverRepository.findRelieversByEmployee(subEmpList,DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
+                page = employeeRelieverRepository.findRelieversByEmployee(subEmpList,startDate,toDate, pageRequest);
             }else {
-                page = employeeRelieverRepository.findAllRelieversByEmployee(DateUtil.convertToSQLDate(searchCriteria.getFromDate()),DateUtil.convertToSQLDate(searchCriteria.getToDate()), pageRequest);
+                page = employeeRelieverRepository.findAllRelieversByEmployee(startDate,toDate, pageRequest);
 //                page = employeeRelieverRepository.findAll(pageRequest);
             }
 
@@ -1610,25 +1652,96 @@ public class    EmployeeService extends AbstractService {
         return empShiftDto;
     }
 
-    public List<EmployeeDTO> getEmpAttendanceList(SearchCriteria searchCriteria) {
-    	List<EmployeeDTO> resp = new ArrayList<>();
+    public SearchResult<EmployeeDTO> getEmpAttendanceList(SearchCriteria searchCriteria) {
+        SearchResult<EmployeeDTO> result = new SearchResult<>();
     	Set<Long> empIds = new TreeSet<Long>();
     	List<Long> subEmpList = new ArrayList<Long>();
-    	SearchResult<AttendanceDTO> attnLists = attendanceService.findBySearchCrieria(searchCriteria);
-		if(CollectionUtils.isNotEmpty(attnLists.getTransactions())) {
-			for(AttendanceDTO attnList : attnLists.getTransactions()) {
-    			if(attnList.getEmployeeId() > 0) {
-    				empIds.add(attnList.getEmployeeId());
+        Pageable pageRequest = null;
+        Page<Employee> page = null;
+        List<EmployeeDTO> transactions = null;
+
+        if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+            Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+            log.debug("Sorting object" + sort);
+            if(searchCriteria.isList()) {
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+            }else {
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+            }
+        } else {
+            if(searchCriteria.isList()) {
+                Sort sort = new Sort(Sort.Direction.ASC , "name");
+                pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+            }else {
+                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+            }
+        }
+
+        Calendar startCal = Calendar.getInstance();
+
+        if (searchCriteria.getCheckInDateTimeFrom() != null) {
+            startCal.setTime(searchCriteria.getCheckInDateTimeFrom());
+        }
+        startCal.set(Calendar.HOUR_OF_DAY, 0);
+        startCal.set(Calendar.MINUTE, 0);
+        startCal.set(Calendar.SECOND, 0);
+        searchCriteria.setCheckInDateTimeFrom(startCal.getTime());
+        Calendar endCal = Calendar.getInstance();
+        if (searchCriteria.getCheckInDateTimeTo() != null) {
+            endCal.setTime(searchCriteria.getCheckInDateTimeTo());
+        }
+        endCal.set(Calendar.HOUR_OF_DAY, 23);
+        endCal.set(Calendar.MINUTE, 59);
+        endCal.set(Calendar.SECOND, 0);
+        searchCriteria.setCheckInDateTimeTo(endCal.getTime());
+
+        java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
+        java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
+
+        List<Attendance> attnLists = attendanceRepository.findByProjectAndDate(searchCriteria.getProjectId(), startDate, toDate);
+
+		if(CollectionUtils.isNotEmpty(attnLists)) {
+			for(Attendance attnList : attnLists) {
+    			if(attnList.getEmployee().getId() > 0) {
+    				empIds.add(attnList.getEmployee().getId());
     			}
     		}
     		subEmpList.addAll(empIds);
     		if(CollectionUtils.isNotEmpty(subEmpList)) {
-        		List<Employee> employee = employeeRepository.findAllByNonIds(subEmpList);
-        		resp = mapperUtil.toModelList(employee, EmployeeDTO.class);
+        		page  = employeeRepository.findAllByNonIds(searchCriteria.getProjectId(), subEmpList, pageRequest);
+                if(page != null) {
+                    //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+                    if(transactions == null) {
+                        transactions = new ArrayList<EmployeeDTO>();
+                    }
+                    List<Employee> empList =  page.getContent();
+                    if(CollectionUtils.isNotEmpty(empList)) {
+                        for(Employee emp : empList) {
+                            transactions.add(mapToModel(emp));
+                        }
+                    }
+                    if(CollectionUtils.isNotEmpty(transactions)) {
+                        buildEmployeeResult(searchCriteria, page, transactions, result);
+                    }
+                }
     		}
 		}
 
-    	return resp;
+    	return result;
+    }
+
+    private void buildEmployeeResult(SearchCriteria searchCriteria, Page<Employee> page, List<EmployeeDTO> transactions, SearchResult<EmployeeDTO> result) {
+        if(page != null) {
+            result.setTotalPages(page.getTotalPages());
+        }
+        result.setCurrPage(page.getNumber() + 1);
+        result.setTotalCount(page.getTotalElements());
+        result.setStartInd((result.getCurrPage() - 1) * 10 + 1);
+        result.setEndInd((result.getTotalCount() > 10  ? (result.getCurrPage()) * 10 : result.getTotalCount()));
+
+        result.setTransactions(transactions);
+        return;
+
     }
 
 }

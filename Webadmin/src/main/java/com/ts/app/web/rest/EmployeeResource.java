@@ -666,13 +666,13 @@ public class EmployeeResource {
     }
 
     @RequestMapping(value="/employee/absent/search", method = RequestMethod.POST)
-    public ResponseEntity<?> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
-    	List<EmployeeDTO> response = null;
+    public SearchResult<EmployeeDTO> getEmployeeAttendance(@RequestBody SearchCriteria searchCriteria) {
+        SearchResult<EmployeeDTO> response = null;
     	if(searchCriteria!=null) {
     		searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
         	response = employeeService.getEmpAttendanceList(searchCriteria);
     	}
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
 

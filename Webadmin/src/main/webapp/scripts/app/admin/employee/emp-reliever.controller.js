@@ -868,8 +868,8 @@ angular.module('timeSheetApp')
             $scope.searchCriteria.currPage = currPageVal;
             $scope.searchCriteria.findAll = false;
 
-            $scope.searchCriteria.fromDate = new Date;
-            $scope.searchCriteria.toDate = new Date;
+            $scope.searchCriteria.fromDate = new Date();
+            $scope.searchCriteria.toDate = new Date();
 
             EmployeeComponent.getEmpRelievers($scope.searchCriteria).then(function (data) {
                 console.log(data);

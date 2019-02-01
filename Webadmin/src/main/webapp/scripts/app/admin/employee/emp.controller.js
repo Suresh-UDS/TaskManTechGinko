@@ -1744,22 +1744,24 @@ angular.module('timeSheetApp')
 				$scope.searchSite = null;
 				$scope.sitesListOne.selected=$scope.searchSite;
 			}
-			// if($rootScope.searchFilterCriteria.attendFromDate) {
-			// 	$scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.attendFromDate;
-			// }
-            //
-			// if($rootScope.searchFilterCriteria.attendToDate) {
-			// 	$scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.attendToDate;
-			// }
-            console.log($rootScope.searchFilterCriteria.empFromDate);
-			console.log($rootScope.searchFilterCriteria.empToDate);
-            if($rootScope.searchFilterCriteria.empFromDate) {
-                $scope.searchCriteria.fromDate = $rootScope.searchFilterCriteria.empFromDate;
-            }
 
-            if($rootScope.searchFilterCriteria.empToDate) {
-                $scope.searchCriteria.toDate = $rootScope.searchFilterCriteria.empToDate;
-            }
+			if($rootScope.searchFilterCriteria.attendFromDate) {
+				$scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.attendFromDate;
+			}
+
+			if($rootScope.searchFilterCriteria.attendToDate) {
+				$scope.searchCriteria.checkInDateTimeTo = $rootScope.searchFilterCriteria.attendToDate;
+			}
+
+            // console.log($rootScope.searchFilterCriteria.empFromDate);
+			// console.log($rootScope.searchFilterCriteria.empToDate);
+            // if($rootScope.searchFilterCriteria.empFromDate) {
+            //     $scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.empFromDate;
+            // }
+            //
+            // if($rootScope.searchFilterCriteria.empToDate) {
+            //     $scope.searchCriteria.checkInDateTimeFrom = $rootScope.searchFilterCriteria.empToDate;
+            // }
 
 
             /* Root scope (search criteria) end*/
@@ -1932,8 +1934,8 @@ angular.module('timeSheetApp')
 
 		/* Localstorage (Retain old values while edit page to list) end */
 
-
-		EmployeeComponent.search($scope.searchCriteras).then(function (data) {
+        var EmpSearch = $scope.empStatus == 'Absent' ? EmployeeComponent.searchAbsent($scope.searchCriteras):EmployeeComponent.search($scope.searchCriteras);
+        EmpSearch.then(function (data) {
 			$scope.employees = data.transactions;
 			$scope.employeesLoader = true;
 
