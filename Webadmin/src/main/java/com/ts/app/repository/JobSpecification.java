@@ -101,6 +101,16 @@ public class JobSpecification implements Specification<Job> {
             		predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
             		predicates.add(builder.isNotNull(root.get("parentJob")));
             }
+
+            log.debug("JobSpecification toPredicate - searchCriteria region -"+ searchCriteria.getRegion());
+            if(StringUtils.isNotEmpty(searchCriteria.getRegion()) && searchCriteria.getRegion() != null) {
+                predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
+            }
+
+            log.debug("JobSpecification toPredicate - searchCriteria branch -"+ searchCriteria.getBranch());
+            if(StringUtils.isNotEmpty(searchCriteria.getBranch()) && searchCriteria.getBranch() != null) {
+                predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
+            }
             
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {

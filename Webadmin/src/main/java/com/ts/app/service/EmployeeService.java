@@ -1725,7 +1725,11 @@ public class    EmployeeService extends AbstractService {
                     }
                 }
     		}
-		}
+		} else {
+
+            result  = this.findBySearchCrieria(searchCriteria);
+
+        }
 
     	return result;
     }
