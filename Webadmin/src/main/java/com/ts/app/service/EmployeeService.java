@@ -1697,8 +1697,12 @@ public class    EmployeeService extends AbstractService {
 
         java.sql.Date startDate = new java.sql.Date(searchCriteria.getCheckInDateTimeFrom().getTime());
         java.sql.Date toDate = new java.sql.Date(searchCriteria.getCheckInDateTimeTo().getTime());
-
-        List<Attendance> attnLists = attendanceRepository.findByProjectAndDate(searchCriteria.getProjectId(), startDate, toDate);
+        List<Attendance> attnLists = new ArrayList<>();
+        if(searchCriteria.getProjectId() > 0) {
+            attnLists = attendanceRepository.findByProjectAndDate(searchCriteria.getProjectId(), startDate, toDate);
+        }else if(searchCriteria.getSiteId() > 0) {
+            attnLists = attendanceRepository.findBySiteAndDate(searchCriteria.getSiteId(), startDate, toDate);
+        }
 
 		if(CollectionUtils.isNotEmpty(attnLists)) {
 			for(Attendance attnList : attnLists) {

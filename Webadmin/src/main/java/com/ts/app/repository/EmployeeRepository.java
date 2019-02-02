@@ -154,7 +154,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
     //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
     //	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps  WHERE ps.site.id = :siteId and e.active = 'Y' and e.isLeft = FALSE")
-	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps  WHERE ps.site.id = :siteId and e.active = 'Y' ")
+	@Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps  WHERE ps.site.id = :siteId and e.active = 'Y' and e.isLeft = FALSE")
 	long findCountBySiteId(@Param("siteId") long siteId);
 
     //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
@@ -169,7 +169,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
     //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
     //    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' and e.isLeft = FALSE")
-    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' ")
+    @Query("SELECT count(distinct e) FROM Employee e join e.projectSites ps where ps.site.id IN (:siteIds) and e.active = 'Y' and e.isLeft = FALSE")
 	long findTotalCountBySites(@Param("siteIds") List<Long> siteIds);
 
     //	isLeft is removed from query as count in employee list mismatches with dashboard employees count - 11-12-2018 - Karthick
@@ -192,7 +192,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
     @Query("SELECT distinct e FROM Employee e WHERE e.isFaceIdEnrolled = TRUE")
     List<Employee> findEnrolledEmployees();
 
-    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.id NOT IN (:subEmpList) and e.active='Y' order by e.name")
+    @Query("SELECT distinct e FROM Employee e join e.projectSites ps WHERE ps.project.id = :projectId and e.id NOT IN (:subEmpList) and e.active='Y' and e.isLeft = FALSE order by e.name")
 	Page<Employee> findAllByNonIds(@Param("projectId") long projectId, @Param("subEmpList") List<Long> subEmpList, Pageable pageRequest);
 
 }

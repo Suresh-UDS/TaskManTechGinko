@@ -137,4 +137,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long>,Jp
     @Query("SELECT at FROM Attendance at where at.employee.id NOT IN (:empIds) order by at.checkInTime desc")
 	List<Attendance> findNonEmpIds(@Param("empIds") List<Long> empIds);
 
+    @Query("SELECT a from Attendance a where a.site.id = :siteId and a.checkInTime between :startDate and :endDate")
+    List<Attendance> findBySiteAndDate(@Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }
