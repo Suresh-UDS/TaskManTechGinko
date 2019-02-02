@@ -2184,14 +2184,18 @@ angular.module('timeSheetApp')
 					//console.log("add asset")
 				}
 			}
-
+            $scope.weekSchAssetsSpain = false;
 			$scope.loadWeekSchAssets = function() {
 				if($scope.weekSchSite){
+				$scope.weekSchAssetsSpain = true;
 					$scope.weekSchAssets = '';
 					$scope.searchCriteria.siteId = $scope.weekSchSite.id;
 					AssetComponent.search($scope.searchCriteria).then(function(data) {
 						//console.log('Asset based tickets -- ',data);
 						$scope.weekSchAssets = data.transactions;
+						$scope.weekSchAssetsSpain = false;
+					}).catch(function(){
+					   $scope.weekSchAssetsSpain = false;
 					});
 				}
 
