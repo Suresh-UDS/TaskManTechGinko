@@ -709,54 +709,104 @@ module.exports = {
     getSummary: function(req, res, next) {
         var quotationSummary = {};
         console.log(new Date(req.body.createdDate))
-        Quotation.find({siteId: { $in:req.body.siteIds }, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }}).exec(function(err, result){ 
-            console.log(result);
-            console.log(err);
-            if(result && result.length > 0) {
-                quotationSummary.totalCount = result.length;
-            }else{
-                quotationSummary.totalCount = 0;
-            }
-            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
+        if(req.body.siteIds && req.body.siteIds.length > 0) {
+            Quotation.find({siteId: { $in:req.body.siteIds }, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }}).exec(function(err, result){ 
+                console.log(result);
+                console.log(err);
                 if(result && result.length > 0) {
-                    quotationSummary.totalPending = result.length;
+                    quotationSummary.totalCount = result.length;
                 }else{
-                    quotationSummary.totalPending = 0;
+                    quotationSummary.totalCount = 0;
                 }
-                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isApproved: true}).exec(function(err, result){ 
+                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
                     if(result && result.length > 0) {
-                        quotationSummary.totalApproved = result.length;
+                        quotationSummary.totalPending = result.length;
                     }else{
-                        quotationSummary.totalApproved = 0;
+                        quotationSummary.totalPending = 0;
                     }
-                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isSubmitted: true}).exec(function(err, result){ 
+                    Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isApproved: true}).exec(function(err, result){ 
                         if(result && result.length > 0) {
-                            quotationSummary.totalSubmitted = result.length;
+                            quotationSummary.totalApproved = result.length;
                         }else{
-                            quotationSummary.totalSubmitted = 0;
+                            quotationSummary.totalApproved = 0;
                         }
-                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isRejected: true}).exec(function(err, result){
+                        Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isSubmitted: true}).exec(function(err, result){ 
                             if(result && result.length > 0) {
-                                quotationSummary.totalRejected = result.length;
+                                quotationSummary.totalSubmitted = result.length;
                             }else{
-                                quotationSummary.totalRejected = 0;
+                                quotationSummary.totalSubmitted = 0;
                             }
-                            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){
+                            Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isRejected: true}).exec(function(err, result){
                                 if(result && result.length > 0) {
-                                    quotationSummary.totalArchived = result.length;
+                                    quotationSummary.totalRejected = result.length;
                                 }else{
-                                    quotationSummary.totalArchived = 0;
+                                    quotationSummary.totalRejected = 0;
                                 }
-
-                                res.send(200, quotationSummary);
+                                Quotation.find({siteId: {$in:req.body.siteIds}, createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){
+                                    if(result && result.length > 0) {
+                                        quotationSummary.totalArchived = result.length;
+                                    }else{
+                                        quotationSummary.totalArchived = 0;
+                                    }
+    
+                                    res.send(200, quotationSummary);
+                                });
                             });
+    
                         });
-
                     });
                 });
             });
-        });
-
+        } else {
+            Quotation.find({ createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }}).exec(function(err, result){ 
+                console.log(result);
+                console.log(err);
+                if(result && result.length > 0) {
+                    quotationSummary.totalCount = result.length;
+                }else{
+                    quotationSummary.totalCount = 0;
+                }
+                Quotation.find({ createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isDrafted: true}).exec(function(err, result){ 
+                    if(result && result.length > 0) {
+                        quotationSummary.totalPending = result.length;
+                    }else{
+                        quotationSummary.totalPending = 0;
+                    }
+                    Quotation.find({ createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isApproved: true}).exec(function(err, result){ 
+                        if(result && result.length > 0) {
+                            quotationSummary.totalApproved = result.length;
+                        }else{
+                            quotationSummary.totalApproved = 0;
+                        }
+                        Quotation.find({ createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isSubmitted: true}).exec(function(err, result){ 
+                            if(result && result.length > 0) {
+                                quotationSummary.totalSubmitted = result.length;
+                            }else{
+                                quotationSummary.totalSubmitted = 0;
+                            }
+                            Quotation.find({createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isRejected: true}).exec(function(err, result){
+                                if(result && result.length > 0) {
+                                    quotationSummary.totalRejected = result.length;
+                                }else{
+                                    quotationSummary.totalRejected = 0;
+                                }
+                                Quotation.find({createdDate: { $gt: new Date(req.body.createdDate), $lt: new Date(req.body.toDate) }, isArchived: true}).exec(function(err, result){
+                                    if(result && result.length > 0) {
+                                        quotationSummary.totalArchived = result.length;
+                                    }else{
+                                        quotationSummary.totalArchived = 0;
+                                    }
+    
+                                    res.send(200, quotationSummary);
+                                });
+                            });
+    
+                        });
+                    });
+                });
+            });
+        }
+       
 
     },
 
