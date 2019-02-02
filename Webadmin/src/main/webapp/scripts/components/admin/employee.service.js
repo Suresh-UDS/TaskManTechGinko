@@ -314,6 +314,7 @@ angular.module('timeSheetApp')
 
             markLftEmp : function (lftEmp) {
                 return $http.post('api/employee/left',lftEmp).then(function (response) {
+                console.log('<< Response',response);
                     return response.data;
                 });
             }

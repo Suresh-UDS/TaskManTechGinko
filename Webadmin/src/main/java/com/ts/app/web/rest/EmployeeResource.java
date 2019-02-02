@@ -678,7 +678,7 @@ public class EmployeeResource {
     @RequestMapping(value = "/employee/left", method = RequestMethod.POST)
     public List<EmployeeDTO> getWithoutLeftEmployee(@RequestBody SearchCriteria searchCriteria) {
         List<EmployeeDTO> empList = null;
-        empList = employeeService.getEmployeeWithoutLeft(searchCriteria.getEmpIds());
+        empList = employeeService.getEmployeeWithoutLeft(searchCriteria);
         return empList;
     }
 

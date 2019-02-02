@@ -319,7 +319,7 @@
                                         <button ng-disabled="employee.left" title="Mark Left"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#leftModal" data-dismiss="#leftModal"
-                                                ng-click="employeeDetails(employee.id);$scope.markLeftEmployee(employee.id);"
+                                                ng-click="employeeDetails(employee.id);"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i style="color: #942a25" class="fas fa-user-times"></i>
                                         </button>
@@ -767,13 +767,14 @@
                                 <div class="dropdown">
                                     <span class="form-control-feedback d-sm-arrow-icon"><i
                                         class="material-icons">keyboard_arrow_down</i></span>
-                                    <span class="form-control-feedback d-sm-arrow-icon" ng-show="allEmployees"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!allEmployees"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
                                     <select
                                         class="form-control siteList" ng-model="NewEmployee"
-                                        ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="!allEmployees">
+                                        ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
                                         <option value="">Select Employee..</option>
                                     </select>
+                                    <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
                                 </div>
                             </div>
                        </div>
