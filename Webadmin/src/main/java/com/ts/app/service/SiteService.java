@@ -577,6 +577,12 @@ public class SiteService extends AbstractService {
         return mapperUtil.toModelList(sites,SiteDTO.class);
     }
 
+    public List<SiteDTO> findSitesByProjectId(long projectId){
+        List<Site> sites = siteRepository.findSites(projectId);
+
+        return mapperUtil.toModelList(sites,SiteDTO.class);
+    }
+
     public List<SiteDTO> findSitesByRegionAndBranch(long projectId, String region, String branch){
         List<Site> sites = siteRepository.findSitesByRegionAndBranch(projectId,region, branch);
 

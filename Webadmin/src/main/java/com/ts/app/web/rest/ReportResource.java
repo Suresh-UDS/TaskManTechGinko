@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.repository.SiteRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -22,13 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ts.app.domain.AttendanceReportCounts;
-import com.ts.app.domain.AttendanceStatusReport;
-import com.ts.app.domain.ChartModelEntity;
-import com.ts.app.domain.JobReportCounts;
-import com.ts.app.domain.JobStatusReport;
-import com.ts.app.domain.TicketReportCounts;
-import com.ts.app.domain.TicketStatusReport;
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.ReportDatabaseService;
@@ -268,17 +263,16 @@ public class ReportResource {
     				sites = siteService.findSitesByRegionAndBranch(searchCriteria.getProjectId(), searchCriteria.getRegion(), searchCriteria.getBranch());
     			}else if(StringUtils.isNotEmpty(searchCriteria.getRegion())) {
     				sites = siteService.findSitesByRegion(searchCriteria.getProjectId(), searchCriteria.getRegion());
-    			}
+    			}else if(searchCriteria.getProjectId() > 0) {
+    			    sites = siteService.findSitesByProjectId(searchCriteria.getProjectId());
+                }
     			if(!CollectionUtils.isEmpty(sites)) {
     				List<Long> siteIds = new ArrayList<Long>();
     				for(SiteDTO site : sites) {
     					siteIds.add(site.getId());
     				}
     				searchCriteria.setSiteIds(siteIds);
-    			}else{
-                    List<Long> siteIds = new ArrayList<Long>();
-                    searchCriteria.setSiteIds(siteIds);
-                }
+    			}
     		}
     		QuotationDTO quotationSummary = reportService.getQuotationCountSummary(searchCriteria);
     		return new ResponseEntity<>(quotationSummary, HttpStatus.OK);

@@ -209,6 +209,7 @@ angular.module('timeSheetApp')
             //     // $scope.constructChartData(response);
             // });
             DashboardComponent.loadTicketChartDataByProject(searchCriteria.projectId, searchCriteria.fromDate, searchCriteria.toDate).then(function(response){  // old dashboard
+                console.log(response);
                 /*console.log("Dashboard ticket data_________");
                 console.log(response);
                 console.log(response.closedTicketCounts["0-3"]);
@@ -351,6 +352,7 @@ angular.module('timeSheetApp')
             $scope.overAllTicketsTotalCount=$scope.openTicketsTotalCount+$scope.closedTicketsTotalCount;
 
             $scope.assignedTicketTotalCount = response.totalAssignedTicketCount;
+            $scope.openTicketTotalCnt = response.totalOpenTicketCount;
 
             // if($scope.openTicketsTotalCount > 0) {
             //
@@ -1118,7 +1120,7 @@ angular.module('timeSheetApp')
 	        	}
 	        	$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
 	        	$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-	        	$scope.searchCriteria.graphRequest = true;
+	        	$scope.searchCriteria.graphRequest = false;
 
 	        	console.log('job report search criteria -' , JSON.stringify($scope.searchCriteria));
             // $scope.loadingStop();

@@ -503,6 +503,8 @@ public class RateCardService extends AbstractService {
                 sites = siteService.findSitesByRegionAndBranch(searchCriteria.getProjectId(), searchCriteria.getRegion(), searchCriteria.getBranch());
             }else if(org.apache.commons.lang.StringUtils.isNotEmpty(searchCriteria.getRegion())) {
                 sites = siteService.findSitesByRegion(searchCriteria.getProjectId(), searchCriteria.getRegion());
+            }else if(searchCriteria.getRegion() == null && searchCriteria.getBranch() == null && searchCriteria.getProjectId() > 0) {
+                sites = siteService.findSitesByProjectId(searchCriteria.getProjectId());
             }
             if(!CollectionUtils.isEmpty(sites)) {
                 siteIds = new ArrayList<Long>();

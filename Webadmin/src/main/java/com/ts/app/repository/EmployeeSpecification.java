@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 public class EmployeeSpecification implements Specification<Employee> {
     SearchCriteria searchCriteria;
@@ -123,6 +120,8 @@ public class EmployeeSpecification implements Specification<Employee> {
         predicates.add(builder.equal(root.get("active"), "Y"));
 
         query.orderBy(builder.desc(root.get("createdDate")));
+
+        query.distinct(true);
 
         List<Predicate> orPredicates = new ArrayList<>();
         log.debug("EmpSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());

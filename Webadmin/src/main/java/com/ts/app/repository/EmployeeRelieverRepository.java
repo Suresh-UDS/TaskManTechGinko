@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.function.LongFunction;
 
@@ -23,16 +24,16 @@ public interface EmployeeRelieverRepository extends JpaRepository<EmployeeReliev
 	public Page<EmployeeReliever> findRelievers(@Param("employeeId") long employeeId, Pageable pageRequest);
 
 	@Query("SELECT count(er) FROM EmployeeReliever er where er.employee.id in :empIds and er.startTime>= :startTime and er.endTime<= :endTime")
-    public long findRelieverCountByEmployee(@Param("empIds")List<Long> empIds, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    public long findRelieverCountByEmployee(@Param("empIds") List<Long> empIds, @Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime);
 
     @Query("SELECT er FROM EmployeeReliever er where er.employee.id in :empIds and er.startTime>= :startTime and er.endTime<= :endTime")
-    public Page<EmployeeReliever> findRelieversByEmployee(@Param("empIds")List<Long> empIds, @Param("startTime") Date startTime, @Param("endTime") Date endTime, Pageable pageRequest);
+    public Page<EmployeeReliever> findRelieversByEmployee(@Param("empIds") List<Long> empIds, @Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime, Pageable pageRequest);
 
     @Query("SELECT count(er) FROM EmployeeReliever er where er.startTime>= :startTime and er.endTime<= :endTime")
-    public long findRelieverCountByEmployee(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    public long findRelieverCountByEmployee(@Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime);
 
     @Query("SELECT er FROM EmployeeReliever er where er.startTime>= :startTime and er.endTime<= :endTime")
-    public Page<EmployeeReliever> findAllRelieversByEmployee(@Param("startTime") Date startTime, @Param("endTime") Date endTime, Pageable pageRequest);
+    public Page<EmployeeReliever> findAllRelieversByEmployee(@Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime, Pageable pageRequest);
 
 
 }
