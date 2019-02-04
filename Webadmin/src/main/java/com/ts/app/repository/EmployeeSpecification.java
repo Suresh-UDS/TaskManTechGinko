@@ -121,6 +121,8 @@ public class EmployeeSpecification implements Specification<Employee> {
 
         query.orderBy(builder.desc(root.get("createdDate")));
 
+        query.distinct(true);
+
         List<Predicate> orPredicates = new ArrayList<>();
         log.debug("EmpSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
 
