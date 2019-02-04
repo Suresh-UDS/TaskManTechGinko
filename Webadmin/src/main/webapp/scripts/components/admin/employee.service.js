@@ -310,7 +310,16 @@ angular.module('timeSheetApp')
                 return $http.post('api/relieversList', searchCriteria).then(function (response) {
                     return response.data;
                 });
+            },
+
+            markLftEmp : function (lftEmp) {
+                return $http.post('api/employee/left',lftEmp).then(function (response) {
+                console.log('<< Response',response);
+                    return response.data;
+                });
             }
+
+
 
         };
     });

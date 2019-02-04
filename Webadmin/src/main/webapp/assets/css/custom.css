@@ -2455,11 +2455,21 @@ ul.ckLstDot li:before {
 
  /* Highchart custom loader css end */
 
- [type=checkbox]:not(:checked) {
+ .fdbackRemarks:not(:checked) {
      position: unset !important;
      opacity: 1 !important;
      pointer-events: visible !important;
 
+ }
+
+ /* datepicker cursor modified css*/
+ input.datepicker,input.timepicker {
+   color: transparent;
+   text-shadow: 0 0 0 #000;
+
+   &:focus {
+       outline: none;
+   }
  }
 
 

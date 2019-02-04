@@ -1221,17 +1221,34 @@ angular.module('timeSheetApp')
 
 	$scope.employeeDetails= function(id){
 		if(id > 0){
-
+		    $scope.employee = "";
+            $scope.markLeftEmployeeArray = "";
 			EmployeeComponent.findOne(id).then(function (data) {
-
 				//console.log(data);
-
 				$scope.employee = data;
+                var empIds = [$scope.employee.projectSites[0].employeeId];
+                var siteIds = [$scope.employee.projectSites[0].siteId];
+                EmployeeComponent.markLftEmp({empIds,siteIds}).then(function (data) {
+                    console.log('Left employee list',data);
+                    $scope.markLeftEmployeeArray = data;
+                });
 			});
 
 		}
 
 	};
+
+	$scope.markLeftEmployee= function(id){
+        if(id > 0){
+            $scope.markLeftEmployeeArray = "";
+            EmployeeComponent.markLftEmp({empIds:[id]}).then(function (data) {
+                console.log(data);
+                $scope.markLeftEmployeeArray = data;
+            });
+
+        }
+
+    };
 
 	$scope.updateEmployeeLeft= function(employee){
 

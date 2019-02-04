@@ -62,7 +62,7 @@
 
 <body  ng-switch="isLoggedIn" class="sidebar-mini">
 
-    <div ng-hide="!loginView" class="container-fluid" >
+    <div  ng-hide="!loginView" class="container-fluid" >
         <!-- Initial Loader gif -->
         <div class="loaderCenter">
             <img src="/assets/img/progress.gif">
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div ng-show="loginView" class="LoginPageView">
+    <div  ng-cloak="" ng-show="loginView" class="LoginPageView">
         <!-- Login start -->
         <div  ui-view="login" ng-cloak="" class="LoginPageView" ></div>
         <!-- Login end -->
