@@ -130,7 +130,7 @@ public class ExportUtil {
 
 	private String[] INVENTORY_TRANS_HEADER = { "ID", "ITEM NAME", "ITEM CODE", "CLIENT", "SITE", "STORE STOCK", "UOM", "QUANTITY", "INDENT NUMBER", "PURCHASE NUMBER", "TRANSACTION DATE", "STATUS"};
 
-	private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "QUESTION", "ANSWER", "ITEM RATING", "ITEM REMARKS", "RATING", "REMARKS" };
+    private String[] FEEDBACK_HEADER = { "ID", "DATE", "REVIEWER NAME", "REVIEWER CODE", "CLIENT", "SITE", "FEEDBACK_NAME", "BLOCK", "FLOOR", "ZONE", "QUESTION", "ANSWER", "ITEM RATING", "ITEM REMARKS", "RATING", "REMARKS" };
 
 	private String[] QUOTATION_HEADER = { "ID", "CLIENT NAME", "SITE NAME", "QUOTATION NAME", "TITLE", "SENDBY USERNAME", "SUBMITTED DATE", "APPROVEDBY USERNAME", "APPROVED DATE", "STATUS", "MODE", "GRAND TOTAL"};
 
@@ -2771,13 +2771,13 @@ public class ExportUtil {
 				}
 
 				int rowNum = 1;
-				log.debug("Writing feedback to excel file - content size -" + (CollectionUtils.isNotEmpty(content) ? content.size() : 0));
+                Row dataRow = null;
+                log.debug("Writing feedback to excel file - content size -" + (CollectionUtils.isNotEmpty(content) ? content.size() : 0));
 				if(CollectionUtils.isNotEmpty(content)) {
 					for (FeedbackTransactionDTO transaction : content) {
 						log.debug("Feebdack Transaction DTO -" + transaction);
-						Row dataRow = xssfSheet.createRow(rowNum++);
 
-						dataRow.createCell(0).setCellValue(transaction.getId());
+//						dataRow.createCell(0).setCellValue(transaction.getId());
 						ZonedDateTime dateTime = transaction.getCreatedDate();
 						Calendar feedbackDate = Calendar.getInstance();
 						feedbackDate.setTimeInMillis(dateTime.toInstant().toEpochMilli());
@@ -2802,16 +2802,38 @@ public class ExportUtil {
                                     log.debug("feedback ans type" +result.getAnswerType());
                                     log.debug("feedback answer" +result.getAnswer());
                                     log.debug("feedback score type" +result.getScoreType());
-                                    if ((result.getAnswerType().equals(FeedbackAnswerType.YESNO) && result.getAnswer().equalsIgnoreCase("false") && (result.getScoreType().equalsIgnoreCase("yes:1")) ||
-                                        (result.getAnswerType().equals(FeedbackAnswerType.YESNO) && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("no:1")) ||
-                                        (result.getAnswerType().equals(FeedbackAnswerType.RATING) && Float.parseFloat(result.getAnswer())<5))
-                                        ) {
+                                    if (result.getAnswerType().equalsIgnoreCase("YesNo") && result.getAnswer().equalsIgnoreCase("false") && result.getScoreType().equalsIgnoreCase("yes:1")) {
+
+                                        log.debug("Inside the condition"+result.getAnswer());
+                                        log.debug("Inside the condition"+result.getAnswerType());
+
+                                        cnt++;
+
+                                        if(cnt < size) {
+                                            dataRow = xssfSheet.createRow(rowNum++);
+                                            dataRow.createCell(0).setCellValue(transaction.getId());
+                                            dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
+                                            dataRow.createCell(2).setCellValue(transaction.getReviewerName());
+                                            dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
+                                            dataRow.createCell(4).setCellValue(transaction.getProjectName());
+                                            dataRow.createCell(5).setCellValue(transaction.getSiteName());
+                                            dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
+                                            dataRow.createCell(7).setCellValue(transaction.getBlock());
+                                            dataRow.createCell(8).setCellValue(transaction.getFloor());
+                                            dataRow.createCell(9).setCellValue(transaction.getZone());
+                                            dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+                                            dataRow.createCell(10).setCellValue(result.getQuestion());
+                                            dataRow.createCell(11).setCellValue(result.getAnswer());
+                                            dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                            dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+                                            dataRow.createCell(15).setCellValue(transaction.getRemarks());
+                                        }
+                                        }else if(result.getAnswerType().equalsIgnoreCase("YesNo") && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("no:1")){
+
+                                            log.debug("Inside the condition"+result.getAnswer());
 
                                             cnt++;
-                                            dataRow.createCell(10).setCellValue(result.getQuestion());
-                                            dataRow.createCell(11).setCellValue(result.getAnswerType().equals(FeedbackAnswerType.YESNO)?result.getAnswer():"");
-                                            dataRow.createCell(12).setCellValue(result.getAnswerType().equals(FeedbackAnswerType.RATING)?result.getAnswer():"");
-                                            dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+
                                             if(cnt < size) {
                                                 dataRow = xssfSheet.createRow(rowNum++);
                                                 dataRow.createCell(0).setCellValue(transaction.getId());
@@ -2824,10 +2846,38 @@ public class ExportUtil {
                                                 dataRow.createCell(7).setCellValue(transaction.getBlock());
                                                 dataRow.createCell(8).setCellValue(transaction.getFloor());
                                                 dataRow.createCell(9).setCellValue(transaction.getZone());
+                                                dataRow.createCell(10).setCellValue(result.getQuestion());
+                                                dataRow.createCell(11).setCellValue(result.getAnswer());
+                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
                                                 dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                                 dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                             }
-                                    }
+
+                                        }else if((result.getAnswerType().equalsIgnoreCase("Rating") && Float.parseFloat(result.getAnswer())<5)) {
+
+                                            log.debug("Inside the condition"+result.getAnswer());
+
+                                            cnt++;
+
+                                            if(cnt < size) {
+                                                dataRow = xssfSheet.createRow(rowNum++);
+                                                dataRow.createCell(0).setCellValue(transaction.getId());
+                                                dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
+                                                dataRow.createCell(2).setCellValue(transaction.getReviewerName());
+                                                dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
+                                                dataRow.createCell(4).setCellValue(transaction.getProjectName());
+                                                dataRow.createCell(5).setCellValue(transaction.getSiteName());
+                                                dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
+                                                dataRow.createCell(7).setCellValue(transaction.getBlock());
+                                                dataRow.createCell(8).setCellValue(transaction.getFloor());
+                                                dataRow.createCell(9).setCellValue(transaction.getZone());
+                                                dataRow.createCell(10).setCellValue(result.getQuestion());
+                                                dataRow.createCell(12).setCellValue(result.getAnswer());
+                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                                dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+                                                dataRow.createCell(15).setCellValue(transaction.getRemarks());
+                                            }
+                                        }
 
 
                                 }
