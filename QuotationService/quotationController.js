@@ -839,6 +839,11 @@ module.exports = {
       if(req.body.siteIds && req.body.siteIds.length > 0){
         quotCriterias.siteId = {$in: req.body.siteIds};
       }
+      if(req.body.projectId && req.body.projectId>0){
+         if(!req.body.siteId && !req.body.siteIds){
+            quotCriterias.siteId=0;
+          }
+      }
       if(req.body.createdBy){
         quotCriterias.createdByUserName={$regex:'^'+req.body.createdBy,$options:"si"};
       }
