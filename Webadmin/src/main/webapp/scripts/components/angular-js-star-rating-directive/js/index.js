@@ -1,7 +1,7 @@
 // https://angulartutorial.blogspot.com/2014/03/rating-stars-in-angular-js-using.html
 
 angular.module("angular-star-rating-new", [])
-
+/*
 .directive("starRating", function() {
   return {
     restrict : "EA",
@@ -38,8 +38,8 @@ angular.module("angular-star-rating-new", [])
         if (newVal) { updateStars(); }
       });
     }
-  };  
-})
+  };
+})*/
 .directive("averageStarRating", function() {
   return {
     restrict : "EA",
@@ -69,7 +69,7 @@ angular.module("angular-star-rating-new", [])
         var starContainerMaxWidth = 100; //%
         scope.filledInStarsContainerWidth = scope.averageRatingValue / scope.max * starContainerMaxWidth;
       };
-      scope.$watch("averageRatingValue", function(oldVal, newVal) {
+      scope.$watch("averageRatingValue", function(newVal,oldVal) {
         if (newVal) { updateStars(); }
       });
     }
