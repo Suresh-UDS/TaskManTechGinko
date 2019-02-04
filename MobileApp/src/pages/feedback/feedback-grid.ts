@@ -53,6 +53,8 @@ export class FeedbackGridPage {
         //
         // }
 
+        delete this.questions[i].answer;
+
 
         var image = this.feedbackService.getImage(this.questions[i].image,this.feedback.id).subscribe(
             response=>{
