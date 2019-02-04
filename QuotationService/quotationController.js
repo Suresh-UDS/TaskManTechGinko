@@ -828,10 +828,11 @@ module.exports = {
         console.log(req.body);
 
         var quotCriterias = {};
-        
+
      if(req.body.projectId && req.body.projectId>0){
-         if(!req.body.siteId && !req.body.siteIds){
-            quotCriterias.siteId=0;
+         if(!req.body.siteId && req.body.siteIds.length == 0){
+            var sid = 0;
+            quotCriterias.siteId = {$in: sid};
           }
       }
 
