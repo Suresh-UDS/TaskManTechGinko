@@ -150,12 +150,13 @@
                                                         <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span ng-show="siteEmpSpin && !employees"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                        <span ng-show="!siteEmpSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select required class="form-control " ng-model="selectedEmployee"
-                                                        ng-options="emp as emp.name for emp in employees track by emp.id" ng-change="checkSite();" tabindex="8">
+                                                                ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" ng-change="checkSite();" tabindex="8">
                                                             <option value="">Select Employees...</option>
                                                         </select>
-
+                                                        <span ng-if="employees.length == 0"><p class="error-msg margin0">No Employee</p></span>
                                                         <div ng-show="form.$submitted || form.employeeName.$touched || form.employeeName.$dirty">
                                                             <div
                                                                 ng-show="form.employeeName.$dirty || form.employeeName.$invalid">

@@ -182,7 +182,7 @@ angular.module('timeSheetApp')
 			//Date
 			$('input#jobStartDate').on('dp.change', function(e){
 				$scope.job.plannedStartTime = new Date(e.date._d);
-				$scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+				$scope.selectPlannedStartTime = $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 				console.log('job start time - ' + $scope.job.plannedStartTime);
 				$scope.job.scheduleEndDate = "";
 				$scope.selectScheduleEndDate = "";
@@ -191,21 +191,21 @@ angular.module('timeSheetApp')
 				});
 			});
 
-			$('#jobStartDate').datetimepicker({
-				format: 'DD/MM/YYYY HH:mm A'
+			/*$('#jobStartDate').datetimepicker({
+				format: 'dd/MM/yyyy HH:mm a'
 			});
-
+*/
 			$('input#scheduleEndDate').on('dp.change', function(e){
 
 				$scope.job.scheduleEndDate = new Date(e.date._d);
-				$scope.selectScheduleEndDate = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+				$scope.selectScheduleEndDate = $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 				console.log('job schedule end date - ' + $scope.job.scheduleEndDate);
 			});
 
-			$('#scheduleEndDate').datetimepicker({
-				format: 'DD/MM/YYYY HH:mm A'
+			/*$('#scheduleEndDate').datetimepicker({
+				format: 'dd/MM/yyyy HH:mm a'
 			});
-
+*/
 
 			/*
         $('input#selectedJobDate').on('dp.change', function(e){
@@ -625,8 +625,9 @@ angular.module('timeSheetApp')
 				});
 			};
 
-
+            $scope.siteEmpSpin = false;
 			$scope.loadEmployees = function () {
+			    $scope.siteEmpSpin = true;
 				var deferred = $q.defer();
 				if($scope.searchSite){
 					$scope.searchCriteria.siteId = $scope.searchSite.id;
@@ -653,6 +654,7 @@ angular.module('timeSheetApp')
 					$scope.employeeFilterDisable = false;
 					$scope.empSpin = false;
 					deferred.resolve($scope.employees);
+					$scope.siteEmpSpin = false;
 				});
 				return deferred.promise;
 
@@ -869,14 +871,14 @@ angular.module('timeSheetApp')
 						$scope.job.pendingAtUDS=true;
 						$scope.selectedSite = {id : data.siteId,name : data.siteName};
 						$scope.job.plannedStartTime = data.plannedStartTime;
-						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
+						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'MM/dd/yyyy HH:mm a');
 						if($scope.job.schedule == 'ONCE'){
 							$scope.job.scheduleEndDate = "";
 							$scope.onceJob = true;
 						}else{
 							$scope.job.scheduleEndDate = data.scheduleEndDate;
 						}
-						$scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
+						$scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'MM/dd/yyyy HH:mm a');
 						$scope.loadEmployees().then(function(employees){
 							//console.log('load employees ');
 							$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -1006,7 +1008,7 @@ angular.module('timeSheetApp')
 					$scope.job.active = 'Y';
 					$scope.job.plannedHours = 1;
 					$scope.job.plannedStartTime =new Date();
-					$scope.selectPlannedStartTime = $filter('date')(new Date(), 'dd/MM/yyyy hh:mm a');
+					$scope.selectPlannedStartTime = $filter('date')(new Date(), 'MM/dd/yyyy HH:mm a');
 
 
 					if($stateParams.ticketId){
