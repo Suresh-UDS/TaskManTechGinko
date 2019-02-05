@@ -217,7 +217,8 @@
                                 <div class="row">
 
                                     <div class="col-md-6">
-                                        <h3>Overall rating ({{averageRating}})</h3>
+                                        <h3 ng-if="averageRating">Overall rating ({{averageRating}})</h3>
+                                        <h3 ng-if="!averageRating">Overall rating (0)</h3>
                                     </div>
                                     <div class="col-md-6">
                                         <!-- USE COMPONENT HERE-->
@@ -227,7 +228,7 @@
 
                                             <!-- <jk-rating-stars max-rating="5" rating="feedbackReport.overallRating" read-only="readOnly" >
                                             </jk-rating-stars> -->
-                                            <average-star-rating ng-model="averageRating" max="5"></average-star-rating>
+                                            <average-star-rating  ng-model="averageRating" min="0" max="5"></average-star-rating>
 
 
 

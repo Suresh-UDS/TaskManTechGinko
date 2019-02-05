@@ -843,18 +843,29 @@ angular.module('timeSheetApp')
 
 
 	$scope.loadImagesNew = function(imageUrl, enrollUrl) {
+        if(enrollUrl){
+         $scope.enrollImg = enrollUrl;
+        }else{
+          $scope.enrollImg = "../assets/img/user.png";
+        }
+        if(imageUrl){
+              $scope.attenImg = imageUrl;
+        }else{
+             $scope.attenImg = "../assets/img/user.png";
+        }
+
+
 
 //		$scope.loadEnrImage(enrollId);
 		//Attendance Image
-		var eleId = 'photoOutImg';
+		/*var eleId = 'photoOutImg';
 		var ele = document.getElementById(eleId);
-		ele.setAttribute('src',imageUrl);
+		ele.setAttribute('src',imageUrl);*/
 
 //		var enrollImg = enrollUrl;
-
-		var eleId1 = 'photoEnrolled';
+		/*var eleId1 = 'photoEnrolled';
 		var ele1 = document.getElementById(eleId1);
-		ele1.setAttribute('src',enrollUrl);
+		ele1.setAttribute('src',enrollUrl);*/
 	};
 
 	$scope.initMap = function(container, latIn, lngIn, containerOut, latOut, lngOut) {
