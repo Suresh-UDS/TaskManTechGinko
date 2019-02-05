@@ -577,12 +577,16 @@ public class EmployeeResource {
         log.info("Inside the save designation-" + designationDTO);
         log.info("Inside Save designation"+designationDTO.getDesignation());
         long userId = SecurityUtils.getCurrentUserId();
+        DesignationDTO designation = null;
         try {
-            DesignationDTO designation= employeeService.createDesignation(designationDTO);
+            designation = employeeService.createDesignation(designationDTO);
         }catch(Exception e) {
             throw new TimesheetException(e, designationDTO);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if(designation.getErrorMessage() == null) {
+            return new ResponseEntity<>(designation, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(designation, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(path="/employee/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
