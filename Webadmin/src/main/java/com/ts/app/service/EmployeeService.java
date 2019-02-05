@@ -328,6 +328,20 @@ public class    EmployeeService extends AbstractService {
             }
         }
         employeeUpdate.getProjectSites().addAll(updatedProjSites);
+
+        List<EmployeeLocation> locations = employeeUpdate.getLocations();  // update a location of employee
+        locations.clear();
+        List<EmployeeLocation> updatedLocations = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(employee.getLocations())) {
+            for(EmployeeLocationDTO locDTO : employee.getLocations()) {
+                EmployeeLocation empLoc = mapperUtil.toEntity(locDTO, EmployeeLocation.class);
+                empLoc.setEmployee(employeeUpdate);
+                updatedLocations.add(empLoc);
+            }
+        }
+
+        employeeUpdate.getLocations().addAll(updatedLocations);
+
         Hibernate.initialize(employeeUpdate.getUser());
         User user = employeeUpdate.getUser();
         if(user != null) {
@@ -346,6 +360,7 @@ public class    EmployeeService extends AbstractService {
                 employee.setClient(true); //mark the employee as client employee
             }
         }
+
         employeeUpdate.setDesignation(employee.getDesignation());
         employeeRepository.saveAndFlush(employeeUpdate);
         employee = mapperUtil.toModel(employeeUpdate, EmployeeDTO.class);

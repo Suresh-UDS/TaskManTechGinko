@@ -1073,10 +1073,11 @@ angular.module('timeSheetApp')
 				$scope.showNotifications('top','center','success','Designation Added Successfully');
 				$scope.loadDesignations();
 			}).catch(function(response){
-			    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+			    console.log('error msg',response);
+			    if (response.status === 400 && response.data.errorMessage != null) {
                     $scope.errorEmployeeExists = true;
                     $scope.errorMessage = response.data.description;
-                    $scope.showNotifications('top','center','danger', 'Designation already exists!.. Please choose another one');
+                    $scope.showNotifications('top','center','danger', 'Designation already exists!.. Please add new one');
                 } else {
                     $scope.error = 'ERROR';
                     $scope.showNotifications('top','center','danger', 'Designation Not Saved!.. Please try again later.');
@@ -1555,8 +1556,12 @@ angular.module('timeSheetApp')
 //		$scope.errorManager = "true";
 //		$scope.errorSite = null;
 //		}else {
-		$scope.employee.projectId = $scope.selectedProject.id;
-		$scope.employee.siteId = $scope.selectedSite.id;
+        if($scope.selectedProject){
+           $scope.employee.projectId = $scope.selectedProject.id;
+        }
+		if($scope.selectedSite){
+		   $scope.employee.siteId = $scope.selectedSite.id;
+		}
 		$scope.employee.managerId = $scope.selectedManager ? $scope.selectedManager.id : 0;
 		if($scope.selectedRole) {
             $scope.employee.userRoleId = $scope.selectedRole.id;
