@@ -13,12 +13,12 @@ import com.ts.app.web.rest.dto.ImportResult;
 
 @Service
 public class ImportService extends AbstractService {
-	
+
 	private final Logger log = LoggerFactory.getLogger(ImportService.class);
-	
+
 	@Autowired
 	private ImportUtil importUtil;
-	
+
 	public ImportResult importJobData(MultipartFile file, long dateTime)  {
 		ImportResult result = null;
 		try {
@@ -106,7 +106,7 @@ public class ImportService extends AbstractService {
 	public ImportResult importEmployeeShiftData(MultipartFile file, long dateTime) {
         ImportResult result = null;
         try {
-        		importUtil.importEmployeeShiftData(file, dateTime);
+        		result = importUtil.importEmployeeShiftData(file, dateTime);
         }catch(Exception e) {
 			result = importUtil.getImportResult(String.valueOf(dateTime));
 		}
