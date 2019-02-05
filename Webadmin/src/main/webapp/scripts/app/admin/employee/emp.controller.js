@@ -952,25 +952,28 @@ angular.module('timeSheetApp')
 		}
 	};
 
+    $scope.mangSpin = false;
 	$scope.loadAllManagers = function () {
 		$scope.showLoader();
+		$scope.mangSpin = true;
 		if(!$scope.allManagers) {
 			if($scope.employee && $scope.employee.id) {
 				EmployeeComponent.findAllManagers($scope.employee.id).then(function (data) {
 
 					//console.log("Managers");
-					//console.log(data);
+					console.log(data);
 
 					$scope.allManagers = data;
 					$scope.hideLoader();
-				})
+					$scope.mangSpin = false;
+				});
 			}else {
 				EmployeeComponent.findAll().then(function (data) {
-					//console.log(data)
+					//console.log('all manager',data)
 					$scope.allManagers = data;
 					$scope.hideLoader();
-
-				})
+                    $scope.mangSpin = false;
+				});
 			}
 		}
 	};

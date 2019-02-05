@@ -238,7 +238,7 @@
                                                             <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                             <!--required >-->
                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles" name="UserRole" required tabindex="3">
+                                                            <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles | orderBy:'name'" name="UserRole" required tabindex="3">
                                                                 <option value="">Select role...</option>
                                                             </select>
 
@@ -269,8 +269,10 @@
                                                                 <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
                                                                 <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
                                                                 <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
-                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name for manager in allManagers" name="manager" tabindex="11">
+
+                                                                <span ng-show="mangSpin && !allManagers"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                                <span ng-show="!mangSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name + '-' + manager.empId group by manager.designation for manager in allManagers | orderBy:'name'" name="manager" tabindex="11">
                                                                     <option value="">Select Manager...</option>
                                                                 </select>
                                                                 <div ng-show="form.$submitted || form.manager.$touched || form.manager.$dirty">
