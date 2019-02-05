@@ -232,8 +232,19 @@ public class    EmployeeService extends AbstractService {
     }
 
     public DesignationDTO createDesignation(DesignationDTO designationDTO) {
-        Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
-        designationRepository.save(designation);
+        if(StringUtils.isNotEmpty(designationDTO.getDesignation())) {
+            Designation designation = new Designation();
+            List<Designation> designationList = designationRepository.findByDesignation(designationDTO.getDesignation());
+            if(CollectionUtils.isEmpty(designationList)) {
+                designation = mapperUtil.toEntity(designationDTO, Designation.class);
+                designationRepository.save(designation);
+                designationDTO.setErrorStatus(false);
+            }else{
+                designationDTO.setErrorMessage("Already exists a "+ designationDTO.getDesignation() +" designation");
+                designationDTO.setErrorStatus(true);
+                designationDTO.setStatus("400");
+            }
+        }
         return designationDTO;
     }
 
@@ -1360,6 +1371,7 @@ public class    EmployeeService extends AbstractService {
 //                    }
                     page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
                     allEmpsList.addAll(page.getContent());
+
                 }
 
 
