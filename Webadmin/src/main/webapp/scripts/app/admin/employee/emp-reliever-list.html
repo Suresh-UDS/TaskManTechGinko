@@ -100,7 +100,7 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th style="width: 20%">Name
+                                <th style="width: 20%">Employee
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
@@ -111,7 +111,18 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th style="width: 40%">Mobile
+                                <th style="width: 20%">Non-Employee
+
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('address')" ng-class="isActiveDesc == 'address' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th style="width: 20%">Mobile
 
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('address')" ng-class="isActiveAsc == 'address' ? 'active' : ''" >
@@ -131,7 +142,8 @@
                                 <td>{{reliever.id}}</td>
                                 <td>{{reliever.startTime | date: 'dd-MMM-yyyy @ hh:mm:ss'}}</td>
                                 <td>{{reliever.endTime | date: 'dd-MMM-yyyy @ hh:mm:ss'}}</td>
-                                <td>{{reliever.relieverName}}</td>
+                                <td>{{reliever.relieverEmployeeFullName ? reliever.relieverEmployeeFullName : "-"}}</td>
+                                <td>{{reliever.relieverName ? reliever.relieverName : "-"}}</td>
                                 <td>{{reliever.relieverMobile}}</td>
 
                                 <td class="text-right">

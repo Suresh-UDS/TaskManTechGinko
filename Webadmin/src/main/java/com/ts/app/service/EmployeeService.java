@@ -20,8 +20,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +37,7 @@ import java.util.*;
  */
 @Service
 @Transactional
-public class    EmployeeService extends AbstractService {
+public class EmployeeService extends AbstractService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
@@ -232,8 +230,19 @@ public class    EmployeeService extends AbstractService {
     }
 
     public DesignationDTO createDesignation(DesignationDTO designationDTO) {
-        Designation designation= mapperUtil.toEntity(designationDTO, Designation.class);
-        designationRepository.save(designation);
+        if(StringUtils.isNotEmpty(designationDTO.getDesignation())) {
+            Designation designation = new Designation();
+            List<Designation> designationList = designationRepository.findByDesignation(designationDTO.getDesignation());
+            if(CollectionUtils.isEmpty(designationList)) {
+                designation = mapperUtil.toEntity(designationDTO, Designation.class);
+                designationRepository.save(designation);
+                designationDTO.setErrorStatus(false);
+            }else{
+                designationDTO.setErrorMessage("Already exists a "+ designationDTO.getDesignation() +" designation");
+                designationDTO.setErrorStatus(true);
+                designationDTO.setStatus("400");
+            }
+        }
         return designationDTO;
     }
 
@@ -687,8 +696,8 @@ public class    EmployeeService extends AbstractService {
         endCal.set(Calendar.SECOND, 0);
         searchCriteria.setToDate(endCal.getTime());
 
-        java.sql.Timestamp startDate = new java.sql.Timestamp(searchCriteria.getFromDate().getTime());
-        java.sql.Timestamp toDate = new java.sql.Timestamp(searchCriteria.getToDate().getTime());
+        Timestamp startDate = new Timestamp(searchCriteria.getFromDate().getTime());
+        Timestamp toDate = new Timestamp(searchCriteria.getToDate().getTime());
 
         if(empId > 0 && !user.isAdmin()) {
             Employee employee = user.getEmployee();
@@ -762,8 +771,8 @@ public class    EmployeeService extends AbstractService {
             endCal.set(Calendar.SECOND, 0);
             searchCriteria.setToDate(endCal.getTime());
 
-            java.sql.Timestamp startDate = new java.sql.Timestamp(searchCriteria.getFromDate().getTime());
-            java.sql.Timestamp toDate = new java.sql.Timestamp(searchCriteria.getToDate().getTime());
+            Timestamp startDate = new Timestamp(searchCriteria.getFromDate().getTime());
+            Timestamp toDate = new Timestamp(searchCriteria.getToDate().getTime());
 
             if(empId > 0 && !user.isAdmin()) {
                 Employee employee = user.getEmployee();
@@ -825,7 +834,7 @@ public class    EmployeeService extends AbstractService {
         return mapperUtil.toModelList(entities, EmployeeRelieverDTO.class);
     }
 
-    public List<EmployeeDTO> findBySiteId(long userId,long siteId) {
+    public List<EmployeeDTO> findBySiteId(long userId, long siteId) {
         List<EmployeeDTO> employeeDtos = null;
         User user = userRepository.findOne(userId);
         List<Employee> entities = null;
@@ -1402,6 +1411,7 @@ public class    EmployeeService extends AbstractService {
 //                    }
                     page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
                     allEmpsList.addAll(page.getContent());
+
                 }
 
 
@@ -1463,8 +1473,8 @@ public class    EmployeeService extends AbstractService {
             endCal.set(Calendar.MINUTE, 59);
             endCal.set(Calendar.SECOND, 0);
 
-            java.sql.Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
-            java.sql.Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
+            Timestamp startDate = DateUtil.convertToTimestamp(startCal.getTime());
+            Timestamp toDate = DateUtil.convertToTimestamp(endCal.getTime());
 
 
             log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
@@ -1712,7 +1722,11 @@ public class    EmployeeService extends AbstractService {
     		}
     		subEmpList.addAll(empIds);
     		if(CollectionUtils.isNotEmpty(subEmpList)) {
-        		page  = employeeRepository.findAllByNonIds(searchCriteria.getProjectId(), subEmpList, pageRequest);
+    		    if(searchCriteria.getSiteId() == 0 && searchCriteria.getProjectId() > 0) {
+                    page  = employeeRepository.findAllByNonIds(searchCriteria.getProjectId(), subEmpList, pageRequest);
+                } else if(searchCriteria.getSiteId() > 0) {
+                    page  = employeeRepository.findAllByNonEmpIds(searchCriteria.getProjectId(), searchCriteria.getSiteId(), subEmpList, pageRequest);
+                }
                 if(page != null) {
                     //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
                     if(transactions == null) {

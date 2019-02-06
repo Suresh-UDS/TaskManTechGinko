@@ -20,11 +20,11 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://produdsdb-cluster.cluster-cdihr97wq71b.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
 #        url: jdbc:mysql://udstaskman.c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
         name:
-        username: UDSTaskMan
-        password: Rd32018Uds
+        username: TaskMan
+        password: Task@2019
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -186,8 +186,8 @@ pushService:
 
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
-   s3-secretKey: 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
+   s3-accessKey: AKIAJZXGWPKSXT7E73DQ
+   s3-secretKey: 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
    s3-bucketName: fms-taskman
    s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
    s3-bucketEnv: prod/
