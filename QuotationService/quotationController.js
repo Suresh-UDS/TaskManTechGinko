@@ -53,7 +53,7 @@ var _ = require('underscore');
         if(req.body.isSubmitted){
             quotation.isSubmitted = true;
             quotation.submittedDate = date;
-	    quotation.createdDate = date;
+	        quotation.createdDate = date;
             quotation.processHistory.isSubmitted = date;
             quotation.status = 'Waiting for approval';
         }else{
@@ -74,7 +74,7 @@ var _ = require('underscore');
             quotation.processHistory.isRejected = date;
             quotation.status = 'Rejected';
         }else{
-            quotation.isApproved = false;
+            quotation.isRejected = false;
         }
 
         if(req.body.isArchived){
