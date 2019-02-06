@@ -1357,11 +1357,11 @@ angular.module('timeSheetApp')
 
 	}
 
-
+    $scope.empSpin = false;
 
 	$scope.getEmployeeDetails = function(id) {
 		if(id>0){
-
+            $scope.empSpin = true;
 			$scope.loadingStart();
 			$scope.empSitesList = null;
 			EmployeeComponent.findOne(id).then(function (data) {
@@ -1373,8 +1373,10 @@ angular.module('timeSheetApp')
 				$scope.loadSelectedManager($scope.employee.managerId);
 				$scope.loadSelectedRole($scope.employee.userRoleId);
 				$scope.empSitesList = $scope.employee.projectSites;
-				$scope.selectedRole = {id:$scope.employee.userRoleId,name:$scope.employee.userRoleName}
+				$scope.selectedRole = {id:$scope.employee.userRoleId,name:$scope.employee.userRoleName};
+				$scope.empSpin = false;
 				$scope.loadingStop();
+
 			});
 			EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
 
@@ -1397,7 +1399,8 @@ angular.module('timeSheetApp')
 					$scope.isCheckedOut = true;
 					$scope.isCheckedIn = false;
 				}
-
+				$scope.empSpin = false;
+                $scope.loadingStop();
 
 			});
 
@@ -1405,10 +1408,11 @@ angular.module('timeSheetApp')
 		}
 
 	};
-
+    $scope.empSitesSpin = false;
 	$scope.getRelieveEmpDetails = function(id) {
 
 		if(id > 0){
+		   $scope.empSitesSpin = true;
 			EmployeeComponent.findOne(id).then(function (data) {
 				$scope.employee = data;
 				/*Employee reliever scope values reset start*/
@@ -1433,7 +1437,7 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.empSites = null;
 				}
-
+                $scope.empSitesSpin = false;
 				//console.log('Emp site',$scope.empSites);
 
 
@@ -1619,14 +1623,14 @@ angular.module('timeSheetApp')
 		$scope.success = 'OK';
 		$state.reload();
 	};
-
+    $scope.relieversEmpSpin = false;
 	$scope.getRelievers = function(employee){
 		console.log("Getting Relievers");
 		$scope.relieversEmp = null;
 		$scope.relievedEmployee = employee;
 		var relieverSite = $scope.relieverSite;
 		if(relieverSite && relieverSite.siteId){
-
+            $scope.relieversEmpSpin = true;
 			//console.log('reliever site - ' + JSON.stringify(relieverSite));
 
 			EmployeeComponent.getAllRelievers(relieverSite.siteId).then(function(response){
@@ -1636,7 +1640,7 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.relieversEmp = null;
 				}
-
+                $scope.relieversEmpSpin = false;
 				console.log("Response from relievers");
 				console.log($scope.relieversEmp);
 

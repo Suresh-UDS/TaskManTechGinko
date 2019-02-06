@@ -932,6 +932,8 @@
                                 <label class="label-control">Site<span class="red-star">*</span></label>
                                 <div class="dropdown">
                                     <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span ng-show="empSitesSpin && !empSites"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!empSitesSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <select
                                         class="form-control" ng-model="relieverSite" name="relieverSite"
                                         ng-options="site as site.siteName for site in empSites" ng-required="true" ng-click="getRelievers(employee)" autofocus="on"  tabindex="1">
@@ -1002,7 +1004,8 @@
                                             placeholder="Search Reliever" ng-model="selectedReliever"
                                             ng-value="selectedReliever.name"
                                             uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />-->
-                                        <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span ng-show="relieversEmpSpin && !relieversEmp"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!relieversEmpSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             class="form-control" ng-model="selectedReliever" name="relieverEmp"
                                             ng-options="emp as emp.fullName for emp in relieversEmp" ng-required="reqEmp"   tabindex="6">
@@ -1027,22 +1030,22 @@
                                     <label class="label-control">Name<span class="red-star">*</span></label>
                                     <input id="relieverOthName" type="text" class="form-control" ng-model="relieverOthName"
                                            name="relieverOthName" autocomplete="off" tabindex="1" ng-required="reqOth"
-                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="6"/>
+                                           ng-minlength=5 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="6"/>
                                     <div ng-show="relieverForm.$submitted || relieverForm.relieverOthName.$touched || relieverForm.relieverOthName.$dirty">
-                                        <div ng-show="relieverForm.relieverOthName.$dirty || form.relieverOthName.$invalid">
-                                            <p class="help-block" style="color:maroon"
+                                        <div ng-show="relieverForm.relieverOthName.$dirty || form.relieverOthName.$invalid || relieverForm.relieverOthName.$touched">
+                                            <p class="help-block" style="width:100%;z-index:970;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.required">
                                                 Name is required.
                                             </p>
-                                            <p class="help-block" style="color:maroon"
+                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.minlength">
                                                 Name is required to be at least 5 character.
                                             </p>
-                                            <p class="help-block" style="color:maroon"
+                                            <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.maxlength">
                                                 Name cannot be longer than 50 characters.
                                             </p>
-                                            <p class="help-block" style="color:maroon"
+                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.pattern">
                                                 Name can only contain letters,numbers and space.
                                             </p>

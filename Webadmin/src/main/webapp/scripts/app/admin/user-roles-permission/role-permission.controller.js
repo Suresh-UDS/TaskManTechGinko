@@ -40,6 +40,10 @@ angular.module('timeSheetApp')
 
 	};
 
+	$scope.showNotifications= function(position,alignment,color,msg){
+        demo.showNotification(position,alignment,color,msg);
+    }
+
 	$scope.selectRole = function() {
 		console.log('selected role - '+ $scope.selectedUserRole);
 		// $scope.loadModuleActions();
@@ -120,6 +124,7 @@ angular.module('timeSheetApp')
 	}
 
 	$scope.saveRolePermissions = function () {
+	    $scope.rolePermissionLoadingStart();
 		console.log('selectedRole -'+ $scope.selectedUserRole);
 		console.log('selectedRolePermissions -'+ JSON.stringify($scope.selectedPermissions));
 		$scope.permissions = {
@@ -132,17 +137,23 @@ angular.module('timeSheetApp')
 			$scope.selectedPermissions = [];
 			$scope.selectedUserRole = '';
 			$scope.refreshPage();
+			$scope.rolePermissionLoadingStop();
 			$location.path('/role-permission');
+			$scope.showNotifications('top','center','success','Role Permission Updated Successfully');
 		}).catch(function (response) {
 			$scope.success = null;
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 				$scope.errorModuleActionExists = true;
+				$scope.showNotifications('top','center','danger','Role Permission already exists!..');
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
+				$scope.showNotifications('top','center','danger','Role Permission invalid!..');
 			} else {
 				$scope.error = 'ERROR';
+				$scope.showNotifications('top','center','danger','Unable to update Role Permission!.. Please try again later.');
 			}
+			$scope.rolePermissionLoadingStop();
 		});
 	};
 
