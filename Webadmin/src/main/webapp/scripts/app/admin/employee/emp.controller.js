@@ -1373,7 +1373,7 @@ angular.module('timeSheetApp')
 				$scope.loadSelectedManager($scope.employee.managerId);
 				$scope.loadSelectedRole($scope.employee.userRoleId);
 				$scope.empSitesList = $scope.employee.projectSites;
-				$scope.selectedRole = {id:userRoleId,name:$scope.employee.userRoleName}
+				$scope.selectedRole = {id:$scope.employee.userRoleId,name:$scope.employee.userRoleName}
 				$scope.loadingStop();
 			});
 			EmployeeComponent.getEmployeeCurrentAttendance(id).then(function(data) {
