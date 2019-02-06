@@ -1724,7 +1724,11 @@ public class    EmployeeService extends AbstractService {
     		}
     		subEmpList.addAll(empIds);
     		if(CollectionUtils.isNotEmpty(subEmpList)) {
-        		page  = employeeRepository.findAllByNonIds(searchCriteria.getProjectId(), subEmpList, pageRequest);
+    		    if(searchCriteria.getSiteId() == 0 && searchCriteria.getProjectId() > 0) {
+                    page  = employeeRepository.findAllByNonIds(searchCriteria.getProjectId(), subEmpList, pageRequest);
+                } else if(searchCriteria.getSiteId() > 0) {
+                    page  = employeeRepository.findAllByNonEmpIds(searchCriteria.getProjectId(), searchCriteria.getSiteId(), subEmpList, pageRequest);
+                }
                 if(page != null) {
                     //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
                     if(transactions == null) {
