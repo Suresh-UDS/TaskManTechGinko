@@ -493,6 +493,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.feedbackListLoader = true;
+	$scope.feedbackListDetailLoader = true;
 
 	$scope.searchFilter = function () {
 		$('.AdvancedFilterModal.in').modal('hide');
@@ -776,7 +777,7 @@ angular.module('timeSheetApp')
 
 		}).catch(function(res){
 			$rootScope.loadingStop();
-			$scope.feedbackListLoader = false;
+			$scope.feedbackListLoader = true;
 			//$scope.showNotifications('top','center','danger','Cannot Load Feedback');
 		});
 
@@ -822,7 +823,7 @@ angular.module('timeSheetApp')
 				$scope.noData = true;
 			}
 		}).catch(function(res){
-			$scope.feedbackListDetailLoader = false;
+			$scope.feedbackListDetailLoader = true;
 			$scope.noData = true;
 			//$scope.showNotifications('top','center','danger','Cannot Load Feedback');
 		});
@@ -1112,7 +1113,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.clearProject = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.client.selected = undefined;
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
@@ -1129,7 +1130,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearRegion = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
 		$scope.sitesListOne.selected = undefined;
@@ -1155,7 +1156,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearSite = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.sitesListOne.selected = null;
 		$scope.filteredLocations ="";
 		$scope.siteId = null;
