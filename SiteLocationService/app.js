@@ -18,7 +18,7 @@ function startup(){
 
   // Bootstrap mongoose and load dummy data
     //mongoose.connect('mongodb://admin:Tgadmin123#@localhost:27017/quotation_svc', function(err) {
-    mongoose.connect('mongodb://10.1.2.132:27017,10.1.2.187:27017/location_svc?replicaSet=rs0', function(err) {
+    mongoose.connect('mongodb://172.31.28.83:27017,172.31.26.106:27017,172.31.23.89:27017/location_svc?replicaSet=fms', function(err) {
     if (err) throw err;
 
     /*
