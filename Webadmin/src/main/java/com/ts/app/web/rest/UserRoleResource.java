@@ -76,8 +76,14 @@ public class UserRoleResource {
 	@RequestMapping(value = "/userRole", method = RequestMethod.GET)
 	public List<UserRoleDTO> findAll() {
 		log.info("--Invoked UserRoleResource.findAll --");
-		return userRoleService.findAll();
+		return userRoleService.findAndExclude();
 	}
+
+    @RequestMapping(value = "/userRole/exclude", method = RequestMethod.GET)
+    public List<UserRoleDTO> findExcludeRole() {
+        log.info("--Invoked UserRoleResource.findExcludeRole --");
+        return userRoleService.findAndExclude();
+    }
 
 	@RequestMapping(value = "/userRole/{id}", method = RequestMethod.GET)
 	public UserRoleDTO get(@PathVariable Long id) {

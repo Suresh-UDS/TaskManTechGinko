@@ -2,6 +2,7 @@ package com.ts.app.service;
 
 import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.UserRole;
+import com.ts.app.repository.UserRepository;
 import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
@@ -32,6 +33,9 @@ public class UserRoleService extends AbstractService {
 
 	@Inject
 	private UserRoleRepository userRoleRepository;
+
+	@Inject
+    private UserRepository userRepository;
 
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -75,6 +79,11 @@ public class UserRoleService extends AbstractService {
 		List<UserRole> entities = userRoleRepository.findActiveUserRoles();
 		return mapperUtil.toModelList(entities, UserRoleDTO.class);
 	}
+
+    public List<UserRoleDTO> findAndExclude() {
+        List<UserRole> entities = userRoleRepository.findExcludeAdminRole();
+        return mapperUtil.toModelList(entities, UserRoleDTO.class);
+    }
 
 	public UserRoleDTO findOne(Long id) {
 		UserRole entity = userRoleRepository.findOne(id);
