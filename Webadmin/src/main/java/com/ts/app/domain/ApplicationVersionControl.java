@@ -26,6 +26,9 @@ public class ApplicationVersionControl extends AbstractAuditingEntity implements
     @Column(name = "application_version")
     private String applicationVersion;
 
+    @Column(name = "display_version")
+    private String displayVersion;
+
     public long getId() {
         return id;
     }
@@ -49,5 +52,13 @@ public class ApplicationVersionControl extends AbstractAuditingEntity implements
 
     public void setApplicationVersion(String applicationVersion) {
         this.applicationVersion = applicationVersion;
+    }
+
+    public String getDisplayVersion() {
+        return displayVersion;
+    }
+
+    public void setDisplayVersion(String displayVersion) {
+        this.displayVersion = displayVersion;
     }
 }

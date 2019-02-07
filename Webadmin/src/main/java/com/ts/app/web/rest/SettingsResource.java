@@ -69,5 +69,14 @@ public class SettingsResource {
         return applicationVersionControls;
     }
 
+    @RequestMapping(value = "/web/version/{type}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<ApplicationVersionControl> findWebVersion(@PathVariable("type") String type){
+	    log.debug("Inside the version control web");
+	    List<ApplicationVersionControl> applicationVersionControls = settingsService.findApplicationVersionCode(type);
+
+	    return applicationVersionControls;
+    }
+
 
 }

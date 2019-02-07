@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ApplicationVersionControlRepository extends JpaRepository<ApplicationVersionControl, Long>,JpaSpecificationExecutor<Setting> {
     @Query("SELECT a from ApplicationVersionControl a where a.storeName = :storeName")
-    ApplicationVersionControl findByApplicationStoreName(@Param("storeName") String storeName);
+    List<ApplicationVersionControl> findByApplicationStoreName(@Param("storeName") String storeName);
 }
