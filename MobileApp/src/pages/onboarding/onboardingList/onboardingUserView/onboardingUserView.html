@@ -1,0 +1,111 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+    </ion-navbar>
+</ion-header>
+<ion-content id="userProgileMainContainer">
+    <ion-card class="profileCard">
+        <ion-card-content>
+            <ion-avatar item-start class="profileContainer">
+                <img [src]="userData['kycDetails']['allKYCData']['employeeProfile']" class="userProfile" />
+                <h1>{{userData['personalDetails']['employeeName']}}</h1>
+            </ion-avatar>
+
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-content class="listContainer">
+            <ion-list>
+                <ion-list-header>
+                    Basic Details
+                </ion-list-header>
+                <ion-item>
+                    <p item-start class="text-left">Gender</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['gender']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Marital Status</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['maritalStatus']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Date Of Birth</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['dateOfBirth']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Date Of Joining</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['dateOfJoining']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Blood Group</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['bloodGroup']}}</p>
+                </ion-item>
+
+
+                <ion-list-header>
+                    Contact Details
+                </ion-list-header>
+                <ion-item>
+                    <p item-start class="text-left">Mobile Number</p>
+                    <p item-end class="text-right">+91 <span>{{userData['contactDetails']['contactNumber']}}</span></p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Address</p>
+                    <p item-end class="text-right">{{userData['contactDetails']['communicationAddress']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">City</p>
+                    <p item-end class="text-right">{{userData['contactDetails']['communicationCity']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">State</p>
+                    <p item-end class="text-right">{{userData['contactDetails']['communicationState']}}</p>
+                </ion-item>
+
+                <ion-list-header>
+                    Family and Employeement
+                </ion-list-header>
+                <ion-item>
+                    <p item-start class="text-left">Father Name</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['fatherName']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Mother Name</p>
+                    <p item-end class="text-right">{{userData['personalDetails']['motherName']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Designation</p>
+                    <p item-end class="text-right">{{userData['employmentDetails']['employeeDesignation']}}</p>
+                </ion-item>
+                <ion-item>
+                    <p item-start class="text-left">Area Of Work</p>
+                    <p item-end class="text-right">{{userData['employmentDetails']['employeeAreaOfWork']}}</p>
+                </ion-item>
+                <!-- <ion-item>
+                    <ion-avatar item-start>
+                        <ion-icon name="transgender"></ion-icon>
+                    </ion-avatar>
+                    <p>Gender</p>
+                    <h2>Male</h2>
+                    <!-- <h3>Don't Know What To Do!</h3>
+                    <p>I've had a pretty messed up day. If we just...</p>
+                </ion-item>
+                <ion-item>
+                    <ion-avatar item-start>
+                        <ion-icon name="heart-outline"></ion-icon>
+                    </ion-avatar>
+                    <p>Marital Status</p>
+                    <h2>Single</h2>
+                </ion-item>
+                <ion-item>
+                    <ion-avatar item-start>
+                        <i class="fa fa-birthday-cake"></i>
+                    </ion-avatar>
+                    <p>Date of birth</p>
+                    <h2>Single</h2>
+                </ion-item> -->
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

@@ -1,0 +1,119 @@
+<div padding>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <form [formGroup]="onboardingContactDetailsForm" novalidate>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="control-label trequired">Mobile Number</label>
+                        <input class="form-control" type="number" formControlName="contactNumber">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="control-label trequired">Emergency Contact No</label>
+                        <input class="form-control" type="number" formControlName="emergencyConatctNo">
+                    </div>
+                </div>
+                <!-- <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngIf="pFrom.contactNumber.errors && pFrom.contactNumber.touched"
+                        class="error-msg">
+                        <span *ngIf="pFrom.contactNumber.errors.shouldMinLength">
+                            Invalid Mobile Format
+                        </span>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngIf="pFrom.emergencyConatctNo.errors && pFrom.emergencyConatctNo.touched"
+                        class="error-msg">
+                        <span *ngIf="pFrom.emergencyConatctNo.errors.notToEquivalent">
+                            Contact no and Emergency no should not equal
+                        </span>
+                    </div>
+                </div> -->
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <h3 class="headerText">Present Address</h3>
+                    </div>
+                </div>
+                <!-- <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
+                        <label class="control-label">House No</label>
+                        <input class="form-control" type="text" name="houseno" required>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
+                        <label class="control-label">Street Name</label>
+                        <input class="form-control" type="text" name="streetname" required>
+                    </div>
+                </div> -->
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label trequired">Address</label>
+                        <input class="form-control" type="text" formControlName="communicationAddress">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="control-label trequired">City</label>
+                        <input class="form-control" type="text" formControlName="communicationCity">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <ion-item>
+                            <ion-label class="label-text trequired" stacked>State</ion-label>
+                            <ion-select interface="popover" formControlName="communicationState">
+                                <ion-option *ngFor="let list of totalStates" [value]="list.name">{{list.name}}</ion-option>
+                            </ion-select>
+                        </ion-item>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <h3 class="headerText">Permanent Address</h3>
+                    </div>
+                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <span>Same as present</span>
+                        <ion-checkbox checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
+                    </div> -->
+                </div>
+                <!-- <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
+                        <label class="control-label">House No</label>
+                        <input class="form-control" type="text" name="phouseno" required>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
+                        <label class="control-label">Street Name</label>
+                        <input class="form-control" type="text" name="pstreetname" required>
+                    </div>
+                </div> -->
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label">Address</label>
+                        <input class="form-control" type="text" formControlName="permanentAddress">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="control-label">City</label>
+                        <input class="form-control" type="text" formControlName="permanentCity">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <ion-item>
+                            <ion-label class="label-text" stacked>State</ion-label>
+                            <ion-select interface="popover" formControlName="permanentState">
+                                <ion-option *ngFor="let list of totalStates" [value]="list.name">{{list.name}}</ion-option>
+                            </ion-select>
+                        </ion-item>
+                        <!-- <input class="form-control" type="text" formControlName="permanentState"> -->
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="headerText trequired">Present Address Proof</label>
+                        <ion-avatar item-start class="inlineElemet">
+                            <img [src]="addressProof" (click)="getProofmage()" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

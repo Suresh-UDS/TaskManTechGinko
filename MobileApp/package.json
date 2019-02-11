@@ -85,6 +85,7 @@
     "ionic-plugin-keyboard": "^2.2.1",
     "ionic-select-searchable": "^2.10.0",
     "ionic2-auto-complete": "^1.6.2-alpha",
+    "ionic-stepper": "^1.1.0",
     "ionic2-calendar": "^0.3.13-weekdayview-tpls",
     "ionic2-date-picker": "^1.1.0",
     "ionicons": "3.0.0",

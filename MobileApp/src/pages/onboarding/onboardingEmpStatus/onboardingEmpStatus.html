@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>OnBoarding Employee Status</ion-title>
+    </ion-navbar>
+    <ion-card>
+        <ion-card-header>
+            {{employeeName}}
+        </ion-card-header>
+        <ion-list>
+            <ion-item>
+                <ion-note item-start>
+                    {{employeeCode}}
+                </ion-note>
+            </ion-item>
+        </ion-list>
+    </ion-card>
+</ion-header>
+
+<ion-content>
+    <div #stepperContainer padding>
+        <ion-stepper #stepper>
+            <!-- <ion-step label="OnBoarding" [icon]="'checkmark'" description="Status: 100% Completed">
+                <button ion-button small (click)="updateEmpDetails()">Update</button>
+            </ion-step> -->
+            <ion-step *ngFor="let list of onboardingFormStatus; let index = index" label="{{list.name}}" [icon]="list.icon" description="Status: {{list.status}} Completed">
+                <button *ngIf="list.status !== '100%'" ion-button small (click)="updateEmpDetails(list.name, index)">Update</button>
+
+                <button *ngIf="list.status == '100%'" small ion-button icon-only (click)="updateEmpDetails(list.name, index)">
+                    <ion-icon name="create"></ion-icon>
+                </button>
+            </ion-step>
+            <!-- <ion-step label="Contact Details" [icon]="'time'" description="Status: 10% Completed">
+                <button ion-button small (click)="updateEmpDetails('Contact Details', 1)">Update</button>
+            </ion-step>
+
+            <ion-step label="Family & Academic" [icon]="'time'" description="Status: 10% Completed">
+                <button ion-button small (click)="updateEmpDetails('Family & Academic', 2)">Update</button>
+            </ion-step>
+            <ion-step label="Employment Details" [icon]="'time'" description="Status: 10% Completed">
+                <button ion-button small (click)="updateEmpDetails('Employment Details', 3)">Update</button>
+            </ion-step>
+            <ion-step label="Kyc Details" [icon]="'time'" description="Status: 10% Completed">
+                <button ion-button small (click)="updateEmpDetails('Kyc Details', 4)">Update</button>
+            </ion-step> -->
+        </ion-stepper>
+    </div>
+</ion-content>

@@ -90,3 +90,36 @@ ion-backdrop
 {
   opacity: 0.4 !important;
 }
+
+
+#onboardingEmp label.trequired:after, #onboardingEmp ion-label.trequired:after{
+  color: #e32;
+  content: ' *';
+  display:inline;
+}
+
+#onboardingEmp .padding0 {
+  padding: 2px !important;
+}
+#onboardingEmp .row {
+  margin-top: 0px !important;
+}
+#onboardingEmp .item-md.item-block .item-inner {
+  border-bottom: 1px solid #dedede !important;
+}
+#onboardingEmp .form-control {
+  height: 29px !important;
+}
+#onboardingEmp .label-md[stacked] {
+  font-size: 11px;
+  text-transform: capitalize;
+  font-weight: 400;
+  position: relative;
+  top: 12px;
+}
+.onboardingEmp .padding10 {
+  padding: 10px;
+}
+.onboardingEmp .padding5 {
+  padding: 5px;
+}

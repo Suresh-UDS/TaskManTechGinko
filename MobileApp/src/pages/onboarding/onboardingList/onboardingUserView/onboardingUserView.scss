@@ -1,0 +1,66 @@
+page-onboardinguser-View {
+    .card { 
+        margin: 1px !important;
+        display: block !important;
+    }
+    .card-md {
+        width: 100% !important;
+    }
+    #userProgileMainContainer .scroll-content {
+        margin-top: 64px !important;
+    }
+    .profileCard.card-md {
+        box-shadow: none !important;
+        background: #ffc55b;
+        height: 120px;
+        overflow: visible !important;
+    }
+    .profileContainer {
+        width: 135px;
+        position: absolute;
+        bottom: -70px;
+        left: 32%;
+        z-index: 9;
+        margin-left: 0px;
+        text-align: center;
+    }
+    .userProfile {
+        width: 133px;
+        height: 135px;
+        border-radius: 50%;
+        border: 8px solid #d6d6d6;
+    }
+    .toolbar-background-md {
+        background: #ffc55b !important; 
+    }
+    .back-button-icon-md {
+        color: white !important;
+    }
+    .header-md::after {
+        background: none;
+    }
+    .toolbar-md {
+        min-height: 66px !important
+    }
+    .card .card-content {
+        width: 100%;
+        height: 100%;
+    }
+    .listContainer {
+        margin-top: 55px;
+    }
+    .listContainer .label {
+        text-align: left !important;
+    }
+    .listContainer .list-header-md {
+        padding-left: 0px;
+        border-bottom: 1px solid #dedede;
+        border-top: none !important;
+    }
+    .listContainer .item-block {
+        min-height: 3rem !important;
+    }
+    .listContainer ion-label {
+        font-size: 12px !important;
+    }
+}

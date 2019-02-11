@@ -1,0 +1,55 @@
+
+
+page-empEmployeementDetails-new {
+    .form-group.label-floating.is-focused label.control-label {
+        left: auto !important;
+    }
+    .checkbox, .radio {
+        margin-bottom: 0px;
+        margin-top: 3px;
+    }
+    .spanText {
+        padding: 0px 6px;
+        margin-bottom: -1px;
+    }
+    .headerText {
+        font-weight: bold !important;
+        color: orange !important;
+    }
+    .paragraphText {
+        padding: 8px 15px;
+    }
+    .toggle-md .toggle-icon {
+        width: 44px !important;
+        height: 27px !important;
+    }
+    .toggle-md .toggle-inner {
+        width: 25px !important;
+        height: 26px !important;
+    }
+    .toggle-md .toggle-inner {
+        top: 0px !important;
+    }
+    .toggle-md {
+        padding: 0px !important;
+    }
+    .padding0 {
+        padding: 0 !important;
+    }
+    .centerDiv {
+        text-align: left;
+        width: 220px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0;
+    }
+    .mdImage {
+        // width: 85px;
+        height: 100px;
+    }
+    .form-group .form-control[disabled] {
+        background-color: #b3b1b1 !important;
+        color: #b3b1b1 !important;
+    }
+}

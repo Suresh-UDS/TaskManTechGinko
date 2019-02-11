@@ -1,0 +1,55 @@
+
+page-kycDetails-new {
+    .form-group.label-floating.is-focused label.control-label {
+        left: auto !important;
+    }
+    .mdImage {
+        // width: 85px;
+        height: 100px;
+    }
+    .passbookImage {
+        height: 115px;
+        width: 50%;
+    }
+    .checkbox, .radio {
+        margin-bottom: 0px;
+        margin-top: 3px;
+    }
+    .spanText {
+        padding: 0px 6px;
+        margin-bottom: -1px;
+    }
+    .headerText {
+        font-weight: bold !important;
+        color: orange !important;
+    }
+    ion-select {
+        overflow: visible !important;
+        max-width: 96% !important;
+    }
+    .label-md {
+        margin: 0;
+        text-align: left;
+        padding-left: 1px;
+    }
+    .item-md.item-block .item-inner {
+        padding-right: 2px !important;
+    }
+    .toggle-md .toggle-icon {
+        width: 44px !important;
+        height: 27px !important;
+    }
+    .toggle-md .toggle-inner {
+        width: 25px !important;
+        height: 26px !important;
+    }
+    .toggle-md .toggle-inner {
+        top: 0px !important;
+    }
+    .toggle-md {
+        padding: 0px !important;
+    }
+    .padding0 {
+        padding: 0 !important;
+    }
+}
