@@ -62,7 +62,7 @@ export class onboardingExistEmployee implements OnInit {
   }
   userFilter() {
     this.actionRequiredfilterData = {};
-    this.popOverEvent = this.popoverCtrl.create(onboardingListFilter);
+    this.popOverEvent = this.popoverCtrl.create(onboardingListFilter, {}, { enableBackdropDismiss: false });
     this.popOverEvent.present();
     this.popOverEvent.onDidDismiss(data => {
       console.log(data);

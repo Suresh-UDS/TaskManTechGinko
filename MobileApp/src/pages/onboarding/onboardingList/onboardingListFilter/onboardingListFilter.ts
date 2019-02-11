@@ -22,7 +22,8 @@ export class onboardingListFilter {
         }
     }
     closePopOver() {
-        this._viewController.dismiss('');
+        let obj = {};
+        this._viewController.dismiss(obj);
     }
     userFilterKeyFn(key) {
         this.userFilterKey = key;

@@ -3,7 +3,7 @@
     <ion-list>
         <ion-item>
             <ion-label class="label-text trequired" stacked>Select Field</ion-label>
-            <ion-select name="searchField" [(ngModel)]="searchField" (ionChange)="userFilterKeyFn(searchField)">
+            <ion-select name="searchField" interface="popover" [(ngModel)]="searchField" (ionChange)="userFilterKeyFn(searchField)">
                 <ion-option value="employeeName">Employee Name</ion-option>
                 <ion-option value="fatherName">Father Name</ion-option>
                 <ion-option value="gender">Gender</ion-option>
