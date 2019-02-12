@@ -274,6 +274,8 @@ public class SearchCriteria extends Paginator {
 
 	private List<Long> empIds;
 
+	private boolean showInActive;
+
 	public String getModule() {
 		return module;
 	}
@@ -1396,5 +1398,13 @@ public class SearchCriteria extends Paginator {
 
     public void setEmpIds(List<Long> empIds) {
         this.empIds = empIds;
+    }
+
+    public boolean isShowInActive() {
+        return showInActive;
+    }
+
+    public void setShowInActive(boolean showInActive) {
+        this.showInActive = showInActive;
     }
 }

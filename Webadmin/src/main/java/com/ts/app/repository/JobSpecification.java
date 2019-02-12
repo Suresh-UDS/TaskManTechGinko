@@ -133,7 +133,11 @@ public class JobSpecification implements Specification<Job> {
 	            	}
 	        	}
 
-    		predicates.add(builder.equal(root.get("active"), "Y"));
+            if(searchCriteria.isShowInActive()) {
+                predicates.add(builder.equal(root.get("active"), "N"));
+            } else {
+                predicates.add(builder.equal(root.get("active"), "Y"));
+            }
 
     		query.orderBy(builder.desc(root.get("id")));
             //Predicate firstStage = builder.and(predicates.toArray(new Predicate[predicates.size()]));
