@@ -102,14 +102,20 @@ module.exports = {
           return res.json(500, err);
         }
         console.log(locations);
+        var counter = 0;
         if(locations && locations.length>0){
           locations.forEach(function (location) {
+              counter++;
               if(location.siteId == siteId){
                   res.json(200,'{status : true}')
               }
+              if(counter == locations.length){
+                  res.json(500, '{status: false}');
+              }
           })
+        }else{
+            res.json(500, '{status: false}');
         }
-        res.json(500, '{status: false}');
       });
      });
   }

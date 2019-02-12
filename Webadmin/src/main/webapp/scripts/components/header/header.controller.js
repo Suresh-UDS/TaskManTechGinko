@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
     .controller('HeaderController', function ($rootScope,$scope, $location, $state,
-        Auth, Principal, ENV, $interval){
+        Auth,AuthServerProvider, Principal, ENV, $interval){
 
         $rootScope.isAuthenticated = Principal.isAuthenticated;
         $scope.$state = $state;
@@ -17,6 +17,9 @@ angular.module('timeSheetApp')
 
         };
 
+        $scope.init = function() {
+
+        };
       // Session timeout
        $interval(function(){
 
@@ -52,6 +55,12 @@ angular.module('timeSheetApp')
 
         $rootScope.inits = function()
         {
+            AuthServerProvider.getCurrentVersion('web').then(function (data) {
+                console.log(data);
+                $scope.version = data[0].displayVersion;
+            });
+
+
             if($rootScope.isAuthenticated() == true){
 
               Principal.identity().then(function(response)
@@ -80,8 +89,6 @@ angular.module('timeSheetApp')
             }
 
         };
-
-
 
         $('#minimizeSidebar').click(function() {
 
