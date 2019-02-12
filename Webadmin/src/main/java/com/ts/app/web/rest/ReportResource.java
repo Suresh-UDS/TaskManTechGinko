@@ -273,7 +273,11 @@ public class ReportResource {
     				}
     				searchCriteria.setSiteIds(siteIds);
     			}
-    		}
+    		}else {
+                List<Long> siteIds = new ArrayList<Long>();
+                siteIds.add(searchCriteria.getSiteId());
+                searchCriteria.setSiteIds(siteIds);
+            }
     		QuotationDTO quotationSummary = reportService.getQuotationCountSummary(searchCriteria);
     		return new ResponseEntity<>(quotationSummary, HttpStatus.OK);
         //List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
