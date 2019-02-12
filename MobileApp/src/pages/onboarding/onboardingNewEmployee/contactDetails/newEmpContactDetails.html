@@ -26,12 +26,13 @@
                         </span>
                     </div>
                 </div> -->
-                <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <h3 class="headerText">Present Address</h3>
+                <div formGroupName="communicationAddress">
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                            <h3 class="headerText">Present Address</h3>
+                        </div>
                     </div>
-                </div>
-                <!-- <div class="row form-group">
+                    <!-- <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
                         <label class="control-label">House No</label>
                         <input class="form-control" type="text" name="houseno" required>
@@ -41,38 +42,40 @@
                         <input class="form-control" type="text" name="streetname" required>
                     </div>
                 </div> -->
-                <div class="row form-group">
-                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
-                        <label class="control-label trequired">Address</label>
-                        <input class="form-control" type="text" formControlName="communicationAddress">
+                    <div class="row form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                            <label class="control-label trequired">Address</label>
+                            <input class="form-control" type="text" formControlName="address">
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <label class="control-label trequired">City</label>
+                            <input class="form-control" type="text" formControlName="city">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <ion-item>
+                                <ion-label class="label-text trequired" stacked>State</ion-label>
+                                <ion-select interface="popover" formControlName="state">
+                                    <ion-option *ngFor="let list of totalStates" [value]="list.name">{{list.name}}</ion-option>
+                                </ion-select>
+                            </ion-item>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="control-label trequired">City</label>
-                        <input class="form-control" type="text" formControlName="communicationCity">
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <ion-item>
-                            <ion-label class="label-text trequired" stacked>State</ion-label>
-                            <ion-select interface="popover" formControlName="communicationState">
-                                <ion-option *ngFor="let list of totalStates" [value]="list.name">{{list.name}}</ion-option>
-                            </ion-select>
-                        </ion-item>
-                    </div>
-                </div>
-
-                <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <h3 class="headerText">Permanent Address</h3>
-                    </div>
-                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                <div formGroupName="permanentAddress">
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                            <h3 class="headerText">Permanent Address</h3>
+                        </div>
+                        <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <span>Same as present</span>
                         <ion-checkbox checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
                     </div> -->
-                </div>
-                <!-- <div class="row form-group">
+                    </div>
+                    <!-- <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
                         <label class="control-label">House No</label>
                         <input class="form-control" type="text" name="phouseno" required>
@@ -82,26 +85,27 @@
                         <input class="form-control" type="text" name="pstreetname" required>
                     </div>
                 </div> -->
-                <div class="row form-group">
-                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
-                        <label class="control-label">Address</label>
-                        <input class="form-control" type="text" formControlName="permanentAddress">
+                    <div class="row form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                            <label class="control-label">Address</label>
+                            <input class="form-control" type="text" formControlName="address">
+                        </div>
                     </div>
-                </div>
 
-                <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="control-label">City</label>
-                        <input class="form-control" type="text" formControlName="permanentCity">
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <ion-item>
-                            <ion-label class="label-text" stacked>State</ion-label>
-                            <ion-select interface="popover" formControlName="permanentState">
-                                <ion-option *ngFor="let list of totalStates" [value]="list.name">{{list.name}}</ion-option>
-                            </ion-select>
-                        </ion-item>
-                        <!-- <input class="form-control" type="text" formControlName="permanentState"> -->
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <label class="control-label">City</label>
+                            <input class="form-control" type="text" formControlName="city">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <ion-item>
+                                <ion-label class="label-text" stacked>State</ion-label>
+                                <ion-select interface="popover" formControlName="state">
+                                    <ion-option *ngFor="let list of totalStates" [value]="list.name">{{list.name}}</ion-option>
+                                </ion-select>
+                            </ion-item>
+                            <!-- <input class="form-control" type="text" formControlName="permanentState"> -->
+                        </div>
                     </div>
                 </div>
 

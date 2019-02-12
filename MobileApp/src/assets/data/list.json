@@ -1,0 +1,117 @@
+[
+   {
+      "employeeName": "test",
+      "employeeCode": "390786",
+      "gender": "male",
+      "dateOfBirth": "23-11-1998",
+      "dateOfJoining": "12-12-2017",
+      "contactNumber": "9876543234",
+      "religion": "hindu",
+      "maritalStatus": "none",
+      "bloodGroup": "o Positive",
+      "aadharPhotoCopy": "assets/imgs/placeholder.png",
+      "profilePicture": "assets/imgs/placeholder.png",
+      "employeeSignature": "assets/imgs/placeholder.png",
+      "employeeVoiceSample": "vjvjhvjhvjhvj",
+      "prePrintedStatement": "assets/imgs/placeholder.png",
+      "tempId": "bubu",
+      "isSync": true,
+      "thumbImpressen": [
+         {
+            "type": "leftHand",
+            "impressen": "guhggigi"
+         }
+      ],
+      "relationshipDetails": [
+         {
+            "name": "ragu",
+            "relationship": "father",
+            "contactNumber": "8765432345"
+         },
+         {
+            "name": "ratha",
+            "relationship": "mother",
+            "contactNumber": "8765432345"
+         }
+      ],
+      "nomineeDetail": [
+         {
+            "name": "ragu",
+            "relationship": "father",
+            "contactNumber": "8765432345",
+            "nominePercentage": "50"
+         },
+         {
+            "name": "ratha",
+            "relationship": "mother",
+            "contactNumber": "8765432345",
+            "nominePercentage": "50"
+         }
+      ],
+      "identificationMark": [
+         "mole on right cheek",
+         "scare on left elbow"
+      ],
+      "aadharNumber": "65787642895638",
+      "communicationAddress": [
+         {
+            "type": "present",
+            "address": "Uds salai",
+            "city": "chennai",
+            "state": "tamilnadu"
+         }
+      ],
+      "educationQualification": [
+         {
+            "Qualification": "diploma",
+            "institute": "anna university"
+         }
+      ],
+      "emergencyConatctNo": [
+         "7878568945",
+         "6890978563"
+      ],
+      "previousEmployee": [
+         {
+            "name": "UDS",
+            "designation": "worker"
+         }
+      ],
+      "epfNo": "ujoiojiojio",
+      "UANNo": "bib7nionj8",
+      "ESINo": "fgfgrfgrf9",
+      "bankDetails": [
+         {
+            "name": "Sbi",
+            "accountNo": "6787454565787454",
+            "IFSC": "SBI768",
+            "isActive": true
+         }
+      ],
+      "customer": [
+         {
+            "branchName": "chennai",
+            "project": [
+               {
+                  "projectId": "bjjj5",
+                  "projectName": "Abeesw",
+                  "projectDes": "bhbjbjbj",
+                  "wbs": [
+                     {
+                        "wbsId": "hbjhjh43",
+                        "wbsName": "asennt",
+                        "wbsDes": "bbjbjbjbj",
+                        "position": "50058172",
+                        "positionDescription": "FITTER O",
+                        "activityDescription": "HK SUPERVISOR",
+                        "activityNo": "10",
+                        "activityId": "7",
+                        "gross": "11000.0"
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+]

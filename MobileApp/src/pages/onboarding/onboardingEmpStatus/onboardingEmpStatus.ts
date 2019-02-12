@@ -51,10 +51,27 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
         }
         for (let i = 0; i < data.length; i++) {
           if (this.onboardingFormStatus[i]['key'] == objDataKeys[i]) {
-            this.onboardingFormStatus[i]['icon'] = 'checkmark';
-            this.onboardingFormStatus[i]['status'] = '100%';
-            data[i].querySelector('.ionic-step-header-icon').classList.remove('error');
-            data[i].querySelector('.ionic-step-header-icon').classList.add('success');
+
+            let keyPercentage = 0
+            let objectFormattedValues = [];
+            const objectkeys = Object.keys(localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
+            const objectValues = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
+            objectFormattedValues = objectValues.filter((data) => {
+              if (data) {
+                return data;
+              }
+            });
+            keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100;
+            this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
+            if (keyPercentage == 100) {
+              this.onboardingFormStatus[i]['icon'] = 'checkmark';
+              data[i].querySelector('.ionic-step-header-icon').classList.remove('error');
+              data[i].querySelector('.ionic-step-header-icon').classList.add('success');
+            } else {
+              this.onboardingFormStatus[i]['icon'] = 'time';
+              data[i].querySelector('.ionic-step-header-icon').classList.remove('success');
+              data[i].querySelector('.ionic-step-header-icon').classList.add('error');
+            }
           } else {
             this.onboardingFormStatus[i]['icon'] = 'time';
             this.onboardingFormStatus[i]['status'] = '0%';

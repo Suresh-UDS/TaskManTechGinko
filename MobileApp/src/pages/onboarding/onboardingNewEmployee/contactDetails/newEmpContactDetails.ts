@@ -61,13 +61,16 @@ export class newEmpContactDetails implements OnInit {
     this.onboardingContactDetailsForm = this.fb.group({
       contactNumber: ['', [Validators.required]],
       emergencyConatctNo: ['', [Validators.required]],
-      communicationAddress: ['', [Validators.required]],
-      communicationCity: ['', [Validators.required]],
-      communicationState: ['', [Validators.required]],
-      permanentAddress: [''],
-      permanentCity: [''],
-      permanentState: [''],
-      checkSameAsPresent: ['']
+      communicationAddress: this.fb.group({
+        address: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+        state: ['', [Validators.required]],
+      }),
+      permanentAddress: this.fb.group({
+        address: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+        state: ['', [Validators.required]],
+      })
     });
     this.onboardingContactDetailsForm.setValidators([this.validateNumberMinLength(), this.validateAreNotEqual()]);
     //this.onboardingContactDetailsForm.setValidators(this.validateAreNotEqual());

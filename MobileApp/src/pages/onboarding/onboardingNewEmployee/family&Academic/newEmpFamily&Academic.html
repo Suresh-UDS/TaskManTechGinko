@@ -2,62 +2,67 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <form [formGroup]="onboardingFamilyAcademicForm" novalidate>
-                <div class="row form-group padding0">
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="control-label trequired">Highest Education Qualification</label>
-                        <input class="form-control" type="text" formControlName="Qualification">
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="control-label trequired">Board / Institute</label>
-                        <input class="form-control" type="text" formControlName="institute">
+                <div formGroupName="educationQualification">
+                    <div class="row form-group padding0">
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <label class="control-label trequired">Highest Education Qualification</label>
+                            <input class="form-control" type="text" formControlName="Qualification">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <label class="control-label trequired">Board / Institute</label>
+                            <input class="form-control" type="text" formControlName="institute">
+                        </div>
                     </div>
                 </div>
                 <div class="row from-group">
                     <div class="col-md-12 col-xs-12 col-sm-12">
-                        <div class="pull-right" *ngIf="nomineeList.length !== 3">
+                        <div class="pull-right" *ngIf="nomineeForms.length !== 3">
                             <button ion-button icon-only (click)="addNominees()">
                                 <ion-icon name="add"></ion-icon>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="boxShadowContent padding5" *ngFor="let list of nomineeList;let index = index">
-                    <div class="row form-group" *ngIf="index !== 0 ">
-                        <div class="col-md-12 col-xs-12 col-sm-12 padding0">
-                            <div class="pull-right">
-                                <button ion-button icon-only (click)="removeNominees(index)">
-                                    <ion-icon name="remove"></ion-icon>
-                                </button>
+                <div formArrayName="nomineeDetail">
+                    <div class="boxShadowContent padding5" *ngFor="let list of nomineeForms.controls; let i=index"
+                        [formGroupName]="i">
+                        <div class="row form-group" *ngIf="i !== 0 ">
+                            <div class="col-md-12 col-xs-12 col-sm-12 padding0">
+                                <div class="pull-right">
+                                    <button ion-button icon-only (click)="removeNominees(index)">
+                                        <ion-icon name="remove"></ion-icon>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="control-label trequired">Nominee Name</label>
-                            <input class="form-control" type="text" [formControlName]="list['name']">
+                        <div class="row form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                                <label class="control-label trequired">Nominee Name</label>
+                                <input class="form-control" type="text" formControlName="name">
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                                <ion-item>
+                                    <ion-label class="label-text trequired" stacked>Relationship</ion-label>
+                                    <ion-select interface="popover" formControlName="relationship">
+                                        <ion-option value="Father">Father</ion-option>
+                                        <ion-option value="Mother">Mother</ion-option>
+                                        <ion-option value="Wife">Wife</ion-option>
+                                        <ion-option value="Son">Son</ion-option>
+                                        <ion-option value="Brother">Brother</ion-option>
+                                        <ion-option value="Sister">Sister</ion-option>
+                                    </ion-select>
+                                </ion-item>
+                            </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <ion-item>
-                                <ion-label class="label-text trequired" stacked>Relationship</ion-label>
-                                <ion-select interface="popover" [formControlName]="list['relationShip']">
-                                    <ion-option value="Father">Father</ion-option>
-                                    <ion-option value="Mother">Mother</ion-option>
-                                    <ion-option value="Wife">Wife</ion-option>
-                                    <ion-option value="Son">Son</ion-option>
-                                    <ion-option value="Brother">Brother</ion-option>
-                                    <ion-option value="Sister">Sister</ion-option>
-                                </ion-select>
-                            </ion-item>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="control-label">Contact Number</label>
-                            <input class="form-control" type="text" [formControlName]="list['contactNumber']">
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="control-label trequired">Percentage</label>
-                            <input class="form-control" type="text" [formControlName]="list['percentage']">
+                        <div class="row form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                                <label class="control-label">Contact Number</label>
+                                <input class="form-control" type="text" formControlName="contactNumber">
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                                <label class="control-label trequired">Percentage</label>
+                                <input class="form-control" type="text" formControlName="nominePercentage">
+                            </div>
                         </div>
                     </div>
                 </div>

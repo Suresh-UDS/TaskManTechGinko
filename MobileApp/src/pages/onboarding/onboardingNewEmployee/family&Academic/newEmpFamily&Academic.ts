@@ -14,15 +14,17 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
   nomineeList: any = [];
   onboardingFamilyAcademicData;
   storedIndex;
-  constructor(private _fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
+  constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
 
-    this.onboardingFamilyAcademicForm = new FormGroup({
-      Qualification: new FormControl('', [Validators.required]),
-      institute: new FormControl('', [Validators.required])
+    this.onboardingFamilyAcademicForm = this.fb.group({
+      educationQualification: this.fb.group({
+        Qualification: ['', [Validators.required]],
+        institute: ['', [Validators.required]]
+      }),
+      nomineeDetail: this.fb.array([])
     });
-
     this.storage.get('onboardingCurrentIndex').then(index => {
       this.storedIndex = index;
       this.storage.get('OnBoardingData').then(localStoragedData => {
@@ -64,29 +66,39 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
       }
     });
   }
+  get nomineeForms() {
+    return this.onboardingFamilyAcademicForm.get('nomineeDetail') as FormArray
+  }
   addNominees() {
     //alert('====');
     //alert(this.onboardingFamilyAcademicForm.value);
-    let length = this.nomineeList.length + 1;
-    if (length <= 3) {
-      let obj = {
-        name: 'nomineeName' + length,
-        relationShip: 'nomineeRelationShip' + length,
-        percentage: 'nomineePercentage' + length,
-        contactNumber: 'nomineeContactNumber' + length
-      }
-      //this.addDynamicForm(obj);
-      // alert(obj.name);
-      this.onboardingFamilyAcademicForm.addControl(obj.name, new FormControl('', [Validators.required]));
-      this.onboardingFamilyAcademicForm.addControl(obj.relationShip, new FormControl('', [Validators.required]));
-      this.onboardingFamilyAcademicForm.addControl(obj.percentage, new FormControl('', [Validators.required, Validators.max(100)]));
-      this.onboardingFamilyAcademicForm.addControl(obj.contactNumber, new FormControl(''));
+    const nominee = this.fb.group({
+      name: ['', [Validators.required]],
+      relationship: ['', [Validators.required]],
+      contactNumber: [''],
+      nominePercentage: ['', [Validators.required]]
+    })
+    this.nomineeForms.push(nominee);
+    // let length = this.nomineeList.length + 1;
+    // if (length <= 3) {
+    //   let obj = {
+    //     name: 'nomineeName' + length,
+    //     relationShip: 'nomineeRelationShip' + length,
+    //     percentage: 'nomineePercentage' + length,
+    //     contactNumber: 'nomineeContactNumber' + length
+    //   }
+    //   //this.addDynamicForm(obj);
+    //   // alert(obj.name);
+    //   this.onboardingFamilyAcademicForm.addControl(obj.name, new FormControl('', [Validators.required]));
+    //   this.onboardingFamilyAcademicForm.addControl(obj.relationShip, new FormControl('', [Validators.required]));
+    //   this.onboardingFamilyAcademicForm.addControl(obj.percentage, new FormControl('', [Validators.required, Validators.max(100)]));
+    //   this.onboardingFamilyAcademicForm.addControl(obj.contactNumber, new FormControl(''));
 
-      this.nomineeList.push(obj);
-      // this.nomineeList.push(obj);
-      //this.setValidation(obj);
+    //   this.nomineeList.push(obj);
+    // this.nomineeList.push(obj);
+    //this.setValidation(obj);
 
-    }
+    //}
   }
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
@@ -111,7 +123,7 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
   //this.index = this.index + 1;
   //}
   removeNominees(index) {
-    this.nomineeList.splice(index, 1)
+    this.nomineeForms.removeAt(index);
   }
   ngAfterViewInit() {
 

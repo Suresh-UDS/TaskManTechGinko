@@ -10,6 +10,7 @@ import { OnboardingService } from '../../service/onboarding.service';
 import { componentService } from '../../service/componentService';
 
 import { Storage } from '@ionic/storage';
+import { onBoardingModel } from './onboarding';
 
 @Component({
   selector: 'page-onboarding-list',
@@ -25,26 +26,59 @@ export class onboardingExistEmployee implements OnInit {
   errormsg;
   hideFilter = true;
 
-  constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) {
-  }
+  constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) { }
 
   ngOnInit() { }
   ionViewWillEnter() {
     this.storage.get('OnBoardingData').then((localStoragedData) => {
-      for (let list of localStoragedData['actionRequired']) {
-        list['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
-        if (list.hasOwnProperty('kycDetails')) {
-          list['personalDetails']['image'] = list['kycDetails']['allKYCData']['employeeProfile'];
-        } else {
-          list['personalDetails']['image'] = 'assets/imgs/placeholder.png'
+      // for (let list of localStoragedData['actionRequired']) {
+      //   list['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
+      //   if (list.hasOwnProperty('kycDetails')) {
+      //     list['personalDetails']['image'] = list['kycDetails']['allKYCData']['employeeProfile'];
+      //   } else {
+      //     list['personalDetails']['image'] = 'assets/imgs/placeholder.png'
+      //   }
+      // }
+      this.onboardingService.getAllOnboardingUser().subscribe(res => {
+        let objectsKeys;
+        let objectsValues;
+        for (var i = 0; i < res.length; i++) {
+          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+            for (let list in onBoardingModel) {
+              for (let key in onBoardingModel[list]) {
+                onBoardingModel[list][key] = res[i][key];
+                if (list == 'employmentDetails') {
+                  if (res[i]['previousEmployee'].length) {
+                    onBoardingModel[list]['isEmploymentEarlier'] = res[i]['previousEmployee'][0]['name'] ? true : false;
+                    onBoardingModel[list]['employeeName'] = res[i]['previousEmployee'][0]['name'];
+                    onBoardingModel[list]['employeeDesignation'] = res[i]['previousEmployee'][0]['designation'];
+                  }
+                }
+                if (list == 'kycDetails') {
+                  //onBoardingModel['personalDetails']['image'] = res[i]['kycDetails'][0]['accountNo'];
+                  if (res[i]['bankDetails'].length) {
+                    onBoardingModel[list]['bAccountNumber'] = res[i]['bankDetails'][0]['accountNo'];
+                    onBoardingModel[list]['bIfscNumber'] = res[i]['bankDetails'][0]['IFSC'];
+                  }
+                }
+              }
+              console.log(onBoardingModel);
+              //objectsKeys = Object['values'](onBoardingModel[list]);
+              //onBoardingModel[list]['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
+            }
+            //objectsKeys = Object['entries'](onBoardingModel[list]);
+            console.log('entries ==== ');
+            console.log(objectsKeys);
+            localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = onBoardingModel;
+            this.storage.set('OnBoardingData', localStoragedData);
+          }
         }
-      }
-      this.actionRequiredEmp = localStoragedData['actionRequired'];
-      this.completedEmp = localStoragedData["completed"];
-      console.log(this.actionRequiredEmp);
-      console.log(typeof this.actionRequiredEmp);
-      console.log(this.actionRequiredEmp.length);
-      this.onSegmentChange();
+        console.log(onBoardingModel);
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        this.onSegmentChange();
+        this.getPercentage();
+      });
     });
   }
   addNewEmpyoee() {
@@ -73,9 +107,42 @@ export class onboardingExistEmployee implements OnInit {
       }
     });
   }
+  getPercentage() {
+    for (var i = 0; i < this.actionRequiredEmp.length; i++) {
+      let objectPercentage = 0;
+      for (let list in this.actionRequiredEmp[i]) {
+
+        let keyPercentage = 0
+        let objectFormattedValues = [];
+        const objectkeys = Object.keys(this.actionRequiredEmp[i][list]);
+        const objectValues = Object['values'](this.actionRequiredEmp[i][list]);
+        objectFormattedValues = objectValues.filter((data) => {
+          if (data) {
+            return data;
+          }
+        });
+        keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100
+        objectPercentage += keyPercentage;
+      }
+      this.actionRequiredEmp[i]['personalDetails']['percentage'] = Math.floor(objectPercentage / 5);
+    }
+  }
+  findSavedDuplication(array, key) {
+    let count = 0;
+    for (let list of array) {
+      if (list['personalDetails']['employeeCode'] == key) {
+        count = count + 1;
+      }
+    }
+    if (count == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
   onSegmentChange() {
-    if(this.onBoardingAction == 'actionRequired') {
-       this.hideFilter = this.actionRequiredEmp['length'] ? true : false;
+    if (this.onBoardingAction == 'actionRequired') {
+      this.hideFilter = this.actionRequiredEmp['length'] ? true : false;
     } else {
       this.hideFilter = this.completedEmp['length'] ? true : false;
     }

@@ -38,19 +38,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     });
 
     this.onboardingPersonalDetailsForm.controls['dateOfBirth'].valueChanges.subscribe(value => {
-      console.log("date = " + value);
-      if (value) {
-        var mindate = new Date(value);
-        var formattedMinDate = mindate.setDate(mindate.getDate() + 5110);
-        var formattedFinalDate = new Date(formattedMinDate);
-        var filteredDate = this.pipe.transform(formattedFinalDate, 'yyyy-MM-dd');
-        console.log('filter date = ' + filteredDate);
-        this.setMinDate = filteredDate;
-      }
-      let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
-      if (!dateOfJoining) {
-        this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
-      }
+
+      this.setMinValidation(value);
       // const dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining');
       // const minDate = new Date(value);
       // console.log(minDate)
@@ -101,6 +90,20 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
 
 
+  setMinValidation(value) {
+    if (value) {
+      var mindate = new Date(value);
+      var formattedMinDate = mindate.setDate(mindate.getDate() + 5110);
+      var formattedFinalDate = new Date(formattedMinDate);
+      var filteredDate = this.pipe.transform(formattedFinalDate, 'yyyy-MM-dd');
+      console.log('filter date = ' + filteredDate);
+      this.setMinDate = filteredDate;
+    }
+    let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
+    if (!dateOfJoining || dateOfJoining < filteredDate) {
+      this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
+    }
+  }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex]) {
@@ -108,6 +111,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
         for (let list in localStoragedData['actionRequired'][this.storedIndex]['personalDetails']) {
           this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails'][list]);
         }
+        this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
       }
     });
   }

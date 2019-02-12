@@ -15,16 +15,11 @@ export class OnboardingService {
     }
 
     getAllOnboardingUser(): Observable<any> {
-        return this.http.get('http://172.16.1.103:3000/jsonfile').map(
+        return this.http.get('../../assets/data/list.json').map(
             response => {
-                console.log("create job");
-                return response.json();
+                return JSON.parse(response['_body']);
             }).catch(error => {
-                console.log("Error in create Job");
-                console.log(error);
                 return Observable.throw(error.json());
-
             })
     }
-
 }

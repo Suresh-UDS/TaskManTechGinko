@@ -16,8 +16,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   onboardingKycSubscription;
   formStatusValues
   @ViewChild('onboardingKYCForm') onboardingKYCForm: NgForm;
-  userAllKYCData:any = {}
-  storedIndex
+  userAllKYCData: any = {}
+  storedIndex;
   // kycdata = [
   //   { name: 'Driving License' },
   //   { name: 'PAN Card' },
@@ -59,11 +59,10 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
   initialKycImage() {
     this.userAllKYCData = {
-      aatharFront: 'assets/imgs/placeholder.png',
-      aatharBack: 'assets/imgs/placeholder.png',
+      aadharPhotoCopy: 'assets/imgs/placeholder.png',
       employeeSignature: 'assets/imgs/placeholder.png',
-      employeeProfile: 'assets/imgs/placeholder.png',
-      bankPassbook: 'assets/imgs/placeholder.png'
+      profilePicture: 'assets/imgs/placeholder.png',
+      prePrintedStatement: 'assets/imgs/placeholder.png'
     }
   }
 
@@ -109,15 +108,13 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
     this.camera.getPicture(options).then((imageData) => {
       if (imageSide == 'front') {
-        this.userAllKYCData['aatharFront'] = imageData;
-      } else if (imageSide == 'back') {
-        this.userAllKYCData['aatharBack'] = imageData;
+        this.userAllKYCData['aadharPhotoCopy'] = imageData;
       } else if (imageSide == 'passbook') {
-        this.userAllKYCData['bankPassbook'] = imageData;
+        this.userAllKYCData['prePrintedStatement'] = imageData;
       } else if (imageSide == 'sign') {
         this.userAllKYCData['employeeSignature'] = imageData;
       } else if (imageSide == 'profile') {
-        this.userAllKYCData['employeeProfile'] = imageData;
+        this.userAllKYCData['profilePicture'] = imageData;
       }
 
       this.sendValidationMessage();
@@ -168,14 +165,12 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   // }
   sendValidationMessage() {
     if ((this.formStatusValues['status']) &&
-      (this.userAllKYCData['aatharFront'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['aatharBack'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['bankPassbook'] !== 'assets/imgs/placeholder.png') &&
+      (this.userAllKYCData['aadharPhotoCopy'] !== 'assets/imgs/placeholder.png') &&
       (this.userAllKYCData['employeeSignature'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['employeeProfile'] !== 'assets/imgs/placeholder.png')) {
+      (this.userAllKYCData['profilePicture'] !== 'assets/imgs/placeholder.png') &&
+      (this.userAllKYCData['prePrintedStatement'] !== 'assets/imgs/placeholder.png')) {
 
-
-      this.formStatusValues['data']['allKYCData'] = this.userAllKYCData
+      this.formStatusValues['data'] = this.userAllKYCData
       this.messageService.formDataMessage(this.formStatusValues);
 
     } else {
@@ -187,11 +182,15 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       if (localStoragedData['actionRequired'].length && localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('kycDetails')) {
         console.log('datta ===');
         console.log(localStoragedData);
-        this.userAllKYCData = localStoragedData['actionRequired'][this.storedIndex]['allKYCData'];
+        this.userAllKYCData['aadharPhotoCopy'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopy'];
+        this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['employeeSignature'];
+        this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['profilePicture'];
+        this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['prePrintedStatement'];
 
         for (let list in localStoragedData['actionRequired'][this.storedIndex]['kycDetails']) {
           this.onboardingKYCForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails'][list]);
         }
+        this.sendValidationMessage();
       }
     });
   }

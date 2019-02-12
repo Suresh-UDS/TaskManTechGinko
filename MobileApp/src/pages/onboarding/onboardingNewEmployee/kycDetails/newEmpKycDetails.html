@@ -5,7 +5,7 @@
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <label class="control-label trequired">Aadhar card no</label>
-                        <input class="form-control" type="text" name="AadharCardNo" [(ngModel)]="kycFormData.aatharCardNo"
+                        <input class="form-control" type="text" name="aadharNumber" [(ngModel)]="kycFormData.aadharNumber"
                             required>
                     </div>
                     <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
@@ -32,15 +32,15 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
                         <label class="trequired">Aathar Front View</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.aatharFront" (click)="getImageData('front')" class="mdImage" />
+                            <img [src]="userAllKYCData.aadharPhotoCopy" (click)="getImageData('front')" class="mdImage" />
                         </ion-avatar>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
+                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
                         <label class="trequired">Aathar Back View</label>
                         <ion-avatar item-start class="inlineElement">
                             <img [src]="userAllKYCData.aatharBack" (click)="getImageData('back')" class="mdImage" />
                         </ion-avatar>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="row form-group">
@@ -64,7 +64,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.bankPassbook" (click)="getImageData('passbook')" class="passbookImage" />
+                            <img [src]="userAllKYCData.prePrintedStatement" (click)="getImageData('passbook')" class="passbookImage" />
                         </ion-avatar>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <label class="trequired">Profile Picture</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.employeeProfile" (click)="getImageData('profile')" class="mdImage" />
+                            <img [src]="userAllKYCData.profilePicture" (click)="getImageData('profile')" class="mdImage" />
                         </ion-avatar>
                     </div>
 
