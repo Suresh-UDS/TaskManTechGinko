@@ -1074,9 +1074,11 @@ public class SchedulerHelperService extends AbstractService {
                                         if (user.getUserRole().equals(env.getProperty("roles.exclude.role1")))
                                         {
                                             iterator.remove();
-                                        } else if (user.getUserRole().equals(env.getProperty("roles.exclude.role2"))) {
+                                        }
+                                        if (user.getUserRole().equals(env.getProperty("roles.exclude.role2"))) {
                                             iterator.remove();
-                                        } else if (user.getUserRole().equals(env.getProperty("roles.exclude.role3"))) {
+                                        }
+                                        if (user.getUserRole().equals(env.getProperty("roles.exclude.role3"))) {
                                             iterator.remove();
                                         }
                                     }
@@ -1784,7 +1786,7 @@ public class SchedulerHelperService extends AbstractService {
 						}
 
 						//generate attendance report if enabled
-						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
+						if (env.getProperty("scheduler.dayWiseAttendanceReport.enabled").equalsIgnoreCase("true")) {
 							Map<String, Long> empAttnCountMap = extractAttendanceDataForReport(date, proj, site, cal, dayEndcal, siteAttnList, shiftWiseSummary,
 																	siteShiftConsolidatedData, siteWiseConsolidatedMap, consolidatedData, empAttnList, content, false);
 							if(MapUtils.isNotEmpty(empAttnCountMap)) {

@@ -1201,7 +1201,7 @@ public class ExportUtil {
 				}else {
 					dataRow.getCell(dayStartCell).setCellValue("A");
 				}
-				if(week.equalsIgnoreCase("SUN")) {
+				if(week.equalsIgnoreCase("SUN") && !attnMap.containsKey(day)) {
 					offCounts += 1;
 					dataRow.getCell(dayStartCell).setCellValue("O");
 					if(shiftCountMap.containsKey(key.getEmployeeId())) {

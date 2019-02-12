@@ -605,10 +605,14 @@ public class SchedulerService extends AbstractService {
 	public void attendanceMusterrollReportSchedule() {
 		log.info("Attendance muster roll report scheduler invoked");
 		Calendar startCal = Calendar.getInstance();
+		startCal.add(Calendar.MONTH, -1);
 		startCal.set(Calendar.DAY_OF_MONTH, 1);
 		startCal.set(Calendar.HOUR_OF_DAY,0);
 		startCal.set(Calendar.MINUTE,0);
+        startCal.set(Calendar.DAY_OF_MONTH, startCal.getActualMinimum(Calendar.DAY_OF_MONTH));
 		Calendar endCal = Calendar.getInstance();
+		endCal.add(Calendar.MONTH, -1);
+        endCal.set(Calendar.DAY_OF_MONTH, 1);
 		endCal.set(Calendar.HOUR_OF_DAY,23);
 		endCal.set(Calendar.MINUTE,59);
 		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
