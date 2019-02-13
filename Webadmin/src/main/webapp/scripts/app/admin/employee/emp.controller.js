@@ -1875,6 +1875,13 @@ angular.module('timeSheetApp')
 		/* Root scope (search criteria) */
 		$rootScope.searchFilterCriteria.isDashboard = false;
 
+        if($scope.showInActive){
+           $scope.searchCriteria.showInActive = true;
+           $scope.searchCriteria.left = true;
+        }else{
+           $scope.searchCriteria.showInActive = false;
+           $scope.searchCriteria.left = false;
+        }
 
 		if( !$scope.searchProject && !$scope.searchSite
 				&& !$scope.searchEmployeeId && !$scope.searchEmployeeName) {

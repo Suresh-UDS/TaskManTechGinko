@@ -1387,6 +1387,12 @@ angular.module('timeSheetApp')
 				   $scope.searchCriteria.showJobSchedules = false;
 				}
 
+				if($scope.showInActive){
+                   $scope.searchCriteria.showInActive = true;
+                }else{
+                   $scope.searchCriteria.showInActive = false;
+                }
+
 				/* Root scope (search criteria) */
 				$rootScope.searchFilterCriteria.isDashboard = false;
 
