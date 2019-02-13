@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { onboardingNewEmployee } from '../onboardingNewEmployee/onboardingNewEmployee';
 import { Storage } from '@ionic/storage';
+import { onBoardingModel } from '../onboardingList/onboarding';
 
 @Component({
   selector: 'page-onboarding-status',
@@ -39,45 +40,67 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
 
       console.log(currentIndex);
 
+      let objectPercentage = 0;
+      let keyPercentage = 0;
+      let objectkeys = [];
+      let objectValues = [];
+      let objectFormattedValues = [];
+
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         //obj[this.wizardObj[this.currentIndex]['key']] = data['data'];
         console.log(localStoragedData);
         console.log(localStoragedData['actionRequired']);
-        this.employeeName = localStoragedData['actionRequired'][currentIndex]['personalDetails']['employeeName'];
-        this.employeeCode = localStoragedData['actionRequired'][currentIndex]['personalDetails']['employeeCode'];
-        for (let list in localStoragedData['actionRequired'][currentIndex]) {
-          objDataKeys.push(list);
-          // alert(list);
-        }
+        this.employeeName = localStoragedData['actionRequired'][currentIndex]['employeeName'];
+        this.employeeCode = localStoragedData['actionRequired'][currentIndex]['employeeCode'];
+        // for (let list in localStoragedData['actionRequired'][currentIndex]) {
+        //   objDataKeys.push(list);
+        //   // alert(list);
+        // }
         for (let i = 0; i < data.length; i++) {
-          if (this.onboardingFormStatus[i]['key'] == objDataKeys[i]) {
 
-            let keyPercentage = 0
-            let objectFormattedValues = [];
-            const objectkeys = Object.keys(localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
-            const objectValues = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
-            objectFormattedValues = objectValues.filter((data) => {
-              if (data) {
-                return data;
-              }
-            });
-            keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100;
-            this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
-            if (keyPercentage == 100) {
-              this.onboardingFormStatus[i]['icon'] = 'checkmark';
-              data[i].querySelector('.ionic-step-header-icon').classList.remove('error');
-              data[i].querySelector('.ionic-step-header-icon').classList.add('success');
-            } else {
-              this.onboardingFormStatus[i]['icon'] = 'time';
-              data[i].querySelector('.ionic-step-header-icon').classList.remove('success');
-              data[i].querySelector('.ionic-step-header-icon').classList.add('error');
+          let keyData = this.onboardingFormStatus[i]['key'];
+          for (let key in onBoardingModel[keyData]) {
+            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][key];
+          }
+
+          objectkeys = Object.keys(onBoardingModel[keyData]);
+          objectValues = Object['values'](onBoardingModel[keyData]);
+          objectFormattedValues = objectValues.filter((data) => {
+            if (data && JSON.stringify(data) !== '{}') {
+              return data;
             }
+          });
+
+    
+          keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100
+    
+          this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
+          // let keyPercentage = 0
+          // let objectFormattedValues = [];
+          // const objectkeys = Object.keys(localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
+          // const objectValues = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
+          // objectFormattedValues = objectValues.filter((data) => {
+          //   if (data) {
+          //     return data;
+          //   }
+          // });
+          // keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100;
+          // this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
+          if (keyPercentage == 100) {
+            this.onboardingFormStatus[i]['icon'] = 'checkmark';
+            data[i].querySelector('.ionic-step-header-icon').classList.remove('error');
+            data[i].querySelector('.ionic-step-header-icon').classList.add('success');
           } else {
             this.onboardingFormStatus[i]['icon'] = 'time';
-            this.onboardingFormStatus[i]['status'] = '0%';
             data[i].querySelector('.ionic-step-header-icon').classList.remove('success');
             data[i].querySelector('.ionic-step-header-icon').classList.add('error');
           }
+          // } else {
+          //   this.onboardingFormStatus[i]['icon'] = 'time';
+          //   this.onboardingFormStatus[i]['status'] = '0%';
+          //   data[i].querySelector('.ionic-step-header-icon').classList.remove('success');
+          //   data[i].querySelector('.ionic-step-header-icon').classList.add('error');
+          // }
           // alert(JSON.stringify(currentScope.onboardingFormStatus));
           // if (i == 0) {
           //   data[i].querySelector('.ionic-step-header-icon').classList.add('success');

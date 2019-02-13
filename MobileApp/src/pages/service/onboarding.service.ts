@@ -15,7 +15,7 @@ export class OnboardingService {
     }
 
     getAllOnboardingUser(): Observable<any> {
-        return this.http.get('../../assets/data/list.json').map(
+        return this.http.get('assets/data/list.json').map(
             response => {
                 return JSON.parse(response['_body']);
             }).catch(error => {

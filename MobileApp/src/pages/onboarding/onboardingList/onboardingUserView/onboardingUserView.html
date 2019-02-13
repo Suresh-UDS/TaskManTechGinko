@@ -9,8 +9,8 @@
     <ion-card class="profileCard">
         <ion-card-content>
             <ion-avatar item-start class="profileContainer">
-                <img [src]="userData['kycDetails']['allKYCData']['employeeProfile']" class="userProfile" />
-                <h1>{{userData['personalDetails']['employeeName']}}</h1>
+                <img [src]="userData['profilePicture']" class="userProfile" />
+                <h1>{{userData['employeeName']}}</h1>
             </ion-avatar>
 
         </ion-card-content>
@@ -23,23 +23,23 @@
                 </ion-list-header>
                 <ion-item>
                     <p item-start class="text-left">Gender</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['gender']}}</p>
+                    <p item-end class="text-right">{{userData['gender']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Marital Status</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['maritalStatus']}}</p>
+                    <p item-end class="text-right">{{userData['maritalStatus']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Date Of Birth</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['dateOfBirth']}}</p>
+                    <p item-end class="text-right">{{userData['dateOfBirth']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Date Of Joining</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['dateOfJoining']}}</p>
+                    <p item-end class="text-right">{{userData['dateOfJoining']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Blood Group</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['bloodGroup']}}</p>
+                    <p item-end class="text-right">{{userData['bloodGroup']}}</p>
                 </ion-item>
 
 
@@ -48,19 +48,19 @@
                 </ion-list-header>
                 <ion-item>
                     <p item-start class="text-left">Mobile Number</p>
-                    <p item-end class="text-right">+91 <span>{{userData['contactDetails']['contactNumber']}}</span></p>
+                    <p item-end class="text-right">+91 <span>{{userData['contactNumber']}}</span></p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Address</p>
-                    <p item-end class="text-right">{{userData['contactDetails']['communicationAddress']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">City</p>
-                    <p item-end class="text-right">{{userData['contactDetails']['communicationCity']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">State</p>
-                    <p item-end class="text-right">{{userData['contactDetails']['communicationState']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress']}}</p>
                 </ion-item>
 
                 <ion-list-header>
@@ -68,19 +68,19 @@
                 </ion-list-header>
                 <ion-item>
                     <p item-start class="text-left">Father Name</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['fatherName']}}</p>
+                    <p item-end class="text-right">{{userData['fatherName']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Mother Name</p>
-                    <p item-end class="text-right">{{userData['personalDetails']['motherName']}}</p>
+                    <p item-end class="text-right">{{userData['motherName']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Designation</p>
-                    <p item-end class="text-right">{{userData['employmentDetails']['employeeDesignation']}}</p>
+                    <p item-end class="text-right">{{userData['designation']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Area Of Work</p>
-                    <p item-end class="text-right">{{userData['employmentDetails']['employeeAreaOfWork']}}</p>
+                    <p item-end class="text-right">{{userData['employeeAreaOfWork']}}</p>
                 </ion-item>
                 <!-- <ion-item>
                     <ion-avatar item-start>

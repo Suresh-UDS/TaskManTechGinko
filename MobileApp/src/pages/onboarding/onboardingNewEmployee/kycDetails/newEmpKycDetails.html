@@ -1,12 +1,11 @@
 <div padding>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <form #onboardingKYCForm="ngForm" novalidate>
+            <form [formGroup]="onboardingKYCForm" novalidate>
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <label class="control-label trequired">Aadhar card no</label>
-                        <input class="form-control" type="text" name="aadharNumber" [(ngModel)]="kycFormData.aadharNumber"
-                            required>
+                        <input class="form-control" type="text" formControlName="aadharNumber" required>
                     </div>
                     <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">Name as on aadhar</label>
@@ -51,15 +50,18 @@
                         </div>
                         <span class="spanText">Has Bank Details</span>
                     </div> -->
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">Account Number</label>
-                        <input class="form-control" type="text" name="bAccountNumber" [(ngModel)]="kycFormData.bAccountNumber"
-                            required>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">IFSC Number</label>
-                        <input class="form-control" type="text" name="bIfscNumber" [(ngModel)]="kycFormData.bIfscNumber"
-                            required>
+                    <div *ngFor="let list of onboardingKYCForm.get('bankDetails').controls; let i = index;"
+                        formArrayName="bankDetails">
+                        <div [formGroupName]="i">
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label trequired">Account Number</label>
+                                <input class="form-control" type="text" formControlName="accountNo">
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label trequired">IFSC Number</label>
+                                <input class="form-control" type="text" formControlName="IFSC">
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>

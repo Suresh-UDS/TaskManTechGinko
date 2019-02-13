@@ -23,13 +23,16 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">Father Name</label>
-                        <input class="form-control" type="text" formControlName="fatherName">
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">Mother Name</label>
-                        <input class="form-control" type="text" formControlName="motherName">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0" *ngFor="let list of onboardingPersonalDetailsForm.get('relationshipDetails').controls; let i = index;"
+                        formArrayName="relationshipDetails">
+                        <div [formGroupName]="i">
+                            <label class="control-label trequired">{{list['value']['relationship']}} Name</label>
+                            <input class="form-control" type="text" formControlName="name">
+                            <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                            <label class="control-label trequired">Mother Name</label>
+                            <input class="form-control" type="text" formControlName="motherName">
+                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -97,14 +100,14 @@
                         <ion-item>
                             <ion-label class="label-text" stacked>Blood Group</ion-label>
                             <ion-select interface="popover" formControlName="bloodGroup">
-                                <ion-option value="a+">A+</ion-option>
-                                <ion-option value="b+">B+</ion-option>
-                                <ion-option value="a-">A-</ion-option>
-                                <ion-option value="b-">B-</ion-option>
-                                <ion-option value="ab+">AB+</ion-option>
-                                <ion-option value="ab-">AB-</ion-option>
-                                <ion-option value="o+">o+</ion-option>
-                                <ion-option value="o-">o-</ion-option>
+                                <ion-option value="a Positive">A+</ion-option>
+                                <ion-option value="b Positive">B+</ion-option>
+                                <ion-option value="a Negative">A-</ion-option>
+                                <ion-option value="b Negative">B-</ion-option>
+                                <ion-option value="ab Positive">AB+</ion-option>
+                                <ion-option value="ab Negative">AB-</ion-option>
+                                <ion-option value="o Positive">o+</ion-option>
+                                <ion-option value="o Negative">o-</ion-option>
                             </ion-select>
                         </ion-item>
                     </div>

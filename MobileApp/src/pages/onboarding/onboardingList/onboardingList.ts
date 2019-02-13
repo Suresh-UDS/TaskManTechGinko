@@ -44,36 +44,36 @@ export class onboardingExistEmployee implements OnInit {
         let objectsValues;
         for (var i = 0; i < res.length; i++) {
           if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-            for (let list in onBoardingModel) {
-              for (let key in onBoardingModel[list]) {
-                onBoardingModel[list][key] = res[i][key];
-                if (list == 'employmentDetails') {
-                  if (res[i]['previousEmployee'].length) {
-                    onBoardingModel[list]['isEmploymentEarlier'] = res[i]['previousEmployee'][0]['name'] ? true : false;
-                    onBoardingModel[list]['employeeName'] = res[i]['previousEmployee'][0]['name'];
-                    onBoardingModel[list]['employeeDesignation'] = res[i]['previousEmployee'][0]['designation'];
-                  }
-                }
-                if (list == 'kycDetails') {
-                  //onBoardingModel['personalDetails']['image'] = res[i]['kycDetails'][0]['accountNo'];
-                  if (res[i]['bankDetails'].length) {
-                    onBoardingModel[list]['bAccountNumber'] = res[i]['bankDetails'][0]['accountNo'];
-                    onBoardingModel[list]['bIfscNumber'] = res[i]['bankDetails'][0]['IFSC'];
-                  }
-                }
-              }
-              console.log(onBoardingModel);
-              //objectsKeys = Object['values'](onBoardingModel[list]);
-              //onBoardingModel[list]['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
-            }
+            // for (let list in onBoardingModel) {
+            //   for (let key in onBoardingModel[list]) {
+            //     onBoardingModel[list][key] = res[i][key];
+            //     if (list == 'employmentDetails') {
+            //       if (res[i]['previousEmployee'].length) {
+            //         onBoardingModel[list]['isEmploymentEarlier'] = res[i]['previousEmployee'][0]['name'] ? true : false;
+            //         onBoardingModel[list]['employeeName'] = res[i]['previousEmployee'][0]['name'];
+            //         onBoardingModel[list]['employeeDesignation'] = res[i]['previousEmployee'][0]['designation'];
+            //       }
+            //     }
+            //     if (list == 'kycDetails') {
+            //       //onBoardingModel['personalDetails']['image'] = res[i]['kycDetails'][0]['accountNo'];
+            //       if (res[i]['bankDetails'].length) {
+            //         onBoardingModel[list]['bAccountNumber'] = res[i]['bankDetails'][0]['accountNo'];
+            //         onBoardingModel[list]['bIfscNumber'] = res[i]['bankDetails'][0]['IFSC'];
+            //       }
+            //     }
+            //   }
+            //   console.log(onBoardingModel);
+            //   //objectsKeys = Object['values'](onBoardingModel[list]);
+            //   //onBoardingModel[list]['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
+            // }
             //objectsKeys = Object['entries'](onBoardingModel[list]);
-            console.log('entries ==== ');
-            console.log(objectsKeys);
-            localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = onBoardingModel;
+            //console.log('entries ==== ');
+            //console.log(objectsKeys);
+            localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
             this.storage.set('OnBoardingData', localStoragedData);
           }
         }
-        console.log(onBoardingModel);
+        //console.log(onBoardingModel);
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
         this.onSegmentChange();
@@ -82,7 +82,8 @@ export class onboardingExistEmployee implements OnInit {
     });
   }
   addNewEmpyoee() {
-    this.storage.set('onboardingCurrentIndex', this.actionRequiredEmp.length)
+    this.storage.set('onboardingCurrentIndex', this.actionRequiredEmp.length);
+    console.log("index === " + this.actionRequiredEmp.length);
     this.navCtrl.push(onboardingNewEmployee);
   }
   updateEmployeeDetails(index) {
@@ -110,27 +111,36 @@ export class onboardingExistEmployee implements OnInit {
   getPercentage() {
     for (var i = 0; i < this.actionRequiredEmp.length; i++) {
       let objectPercentage = 0;
-      for (let list in this.actionRequiredEmp[i]) {
+      let keyPercentage = 0;
+      let objectkeys = [];
+      let objectValues = [];
+      let objectFormattedValues = [];
+      for (let list in onBoardingModel) {
+        for (let key in onBoardingModel[list]) {
+          onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
+        }
 
-        let keyPercentage = 0
-        let objectFormattedValues = [];
-        const objectkeys = Object.keys(this.actionRequiredEmp[i][list]);
-        const objectValues = Object['values'](this.actionRequiredEmp[i][list]);
+        
+        objectkeys = Object.keys(onBoardingModel[list]);
+        objectValues = Object['values'](onBoardingModel[list]);
         objectFormattedValues = objectValues.filter((data) => {
-          if (data) {
+          if (data && JSON.stringify(data) !== '{}') {
             return data;
           }
         });
         keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100
         objectPercentage += keyPercentage;
+
       }
-      this.actionRequiredEmp[i]['personalDetails']['percentage'] = Math.floor(objectPercentage / 5);
+      this.actionRequiredEmp[i]['percentage'] = Math.floor(objectPercentage / 5);
+
+      console.log(Math.floor(objectPercentage / 5));
     }
   }
   findSavedDuplication(array, key) {
     let count = 0;
     for (let list of array) {
-      if (list['personalDetails']['employeeCode'] == key) {
+      if (list['employeeCode'] == key) {
         count = count + 1;
       }
     }

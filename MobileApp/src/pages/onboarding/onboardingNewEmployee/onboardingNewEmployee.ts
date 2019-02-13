@@ -4,7 +4,7 @@ import { AlertController, NavParams, NavController } from 'ionic-angular';
 import { onboardingExistEmployee } from '../onboardingList/onboardingList';
 import { newEmpPersonalDetail } from './personalDetails/newEmpPersonalDetails';
 import { newEmpKycDetails } from './kycDetails/newEmpKycDetails';
-import { newEmpFamilyAndAcademic } from './family&Academic/newEmpFamily&Academic';
+import { newEmpFamilyAndAcademic } from './familyAcademic/newEmpFamilyAcademic';
 import { newEmpEmployeementDetails } from './employeementDetails/newEmpEmployeementDetails';
 import { newEmpContactDetails } from './contactDetails/newEmpContactDetails';
 import { onBoardingDataService } from './onboarding.messageData.service';
@@ -143,17 +143,21 @@ export class onboardingNewEmployee {
     });
   }
   storeFormData(data) {
-    let storeKeyName = this.wizardObj[this.currentIndex]['key'];
+    //let storeKeyName = this.wizardObj[this.currentIndex]['key'];
     // alert(storeKeyName);
     console.log(data);
-    let obj: any = {};
+    //let obj: any = {};
     console.log('store fn start');
 
     let promise = new Promise((resolve, reject) => {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
-        obj = localStoragedData['actionRequired'][this.storedIndex] || {};
-        obj[storeKeyName] = data
-        localStoragedData['actionRequired'][this.storedIndex] = obj;
+        localStoragedData['actionRequired'][this.storedIndex] = localStoragedData['actionRequired'][this.storedIndex] || {};
+        //obj[storeKeyName] = data
+        // for(let key in data) {
+        //   localStoragedData['actionRequired'][this.storedIndex][key] = data[key];
+        // }
+        Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+        console.log(localStoragedData);
         //localStoragedData['completed'] = [];
         this.storage.set('OnBoardingData', localStoragedData);
 
@@ -162,7 +166,7 @@ export class onboardingNewEmployee {
         }
 
         console.log('store data');
-        // alert(JSON.stringify(localStoragedData));
+        console.log(JSON.stringify(localStoragedData));
         resolve('success');
       });
     });

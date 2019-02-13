@@ -18,39 +18,39 @@ export class newEmpContactDetails implements OnInit {
   mobnumPattern = "^((\\+91-?)|0)?[0-9]{10}$";
   PhoneNumberErrorMessage;
   totalStates = [
-    { name: 'Assam' },
-    { name: 'Andhra Pradesh' },
-    { name: 'Odisha' },
-    { name: 'Punjab' },
-    { name: 'Delhi' },
-    { name: 'Gujarat' },
-    { name: 'Karnataka' },
-    { name: 'Haryana' },
-    { name: 'Rajasthan' },
-    { name: 'Himachal Pradesh' },
-    { name: 'Jharkand' },
-    { name: 'Chhattisgarh' },
-    { name: 'Kerala' },
-    { name: 'Tamil Nadu' },
-    { name: 'Madhya Pradesh' },
-    { name: 'Bihar' },
-    { name: 'Maharashtra' },
-    { name: 'Chandigarh' },
-    { name: 'Telangana' },
-    { name: 'Jammu and Kashmir' },
-    { name: 'Tripura' },
-    { name: 'Meghalaya' },
-    { name: 'Goa' },
-    { name: 'Arunachal Pradesh' },
-    { name: 'Manipur' },
-    { name: 'Mizoram' },
-    { name: 'Sikkim' },
-    { name: 'Puduchery' },
-    { name: 'Nagaland' },
-    { name: 'Andaman and Nicobhar' },
-    { name: 'Dadra and Nagar Haveli' },
-    { name: 'Daman and Diu' },
-    { name: 'Lakshadweep' }
+    { name: 'Assam', key: 'assam' },
+    { name: 'Andhra Pradesh', key: 'andhrapradesh' },
+    { name: 'Odisha', key: 'odisha' },
+    { name: 'Punjab', key: 'punjab' },
+    { name: 'Delhi', key: 'delhi' },
+    { name: 'Gujarat', key: 'gujarat' },
+    { name: 'Karnataka', key: 'karnataka' },
+    { name: 'Haryana', key: 'haryana' },
+    { name: 'Rajasthan', key: 'rajasthan' },
+    { name: 'Himachal Pradesh', key: 'himachalpradesh' },
+    { name: 'Jharkand', key: 'jharkand' },
+    { name: 'Chhattisgarh', key: 'chhattisgarh' },
+    { name: 'Kerala', key: 'kerala' },
+    { name: 'Tamil Nadu', key: 'tamilnadu' },
+    { name: 'Madhya Pradesh', key: 'madhyapradesh' },
+    { name: 'Bihar', key: 'bihar' },
+    { name: 'Maharashtra', key: 'maharashtra' },
+    { name: 'Chandigarh', key: 'chandigarh' },
+    { name: 'Telangana', key: 'telangana' },
+    { name: 'Jammu and Kashmir', key: 'jammu and kashmir' },
+    { name: 'Tripura', key: 'tripura' },
+    { name: 'Meghalaya', key: 'meghalaya' },
+    { name: 'Goa', key: 'goa' },
+    { name: 'Arunachal Pradesh', key: 'arunachalpradesh' },
+    { name: 'Manipur', key: 'manipur' },
+    { name: 'Mizoram', key: 'mizoram' },
+    { name: 'Sikkim', key: 'sikkim' },
+    { name: 'Puduchery', key: 'puduchery' },
+    { name: 'Nagaland', key: 'nagaland' },
+    { name: 'Andaman and Nicobhar', key: 'andaman and nicobhar' },
+    { name: 'Dadra and Nagar Haveli', key: 'dasra and nagarhaveli' },
+    { name: 'Daman and Diu', key: 'daman and diu' },
+    { name: 'Lakshadweep', key: 'lakshadweep' }
   ]
   constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
   ngOnInit() {
@@ -61,16 +61,8 @@ export class newEmpContactDetails implements OnInit {
     this.onboardingContactDetailsForm = this.fb.group({
       contactNumber: ['', [Validators.required]],
       emergencyConatctNo: ['', [Validators.required]],
-      communicationAddress: this.fb.group({
-        address: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-      }),
-      permanentAddress: this.fb.group({
-        address: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-      })
+      communicationAddress: this.fb.array([this.addCommunicationAddress()]),
+      permanentAddress: this.fb.array([this.addPermanentAddress()])
     });
     this.onboardingContactDetailsForm.setValidators([this.validateNumberMinLength(), this.validateAreNotEqual()]);
     //this.onboardingContactDetailsForm.setValidators(this.validateAreNotEqual());
@@ -106,7 +98,8 @@ export class newEmpContactDetails implements OnInit {
       //   }
       //   this.sendValidationMessage();
       // }
-      console.log('contact form = ' + status);
+      //console.log('contact form = ' + status);
+      console.log(this.onboardingContactDetailsForm.value);
       if (status == 'VALID') {
         this.formStatusValues = {
           status: true,
@@ -147,6 +140,21 @@ export class newEmpContactDetails implements OnInit {
     };
   }
   get pFrom() { return this.onboardingContactDetailsForm.controls; }
+
+  addCommunicationAddress(): FormGroup {
+    return this.fb.group({
+      address: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+    });
+  }
+  addPermanentAddress(): FormGroup {
+    return this.fb.group({
+      address: [''],
+      city: [''],
+      state: [''],
+    });
+  }
   getProofmage() {
     const options: CameraOptions = {
       quality: 80,
@@ -181,6 +189,10 @@ export class newEmpContactDetails implements OnInit {
   sendValidationMessage() {
     if (this.formStatusValues['status'] && this.addressProof !== 'assets/imgs/placeholder.png') {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
+      this.formStatusValues['data']['emergencyConatctNo'] = [
+        this.formStatusValues['data']['emergencyConatctNo']
+      ];
+      delete this.formStatusValues['data']['emergencyConatctNo'];
       this.messageService.formDataMessage(this.formStatusValues);
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });
@@ -188,13 +200,18 @@ export class newEmpContactDetails implements OnInit {
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      console.log('contact details');
-      if (localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('contactDetails')) {
-        console.log('datta ===');
-        console.log(localStoragedData);
-        this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'];
-        for (let list in localStoragedData['actionRequired'][this.storedIndex]['contactDetails']) {
-          this.onboardingContactDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails'][list]);
+      if (localStoragedData['actionRequired'][this.storedIndex]) {
+
+        if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('contactNumber')) {
+
+          console.log(localStoragedData['actionRequired'][this.storedIndex]);
+
+          this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
+          this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+          this.onboardingContactDetailsForm.controls['emergencyConatctNo'].setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0]);
+          // for (let list in localStoragedData['actionRequired'][this.storedIndex]['contactDetails']) {
+          //   this.onboardingContactDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails'][list]);
+          // }
         }
       }
     });

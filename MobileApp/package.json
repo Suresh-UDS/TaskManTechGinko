@@ -91,7 +91,7 @@
     "ionic2-date-picker": "^1.1.0",
     "ionicons": "3.0.0",
     "ipaddr.js": "^1.8.1",
-    "moment": "^2.20.1",
+    "moment": "^2.24.0",
     "ngx-permissions": "^5.0.0",
     "onesignal-cordova-plugin": "^2.4.6",
     "postcss": "^7.0.2",

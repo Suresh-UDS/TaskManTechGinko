@@ -3,11 +3,12 @@ import { onBoardingDataService } from '../onboarding.messageData.service';
 import { FormArray, FormGroup, FormControl, Validators, FormBuilder, NgForm } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
+
 @Component({
   selector: 'page-familyAndAcademic-new',
-  templateUrl: 'newEmpFamily&Academic.html',
+  templateUrl: 'newEmpFamilyAcademic.html',
 })
-export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
+export class newEmpFamilyAndAcademic implements OnInit {
 
   onboardingFamilyAcademicForm: FormGroup;
   onboardingFamilyAcademicSubscription
@@ -19,26 +20,29 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.onboardingFamilyAcademicForm = this.fb.group({
-      educationQualification: this.fb.group({
-        Qualification: ['', [Validators.required]],
-        institute: ['', [Validators.required]]
-      }),
+      educationQualification: this.fb.array([this.setEducation()]),
       nomineeDetail: this.fb.array([])
     });
     this.storage.get('onboardingCurrentIndex').then(index => {
       this.storedIndex = index;
       this.storage.get('OnBoardingData').then(localStoragedData => {
-        if (localStoragedData['actionRequired'].length && localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('familyAcademicDetails')) {
-          let getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['totalNomiee'];
-          if (getEpfCount > 0) {
-            for (let i = 0; i < getEpfCount; i++) {
+        if (localStoragedData['actionRequired'][this.storedIndex]) {
+          if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')) {
+            let getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
+            if (getEpfCount > 0) {
+              for (let i = 0; i < getEpfCount; i++) {
+                this.addNominees();
+              }
+              this.updateFormData();
+
+            } else {
               this.addNominees();
             }
-            this.updateFormData();
+          } else {
+            this.addNominees();
           }
-        } else {
-          this.addNominees();
         }
+
       });
     })
     this.messageService.clearMessageSource.subscribe(data => {
@@ -49,13 +53,13 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
 
     this.onboardingFamilyAcademicSubscription = this.onboardingFamilyAcademicForm.statusChanges.subscribe(status => {
       console.log(status);
-      //console.log(this.onboardingFamilyAcademicForm.value)
+      console.log(this.onboardingFamilyAcademicForm.value)
       if (status == 'VALID') {
         let formStatusValues = {
           status: true,
           data: this.onboardingFamilyAcademicForm.value
         }
-        formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
+        //formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
         this.messageService.formDataMessage(formStatusValues);
       } else {
         let formStatusValues = {
@@ -69,6 +73,12 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
   get nomineeForms() {
     return this.onboardingFamilyAcademicForm.get('nomineeDetail') as FormArray
   }
+  setEducation(): FormGroup {
+    return this.fb.group({
+      Qualification: ['', [Validators.required]],
+      institute: ['', [Validators.required]]
+    });
+  }
   addNominees() {
     //alert('====');
     //alert(this.onboardingFamilyAcademicForm.value);
@@ -76,7 +86,7 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
       name: ['', [Validators.required]],
       relationship: ['', [Validators.required]],
       contactNumber: [''],
-      nominePercentage: ['', [Validators.required]]
+      nominePercentage: ['', [Validators.required, Validators.max(100)]]
     })
     this.nomineeForms.push(nominee);
     // let length = this.nomineeList.length + 1;
@@ -102,12 +112,13 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
   }
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      if (localStoragedData['actionRequired'].length && localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('familyAcademicDetails')) {
+      if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('educationQualification')) {
         console.log('datta ===');
         console.log(localStoragedData);
-        for (let list in localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']) {
-          this.onboardingFamilyAcademicForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'][list]);
-        }
+        this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+        // for (let list in localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']) {
+        //   this.onboardingFamilyAcademicForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'][list]);
+        // }
       }
     });
   }
@@ -125,9 +136,9 @@ export class newEmpFamilyAndAcademic implements OnInit, AfterViewInit {
   removeNominees(index) {
     this.nomineeForms.removeAt(index);
   }
-  ngAfterViewInit() {
+  // ngAfterViewInit() {
 
-  }
+  // }
   // setValidation(obj) {
   //   let formControls = {};
   //   formControls[obj['name']] = new FormControl('', [Validators.required]);

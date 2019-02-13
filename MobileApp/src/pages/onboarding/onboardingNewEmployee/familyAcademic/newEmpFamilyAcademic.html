@@ -2,8 +2,9 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <form [formGroup]="onboardingFamilyAcademicForm" novalidate>
-                <div formGroupName="educationQualification">
-                    <div class="row form-group padding0">
+                <div *ngFor="let list of onboardingFamilyAcademicForm.get('educationQualification').controls; let i = index;"
+                    formArrayName="educationQualification">
+                    <div class="row form-group padding0" [formGroupName]="i">
                         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                             <label class="control-label trequired">Highest Education Qualification</label>
                             <input class="form-control" type="text" formControlName="Qualification">
@@ -61,7 +62,7 @@
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                                 <label class="control-label trequired">Percentage</label>
-                                <input class="form-control" type="text" formControlName="nominePercentage">
+                                <input class="form-control" type="number" formControlName="nominePercentage">
                             </div>
                         </div>
                     </div>

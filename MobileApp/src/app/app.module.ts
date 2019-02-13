@@ -152,7 +152,7 @@ import { onboardingEmpStatus } from '../pages/onboarding/onboardingEmpStatus/onb
 import { newEmpOnboardingDetails } from '../pages/onboarding/onboardingNewEmployee/onboardingScreen/newEmpOnboarding';
 import { newEmpPersonalDetail } from '../pages/onboarding/onboardingNewEmployee/personalDetails/newEmpPersonalDetails';
 import { newEmpKycDetails } from '../pages/onboarding/onboardingNewEmployee/kycDetails/newEmpKycDetails';
-import { newEmpFamilyAndAcademic } from '../pages/onboarding/onboardingNewEmployee/family&Academic/newEmpFamily&Academic';
+import { newEmpFamilyAndAcademic } from '../pages/onboarding/onboardingNewEmployee/familyAcademic/newEmpFamilyAcademic';
 import { newEmpEmployeementDetails } from '../pages/onboarding/onboardingNewEmployee/employeementDetails/newEmpEmployeementDetails';
 import { newEmpContactDetails } from '../pages/onboarding/onboardingNewEmployee/contactDetails/newEmpContactDetails';
 import { onboardingLocation } from '../pages/onboarding/onboardingLocation/onboardingLocation';

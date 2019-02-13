@@ -5,6 +5,9 @@ page-personalDetails-new {
         overflow: visible !important;
         max-width: 96% !important;
     }
+    .form-group label.control-label {
+        text-transform: capitalize !important;
+    }
     .label-md {
         margin: 0;
         text-align: left;
@@ -27,6 +30,6 @@ page-personalDetails-new {
     }
     .form-group .form-control[disabled] {
         background-color: #b3b1b1 !important;
-        color: #b3b1b1 !important;
+        // color: #b3b1b1 !important;
     }
 }

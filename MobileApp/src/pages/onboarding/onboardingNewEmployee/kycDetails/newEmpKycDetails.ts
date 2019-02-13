@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { Camera, CameraOptions } from "@ionic-native/camera";
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 
@@ -10,12 +10,9 @@ import { Storage } from '@ionic/storage';
 })
 export class newEmpKycDetails implements OnInit, AfterViewInit {
 
-  kycFormData = {};
-  selectedKycData;
-  hasBankAccount;
   onboardingKycSubscription;
   formStatusValues
-  @ViewChild('onboardingKYCForm') onboardingKYCForm: NgForm;
+  onboardingKYCForm: FormGroup;
   userAllKYCData: any = {}
   storedIndex;
   // kycdata = [
@@ -24,9 +21,14 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
+  constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
+
+    this.onboardingKYCForm = this.fb.group({
+      aadharNumber: ['', [Validators.required]],
+      bankDetails: this.fb.array([this.createBankDetails()])
+    });
     this.initialKycImage();
     this.storage.get('onboardingCurrentIndex').then(index => {
       this.storedIndex = index;
@@ -56,6 +58,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       this.sendValidationMessage();
     });
   }
+
 
   initialKycImage() {
     this.userAllKYCData = {
@@ -120,6 +123,12 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       this.sendValidationMessage();
     })
   }
+  createBankDetails(): FormGroup {
+    return this.fb.group({
+      accountNo: ['', [Validators.required]],
+      IFSC: ['', [Validators.required]]
+    });
+  }
   // getPassBook(value) {
   //   if (value) {
   //     this.bankFieldValidation = true;
@@ -179,17 +188,18 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      if (localStoragedData['actionRequired'].length && localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('kycDetails')) {
+      if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('aadharNumber')) {
         console.log('datta ===');
         console.log(localStoragedData);
-        this.userAllKYCData['aadharPhotoCopy'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopy'];
-        this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['employeeSignature'];
-        this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['profilePicture'];
-        this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['prePrintedStatement'];
+        this.userAllKYCData['aadharPhotoCopy'] = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopy'];
+        this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];
+        this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['profilePicture'];
+        this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['prePrintedStatement'];
 
-        for (let list in localStoragedData['actionRequired'][this.storedIndex]['kycDetails']) {
-          this.onboardingKYCForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails'][list]);
-        }
+        this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+        // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
+        //   this.onboardingKYCForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
+        // }
         this.sendValidationMessage();
       }
     });

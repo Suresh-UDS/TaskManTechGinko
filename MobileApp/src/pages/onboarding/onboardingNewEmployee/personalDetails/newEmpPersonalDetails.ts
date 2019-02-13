@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
+import { Alert } from 'ionic-angular';
 
 @Component({
   selector: 'page-personalDetails-new',
@@ -23,8 +25,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],
-      fatherName: ['', [Validators.required]],
-      motherName: ['', [Validators.required]],
+      // fatherName: ['', [Validators.required]],
+      // motherName: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
@@ -34,7 +36,19 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       bloodGroup: [''],
       // SpeciallyAbled: new FormControl('', [Validators.required]),
       identificationMark1: ['', [Validators.required]],
-      identificationMark2: ['']
+      identificationMark2: [''],
+      relationshipDetails: this.fb.array([
+        this.fb.group({
+          name: ['', [Validators.required]],
+          relationship: 'Father',
+          contactNumber: '',
+        }),
+        this.fb.group({
+          name: ['', [Validators.required]],
+          relationship: 'Mother',
+          contactNumber: '',
+        })
+      ])
     });
 
     this.onboardingPersonalDetailsForm.controls['dateOfBirth'].valueChanges.subscribe(value => {
@@ -70,12 +84,18 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       //   this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
       // }
 
-      console.log('status = ' + status);
+      console.log(this.onboardingPersonalDetailsForm.value);
       if (status == 'VALID') {
         let fromStatusValues = {
           status: true,
           data: this.onboardingPersonalDetailsForm.value
         }
+        fromStatusValues['data']['identificationMark'] = [
+          fromStatusValues['data']['identificationMark1'],
+          fromStatusValues['data']['identificationMark2']
+        ]
+        delete fromStatusValues['data']['identificationMark1'];
+        delete fromStatusValues['data']['identificationMark2'];
         this.messageService.formDataMessage(fromStatusValues);
       } else {
         let fromStatusValues = {
@@ -90,12 +110,14 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
 
 
+  
   setMinValidation(value) {
     if (value) {
-      var mindate = new Date(value);
-      var formattedMinDate = mindate.setDate(mindate.getDate() + 5110);
-      var formattedFinalDate = new Date(formattedMinDate);
-      var filteredDate = this.pipe.transform(formattedFinalDate, 'yyyy-MM-dd');
+      value = new Date(value);
+      var formattedMinDate = moment(value, "YYYY-MM-DD").add(5110, 'days');
+      // var formattedMinDate = value.setDate(value.getDate() + 5110);
+      // var formattedFinalDate = new Date(formattedMinDate);
+      var filteredDate = this.pipe.transform(formattedMinDate, 'yyyy-MM-dd');
       console.log('filter date = ' + filteredDate);
       this.setMinDate = filteredDate;
     }
@@ -107,11 +129,25 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex]) {
-        console.log(localStoragedData);
-        for (let list in localStoragedData['actionRequired'][this.storedIndex]['personalDetails']) {
-          this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails'][list]);
+
+        if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('employeeName')) {
+
+          console.log(localStoragedData['actionRequired'][this.storedIndex]);
+
+          this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+          // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
+          //   this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
+          // }
+          var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']).format('YYYY-MM-DD');
+          var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining']).format('YYYY-MM-DD');
+          
+          this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(formatDateOfBirthDate);
+          this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formatDateOfJoiningDate);
+
+          this.onboardingPersonalDetailsForm.controls['identificationMark1'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0]);
+          this.onboardingPersonalDetailsForm.controls['identificationMark2'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);
+          this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']);
         }
-        this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
       }
     });
   }

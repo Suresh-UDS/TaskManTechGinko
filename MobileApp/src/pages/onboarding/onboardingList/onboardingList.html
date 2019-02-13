@@ -48,23 +48,23 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['personalDetails']['image']" class="mdImage" />
+                                <img [src]="list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
                             <ion-list>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
-                                    <h2 class="textColor">{{list['personalDetails']['employeeName']}}</h2>
+                                    <h2 class="textColor">{{list['employeeName']}}</h2>
                                 </ion-item>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['personalDetails']['employeeCode']}}
+                                    {{list['employeeCode']}}
                                 </ion-item>
                                 <ion-item class="progressContent">
                                     <div class="progress-outer">
                                         <div class="progress-inner">
-                                            {{list['personalDetails']['percentage']}}% 
+                                            {{list['percentage']}}%
                                         </div>
                                     </div> <span class="progressText">Completed</span>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
@@ -115,22 +115,22 @@
 
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['kycDetails']['allKYCData']['employeeProfile']" class="mdImage" />
+                                <img [src]="list['profilePicture']" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
                             <ion-list>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
-                                    <h2 class="textColor">{{list['personalDetails']['employeeName']}}</h2>
+                                    <h2 class="textColor">{{list['employeeName']}}</h2>
                                 </ion-item>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['personalDetails']['employeeCode']}}
+                                    {{list['employeeCode']}}
                                 </ion-item>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['personalDetails']['gender']}}
+                                    {{list['gender']}}
                                 </ion-item>
                                 <ion-item>
                                     <button ion-button icon-start>

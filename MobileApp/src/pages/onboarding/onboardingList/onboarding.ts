@@ -4,16 +4,14 @@
     personalDetails: {
         employeeCode:  '',
         employeeName: '',
-        fatherName: '',
-        motherName: '',
+        relationshipDetails: '',
         gender: '',
         maritalStatus: '',
         dateOfBirth: '',
         dateOfJoining: '',
         religion: '',
         bloodGroup: '',
-        identificationMark1: '',
-        identificationMark2: ''
+        identificationMark: ''
     },
     contactDetails: {
         contactNumber: '',
@@ -27,18 +25,11 @@
         nomineeDetail: '',
     },
     employmentDetails: {
-        isEmploymentEarlier: false,
-        employeeName: '',
-        fromEmployed: '',
-        toEmployed: '',
-        employeeDesignation: '',
-        employeeAddress: '',
-        employeeAreaOfWork: '',
+        previousEmployee : '',
     },
     kycDetails: {
         aadharNumber: '',
-        bAccountNumber: '',
-        bIfscNumber: '',
+        bankDetails: '',
         aadharPhotoCopy: 'assets/imgs/placeholder.png',
         employeeSignature: 'assets/imgs/placeholder.png',
         profilePicture: 'assets/imgs/placeholder.png',
