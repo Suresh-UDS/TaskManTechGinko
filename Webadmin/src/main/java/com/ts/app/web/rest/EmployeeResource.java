@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.Ticket;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -516,6 +517,20 @@ public class EmployeeResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/employee/unAssignReliever", method = RequestMethod.POST)
+    public ResponseEntity<?> unAssignReliever(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside unassign Reliever" + reliever.getEmployeeId() );
+
+        try{
+            employeeService.unAssignReliever(reliever);
+        }catch (Exception e){
+            throw new TimesheetException(e);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/employee/assignJobsAndTransfer", method = RequestMethod.POST)
     public ResponseEntity<?> transferEmployee(@RequestBody RelieverDTO reliever) {
 
@@ -555,6 +570,23 @@ public class EmployeeResource {
         log.info("Inside mark left Reliever" + reliever.getEmployeeId() + " , "+reliever.getEmployeeEmpId());
 
         EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        selectedEmployee.setLeft(true);
+        try {
+            employeeService.updateEmployee(selectedEmployee,false);
+            jobService.deleteJobsForEmployee(selectedEmployee,reliever.getRelievedFromDate());
+        }catch(Exception e) {
+            throw new TimesheetException(e, selectedEmployee);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/employee/assignJobsAndMarkLeft", method = RequestMethod.POST)
+    public ResponseEntity<?> assignJobsAndMarkLeft(@RequestBody RelieverDTO reliever) {
+
+        log.info("Inside assign jobs and mark left Reliever" + reliever.getEmployeeId() + " , "+reliever.getRelieverId());
+
+        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
         selectedEmployee.setLeft(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
@@ -684,6 +716,13 @@ public class EmployeeResource {
         List<EmployeeDTO> empList = null;
         empList = employeeService.getEmployeeWithoutLeft(searchCriteria);
         return empList;
+    }
+
+    @RequestMapping(value = "/employee/openTickets",method = RequestMethod.GET)
+    public List<Ticket> getEmployeePendingTickets(){
+        List<Ticket> ticketList = null;
+        ticketList = employeeService.getPendingTickets(SecurityUtils.getCurrentUserId());
+        return ticketList;
     }
 
 

@@ -50,6 +50,9 @@ public class    EmployeeService extends AbstractService {
     private EmployeeRepository employeeRepository;
 
     @Inject
+    private TicketRepository ticketRepository;
+
+    @Inject
     private DeviceRepository deviceRepository;
 
     @Inject
@@ -266,6 +269,16 @@ public class    EmployeeService extends AbstractService {
     		}
     		employeeRelieverRepository.save(employeeReliever);
     		return employee;
+    }
+
+    public EmployeeDTO unAssignReliever(RelieverDTO relieverDTO) {
+
+        Employee relievedEmployee = employeeRepository.findOne(relieverDTO.getEmployeeId());
+
+        relievedEmployee.setRelieved(false);
+        relievedEmployee = employeeRepository.save(relievedEmployee);
+
+        return mapperUtil.toModel(relievedEmployee,EmployeeDTO.class);
     }
 
     public EmployeeDTO updateEmployee(EmployeeDTO employee, boolean shouldUpdateActiveStatus) {
@@ -1661,5 +1674,11 @@ public class    EmployeeService extends AbstractService {
     public List<EmployeeDTO> getEmployeeWithoutLeft(SearchCriteria searchCriteria) {
         List<Employee> emp = employeeRepository.findWithoutLeftEmp(searchCriteria.getEmpIds(),searchCriteria.getSiteIds());
         return mapperUtil.toModelList(emp, EmployeeDTO.class);
+    }
+
+    public List<Ticket> getPendingTickets(long userId){
+        Employee employee = employeeRepository.findByUserId(userId);
+        List<Ticket> tickets = ticketRepository.findByEmployeeAndStartDate(employee.getId());
+        return tickets;
     }
 }

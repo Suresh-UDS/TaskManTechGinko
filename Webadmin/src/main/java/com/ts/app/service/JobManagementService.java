@@ -1,5 +1,7 @@
 package com.ts.app.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +14,9 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.security.SecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
@@ -35,46 +40,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.CheckInOut;
-import com.ts.app.domain.CheckInOutImage;
-import com.ts.app.domain.Checklist;
-import com.ts.app.domain.ChecklistItem;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.domain.JobMaterial;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobType;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.NotificationLog;
-import com.ts.app.domain.Price;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.TicketStatus;
-import com.ts.app.domain.User;
-import com.ts.app.domain.UserRole;
-import com.ts.app.domain.UserRoleEnum;
-import com.ts.app.domain.UserRolePermission;
-import com.ts.app.repository.AssetRepository;
-import com.ts.app.repository.CheckInOutImageRepository;
-import com.ts.app.repository.CheckInOutRepository;
-import com.ts.app.repository.ChecklistRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobChecklistRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.JobSpecification;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.NotificationRepository;
-import com.ts.app.repository.PricingRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
 import com.ts.app.service.util.AmazonS3Utils;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
@@ -145,6 +110,9 @@ public class JobManagementService extends AbstractService {
 
 	@Inject
 	private SchedulerService schedulerService;
+
+	@Inject
+    private SchedulerConfigRepository schedulerConfigRepository;
 
 	@Inject
 	private ExportUtil exportUtil;
@@ -1386,7 +1354,7 @@ public class JobManagementService extends AbstractService {
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
 		}
-		
+
 		if(CollectionUtils.isNotEmpty(jobDTO.getChecklistItems())) {
 			List<JobChecklistDTO> jobclDtoList = jobDTO.getChecklistItems();
 			List<JobChecklist> checklistItems = new ArrayList<JobChecklist>();
@@ -1425,11 +1393,11 @@ public class JobManagementService extends AbstractService {
 				job.setChecklistItems(checklistItems);
 			}
 		}
-		
+
 		if(CollectionUtils.isNotEmpty(jobDTO.getJobMaterials())) {
-			List<JobMaterialDTO> jobMaterialDTO = jobDTO.getJobMaterials(); 
+			List<JobMaterialDTO> jobMaterialDTO = jobDTO.getJobMaterials();
 			List<JobMaterial> jobMaterialItms = new ArrayList<JobMaterial>();
-			for(JobMaterialDTO material : jobMaterialDTO) { 
+			for(JobMaterialDTO material : jobMaterialDTO) {
 				JobMaterial jobMaterial = mapperUtil.toEntity(material, JobMaterial.class);
 				jobMaterial.setJob(job);
 				jobMaterialItms.add(jobMaterial);
@@ -2072,9 +2040,9 @@ public class JobManagementService extends AbstractService {
         allJobsList= jobRepository.findByStartDateSiteAndEmployee( siteId, employee.getId(), fromDt, toDt);
         Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
         for(Job job: allJobsList){
-            job.setRelieved(true);
-            job.setReliever(relieverDetails);
-            job = jobRepository.save(job);
+            JobDTO jobDTO = mapperUtil.toModel(job,JobDTO.class);
+            jobDTO.setEmployeeId(relieverDetails.getId());
+            JobDTO editedJob = updateJob(jobDTO, SecurityUtils.getCurrentUserId());
         }
 
         return allJobsList;
@@ -2094,9 +2062,26 @@ public class JobManagementService extends AbstractService {
         allJobsList= jobRepository.findByStartDateAndEmployee(employee.getId(), fromDt);
         Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
         for(Job job: allJobsList){
-            job.setEmployee(relieverDetails);
-            job = jobRepository.save(job);
+            JobDTO jobDTO = mapperUtil.toModel(job,JobDTO.class);
+            jobDTO.setEmployeeId(relieverDetails.getId());
+            JobDTO editedJob = updateJob(jobDTO, SecurityUtils.getCurrentUserId());
+            log.debug("Edited job details - "+editedJob.getEmployeeId());
+            log.debug("Edited job details - "+editedJob.getId());
         }
+
+        List<Ticket> allTicketList = new ArrayList<Ticket>();
+
+        ZonedDateTime startDate = ZonedDateTime.ofInstant(checkInDateFrom.toInstant(), ZoneId.systemDefault());
+
+        allTicketList = ticketRepository.findByEmployeeAndStartDate(employee.getId());
+
+        for (Ticket ticket: allTicketList){
+            ticket.setEmployee(relieverDetails);
+            Ticket editedTicket = ticketRepository.save(ticket);
+            log.debug("Edited ticket details - "+ticket.getEmployee().getId());
+            log.debug("Edited ticket details - "+ticket.getId());
+        }
+
     }
 
     public void deleteJobsForEmployee(EmployeeDTO employee, Date fromDate){
@@ -2113,12 +2098,23 @@ public class JobManagementService extends AbstractService {
         jobList = jobRepository.findByStartDateAndEmployee(employee.getId(),fromDt);
         if(CollectionUtils.isNotEmpty(jobList)) {
         		for(Job job : jobList) {
+        		    log.debug("Job id - "+job.getId());
         			job.getChecklistItems().clear();
+        			if(job.isScheduled()){
+                        List<SchedulerConfig> schedulerConfiglist = schedulerConfigRepository.findJobSchedule(job.getParentJob().getId());
+                        if(schedulerConfiglist.size()>0){
+                            for (SchedulerConfig schedulerConfig:schedulerConfiglist){
+                                log.debug("Scheduler config details - "+schedulerConfig.getId());
+                                schedulerConfig.setActive(SchedulerConfig.ACTIVE_NO);
+                                schedulerConfigRepository.save(schedulerConfig);
+                            }
+                        }
+                    }
         			jobRepository.saveAndFlush(job);
+        			jobRepository.delete(job.getId());
         		}
         }
-        jobRepository.deleteInBatch(jobList);
-
+//        jobRepository.deleteInBatch(jobList);
 
     }
 
