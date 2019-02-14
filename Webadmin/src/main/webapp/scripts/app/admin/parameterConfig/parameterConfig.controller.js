@@ -324,14 +324,14 @@ angular.module('timeSheetApp')
 
                     $scope.loadParameterConfigs();
                     $scope.parameterConfig = {};
-                    $scope.selectedAssetType ={};
-                    $scope.selectedParameter ={};
-                    $scope.selectedParameterUOM ={};
+                    $scope.selectedAssetType =null;
+                    $scope.selectedParameter =null;
+                    $scope.selectedParameterUOM =null;
                     $scope.selectedRule ="";
-                    $scope.btnDisabled = false;
                     $scope.selectedThreshold =null;
                     $scope.validationRequired.value =false;
                     $scope.consumptionMonitoringRequired.value =false;
+                    $scope.btnDisabled = false;
 
 	                //$location.path('/parameter-config');
 	            }).catch(function (response) {
@@ -365,9 +365,12 @@ angular.module('timeSheetApp')
                 $scope.loadingStart();
         		ParameterConfigComponent.remove($scope.deleteParamConId).then(function(){
 	            	$scope.success = 'OK';
+	            	$scope.showNotifications('top','center','success','Parameter Configuration Deleted Successfully..!!');
                     $scope.initLoad();
 	            	$scope.loadParameterConfigs();
                     $scope.loadingStop();
+	        	}).catch(function(){
+	        	    $scope.showNotifications('top','center','danger','Unable To Delete Parameter Configuration.');
 	        	});
         }
 
@@ -411,7 +414,7 @@ angular.module('timeSheetApp')
 
          }
 
-        var nottifShow = true ;
+       /* var nottifShow = true ;
 
         $scope.showNotifications= function(position,alignment,color,msg){
 
@@ -426,6 +429,10 @@ angular.module('timeSheetApp')
 
             }
 
+        }*/
+
+        $scope.showNotifications= function(position,alignment,color,msg){
+            demo.showNotification(position,alignment,color,msg);
         }
 
          /*

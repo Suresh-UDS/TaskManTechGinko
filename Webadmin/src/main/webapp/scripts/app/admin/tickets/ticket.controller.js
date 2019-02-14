@@ -412,11 +412,13 @@ angular.module('timeSheetApp')
 	}
 	//
 
-
+    $scope.siteSpin = false;
 	$scope.loadSites = function () {
+	    $scope.siteSpin = true;
 		SiteComponent.findAll().then(function (data) {
 			$scope.sites = data;
 			$scope.loadingStop();
+			$scope.siteSpin = false;
 		});
 	};
 
@@ -658,9 +660,10 @@ angular.module('timeSheetApp')
 		}
 	}
 
-
+    $scope.empSpin = false;
 	$scope.loadEmployees = function () {
 		if($scope.selectedSite){
+		    $scope.empSpin = true;
 			$scope.searchCriteria.siteId = $scope.selectedSite.id;
 			$scope.searchCriteria.list = true;
 			$scope.searchCriteria.module = 'Ticket';
@@ -669,6 +672,7 @@ angular.module('timeSheetApp')
 				//$scope.selectedEmployee = null;
 				$scope.employees = data.transactions;
 				//console.log('Site based employees -- ',$scope.employees);
+				$scope.empSpin = false;
 			});
 		}
 	};

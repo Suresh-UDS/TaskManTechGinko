@@ -19,39 +19,58 @@
             <div class="card margin-TB-5" >
 
                 <div class="card-content">
+                    <form name="form" role="form"  novalidate >
+                        <div class="row">
 
-                    <div class="row">
+                            <div class="col-md-4">
 
-                        <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Module Name<span class="red-star">*</span></label>
+                                    <input type="text" class="form-control InputTxtCapsAll" name="moduleName" ng-model="moduleName" required>
+                                    <div ng-show="form.$submitted || form.moduleName.$touched || form.moduleName.$dirty">
+                                        <div
+                                            ng-show="form.moduleName.$dirty || form.moduleName.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="form.moduleName.$error.required">
+                                                Module Name is required.
+                                            </p>
+                                        </div>
 
-                            <div class="form-group">
-                                <label class="control-label">Module Name</label>
-                                <input type="text" class="form-control InputTxtCapsAll" ng-model="moduleName">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group  pdng-top20">
+                                    <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select name="actionSelector" ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="form-control"  title="Select Action" required>
+                                         <option value="">Select Action...</option>
+                                    </select>
+                                    <div ng-show="form.$submitted || form.actionSelector.$touched || form.actionSelector.$dirty">
+                                        <div
+                                            ng-show="form.actionSelector.$dirty || form.actionSelector.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="form.actionSelector.$error.required">
+                                                Action  is required.
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3" style="padding-top:5px;">
+
+                                <button type="submit" ng-disabled="form.$invalid" class="btn btn-success" ng-click="addAction()">
+                                    <span class="btn-label">
+                                        <i class="material-icons">add</i>
+                                    </span>
+                                    Add
+                                </button>
+
                             </div>
 
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group  pdng-top20">
-                                <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select ng-model="actionSelector" ng-change="selectAction(actionSelector)" ng-options="action as action.name for action in masterActions" class="form-control"  title="Select Action" >
-                                     <option value="">Select Action...</option>
-                                </select>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3" style="padding-top:5px;">
-
-                            <button class="btn btn-success" ng-click="addAction()">
-                                <span class="btn-label">
-                                    <i class="material-icons">add</i>
-                                </span>
-                                Add
-                            </button>
-
-                        </div>
-
-                    </div>
-
+                    </form>
 
                     <div class="row col-md-5 addedActionList pdng-top15" ng-hide="!(selectedActions.length > 0)">
 

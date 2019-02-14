@@ -97,8 +97,17 @@
     </div>
 
     <div class="row">
-
         <div class="col-md-12">
+            <div class="pull-right">
+                <!-- Material switch -->
+                <div class="switch">
+                    <span>Show Deleted Employees</span>
+                    <label>
+                        <input type="checkbox" ng-model="showInActive" ng-click="searchFilter();">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </div>
             <div class="card TableCard">
                 <div class="card-content">
 
@@ -198,6 +207,7 @@
                     <!--</form>-->
 
                     <!--</div>-->
+
                     <div class="table-responsive tablecard">
                         <table id="" class="table table-hover withSortingIcons">
                             <thead>
@@ -285,15 +295,15 @@
                                     <span class="label label-warning"
                                             ng-show="employee.relieved">Relieved</span>
                                     <span class="label label-danger" disabled
-                                            ng-show="employee.left">InActive</span>
+                                          ng-if="employee.active=='N'">InActive</span>
                                     <span class="label label-success"
-                                            ng-show="!employee.left">Active</span>
+                                          ng-if="employee.active=='Y'">Active</span>
                                 </td>
                                 <td class="text-right hoverMe"><a title="View More Action"
                                                                   class="btn btn-simple btn-info btn-icon like Viewmore"><i
                                     class="material-icons">more_vert</i></a>
                                     <div class="HoverBx">
-                                        <button ng-disabled="employee.left" title="View"
+                                        <button ng-disabled="employee.left || showInActive" title="View"
                                                 ng-click="getEmployeeDetails(employee.id);getRelieversDetails(employee.id);"
                                                 has-permission="Employee:View" data-toggle="modal"
                                                 data-target="#viewModal"
@@ -301,14 +311,14 @@
                                             <i class="material-icons">remove_red_eye</i>
                                         </button>
                                         <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                        <button ng-disabled="employee.left" title="Mark Attendance "
+                                        <button  ng-disabled="employee.left || showInActive" title="Mark Attendance "
                                                  has-permission="Employee:Edit" data-toggle="modal"
                                                  ng-click="getEmployeeDetails(employee.id);"
                                                  data-target="#empAtnModal"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">date_range</i>
                                         </button>
-                                        <button ng-disabled="employee.left"
+                                        <button ng-disabled="employee.left || showInActive"
                                                 ng-class="{active: $state.includes('admin')}"
                                                 has-permission="Employee:Edit"
                                                 ui-sref="edit-employee({ id: employee.id })" type="button"
@@ -316,7 +326,7 @@
                                                 class="btn btn-success btn-simple btn-xs">
                                             <i class="material-icons">edit</i>
                                         </button>
-                                        <button ng-disabled="employee.left" title="Mark Left"
+                                        <button  ng-disabled="employee.left || showInActive" title="Mark Left"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#leftModal" data-dismiss="#leftModal"
                                                 ng-click="employeeDetails(employee.id);"
@@ -324,8 +334,8 @@
                                             <i style="color: #942a25" class="fas fa-user-times"></i>
                                         </button>
                                         <!--<button ng-disabled="employee.left" title="Site Transfer"   data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
-                                        <button ng-if="!employee.reliever"
-                                                ng-disabled="employee.left" title="Relieve Employee"
+                                        <button ng-if="!employee.reliever && !employee.relieved"
+                                                ng-disabled="employee.left || showInActive" title="Relieve Employee"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#relieverConfirmation"
                                                 data-dismiss="#relieverConfirmation"
@@ -492,9 +502,9 @@
                                                 <span class="label label-warning"
                                                         ng-show="employee.relieved">Relieved</span>
                                                 <span class="label label-danger" disabled
-                                                        ng-show="employee.left">InActive</span>
+                                                        ng-if="employee.active=='N'">InActive</span>
                                                 <span class="label label-success"
-                                                        ng-show="!employee.left">Active</span>
+                                                        ng-if="employee.active=='Y'">Active</span>
                                             </td>
 
                                         </tr>

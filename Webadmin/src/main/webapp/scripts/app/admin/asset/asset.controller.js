@@ -1749,9 +1749,9 @@ angular.module('timeSheetApp')
 			});
 
 
-			/*$('#warFromDate').datetimepicker().on('dp.show', function () {
-            return $(this).data('DateTimePicker').minDate(new Date());
-        });*/
+			$('#warFromDate').datetimepicker().on('dp.show', function () {
+            return $(this).data('DateTimePicker').maxDate(new Date());
+        });
 
 			/*$('input#warFromDate').on('dp.change', function(e){
 

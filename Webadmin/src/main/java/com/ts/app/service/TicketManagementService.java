@@ -205,7 +205,7 @@ public class TicketManagementService extends AbstractService {
         }
 
         if(isValid) {
-            Site site = siteRepository.findOne(ticket.getSite().getId());
+            Site site = siteRepository.findOne(ticketDTO.getSiteId());
             if(site!=null){
                 ticket.setSite(site);
             }

@@ -39,10 +39,12 @@ angular.module('timeSheetApp')
 	$scope.pageSort = 10;
 
 	$scope.addAction = function() {
-		var action = $scope.actionSelector
+		var action = $scope.actionSelector;
 		console.log('action selected -' + action);
 		$scope.selectedActions.push(action);
-		console.log('action selected -' + action + ',' + $scope.selectedActions)
+		console.log('action selected -' + action + ',' + $scope.selectedActions);
+		//$scope.moduleName = null;
+		$scope.actionSelector = null;
 	}
 
 	$scope.selectAction = function(obj) {
@@ -364,6 +366,9 @@ angular.module('timeSheetApp')
 		$scope.search();
 	};
 
+     $scope.showNotifications= function(position,alignment,color,msg){
+         demo.showNotification(position,alignment,color,msg);
+     }
 
 
 });

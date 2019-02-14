@@ -603,7 +603,7 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label">Schedule End Date </label>
+                                                    <label class="control-label">Schedule End Date <span class="red-star" ng-if="job.schedule != 'ONCE'">*</span></label>
                                                     <!-- <p class="input-group">
                                                         <input
                                                             ng-model="selectScheduleEndDate"
@@ -620,12 +620,12 @@
                                                     </p> -->
 
                                                      <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" tabindex="30" />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" ng-required="job.schedule != 'ONCE'" tabindex="30" />
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched || form.scheduleEndDate.$dirty">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">
                                                             <p class="help-block" style="color: maroon"
-                                                               ng-show="form.scheduleEndDate.$error.required">Required.</p>
+                                                               ng-show="form.scheduleEndDate.$error.required">Schedule End Date is required.</p>
                                                             <!--
                                                             <p class="help-block" style="color:maroon"
                                                                    ng-show="form.plannedStartDate.$error.pattern">
