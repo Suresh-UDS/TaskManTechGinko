@@ -15,17 +15,18 @@ module.exports = {
 		}
 	},
 
-	mailer : {
-		service : 'gmail',
-		smtp: {
-			host: "smtp.gmail.com",
-			secureConnection: true,
-			port: 465
-		},
-		username :'timesheettestuser1@gmail.com',
-		password :'Test123#',
-        from:'UDS <no-reply@uds.com>'
-	},
+    mailer : {
+        service : 'outlook365',
+        smtp: {
+            host: "smtp.office365.com",
+            secureConnection: false,
+            port: 587
+        },
+        tls:{ciphers:'SSLv3'},
+        username :'taskmanfms@uds.in',
+        password :'Task@2018',
+        from:'taskmanfms@uds.in'
+    },
 
 	pushService : {
 		  baseUrl:'http://ec2-52-76-59-180.ap-southeast-1.compute.amazonaws.com:9000'
