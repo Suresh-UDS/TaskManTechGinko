@@ -53,6 +53,7 @@ import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.SiteDTO;
 import com.ts.app.web.rest.errors.TimesheetException;
 import com.ts.app.web.rest.util.TokenUtils;
+import retrofit2.http.Path;
 
 /**
  * REST controller for managing the Employee information.
@@ -718,10 +719,10 @@ public class EmployeeResource {
         return empList;
     }
 
-    @RequestMapping(value = "/employee/openTickets",method = RequestMethod.GET)
-    public List<Ticket> getEmployeePendingTickets(){
+    @RequestMapping(value = "/employee/openTickets/{employeeId}",method = RequestMethod.GET)
+    public List<Ticket> getEmployeePendingTickets(@PathVariable("employeeId") long employeeId){
         List<Ticket> ticketList = null;
-        ticketList = employeeService.getPendingTickets(SecurityUtils.getCurrentUserId());
+        ticketList = employeeService.getPendingTickets(employeeId);
         return ticketList;
     }
 

@@ -219,8 +219,8 @@ angular.module('timeSheetApp')
                 })
             },
 
-            getEmployeeOpenTickets:function(){
-                return $http.get('api/employee/openTickets').then(function (response) {
+            getEmployeeOpenTickets:function(employeeId){
+                return $http.get('api/employee/openTickets/'+employeeId).then(function (response) {
                     return response.data;
                 })
             },

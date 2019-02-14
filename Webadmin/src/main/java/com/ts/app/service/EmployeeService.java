@@ -1676,8 +1676,8 @@ public class    EmployeeService extends AbstractService {
         return mapperUtil.toModelList(emp, EmployeeDTO.class);
     }
 
-    public List<Ticket> getPendingTickets(long userId){
-        Employee employee = employeeRepository.findByUserId(userId);
+    public List<Ticket> getPendingTickets(long employeeId){
+        Employee employee = employeeRepository.findOne(employeeId);
         List<Ticket> tickets = ticketRepository.findByEmployeeAndStartDate(employee.getId());
         return tickets;
     }
