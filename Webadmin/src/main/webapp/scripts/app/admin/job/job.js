@@ -60,7 +60,7 @@ angular.module('timeSheetApp')
         })
         .state('jobs', {
                 parent: 'manage',
-                url: '/jobs',
+                url: '/jobs?{project:json}{site:json}',
                // controller: 'JobController',
                 data: {
                     authorities: [],
@@ -74,6 +74,10 @@ angular.module('timeSheetApp')
                 },
                 resolve: {
 
-                }
+                },
+                  params:{
+                   project:null,
+                   site:null
+                  }
             });
     });

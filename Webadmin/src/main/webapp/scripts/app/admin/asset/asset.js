@@ -60,7 +60,7 @@ angular.module('timeSheetApp')
         })
         .state('assets', {
                 parent: 'manage',
-                url: '/assets',
+                url: '/assets?{project:json}{site:json}',
                 //controller: 'AssetController',
                 data: {
                     authorities: [],
@@ -74,7 +74,11 @@ angular.module('timeSheetApp')
                 },
                 resolve: {
 
-                }
+                },
+                 params:{
+                  project:null,
+                  site:null
+                 }
             })
             .state('schedule-list', {
                 parent: 'manage',

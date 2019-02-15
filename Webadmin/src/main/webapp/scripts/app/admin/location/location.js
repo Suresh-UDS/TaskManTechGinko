@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('locations', {
                 parent: 'manage',
-                url: '/locations',
+                url: '/locations?{project:json}{site:json}',
                 //controller: 'LocationController',
                 data: {
                     authorities: [],
@@ -19,7 +19,11 @@ angular.module('timeSheetApp')
                 },
                 resolve: {
 
-                }
+                },
+                 params:{
+                  project:null,
+                  site:null
+                 }
             })
             .state('add-location', {
                 parent: 'manage',
