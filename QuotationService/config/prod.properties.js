@@ -14,18 +14,18 @@ module.exports = {
     		}
     	},
 
-    	mailer : {
-    		service : 'outlook365',
-    		smtp: {
-    			host: "smtp.office365.com",
-    			secureConnection: false,
-    			port: 587
-    		},
-tls:{ciphers:'SSLv3'},
-    		username :'taskmanfms@uds.in',
-    		password :'Task@2018',
-            from:'taskmanfms@uds.in'
-    	},
+	mailer : {
+		service : 'outlook365',
+		smtp: {
+			host: "smtp.office365.com",
+			secureConnection: false,
+			port: 587
+		},
+		tls:{ciphers:'SSLv3'},
+		username :'taskmanfms@uds.in',
+		password :'Nov@2018',
+		from:'taskmanfms@uds.in'
+	},
 
     	pushService : {
     		 baseUrl:'http://localhost:8001'

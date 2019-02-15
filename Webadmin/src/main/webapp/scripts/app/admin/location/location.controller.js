@@ -793,11 +793,21 @@ angular.module('timeSheetApp')
 		$scope.location.zone = $scope.selectedZone;
 		//console.log("Before pushing location to server");
 		//console.log(JSON.stringify($scope.location));
-		LocationComponent.createLocation($scope.location).then(function(){
-			$scope.saveLoad = false;
-			//console.log("success");
-			$location.path('/locations');
-			// $scope.loadLocationItems();
+        LocationComponent.createLocation($scope.location).then(function(response){
+            $scope.saveLoad = false;
+            console.log("success");
+            console.log(response);
+            if(response.errorStatus){
+                $scope.errorLocationExists = true;
+                $scope.showNotifications('top','center','danger',response.errorMessage);
+                $scope.btnDisable = false;
+
+            }else{
+                $scope.showNotifications('top','center','success','Location Successfully created !!!');
+                $location.path('/locations');
+
+            }
+            // $scope.loadLocationItems();
 		}).catch(function (response) {
 			$scope.saveLoad = false;
 			$scope.success = null;
@@ -1483,7 +1493,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.clearProject = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.client.selected = undefined;
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
@@ -1500,7 +1510,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearRegion = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
 		$scope.sitesListOne.selected = undefined;
@@ -1528,7 +1538,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearSite = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.sitesListOne.selected = undefined;
 		$scope.blocksListOne.selected = undefined;
 		$scope.floorsListOne.selected = undefined;
@@ -1540,7 +1550,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearBlock = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.blocksListOne.selected = undefined;
 		$scope.floorsListOne.selected = undefined;
 		$scope.zonesListOne.selected = undefined;
@@ -1549,14 +1559,14 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearFloor = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.floorsListOne.selected = undefined;
 		$scope.zonesListOne.selected = undefined;
 		$scope.zoneFilterDisable = true;
 	};
 
 	$scope.clearZone = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.zonesListOne.selected = undefined;
 	};
 
