@@ -798,7 +798,7 @@
                                         <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
                                         <select
                                             class="form-control siteList" ng-model="NewEmployee"
-                                            ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
+                                            ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
                                             <option value="">Select Employee..</option>
                                         </select>
                                         <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
@@ -826,7 +826,7 @@
                                         <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
                                         <select
                                             class="form-control siteList" ng-model="NewEmployee"
-                                            ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
+                                            ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
                                             <option value="">Select Employee..</option>
                                         </select>
                                         <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>

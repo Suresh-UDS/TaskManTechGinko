@@ -867,7 +867,18 @@ angular.module('timeSheetApp')
 							$location.path('/jobs');
 						}
 						$scope.title = $scope.job.title;
+
+						if($scope.job.pendingAtUDS){
 						$scope.job.pendingStatus='pendingAtUDS';
+						$scope.job.pendingAtUDS = true;
+						$scope.job.pendingAtClient = false;
+						}
+						if($scope.job.pendingAtClient){
+						 $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
+						 $scope.job.pendingAtClient = true;
+						 $scope.job.pendingAtUDS = false;
+						}
+
 						$scope.job.pendingAtUDS=true;
 						$scope.selectedSite = {id : data.siteId,name : data.siteName};
 						$scope.job.plannedStartTime = data.plannedStartTime;
@@ -1083,20 +1094,18 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.job.ticketId = $stateParams.ticketId;
 				}
-				console.log($scope.job.pendingStatus);
-				if($scope.job.pendingStatus && $scope.job.pendingStatus=='pendingAtUDS'){
-					$scope.job.pendingAtUDS = true;
-					$scope.job.pendingAtClient = false;
+				console.log('pendingAtUDS' + $scope.job.pendingAtUDS + ',PendingAtClient'+$scope.job.pendingAtClient);
+				if($scope.job.pendingAtUDS){
+                     $scope.job.pendingStatus='pendingAtUDS';
+                     $scope.job.pendingAtUDS = true;
+                     $scope.job.pendingAtClient = false;
+                }
+                if($scope.job.pendingAtClient){
+                     $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
+                     $scope.job.pendingAtClient = true;
+                     $scope.job.pendingAtUDS = false;
+                }
 
-				}else if($scope.job.pendingStatus=='pendingAtClient'){
-					$scope.job.pendingAtClient = true;
-					$scope.job.pendingAtUDS = false;
-
-				}else{
-					$scope.job.pendingAtUDS = true;
-					$scope.job.pendingAtClient = false;
-
-				}
 				if($scope.selectedChecklist) {
 					var items = $scope.selectedChecklist.items;
 					for(var i =0; i<items.length;i++) {

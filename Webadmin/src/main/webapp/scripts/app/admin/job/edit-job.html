@@ -171,7 +171,7 @@
                                             <div class="col-md-4">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingStatus" value="pendingAtUDS" ng-checked="job.pendingAtUDS" tabindex="9"> Pending At UDS
+                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingAtUDS"   ng-checked="job.pendingAtUDS" tabindex="9"> Pending At UDS
                                                     </label>
                                                 </div>
                                             </div>
@@ -179,7 +179,7 @@
                                             <div class="col-md-4">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingStatus" value="pendingAtClient" tabindex="10"> Pending At {{job.siteProjectName}}
+                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingAtClient"   ng-checked="job.pendingAtClient" tabindex="10"> Pending At {{job.siteProjectName}}
                                                     </label>
                                                 </div>
                                             </div>
@@ -625,7 +625,7 @@
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched || form.scheduleEndDate.$dirty">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">
                                                             <p class="help-block" style="color: maroon"
-                                                               ng-show="form.scheduleEndDate.$error.required">Schedule End Date is required.</p>
+                                                               ng-show="form.scheduleEndDate.$error.required">Required.</p>
                                                             <!--
                                                             <p class="help-block" style="color:maroon"
                                                                    ng-show="form.plannedStartDate.$error.pattern">
