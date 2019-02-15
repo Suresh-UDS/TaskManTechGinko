@@ -329,7 +329,7 @@
                                         <button  ng-disabled="employee.left || showInActive" title="Mark Left"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#leftModal" data-dismiss="#leftModal"
-                                                ng-click="employeeDetails(employee.id);"
+                                                ng-click="employeeDetails(employee.id);getEmployeeOpenTickets(employee.id);"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i style="color: #942a25" class="fas fa-user-times"></i>
                                         </button>
@@ -343,6 +343,16 @@
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">assignment_ind</i>
                                         </button>
+                                        <button ng-if="employee.relieved"
+                                                ng-disabled="employee.left || showInActive" title="Take Employee"
+                                                has-permission="Employee:Edit" data-toggle="modal"
+                                                data-target="#takenConfirmation"
+                                                onClick="$('#takenEmpModal').modal()"
+                                                ng-click="takenEmpConfirm(employee.id);"
+                                                class="btn btn-simple btn-success btn-icon like">
+                                            <i class="material-icons">assignment_ind</i>
+                                        </button>
+
                                     </div></td>
                             </tr>
                             </tbody>
@@ -769,33 +779,65 @@
                 </button>
                 <h5 class="modal-title" id="isLeftModal">Mark Employee as Left
                     ?</h5>
-                <div>
-                    <input type="radio"  ng-model="markLeftOptions" value="delete"> Delete
-                    Jobs and Mark Left <input type="radio"
-                                              ng-model="markLeftOptions" value="assign"> Assign Jobs to
-                    New Employee and Mark Left
-                </div>
+                <div ng-hide="haveTickets">
+                    <div>
+                        <input type="radio"  ng-model="markLeftOptions" value="delete"> Delete
+                        Jobs and Mark Left <input type="radio"
+                                                  ng-model="markLeftOptions" value="assign"> Assign Jobs to
+                        New Employee and Mark Left
+                    </div>
 
-                <div id="assign" ng-if="markLeftOptions != 'delete' && markLeftOptions == 'assign'">
-                    <div class="row">
-                       <div class="col-xs-12 col-md-6">
-                            <div class="form-group">
-                                <div class="dropdown">
+                    <div id="assign" ng-if="markLeftOptions != 'delete' && markLeftOptions == 'assign'">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="dropdown">
                                     <span class="form-control-feedback d-sm-arrow-icon"><i
                                         class="material-icons">keyboard_arrow_down</i></span>
-                                    <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
-                                    <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
-                                    <select
-                                        class="form-control siteList" ng-model="NewEmployee"
-                                        ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
-                                        <option value="">Select Employee..</option>
-                                    </select>
-                                    <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                                        <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <select
+                                            class="form-control siteList" ng-model="NewEmployee"
+                                            ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
+                                            <option value="">Select Employee..</option>
+                                        </select>
+                                        <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                                    </div>
                                 </div>
                             </div>
-                       </div>
+                        </div>
                     </div>
+
                 </div>
+                <div ng-show="haveTickets">
+                    <div>
+                        <input type="hidden" ng-model="markLeftOptions" value="assign"> Assign Jobs to
+                        New Employee and Mark Left
+                    </div>
+
+                    <div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="dropdown">
+                                    <span class="form-control-feedback d-sm-arrow-icon"><i
+                                        class="material-icons">keyboard_arrow_down</i></span>
+                                        <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <select
+                                            class="form-control siteList" ng-model="NewEmployee"
+                                            ng-options="emp as emp.fullName for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
+                                            <option value="">Select Employee..</option>
+                                        </select>
+                                        <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
             <div class="modal-footer ">
                 <button type="button" class="btn btn-info btn-round"
@@ -1978,3 +2020,26 @@
     </div>
 </div>
 <!-- -->
+
+<!-- Take employee confirmation dialog -->
+<div class="row">
+    <div id="takenEmpModal" data-backdrop="false" class="modal fade deleteModal"
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to take the Employee<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="takenEmp()"
+                            class="btn btn-success text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End of take employee confirmation dialog -->

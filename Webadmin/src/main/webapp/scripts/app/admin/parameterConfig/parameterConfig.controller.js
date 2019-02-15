@@ -371,6 +371,7 @@ angular.module('timeSheetApp')
                     $scope.loadingStop();
 	        	}).catch(function(){
 	        	    $scope.showNotifications('top','center','danger','Unable To Delete Parameter Configuration.');
+	        	    $scope.loadingStop();
 	        	});
         }
 

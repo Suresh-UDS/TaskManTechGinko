@@ -2902,5 +2902,36 @@ angular.module('timeSheetApp')
      $scope.NewEmployee = "";
 	 }
 
+	 $scope.takenEmpConfirm = function (id){
+
+            $scope.takenEmpId= id;
+
+     }
+
+     $scope.takenEmp = function () {
+             $scope.loadingStart();
+            EmployeeComponent.unAssignReliever({employeeId:$scope.takenEmpId}).then(function(){
+                $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Employee Taken  Successfully..!!');
+                 $scope.searchFilter();
+                 $scope.loadingStop();
+            }).catch(function(){
+                $scope.showNotifications('top','center','danger','Unable To Take Employee.');
+                $scope.loadingStop();
+            });
+     }
+
+     $scope.haveTickets = false;
+     $scope.getEmployeeOpenTickets = function (id) {
+          $scope.haveTickets = false;
+         EmployeeComponent.getEmployeeOpenTickets(id).then(function(response){
+             if(response.length > 0){
+                $scope.haveTickets = true;
+             }
+         }).catch(function(){
+             $scope.haveTickets = false;
+         });
+     }
+
 
 });
