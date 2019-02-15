@@ -48,7 +48,8 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                                <img [src]="list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'"
+                                    class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -106,7 +107,7 @@
                     </ion-card-content>
                 </ion-card>
             </div>
-            <ion-card *ngFor="let list of completedEmp | userFilter:completedfilterData">
+            <ion-card *ngFor="let list of completedEmp | userFilter:completedfilterData; let Cindex= index">
                 <!-- <ion-item>
                     <h2>Marty</h2>
                 </ion-item> -->
@@ -137,6 +138,12 @@
                                         <ion-icon name="eye"></ion-icon>
                                         <div>View</div>
                                     </button>
+                                    <ion-note *ngIf="list['isSync'] == false" item-end>
+                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button icon-start>
+                                            <ion-icon name="sync"></ion-icon>
+                                            SYNC
+                                        </button>
+                                    </ion-note>
                                 </ion-item>
                             </ion-list>
                         </ion-col>

@@ -6,6 +6,12 @@ page-onboardingLocation-new {
     .card-md {
         width: 100% !important;
     }
+    .select-searchable{
+        overflow: visible !important;
+        max-width: 96% !important;
+        width: 96% !important;
+        margin-top: 9px;
+    }
     ion-select {
         overflow: visible !important;
         max-width: 96% !important;

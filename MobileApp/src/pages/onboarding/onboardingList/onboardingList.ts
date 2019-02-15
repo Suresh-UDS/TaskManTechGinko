@@ -9,6 +9,7 @@ import { onboardingListFilter } from '../onboardingList/onboardingListFilter/onb
 import { OnboardingService } from '../../service/onboarding.service';
 import { componentService } from '../../service/componentService';
 
+
 import { Storage } from '@ionic/storage';
 import { onBoardingModel } from './onboarding';
 
@@ -25,9 +26,13 @@ export class onboardingExistEmployee implements OnInit {
   completedEmp: any = [];
   errormsg;
   hideFilter = true;
+  wbsId;
 
-  constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) { }
-
+  constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) {
+    this.storage.get('onboardingProjectSiteIds').then((Ids) => {
+      this.wbsId = Ids['SiteId'];
+    });
+  }
   ngOnInit() { }
   ionViewWillEnter() {
     this.storage.get('OnBoardingData').then((localStoragedData) => {
@@ -39,7 +44,7 @@ export class onboardingExistEmployee implements OnInit {
       //     list['personalDetails']['image'] = 'assets/imgs/placeholder.png'
       //   }
       // }
-      this.onboardingService.getAllOnboardingUser().subscribe(res => {
+      this.onboardingService.getEmployeeListByWbs(this.wbsId).subscribe(res => {
         let objectsKeys;
         let objectsValues;
         for (var i = 0; i < res.length; i++) {
@@ -120,7 +125,7 @@ export class onboardingExistEmployee implements OnInit {
           onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
         }
 
-        
+
         objectkeys = Object.keys(onBoardingModel[list]);
         objectValues = Object['values'](onBoardingModel[list]);
         objectFormattedValues = objectValues.filter((data) => {
@@ -162,5 +167,18 @@ export class onboardingExistEmployee implements OnInit {
       var x = a[key]; var y = b[key];
       return ((x < y) ? -1 : ((x > y) ? 0 : 1));
     });
+  }
+  syncEmployeeDetails(object, index) {
+    this.component.showLoader("Loading OnBoarding");
+    this.onboardingService.saveOnboardingUser(object, index).subscribe((res) => {
+      this.component.closeAll();
+      this.storage.get('OnBoardingData').then((localStoragedData) => {
+        localStoragedData['completed'].splice(index, 1);
+        this.storage.set('OnBoardingData', localStoragedData);
+      });
+    }, (error) => {
+      this.component.closeAll();
+      this.component.showToastMessage('Server Unreachable', 'bottom');
+    })
   }
 }

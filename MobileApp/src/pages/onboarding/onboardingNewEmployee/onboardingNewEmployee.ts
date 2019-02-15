@@ -1,5 +1,6 @@
 import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { AlertController, NavParams, NavController } from 'ionic-angular';
+import { Network } from "@ionic-native/network";
 
 import { onboardingExistEmployee } from '../onboardingList/onboardingList';
 import { newEmpPersonalDetail } from './personalDetails/newEmpPersonalDetails';
@@ -10,6 +11,8 @@ import { newEmpContactDetails } from './contactDetails/newEmpContactDetails';
 import { onBoardingDataService } from './onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 import { componentService } from '../../service/componentService';
+import { OnboardingService } from '../../service/onboarding.service';
+
 
 
 @Component({
@@ -24,7 +27,7 @@ export class onboardingNewEmployee {
   storedIndex;
   formLoadingProgress: any = 'pie0';
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
-  constructor(public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, private navCtrl: NavController) {
+  constructor(private network: Network, private onBoardingService: OnboardingService,public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, private navCtrl: NavController) {
 
     this.storage.get('onboardingCurrentIndex').then(index => {
       this.storedIndex = index;
@@ -125,19 +128,32 @@ export class onboardingNewEmployee {
     }
   }
   formFinalOperation() {
-    this.componentService.showLoader("Loading OnBoarding");
     let obj: any = {};
     this.storeFormData(this.wizardObj[this.currentIndex]['formData']).then(data => {
       if (data == 'success') {
         this.storage.get('OnBoardingData').then((localStoragedData) => {
-          localStoragedData['completed'][localStoragedData['completed'].length] = localStoragedData['actionRequired'][this.storedIndex];
+          let tempIndex = localStoragedData['completed'].length;
+          localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
           localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-          this.storage.set('OnBoardingData', localStoragedData);
-
-          setTimeout(() => {
-            this.componentService.closeAll();
+          
+          if (this.network.type != 'none') {
+            this.componentService.showLoader("Loading OnBoarding");
+            this.onBoardingService.saveOnboardingUser(localStoragedData['completed'][tempIndex], tempIndex).subscribe((res) => {
+              this.componentService.closeAll();
+              localStoragedData['completed'].splice(tempIndex, 1);
+              this.storage.set('OnBoardingData', localStoragedData);
+              this.navCtrl.setRoot(onboardingExistEmployee);
+            }, (error) => {
+              this.componentService.closeAll();
+              localStoragedData['completed'][tempIndex]['isSync'] = false;
+              this.storage.set('OnBoardingData', localStoragedData);
+              this.componentService.showToastMessage('Server Unreachable', 'bottom');
+            })
+          } else {
+            localStoragedData['completed'][tempIndex]['isSync'] = false;
+            this.storage.set('OnBoardingData', localStoragedData);
             this.navCtrl.setRoot(onboardingExistEmployee);
-          }, 2000);
+          }
         });
       }
     });

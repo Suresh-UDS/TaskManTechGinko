@@ -52,36 +52,36 @@
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Address</p>
-                    <p item-end class="text-right">{{userData['communicationAddress']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">City</p>
-                    <p item-end class="text-right">{{userData['communicationAddress']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress'][0]['city']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">State</p>
-                    <p item-end class="text-right">{{userData['communicationAddress']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress'][0]['state']}}</p>
                 </ion-item>
 
                 <ion-list-header>
                     Family and Employeement
                 </ion-list-header>
                 <ion-item>
-                    <p item-start class="text-left">Father Name</p>
-                    <p item-end class="text-right">{{userData['fatherName']}}</p>
+                    <p item-start class="text-left">{{userData['nomineeDetail'][0]['relationship']}} Name</p>
+                    <p item-end class="text-right">{{userData['nomineeDetail'][0]['name']}}</p>
                 </ion-item>
                 <ion-item>
-                    <p item-start class="text-left">Mother Name</p>
-                    <p item-end class="text-right">{{userData['motherName']}}</p>
+                    <p item-start class="text-left">{{userData['nomineeDetail'][1]['relationship']}} Name</p>
+                    <p item-end class="text-right">{{userData['nomineeDetail'][1]['name']}}</p>
                 </ion-item>
-                <ion-item>
+                <!-- <ion-item>
                     <p item-start class="text-left">Designation</p>
                     <p item-end class="text-right">{{userData['designation']}}</p>
                 </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Area Of Work</p>
                     <p item-end class="text-right">{{userData['employeeAreaOfWork']}}</p>
-                </ion-item>
+                </ion-item> -->
                 <!-- <ion-item>
                     <ion-avatar item-start>
                         <ion-icon name="transgender"></ion-icon>

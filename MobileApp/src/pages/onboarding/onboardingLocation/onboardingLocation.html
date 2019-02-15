@@ -18,11 +18,12 @@
                     <div class="col-md-9 col-sm-9 col-xs-9">
                         <ion-item>
                             <ion-label class="label-text TextData" floating>Select Client</ion-label>
-                            <ion-select interface="popover" [(ngModel)]="selectedClient" (ionChange)="getClientSites(selectedClient)"
-                                formControlName="selectClient" required>
-                                <ion-option class="TextData" *ngFor="let client of clients;let i of index" [value]="client">{{client.name}}</ion-option>
-                            </ion-select>
-                            <div class="error-msg" *ngIf="selectClientSiteForm.get('selectClient').hasError('required') && selectClientSiteForm.get('selectClient').touched">
+                            <select-searchable formControlName="selectClient" item-content [(ngModel)]="selectedClient"
+                                [items]="clients" itemValueField="projectId" itemTextField="projectDesc" [canSearch]="true"
+                                (onChange)="getClientSites(selectedClient)">
+                            </select-searchable>
+                            <div class="error-msg"
+                                *ngIf="selectClientSiteForm.get('selectClient').hasError('required') && selectClientSiteForm.get('selectClient').touched">
                                 Client is required.
                             </div>
                         </ion-item>
@@ -35,10 +36,13 @@
                     <div class="col-md-9 col-sm-9 col-xs-9">
                         <ion-item>
                             <ion-label class="label-text TextData" floating>Select Site</ion-label>
-                            <ion-select interface="popover" [(ngModel)]="selectedSite" formControlName="selectSite" required>
-                                <ion-option class="TextData" *ngFor="let site of sites;let i of index" [value]="site">{{site.name}}</ion-option>
+                            <ion-select interface="popover" [(ngModel)]="selectedSite" formControlName="selectSite"
+                                required>
+                                <ion-option class="TextData" *ngFor="let site of sites;let i of index" [value]="site">
+                                    {{site.wbsDesc}}</ion-option>
                             </ion-select>
-                            <div class="error-msg" *ngIf="selectClientSiteForm.get('selectSite').hasError('required') && selectClientSiteForm.get('selectSite').touched">
+                            <div class="error-msg"
+                                *ngIf="selectClientSiteForm.get('selectSite').hasError('required') && selectClientSiteForm.get('selectSite').touched">
                                 Site is required.
                             </div>
                         </ion-item>
@@ -47,7 +51,7 @@
 
                 <div class="row form-group flexCenter">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button ion-button (click)="onboardingList()">Submit</button>
+                        <button ion-button (click)="onboardingList(selectedSite)">Submit</button>
                         <!-- <button ion-button (click)="onboardingList()" [disabled]="selectClientSiteForm.invalid">Submit</button> -->
                     </div>
                 </div>
