@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('tickets', {
                 parent: 'manage',
-                url: '/tickets',
+                url: '/tickets?{project:json}{site:json}',
                 //controller: 'TicketController',
                 data: {
                     authorities: [],
@@ -18,8 +18,12 @@ angular.module('timeSheetApp')
                     }
                 },
                 resolve: {
-                    
-                }
-            });      
-       
+
+                },
+                 params:{
+                  project:null,
+                  site:null
+                 }
+            });
+
     });

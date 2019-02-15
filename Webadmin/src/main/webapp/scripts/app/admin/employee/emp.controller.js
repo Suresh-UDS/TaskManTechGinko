@@ -1852,12 +1852,19 @@ angular.module('timeSheetApp')
 			if($scope.client.selected && $scope.client.selected.id !=0){
 
 				$scope.searchProject = $scope.client.selected;
-			}else{
+			}else if($stateParams.project){
+                 $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                 $scope.client.selected =$scope.searchProject;
+                 $scope.projectFilterFunction($scope.searchProject);
+            }else{
 				$scope.searchProject = null;
 			}
 			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 				$scope.searchSite = $scope.sitesListOne.selected;
-			}else{
+			}else if($stateParams.site){
+                $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
+                $scope.sitesListOne.selected = $scope.searchSite;
+            }else{
 				$scope.searchSite = null;
 			}
 			if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){

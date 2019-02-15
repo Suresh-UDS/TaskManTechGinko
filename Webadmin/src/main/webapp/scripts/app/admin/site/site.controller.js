@@ -860,6 +860,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.search = function () {
+
 		$scope.noData = false;
 		var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
 		if(!$scope.searchCriteria) {
@@ -915,6 +916,10 @@ angular.module('timeSheetApp')
 		else{
 			if($scope.client.selected && $scope.client.selected.id !=0){
 				$scope.searchProject = $scope.client.selected;
+			}else if($stateParams.project){
+                $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                $scope.client.selected =$scope.searchProject;
+                $scope.projectFilterFunction($scope.searchProject);
 			}else{
 				$scope.searchProject = null;
 			}
