@@ -31,7 +31,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
                         <label class="trequired">Aathar Front View</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.aadharPhotoCopy" (click)="getImageData('front')" class="mdImage" />
+                            <img [src]="userAllKYCData.aadharPhotoCopy" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('front')" class="mdImage" />
                         </ion-avatar>
                     </div>
                     <!-- <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
@@ -59,14 +59,14 @@
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                                 <label class="control-label trequired">IFSC Number</label>
-                                <input class="form-control" type="text" formControlName="IFSC">
+                                <input class="form-control" type="text" formControlName="ifsc">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.prePrintedStatement" (click)="getImageData('passbook')" class="passbookImage" />
+                            <img [src]="userAllKYCData.prePrintedStatement" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('passbook')" class="passbookImage" />
                         </ion-avatar>
                     </div>
                 </div>
@@ -76,13 +76,13 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <label class="trequired">Employee Signature</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.employeeSignature" (click)="getImageData('sign')" class="mdImage" />
+                            <img [src]="userAllKYCData.employeeSignature" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('sign')" class="mdImage" />
                         </ion-avatar>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <label class="trequired">Profile Picture</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.profilePicture" (click)="getImageData('profile')" class="mdImage" />
+                            <img [src]="userAllKYCData.profilePicture" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('profile')" class="mdImage" />
                         </ion-avatar>
                     </div>
 

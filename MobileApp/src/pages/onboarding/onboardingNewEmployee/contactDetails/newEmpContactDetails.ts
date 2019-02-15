@@ -17,6 +17,7 @@ export class newEmpContactDetails implements OnInit {
   storedIndex;
   mobnumPattern = "^((\\+91-?)|0)?[0-9]{10}$";
   PhoneNumberErrorMessage;
+  addressProofImage;
   totalStates = [
     { name: 'Assam', key: 'assam' },
     { name: 'Andhra Pradesh', key: 'andhrapradesh' },
@@ -165,6 +166,7 @@ export class newEmpContactDetails implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
       this.addressProof = imageData;
+      this.addressProofImage = true;
       this.sendValidationMessage();
     })
   }
@@ -187,16 +189,22 @@ export class newEmpContactDetails implements OnInit {
   // }
 
   sendValidationMessage() {
-    if (this.formStatusValues['status'] && this.addressProof !== 'assets/imgs/placeholder.png') {
+    if (this.formStatusValues['status'] && this.addressProofImage) {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
-      this.formStatusValues['data']['emergencyConatctNo'] = [
-        this.formStatusValues['data']['emergencyConatctNo']
-      ];
-      delete this.formStatusValues['data']['emergencyConatctNo'];
+      let contactNo = this.formStatusValues['data']['emergencyConatctNo'];
+      this.formStatusValues['data']['emergencyConatctNo'] = [];
+      this.formStatusValues['data']['emergencyConatctNo'][0] = contactNo;
+      this.formStatusValues['data']['emergencyConatctNo'];
       this.messageService.formDataMessage(this.formStatusValues);
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });
     }
+  }
+  imgErrorFunction() {
+    this.addressProofImage = false;
+  }
+  imgSuccessLoaded() {
+    this.addressProofImage = true;
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {

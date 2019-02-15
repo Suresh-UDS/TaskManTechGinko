@@ -110,19 +110,19 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
 
 
-  
+
   setMinValidation(value) {
     if (value) {
       value = new Date(value);
-      var formattedMinDate = moment(value, "YYYY-MM-DD").add(5110, 'days');
+      var formattedMinDate = moment(value, "YYYY-MM-DD").add(5110, 'days').format('YYYY-MM-DD');
       // var formattedMinDate = value.setDate(value.getDate() + 5110);
       // var formattedFinalDate = new Date(formattedMinDate);
-      var filteredDate = this.pipe.transform(formattedMinDate, 'yyyy-MM-dd');
-      console.log('filter date = ' + filteredDate);
-      this.setMinDate = filteredDate;
+      //var filteredDate = this.pipe.transform(formattedMinDate, 'yyyy-MM-dd');
+      console.log('filter date = ' + formattedMinDate);
+      this.setMinDate = formattedMinDate;
     }
     let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
-    if (!dateOfJoining || dateOfJoining < filteredDate) {
+    if (dateOfJoining < formattedMinDate) {
       this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
     }
   }
@@ -137,10 +137,10 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
           //   this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
-          // }
-          var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']).format('YYYY-MM-DD');
-          var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining']).format('YYYY-MM-DD');
-          
+          // }'DD-MM-YYYY').format('YYYY-MM-DD');
+          var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+          var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+
           this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(formatDateOfBirthDate);
           this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formatDateOfJoiningDate);
 

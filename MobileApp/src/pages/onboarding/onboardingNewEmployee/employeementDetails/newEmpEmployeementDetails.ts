@@ -75,21 +75,18 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     let toEmployed = this.nomineeForms.controls[0]['controls']['toEmployed'].value;
     if (value) {
 
-      var formattedMinDate = moment(value, "YYYY-MM-DD").add(30, 'days');
+      var formattedMinDate = moment(value, "YYYY-MM-DD").add(60, 'days').format('YYYY-MM-DD');
+      //var formattedMinDate = moment(value, "YYYY-MM-DD").add(30, 'days');
       // var mindate = new Date(value);
       // var formattedMinDate = mindate.setDate(mindate.getDate() + 30);
       // var formattedFinalDate = new Date(formattedMinDate);
       //this.filteredMinDate = this.pipe.transform(formattedFinalDate, 'yyyy-MM-dd');
-      var filteredDate = this.pipe.transform(formattedMinDate, 'yyyy-MM-dd');
-      this.setMinDate = filteredDate;
+      //var filteredDate = this.pipe.transform(formattedMinDate, 'yyyy-MM-dd');
+      this.setMinDate = formattedMinDate;
     }
-    if (toEmployed) {
-      if (toEmployed < filteredDate) {
-        this.nomineeForms.controls[0]['controls']['fromEmployed'].setValue('');
-        //this.onboardingEmployeeMentForm.controls['toEmployed'].setValue('');
-      }
-    } else {
-      this.nomineeForms.controls[0]['controls']['fromEmployed'].setValue('');
+
+    if (toEmployed < formattedMinDate) {
+      this.nomineeForms.controls[0]['controls']['toEmployed'].setValue('');
       //this.onboardingEmployeeMentForm.controls['toEmployed'].setValue('');
     }
   }
@@ -100,7 +97,6 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
   SetEarlierEmp() {
     // console.log(this.nomineeForms.controls['isEmploymentEarlier'].value);
     let value = this.nomineeForms.controls[0]['controls']['isEmploymentEarlier']['value'];
-
     // alert(value);
     //const value = this.addressData.controls[0]['controls']['address']['value'];
     //console.log(value);
@@ -215,8 +211,8 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
         if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('previousEmployee')) {
           this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
 
-          var fromempDate = moment(localStoragedData['actionRequired'][this.storedIndex]['fromEmployed']).format('YYYY-MM-DD');
-          var toEmpDate = moment(localStoragedData['actionRequired'][this.storedIndex]['toEmployed']).format('YYYY-MM-DD');
+          var fromempDate = moment(localStoragedData['actionRequired'][this.storedIndex]['fromEmployed'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+          var toEmpDate = moment(localStoragedData['actionRequired'][this.storedIndex]['toEmployed'], 'DD-MM-YYYY').format('YYYY-MM-DD');
 
           this.nomineeForms.controls[0]['controls']['fromEmployed'].setValue(fromempDate);
           this.nomineeForms.controls[0]['controls']['toEmployed'].setValue(toEmpDate);

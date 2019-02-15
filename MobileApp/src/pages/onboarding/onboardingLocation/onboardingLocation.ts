@@ -64,11 +64,15 @@ export class onboardingLocation implements OnInit {
         })
     }
     onboardingList(object) {
-        this.storage.set('onboardingProjectSiteIds', { prijectID: object['projectId'], SiteId: object['wbsId'] });
+        let obj = { projectId: object['projectId'], siteId: object['wbsId'] };
+        this.storage.set('onboardingProjectSiteIds', obj);
         this.navCtrl.push(onboardingExistEmployee);
     }
     clearStorage() {
         this.storage.set('OnBoardingData', { actionRequired: [], completed: [] });
+    }
+    onboardingListDummy() {
+        this.navCtrl.push(onboardingExistEmployee);
     }
     setStorage() {
         this.storage.get('OnBoardingData').then((data) => {

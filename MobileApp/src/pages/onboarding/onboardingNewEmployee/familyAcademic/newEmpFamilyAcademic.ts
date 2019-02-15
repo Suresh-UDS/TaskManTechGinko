@@ -75,7 +75,7 @@ export class newEmpFamilyAndAcademic implements OnInit {
   }
   setEducation(): FormGroup {
     return this.fb.group({
-      Qualification: ['', [Validators.required]],
+      qualification: ['', [Validators.required]],
       institute: ['', [Validators.required]]
     });
   }

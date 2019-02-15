@@ -16,7 +16,7 @@ export class OnboardingService {
     }
 
     AllProjects(): Observable<any> {
-        return this.http.get('http://172.16.1.45:8080/getProjectList').map(
+        return this.http.get('http://172.16.1.57:8090/api/onboard/getProjectList').map(
             response => {
                 console.log(response.json());
                 return response.json();
@@ -28,7 +28,7 @@ export class OnboardingService {
     }
     allSites(id): Observable<any> {
         console.log(id);
-        return this.http.get('http://172.16.1.45:8080/getWBSListByProjectIds/[' + id + ']').map(
+        return this.http.get('http://172.16.1.57:8090/api/onboard/getWBSListByProjectIds/[' + id + ']').map(
             response => {
                 console.log(response.json());
                 return response.json();
@@ -39,7 +39,9 @@ export class OnboardingService {
             })
     }
     getEmployeeListByWbs(wbsId): Observable<any> {
-        return this.http.get('http://172.16.1.97:8088/api/getEmployeeListByWbs/[' + wbsId + ']').map(
+        // let url = 'http://172.16.1.57:8080/api/employeesByWbs/UDS200008570001';
+        let url = 'http://172.16.1.57:8080/api/employeesByWbs/' + wbsId;
+        return this.http.get(url).map(
             response => {
                 console.log(response.json());
                 return response.json();
@@ -51,7 +53,7 @@ export class OnboardingService {
     }
     saveOnboardingUser(object, index) {
         object['isSync'] = true;
-        return this.http.post(this.config.Url + 'api/project', object).map(
+        return this.http.post('http://172.16.1.57:8080/api/employees', object).map(
             response => {
                 return response.json();
             }).catch(error => {

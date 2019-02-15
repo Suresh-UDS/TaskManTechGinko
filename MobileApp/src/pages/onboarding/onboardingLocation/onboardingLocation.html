@@ -36,7 +36,7 @@
                     <div class="col-md-9 col-sm-9 col-xs-9">
                         <ion-item>
                             <ion-label class="label-text TextData" floating>Select Site</ion-label>
-                            <ion-select interface="popover" [(ngModel)]="selectedSite" formControlName="selectSite"
+                            <ion-select interface="popover" (onChange)="clearStorage()" [(ngModel)]="selectedSite" formControlName="selectSite"
                                 required>
                                 <ion-option class="TextData" *ngFor="let site of sites;let i of index" [value]="site">
                                     {{site.wbsDesc}}</ion-option>
@@ -51,8 +51,8 @@
 
                 <div class="row form-group flexCenter">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button ion-button (click)="onboardingList(selectedSite)">Submit</button>
-                        <!-- <button ion-button (click)="onboardingList()" [disabled]="selectClientSiteForm.invalid">Submit</button> -->
+                        <button ion-button (click)="onboardingListDummy()">Submit</button>
+                        <!-- <button ion-button (click)="onboardingList(selectedSite)" [disabled]="selectClientSiteForm.invalid">Submit</button> -->
                     </div>
                 </div>
             </form>

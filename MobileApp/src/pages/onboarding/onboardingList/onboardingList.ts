@@ -30,11 +30,12 @@ export class onboardingExistEmployee implements OnInit {
 
   constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) {
     this.storage.get('onboardingProjectSiteIds').then((Ids) => {
-      this.wbsId = Ids['SiteId'];
+      this.wbsId = Ids['siteId'];
     });
   }
   ngOnInit() { }
   ionViewWillEnter() {
+    this.component.showLoader("Please wait....");
     this.storage.get('OnBoardingData').then((localStoragedData) => {
       // for (let list of localStoragedData['actionRequired']) {
       //   list['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
@@ -81,8 +82,15 @@ export class onboardingExistEmployee implements OnInit {
         //console.log(onBoardingModel);
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
+        
+        this.component.closeLoader();
+      }, err => {
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
         this.onSegmentChange();
         this.getPercentage();
+        this.component.closeLoader();
+        this.component.showToastMessage('Server Unreachable', 'bottom');
       });
     });
   }

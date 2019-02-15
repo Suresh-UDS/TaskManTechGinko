@@ -13,7 +13,7 @@ export class onboardingUserFilterPipe implements PipeTransform {
             let key = Object.keys(filter);
             console.log(key);
             console.log(items);
-            return items.filter(item => item[key[0]].indexOf(filter[key[0]]) !== -1);
+            return items.filter(item => item[key[0]].toLowerCase().indexOf(filter[key[0]].toLowerCase()) !== -1);
         }
     }
 }
