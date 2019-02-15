@@ -867,8 +867,6 @@ angular.module('timeSheetApp')
 							$location.path('/jobs');
 						}
 						$scope.title = $scope.job.title;
-						$scope.job.pendingStatus='pendingAtUDS';
-						$scope.job.pendingAtUDS=true;
 						$scope.selectedSite = {id : data.siteId,name : data.siteName};
 						$scope.job.plannedStartTime = data.plannedStartTime;
 						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'MM/dd/yyyy HH:mm a');
