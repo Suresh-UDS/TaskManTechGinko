@@ -108,7 +108,7 @@ public class SchedulerHelperService extends AbstractService {
 	private static final String DAILY = "DAY";
 	private static final String WEEKLY = "WEEK";
 	private static final String MONTHLY = "MONTH";
-	
+
 	private static final String FREQ_ONCE_EVERY_HOUR = "1H";
 	private static final String FREQ_ONCE_EVERY_2_HOUR = "2H";
 	private static final String FREQ_ONCE_EVERY_3_HOUR = "3H";
@@ -116,7 +116,7 @@ public class SchedulerHelperService extends AbstractService {
 	private static final String FREQ_ONCE_EVERY_5_HOUR = "5H";
 	private static final String FREQ_ONCE_EVERY_6_HOUR = "6H";
 
-	
+
 
 	@Inject
 	private PushService pushService;
@@ -829,7 +829,13 @@ public class SchedulerHelperService extends AbstractService {
 		empAttnList.addAll(siteAttnList);
 		employeeAttnCount.put("ProjEmployees", projEmployees);
 		employeeAttnCount.put("ProjPresent", projPresent);
-		employeeAttnCount.put("ProjAbsent", projAbsent);
+		if(projEmployees<projPresent){
+		    long abscnt = 0;
+            employeeAttnCount.put("ProjAbsent",abscnt );
+
+        }else{
+            employeeAttnCount.put("ProjAbsent", projEmployees - projPresent);
+        }
 		return employeeAttnCount;
 	}
 
@@ -2189,7 +2195,7 @@ public class SchedulerHelperService extends AbstractService {
 				}
 				*/
 			}
-			
+
 			for(Future future : futures) {
 				try {
 					future.get();
@@ -2198,7 +2204,7 @@ public class SchedulerHelperService extends AbstractService {
 				}
 			}
 			executorService.shutdown();
-			
+
 		}
 		schedulerConfigRepository.save(dailyTasks);
 	}
@@ -2227,11 +2233,11 @@ public class SchedulerHelperService extends AbstractService {
 			}
 			List<Job> job = jobRepository.findJobsByParentJobIdAndDate(parentJobId, DateUtil.convertToSQLDate(startTimeCal.getTime()), DateUtil.convertToSQLDate(endTimeCal.getTime()));
 			if (CollectionUtils.isEmpty(job)) {
-				 long siteId = 0; 
+				 long siteId = 0;
 				 try {
 					 boolean shouldProcess = true;
-					 Job parentJob = jobRepository.findOne(parentJobId);
-					 siteId = parentJob.getSite().getId();
+//					 Job parentJob = jobRepository.findOne(parentJobId);
+//					 siteId = parentJob.getSite().getId();
                      if(schedulerConfig.isScheduleDailyExcludeWeekend()) {
                          //if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                         	if(startTimeCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -2245,14 +2251,14 @@ public class SchedulerHelperService extends AbstractService {
 					 if(logger.isErrorEnabled())
 						 logger.error("Failed to create JOB ", ex);
 					 mailService.sendJobCreationErrorEmail(siteId);
-					 
+
 				 }
 			}
 			if(logger.isDebugEnabled()) {
 				logger.debug("Job Creation Thread Completed for, parentJobId -" + parentJobId + ", startTimeCal - " + startTimeCal + ", endTimeCal-" + endTimeCal);
 			}
 		}
-		
+
 		@Override
 		public void run() {
 			execute();
@@ -2260,7 +2266,7 @@ public class SchedulerHelperService extends AbstractService {
 		}
 
 	}
-	
+
 	public void createJobs(SchedulerConfig scheduledTask) {
 		Job parentJob = scheduledTask.getJob();
 		log.debug("creating jobs for - siteId -" + parentJob.getSite().getId());
@@ -2329,12 +2335,12 @@ public class SchedulerHelperService extends AbstractService {
 			} else if (creationPolicy.equalsIgnoreCase("daily")) {
 
 				DateTime currDate = DateTime.now();
-				
+
 				DateTime lastDate = DateTime.now();
 
 				lastDate = lastDate.plusDays(2);
 
-				
+
 				if(CollectionUtils.isNotEmpty(prevJobs)) {
 					Job prevJob = prevJobs.get(0);
 					//currDate = addDays(currDate, scheduledTask.getSchedule(), scheduledTask.getData());
@@ -2367,7 +2373,7 @@ public class SchedulerHelperService extends AbstractService {
 			}
 		}
 	}
-	
+
 	private JobDTO createJob(Job parentJob, Map<String, String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs, Date eHrs, List<JobDTO> jobs) {
 		JobDTO job = new JobDTO();
 		job.setTitle(dataMap.get("title"));
@@ -2504,7 +2510,7 @@ public class SchedulerHelperService extends AbstractService {
 		}
 		return job;
 	}
-	
+
 	private void jobCreationTask(SchedulerConfig scheduledTask, Job parentJob, String data, Date jobDate, List<JobDTO> jobs) {
 		log.debug("Creating Job : " + data);
 		Map<String, String> dataMap = Splitter.on("&").withKeyValueSeparator("=").split(data);
@@ -2537,7 +2543,7 @@ public class SchedulerHelperService extends AbstractService {
 			} catch (Exception ex) {
 				log.warn("Failed to create JOB ", ex);
 				mailService.sendJobCreationErrorEmail(parentJob.getSite().getId());
-				
+
 			}
 
 		} catch (Exception e) {
