@@ -95,13 +95,21 @@ export class onboardingExistEmployee implements OnInit {
     });
   }
   addNewEmpyoee() {
-    this.storage.set('onboardingCurrentIndex', this.actionRequiredEmp.length);
+    let obj = {
+      index: this.actionRequiredEmp.length,
+      action: 'add'
+    }
+    this.storage.set('onboardingCurrentIndex', obj);
     console.log("index === " + this.actionRequiredEmp.length);
     this.navCtrl.push(onboardingNewEmployee);
   }
   updateEmployeeDetails(index) {
     console.log('index = ' + index);
-    this.storage.set('onboardingCurrentIndex', index)
+    let obj = {
+      index: index,
+      action: 'update'
+    }
+    this.storage.set('onboardingCurrentIndex', obj)
     //window.localStorage.setItem('onboardingCurrentIndex', index);
     this.navCtrl.push(onboardingEmpStatus);
   }

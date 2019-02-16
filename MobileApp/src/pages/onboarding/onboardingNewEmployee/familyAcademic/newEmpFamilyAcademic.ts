@@ -23,8 +23,8 @@ export class newEmpFamilyAndAcademic implements OnInit {
       educationQualification: this.fb.array([this.setEducation()]),
       nomineeDetail: this.fb.array([])
     });
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
       this.storage.get('OnBoardingData').then(localStoragedData => {
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')) {

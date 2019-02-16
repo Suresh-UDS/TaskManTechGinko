@@ -36,6 +36,8 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
     const data = document.getElementsByTagName('ion-step-header');
 
     this.storage.get('onboardingCurrentIndex').then(currentIndex => {
+
+      currentIndex = currentIndex['index'];
       console.log('index = ' + currentIndex);
 
       console.log(currentIndex);

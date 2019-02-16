@@ -29,8 +29,8 @@ export class onboardingNewEmployee {
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
   constructor(private network: Network, private onBoardingService: OnboardingService,public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, private navCtrl: NavController) {
 
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);

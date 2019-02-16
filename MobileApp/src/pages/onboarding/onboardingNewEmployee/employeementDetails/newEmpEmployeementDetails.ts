@@ -29,8 +29,8 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder, public componentService: componentService, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
     });
     // this.storage.get('OnBoardingData').then(localStoragedData => {
     //   if (localStoragedData['actionRequired'].length && localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']) {

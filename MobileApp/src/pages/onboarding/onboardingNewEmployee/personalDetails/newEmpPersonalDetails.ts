@@ -19,8 +19,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   pipe = new DatePipe('en-US');
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
   ngOnInit() {
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
     })
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],

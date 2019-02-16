@@ -30,8 +30,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       bankDetails: this.fb.array([this.createBankDetails()])
     });
     this.initialKycImage();
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
     });
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {

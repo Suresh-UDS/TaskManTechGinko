@@ -56,8 +56,8 @@ export class newEmpContactDetails implements OnInit {
   constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
   ngOnInit() {
 
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
     });
     this.onboardingContactDetailsForm = this.fb.group({
       contactNumber: ['', [Validators.required]],
