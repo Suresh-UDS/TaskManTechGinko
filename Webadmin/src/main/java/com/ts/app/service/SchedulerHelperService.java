@@ -829,7 +829,7 @@ public class SchedulerHelperService extends AbstractService {
 		empAttnList.addAll(siteAttnList);
 		employeeAttnCount.put("ProjEmployees", projEmployees);
 		employeeAttnCount.put("ProjPresent", projPresent);
-		employeeAttnCount.put("ProjAbsent", projAbsent);
+		employeeAttnCount.put("ProjAbsent", projEmployees - projPresent);
 		return employeeAttnCount;
 	}
 
