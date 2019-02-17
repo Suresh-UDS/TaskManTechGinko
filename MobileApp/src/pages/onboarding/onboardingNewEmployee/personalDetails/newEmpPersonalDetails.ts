@@ -16,11 +16,13 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   onboardingPersonalDetailsSubscription;
   storedIndex;
   setMinDate: any;
+  formActionStatus:any;
   pipe = new DatePipe('en-US');
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
   ngOnInit() {
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      this.formActionStatus = data['action'];
     })
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
@@ -89,6 +91,13 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
         let fromStatusValues = {
           status: true,
           data: this.onboardingPersonalDetailsForm.value
+        }
+        if(this.formActionStatus == 'add') {
+          let obj = {
+            branchName: '',
+            project: [{}]
+          }
+          fromStatusValues['data'] = obj;
         }
         fromStatusValues['data']['identificationMark'] = [
           fromStatusValues['data']['identificationMark1'],
