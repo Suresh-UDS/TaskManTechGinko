@@ -1093,19 +1093,12 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.job.ticketId = $stateParams.ticketId;
 				}
-				console.log('pendingAtUDS' + $scope.job.pendingAtUDS + ',PendingAtClient'+$scope.job.pendingAtClient);
-				$scope.job.pendingAtUDS = true;
-                $scope.job.pendingAtClient = false;
-				if($scope.job.pendingAtUDS){
-                     $scope.job.pendingStatus='pendingAtUDS';
-                     $scope.job.pendingAtUDS = true;
-                     $scope.job.pendingAtClient = false;
-                }
-                if($scope.job.pendingAtClient){
-                     $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
-                     $scope.job.pendingAtClient = true;
-                     $scope.job.pendingAtUDS = false;
-                }
+				if(!$scope.chVal){
+                   $scope.job.pendingAtUDS = true;
+                   $scope.job.pendingAtClient = false;
+                   $scope.job.pendingStatus='pendingAtUDS';
+                   console.log('pendingAtUDS' + $scope.job.pendingAtUDS + ',PendingAtClient'+$scope.job.pendingAtClient);
+				}
 
 				if($scope.selectedChecklist) {
 					var items = $scope.selectedChecklist.items;
@@ -1194,6 +1187,20 @@ angular.module('timeSheetApp')
 				});
 
 			};
+             $scope.chVal = false;
+			 $scope.chStatus = function(val){
+			     $scope.chVal = true;
+                 if(val == 'UDS'){
+                      $scope.job.pendingStatus='pendingAtUDS';
+                      $scope.job.pendingAtUDS = true;
+                      $scope.job.pendingAtClient = false;
+                 }
+                 if(val == 'Client'){
+                      $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
+                      $scope.job.pendingAtClient = true;
+                      $scope.job.pendingAtUDS = false;
+                 }
+             };
 
 			var that =  $scope;
 
