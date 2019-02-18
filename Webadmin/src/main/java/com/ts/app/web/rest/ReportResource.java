@@ -9,6 +9,9 @@ import javax.inject.Inject;
 
 import com.ts.app.domain.*;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.*;
+import com.ts.app.web.rest.dto.QuotationDTO;
+import com.ts.app.web.rest.dto.SiteDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,19 +26,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.ReportDatabaseService;
-import com.ts.app.service.ReportService;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.SchedulerService;
-import com.ts.app.service.SiteService;
 import com.ts.app.service.util.ReportDatabaseUtil;
-import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SiteDTO;
+import org.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.inject.Inject;
+import java.util.*;
 
 
 /**
@@ -62,9 +68,9 @@ public class ReportResource {
 
 	@Inject
     private SchedulerService schedulerService;
-	
+
 	@Inject
-	private SiteService siteService;
+    private SiteService siteService;
 
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)

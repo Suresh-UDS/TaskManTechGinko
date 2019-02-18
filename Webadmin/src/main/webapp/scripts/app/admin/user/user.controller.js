@@ -215,7 +215,7 @@ angular.module('timeSheetApp')
 			UserComponent.findOne($stateParams.id).then(function (data) {
 				$scope.user = data;
 				//console.log('User Role list',$scope.user);
-				$scope.selectedRole = {id : $scope.user.userRoleId, name : $scope.user.userRoleName};
+				$scope.selectedRole = {id : $scope.user.userRoleId, name : $scope.user.userRole};
 				$scope.selectedEmployee = {id : $scope.user.employeeId,name : $scope.user.employeeName};
 				$scope.loadingStop();
 				//console.log("selected employee",$scope.selectedEmployee);
@@ -362,10 +362,10 @@ angular.module('timeSheetApp')
 
 		if($scope.searchRole) {
 			$scope.searchCriteria.userRoleId = $scope.searchRole.id;
-			$scope.searchCriteria.userRoleName = $scope.searchRole.name;
+			$scope.searchCriteria.userRole = $scope.searchRole.name;
 		}else{
 			$scope.searchCriteria.userRoleId = null;
-			$scope.searchCriteria.userRoleName = null;
+			$scope.searchCriteria.userRole = null;
 		}
 
 
@@ -404,8 +404,8 @@ angular.module('timeSheetApp')
 				$scope.filter = true;
 				$scope.pages.currPage = $scope.localStorage.currPage;
 
-				if($scope.localStorage.userRoleName){
-					$scope.searchRole = {name:$scope.localStorage.userRoleName};
+				if($scope.localStorage.userRole){
+					$scope.searchRole = {name:$scope.localStorage.userRole};
 					$scope.userRolesListOne.selected = $scope.searchRole;
 				}else{
 					$scope.searchRole = null;
@@ -436,10 +436,10 @@ angular.module('timeSheetApp')
 
 			$rootScope.retain = 0;
 
-			var searchCriteras  = $scope.localStorage;
+			$scope.searchCriteras  = $scope.localStorage;
 		}else{
 
-			var searchCriteras  = $scope.searchCriteria;
+			$scope.searchCriteras  = $scope.searchCriteria;
 		}
 
 		/* Localstorage (Retain old values while edit page to list) end */
@@ -447,7 +447,7 @@ angular.module('timeSheetApp')
 
 
 
-		UserComponent.search(searchCriteras).then(function (data) {
+		UserComponent.search($scope.searchCriteras).then(function (data) {
 			//$scope.loadEmployee();
 			//console.log("Employee details---"+JSON.stringify($scope.loadEmployee()));
 			$scope.users = data.transactions;
@@ -457,7 +457,7 @@ angular.module('timeSheetApp')
 
 
 			/** retaining list search value.**/
-			getLocalStorage.updateSearch(searchCriteras);
+			getLocalStorage.updateSearch($scope.searchCriteras);
 			/*
 			 ** Call pagination  main function **
 			 */

@@ -74,7 +74,7 @@ var _ = require('underscore');
             quotation.processHistory.isRejected = date;
             quotation.status = 'Rejected';
         }else{
-            quotation.isApproved = false;
+            quotation.isRejected = false;
         }
 
         if(req.body.isArchived){

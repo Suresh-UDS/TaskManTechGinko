@@ -146,6 +146,16 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="pull-right">
+                                <!-- Material switch -->
+                                <div class="switch">
+                                    <span>Show Deleted Jobs</span>
+                                    <label>
+                                        <input type="checkbox" ng-model="showInActive" ng-click="searchFilter();">
+                                        <span class="lever"></span>
+                                    </label>
+                                </div>
+                            </div>
                        </div>
 
                     </div>
@@ -642,7 +652,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">From date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" tabindex="1" />
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" placeholder="DD/MM/YYYY"  id="searchJobDate"  ng-model="searchJobDate" autocomplete="off" tabindex="1" />
 
 	                                                 <p class="help-block" style="color:maroon"
 	                                                   ng-show="searchForm.employee.$error.required">
@@ -657,7 +667,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">To date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" placeholder="DD/MM/YYYY"  id="searchJobDateTo"  ng-model="searchJobDateTo" autocomplete="off" tabindex="2" />
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" placeholder="DD/MM/YYYY"  id="searchJobDateTo"  ng-model="searchJobDateTo" autocomplete="off" tabindex="2" />
                                                 </div>
                                             </div>
                                         </div>

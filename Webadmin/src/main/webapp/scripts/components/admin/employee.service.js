@@ -212,6 +212,19 @@ angular.module('timeSheetApp')
                 })
             },
 
+            unAssignReliever: function (relieverDetails) {
+
+                return $http.post('api/employee/unAssignReliever',relieverDetails).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getEmployeeOpenTickets:function(employeeId){
+                return $http.get('api/employee/openTickets/'+employeeId).then(function (response) {
+                    return response.data;
+                })
+            },
+
             getRelievers: function (emp) {
                 return $http.post('api/employee/relievers',emp).then(function (response) {
                     return response.data;
@@ -308,6 +321,13 @@ angular.module('timeSheetApp')
 
             getEmpRelievers : function (searchCriteria) {
                 return $http.post('api/relieversList', searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
+
+            markLftEmp : function (lftEmp) {
+                return $http.post('api/employee/left',lftEmp).then(function (response) {
+                console.log('<< Response',response);
                     return response.data;
                 });
             }

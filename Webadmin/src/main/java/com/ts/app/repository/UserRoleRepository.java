@@ -23,6 +23,9 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 	@Query("SELECT ur FROM UserRole ur WHERE ur.active='Y' order by last_modified_date desc")
 	List<UserRole> findActiveUserRoles();
 
+    @Query("SELECT ur FROM UserRole ur WHERE NOT ur.name='Admin' order by last_modified_date desc")
+    List<UserRole> findExcludeAdminRole();
+
 	@Query("SELECT ur FROM UserRole ur WHERE ur.id = :userRoleId and ur.active='Y'")
 	Page<UserRole> findRoleById(@Param("userRoleId") long userRoleId, Pageable pageRequest);
 

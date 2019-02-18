@@ -1830,7 +1830,7 @@ a.cal-btn i
   .overlay{
     background: rgba(255,255,255,0.4);
     width: 100%;
-    height: 250%;
+    height: 500%;
     position: absolute;
     top: 0;
     left: 0;
@@ -2454,5 +2454,22 @@ ul.ckLstDot li:before {
  }
 
  /* Highchart custom loader css end */
+
+ .fdbackRemarks:not(:checked) {
+     position: unset !important;
+     opacity: 1 !important;
+     pointer-events: visible !important;
+
+ }
+
+ /* datepicker cursor modified css*/
+ input.datepicker,input.timepicker {
+   color: transparent;
+   text-shadow: 0 0 0 #000;
+
+   &:focus {
+       outline: none;
+   }
+ }
 
 

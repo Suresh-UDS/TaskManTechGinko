@@ -45,8 +45,8 @@
                     Mail: {{searchCriteras.userEmail}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userRoleName && searchCriteras.userRoleName !='-- ALL ROLE --'">
-                    Role: {{searchCriteras.userRoleName}}
+                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteras.userRole && searchCriteras.userRole !='-- ALL ROLE --'">
+                    Role: {{searchCriteras.userRole}}
                 </span>
 
             </span>
@@ -365,7 +365,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 col-md-4">
+                            <div class="col-xs-12 col-md-4">
                             <div class="form-group" >
                                 <div class="dropdown">
                                     <input type="text" class="form-control searchable-input floatL border-bottom-input" placeholder="Search Email"
@@ -374,23 +374,23 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-xs-12 col-md-4">
                             <div class="form-group" >
                                 <div class="dropdown">
-                                    <div class="form-group">
+
                                         <!-- <label class="control-label">User Role</label> -->
-                                       
+
                                         <span ng-show="roleDisable"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                         <span ng-show="!roleDisable && !userRolesListOne.selected" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                               
+
 	                                    <ui-select ng-model="userRolesListOne.selected"  ng-disabled="roleDisable">
 										  <ui-select-match placeholder="Select User Role..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 										  <ui-select-choices repeat="userRolesListOne in userRolesLists | filter: $select.search"  null-option="allUserRole" loose-null>
 										    <span ng-bind-html="userRolesListOne.name | highlight: $select.search"></span>
 										  </ui-select-choices>
 										</ui-select>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

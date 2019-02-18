@@ -166,7 +166,6 @@ public class TicketManagementService extends AbstractService {
 
     }
 
-
     public TicketDTO updateTicket(TicketDTO ticketDTO){
         User user = userRepository.findOne(ticketDTO.getUserId());
         Ticket ticket = ticketRepository.findOne(ticketDTO.getId());
@@ -205,7 +204,7 @@ public class TicketManagementService extends AbstractService {
         }
 
         if(isValid) {
-            Site site = siteRepository.findOne(ticket.getSite().getId());
+            Site site = siteRepository.findOne(ticketDTO.getSiteId());
             if(site!=null){
                 ticket.setSite(site);
             }
@@ -591,6 +590,8 @@ public class TicketManagementService extends AbstractService {
 
     private void sendNotifications(Employee ticketOwner, Employee assignedTo,Employee currentUserEmp,  Ticket ticket, Site site, boolean isNew) {
         User assignedToUser = null;
+
+        site = siteRepository.getOne(ticket.getSite().getId());
         if(assignedTo != null) {
             Hibernate.initialize(assignedTo.getUser());
             assignedToUser = assignedTo.getUser();

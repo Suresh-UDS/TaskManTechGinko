@@ -60,11 +60,20 @@
                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParams()">
                                             <div class="row">
                                                 <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">Select Parameter</label>
+                                                    <label class="control-label">Select Parameter<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" ng-model="selectedParameter"  ng-options="parameter as parameter.name for parameter in parameters track by parameter.name">
+                                                    <select class="form-control" ng-model="selectedParameter" name="selectedAssetParam"  ng-options="parameter as parameter.name for parameter in parameters track by parameter.name" required>
                                                         <option value="">Select parameter ..</option>
                                                     </select>
+                                                    <div ng-show="form.$submitted  || form.selectedAssetParam.$touched">
+                                                        <div ng-show="form.selectedAssetParam.$dirty || form.selectedAssetParam.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.selectedAssetParam.$error.required">
+                                                                Asset Parameter is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-2 ">
                                                    <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addParameter" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
@@ -88,11 +97,20 @@
                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon" ng-init="loadAssetParamUoms()">
                                             <div class="row">
                                                 <div class="col-md-10 pad-r-0px">
-                                                    <label class="control-label">Select Units</label>
+                                                    <label class="control-label">Select Units<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom">
+                                                    <select class="form-control" name="parameterUOM" ng-model="selectedParameterUOM"  ng-options="parameterUOM as parameterUOM.uom for parameterUOM in parameterUOMs track by parameterUOM.uom" required>
                                                         <option value="">Select units ..</option>
                                                     </select>
+                                                    <div ng-show="form.$submitted || form.parameterUOM.$touched || form.parameterUOM.$dirty">
+                                                        <div ng-show="form.parameterUOM.$dirty || form.parameterUOM.$invalid">
+                                                            <p class="help-block" style="color:maroon"
+                                                               ng-show="form.parameterUOM.$error.required">
+                                                                Parameter UOM is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-2 ">
                                                     <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
@@ -242,8 +260,8 @@
                                                 </div>
                                              </td>
 			                                 <td class="text-right">
-                                                <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="Config:Edit"  title="Edit"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-			                                 	<a  has-permission="Config:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" title="Delete" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
+                                                <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="Asset:Config"  title="Edit"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+			                                 	<a  has-permission="Asset:Config" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" title="Delete" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>
 			                                 </td>
 
 										</tr>

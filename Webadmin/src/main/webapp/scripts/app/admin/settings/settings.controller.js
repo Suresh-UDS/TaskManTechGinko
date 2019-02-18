@@ -7,13 +7,13 @@ angular.module('timeSheetApp')
 	$rootScope.loginView = false;
 	$scope.selectedProject =null;
 	$scope.selectedDayWiseAttnEmailTimeSer =  new Date();
-	$scope.selectedDayWiseAttnEmailTime= $filter('date')(new Date(), 'dd/MM/yyyy HH:mm a');
+	$scope.selectedDayWiseAttnEmailTime= $filter('date')(new Date(), 'MM/dd/yyyy HH:mm a');
 
 	$scope.selectedDayWiseReportEmailTimeSer = new Date();
-	$scope.selectedDayWiseReportEmailTime= $filter('date')(new Date(), 'dd/MM/yyyy HH:mm a');
+	$scope.selectedDayWiseReportEmailTime= $filter('date')(new Date(), 'MM/dd/yyyy HH:mm a');
 
 	$scope.selectedFeedbackReportTimeSer = new Date();
-	$scope.selectedFeedbackReportTime= $filter('date')(new Date(), 'dd/MM/yyyy HH:mm a');
+	$scope.selectedFeedbackReportTime= $filter('date')(new Date(), 'MM/dd/yyyy HH:mm a');
 
 
 	$scope.selectedSite =null;
@@ -55,7 +55,7 @@ angular.module('timeSheetApp')
 
 		$.notifyClose();
 
-		$scope.selectedDayWiseAttnEmailTime = $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm a');
+		$scope.selectedDayWiseAttnEmailTime = $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 		$scope.selectedDayWiseAttnEmailTimeSer = new Date(e.date._d);
 		$scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTimeSer;
 
@@ -67,7 +67,7 @@ angular.module('timeSheetApp')
 
 		$.notifyClose();
 
-		$scope.selectedDayWiseReportEmailTime= $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm a');
+		$scope.selectedDayWiseReportEmailTime= $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 		$scope.selectedDayWiseReportEmailTimeSer = new Date(e.date._d);
 		$scope.settings.dayWiseReportAlertTime = $scope.selectedDayWiseReportEmailTimeSer;
 
@@ -79,7 +79,7 @@ angular.module('timeSheetApp')
 
 		$.notifyClose();
 
-		$scope.selectedFeedbackReportTime= $filter('date')(e.date._d, 'dd/MM/yyyy HH:mm a');
+		$scope.selectedFeedbackReportTime= $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 		$scope.selectedFeedbackReportTimeSer = new Date(e.date._d);
 		$scope.settings.feedbackReportTime = $scope.selectedFeedbackReportTimeSer;
 

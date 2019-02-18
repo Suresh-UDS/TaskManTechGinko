@@ -62,7 +62,7 @@ angular.module('timeSheetApp')
             }
         }).state('quotation-list', {
 	          parent: 'manage',
-	          url: '/quotation-list',
+	          url: '/quotation-list?{project:json}{site:json}',
 	          //controller: 'QuotationController',
 	          data: {
 	              authorities: [],
@@ -75,8 +75,12 @@ angular.module('timeSheetApp')
 	              }
 	          },
 	          resolve: {
-	
-	
-	          }
+
+
+	          },
+              params:{
+                project:null,
+                site:null
+              }
 	      });
     });

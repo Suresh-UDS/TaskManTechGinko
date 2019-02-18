@@ -937,6 +937,11 @@ public class SettingsService extends AbstractService {
         return applicationVersionControl;
     }
 
+    public List<ApplicationVersionControl>  findApplicationVersionCode(String type) {
+        List<ApplicationVersionControl> applicationVersionControl = applicationVersionControlRepository.findByApplicationStoreName(type);
+        return applicationVersionControl;
+    }
+
     public SettingsDTO findSetting(String key) {
     		SettingsDTO settingDto = null;
     		if(StringUtils.isNotEmpty(key)) {

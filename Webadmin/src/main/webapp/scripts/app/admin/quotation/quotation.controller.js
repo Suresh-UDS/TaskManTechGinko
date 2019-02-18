@@ -150,22 +150,76 @@ angular
 
 			        });
 
-			        $('input#searchCreatedDate').on('dp.change', function(e){
+			        /*$('input#searchCreatedDate').on('dp.change', function(e){
 		                $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchCreatedDateSer = new Date(e.date._d);
-		                /*if($scope.searchToDate < $scope.searchCreatedDate){
+		                *//*if($scope.searchToDate < $scope.searchCreatedDate){
 		                	$scope.searchToDate = "";
 			                $scope.searchToDateSer = "";
 		                }
 		                $('input#searchToDate').datetimepicker().on('dp.show', function () {
 		                return $(this).data('DateTimePicker').minDate(e.date);
-		                });*/
+		                });*//*
 		            });
 
 			        $('input#searchToDate').on('dp.change', function(e){
 		                $scope.searchToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
 		                $scope.searchToDateSer = new Date(e.date._d);
-		            });
+		            });*/
+
+		            $('#searchCreatedDate').on('dp.change', function(e){
+                        $scope.searchCreatedDateSer =new Date(e.date._d);
+                        $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                        $scope.searchCreatedDateSer.setHours(0,0,0,0);
+                        if($scope.searchToDateSer){
+                            $scope.searchToDateSer.setHours(0,0,0,0);
+                        }
+
+
+                        if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
+                            $scope.fromErrMsg = 'From date cannot be greater than To date';
+
+                            alert($scope.fromErrMsg);
+
+                            $('input#searchCreatedDate').data('DateTimePicker').clear();
+                            $('input#searchToDate').data('DateTimePicker').clear();
+                            $scope.searchCreatedDateSer = new Date();
+                            $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                            $scope.searchToDateSer = new Date();
+                            $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                            $('input#searchCreatedDate').val($scope.searchCreatedDate);
+                            $('input#searchToDate').val($scope.searchToDate);
+
+                            return false;
+                        }
+
+                    });
+                    $('#searchToDate').on('dp.change', function(e){
+                        $scope.searchToDateSer =new Date(e.date._d);
+                        $scope.searchToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                        $scope.searchToDateSer.setHours(0,0,0,0);
+                        if($scope.searchCreatedDateSer){
+                            $scope.searchCreatedDateSer.setHours(0,0,0,0);
+                        }
+
+                        if($scope.searchCreatedDateSer > $scope.searchToDateSer && $scope.searchCreatedDateSer != $scope.searchToDateSer){
+                            $scope.toErrMsg = 'To date cannot be lesser than From date';
+
+                            alert($scope.toErrMsg);
+
+                            $('input#searchCreatedDate').data('DateTimePicker').clear();
+                            $('input#searchToDate').data('DateTimePicker').clear();
+                            $scope.searchCreatedDateSer = new Date();
+                            $scope.searchCreatedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                            $scope.searchToDateSer = new Date();
+                            $scope.searchToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                            $('input#searchCreatedDate').val($scope.searchCreatedDate);
+                            $('input#searchToDate').val($scope.searchToDate);
+
+                            return false;
+                        }
+
+                    });
 
 			        $scope.initCalender();
 
@@ -1082,7 +1136,7 @@ angular
                             $scope.siteFilterDisable=false;
 
                         }else{
-                           $scope.searchSite = null;
+                          $scope.searchSite = null;
                           $scope.sitesListOne.selected=$scope.searchSite;
                         }
                         if($rootScope.searchFilterCriteria.quotStatus){
@@ -1107,6 +1161,10 @@ angular
 
 		        	    if($scope.client.selected && $scope.client.selected.id !=0){
                             $scope.searchProject = $scope.client.selected;
+                        }else if($stateParams.project){
+                             $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                             $scope.client.selected =$scope.searchProject;
+                             $scope.projectFilterFunction($scope.searchProject);
                         }else{
                            $scope.searchProject = null;
                         }
@@ -1122,6 +1180,9 @@ angular
                         }
                         if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
                             $scope.searchSite = $scope.sitesListOne.selected;
+                        }else if($stateParams.site){
+                              $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
+                              $scope.sitesListOne.selected = $scope.searchSite;
                         }else{
                            $scope.searchSite = null;
                         }

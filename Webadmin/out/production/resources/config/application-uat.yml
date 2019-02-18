@@ -230,15 +230,15 @@ scheduler:
    attendanceConsolidatedReport:
       enabled: true
    feedbackreport:
-      enabled: true 
+      enabled: true
    attendanceMusterRollReport:
-      enabled: true 
+      enabled: true
    dayWiseJobReport:
-      enabled: true 
+      enabled: true
    dayWiseTicketReport:
       enabled: true
    dayWiseQuotationReport:
-      enabled: true 
+      enabled: true
 
 default.user.password: uds12345
 
@@ -248,6 +248,15 @@ google:
           callback:
               host: 13.232.248.92
               port: 8080
+
+influxdb:
+    url: http://3.0.29.145:8086
+    username: superadmin
+    password: "*BehindWheel7"
+    dbname: dashboard
+    retention-policy: one_year_policy
+    gzip: true
+
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

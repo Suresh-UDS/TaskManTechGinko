@@ -411,7 +411,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Acquired Date</label>
                                                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                    <input type="text" ng-model="assetEdit.acquiredDate1" class="form-control datepicker"  id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}" tabindex="12" />
+                                                                                    <input type="text" ng-model="assetEdit.acquiredDate1" class="form-control datepicker" onkeydown="return false" id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}" tabindex="12" />
 
                                                                                 </div>
 
@@ -641,7 +641,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">From Date</label>
                                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                                <input type="text" class="form-control datepicker"  id="warFromDate" ng-model ="assetEdit.warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off" tabindex="18" />
+                                                                                                <input type="text" class="form-control datepicker" onkeydown="return false" id="warFromDate" ng-model ="assetEdit.warFromDate1" placeholder="DD/MM/YYYY" name="warFromDate" autocomplete="off" tabindex="18" />
                                                                                                 <!-- <div ng-show="form.$submitted || form.warFromDate.$touched"> -->
                                                                                                     <!-- <div
                                                                                                         ng-show="form.warFromDate.$dirty || form.warFromDate.$invalid">
@@ -666,7 +666,7 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">To Date</label>
                                                                                                 <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                                                <input type="text" class="form-control datepicker"  id="warToDate" ng-model ="assetEdit.warToDate1" name="warToDate" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="19" />
+                                                                                                <input type="text" class="form-control datepicker" onkeydown="return false" id="warToDate" ng-model ="assetEdit.warToDate1" name="warToDate" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="19" />
                                                                                                <!--  <div ng-show="form.$submitted || form.warToDate.$touched"> -->
                                                                                                     <!-- <div
                                                                                                         ng-show="form.warToDate.$dirty || form.warToDate.$invalid">
@@ -1036,7 +1036,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input  type="text" class="form-control datepicker"  id="dateFilterPpmFrom"  ng-model="ppmFrom" placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"  name="PpmFrom" required />
+                                                                            <input  type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterPpmFrom"  ng-model="ppmFrom" placeholder="{{dateFilterPpmFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"  name="PpmFrom" required />
                                                                             <div ng-show="form3.$submitted || form3.PpmFrom.$touched || form3.PpmFrom.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.PpmFrom.$dirty || form3.PpmFrom.$invalid">
@@ -1056,7 +1056,7 @@
                                                                         <div class="form-group">
                                                                             <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                             <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                            <input type="text" class="form-control datepicker"  id="dateFilterPpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}" autocomplete="off"  name ="PpmTo" required />
+                                                                            <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterPpmTo" ng-model="ppmTo"  placeholder="{{dateFilterPpmTo | date:'dd-MMM-yyyy'}}" autocomplete="off"  name ="PpmTo" required />
                                                                             <div ng-show="form3.$submitted || form3.PpmTo.$touched || form3.PpmTo.$dirty">
                                                                                 <div
                                                                                     ng-show="form3.PpmTo.$dirty || form3.PpmTo.$invalid">
@@ -1080,7 +1080,7 @@
 
                                                                                 <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as (emp.name | uppercase) for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                                <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                     <option value="">Select Employees...</option>
@@ -1184,7 +1184,7 @@
 						                                                    <label class="control-label">Start Time<span class="red-star">*</span></label>
 						                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-						                                                    <input type="text" class="form-control timepicker padng-right10"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'hh:mm a'}}" />
+						                                                    <input type="text" class="form-control timepicker padng-right10" onkeydown="return false"  id="ppmJobStartTime"  ng-model="ppmJobStartTime" autocomplete="off" name="ppmJobStartTime" ng-required="true" placeholder="{{ppmJobStartTime | date:'hh:mm a'}}" />
 
 																		   <div ng-show="form3.$submitted || form3.ppmJobStartTime.$touched || form3.ppmJobStartTime.$dirty">
                                                                                 <div
@@ -1370,7 +1370,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">From Date<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"required />
+                                                                        <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterAmcFrom" ng-model="amcFrom" name="AmcFrom" placeholder="{{dateFilterAmcFrom | date:'dd-MMM-yyyy'}}" autocomplete="off"required />
                                                                         <div ng-show="form4.$submitted || form4.AmcFrom.$touched || form4.AmcFrom.$dirty">
                                                                             <div
                                                                                 ng-show="form4.AmcFrom.$dirty || form4.AmcFrom.$invalid">
@@ -1390,7 +1390,7 @@
                                                                     <div class="form-group">
                                                                         <label class="control-label">To Date<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                                        <input type="text" class="form-control datepicker"  id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}" autocomplete="off" required />
+                                                                        <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterAmcTo"  ng-model="amcTo" name="AmcTo" placeholder="{{dateFilterAmcTo | date:'dd-MMM-yyyy'}}" autocomplete="off" required />
                                                                         <div ng-show="form4.$submitted || form4.AmcTo.$touched || form4.AmcTo.$dirty">
                                                                             <div
                                                                                 ng-show="form4.AmcTo.$dirty || form4.AmcTo.$invalid">
@@ -1413,7 +1413,7 @@
 
                                                                             <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as (emp.name | uppercase) for emp in employees track by emp.id" name="employeeName" ng-required="true">
+                                                                            <select class="form-control "  ng-model="selectedEmployee"  ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" name="employeeName" ng-required="true">
 
 
                                                                                 <option value="">Select Employees...</option>
@@ -1513,7 +1513,7 @@
                                                                         <label class="control-label">Start Time<span class="red-star">*</span></label>
                                                                         <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
 
-                                                                        <input type="text" class="form-control timepicker padng-right10"  id="amcJobStartTime"  name="amcJobStartTime" ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'hh:mm a'}}" autocomplete="off" required/>
+                                                                        <input type="text" class="form-control timepicker padng-right10" onkeydown="return false"  id="amcJobStartTime"  name="amcJobStartTime" ng-model="amcJobStartTime" placeholder="{{amcJobStartTime | date:'hh:mm a'}}" autocomplete="off" required/>
 
                                                                         <div ng-show="form4.$submitted || form4.amcJobStartTime.$touched || form4.amcJobStartTime.$dirty">
                                                                             <div
@@ -1725,14 +1725,14 @@
                                                                                 <div class="" style="float:left;width:100%;" ng-init="loadAllRules()">
                                                                                     <label class="control-label">Select Rule </label>
                                                                                     <span class="form-control-feedback d-arrow-icon" style="padding-right: 30px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="param" ng-options="(rule | uppercase) for rule in readingRules"  aria-invalid="false" >
+                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="rule" ng-options="(rule | uppercase) for rule in readingRules"  aria-invalid="false" >
                                                                                     <option value="" class="" selected="selected">Select Rule ..</option>
                                                                                     </select>
-                                                                                    <!-- <div ng-show="form6.$submitted || form6.param.$touched">
-                                                                                        <div ng-show="form6.param.$dirty || form6.param.$invalid">
+                                                                                    <!-- <div ng-show="form6.$submitted || form6.rule.$touched">
+                                                                                        <div ng-show="form6.rule.$dirty || form6.rule.$invalid">
                                                                                             <p class="help-block" style="color:maroon"
-                                                                                               ng-show="form6.param.$error.required">
-                                                                                                Parameter is required.
+                                                                                               ng-show="form6.rule.$error.required">
+                                                                                                Rule is required.
                                                                                             </p>
 
                                                                                         </div>
@@ -1946,13 +1946,13 @@
                                                                                          </div>
                                                                                      </td> -->
                                                                                     <td class="text-right">
-                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')" href="javascript:void(0);"  has-permission="Config:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                                                                        <a  has-permission="Config:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
+                                                                                        <a  ng-click="getParameterConfigDetails(assetParam.id ,'edit')" href="javascript:void(0);"  has-permission="AssetConfig:Edit"   class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                                                                        <a  has-permission="AssetConfig:Delete" href="javascript:void(0);" class="btn btn-simple btn-danger" ng-click="deleteConfigConfirm(assetParam.id)"><i class="material-icons" onClick="$('#deleteModalConfig').modal()" data-target="#myModal">delete_forever</i><div class="ripple-container"></div></a>
                                                                                     </td>
 
                                                                                 </tr>
                                                                                 <tr>
-                                                                                   <td colspan="7" align="center" ng-show="!assetParameters">No asset param Found</td>
+                                                                                   <td colspan="8" align="center" ng-if="assetParameters.length == 0">No asset param Found</td>
                                                                                 </tr>
 
                                                                             </tbody>

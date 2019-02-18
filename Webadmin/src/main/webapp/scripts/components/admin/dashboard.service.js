@@ -101,6 +101,12 @@ angular.module('timeSheetApp')
                 return $http.post('api/reliever/count', searchCriteria).then(function (response) {
                     return response.data;
                 });
+            },
+
+            getAvgTicketMonthly : function () {
+                return $http.get('api/getAvgTicket/monthly').then(function (response) {
+                   return response.data;
+                });
             }
         }
     })

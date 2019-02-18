@@ -39,6 +39,7 @@ declare  var demo;
 export class AssetList {
 
     assetList:any;
+
     searchCriteria:any;
     page:1;
     totalPages:0;
@@ -488,10 +489,6 @@ export class AssetList {
 
 
     }
-
-
-
-
 
 
 }

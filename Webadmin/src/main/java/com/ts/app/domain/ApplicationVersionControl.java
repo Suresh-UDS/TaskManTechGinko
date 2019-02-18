@@ -1,13 +1,7 @@
 package com.ts.app.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "application_version_control")
@@ -25,6 +19,9 @@ public class ApplicationVersionControl extends AbstractAuditingEntity implements
 
     @Column(name = "application_version")
     private String applicationVersion;
+
+    @Column(name = "display_version")
+    private String displayVersion;
 
     public long getId() {
         return id;
@@ -49,5 +46,13 @@ public class ApplicationVersionControl extends AbstractAuditingEntity implements
 
     public void setApplicationVersion(String applicationVersion) {
         this.applicationVersion = applicationVersion;
+    }
+
+    public String getDisplayVersion() {
+        return displayVersion;
+    }
+
+    public void setDisplayVersion(String displayVersion) {
+        this.displayVersion = displayVersion;
     }
 }

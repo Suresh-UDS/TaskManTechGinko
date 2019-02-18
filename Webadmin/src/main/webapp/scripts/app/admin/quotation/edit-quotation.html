@@ -72,11 +72,11 @@
 														ng-show="form.$submitted || form.quotationDescription.$touched">
 														<div
 															ng-show="form.quotationDescription.$dirty || form.quotationDescription.$invalid">
-															<p class="help-block" style="color: maroon"
+															<p class="help-block" style="width:100%;z-index:996;background:#fff;color:maroon"
 																ng-show="form.quotationDescription.$error.maxlength">
 																Quotation Description cannot be longer than 250
 																characters.</p>
-															<p class="help-block" style="color: maroon"
+															<p class="help-block" style="width:100%;z-index:998;background:#fff;color:maroon"
 																ng-show="form.quotationDescription.$error.pattern">
 																Quotation Description contain letters and space.</p>
 														</div>
@@ -95,7 +95,7 @@
                                                     <div class="dropdown">
 
                                                         <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                              
+
 		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
 														  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
@@ -107,7 +107,7 @@
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.projectName.$error.required">
                                                                     Client name is required.
-                                                                </p>    
+                                                                </p>
                                                             </div>
                                                         </div>
 
@@ -120,7 +120,7 @@
                                                     <span class="red-star">*</span>
                                                     <div class="dropdown" >
                                                         <span ng-show="!siteDisable && !SelectSite.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                              
+
 		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="true">
 														  <ui-select-match placeholder="Select sites..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="SelectSite in SelectSites | filter: $select.search" >
@@ -133,7 +133,7 @@
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="form.siteName.$error.required">
                                                                     Site name is required.
-                                                                </p> 
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </div>

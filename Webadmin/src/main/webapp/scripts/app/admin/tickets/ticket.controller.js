@@ -191,7 +191,7 @@ angular.module('timeSheetApp')
 		{
 			/** @reatin - retaining scope value.**/
 			$rootScope.retain=1;
-			$scope.updatedTicket()
+			$scope.updatedTicket();
 		}
 	};
 
@@ -412,11 +412,13 @@ angular.module('timeSheetApp')
 	}
 	//
 
-
+    $scope.siteSpin = false;
 	$scope.loadSites = function () {
+	    $scope.siteSpin = true;
 		SiteComponent.findAll().then(function (data) {
 			$scope.sites = data;
 			$scope.loadingStop();
+			$scope.siteSpin = false;
 		});
 	};
 
@@ -658,9 +660,10 @@ angular.module('timeSheetApp')
 		}
 	}
 
-
+    $scope.empSpin = false;
 	$scope.loadEmployees = function () {
 		if($scope.selectedSite){
+		    $scope.empSpin = true;
 			$scope.searchCriteria.siteId = $scope.selectedSite.id;
 			$scope.searchCriteria.list = true;
 			$scope.searchCriteria.module = 'Ticket';
@@ -669,6 +672,7 @@ angular.module('timeSheetApp')
 				//$scope.selectedEmployee = null;
 				$scope.employees = data.transactions;
 				//console.log('Site based employees -- ',$scope.employees);
+				$scope.empSpin = false;
 			});
 		}
 	};
@@ -1063,7 +1067,9 @@ angular.module('timeSheetApp')
 			$scope.showNotifications('top','center','success','Ticket status has been updated successfuly!!');
 			$(".fade").removeClass("modal-backdrop");
 			$('#reopenModalNew').modal('hide');
-			$state.reload();
+			//$state.reload();
+			$rootScope.retain=1;
+            $scope.searchFilter();
 
 		});
 	}
@@ -1238,7 +1244,11 @@ angular.module('timeSheetApp')
 
 			if($scope.client.selected && $scope.client.selected.id !=0){
 				$scope.searchProject = $scope.client.selected;
-			}else{
+			}else if($stateParams.project){
+                 $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                 $scope.client.selected =$scope.searchProject;
+                 $scope.projectFilterFunction($scope.searchProject);
+            }else{
 				$scope.searchProject = null;
 			}
 			if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
@@ -1253,7 +1263,10 @@ angular.module('timeSheetApp')
 			}
 			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 				$scope.searchSite = $scope.sitesListOne.selected;
-			}else{
+			}else if($stateParams.site){
+                   $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
+                   $scope.sitesListOne.selected = $scope.searchSite;
+             }else{
 				$scope.searchSite = null;
 			}
 			if($scope.statusListOne.selected && $scope.statusListOne.selected != '-- ALL STATUS --'){

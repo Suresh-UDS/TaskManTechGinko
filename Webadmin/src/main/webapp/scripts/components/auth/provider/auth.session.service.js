@@ -31,6 +31,14 @@ angular.module('timeSheetApp')
             hasValidToken: function () {
                 var token = this.getToken();
                 return !!token;
+            },
+            getCurrentVersion: function (type) {
+                console.log("Application type version control");
+                console.log(type);
+                return $http.get('api/web/version/'+type).then(function (response) {
+                    console.log(response)
+                    return response.data;
+                });
             }
         };
     });

@@ -23,9 +23,9 @@
 
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                
+
                                                 <label class="control-label">Select Client<span class="red-star">*</span> </label>
-                                               
+
                                                 <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
                                                 <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
@@ -237,12 +237,12 @@
                                                            Pin code is invalid.
                                                        </p>
                                                    </div>
-                                               </div> 
+                                               </div>
                                            </div>
                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="control-label">Country</label>
+                                                <label class="control-label">Country<span class="red-star">*</span></label>
                                                 <input type="text"  name="country" ng-model="site.country" tabindex="10"  class="form-control" required>
                                                 <div ng-show="form.$submitted || form.country.$touched || form.country.$dirty">
                                                    <div ng-show="form.country.$dirty || form.country.$invalid">
@@ -273,7 +273,7 @@
                                             <div class="form-group  ">
                                                 <label class="control-label">Site Location (Latitude) </label>
                                                 <input type="text" class="form-control"   name='latitude'
-                                                       ng-model="site.addressLat" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' tabindex="2" required autocomplete="off"/>
+                                                       ng-model="site.addressLat" ng-pattern='/^[-+]?[0-9]{1,10}(\.[0-9]+)?$/' tabindex="2" required autocomplete="off"/>
                                                 <div ng-show="form.$submitted || form.latitude.$touched || form.latitude.$dirty">
                                                     <div ng-show="form.latitude.$dirty || form.latitude.$invalid">
                                                         <p class="help-block" style="color:maroon"
@@ -296,7 +296,7 @@
                                             <div class="form-group  ">
                                                 <label class="control-label">Site Location (Longitude) </label>
                                                 <input type="text" class="form-control"   name='longitude'
-                                                       ng-model="site.addressLng" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' tabindex="3" required autocomplete="off"/>
+                                                       ng-model="site.addressLng" ng-pattern='/^[-+]?[0-9]{1,10}(\.[0-9]+)?$/' tabindex="3" required autocomplete="off"/>
                                                 <div ng-show="form.$submitted || form.longitude.$touched || form.longitude.$dirty">
                                                     <div ng-show="form.longitude.$dirty || form.longitude.$invalid">
                                                         <p class="help-block" style="color:maroon"
@@ -319,14 +319,15 @@
                                             <div class="form-group">
                                                 <label class="control-label">Geo Fence Radius (in Kms.) </label>
                                                 <input type="text" class="form-control"   name='radius'
-                                                       ng-model="site.radius" ng-pattern='/^[-+]?[0-9]{1,7}(\.[0-9]+)?$/' tabindex="5" required autocomplete="off"/>
+                                                       ng-model="site.radius" ng-pattern='/^[-+]?[0-9]{1,3}(\.[0-9]+)?$/' tabindex="5"  required autocomplete="off"/>
                                                 <div ng-show="form.$submitted || form.radius.$touched || form.radius.$dirty">
                                                     <div ng-show="form.radius.$dirty || form.radius.$invalid">
-                                                        <p class="help-block" style="color:maroon"
+                                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                            ng-show="form.radius.$error.required">
                                                             Radius is required.
                                                         </p>
-                                                        <p class="help-block" style="color:maroon"
+
+                                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                            ng-show="form.radius.$error.pattern">
                                                             Radius is invalid.
                                                         </p>
@@ -608,14 +609,14 @@
             <div class="modal-body">
 
                 <form name="addRegionForm" role="form" ng-submit="addRegion()" novalidate>
-                    
+
                             <div class="row">
 	                              <div class="col-md-12">
 		                              <div class="form-group">
 	                                      <label class="control-label">Client<span class="red-star">*</span></label>
 	                                      <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-			                              <select class=" form-control " ng-model="regionSelectedProject" 
-			                              ng-options="project as project.name for project in projectsList track by project.id" 
+			                              <select class=" form-control " ng-model="regionSelectedProject"
+			                              ng-options="project as project.name for project in projectsList track by project.id"
 			                              name="projectName" ng-required="true" >
 		                                       <option value="">Select Client...</option>
 		                                   </select>
@@ -625,7 +626,7 @@
 		                                              ng-show="addRegionForm.projectName.$error.required">
 		                                               Client name is required.
 		                                           </p>
-		
+
 		                                       </div>
 		                                   </div>
 		                              </div>
@@ -690,7 +691,7 @@
                               <label class="control-label">Client<span class="red-star">*</span></label>
                               <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                         <select class=" form-control " ng-model="branchSelectedProject"  ng-change="loadDepSitesList();loadRegions(branchSelectedProject.id);"
-                        ng-options="project as project.name for project in projectsList track by project.id" 
+                        ng-options="project as project.name for project in projectsList track by project.id"
                         name="projectName" ng-required="true" >
                                 <option value="">Select Client...</option>
                             </select>
@@ -712,7 +713,7 @@
                                   <label class="control-label">Region<span class="red-star">*</span></label>
                                   <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                           <select name='region'
-                                                  class="form-control" name="regName" ng-model="selectedRegionOne"   
+                                                  class="form-control" name="regName" ng-model="selectedRegionOne"
                                                   ng-options="region.name for region in regions track by region.name"    >
                                               <option value="">Select Region...</option>
                                           </select>
@@ -753,7 +754,7 @@
 		                            </div>
 	                            </div>
                              </div>
-                    
+
                      <div class="row">
                         <div class="col-md-12 txt-align-center">
                             <input type="submit" ng-click="addBranch()"  class="btn btn-success" name="add" value="Add" ng-disabled="addBranchForm.$invalid || btnDisable">

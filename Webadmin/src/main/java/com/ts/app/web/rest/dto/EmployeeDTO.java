@@ -21,7 +21,7 @@ public class EmployeeDTO extends BaseDTO {
 
     private long id;
 
-    @Size(min = 4, max = 10)
+    @Size(min = 1, max = 10)
     private String empId;
 
     @Size(min = 1, max = 50)
@@ -63,7 +63,7 @@ public class EmployeeDTO extends BaseDTO {
     private List<EmployeeProjectSiteDTO> projectSites;
 
     private List<EmployeeLocationDTO> locations;
-    
+
     private List<EmployeeRelieverDTO> relievers;
 
     private boolean isLeft;
@@ -94,9 +94,9 @@ public class EmployeeDTO extends BaseDTO {
     private String url;
 
     private String faceId;
-    
+
     private String region;
-    
+
     private String branch;
 
     public long getId() {

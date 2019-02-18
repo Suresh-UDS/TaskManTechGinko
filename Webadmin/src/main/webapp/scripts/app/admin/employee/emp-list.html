@@ -35,11 +35,11 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0"
+            <!--<button class="btn btn-info add-btn margn-tb0"
                     ui-sref="employee-location" tabindex="0" has-permission="Employee:View">
                 <i class="material-icons">location_on</i> Map
                 <div class="ripple-container"></div>
-            </button>
+            </button>-->
             <button class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"
                     ng-show="employees.length" ng-click="exportAllData();" tabindex="0">
                 <i class="material-icons">file_download</i> Export
@@ -97,8 +97,17 @@
     </div>
 
     <div class="row">
-
         <div class="col-md-12">
+            <div class="pull-right">
+                <!-- Material switch -->
+                <div class="switch">
+                    <span>Show Deleted Employees</span>
+                    <label>
+                        <input type="checkbox" ng-model="showInActive" ng-click="searchFilter();">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </div>
             <div class="card TableCard">
                 <div class="card-content">
 
@@ -198,6 +207,7 @@
                     <!--</form>-->
 
                     <!--</div>-->
+
                     <div class="table-responsive tablecard">
                         <table id="" class="table table-hover withSortingIcons">
                             <thead>
@@ -257,7 +267,7 @@
                                 <td>{{employee.name | uppercase}} {{employee.lastName | uppercase}}</td>
                                 <td>{{employee.projectName | uppercase}}</td>
                                 <td>{{employee.siteName | uppercase}}</td>
-                                <td ng-if="employee.enrolled_face"><a id="images" href="#"
+                                <td ng-if="employee.enrolled_face"><a id="images" href="javascript:void(0);"
                                                                       onClick="$('#enrollImageModal').modal()"
                                                                       data-target="#enrollImageModal"
                                                                       data-dismiss="#enrollImageModal"
@@ -269,9 +279,9 @@
 
                                 <td has-permission="Employee:Edit"
                                     ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
-                                    <button class="btn btn-success btn-sm"
+                                    <button class="btn btn-success" style="padding: 5px 10px;"
                                             has-permission="Employee:Create"
-                                            ng-click="approveImage(employee)">Approve</button>
+                                            ng-click="approveImage(employee)" title="Click to approve">Approve</button>
                                 </td>
                                 <td has-permission="Employee:Edit"
                                     ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p
@@ -280,20 +290,20 @@
                                     ng-if="!employee.faceAuthorised && !employee.faceIdEnrolled"><p
                                     style="color: red">Face Id not enrolled</p></td>
                                 <td>
-                                    <button class="btn  btn-xs btn-warning"
-                                            ng-show="employee.reliever">Reliever</button>
-                                    <button class="btn  btn-xs btn-warning"
-                                            ng-show="employee.relieved">Relieved</button>
-                                    <button class="btn  btn-xs btn-danger" disabled
-                                            ng-show="employee.left">InActive</button>
-                                    <button class="btn  btn-xs btn-success"
-                                            ng-show="!employee.left">Active</button>
+                                    <span class="label label-warning"
+                                            ng-show="employee.reliever">Reliever</span>
+                                    <span class="label label-warning"
+                                            ng-show="employee.relieved">Relieved</span>
+                                    <span class="label label-danger" disabled
+                                          ng-if="employee.active=='N'">InActive</span>
+                                    <span class="label label-success"
+                                          ng-if="employee.active=='Y'">Active</span>
                                 </td>
                                 <td class="text-right hoverMe"><a title="View More Action"
                                                                   class="btn btn-simple btn-info btn-icon like Viewmore"><i
                                     class="material-icons">more_vert</i></a>
                                     <div class="HoverBx">
-                                        <button ng-disabled="employee.left" title="View"
+                                        <button ng-disabled="employee.left || showInActive" title="View"
                                                 ng-click="getEmployeeDetails(employee.id);getRelieversDetails(employee.id);"
                                                 has-permission="Employee:View" data-toggle="modal"
                                                 data-target="#viewModal"
@@ -301,14 +311,14 @@
                                             <i class="material-icons">remove_red_eye</i>
                                         </button>
                                         <!--<button ng-disabled="employee.left" title="View"  ng-click="getCheckInDetails(employee.id)" has-permission="Employee:Edit" ui-sref="view-employee({ id: employee.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                        <button ng-disabled="employee.left" title="Mark Attendance "
+                                        <button  ng-disabled="employee.left || showInActive" title="Mark Attendance "
                                                  has-permission="Employee:Edit" data-toggle="modal"
                                                  ng-click="getEmployeeDetails(employee.id);"
                                                  data-target="#empAtnModal"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">date_range</i>
                                         </button>
-                                        <button ng-disabled="employee.left"
+                                        <button ng-disabled="employee.left || showInActive"
                                                 ng-class="{active: $state.includes('admin')}"
                                                 has-permission="Employee:Edit"
                                                 ui-sref="edit-employee({ id: employee.id })" type="button"
@@ -316,16 +326,16 @@
                                                 class="btn btn-success btn-simple btn-xs">
                                             <i class="material-icons">edit</i>
                                         </button>
-                                        <button ng-disabled="employee.left" title="Mark Left"
+                                        <button  ng-disabled="employee.left || showInActive" title="Mark Left"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#leftModal" data-dismiss="#leftModal"
-                                                ng-click="employeeDetails(employee.id)"
+                                                ng-click="employeeDetails(employee.id);getEmployeeOpenTickets(employee.id);"
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i style="color: #942a25" class="fas fa-user-times"></i>
                                         </button>
                                         <!--<button ng-disabled="employee.left" title="Site Transfer"   data-toggle="modal" data-target="#siteTransferModal" data-dismiss="#siteTransferModal"   class="btn btn-simple btn-info btn-icon like" ng-click="siteTransferDetails(employee);loadSites()" > <i style="font-size: 20px; color: orangered" class="material-icons">transfer_within_a_station</i></button>-->
-                                        <button ng-if="!employee.reliever"
-                                                ng-disabled="employee.left" title="Relieve Employee"
+                                        <button ng-if="!employee.reliever && !employee.relieved"
+                                                ng-disabled="employee.left || showInActive" title="Relieve Employee"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#relieverConfirmation"
                                                 data-dismiss="#relieverConfirmation"
@@ -333,6 +343,16 @@
                                                 class="btn btn-simple btn-info btn-icon like">
                                             <i class="material-icons">assignment_ind</i>
                                         </button>
+                                        <button ng-if="employee.relieved"
+                                                ng-disabled="employee.left || showInActive" title="Take Employee"
+                                                has-permission="Employee:Edit" data-toggle="modal"
+                                                data-target="#takenConfirmation"
+                                                onClick="$('#takenEmpModal').modal()"
+                                                ng-click="takenEmpConfirm(employee.id);"
+                                                class="btn btn-simple btn-success btn-icon like">
+                                            <i class="material-icons">assignment_ind</i>
+                                        </button>
+
                                     </div></td>
                             </tr>
                             </tbody>
@@ -423,6 +443,12 @@
                                         </tr>
                                         <tr>
 
+                                            <td>User Role</td>
+                                            <td>{{employee.userRoleName | uppercase}}</td>
+
+                                        </tr>
+                                        <tr>
+
                                             <td>Site</td>
                                             <td><a data-toggle="modal" ng-click="getEmployeeSiteDetails(employee.id)" data-target="#siteListModal"
                                                    href="javascript:void(0);">List Of Sites</a></td>
@@ -481,14 +507,14 @@
 
                                             <td>Status</td>
                                             <td>
-                                                <button class="btn  btn-xs btn-warning"
-                                                        ng-show="employee.reliever">Reliever</button>
-                                                <button class="btn  btn-xs btn-warning"
-                                                        ng-show="employee.relieved">Relieved</button>
-                                                <button class="btn  btn-xs btn-danger" disabled
-                                                        ng-show="employee.left">InActive</button>
-                                                <button class="btn  btn-xs btn-success"
-                                                        ng-show="!employee.left">Active</button>
+                                                <span class="label label-warning"
+                                                        ng-show="employee.reliever">Reliever</span>
+                                                <span class="label label-warning"
+                                                        ng-show="employee.relieved">Relieved</span>
+                                                <span class="label label-danger" disabled
+                                                        ng-if="employee.active=='N'">InActive</span>
+                                                <span class="label label-success"
+                                                        ng-if="employee.active=='Y'">Active</span>
                                             </td>
 
                                         </tr>
@@ -753,28 +779,65 @@
                 </button>
                 <h5 class="modal-title" id="isLeftModal">Mark Employee as Left
                     ?</h5>
-                <div>
-                    <input type="radio" data-toggle="collapse" data-parent="#accordian"
-                           data-target="#delete" ng-model="markLeftOptions" value="delete">Delete
-                    Jobs and Mark Left <input type="radio" data-toggle="collapse"
-                                              data-parent="#accordian" data-target="#assign"
-                                              ng-model="markLeftOptions" value="assign">Assign Jobs to
-                    New Employee and Mark Left
-                </div>
-                <div class="collapse" id="delete"></div>
-                <div class="collapse" id="assign">
-                    <div class="form-group">
-                        <div class="dropdown">
-							<span class="form-control-feedback d-arrow-icon"><i
-                                class="material-icons">keyboard_arrow_down</i></span>
-                            <select
-                                class="siteList" ng-model="transferringEmployee"
-                                ng-options="emp as emp.fullName for emp in allEmployees">
-                                <option value="">Select..</option>
-                            </select>
+                <div ng-hide="haveTickets">
+                    <div>
+                        <input type="radio"  ng-model="markLeftOptions" value="delete"> Delete
+                        Jobs and Mark Left <input type="radio"
+                                                  ng-model="markLeftOptions" value="assign"> Assign Jobs to
+                        New Employee and Mark Left
+                    </div>
+
+                    <div id="assign" ng-if="markLeftOptions != 'delete' && markLeftOptions == 'assign'">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="dropdown">
+                                    <span class="form-control-feedback d-sm-arrow-icon"><i
+                                        class="material-icons">keyboard_arrow_down</i></span>
+                                        <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <select
+                                            class="form-control siteList" ng-model="NewEmployee"
+                                            ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
+                                            <option value="">Select Employee..</option>
+                                        </select>
+                                        <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+                <div ng-show="haveTickets">
+                    <div>
+                        <input type="hidden" ng-model="markLeftOptions" value="assign"> Assign Jobs to
+                        New Employee and Mark Left
+                    </div>
+
+                    <div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                    <div class="dropdown">
+                                    <span class="form-control-feedback d-sm-arrow-icon"><i
+                                        class="material-icons">keyboard_arrow_down</i></span>
+                                        <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <select
+                                            class="form-control siteList" ng-model="NewEmployee"
+                                            ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
+                                            <option value="">Select Employee..</option>
+                                        </select>
+                                        <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
             <div class="modal-footer ">
                 <button type="button" class="btn btn-info btn-round"
@@ -921,6 +984,8 @@
                                 <label class="label-control">Site<span class="red-star">*</span></label>
                                 <div class="dropdown">
                                     <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span ng-show="empSitesSpin && !empSites"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                    <span ng-show="!empSitesSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                     <select
                                         class="form-control" ng-model="relieverSite" name="relieverSite"
                                         ng-options="site as site.siteName for site in empSites" ng-required="true" ng-click="getRelievers(employee)" autofocus="on"  tabindex="1">
@@ -946,7 +1011,7 @@
                                 <label class="label-control">From date<span class="red-star">*</span></label>
                                 <span class="form-control-feedback calender-icon"><i
                                     class="material-icons">date_range</i></span>
-                                <input id="dateFilterFrom" type="text" class="form-control datepicker" ng-model="relieverDateFrom" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="2" ng-required="true"/>
+                                <input id="dateFilterFrom" type="text" class="form-control datepicker" onkeydown="return false"ng-model="relieverDateFrom" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="2" ng-required="true"/>
                             </div>
                         </div>
 
@@ -955,7 +1020,7 @@
                                 <label class="label-control">To date<span class="red-star">*</span></label>
                                 <span class="form-control-feedback calender-icon"><i
                                     class="material-icons">date_range</i></span>
-                                <input id="dateFilterTo" type="text" class="form-control datepicker" ng-model="relieverDateTo" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="3" ng-required="true"/>
+                                <input id="dateFilterTo" type="text" class="form-control datepicker" onkeydown="return false"ng-model="relieverDateTo" placeholder="DD/MM/YYYY" autocomplete="off" tabindex="3" ng-required="true"/>
                             </div>
                         </div>
                     </div>
@@ -991,7 +1056,8 @@
                                             placeholder="Search Reliever" ng-model="selectedReliever"
                                             ng-value="selectedReliever.name"
                                             uib-typeahead="employee as employee.fullName for employee in relievers | filter:$viewValue | limitTo:5" />-->
-                                        <span class="form-control-feedback  d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span ng-show="relieversEmpSpin && !relieversEmp"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!relieversEmpSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             class="form-control" ng-model="selectedReliever" name="relieverEmp"
                                             ng-options="emp as emp.fullName for emp in relieversEmp" ng-required="reqEmp"   tabindex="6">
@@ -1016,22 +1082,22 @@
                                     <label class="label-control">Name<span class="red-star">*</span></label>
                                     <input id="relieverOthName" type="text" class="form-control" ng-model="relieverOthName"
                                            name="relieverOthName" autocomplete="off" tabindex="1" ng-required="reqOth"
-                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="6"/>
+                                           ng-minlength=5 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="6"/>
                                     <div ng-show="relieverForm.$submitted || relieverForm.relieverOthName.$touched || relieverForm.relieverOthName.$dirty">
-                                        <div ng-show="relieverForm.relieverOthName.$dirty || form.relieverOthName.$invalid">
-                                            <p class="help-block" style="color:maroon"
+                                        <div ng-show="relieverForm.relieverOthName.$dirty || form.relieverOthName.$invalid || relieverForm.relieverOthName.$touched">
+                                            <p class="help-block" style="width:100%;z-index:970;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.required">
                                                 Name is required.
                                             </p>
-                                            <p class="help-block" style="color:maroon"
+                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.minlength">
                                                 Name is required to be at least 5 character.
                                             </p>
-                                            <p class="help-block" style="color:maroon"
+                                            <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.maxlength">
                                                 Name cannot be longer than 50 characters.
                                             </p>
-                                            <p class="help-block" style="color:maroon"
+                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.pattern">
                                                 Name can only contain letters,numbers and space.
                                             </p>
@@ -1819,7 +1885,7 @@
 
 				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients..." >{{$select.selected.name}}
-														   <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														   <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -1842,7 +1908,7 @@
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -1866,7 +1932,7 @@
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
-													       <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													       <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -1889,7 +1955,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site...">{{$select.selected.name}}
-													       <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													       <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -1954,3 +2020,26 @@
     </div>
 </div>
 <!-- -->
+
+<!-- Take employee confirmation dialog -->
+<div class="row">
+    <div id="takenEmpModal" data-backdrop="false" class="modal fade deleteModal"
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="delete-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Are you sure to take the Employee<br>
+                </div>
+                <div class="delete-footer">
+                    <button type="button" ng-click="takenEmp()"
+                            class="btn btn-success text-danger" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End of take employee confirmation dialog -->

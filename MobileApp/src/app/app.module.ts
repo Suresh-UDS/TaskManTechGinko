@@ -145,6 +145,7 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
 
+
 @NgModule({
   declarations: [
     MyApp,
@@ -244,7 +245,6 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
       ExpenseDetails,
       AddExpense,
     AddMaterial
-
   ],
   imports: [
     BrowserModule,
@@ -360,49 +360,48 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
     AddMaterial,
     // WheelSelector
     FeedbackGridFinish
-
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-      NativeAudio,
-      AttendanceService,
-      EmployeeService,
-      FeedbackService,
-      JobService,
-      QuotationService,
-      SiteService,
-      AssetService,
-      DBService,
+    NativeAudio,
+    AttendanceService,
+    EmployeeService,
+    FeedbackService,
+    JobService,
+    QuotationService,
+    SiteService,
+    AssetService,
+    DBService,
     authService,
     HttpClient,
     Geolocation,
-      BackgroundMode,
+    BackgroundMode,
     Geofence,
-      // GoogleMaps,
-      Toast,
-      OneSignal,
+    // GoogleMaps,
+    Toast,
+    OneSignal,
     componentService,
-      OneSignal,
-      BatteryStatus,
+    OneSignal,
+    BatteryStatus,
     Toast,
     FileTransfer,
     File,
-      DatePicker,
-      AppVersion,
-      QRScanner,
-      FabContainer,
-      Diagnostic,
-      SQLite,
-      Network,
-      Market,
-      LocationAccuracy,
-      BackgroundGeolocation,
-      LocationProvider,
-      InventoryService,
+    DatePicker,
+    AppVersion,
+    QRScanner,
+    FabContainer,
+    Diagnostic,
+    SQLite,
+    Network,
+    Market,
+    LocationAccuracy,
+    BackgroundGeolocation,
+    LocationProvider,
+    InventoryService,
     ExpenseService,
-      PurchaseRequisitionService,
+    PurchaseRequisitionService,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

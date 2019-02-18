@@ -150,12 +150,13 @@
                                                         <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
-                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                        <span ng-show="siteEmpSpin && !employees"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                        <span ng-show="!siteEmpSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                         <select required class="form-control " ng-model="selectedEmployee"
-                                                        ng-options="emp as emp.name for emp in employees track by emp.id" ng-change="checkSite();" tabindex="8">
+                                                                ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'} track by emp.id" ng-change="checkSite();" tabindex="8">
                                                             <option value="">Select Employees...</option>
                                                         </select>
-
+                                                        <span ng-if="employees.length == 0"><p class="error-msg margin0">No Employee</p></span>
                                                         <div ng-show="form.$submitted || form.employeeName.$touched || form.employeeName.$dirty">
                                                             <div
                                                                 ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
@@ -170,7 +171,7 @@
                                             <div class="col-md-4">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingStatus" value="pendingAtUDS" ng-checked="job.pendingAtUDS" tabindex="9"> Pending At UDS
+                                                        <input type="radio" name="optionsRadios"  ng-click="chStatus('UDS')" ng-checked="job.pendingAtUDS"  tabindex="9"> Pending At UDS
                                                     </label>
                                                 </div>
                                             </div>
@@ -178,7 +179,7 @@
                                             <div class="col-md-4">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" name="optionsRadios" ng-model="job.pendingStatus" value="pendingAtClient" tabindex="10"> Pending At {{job.siteProjectName}}
+                                                        <input type="radio" name="optionsRadios"  ng-click="chStatus('Client')" ng-checked="job.pendingAtClient"  tabindex="10"> Pending At {{job.siteProjectName}}
                                                     </label>
                                                 </div>
                                             </div>
@@ -602,7 +603,7 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label">Schedule End Date </label>
+                                                    <label class="control-label">Schedule End Date <span class="red-star" ng-if="job.schedule != 'ONCE'">*</span></label>
                                                     <!-- <p class="input-group">
                                                         <input
                                                             ng-model="selectScheduleEndDate"
@@ -619,7 +620,7 @@
                                                     </p> -->
 
                                                      <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" tabindex="30" />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" ng-required="job.schedule != 'ONCE'" tabindex="30" />
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched || form.scheduleEndDate.$dirty">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">

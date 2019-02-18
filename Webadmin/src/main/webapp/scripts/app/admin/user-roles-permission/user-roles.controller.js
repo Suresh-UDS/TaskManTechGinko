@@ -144,7 +144,7 @@ angular.module('timeSheetApp')
 		UserRoleComponent.updateUserRole($scope.userRole).then(function () {
 			$scope.success = 'OK';
 			$scope.loadUserRoles();
-			$scope.showNotifications('top','center','success','UserRole Created Successfully');
+			$scope.showNotifications('top','center','success','UserRole Updated Successfully');
 			$location.path('/user-roles');
 		}).catch(function (response) {
 			$scope.success = null;

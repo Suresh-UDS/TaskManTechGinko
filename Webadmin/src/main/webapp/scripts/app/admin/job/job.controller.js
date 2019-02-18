@@ -182,7 +182,7 @@ angular.module('timeSheetApp')
 			//Date
 			$('input#jobStartDate').on('dp.change', function(e){
 				$scope.job.plannedStartTime = new Date(e.date._d);
-				$scope.selectPlannedStartTime = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+				$scope.selectPlannedStartTime = $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 				console.log('job start time - ' + $scope.job.plannedStartTime);
 				$scope.job.scheduleEndDate = "";
 				$scope.selectScheduleEndDate = "";
@@ -191,21 +191,21 @@ angular.module('timeSheetApp')
 				});
 			});
 
-			$('#jobStartDate').datetimepicker({
-				format: 'DD/MM/YYYY HH:mm A'
+			/*$('#jobStartDate').datetimepicker({
+				format: 'dd/MM/yyyy HH:mm a'
 			});
-
+*/
 			$('input#scheduleEndDate').on('dp.change', function(e){
 
 				$scope.job.scheduleEndDate = new Date(e.date._d);
-				$scope.selectScheduleEndDate = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
+				$scope.selectScheduleEndDate = $filter('date')(e.date._d, 'MM/dd/yyyy HH:mm a');
 				console.log('job schedule end date - ' + $scope.job.scheduleEndDate);
 			});
 
-			$('#scheduleEndDate').datetimepicker({
-				format: 'DD/MM/YYYY HH:mm A'
+			/*$('#scheduleEndDate').datetimepicker({
+				format: 'dd/MM/yyyy HH:mm a'
 			});
-
+*/
 
 			/*
         $('input#selectedJobDate').on('dp.change', function(e){
@@ -625,8 +625,9 @@ angular.module('timeSheetApp')
 				});
 			};
 
-
+            $scope.siteEmpSpin = false;
 			$scope.loadEmployees = function () {
+			    $scope.siteEmpSpin = true;
 				var deferred = $q.defer();
 				if($scope.searchSite){
 					$scope.searchCriteria.siteId = $scope.searchSite.id;
@@ -653,6 +654,7 @@ angular.module('timeSheetApp')
 					$scope.employeeFilterDisable = false;
 					$scope.empSpin = false;
 					deferred.resolve($scope.employees);
+					$scope.siteEmpSpin = false;
 				});
 				return deferred.promise;
 
@@ -865,18 +867,28 @@ angular.module('timeSheetApp')
 							$location.path('/jobs');
 						}
 						$scope.title = $scope.job.title;
-						$scope.job.pendingStatus='pendingAtUDS';
-						$scope.job.pendingAtUDS=true;
+
+						if($scope.job.pendingAtUDS){
+                            $scope.job.pendingStatus='pendingAtUDS';
+                            $scope.job.pendingAtUDS = true;
+                            $scope.job.pendingAtClient = false;
+						}
+						if($scope.job.pendingAtClient){
+                             $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
+                             $scope.job.pendingAtClient = true;
+                             $scope.job.pendingAtUDS = false;
+						}
+
 						$scope.selectedSite = {id : data.siteId,name : data.siteName};
 						$scope.job.plannedStartTime = data.plannedStartTime;
-						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'dd/MM/yyyy hh:mm a');
+						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'MM/dd/yyyy HH:mm a');
 						if($scope.job.schedule == 'ONCE'){
 							$scope.job.scheduleEndDate = "";
 							$scope.onceJob = true;
 						}else{
 							$scope.job.scheduleEndDate = data.scheduleEndDate;
 						}
-						$scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'dd/MM/yyyy hh:mm a');
+						$scope.selectScheduleEndDate = $filter('date')(data.scheduleEndDate, 'MM/dd/yyyy HH:mm a');
 						$scope.loadEmployees().then(function(employees){
 							//console.log('load employees ');
 							$scope.selectedEmployee = {id : data.employeeId,name : data.employeeName};
@@ -1006,7 +1018,7 @@ angular.module('timeSheetApp')
 					$scope.job.active = 'Y';
 					$scope.job.plannedHours = 1;
 					$scope.job.plannedStartTime =new Date();
-					$scope.selectPlannedStartTime = $filter('date')(new Date(), 'dd/MM/yyyy hh:mm a');
+					$scope.selectPlannedStartTime = $filter('date')(new Date(), 'MM/dd/yyyy HH:mm a');
 
 
 					if($stateParams.ticketId){
@@ -1081,20 +1093,13 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.job.ticketId = $stateParams.ticketId;
 				}
-				console.log($scope.job.pendingStatus);
-				if($scope.job.pendingStatus && $scope.job.pendingStatus=='pendingAtUDS'){
-					$scope.job.pendingAtUDS = true;
-					$scope.job.pendingAtClient = false;
-
-				}else if($scope.job.pendingStatus=='pendingAtClient'){
-					$scope.job.pendingAtClient = true;
-					$scope.job.pendingAtUDS = false;
-
-				}else{
-					$scope.job.pendingAtUDS = true;
-					$scope.job.pendingAtClient = false;
-
+				if(!$scope.chVal){
+                   $scope.job.pendingAtUDS = true;
+                   $scope.job.pendingAtClient = false;
+                   $scope.job.pendingStatus='pendingAtUDS';
+                   console.log('pendingAtUDS' + $scope.job.pendingAtUDS + ',PendingAtClient'+$scope.job.pendingAtClient);
 				}
+
 				if($scope.selectedChecklist) {
 					var items = $scope.selectedChecklist.items;
 					for(var i =0; i<items.length;i++) {
@@ -1182,6 +1187,20 @@ angular.module('timeSheetApp')
 				});
 
 			};
+             $scope.chVal = false;
+			 $scope.chStatus = function(val){
+			     $scope.chVal = true;
+                 if(val == 'UDS'){
+                      $scope.job.pendingStatus='pendingAtUDS';
+                      $scope.job.pendingAtUDS = true;
+                      $scope.job.pendingAtClient = false;
+                 }
+                 if(val == 'Client'){
+                      $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
+                      $scope.job.pendingAtClient = true;
+                      $scope.job.pendingAtUDS = false;
+                 }
+             };
 
 			var that =  $scope;
 
@@ -1341,8 +1360,12 @@ angular.module('timeSheetApp')
 				}else{
 					if($scope.client.selected && $scope.client.selected.id !=0){
 						$scope.searchProject = $scope.client.selected;
-					}else{
-						$scope.searchProject = null;
+					}else if($stateParams.project){
+                       $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                       $scope.client.selected =$scope.searchProject;
+                       $scope.projectFilterFunction($scope.searchProject);
+                    }else{
+                       $scope.searchProject = null;
 					}
 					if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
 						$scope.searchRegion = $scope.regionsListOne.selected;
@@ -1356,7 +1379,10 @@ angular.module('timeSheetApp')
 					}
 					if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 						$scope.searchSite = $scope.sitesListOne.selected;
-					}else{
+					}else if($stateParams.site){
+                           $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
+                           $scope.sitesListOne.selected = $scope.searchSite;
+                    }else{
 						$scope.searchSite = null;
 					}
 					if($scope.statusListOne.selected && $scope.statusListOne.selected != '-- ALL STATUS --'){
@@ -1384,6 +1410,12 @@ angular.module('timeSheetApp')
 				}else{
 				   $scope.searchCriteria.showJobSchedules = false;
 				}
+
+				if($scope.showInActive){
+                   $scope.searchCriteria.showInActive = true;
+                }else{
+                   $scope.searchCriteria.showInActive = false;
+                }
 
 				/* Root scope (search criteria) */
 				$rootScope.searchFilterCriteria.isDashboard = false;

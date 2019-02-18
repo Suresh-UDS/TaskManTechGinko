@@ -117,7 +117,11 @@ public class EmployeeSpecification implements Specification<Employee> {
             }
         }
 
-        predicates.add(builder.equal(root.get("active"), "Y"));
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
 
         query.orderBy(builder.desc(root.get("createdDate")));
 

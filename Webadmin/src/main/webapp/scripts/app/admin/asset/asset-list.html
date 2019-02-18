@@ -21,7 +21,7 @@
 
         <div class="col-md-8 txt-align-rgt">
 
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-asset" has-permission="Assets:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-asset" has-permission="Asset:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
@@ -154,7 +154,7 @@
 
                             <tr>
                                 <th>
-                                    <div class="checkbox form-horizontal-checkbox"> 
+                                    <div class="checkbox form-horizontal-checkbox">
                                         <label>
                                             <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="mulSel();" >
                                         </label>
@@ -245,7 +245,7 @@
                                 <td>{{asset.siteName}}</td>
                                 <td class="text-right hoverMe">
 
-                                    <a has-permission="Assets:View"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                    <a has-permission="Asset:View"  title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
 
 
@@ -253,11 +253,11 @@
 
 										<a ui-sref="create-ticket({ assetId: asset.id })"  has-permission="Tickets:Create"  title="Create Ticket"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">receipt</i></a>
 
-                                        <a   has-permission="Assets:View" ui-sref="view-asset({ id: asset.id })"  has-permission="Assets:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                        <a   has-permission="Asset:View" ui-sref="view-asset({ id: asset.id })"  has-permission="Assets:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Assets:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Assets:Delete" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                     </div>
 
@@ -401,7 +401,7 @@
                             <!--<div class="dropdown">-->
                                 <!--<label class="label-control">Acquired Date</label>-->
                                 <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
-                                <!--<input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate"/>-->
+                                <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate"/>-->
                             <!--</div>-->
                         <!--</div>-->
                     <!--</div>-->
@@ -410,7 +410,7 @@
                             <!--<div class="dropdown">-->
                                 <!--<label class="label-control">Created Date</label>-->
                                 <!--<span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>-->
-                                <!--<input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate"/>-->
+                                <!--<input type="text" class="form-control datepicker" onkeydown="return false" id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate"/>-->
                             <!--</div>-->
                         <!--</div>-->
                     <!--</div>-->
@@ -526,7 +526,7 @@
 
 				                                    <ui-select ng-model="client.selected">
 													  <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}
-													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -549,7 +549,7 @@
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-														      <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														      <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -573,7 +573,7 @@
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch..." >{{$select.selected.name}}
-													    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -596,7 +596,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
-													     <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													     <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -631,7 +631,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Acquired Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate" autocomplete="off" tabindex="1"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="searchAcquiredDate" placeholder="DD/MM/YYYY"  ng-model="searchAcquiredDate" autocomplete="off" tabindex="1"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -640,7 +640,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Created Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker"  id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate" autocomplete="off" tabindex="2"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="searchCreatedDate" placeholder="DD/MM/YYYY"  ng-model="searchCreatedDate" autocomplete="off" tabindex="2"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -649,10 +649,10 @@
 				                                <div class="dropdown" ng-init="loadAllAssetTypes();">
 				                                    <div class="form-group">
 				                                        <label class="control-label">Asset Type</label>
-				                                       
+
 				                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-				                                               
+
 					                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
 														  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>
@@ -670,10 +670,10 @@
 				                                <div class="dropdown" ng-init="loadAllAssetGroups();">
 				                                    <div class="form-group">
 				                                        <label class="control-label">Asset Group</label>
-				                                       
+
 				                                        <span ng-show="assetGroupDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!assetGroupDisable && !assetGroupsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-				                                               
+
 					                                    <ui-select ng-model="assetGroupsListOne.selected"  ng-disabled="assetGroupDisable">
 														  <ui-select-match placeholder="Select Asset Group..." allow-clear="true">{{$select.selected.assetgroup}}</ui-select-match>
 														  <ui-select-choices repeat="assetGroupsListOne in assetGroupsLists | filter: $select.search"  null-option="allAssetGroup" loose-null>
@@ -761,7 +761,7 @@
                                                Site is required.
                                             </p>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                             <input type="submit"  class="btn btn-success" name="submit" value="Submit" ng-click="selectAll();" data-dismiss="modal" ng-disabled="assetQrSiteFrom.$invalid">
@@ -814,8 +814,9 @@
                              <div class="dropdown">
                                 <div class="form-group">
                                     <label class="control-label">Select Asset</label>
-                                     <span  class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                     <select name="weekSchAsset" ng-model="weekSchAsset" 
+                                    <span class="form-control-feedback d-md-arrow-icon" ng-show="!weekSchAssetsSpain"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="!weekSchAssets && weekSchAssetsSpain"><i class="ld ld-ring ld-spin" ></i></span>
+                                     <select name="weekSchAsset" ng-model="weekSchAsset"
                                          class="form-control searchable-input floatL" ng-options="weekSchAssetList as weekSchAssetList.title  for weekSchAssetList in weekSchAssets | orderBy:'title'" required>
                                          <option value="">Select Asset</option>
                                      </select>

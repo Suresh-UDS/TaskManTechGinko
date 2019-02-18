@@ -2825,6 +2825,7 @@ public class ExportUtil {
                                             dataRow.createCell(10).setCellValue(result.getQuestion());
                                             dataRow.createCell(11).setCellValue(result.getAnswer());
                                             dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                            dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                             dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                         }
                                         }else if(result.getAnswerType().equalsIgnoreCase("YesNo") && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("no:1")){

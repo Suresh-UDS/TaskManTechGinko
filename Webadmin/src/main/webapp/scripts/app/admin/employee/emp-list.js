@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         $stateProvider
             .state('employees', {
                 parent: 'manage',
-                url: '/employees',
+                url: '/employees?{project:json}{site:json}',
                 //controller: 'EmployeeController',
                 data: {
                     authorities: [],
@@ -18,8 +18,12 @@ angular.module('timeSheetApp')
                     }
                 },
                 resolve: {
-                    
-                }
+
+                },
+                 params:{
+                  project:null,
+                  site:null
+                 }
             }).state('employeeShifts', {
                 parent: 'manage',
                 url: '/employeeShifts',
@@ -35,8 +39,8 @@ angular.module('timeSheetApp')
                     }
                 },
                 resolve: {
-                    
+
                 }
-            });      
-       
+            });
+
     });

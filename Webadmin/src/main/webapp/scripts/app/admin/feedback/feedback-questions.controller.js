@@ -396,6 +396,7 @@ angular.module('timeSheetApp')
 	$scope.remarksAdded = function(remarks){
 		if(remarks){
 			console.log(remarks)
+			$scope.newFeedbackItem.remarksRequired=true;
 		}else{
 			$scope.newFeedbackItem.remarksRequired=false;
 			console.log($scope.newFeedbackItem.remarksRequired);

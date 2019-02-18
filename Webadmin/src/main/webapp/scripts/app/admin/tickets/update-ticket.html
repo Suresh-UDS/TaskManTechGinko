@@ -49,13 +49,23 @@
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
                                                <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
-                                                      name='description' type='text' value=""
+                                                      name='description' type='text' value="" ng-maxlength=250
+                                                      ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
                                                        autofocus required tabindex="4" />
                                                <div ng-show="form.$submitted || form.description.$touched">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:996;background:#fff;color:maroon"
                                                           ng-show="form.description.$error.required">
                                                            Description is required.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:998;background:#fff;color:maroon"
+                                                          ng-show="form.description.$error.maxlength">
+                                                           Description cannot be longer than 250
+                                                           characters.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                          ng-show="form.description.$error.pattern">
+                                                           Description contain letters and space.
                                                        </p>
 
                                                    </div>
@@ -160,12 +170,14 @@
                            <div class="col-md-6" ng-init="loadSites();">
                                     <div class="form-group">
                                         <label class="control-label">Site<span class="red-star">*</span> </label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span ng-show="siteSpin && !sites"  class="form-control-feedback d-md-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!siteSpin" class="form-control-feedback d-md-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
                                         <select
                                             ng-model="selectedSite"
                                             name="site"
                                             ng-change="loadEmployees();loadAssets()"
-                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id" required tabindex="2">
+                                            class="form-control searchable-input floatL" ng-options="site as site.name for site in sites track by site.id" required tabindex="2" ng-disabled="true">
                                             <option value="">Select Site</option>
 
 
@@ -186,7 +198,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Employee </label>
-                                        <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span ng-show="empSpin && !employees"  class="form-control-feedback d-md-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span ng-show="!empSpin" class="form-control-feedback d-md-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             name="employee"
                                             ng-model="selectedEmployee"
@@ -212,7 +225,7 @@
                          </div>
                        </div>
 
-                       <div class="col-md-6" has-permission="Assets:List">
+                       <div class="col-md-6" has-permission="Asset:List">
                         <div class="panel panel-default">
                               <div class="panel-heading">Assets</div>
                           <div class="panel-body">
