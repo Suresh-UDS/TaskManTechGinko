@@ -583,7 +583,7 @@ public class RateCardService extends AbstractService {
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
+                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/search", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
