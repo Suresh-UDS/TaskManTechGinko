@@ -869,17 +869,16 @@ angular.module('timeSheetApp')
 						$scope.title = $scope.job.title;
 
 						if($scope.job.pendingAtUDS){
-						$scope.job.pendingStatus='pendingAtUDS';
-						$scope.job.pendingAtUDS = true;
-						$scope.job.pendingAtClient = false;
+                            $scope.job.pendingStatus='pendingAtUDS';
+                            $scope.job.pendingAtUDS = true;
+                            $scope.job.pendingAtClient = false;
 						}
 						if($scope.job.pendingAtClient){
-						 $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
-						 $scope.job.pendingAtClient = true;
-						 $scope.job.pendingAtUDS = false;
+                             $scope.job.pendingStatus='PendingAt'+$scope.job.siteProjectName;
+                             $scope.job.pendingAtClient = true;
+                             $scope.job.pendingAtUDS = false;
 						}
 
-						$scope.job.pendingAtUDS=true;
 						$scope.selectedSite = {id : data.siteId,name : data.siteName};
 						$scope.job.plannedStartTime = data.plannedStartTime;
 						$scope.selectPlannedStartTime = $filter('date')(data.plannedStartTime, 'MM/dd/yyyy HH:mm a');
@@ -1095,6 +1094,8 @@ angular.module('timeSheetApp')
 					$scope.job.ticketId = $stateParams.ticketId;
 				}
 				console.log('pendingAtUDS' + $scope.job.pendingAtUDS + ',PendingAtClient'+$scope.job.pendingAtClient);
+				$scope.job.pendingAtUDS = true;
+                $scope.job.pendingAtClient = false;
 				if($scope.job.pendingAtUDS){
                      $scope.job.pendingStatus='pendingAtUDS';
                      $scope.job.pendingAtUDS = true;

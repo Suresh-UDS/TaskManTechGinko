@@ -1344,12 +1344,19 @@ public class JobManagementService extends AbstractService {
 		//maintenance type PPM or AMC
 		job.setMaintenanceType(jobDTO.getMaintenanceType());
 		if(jobDTO.isPendingAtClient()){
-            job.setPendingAtClient(jobDTO.isPendingAtClient());
+            if(jobDTO.isPendingAtUDS()){
+                job.setPendingAtUDS(jobDTO.isPendingAtUDS());
+                job.setPendingAtClient(jobDTO.isPendingAtClient());
+            }else{
+                job.setPendingAtClient(jobDTO.isPendingAtClient());
+                job.setPendingAtUDS(false);
+            }
+        }else if(jobDTO.isPendingAtUDS()){
+		    job.setPendingAtClient(false);
+            job.setPendingAtUDS(jobDTO.isPendingAtUDS());
         }
 
-        if(jobDTO.isPendingAtUDS()){
-		    job.setPendingAtUDS(jobDTO.isPendingAtUDS());
-        }
+
 		//add the job checklist items
 		if(CollectionUtils.isNotEmpty(job.getChecklistItems())) {
 			job.getChecklistItems().clear();
