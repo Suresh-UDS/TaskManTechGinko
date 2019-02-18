@@ -1136,7 +1136,7 @@ angular
                             $scope.siteFilterDisable=false;
 
                         }else{
-                           $scope.searchSite = null;
+                          $scope.searchSite = null;
                           $scope.sitesListOne.selected=$scope.searchSite;
                         }
                         if($rootScope.searchFilterCriteria.quotStatus){
@@ -1161,6 +1161,10 @@ angular
 
 		        	    if($scope.client.selected && $scope.client.selected.id !=0){
                             $scope.searchProject = $scope.client.selected;
+                        }else if($stateParams.project){
+                             $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                             $scope.client.selected =$scope.searchProject;
+                             $scope.projectFilterFunction($scope.searchProject);
                         }else{
                            $scope.searchProject = null;
                         }
@@ -1176,6 +1180,9 @@ angular
                         }
                         if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
                             $scope.searchSite = $scope.sitesListOne.selected;
+                        }else if($stateParams.site){
+                              $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
+                              $scope.sitesListOne.selected = $scope.searchSite;
                         }else{
                            $scope.searchSite = null;
                         }

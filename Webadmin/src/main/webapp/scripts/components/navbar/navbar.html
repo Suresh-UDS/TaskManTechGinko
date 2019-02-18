@@ -24,7 +24,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </li>
             <li ui-sref-active="active" has-permission="Client:List" >
                 <a ui-sref="projects" ng-click="dbFilterBtn();">
-                    <i class="material-icons">people</i>
+                    <i class="material-icons">business</i>
                     <p>Client </p>
                 </a>
             </li>
@@ -54,7 +54,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             <li ui-sref-active="active" has-permission="Employee:List">
 				<a data-toggle="collapse" data-target="#formsExamples" href="javascript:void(0);">
-                    <i class="material-icons">content_paste</i>
+                    <i class="material-icons">assignment_ind</i>
                     <p> Employee
                         <b class="caret"></b>
                     </p>
@@ -85,7 +85,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             <li ui-sref-active="active" has-permission="Asset:List">
                 <a  data-toggle="collapse" data-target="#AssetSubMenus" href="javascript:void(0);">
-                    <i class="material-icons">assessment</i>
+                    <i class="material-icons">devices_other</i>
                     <p>Assets  <b class="caret"></b></p>
                 </a>
                 <div class="collapse" id="AssetSubMenus">
@@ -120,7 +120,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             <li ui-sref-active="active" has-permission="Job:List">
                 <a  data-toggle="collapse" data-target="#JobSubMenu" href="javascript:void(0);">
-                    <i class="material-icons">description</i>
+                    <i class="material-icons">build</i>
                     <p>Jobs <b class="caret"></b></p>
                 </a>
                 <div class="collapse" id="JobSubMenu">
@@ -143,7 +143,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             <li ui-sref-active="active" has-permission="Ticket:List">
                 <a ui-sref="tickets" ng-click="dbFilterBtn();">
-                    <i class="material-icons">tab</i>
+                    <i class="material-icons">bug_report</i>
                     <p>Tickets</p>
                 </a>
             </li>
@@ -263,15 +263,17 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                     </ul>
                 </div>
             </li>
-
-            <li has-permission="Reports:List" ng-class="{active: $state.includes('reports')}">
+            <!--has-permission="Reports:List"-->
+            <li ng-class="{active: $state.includes('reports')}"
+                has-permission="Employee:Report || Job:Report || Attendance:Report || Feedback:Report
+                 || Ticket:Report || Asset:Report">
                 <a data-toggle="collapse" data-target="#formsExamplesReport" href="javascript:void(0);">
                     <i class="material-icons">content_paste</i>
                     <p> Reports
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse" id="formsExamplesReport">
+                <div class="collapse" id="formsExamplesReport" >
                     <ul class="nav SubNav">
                         <li ui-sref-active="active" has-permission="Employee:Report">
                             <a ui-sref="employeeReports" ng-click="dbFilterBtn();">
@@ -299,13 +301,13 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         </li>
                         <li ui-sref-active="active">
                             <a ui-sref="ticketReports" has-permission="Ticket:Report" ng-click="dbFilterBtn();">
-                                <i class="material-icons">tab</i>
+                                <i class="material-icons">bug_report</i>
                                 <p>Ticket</p>
                             </a>
                         </li>
                         <li ui-sref-active="active">
                             <a ui-sref="assetReports" has-permission="Asset:Report" ng-click="dbFilterBtn();">
-                                <i class="material-icons">description</i>
+                                <i class="material-icons">devices_other</i>
                                 <p>Asset</p>
                             </a>
                         </li>
@@ -355,7 +357,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                         </li>
                         <li ui-sref-active="active" has-permission="RolePermission:List"  >
                             <a ui-sref="role-permission" ng-click="dbFilterBtn();">
-                                <i class="material-icons">group</i>
+                                <i class="material-icons">how_to_reg</i>
                                 <p>Role Permission</p>
                             </a>
                         </li>
@@ -397,7 +399,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
             <li ui-sref-active="active" has-permission="RateCard:List">
                 <a ui-sref="rateCardList" ng-click="dbFilterBtn();">
-                    <i class="material-icons">credit_card</i>
+                    <i class="material-icons">assignment</i>
                     <p>Rate Card </p>
                 </a>
             </li>
