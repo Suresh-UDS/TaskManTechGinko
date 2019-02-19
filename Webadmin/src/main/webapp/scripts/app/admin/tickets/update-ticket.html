@@ -52,7 +52,7 @@
                                                       name='description' type='text' value="" ng-maxlength=250
                                                       ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
                                                        autofocus required tabindex="4" />
-                                               <div ng-show="form.$submitted || form.description.$touched">
+                                               <div ng-show="form.$submitted || form.description.$touched || form.description.$dirty">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
                                                        <p class="help-block" style="width:100%;z-index:996;background:#fff;color:maroon"
                                                           ng-show="form.description.$error.required">
@@ -293,11 +293,11 @@
 			                          />
 
 
-              							<a id="images" href="#" onClick="$('#myModalNew').modal()" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+              							<a id="images" href="javascript:void(0);" onClick="$('#myModalNew').modal()" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
                  							<img src={{ticketImage}} width="100px" style="margin-top: 15px;" height="100px"/>
              							</a>
 
-             							<a id="images" href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
+             							<a id="images" href="javascript:void(0);" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
                  							<img ng-src="assets/img/{{extension}}.png" style="margin-top: 15px;" width="100px" height="100px"/>
              							</a>
 

@@ -26,8 +26,6 @@
             </button>
         </div>
         <div class="col-md-6 txt-align-rgt">
-
-
             <button class="btn btn-success add-btn margn-tb0 "
                     ui-sref="add-employee" has-permission="Employee:Create"
                     ng-class="{active: $state.includes('admin')}" tabindex="0">
@@ -243,7 +241,7 @@
 									</span>
 
                                 </th>
-                                <th>Site <span class="sortingIcons"> <span
+                               <!-- <th>Site <span class="sortingIcons"> <span
                                     ng-click="columnAscOrder('projectSites.site.name')"
                                     ng-class="isActiveAsc == 'projectSites.site.name' ? 'active' : ''">
 												<i class="fa fa-caret-up"></i>
@@ -253,7 +251,7 @@
 										</span>
 									</span>
 
-                                </th>
+                                </th>-->
                                 <th>Enrolled Face Id</th>
                                 <th has-permission="Employee:Edit">Authorize Face Id</th>
                                 <th>Status</th>
@@ -266,7 +264,7 @@
                                 <td>{{employee.empId}}</td>
                                 <td>{{employee.name | uppercase}} {{employee.lastName | uppercase}}</td>
                                 <td>{{employee.projectName | uppercase}}</td>
-                                <td>{{employee.siteName | uppercase}}</td>
+                                <!--<td>{{employee.siteName | uppercase}}</td>-->
                                 <td ng-if="employee.enrolled_face"><a id="images" href="javascript:void(0);"
                                                                       onClick="$('#enrollImageModal').modal()"
                                                                       data-target="#enrollImageModal"
@@ -344,7 +342,7 @@
                                             <i class="material-icons">assignment_ind</i>
                                         </button>
                                         <button ng-if="employee.relieved"
-                                                ng-disabled="employee.left || showInActive" title="Take Employee"
+                                                ng-disabled="employee.left || showInActive" title="UnRelieve Employee"
                                                 has-permission="Employee:Edit" data-toggle="modal"
                                                 data-target="#takenConfirmation"
                                                 onClick="$('#takenEmpModal').modal()"

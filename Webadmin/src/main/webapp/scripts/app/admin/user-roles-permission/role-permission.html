@@ -12,39 +12,49 @@
 
     <div class="row" ng-init="loadUserRoles()">
         <div class="col-md-12">
-            <div class="card margin-TB-5" style="padding-bottom:15px;" >
+            <form name="rolePermissionForm" ng-submit="saveRolePermissions()" role="form" novalidate >
+                <div class="card margin-TB-5" style="padding-bottom:15px;" >
 
-                <div class="card-content">
-                        <div class="col-md-4 margn-top15">
-                            <div class="form-group">
-                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                <select ng-model="selectedUserRole" ng-change="selectRole()"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
-                                ng-options="role as (role.name | uppercase) for role in userRoles | orderBy:'name'">
-                                    <option value="">Select Roles...</option>
-                                </select>
+                    <div class="card-content">
+                            <div class="col-md-4 margn-top15">
+                                <div class="form-group">
+                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                    <select ng-model="selectedUserRole" ng-change="selectRole()" name="rolePermission"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
+                                    ng-options="role as (role.name | uppercase) for role in userRoles | orderBy:'name'" required>
+                                        <option value="">Select Roles...</option>
+                                    </select>
+                                    <div ng-show="rolePermissionForm.$submitted || rolePermissionForm.rolePermission.$touched || rolePermissionForm.rolePermission.$dirty">
+                                        <div ng-show="rolePermissionForm.rolePermission.$dirty || rolePermissionForm.rolePermission.$invalid">
+                                            <p class="help-block"  style="width:100%;z-index:940;background:#fff;color:maroon"
+                                               ng-show="rolePermissionForm.rolePermission.$error.required">
+                                                Please select a role.
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+
+                                <button type="submit" class="btn btn-success" ng-disabled="rolePermissionForm.$invalid" >
+                                            <span class="btn-label">
+                                                <i class="material-icons">check</i>
+                                            </span>
+                                    Submit
+                                </button>
+
+                                <button class="btn btn-danger" ng-click="cancelAppModule();">
+                                    <i class="material-icons">close</i> Cancel
+                                </button>
 
                             </div>
-                        </div>
-                        <div class="col-md-6 ">
-
-                            <button class="btn btn-success" ng-click="saveRolePermissions()">
-                                        <span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>
-                                Submit
-                            </button>
-
-                            <button class="btn btn-danger" ng-click="cancelAppModule();">
-                                <i class="material-icons">close</i> Cancel
-                            </button>
-
-                        </div>
 
 
+
+                    </div>
 
                 </div>
-
-            </div>
+            </form>
         </div>
     </div>
 
