@@ -547,11 +547,11 @@
                         <div class="col-xs-12 col-md-6">
                           <div class="form-group">
                               <div class="dropdown">
-                                     <label class="label-control">Client</label>
+                                     <label class="label-control">Client<span class="red-star">*</span></label>
                                      <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                      <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                     <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+				                     <ui-select ng-model="client.selected" name="searchClient"  ng-disabled="clientFilterDisable" required>
 									  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
 									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -562,6 +562,14 @@
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>
 									</ui-select>
+                                      <div ng-show="searchForm.$submitted || searchForm.searchClient.$touched">
+                                          <div ng-show="searchForm.searchClient.$dirty || searchForm.searchClient.$invalid">
+                                              <p class="help-block" style="color:maroon"
+                                                 ng-show="searchForm.searchClient.$error.required">
+                                                  Please select client.
+                                              </p>
+                                          </div>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -652,7 +660,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" tabindex="5">Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple"  tabindex="6">Apply Filter</button>
+                    <button type="submit" class="btn btn-success btn-simple"  tabindex="6" ng-disabled="searchForm.$invalid">Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
             </form>

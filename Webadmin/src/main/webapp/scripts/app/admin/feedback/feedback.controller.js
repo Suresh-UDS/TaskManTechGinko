@@ -38,10 +38,10 @@ angular.module('timeSheetApp')
 	$scope.branchsListOne = {};
 	$scope.branchsLists = [];
 	$scope.branchsListOne.selected =  null;
-	$scope.selectedFromDateSer =  new Date();
+/*	$scope.selectedFromDateSer =  new Date();
 	$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 	$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-	$scope.selectedToDateSer =  new Date();
+	$scope.selectedToDateSer =  new Date();*/
 
 
 	$scope.onClick = function (points, evt) {
@@ -172,8 +172,8 @@ angular.module('timeSheetApp')
 		$scope.loading = true;
 		//$scope.loadProjects();
 		$scope.loadProjectsList();
-		$scope.search();
-		$scope.setPage(1);
+		//$scope.search();
+		//$scope.setPage(1);
 	};
 
 
@@ -548,11 +548,17 @@ angular.module('timeSheetApp')
 			$scope.selectedFromDate = $filter('date')($scope.selectedFromDateSer, 'dd/MM/yyyy');
 			$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
 		}else{
+                $scope.selectedFromDate = null;
+                $scope.selectedFromDateSer = null;
+                $scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
+
+            }
+		/*else{
 			$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			$scope.selectedFromDateSer = new Date();
 			$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedFromDateSer;
 
-		}
+		}*/
 
 		if($scope.selectedToDateSer){
 			$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
@@ -563,19 +569,24 @@ angular.module('timeSheetApp')
 			$scope.selectedToDate = $filter('date')($scope.selectedToDateSer, 'dd/MM/yyyy');
 			$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
 		}else{
+                $scope.selectedToDate = null;
+                $scope.selectedToDateSer = null;
+                $scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
+            }
+         		/*else{
 			$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			$scope.selectedToDateSer = new Date();
 			$scope.searchCriteria.checkInDateTimeTo = $scope.selectedToDateSer;
-		}
+		}*/
 
 
 		if(!$scope.selectedProject && !$scope.selectedSite && !$stateParams.pid && !$stateParams.sid) {
 			/*if($rootScope.searchCriteriaFeedback) {
                     $scope.searchCriteria = $rootScope.searchCriteriaFeedback;
                 }else {*/
-			$scope.searchCriteria.findAll = true;
+			$scope.searchCriteria.findAll = false;
 			/*}*/
-
+          $scope.searchCriteria.projectId = null;
 		}else {
 			$scope.searchCriteria.findAll = false;
 
@@ -888,13 +899,17 @@ angular.module('timeSheetApp')
 		$scope.selectedProject = null;
 		$scope.searchCriteria = {};
 		$scope.localStorage = null;
-		$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+		/*$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 		$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 		$scope.selectedFromDateSer = new Date();
 		$scope.selectedToDateSer = new Date();
 		$('input#dateFilterFrom').val($scope.selectedFromDate);
-		$('input#dateFilterTo').val($scope.selectedToDate);
+		$('input#dateFilterTo').val($scope.selectedToDate);*/
 		//$rootScope.searchCriteriaSite = null;
+		$scope.selectedFromDate = null;
+        $scope.selectedToDate = null;
+        $scope.selectedFromDateSer = null;
+        $scope.selectedToDateSer = null;
 		$scope.averageRating = '0';
 		$scope.feedbackCount = '0';
 		$scope.selectedBlock = null;

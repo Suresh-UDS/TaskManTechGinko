@@ -396,7 +396,7 @@
                                 <tr>
                                     <td>Image/File </td>
                                     <td ng-if="ticketImage !=null">
-                                        <a href="#" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
+                                        <a href="javascript:void(0);" ng-show="extension === 'jpg' || extension === 'jpeg' || extension === 'png'" onClick="$('#myModalNew').modal()" data-target="#myModalNew" data-dismiss="#myModalNew" ng-click="loadTicketImage(ticketImage,tickets.id)">
                                             <img id="images" ng-src={{ticketImage}} width="100px" height="100px" />
                                         </a>
                                         <a  href="{{ticketImage}}" ng-hide="extension === 'jpg' || extension === 'jpeg' || extension === 'png'">
@@ -720,7 +720,7 @@
 
 				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}
-													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 													    class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													    <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -743,7 +743,7 @@
 
 						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -767,7 +767,7 @@
 
 					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
-													    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													    <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -790,7 +790,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
-													    <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													    <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
