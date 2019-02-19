@@ -797,12 +797,51 @@ public class ExportUtil {
 	    }
 	}
 
+	class EmployeeDayAttendance {
+
+	    private int day;
+	    private boolean status;
+	    private String shift;
+	    private String prevShift;
+
+        public int getDay() {
+            return day;
+        }
+
+        public void setDay(int day) {
+            this.day = day;
+        }
+
+        public boolean isStatus() {
+            return status;
+        }
+
+        public void setStatus(boolean status) {
+            this.status = status;
+        }
+
+        public String getShift() {
+            return shift;
+        }
+
+        public void setShift(String shift) {
+            this.shift = shift;
+        }
+
+        public String getPrevShift() {
+            return prevShift;
+        }
+
+        public void setPrevShift(String prevShift) {
+            this.prevShift = prevShift;
+        }
+    }
 
 	public ExportResult writeMusterRollAttendanceReportToFile(String projName, String siteName, String shifts, String month, Date fromDate, Date toDate, List<EmployeeAttendanceReport> content, final String empId, ExportResult result, LinkedHashMap<Map<String,String>, String> shiftSlots) {
 
 		final String KEY_SEPARATOR = "::";
 
-		Map<EmployeeAttendanceReport, Map<Integer,Boolean>> attnInfoMap = new TreeMap<EmployeeAttendanceReport,Map<Integer,Boolean>>(new SortbyDesignation());
+		Map<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>> attnInfoMap = new TreeMap<EmployeeAttendanceReport,Map<Integer,EmployeeDayAttendance>>(new SortbyDesignation());
 
 		//Consolidate the attendance data against emp id.
 		if(CollectionUtils.isNotEmpty(content)) {
@@ -812,28 +851,41 @@ public class ExportUtil {
 					attnCal.setTime(empAttnReport.getCheckInTime());
 				}
 				Integer attnDay = attnCal.get(Calendar.DAY_OF_MONTH);
-				Map<Integer, Boolean> attnDayMap = null;
-				if(attnInfoMap.containsKey(empAttnReport)) {
-					attnDayMap = attnInfoMap.get(empAttnReport);
+				Map<Integer, EmployeeDayAttendance> attnDayMap = null;
+				EmployeeAttendanceReport eaReport = new EmployeeAttendanceReport();
+				eaReport.setEmpId(empAttnReport.getEmpId());
+				eaReport.setDesignation(empAttnReport.getDesignation());
+				eaReport.setEmployeeId(empAttnReport.getEmployeeId());
+				eaReport.setName(empAttnReport.getName());
+				eaReport.setLastName(empAttnReport.getLastName());
+				if(attnInfoMap.containsKey(eaReport)) {
+					attnDayMap = attnInfoMap.get(eaReport);
 				}else {
-					attnDayMap = new TreeMap<Integer, Boolean>();
+					attnDayMap = new TreeMap<Integer, EmployeeDayAttendance>();
 				}
 
 				Map<String, String> mapKey = new HashMap<String, String>();
 				mapKey.put(empAttnReport.getShiftStartTime(), empAttnReport.getShiftEndTime());
 
 				String shiftKeyMap = null;
+				EmployeeDayAttendance empDayAttn = new EmployeeDayAttendance();
+                empDayAttn.setDay(attnDay);
 				if(shiftSlots.containsKey(mapKey)) {
 					shiftKeyMap = shiftSlots.get(mapKey);
-					empAttnReport.setShiftKey(shiftKeyMap);
+					//empAttnReport.setShiftKey(shiftKeyMap);
+                    empDayAttn.setShift(shiftKeyMap);
 				}
 
 				if(empAttnReport.getCheckInTime() != null) {
-					attnDayMap.put(attnDay, true);
+				    empDayAttn.setStatus(true);
+				    attnDayMap.put(attnDay,empDayAttn);
+					//attnDayMap.put(attnDay, true);
 				}else {
-					attnDayMap.put(attnDay, false);
+                    empDayAttn.setStatus(false);
+                    attnDayMap.put(attnDay,empDayAttn);
+					//attnDayMap.put(attnDay, false);
 				}
-				attnInfoMap.put(empAttnReport, attnDayMap);
+				attnInfoMap.put(eaReport, attnDayMap);
 			}
 		}
 
@@ -951,15 +1003,15 @@ public class ExportUtil {
 
 	    rowNum = 8;
 
-		Set<Entry<EmployeeAttendanceReport,Map<Integer,Boolean>>> entrySet = attnInfoMap.entrySet();
+		Set<Entry<EmployeeAttendanceReport,Map<Integer,EmployeeDayAttendance>>> entrySet = attnInfoMap.entrySet();
 
 		/* Designation wise sorting */
-		 List<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>> list = new ArrayList<Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>(entrySet);
-		    Collections.sort( list, new Comparator<Map.Entry<EmployeeAttendanceReport, Map<Integer,Boolean>>>()
+		 List<Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>> list = new ArrayList<Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>>(entrySet);
+		    Collections.sort( list, new Comparator<Map.Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>>()
 		    {
 				@Override
-				public int compare(Entry<EmployeeAttendanceReport, Map<Integer, Boolean>> o1,
-						Entry<EmployeeAttendanceReport, Map<Integer, Boolean>> o2) {
+				public int compare(Entry<EmployeeAttendanceReport, Map<Integer, EmployeeDayAttendance>> o1,
+						Entry<EmployeeAttendanceReport, Map<Integer, EmployeeDayAttendance>> o2) {
 					// TODO Auto-generated method stub
 					String ekey1 = null;
 					String ekey2 = null;
@@ -1126,7 +1178,7 @@ public class ExportUtil {
 		log.debug("Employee list length" +list.size());
 		int employeeList = list.size() + (rowNum - 1);
 
-		for (Entry<EmployeeAttendanceReport,Map<Integer,Boolean>> entry : list) {
+		for (Entry<EmployeeAttendanceReport,Map<Integer,EmployeeDayAttendance>> entry : list) {
 
 			Row dataRow = musterSheet.getRow(rowNum);
 
@@ -1160,7 +1212,7 @@ public class ExportUtil {
 			}
 
 			EmployeeAttendanceReport key = entry.getKey();
-			Map<Integer,Boolean> attnMap = attnInfoMap.get(key);
+			Map<Integer,EmployeeDayAttendance> attnMap = attnInfoMap.get(key);
 			dataRow.getCell(0).setCellValue(serialId);
 			dataRow.getCell(0).setCellStyle(shiftStyle);
 			dataRow.getCell(1).setCellValue(key.getEmployeeId());
@@ -1175,27 +1227,35 @@ public class ExportUtil {
 			Map<String, Map<String, Integer>> shiftCountMap = new HashMap<String,Map<String, Integer>>();
 
 			int dayStartCell = 5;
-			int presentCnt = 0;
 			int offCounts = 0;
 			for(int day=1;day <= daysInMonth;day++) {
-				String sh = key.getShiftKey();
+//				String sh = key.getShiftKey();  // s1
 				Map<String, Integer> shiftCounts = null;
 				String week = weeks.get(day - 1);
 				log.debug("Week of the day is -" +week);
 				dataRow.getCell(dayStartCell).setCellStyle(shiftStyle);
 				if(attnMap.containsKey(day)) {
-					boolean attnVal = attnMap.get(day);
-					presentCnt += (attnVal ? 1 : 0);
-					dataRow.getCell(dayStartCell).setCellValue(attnVal ? sh : "A");
+                    EmployeeDayAttendance attnInfo = attnMap.get(day);    // S4 - S5 - S5 - S4 - S4
+                    boolean attnState = attnInfo.isStatus();
+//					presentCnt += (attnState ? 1 : 0);   // S4 = 1  // S5 =
+					dataRow.getCell(dayStartCell).setCellValue(attnState ? attnInfo.getShift() : "A");
 					if(shiftCountMap.containsKey(key.getEmployeeId())) {
 						shiftCounts = shiftCountMap.get(key.getEmployeeId());
 					}else {
 						shiftCounts = new HashMap<String, Integer>();
 					}
 
-					if(attnVal) {
-						shiftCounts.put(sh, presentCnt);
-						shiftCountMap.put(key.getEmployeeId(), shiftCounts);
+					if(attnState) {
+					    if(shiftCounts.containsKey(attnInfo.getShift())) {
+                            int presentCnt = 1;
+                            presentCnt += shiftCounts.get(attnInfo.getShift());
+                            shiftCounts.put(attnInfo.getShift(), presentCnt);
+                            shiftCountMap.put(key.getEmployeeId(), shiftCounts);
+                        }else{
+                            int currCnt = 1;
+                            shiftCounts.put(attnInfo.getShift(), currCnt);
+                            shiftCountMap.put(key.getEmployeeId(), shiftCounts);
+                        }
 						dataRow.getCell(dayStartCell).setCellStyle(shiftStyle);
 					}
 				}else {
