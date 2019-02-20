@@ -1174,17 +1174,16 @@ public class ImportUtil {
 					cellNo = 18;
 					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
 					cellNo = 19;
-                    assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-//					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
-//					if(assetCode != null) {
-//					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
-//					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
-//					    if(isDuplicate) {
-//                            continue;
-//                        } else {
-//                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-//                        }
-//                    }
+					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
+					if(assetCode != null) {
+					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
+					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
+					    if(isDuplicate) {
+                            continue;
+                        } else {
+                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+                        }
+                    }
 					cellNo = 20;
 					assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 					assetManagementService.saveAsset(assetDTO);
@@ -1912,7 +1911,8 @@ public class ImportUtil {
 		return value;
 	}
 
-	private boolean isDuplicateCode(String assetCode, long siteId) {
+	private boolean isDuplicateCode(String code, long siteId) {
+	    String assetCode = siteId+"_"+code;
         List<Asset> asset = assetRepository.findAssetCodeBySite(siteId, assetCode);
         if(asset.size() > 0) {
             return true;
