@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
 import com.ts.app.service.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -43,26 +45,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Branch;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.EmployeeShift;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.JobType;
-import com.ts.app.domain.Location;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.Region;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.EmployeeShiftRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.UserRoleRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.web.rest.errors.TimesheetException;
 
@@ -144,6 +126,9 @@ public class ImportUtil {
 
 	@Inject
     private InventoryManagementService inventoryManagementService;
+
+	@Inject
+    private AssetRepository assetRepository;
 
 	public ImportResult importJobData(MultipartFile file, long dateTime)  {
         String fileName = dateTime + ".xlsx";
@@ -1189,7 +1174,16 @@ public class ImportUtil {
 					cellNo = 18;
 					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
 					cellNo = 19;
-					assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
+					if(assetCode != null) {
+					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
+					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
+					    if(isDuplicate) {
+                            continue;
+                        } else {
+                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+                        }
+                    }
 					cellNo = 20;
 					assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 					assetManagementService.saveAsset(assetDTO);
@@ -1916,5 +1910,13 @@ public class ImportUtil {
 		}
 		return value;
 	}
+
+	private boolean isDuplicateCode(String assetCode, long siteId) {
+        List<Asset> asset = assetRepository.findAssetCodeBySite(siteId, assetCode);
+        if(asset.size() > 0) {
+            return true;
+        }
+	    return false;
+    }
 
 }
