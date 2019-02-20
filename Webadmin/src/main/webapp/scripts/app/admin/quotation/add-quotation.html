@@ -38,23 +38,27 @@
 													<label class="control-label">Title<span class="red-star">*</span></label> <input
 														id='quotationTitle' ng-model="quotation.title"
 														class='form-control InputTxtCapsAll' name='quotationTitle' type='text'
-														value="" ng-minlength='2' ng-maxlength='250'
-														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" ng-disabled="ticketQuot" autofocus required />
+														value="" ng-minlength='1' ng-maxlength='100'
+                                                        ng-pattern="/^[A-Za-z0-9\s&-/]*$/" ng-disabled="ticketQuot" autofocus required />
 													<div
 														ng-show="form.$submitted || form.quotationTitle.$touched">
 														<div
 															ng-show="form.quotationTitle.$dirty || form.quotationTitle.$invalid">
-															<p class="help-block" style="color: maroon"
-																ng-show="form.quotationTitle.$error.required">Title is required.</p>
-															<p class="help-block" style="color: maroon"
-																ng-show="form.quotationTitle.$error.minlength">
-																Title should be atleast 2 Characters.</p>
-															<p class="help-block" style="color: maroon"
-																ng-show="form.quotationTitle.$error.maxlength">
-																Title cannot be longer than 250 characters.</p>
-															<p class="help-block" style="color: maroon"
-																ng-show="form.quotationTitle.$error.pattern">Title
-																can only contain letters, digits and space.</p>
+															<p class="help-block" style="width:100%;z-index:930;background:#fff;color:maroon"
+																ng-show="form.quotationTitle.$error.required">Title is required.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                               ng-show="form.quotationTitle.$error.minlength">
+                                                                Title is required to be at least 1 character.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                               ng-show="form.quotationTitle.$error.maxlength">
+                                                                Title cannot be longer than 100 characters.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="form.quotationTitle.$error.pattern">
+                                                                Title can only contain letters, digits and space.
+                                                            </p>
 														</div>
 													</div>
 												</div>
@@ -64,7 +68,7 @@
 													<label class="control-label">Description</label> <input
 														id='quotationDescription' ng-model="quotation.description"
 														class='form-control InputTxtCaps' name='quotationDescription'
-														type='text' value="" ng-maxlength=250
+														type='text' value="" ng-maxlength=2500
 														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" ng-disabled="ticketQuot" />
 													<div
 														ng-show="form.$submitted || form.quotationDescription.$touched">
@@ -72,11 +76,16 @@
 															ng-show="form.quotationDescription.$dirty || form.quotationDescription.$invalid">
 															<p class="help-block" style="width:100%;z-index:996;background:#fff;color:maroon"
 																ng-show="form.quotationDescription.$error.maxlength">
-																Quotation Description cannot be longer than 250
+																Quotation Description cannot be longer than 2500
 																characters.</p>
 															<p class="help-block" style="width:100%;z-index:998;background:#fff;color:maroon"
 																ng-show="form.quotationDescription.$error.pattern">
-																Quotation Description contain letters and space.</p>
+																Quotation Description contain letters and space.
+                                                            </p>
+                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="form.quotationDescription.$error.pattern">
+                                                                Quotation Description can only contain letters, digits, few special characters and space.
+                                                            </p>
 														</div>
 													</div>
 												</div>

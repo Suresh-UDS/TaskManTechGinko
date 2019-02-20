@@ -1282,6 +1282,7 @@ angular.module('timeSheetApp')
 				$scope.searchCriteria.toDate = $scope.selectedDateToSer;
 			}
 
+
 		}
 
 		/* Root scope (search criteria) */
@@ -1297,7 +1298,7 @@ angular.module('timeSheetApp')
 		$scope.searchCriteria.isReport = false;
 
 		if(!$scope.searchTitle && !$scope.searchDescription && !$scope.searchProject && !$scope.searchSite
-				&& !$scope.searchEmployee && !$scope.searchStatus && !$scope.selectedDateFrom && !$scope.selectedDateTo ) {
+				&& !$scope.searchEmployee && !$scope.searchStatus && !$scope.selectedDateFrom && !$scope.selectedDateTo && $stateParams.asset ) {
 			$scope.searchCriteria.findAll = true;
 		}
 
@@ -1364,6 +1365,11 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.ticketStatus = null;
 		}
 
+		if($stateParams.asset){
+             $scope.searchCriteria.assetId = $stateParams.asset.id;
+             $scope.searchCriteria.assetTitle = $stateParams.asset.title;
+        }
+
 
 		//console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
 		//-------
@@ -1382,7 +1388,7 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.sortByAsc = true;
             }*/
 
-		//console.log("search criteria",$scope.searchCriteria);
+		console.log("search criteria",$scope.searchCriteria);
 		$scope.tickets = '';
 		$scope.ticketsLoader = false;
 		$scope.loadPageTop();

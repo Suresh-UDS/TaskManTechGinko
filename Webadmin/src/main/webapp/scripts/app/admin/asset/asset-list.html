@@ -253,6 +253,8 @@
 
 										<a ui-sref="create-ticket({ assetId: asset.id })"  has-permission="Tickets:Create"  title="Create Ticket"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">receipt</i></a>
 
+                                        <a ui-sref="tickets({asset :{id:asset.id,title:asset.title}})"  has-permission="Tickets:List"  title="Ticket List"  class="btn btn-simple btn-info btn-icon like" target="_blank"><i class="material-icons">list_alt</i></a>
+
                                         <a   has-permission="Asset:View" ui-sref="view-asset({ id: asset.id })"  has-permission="Assets:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
                                         <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>

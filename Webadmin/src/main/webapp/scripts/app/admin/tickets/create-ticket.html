@@ -33,13 +33,27 @@
                                                <label class="control-label">Issue<span class="red-star">*</span> </label>
 
                                                <input type="text" class="form-control InputTxtCapsAll"   name='title'
-                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=50
+                                                      ng-model="tickets.title" ng-minlength='1'
+                                                      ng-maxlength='100'
+                                                      ng-pattern="/^[A-Za-z0-9\s]*$/"
                                                       autofocus  required autocomplete="off" ng-keypress="keyPressHandler($event)" tabindex="1" />
                                                <div ng-show="form.$submitted || form.title.$touched || form.title.$dirty">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
-                                                       <p class="help-block" style="color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                           ng-show="form.title.$error.required">
                                                            Title is required.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                          ng-show="form.title.$error.minlength">
+                                                           Title is required to be at least 1 character.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                          ng-show="form.title.$error.maxlength">
+                                                           Title cannot be longer than 100 characters.
+                                                       </p>
+                                                       <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                          ng-show="form.title.$error.pattern">
+                                                           Title can only contain letters, digits and space.
                                                        </p>
 
                                                    </div>
@@ -52,23 +66,22 @@
                                            <div class="form-group">
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
                                                <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
-                                                      name='description' type='text' value="" ng-maxlength=250
+                                                      name='description' type='text' value="" ng-maxlength=2500
                                                       ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
                                                        autofocus required ng-keypress="keyPressHandler($event)" tabindex="4" />
                                                <div ng-show="form.$submitted || form.description.$touched || form.description.$dirty">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
-                                                       <p class="help-block" style="width:100%;z-index:996;background:#fff;color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:930;background:#fff;color:maroon"
                                                           ng-show="form.description.$error.required">
                                                            Description is required.
                                                        </p>
-                                                       <p class="help-block" style="width:100%;z-index:998;background:#fff;color:maroon"
+                                                       <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                           ng-show="form.description.$error.maxlength">
-                                                           Description cannot be longer than 250
-                                                           characters.
+                                                           Description cannot be longer than 2500 characters.
                                                        </p>
                                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                           ng-show="form.description.$error.pattern">
-                                                          Description contain letters and space.
+                                                           Description can only contain letters, digits, few special characters and space.
                                                        </p>
 
                                                    </div>

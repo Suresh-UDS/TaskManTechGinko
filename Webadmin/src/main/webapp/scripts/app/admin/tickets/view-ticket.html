@@ -70,6 +70,12 @@
                                                     </td>
 
                                                 </tr>
+                                                <tr>
+                                                    <td>Job</td>
+                                                    <td><span ng-if="tickets.jobId">
+                                  	                <a ng-if="(tickets.jobId > 0)" ui-sref="view-job({id : tickets.jobId})" ng-click="closeModal()" class="btn btn-simple btn-info">View Job {{tickets.jobId}}</a></span><span ng-if="!tickets.jobId">-</span>
+                                                    </td>
+                                                </tr>
 
 
                                                 </tbody>
