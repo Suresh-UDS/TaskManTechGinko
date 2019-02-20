@@ -305,11 +305,13 @@ angular.module('timeSheetApp')
                 $scope.closedTicketsTotalCount = data[0].closedCounts;
                 $scope.overAllTicketsTotalCount = data[0].totalCounts;
                 $scope.assignedTicketTotalCount = data[0].assignedCounts;
+                $scope.inProgressTicketCount = data[0].totalAssignedTicketCount;
             } else {
                 $scope.openTicketsTotalCount = 0;
                 $scope.closedTicketsTotalCount = 0;
                 $scope.overAllTicketsTotalCount = 0;
                 $scope.assignedTicketTotalCount = 0;
+                $scope.inProgressTicketCount = 0;
             }
 
         }

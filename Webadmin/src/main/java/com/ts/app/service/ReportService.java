@@ -680,7 +680,7 @@ public class ReportService extends AbstractService {
         reportResult.setTotalNewTicketCount(totalNewTicketCount);
         reportResult.setTotalOpenTicketCount(totalOpenTicketCount);
         reportResult.setTotalInProgressTicketCount(totalInProgressTicketCount);
-        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount + totalInProgressTicketCount);
+        reportResult.setTotalAssignedTicketCount(totalAssignedTicketCount);
         reportResult.setTotalPendingTicketCount(totalPendingTicketCount);
         reportResult.setTotalClosedTicketCount(totalClosedTicketCount);
         reportResult.setTotalPendingDueToClientTicketCount(totalPendingDueToClientTicketCount);

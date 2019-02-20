@@ -394,7 +394,7 @@
                         <div class="panel-body">
                             <div class="row">
 
-                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="col-md-3 col-lg-3 col-sm-3">
                                     <a ui-sref="tickets" ng-click="dbdTStatusFilter('');">
                                         <div class="card blueBg cardWithbg">
                                             <div class="card-header">
@@ -407,7 +407,7 @@
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="col-md-3 col-lg-2 col-sm-2">
                                     <a ui-sref="tickets" ng-click="dbdTStatusFilter('OPEN');">
                                         <div class="card skyblueBg cardWithbg">
                                             <div class="card-header">
@@ -420,7 +420,7 @@
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="col-md-3 col-lg-2 col-sm-2">
                                     <a ui-sref="tickets" ng-click="dbdTStatusFilter('ASSIGNED');">
                                         <div class="card yellowBg cardWithbg">
                                             <div class="card-header">
@@ -435,7 +435,22 @@
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="col-md-3 col-lg-2 col-sm-2">
+                                    <a ui-sref="tickets" ng-click="dbdTStatusFilter('IN PROGRESS');">
+                                        <div class="card yellowBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">
+                                                    how_to_reg
+                                                </i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>In Progress</h4>
+                                                <h3>{{inProgressTicketCount ? inProgressTicketCount : 0 }}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-3">
                                     <a ui-sref="tickets" ng-click="dbdTStatusFilter('CLOSED');">
                                     <div class="card lightRedBg cardWithbg">
                                         <div class="card-header">
