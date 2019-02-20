@@ -355,6 +355,7 @@ angular.module('timeSheetApp')
 
             $scope.assignedTicketTotalCount = response.totalAssignedTicketCount;
             $scope.openTicketTotalCnt = response.totalOpenTicketCount;
+            $scope.inProgressTicketCount = response.totalInProgressTicketCount;
 
             // if($scope.openTicketsTotalCount > 0) {
             //

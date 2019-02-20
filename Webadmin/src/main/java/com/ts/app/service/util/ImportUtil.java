@@ -1911,7 +1911,8 @@ public class ImportUtil {
 		return value;
 	}
 
-	private boolean isDuplicateCode(String assetCode, long siteId) {
+	private boolean isDuplicateCode(String code, long siteId) {
+	    String assetCode = siteId+"_"+code;
         List<Asset> asset = assetRepository.findAssetCodeBySite(siteId, assetCode);
         if(asset.size() > 0) {
             return true;
