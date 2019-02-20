@@ -164,6 +164,7 @@ angular.module('timeSheetApp')
 		$scope.isEdit = 'yes';
 		console.log('loadFeedback -' + id);
 		$scope.loadingStart();
+		$scope.feedbackItems = [];
 		FeedbackComponent.findOneFeedbackMaster(id).then(function (data) {
 			$scope.loadingStop();
 			$scope.feedbackItem = data;
@@ -207,6 +208,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.saveFeedback = function(){
+	    $scope.loadingStart();
 		console.log($scope.feedbackItems);
 		$scope.feedbackItem.projectName = $scope.selectedProject.name;
 		$scope.feedbackItem.projectId = $scope.selectedProject.id;
@@ -222,7 +224,9 @@ angular.module('timeSheetApp')
 			$scope.feedbackItem = {};
 			//$location.path('/feedback-questions');
 			$scope.loadFeedbackItems();
+			$scope.loadingStop();
 		}).catch(function (response) {
+		    $scope.loadingStop();
 			$scope.success = null;
 			console.log(response.data);
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
@@ -301,7 +305,8 @@ angular.module('timeSheetApp')
 		}else{
 			$scope.searchCriteria.columnName ="id";
 		}
-
+        $scope.feedbackMasterList = "";
+        $scope.feedbackMasterListLoader = false;
 		FeedbackComponent.searchFeedbackMaster($scope.searchCriteria).then(function (data) {
 			$scope.feedbackMasterList = data.transactions;
 			$scope.feedbackMasterListLoader = true;
