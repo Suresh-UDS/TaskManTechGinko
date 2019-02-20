@@ -131,7 +131,10 @@
                                 </td>
                                <!-- <td>{{project.phone}}</td>
                                 <td class="lowercase">{{project.email}}</td>-->
-                                <td class="text-right">
+                                <td class="text-right hoverMe"><a title="View More Action"
+                                                                  class="btn btn-simple btn-info btn-icon like Viewmore"><i
+                                    class="material-icons">more_vert</i></a>
+                                    <div class="HoverBx">
 
                                     <a title="View" ng-class="{active: $state.includes('admin')}"  has-permission="Client:View" ui-sref="view-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
                                     <a title="Edit" ng-class="{active: $state.includes('admin')}"  has-permission="Client:Edit" ui-sref="edit-project({ id: project.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
@@ -145,7 +148,7 @@
 
                                     <!-- <a ng-class="{active: $state.includes('admin')}" ng-click="deleteConfirm(project)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a> -->
 
-
+                                    </div>
                                 </td>
 
                             </tr>

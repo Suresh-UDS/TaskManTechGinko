@@ -121,19 +121,23 @@
                                 <td>{{site.projectName | uppercase }}</td>
                                 <td>{{site.address }}</td>
 
-                                <td class="text-right">
+                                <td class="text-right hoverMe"><a title="View More Action"
+                                                                  class="btn btn-simple btn-info btn-icon like Viewmore"><i
+                                    class="material-icons">more_vert</i></a>
+                                    <div class="HoverBx">
 
-                                    <a title="View" ng-class="{active: $state.includes('admin')}" has-permission="Site:View" ui-sref="view-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
+                                        <a title="View" ng-class="{active: $state.includes('admin')}" has-permission="Site:View" ui-sref="view-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
-                                    <a title="Edit" ng-class="{active: $state.includes('admin')}" has-permission="Site:Edit" ui-sref="edit-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a title="Edit" ng-class="{active: $state.includes('admin')}" has-permission="Site:Edit" ui-sref="edit-site({ id: site.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                   <!-- <a title="Locations" ng-class="{active: $state.includes('admin')}"  has-permission="Location:List" ui-sref="locations({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">place</i></a>-->
-                                    <a title="Employees" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:List" ui-sref="employees({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">assignment_ind</i></a>
-                                    <a title="Assets" ng-class="{active: $state.includes('admin')}"  has-permission="Asset:List" ui-sref="assets({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">devices_other</i></a>
-                                    <a title="Jobs" ng-class="{active: $state.includes('admin')}"  has-permission="Job:List" ui-sref="jobs({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">build</i></a>
-                                    <a title="Tickets" ng-class="{active: $state.includes('admin')}"  has-permission="Ticket:List" ui-sref="tickets({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">bug_report</i></a>
-                                    <a title="Quotations" ng-class="{active: $state.includes('admin')}"  has-permission="Quotation:List" ui-sref="quotation-list({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">receipt</i></a>
-                                    <!--<a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
+                                       <!-- <a title="Locations" ng-class="{active: $state.includes('admin')}"  has-permission="Location:List" ui-sref="locations({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">place</i></a>-->
+                                        <a title="Employees" ng-class="{active: $state.includes('admin')}"  has-permission="Employee:List" ui-sref="employees({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">assignment_ind</i></a>
+                                        <a title="Assets" ng-class="{active: $state.includes('admin')}"  has-permission="Asset:List" ui-sref="assets({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">devices_other</i></a>
+                                        <a title="Jobs" ng-class="{active: $state.includes('admin')}"  has-permission="Job:List" ui-sref="jobs({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">build</i></a>
+                                        <a title="Tickets" ng-class="{active: $state.includes('admin')}"  has-permission="Ticket:List" ui-sref="tickets({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">bug_report</i></a>
+                                        <a title="Quotations" ng-class="{active: $state.includes('admin')}"  has-permission="Quotation:List" ui-sref="quotation-list({project :{id:site.projectId,name:site.projectName},site:{id:site.id,name:site.name}})"  class="btn btn-simple btn-info" target="_blank"><i class="material-icons">receipt</i></a>
+                                        <!--<a ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(site)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
+                                    </div>
                                 </td>
                             </tr>
 
