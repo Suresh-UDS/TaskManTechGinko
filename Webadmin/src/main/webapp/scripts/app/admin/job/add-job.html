@@ -218,7 +218,7 @@
 
 
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" tabindex="2" required>
+                                                        <select class="form-control " ng-model="selectedSite" ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id" name="siteName" tabindex="2" ng-disabled="job.ticketId" required>
                                                             <option value="">Select Site...</option>
                                                         </select>
                                                         <!--<span ng-show="siteSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
@@ -250,7 +250,7 @@
                                                     <label class="control-label">Block <!-- <span class="red-star">*</span> --></label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks track by block" name="block" tabindex="4">
+                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks track by block" name="block"  ng-disabled="job.ticketId" tabindex="4">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <!--<span ng-show="blockSpin"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>-->
@@ -281,7 +281,7 @@
                                                     <label class="control-label">Floor <!-- <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors track by floor" name="floor" tabindex="5">
+													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors track by floor" name="floor" ng-disabled="job.ticketId" tabindex="5">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
 
@@ -314,7 +314,7 @@
                                                     <label class="control-label">Zone<!--  <span class="red-star">*</span> --> </label>
                                                     <div class="dropdown">
                                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" name="zone" tabindex="6">
+													<select class="form-control " ng-model="selectedZone" ng-change="getLocationDetails(selectedBlock,selectedFloor,selectedZone)"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" name="zone" ng-disabled="job.ticketId" tabindex="6">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched || form.zone.$dirty">
