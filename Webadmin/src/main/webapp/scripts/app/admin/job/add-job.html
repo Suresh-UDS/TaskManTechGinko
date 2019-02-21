@@ -45,7 +45,7 @@
                                                            class='form-control InputTxtCapsAll'
                                                            name='jobName'
                                                            type='text' value=""
-                                                           ng-minlength='5'
+                                                           ng-minlength='1'
                                                            ng-maxlength='100'
                                                            ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="1"
                                                            required/>
@@ -58,7 +58,7 @@
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.minlength">
-                                                                Job title is required to be at least 5 character.
+                                                                Job title is required to be at least 1 character.
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.maxlength">
