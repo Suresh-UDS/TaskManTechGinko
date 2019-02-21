@@ -596,10 +596,13 @@ public class SchedulerHelperService extends AbstractService {
 		long projPresent = 0;
 		long projAbsent = 0;
 		long empCntInShift = 0;
+		long empCntNotInShift = 0;
 		List<Shift> shifts = siteRepository.findShiftsBySite(site.getId());
 		if (CollectionUtils.isNotEmpty(shifts)) {
 			// List<Shift> shifts = site.getShifts();
-			content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
+           // empCntNotInShift = empShiftRepo.findEmployeeCountBySiteAndNotInShift(site.getId());
+
+            content = new StringBuilder("Site Name - " + site.getName() + Constants.LINE_SEPARATOR);
 			int shiftStartLeadTime = Integer.valueOf(env.getProperty("attendance.shiftStartLeadTime"));
 			for (Shift shift : shifts) {
 				empCntInShift = 0;
@@ -717,7 +720,9 @@ public class SchedulerHelperService extends AbstractService {
 						+ ", shift alert -" + shiftAlert);
 				// }
 			}
-		} else {
+            projEmployees = employeeRepository.findCountBySiteId(site.getId());
+
+        } else {
 			empCntInShift = employeeRepository.findCountBySiteId(site.getId());
 
 			long attendanceCount = attendanceRepository.findCountBySiteAndCheckInTime(site.getId(),
