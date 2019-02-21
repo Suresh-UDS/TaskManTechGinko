@@ -1,5 +1,5 @@
 
-<div class="" ng-controller="RolePermissionController" ng-init="initLoad();loaderHide();">
+<div class="" ng-controller="RolePermissionController" ng-init="initLoad();">
 	<div class="success-message hidden"></div>
 
     <div class="row">
@@ -20,7 +20,7 @@
                                 <div class="form-group">
                                     <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                     <select ng-model="selectedUserRole" ng-change="selectRole()" name="rolePermission"  class="form-control" data-style="btn btn-primary" title="Select Role" data-size="7"
-                                    ng-options="role as (role.name | uppercase) for role in userRoles | orderBy:'name'" required>
+                                    ng-options="role as (role.name | uppercase) for role in userRoles track by role.id  | orderBy:'name'" required>
                                         <option value="">Select Roles...</option>
                                     </select>
                                     <div ng-show="rolePermissionForm.$submitted || rolePermissionForm.rolePermission.$touched || rolePermissionForm.rolePermission.$dirty">
@@ -43,7 +43,7 @@
                                     Submit
                                 </button>
 
-                                <button class="btn btn-danger" ng-click="cancelAppModule();">
+                                <button type="button" class="btn btn-danger" ng-click="cancelAppModule();">
                                     <i class="material-icons">close</i> Cancel
                                 </button>
 

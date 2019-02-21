@@ -46,8 +46,12 @@ angular.module('timeSheetApp')
 
 	$scope.selectRole = function() {
 		console.log('selected role - '+ $scope.selectedUserRole);
-		// $scope.loadModuleActions();
-		$scope.loadPermissions();
+		if(!$scope.selectedUserRole){
+             $scope.loadModuleActions();
+        }else{
+             $scope.loadPermissions();
+        }
+
 	}
 
 	$scope.checkPermission = function(moduleId, moduleName, actionId, actionName) {
@@ -136,9 +140,11 @@ angular.module('timeSheetApp')
 			$scope.moduleName = '';
 			$scope.selectedPermissions = [];
 			$scope.selectedUserRole = '';
-			$scope.refreshPage();
+			//$scope.refreshPage();
+            $scope.loadPermissions();
+            $scope.selectedUserRole = {id:$scope.searchCriteria.userRoleId};
 			$scope.rolePermissionLoadingStop();
-			$location.path('/role-permission');
+			//$location.path('/role-permission');
 			$scope.showNotifications('top','center','success','Role Permission Updated Successfully');
 		}).catch(function (response) {
 			$scope.success = null;
@@ -171,6 +177,8 @@ angular.module('timeSheetApp')
 		var searchCriteria = {
 				"findAll" : true
 		}
+        $scope.moduleActions = "";
+        $scope.moduleActionsLoader = false;
 		ModuleActionComponent.search(searchCriteria).then(function (data) {
 			$scope.moduleActions = data.transactions;
 			$scope.moduleActionsLoader = true;
@@ -181,11 +189,12 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.noData = true;
 			}
+
 		})
 	};
 
 	$scope.refreshPage = function() {
-		$scope.clearFilter();
+		//$scope.clearFilter();
 		$scope.loadUserRoles();
 		$scope.loadModuleActions();
 	}
