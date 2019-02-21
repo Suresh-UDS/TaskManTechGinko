@@ -197,6 +197,21 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
              $('.sidebar .sidebar-wrapper').perfectScrollbar();
          }
 
+        $rootScope.filterModal = function()
+        {
+            $('#basicFilter').modal();
+        }
+
+        $rootScope.filterModal1 = function()
+        {
+            $('#Filter').modal();
+        }
+
+        $rootScope.filterModal2 = function()
+        {
+            $('#advancedFilter').modal();
+        }
+
 
 
         // $rootScope.initScrollBar();
