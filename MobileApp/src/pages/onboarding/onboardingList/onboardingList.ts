@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
-
+import { Network } from "@ionic-native/network";
 import { onboardingNewEmployee } from '../onboardingNewEmployee/onboardingNewEmployee';
 import { onboardingEmpStatus } from '../onboardingEmpStatus/onboardingEmpStatus';
 import { onboardingUserView } from '../onboardingList/onboardingUserView/onboardingUserView';
@@ -28,71 +28,83 @@ export class onboardingExistEmployee implements OnInit {
   hideFilter = true;
   wbsId;
 
-  constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) {
+  constructor(private storage: Storage, private network: Network, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController,
+    public component: componentService) {
+    this.setStorage();
     this.storage.get('onboardingProjectSiteIds').then((Ids) => {
       this.wbsId = Ids['siteId'];
     });
   }
-  ngOnInit() { }
+  ngOnInit() {
+
+
+  }
   ionViewWillEnter() {
     this.component.showLoader("Please wait....");
-    this.storage.get('OnBoardingData').then((localStoragedData) => {
-      // for (let list of localStoragedData['actionRequired']) {
-      //   list['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
-      //   if (list.hasOwnProperty('kycDetails')) {
-      //     list['personalDetails']['image'] = list['kycDetails']['allKYCData']['employeeProfile'];
-      //   } else {
-      //     list['personalDetails']['image'] = 'assets/imgs/placeholder.png'
-      //   }
-      // }
-      this.onboardingService.getEmployeeListByWbs(this.wbsId).subscribe(res => {
-        let objectsKeys;
-        let objectsValues;
-        for (var i = 0; i < res.length; i++) {
-          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-            // for (let list in onBoardingModel) {
-            //   for (let key in onBoardingModel[list]) {
-            //     onBoardingModel[list][key] = res[i][key];
-            //     if (list == 'employmentDetails') {
-            //       if (res[i]['previousEmployee'].length) {
-            //         onBoardingModel[list]['isEmploymentEarlier'] = res[i]['previousEmployee'][0]['name'] ? true : false;
-            //         onBoardingModel[list]['employeeName'] = res[i]['previousEmployee'][0]['name'];
-            //         onBoardingModel[list]['employeeDesignation'] = res[i]['previousEmployee'][0]['designation'];
-            //       }
-            //     }
-            //     if (list == 'kycDetails') {
-            //       //onBoardingModel['personalDetails']['image'] = res[i]['kycDetails'][0]['accountNo'];
-            //       if (res[i]['bankDetails'].length) {
-            //         onBoardingModel[list]['bAccountNumber'] = res[i]['bankDetails'][0]['accountNo'];
-            //         onBoardingModel[list]['bIfscNumber'] = res[i]['bankDetails'][0]['IFSC'];
-            //       }
-            //     }
-            //   }
-            //   console.log(onBoardingModel);
-            //   //objectsKeys = Object['values'](onBoardingModel[list]);
-            //   //onBoardingModel[list]['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
-            // }
-            //objectsKeys = Object['entries'](onBoardingModel[list]);
-            //console.log('entries ==== ');
-            //console.log(objectsKeys);
-            localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
-            this.storage.set('OnBoardingData', localStoragedData);
+
+    console.log('onboard home Empid ' + window.localStorage.getItem('employeeId'));
+    console.log('onboard home UserId ' + window.localStorage.getItem('employeeUserId'));
+  //  console.log('onboard home EmpName ' + window.localStorage.getItem('employeeDetails'));
+
+
+    if (this.network.type != 'none') {
+        console.log(' network ' + this.network.type);
+    } else {
+        console.log(' No network ');
+        this.component.showToastMessage(' No network ','bottom');
+        this.storage.get('OnBoardingData').then((data) => {
+          if (!data) {          
+            this.actionRequiredEmp = data['actionRequired'];
+            this.completedEmp = data["completed"];
+            this.onSegmentChange();
+            this.getPercentage();
+            this.component.closeLoader();
+            this.component.showToastMessage('Server Unreachable', 'bottom');
+      }
+    })
+    }
+
+    this.onboardingService.initGetEmployeeListByWbs().subscribe(response => {
+      console.log('res init in page ' + response);
+
+      this.wbsId = response;
+
+      this.storage.get('OnBoardingData').then((localStoragedData) => {  
+        this.onboardingService.getEmployeeListByWbs(this.wbsId).subscribe(res => {
+          let objectsKeys;
+          let objectsValues;
+          console.log('onboard EMP ' + res.length);
+          for (var i = 0; i < res.length; i++) {
+            if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {        
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+              this.storage.set('OnBoardingData', localStoragedData);
+            }
           }
-        }
-        //console.log(onBoardingModel);
-        this.actionRequiredEmp = localStoragedData['actionRequired'];
-        this.completedEmp = localStoragedData["completed"];
-        
-        this.component.closeLoader();
-      }, err => {
-        this.actionRequiredEmp = localStoragedData['actionRequired'];
-        this.completedEmp = localStoragedData["completed"];
-        this.onSegmentChange();
-        this.getPercentage();
-        this.component.closeLoader();
-        this.component.showToastMessage('Server Unreachable', 'bottom');
+          //console.log(onBoardingModel);
+          this.actionRequiredEmp = localStoragedData['actionRequired'];
+          this.completedEmp = localStoragedData["completed"];
+          this.getPercentage();
+          this.component.closeLoader();
+        }, err => {
+          this.actionRequiredEmp = localStoragedData['actionRequired'];
+          this.completedEmp = localStoragedData["completed"];
+          this.onSegmentChange();
+          this.getPercentage();
+          this.component.closeLoader();
+          this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+        });
       });
-    });
+
+    },
+     err=> {
+      // this.actionRequiredEmp = localStoragedData['actionRequired'];
+      //  this.completedEmp = localStoragedData["completed"];
+      this.onSegmentChange();
+      this.getPercentage();
+      this.component.closeLoader();
+      this.component.showToastMessage('Server Unreachable', 'bottom');
+        console.log(err);
+    })
   }
   addNewEmpyoee() {
     let obj = {
@@ -140,8 +152,6 @@ export class onboardingExistEmployee implements OnInit {
         for (let key in onBoardingModel[list]) {
           onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
         }
-
-
         objectkeys = Object.keys(onBoardingModel[list]);
         objectValues = Object['values'](onBoardingModel[list]);
         objectFormattedValues = objectValues.filter((data) => {
@@ -197,4 +207,13 @@ export class onboardingExistEmployee implements OnInit {
       this.component.showToastMessage('Server Unreachable', 'bottom');
     })
   }
+
+  setStorage() {
+    this.storage.get('OnBoardingData').then((data) => {
+      if (!data) {
+        this.storage.set('OnBoardingData', { actionRequired: [], completed: [] });
+      }
+    })
+  }
+
 }

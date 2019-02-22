@@ -45,6 +45,7 @@ import { Indent } from "../pages/indent/indent";
 import { IndentList } from "../pages/indent-list/indent-list";
 import { ExpenseDetails } from "../pages/expense-details/expense-details";
 import { onboardingLocation } from '../pages/onboarding/onboardingLocation/onboardingLocation';
+import { onboardingExistEmployee } from '../pages/onboarding/onboardingList/onboardingList';
 
 @Component({
     templateUrl: 'app.html'
@@ -146,7 +147,7 @@ export class MyApp {
             { title: 'Attendance', component: SiteListPage, active: false, icon: 'content_paste', permission: 'AttendanceList' },
             // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
             { title: 'Quotation', component: QuotationPage, active: false, icon: 'receipt', permission: 'QuotationList' },
-            { title: 'OnBoarding', component: onboardingLocation, active: false, icon: 'person_add', permission: 'DashboardList' },
+            { title: 'OnBoarding', component: onboardingExistEmployee, active: false, icon: 'person_add', permission: 'DashboardList' },
             { title: 'Expense', component: ExpensePage, active: false, icon: 'pie_chart', permission: 'AttendanceList' },
             { title: 'InventoryMaster', component: InventoryMaster, active: false, icon: 'widgets', permission: 'FeedbackList' },
             { title: 'Indent', component: Indent, active: false, icon: 'build', permission: 'TicketsList' },

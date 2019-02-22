@@ -1,0 +1,821 @@
+[
+    {
+        "id": "5c6580ccf975d5dda01f85aa",
+        "employeeName": "Kannan G",
+        "employeeCode": "3892",
+        "gender": "female",
+        "dateOfBirth": "2023-11-19",
+        "dateOfJoining": "2015-02-20",
+        "contactNumber": "9876543234",
+        "religion": "muslim",
+        "maritalStatus": "Married",
+        "bloodGroup": "o Positive",
+        "aadharPhotoCopy": "nhbibuibubuib",
+        "profilePicture": "bibuhuhuihuih",
+        "employeeSignature": "gvyuygbyigyg",
+        "employeeVoiceSample": "vjvjhvjhvjhvj",
+        "prePrintedStatement": "vujvjvjvjhv",
+        "tempId": "bubu",
+        "isSync": true,
+        "thumbImpressen": [
+            {
+                "type": "leftHand",
+                "impressen": "guhggigi",
+                "additionalProperties": {}
+            }
+        ],
+        "relationshipDetails": [
+            {
+                "name": "ragu",
+                "relationship": "father",
+                "contactNumber": "8765432345",
+                "additionalProperties": {}
+            },
+            {
+                "name": "ratha",
+                "relationship": "mother",
+                "contactNumber": "8765432345",
+                "additionalProperties": {}
+            }
+        ],
+        "nomineeDetail": [
+            {
+                "name": "ragu",
+                "relationship": "father",
+                "contactNumber": "8765432345",
+                "nominePercentage": "50",
+                "additionalProperties": {}
+            },
+            {
+                "name": "ratha",
+                "relationship": "mother",
+                "contactNumber": "8765432345",
+                "nominePercentage": "50",
+                "additionalProperties": {}
+            }
+        ],
+        "identificationMark": [
+            "mole on right cheek",
+            "scare on left elbow"
+        ],
+        "aadharNumber": "65787642895638",
+        "communicationAddress": [
+            {
+                "type": null,
+                "address": "Uds salai",
+                "city": "chennai",
+                "state": "tamilnadu",
+                "additionalProperties": {}
+            }
+        ],
+        "educationQualification": [
+            {
+                "qualification": null,
+                "institute": "anna university",
+                "additionalProperties": {}
+            }
+        ],
+        "emergencyConatctNo": [
+            "7878568945",
+            "6890978563"
+        ],
+        "previousEmployee": [
+            {
+                "name": null,
+                "designation": null,
+                "additionalProperties": {}
+            }
+        ],
+        "epfNo": "ujoiojiojio",
+        "bankDetails": [
+            {
+                "name": "Sbi",
+                "accountNo": "6787454565787454",
+                "isActive": true,
+                "additionalProperties": {},
+                "ifsc": null
+            }
+        ],
+        "customer": [
+            {
+                "branchName": "chennai",
+                "project": [
+                    {
+                        "projectId": "bjjj5",
+                        "projectName": "Abeesw",
+                        "projectDes": "bhbjbjbj",
+                        "wbs": [
+                            {
+                                "wbsId": "UDS200008570001",
+                                "wbsName": "asennt",
+                                "wbsDes": "bbjbjbjbj",
+                                "position": "50058172",
+                                "positionDescription": "FITTER O",
+                                "activityDescription": "HK SUPERVISOR",
+                                "activityNo": "10",
+                                "activityId": "7",
+                                "gross": "11000.0",
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "KASTHURI.K",
+        "employeeCode": "7187",
+        "gender": "female",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "married",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEWOMAN O",
+                                "activityDescription": "CLEANING MATERIALS",
+                                "activityNo": null,
+                                "activityId": "4935",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "MADAN.M",
+        "employeeCode": "9707",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "HK SERVICEMAN",
+                                "activityNo": null,
+                                "activityId": "4934",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "VINOTH.G.A",
+        "employeeCode": "18863",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "CLEANING MATERIALS",
+                                "activityNo": null,
+                                "activityId": "4935",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "JOHN.H",
+        "employeeCode": "20756",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "CLEANING MATERIALS",
+                                "activityNo": null,
+                                "activityId": "4935",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "GAJANAN TRIMBKE",
+        "employeeCode": "20945",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "CLEANING MATERIALS",
+                                "activityNo": null,
+                                "activityId": "4935",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "VENKATESH JADHAV",
+        "employeeCode": "20946",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "HK SERVICEMAN",
+                                "activityNo": null,
+                                "activityId": "4934",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "GANESH GADGE",
+        "employeeCode": "21167",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "HK SERVICEMAN",
+                                "activityNo": null,
+                                "activityId": "4934",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "PRIYA JADHAV",
+        "employeeCode": "21168",
+        "gender": "female",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "4216870102332671  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "HK SERVICEMAN",
+                                "activityNo": null,
+                                "activityId": "4934",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "ANITA MORE",
+        "employeeCode": "21169",
+        "gender": "female",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "HK SERVICEMAN",
+                                "activityNo": null,
+                                "activityId": "4934",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    },
+    {
+        "id": null,
+        "employeeName": "KEVINRAJ.P",
+        "employeeCode": "25389",
+        "gender": "male",
+        "dateOfBirth": "",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "isSync": true,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "                  ",
+                "isActive": null,
+                "additionalProperties": {},
+                "ifsc": "                "
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "HK SERVICEMAN O",
+                                "activityDescription": "HK SERVICEMAN",
+                                "activityNo": null,
+                                "activityId": "4934",
+                                "gross": null,
+                                "additionalProperties": {}
+                            }
+                        ],
+                        "additionalProperties": {}
+                    }
+                ],
+                "additionalProperties": {}
+            }
+        ],
+        "additionalProperties": {},
+        "uanno": null,
+        "esino": null
+    }
+]

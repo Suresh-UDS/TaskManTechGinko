@@ -35,7 +35,8 @@ export class LoginPage {
   type : FormGroup;
   module:any;
   permission:any;
-  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,
+  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController,
+     public toastCtrl:ToastController,private toast: Toast,
               public navParams: NavParams,public myService:authService, public employeeService: EmployeeService,
               public events:Events,private sqlite:SQLite) {
       this.permission=[
@@ -60,8 +61,8 @@ export class LoginPage {
             if(response.errorStatus){
                 demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
             }else{
-                console.log(response);
-                console.log(response);
+                console.log('Login response' + response);
+               
                 console.log("user role");
                 console.log(response.user.userRoleName.toUpperCase());
                 if(response.user){
@@ -88,7 +89,10 @@ export class LoginPage {
                 window.localStorage.setItem('employeeFullName', response.employee.fullName);
                 window.localStorage.setItem('employeeEmpId', response.employee.empId);
                 window.localStorage.setItem('employeeUserId', response.employee.userId);
+                window.localStorage.setItem('empUserId', response.employee.empId);                
                 window.localStorage.setItem('employeeDetails', JSON.stringify(response));
+
+                console.log(JSON.stringify(response));
 
                 var employee = response.employee;
 

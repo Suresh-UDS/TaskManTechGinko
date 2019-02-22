@@ -3,6 +3,8 @@ import { Camera, CameraOptions } from "@ionic-native/camera";
 import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
+import { ActionSheet, ActionSheetController } from 'ionic-angular';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
 
 @Component({
   selector: 'page-kycDetails-new',
@@ -21,7 +23,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
+  constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera,
+    private imagePicker: ImagePicker,
+    private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
 
@@ -101,7 +105,42 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //     this.sendValidationMessage();
   //   })
   // }
+
+
+  presentActionSheet(imageSide) {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'choose',
+      buttons: [
+        {
+          text: 'Camera',
+          handler: () => {
+            console.log("Quotation sheet Controller");
+            this.getImageData(imageSide)
+          }
+        },
+        {
+          text: 'Gallery',
+          handler: () => {
+            const options = {
+              maximumImagesCount: 1, width: 400, height: 400, quality: 50
+            }
+
+            this.imagePicker.getPictures(options).then((results) => {
+              console.log('Image URI : ' + results[0]);
+            }, (err) => {
+              console.log(err + 'gallery - kyc err');
+            });
+          }
+        },
+      ]
+    });
+
+    actionSheet.present();
+  }
+
+
   getImageData(imageSide) {
+
     const options: CameraOptions = {
       quality: 80,
       destinationType: this.camera.DestinationType.NATIVE_URI,
@@ -119,7 +158,6 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       } else if (imageSide == 'profile') {
         this.userAllKYCData['profilePicture'] = imageData;
       }
-
       this.sendValidationMessage();
     })
   }

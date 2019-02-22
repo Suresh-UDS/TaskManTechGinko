@@ -87,6 +87,9 @@ export class DashboardPage {
        console.log(userType);
        this.userType = userType;
    });
+
+//    this.presentActionSheet();
+
    console.log("User Role in dashboard");
    console.log(window.localStorage.getItem('userRole'));
       this.userType=window.localStorage.getItem('userRole')
