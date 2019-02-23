@@ -4,7 +4,9 @@ import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/
 import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 import { ActionSheet, ActionSheetController } from 'ionic-angular';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { File } from '@ionic-native/file';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+// import { ImagePicker } from '@ionic-native/image-picker/ngx';
 
 @Component({
   selector: 'page-kycDetails-new',
@@ -23,9 +25,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera,
-    private imagePicker: ImagePicker,
-    private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService) { }
+  constructor(private fb: FormBuilder, private transfer: FileTransfer, private storage: Storage, private camera: Camera,
+    private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService, private file: File) { }
+
 
   ngOnInit() {
 
@@ -115,21 +117,22 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
           text: 'Camera',
           handler: () => {
             console.log("Quotation sheet Controller");
-            this.getImageData(imageSide)
+            this.getImageData(imageSide, '')
           }
         },
         {
           text: 'Gallery',
           handler: () => {
-            const options = {
-              maximumImagesCount: 1, width: 400, height: 400, quality: 50
-            }
 
-            this.imagePicker.getPictures(options).then((results) => {
-              console.log('Image URI : ' + results[0]);
-            }, (err) => {
-              console.log(err + 'gallery - kyc err');
-            });
+            this.getImageData(imageSide, 'album');
+            // const options = {
+            //   maximumImagesCount: 1, width: 400, height: 400, quality: 50
+            // }
+            // this.imagePicker.getPictures(options).then((results) => {
+            //   console.log('Image URI : ' + results[0]);
+            // }, (err) => {
+            //   console.log(err + 'gallery - kyc err');
+            // });
           }
         },
       ]
@@ -139,24 +142,36 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   }
 
 
-  getImageData(imageSide) {
+  getImageData(imageSide, imageType) {
 
-    const options: CameraOptions = {
+    var options: CameraOptions = {
       quality: 80,
-      destinationType: this.camera.DestinationType.NATIVE_URI,
-      //encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.ALLMEDIA
+      destinationType: this.camera.DestinationType.FILE_URI,
+      mediaType: this.camera.MediaType.PICTURE,
+      encodingType: this.camera.EncodingType.PNG,
     };
-
+    if (imageType == 'album') {
+      options.sourceType = this.camera.PictureSourceType.SAVEDPHOTOALBUM
+    }
     this.camera.getPicture(options).then((imageData) => {
+      console.log(imageData);
+      const imageURI = imageData;
+      
+      //then use the method reasDataURL  btw. var_picture is ur image variable
+      //var imageURI = path;
+      // if (imageType == 'album') {
+      //   imageURI = 'file://' + imageData[0];
+      // } else {
+      //   imageURI = imageData;
+      // }
       if (imageSide == 'front') {
-        this.userAllKYCData['aadharPhotoCopy'] = imageData;
+        this.userAllKYCData['aadharPhotoCopy'] = imageURI;
       } else if (imageSide == 'passbook') {
-        this.userAllKYCData['prePrintedStatement'] = imageData;
+        this.userAllKYCData['prePrintedStatement'] = imageURI;
       } else if (imageSide == 'sign') {
-        this.userAllKYCData['employeeSignature'] = imageData;
+        this.userAllKYCData['employeeSignature'] = imageURI;
       } else if (imageSide == 'profile') {
-        this.userAllKYCData['profilePicture'] = imageData;
+        this.userAllKYCData['profilePicture'] = imageURI;
       }
       this.sendValidationMessage();
     })

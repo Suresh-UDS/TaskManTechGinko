@@ -12,8 +12,16 @@ import { onBoardingDataService } from './onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 import { componentService } from '../../service/componentService';
 import { OnboardingService } from '../../service/onboarding.service';
+import { File } from '@ionic-native/file';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 
-
+const imageUploadModal = {
+  aadharPhotoCopy: String,
+  profilePicture: String,
+  employeeSignature: String,
+  prePrintedStatement: String,
+  addressProof: String
+}
 
 @Component({
   selector: 'page-onboarding-new',
@@ -27,7 +35,7 @@ export class onboardingNewEmployee {
   storedIndex;
   formLoadingProgress: any = 'pie0';
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
-  constructor(private network: Network, private onBoardingService: OnboardingService,public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, private navCtrl: NavController) {
+  constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService, public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, private navCtrl: NavController) {
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
@@ -135,14 +143,19 @@ export class onboardingNewEmployee {
           let tempIndex = localStoragedData['completed'].length;
           localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
           localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-          
+
           if (this.network.type != 'none') {
             this.componentService.showLoader("Loading OnBoarding");
             this.onBoardingService.saveOnboardingUser(localStoragedData['completed'][tempIndex], tempIndex).subscribe((res) => {
-              this.componentService.closeAll();
-              localStoragedData['completed'].splice(tempIndex, 1);
-              this.storage.set('OnBoardingData', localStoragedData);
-              this.navCtrl.setRoot(onboardingExistEmployee);
+
+              this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
+                this.componentService.closeAll();
+                localStoragedData['completed'].splice(tempIndex, 1);
+                this.storage.set('OnBoardingData', localStoragedData);
+                this.navCtrl.setRoot(onboardingExistEmployee);
+              }, err => {
+
+              })
             }, (error) => {
               this.componentService.closeAll();
               localStoragedData['completed'][tempIndex]['isSync'] = false;
@@ -158,12 +171,28 @@ export class onboardingNewEmployee {
       }
     });
   }
+
+  saveImages(array, id) {
+    let promise = new Promise((resolve, reject) => {
+      let imageUpload = Object.keys(imageUploadModal);
+
+      for (var i = 0; i < imageUpload.length; i++) {
+        this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id).then(function (res) {
+          console.log(res);
+        }, function(err) {
+          console.log(err);
+        })
+      }
+      resolve('success')
+    });
+    return promise;
+  }
   storeFormData(data) {
     //let storeKeyName = this.wizardObj[this.currentIndex]['key'];
     // alert(storeKeyName);
-    console.log(data);
+    //console.log(data);
     //let obj: any = {};
-    console.log('store fn start');
+    //console.log('store fn start');
 
     let promise = new Promise((resolve, reject) => {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
@@ -173,7 +202,7 @@ export class onboardingNewEmployee {
         //   localStoragedData['actionRequired'][this.storedIndex][key] = data[key];
         // }
         Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
-        console.log(localStoragedData);
+        //console.log(localStoragedData);
         //localStoragedData['completed'] = [];
         this.storage.set('OnBoardingData', localStoragedData);
 
@@ -181,8 +210,8 @@ export class onboardingNewEmployee {
           this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);
         }
 
-        console.log('store data');
-        console.log(JSON.stringify(localStoragedData));
+        //console.log('store data');
+        //console.log(JSON.stringify(localStoragedData));
         resolve('success');
       });
     });

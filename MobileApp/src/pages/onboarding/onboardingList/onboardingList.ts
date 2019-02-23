@@ -69,10 +69,12 @@ export class onboardingExistEmployee implements OnInit {
 
       this.wbsId = response;
 
+
       this.storage.get('OnBoardingData').then((localStoragedData) => {  
         this.onboardingService.getEmployeeListByWbs(this.wbsId).subscribe(res => {
           let objectsKeys;
           let objectsValues;
+
           console.log('onboard EMP ' + res.length);
           for (var i = 0; i < res.length; i++) {
             if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {        
