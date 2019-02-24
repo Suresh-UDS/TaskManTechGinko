@@ -198,7 +198,7 @@ export class onboardingExistEmployee implements OnInit {
   }
   syncEmployeeDetails(object, index) {
     this.component.showLoader("Loading OnBoarding");
-    this.onboardingService.saveOnboardingUser(object, index).subscribe((res) => {
+    this.onboardingService.saveOnboardingUser(object).subscribe((res) => {
       this.component.closeAll();
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         localStoragedData['completed'].splice(index, 1);

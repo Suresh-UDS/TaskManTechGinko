@@ -76,6 +76,9 @@
                                         <ion-icon name="refresh"></ion-icon>
                                         <div>Update</div>
                                     </button>
+
+                                    <ion-badge *ngIf="list['isSync'] == false" item-end color="secondary">local</ion-badge>
+
                                     <!-- <ion-note *ngIf="list.status == '30%'" item-end>
                                         <button (click)="syncEmployeeDetails()" small round ion-button icon-start>
                                             <ion-icon name="sync"></ion-icon>
@@ -139,7 +142,8 @@
                                         <div>View</div>
                                     </button>
                                     <ion-note *ngIf="list['isSync'] == false" item-end>
-                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button icon-start>
+                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button
+                                            icon-start>
                                             <ion-icon name="sync"></ion-icon>
                                             SYNC
                                         </button>

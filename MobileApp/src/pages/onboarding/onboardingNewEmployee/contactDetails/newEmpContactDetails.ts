@@ -160,11 +160,12 @@ export class newEmpContactDetails implements OnInit {
     const options: CameraOptions = {
       quality: 80,
       destinationType: this.camera.DestinationType.NATIVE_URI,
-      //encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.ALLMEDIA
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
     };
 
     this.camera.getPicture(options).then((imageData) => {
+      imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
       this.addressProof = imageData;
       this.addressProofImage = true;
       this.sendValidationMessage();
@@ -191,10 +192,10 @@ export class newEmpContactDetails implements OnInit {
   sendValidationMessage() {
     if (this.formStatusValues['status'] && this.addressProofImage) {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
-      let contactNo = this.formStatusValues['data']['emergencyConatctNo'];
-      this.formStatusValues['data']['emergencyConatctNo'] = [];
-      this.formStatusValues['data']['emergencyConatctNo'][0] = contactNo;
-      this.formStatusValues['data']['emergencyConatctNo'];
+      let contactNo = JSON.stringify(this.formStatusValues['data']['emergencyConatctNo']);
+      //this.formStatusValues['data']['emergencyConatctNo'] = [];
+      this.formStatusValues['data']['emergencyConatctNo'] = [contactNo]
+      //this.formStatusValues['data']['emergencyConatctNo'];
       this.messageService.formDataMessage(this.formStatusValues);
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });

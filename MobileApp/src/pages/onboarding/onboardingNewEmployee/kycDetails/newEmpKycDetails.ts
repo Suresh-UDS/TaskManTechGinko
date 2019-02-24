@@ -145,17 +145,17 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   getImageData(imageSide, imageType) {
 
     var options: CameraOptions = {
-      quality: 80,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      quality: 50,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
       mediaType: this.camera.MediaType.PICTURE,
-      encodingType: this.camera.EncodingType.PNG,
+      encodingType: this.camera.EncodingType.JPEG,
     };
     if (imageType == 'album') {
       options.sourceType = this.camera.PictureSourceType.SAVEDPHOTOALBUM
     }
     this.camera.getPicture(options).then((imageData) => {
       console.log(imageData);
-      const imageURI = imageData;
+      const imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
       
       //then use the method reasDataURL  btw. var_picture is ur image variable
       //var imageURI = path;

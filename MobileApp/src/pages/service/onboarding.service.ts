@@ -57,11 +57,12 @@ export class OnboardingService {
                 return Observable.throw(error.json());
             })
     }
-    saveOnboardingUser(object, index) {
+    saveOnboardingUser(object) {
+        //object = JSON.stringify(object);
         object['isSync'] = true;
         return this.http.post(this.BASE_URL + '/api/onboard/employees', object).map(
             response => {
-                return response.json();
+                return response;
             }).catch(error => {
                 console.log(error);
                 return Observable.throw(error.json());
@@ -98,23 +99,26 @@ export class OnboardingService {
 
         let promise = new Promise((resolve, reject) => {
             let name = filename.substring(filename.lastIndexOf('/') + 1);
-            let path = filename.substring(0, filename.lastIndexOf('/') + 1);
+            //let path = filename.substring(0, filename.lastIndexOf('/') + 1);
             const fileTransfer: FileTransferObject = this.transfer.create();
+            console.log('file name == ' + name);
+            console.log("file path == " + filename);
             var options: FileUploadOptions = {
-                fileKey: "image",
-                fileName: name,
-                httpMethod: 'POST'
+                fileKey: "file",
+                fileName: key,
+                httpMethod: 'POST',
+                params: {
+                    id: id.toString()
+                }
             }
 
-            var params: any = {};
-            params.id = id;
-            options.params = params;
-
-            fileTransfer.upload(path, encodeURI(this.BASE_URL + '/api/onboard/' + key), options)
+            fileTransfer.upload(filename, this.BASE_URL + '/api/onboard/' + key, options)
                 .then((data) => {
+                    alert('success')
                     console.log(data);
                     resolve(data);
                 }, (err) => {
+                    alert('error');
                     console.log(err);
                     reject(err);
                 });
