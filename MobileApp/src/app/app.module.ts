@@ -61,6 +61,7 @@ import { FeedbackQuestionPage } from "../pages/feedback/feedback-questions";
 import { InitFeedbackPage } from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
 import { TicketFilter } from "../pages/ticket/ticket-filter/ticket-filter";
 import { InventoryMaster } from "../pages/inventory-master/inventory-master";
 import { ExpenseDetails } from "../pages/expense-details/expense-details";
@@ -445,6 +446,7 @@ import { onBoardingDataService } from '../pages/onboarding/onboardingNewEmployee
     Toast,
     FileTransfer,
     File,
+    FilePath,
     DatePicker,
     AppVersion,
     QRScanner,

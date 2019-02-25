@@ -3,9 +3,10 @@ import { Camera, CameraOptions } from "@ionic-native/camera";
 import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
-import { ActionSheet, ActionSheetController } from 'ionic-angular';
+import { normalizeURL, ActionSheet, ActionSheetController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer  } from '@angular/platform-browser';
+import { FilePath } from '@ionic-native/file-path';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 // import { ImagePicker } from '@ionic-native/image-picker/ngx';
@@ -16,6 +17,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 })
 export class newEmpKycDetails implements OnInit, AfterViewInit {
 
+  imageURIto;
   onboardingKycSubscription;
   formStatusValues
   onboardingKYCForm: FormGroup;
@@ -27,7 +29,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private DomSanitizer: DomSanitizer, private fb: FormBuilder, private transfer: FileTransfer, private storage: Storage, private camera: Camera,
+  constructor(private filePath: FilePath,private DomSanitizer: DomSanitizer, private fb: FormBuilder, private transfer: FileTransfer, private storage: Storage, private camera: Camera,
     private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService, private file: File) { }
 
 
@@ -145,46 +147,71 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     actionSheet.present();
   }
 
+  private getFileUri = (url: any) => {
+    var scope = this;
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        console.log(' reader '+ reader.result);
+        scope.imageURIto = reader.result;
+      }
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
 
   getImageData(imageSide, imageType) {
 
     var options: CameraOptions = {
       quality: 50,
-      destinationType: this.camera.DestinationType.NATIVE_URI,
+      destinationType: this.camera.DestinationType.FILE_URI,
       mediaType: this.camera.MediaType.PICTURE,
       encodingType: this.camera.EncodingType.JPEG,
     };
     if (imageType == 'album') {
+     // options.saveToPhotoAlbum = false
       options.sourceType = this.camera.PictureSourceType.SAVEDPHOTOALBUM
     }
     this.camera.getPicture(options).then((imageData) => {
-      console.log(imageData);
+      console.log('capture--- '+ imageData);
       let imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
 
+    //  console.log('normalize url---'+ this.getFileUri(imageURI));
       //then use the method reasDataURL  btw. var_picture is ur image variable
       //var imageURI = path;
-      if (imageType == 'album') {
-        imageURI = 'file://' + imageData;
+      // if (imageType == 'album') {
+        // imageURI = 'file://' + imageData;
         // } else {
         //   imageURI = imageData;
-      }
+      // }
 
-      imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
+      this.filePath.resolveNativePath(imageURI)
+         .then(imageURI => {console.log(' get file path -- ' + imageURI)
+      
+         if (imageSide == 'front') {
+          this.userAllKYCData['aadharPhotoCopy'] = imageURI;
+        } else if (imageSide == 'passbook') {
+          this.userAllKYCData['prePrintedStatement'] = imageURI;
+        } else if (imageSide == 'sign') {
+          this.userAllKYCData['employeeSignature'] = imageURI;
+        } else if (imageSide == 'profile') {
+          this.userAllKYCData['profilePicture'] = imageURI;
+        } else if (imageSide == 'fpRight')
+          this.userAllKYCData['fingerPrintRight'] = imageURI;
+        else if (imageSide == 'fpLeft') {
+          this.userAllKYCData['fingerPrintLeft'] = imageURI;
+        }
+  
+        this.sendValidationMessage();
+    })
+         .catch(err => console.log(err));
 
-      if (imageSide == 'front') {
-        this.userAllKYCData['aadharPhotoCopy'] = imageURI;
-      } else if (imageSide == 'passbook') {
-        this.userAllKYCData['prePrintedStatement'] = imageURI;
-      } else if (imageSide == 'sign') {
-        this.userAllKYCData['employeeSignature'] = imageURI;
-      } else if (imageSide == 'profile') {
-        this.userAllKYCData['profilePicture'] = imageURI;
-      } else if (imageSide == 'fpRight')
-        this.userAllKYCData['fingerPrintRight'] = imageURI;
-      else if (imageSide == 'fpLeft') {
-        this.userAllKYCData['fingerPrintLeft'] = imageURI;
-      }
-      this.sendValidationMessage();
+    //  imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
+
+    
     })
   }
   createBankDetails(): FormGroup {

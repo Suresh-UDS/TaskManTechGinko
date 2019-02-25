@@ -3,7 +3,12 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "angular",
-  "v2": true,
-  "typescript": true
+  "type": "ionic-angular",
+  "app_id": "",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
 }

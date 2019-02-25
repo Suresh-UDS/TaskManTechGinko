@@ -20,7 +20,9 @@ const imageUploadModal = {
   profilePicture: String,
   employeeSignature: String,
   prePrintedStatement: String,
-  addressProof: String
+  addressProof: String,
+  fingerPrintRight: String,
+  fingerPrintLeft: String
 }
 
 @Component({
@@ -147,13 +149,14 @@ export class onboardingNewEmployee {
           tempIndex = localStoragedData['completed'].length;
           //if (this.network.type != 'none') {
           this.componentService.showLoader("Loading OnBoarding");
-          console.log("loading ========");
-          alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-          this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex]).subscribe((res) => {
+          console.log("loading ========" + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+      //   alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+          this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex])
+          .subscribe((res) => {
             localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
             localStoragedData['actionRequired'].splice(this.storedIndex, 1);
             alert(JSON.stringify(res));
-            console.log("res =======");
+            console.log("res ======="+JSON.stringify(res));
             this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
               this.componentService.closeAll();
               localStoragedData['completed'].splice(tempIndex, 1);
@@ -182,8 +185,9 @@ export class onboardingNewEmployee {
       let imageUpload = Object.keys(imageUploadModal);
 
       for (var i = 0; i < imageUpload.length; i++) {
-        this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id).then(function (res) {
-          console.log(res);
+        this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
+        .then(function (res) {
+          console.log('image upload ' + res);
         }, function (err) {
           console.log(err);
         })

@@ -33,7 +33,7 @@
     "@ionic-native/date-picker": "^4.7.0",
     "@ionic-native/diagnostic": "^4.12.0",
     "@ionic-native/file": "^4.6.0",
-    "@ionic-native/file-path": "^4.5.3",
+    "@ionic-native/file-path": "^4.20.0",
     "@ionic-native/file-transfer": "^4.5.3",
     "@ionic-native/geofence": "^4.5.2",
     "@ionic-native/geolocation": "^4.18.0",
