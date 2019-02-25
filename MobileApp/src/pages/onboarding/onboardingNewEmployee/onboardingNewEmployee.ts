@@ -36,7 +36,10 @@ export class onboardingNewEmployee {
   allFormValues = {};
   formLoadingProgress: any = 'pie0';
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
-  constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService, public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, private navCtrl: NavController) {
+  constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService, 
+    public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, 
+    private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, 
+    private navCtrl: NavController) {
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];

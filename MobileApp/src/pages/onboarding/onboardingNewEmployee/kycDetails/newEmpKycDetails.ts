@@ -5,6 +5,8 @@ import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 import { ActionSheet, ActionSheetController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
+import { DomSanitizer } from '@angular/platform-browser';
+
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 // import { ImagePicker } from '@ionic-native/image-picker/ngx';
 
@@ -25,14 +27,14 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private fb: FormBuilder, private transfer: FileTransfer, private storage: Storage, private camera: Camera,
+  constructor(private DomSanitizer: DomSanitizer, private fb: FormBuilder, private transfer: FileTransfer, private storage: Storage, private camera: Camera,
     private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService, private file: File) { }
 
 
   ngOnInit() {
 
     this.onboardingKYCForm = this.fb.group({
-      aadharNumber: ['', [Validators.required]],
+      aadharNumber: ['', [Validators.required, Validators.maxLength(12)]],
       bankDetails: this.fb.array([this.createBankDetails()])
     });
     this.initialKycImage();
@@ -71,7 +73,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       aadharPhotoCopy: 'assets/imgs/placeholder.png',
       employeeSignature: 'assets/imgs/placeholder.png',
       profilePicture: 'assets/imgs/placeholder.png',
-      prePrintedStatement: 'assets/imgs/placeholder.png'
+      prePrintedStatement: 'assets/imgs/placeholder.png',
+      fingerPrintRight: 'assets/imgs/placeholder.png',
+      fingerPrintLeft: 'assets/imgs/placeholder.png'
     }
   }
 
@@ -111,17 +115,17 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
   presentActionSheet(imageSide) {
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'choose',
+      title: 'choose image from',
       buttons: [
         {
-          text: 'Camera',
+          text: 'Take a photo',
           handler: () => {
             console.log("Quotation sheet Controller");
             this.getImageData(imageSide, '')
           }
         },
         {
-          text: 'Gallery',
+          text: 'Pick from Gallery',
           handler: () => {
 
             this.getImageData(imageSide, 'album');
@@ -155,15 +159,18 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     }
     this.camera.getPicture(options).then((imageData) => {
       console.log(imageData);
-      const imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
-      
+      let imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+
       //then use the method reasDataURL  btw. var_picture is ur image variable
       //var imageURI = path;
-      // if (imageType == 'album') {
-      //   imageURI = 'file://' + imageData[0];
-      // } else {
-      //   imageURI = imageData;
-      // }
+      if (imageType == 'album') {
+        imageURI = 'file://' + imageData;
+        // } else {
+        //   imageURI = imageData;
+      }
+
+      imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
+
       if (imageSide == 'front') {
         this.userAllKYCData['aadharPhotoCopy'] = imageURI;
       } else if (imageSide == 'passbook') {
@@ -172,6 +179,10 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.userAllKYCData['employeeSignature'] = imageURI;
       } else if (imageSide == 'profile') {
         this.userAllKYCData['profilePicture'] = imageURI;
+      } else if (imageSide == 'fpRight')
+        this.userAllKYCData['fingerPrintRight'] = imageURI;
+      else if (imageSide == 'fpLeft') {
+        this.userAllKYCData['fingerPrintLeft'] = imageURI;
       }
       this.sendValidationMessage();
     })
@@ -230,6 +241,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       (this.userAllKYCData['aadharPhotoCopy'] !== 'assets/imgs/placeholder.png') &&
       (this.userAllKYCData['employeeSignature'] !== 'assets/imgs/placeholder.png') &&
       (this.userAllKYCData['profilePicture'] !== 'assets/imgs/placeholder.png') &&
+      (this.userAllKYCData['fingerPrintRight'] !== 'assets/imgs/placeholder.png') &&
+      (this.userAllKYCData['fingerPrintLeft'] !== 'assets/imgs/placeholder.png') &&
       (this.userAllKYCData['prePrintedStatement'] !== 'assets/imgs/placeholder.png')) {
 
       this.formStatusValues['data'] = this.userAllKYCData
@@ -248,6 +261,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];
         this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['profilePicture'];
         this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['prePrintedStatement'];
+        this.userAllKYCData['fingerPrintRight'] = localStoragedData['actionRequired'][this.storedIndex]['fingerPrintRight'];
+        this.userAllKYCData['fingerPrintLeft'] = localStoragedData['actionRequired'][this.storedIndex]['fingerPrintLeft'];
 
         this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
         // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
