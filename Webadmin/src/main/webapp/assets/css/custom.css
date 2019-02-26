@@ -2472,4 +2472,8 @@ ul.ckLstDot li:before {
    }
  }
 
+.tblCenter tr td{
+   text-align: center;
+}
+
 

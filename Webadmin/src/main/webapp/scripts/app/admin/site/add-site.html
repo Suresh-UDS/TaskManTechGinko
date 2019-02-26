@@ -2,18 +2,15 @@
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
     <div  ng-init="loadPageTop();loadingStart();">
 
-
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
-
-
             <!--<div class="card-header" data-background-color="red">-->
                 <!--<h4 class="title">Add Site</h4>-->
                 <!--<p class="category"></p>-->
             <!--</div>-->
 
            <div class="cardsCon addSiteCon">
+               <div>
+                   <label><span class="red-star">*</span> Mantatory Field</label>
+               </div>
                <form ng-show="!success" ng-submit="conform('save',form.$invalid)" name="form" role="form" novalidate
                      >
 
@@ -41,7 +38,7 @@
 
                                                <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                               <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
+                                               <ui-select ng-model="SelectClient.selected"  name="projectName" on-select="markSelection(SelectClient.selected);loadRegionsList(SelectClient.selected);" ng-disabled="clientDisable" ng-required="true">
 
 												  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 												  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search" ng-click="markSelection(SelectClient.selected);loadRegionsList(SelectClient.selected);">
@@ -264,15 +261,12 @@
 
                        </div>
                        <div class="col-md-6">
-
-
                            <div class="panel panel-default">
                                <div class="panel-heading">Location Details</div>
-                               <div class="panel-body" style="min-height: 330px;">
-
+                               <div class="panel-body" >
                                    <div class="row">
                                        <div class="col-md-6">
-                                           <div class="form-group  ">
+                                           <div class="form-group">
                                                <label class="control-label">Site Location (Latitude)<span class="red-star">*</span> </label>
                                                <input type="text" class="form-control"   name='latitude'
                                                       ng-model="site.addressLat" ng-pattern='/^[-+]?[0-9]{1,10}(\.[0-9]+)?$/' tabindex="2"  required autocomplete="off"/>
@@ -347,88 +341,86 @@
 
                        </div>
 
-                   </div>
-                   <div class="row">
                        <div class="col-md-6">
-                          <div class="panel panel-default">
-                            <div class="panel-heading">Shift Timings</div>
-                            <div class="panel-body">
+                           <div class="panel panel-default">
+                               <div class="panel-heading">Shift Timings</div>
+                               <div class="panel-body">
 
-                              <div class="row">
+                                   <div class="row">
 
-  									            <div class="col-md-4">
+                                       <div class="col-md-4">
 
-  				                        <!--<div class="form-group label-floating">-->
-  				                        <!--<label class="control-label">Date</label>-->
-  				                        <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
+                                           <!--<div class="form-group label-floating">-->
+                                           <!--<label class="control-label">Date</label>-->
+                                           <!--<input class="datepicker form-control" type="text" value="03/01/2018"/>-->
 
-  				                        <!--</div>-->
+                                           <!--</div>-->
 
-  				                        <div class="form-group">
-  				                            <label class="label-control">From Time</label>
-  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftFrom" value="" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" tabindex="13" autocomplete="off" />
-
-
-                                      <div
-                                          ng-show="sStatus">
-                                          <p class="help-block" style="color: maroon">From time is required</p>
-                                      </div>
+                                           <div class="form-group">
+                                               <label class="label-control">From Time</label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+                                               <input type="text" class="form-control timepicker"  id="shiftFrom" value="" ng-model="newShiftItem.startTimeDup"  placeholder="hh:mm" tabindex="13" autocomplete="off" />
 
 
-  				                        </div>
-
-  				                    </div>
-  				                    <div class="col-md-4">
-
-  				                        <div class="form-group">
-  				                            <label class="label-control">To Time</label>
-  				                            <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
-  				                            <input type="text" class="form-control timepicker"  id="shiftTo" value="" ng-model="newShiftItem.endTimeDup" placeholder="hh:mm" tabindex="14"  autocomplete="off" />
+                                               <div
+                                                   ng-show="sStatus">
+                                                   <p class="help-block" style="color: maroon">From time is required</p>
+                                               </div>
 
 
-                                          <div
-                                              ng-show="eStatus">
-                                              <p class="help-block" style="color: maroon">To time is required</p>
-                                          </div>
+                                           </div>
 
-  				                        </div>
+                                       </div>
+                                       <div class="col-md-4">
 
-  				                    </div>
+                                           <div class="form-group">
+                                               <label class="label-control">To Time</label>
+                                               <span class="form-control-feedback calender-icon"><i class="material-icons">schedule</i></span>
+                                               <input type="text" class="form-control timepicker"  id="shiftTo" value="" ng-model="newShiftItem.endTimeDup" placeholder="hh:mm" tabindex="14"  autocomplete="off" />
 
-  				                    <div class="col-md-4">
 
-  			                            <button type="button" class="btn btn-success margn-top20" ng-click="addShiftItem($event)" tabindex="15">
-  			                                <span class="btn-label" >
-  			                                    <i class="material-icons">add</i>
-                                                Add
-  			                                </span>
+                                               <div
+                                                   ng-show="eStatus">
+                                                   <p class="help-block" style="color: maroon">To time is required</p>
+                                               </div>
 
-  			                            </button>
+                                           </div>
 
-  			                        </div>
-                     				</div>
-                            <div
-                                ng-show="dupStatus">
-                                <p class="help-block" style="color: maroon">Shift already exists.</p>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="">Items</label>
-                                    <ul class="listOfActions list-group">
-                                        <li class="list-group-item justify-content-between" ng-repeat=" item in shiftItems" ng-bind-html-unsafe="item.text">
-                                            {{item.startTime | date:'hh:mm a'}} - {{item.endTime | date:'hh:mm a'}}
-                                            <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                              </div>
-                            </div>
-                   			</div>
-                   		</div>
-                   	</div>
-                  </div>
+                                       </div>
+
+                                       <div class="col-md-4">
+
+                                           <button type="button" class="btn btn-success margn-top20" ng-click="addShiftItem($event)" tabindex="15">
+                                        <span class="btn-label" >
+                                            <i class="material-icons">add</i>
+                                            Add
+                                        </span>
+
+                                           </button>
+
+                                       </div>
+                                   </div>
+                                   <div
+                                       ng-show="dupStatus">
+                                       <p class="help-block" style="color: maroon">Shift already exists.</p>
+                                   </div>
+                                   <div class="row">
+                                       <div class="col-md-12">
+                                           <div class="form-group">
+                                               <label class="">Items</label>
+                                               <ul class="listOfActions list-group">
+                                                   <li class="list-group-item justify-content-between" ng-repeat=" item in shiftItems" ng-bind-html-unsafe="item.text">
+                                                       {{item.startTime | date:'hh:mm a'}} - {{item.endTime | date:'hh:mm a'}}
+                                                       <span class="badge badge-default badge-pill" ng-click="removeItem($index)"><i class="material-icons">remove_circle</i></span>
+                                                   </li>
+                                               </ul>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
 
                    <div class="row">
                        <div class="col-md-12">

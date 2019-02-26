@@ -528,7 +528,7 @@ angular.module('timeSheetApp')
 			    $scope.sStatus = false;
                 $scope.eStatus = false;
                 if($scope.newShiftItem.startTime == $scope.newShiftItem.endTime){
-                 $scope.showNotifications('top','center','warning','Please avoid same from time,to time..');
+                 $scope.showNotifications('top','center','warning','Please avoid same from time & to time..');
                  return;
                 }
 
