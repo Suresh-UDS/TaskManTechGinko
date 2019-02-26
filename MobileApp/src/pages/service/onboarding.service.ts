@@ -59,10 +59,11 @@ export class OnboardingService {
     }
     saveOnboardingUser(object) {
         //object = JSON.stringify(object);
-        object['isSync'] = true;
+        object['isSync'] = false;
+        //cg change to true
         return this.http.post(this.BASE_URL + '/api/onboard/employees', object).map(
             response => {
-                return response;
+                return response.json();
             }).catch(error => {
                 console.log(error);
                 return Observable.throw(error.json());
@@ -97,6 +98,8 @@ export class OnboardingService {
     }
     imageUpLoad(filename, key, id) {
 
+        console.log('imageupload id- '+ id);
+
         let promise = new Promise((resolve, reject) => {
             let name = filename.substring(filename.lastIndexOf('/') + 1);
             //let path = filename.substring(0, filename.lastIndexOf('/') + 1);
@@ -108,18 +111,18 @@ export class OnboardingService {
                 fileName: key,
                 httpMethod: 'POST',
                 params: {
-                    id: id.toString()
+                    id: id
                 }
             }
 
             fileTransfer.upload(filename, this.BASE_URL + '/api/onboard/' + key, options)
                 .then((data) => {
-                    alert('success')
-                    console.log(data);
+        //            alert('success')
+                    console.log('image response - '  +  data);
                     resolve(data);
                 }, (err) => {
-                    alert('error');
-                    console.log(err);
+        //            alert('error');
+                    console.error('image err-' + err);
                     reject(err);
                 });
         });

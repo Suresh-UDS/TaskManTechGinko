@@ -4,7 +4,6 @@
     "cordova": {}
   },
   "type": "ionic-angular",
-  "app_id": "",
   "watchPatterns": [
     "scss/**/*",
     "www/**/*",

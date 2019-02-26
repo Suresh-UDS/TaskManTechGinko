@@ -116,7 +116,8 @@
     </plugin>
     <plugin name="cordova-plugin-telerik-imagepicker" spec="2.2.4" />
     <allow-navigation href="http://192.168.225.181:8100" />
+    <plugin name="cordova-plugin-filepath" spec="^1.5.1" />
+    <plugin name="cordova-plugin-app-launcher" spec="https://github.com/nchutchind/cordova-plugin-app-launcher.git" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="7.1.4" />
-    <plugin name="cordova-plugin-filepath" spec="^1.5.1" />
 </widget>

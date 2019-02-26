@@ -1,12 +1,17 @@
 import { Component, ViewChild, OnInit, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { Camera, CameraOptions } from "@ionic-native/camera";
-import { NgForm, FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { NgForm, FormGroup, FormBuilder, Validators, ValidationErrors, FormArray, ValidatorFn } from '@angular/forms';
 import { onBoardingDataService } from '../onboarding.messageData.service';
 import { Storage } from '@ionic/storage';
 import { normalizeURL, ActionSheet, ActionSheetController } from 'ionic-angular';
 import { File } from '@ionic-native/file';
-import { DomSanitizer  } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FilePath } from '@ionic-native/file-path';
+import * as launcher from '../../../../assets/js/start-app';
+
+
+
+
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 // import { ImagePicker } from '@ionic-native/image-picker/ngx';
@@ -29,16 +34,21 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private filePath: FilePath,private DomSanitizer: DomSanitizer, private fb: FormBuilder, private transfer: FileTransfer, private storage: Storage, private camera: Camera,
+  constructor(private filePath: FilePath, private DomSanitizer: DomSanitizer, private fb: FormBuilder, private transfer: FileTransfer,
+    private storage: Storage, private camera: Camera,
     private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService, private file: File) { }
 
 
   ngOnInit() {
 
     this.onboardingKYCForm = this.fb.group({
-      aadharNumber: ['', [Validators.required, Validators.maxLength(12)]],
+      aadharNumber: ['', [Validators.required]],
       bankDetails: this.fb.array([this.createBankDetails()])
     });
+
+    this.onboardingKYCForm.setValidators([this.validateNumberMaxLength()]);
+
+
     this.initialKycImage();
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
@@ -150,10 +160,10 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   private getFileUri = (url: any) => {
     var scope = this;
     var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
+    xhr.onload = function () {
       var reader = new FileReader();
-      reader.onloadend = function() {
-        console.log(' reader '+ reader.result);
+      reader.onloadend = function () {
+        console.log(' reader ' + reader.result);
         scope.imageURIto = reader.result;
       }
       reader.readAsDataURL(xhr.response);
@@ -161,7 +171,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.send();
-}
+  }
 
   getImageData(imageSide, imageType) {
 
@@ -172,46 +182,47 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       encodingType: this.camera.EncodingType.JPEG,
     };
     if (imageType == 'album') {
-     // options.saveToPhotoAlbum = false
+      // options.saveToPhotoAlbum = false
       options.sourceType = this.camera.PictureSourceType.SAVEDPHOTOALBUM
     }
     this.camera.getPicture(options).then((imageData) => {
-      console.log('capture--- '+ imageData);
+      console.log('capture--- ' + imageData);
       let imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
 
-    //  console.log('normalize url---'+ this.getFileUri(imageURI));
+      //  console.log('normalize url---'+ this.getFileUri(imageURI));
       //then use the method reasDataURL  btw. var_picture is ur image variable
       //var imageURI = path;
       // if (imageType == 'album') {
-        // imageURI = 'file://' + imageData;
-        // } else {
-        //   imageURI = imageData;
+      // imageURI = 'file://' + imageData;
+      // } else {
+      //   imageURI = imageData;
       // }
 
       this.filePath.resolveNativePath(imageURI)
-         .then(imageURI => {console.log(' get file path -- ' + imageURI)
-      
-         if (imageSide == 'front') {
-          this.userAllKYCData['aadharPhotoCopy'] = imageURI;
-        } else if (imageSide == 'passbook') {
-          this.userAllKYCData['prePrintedStatement'] = imageURI;
-        } else if (imageSide == 'sign') {
-          this.userAllKYCData['employeeSignature'] = imageURI;
-        } else if (imageSide == 'profile') {
-          this.userAllKYCData['profilePicture'] = imageURI;
-        } else if (imageSide == 'fpRight')
-          this.userAllKYCData['fingerPrintRight'] = imageURI;
-        else if (imageSide == 'fpLeft') {
-          this.userAllKYCData['fingerPrintLeft'] = imageURI;
-        }
-  
-        this.sendValidationMessage();
-    })
-         .catch(err => console.log(err));
+        .then(imageURI => {
+          console.log(' get file path -- ' + imageURI)
 
-    //  imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
+          if (imageSide == 'front') {
+            this.userAllKYCData['aadharPhotoCopy'] = imageURI;
+          } else if (imageSide == 'passbook') {
+            this.userAllKYCData['prePrintedStatement'] = imageURI;
+          } else if (imageSide == 'sign') {
+            this.userAllKYCData['employeeSignature'] = imageURI;
+          } else if (imageSide == 'profile') {
+            this.userAllKYCData['profilePicture'] = imageURI;
+          } else if (imageSide == 'fpRight') {
+            this.userAllKYCData['fingerPrintRight'] = imageURI;
+          } else if (imageSide == 'fpLeft') {
+            this.userAllKYCData['fingerPrintLeft'] = imageURI;
+          }
 
-    
+          this.sendValidationMessage();
+        })
+        .catch(err => console.log(err));
+
+      //  imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
+
+
     })
   }
   createBankDetails(): FormGroup {
@@ -220,6 +231,20 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       ifsc: ['', [Validators.required]]
     });
   }
+
+  private validateNumberMaxLength(): ValidatorFn {
+    return (group: FormGroup): ValidationErrors => {
+      const control1 = group.controls['aadharNumber'];
+      if (control1.value) {
+        const srtingData = control1.value.toString();
+        if (srtingData.length !== 12) {
+          control1.setErrors({ shouldMinLength: true });
+        }
+      }
+      return;
+    };
+  }
+
   // getPassBook(value) {
   //   if (value) {
   //     this.bankFieldValidation = true;
@@ -265,19 +290,27 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   // }
   sendValidationMessage() {
     if ((this.formStatusValues['status']) &&
-      (this.userAllKYCData['aadharPhotoCopy'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['employeeSignature'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['profilePicture'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['fingerPrintRight'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['fingerPrintLeft'] !== 'assets/imgs/placeholder.png') &&
-      (this.userAllKYCData['prePrintedStatement'] !== 'assets/imgs/placeholder.png')) {
+      (this.userAllKYCData['aadharPhotoCopy'] !== null) &&
+      (this.userAllKYCData['employeeSignature'] !== null) &&
+      (this.userAllKYCData['profilePicture'] !== null) &&
+      (this.userAllKYCData['fingerPrintRight'] !== null) &&
+      (this.userAllKYCData['fingerPrintLeft'] !== null) &&
+      (this.userAllKYCData['prePrintedStatement'] !== null)) {
 
-      this.formStatusValues['data'] = this.userAllKYCData
+      this.formStatusValues['data'] = this.userAllKYCData;
       this.messageService.formDataMessage(this.formStatusValues);
+
+      console.log(' status kyc1 ' + this.userAllKYCData['aadharPhotoCopy'] + ' - ' + 
+      this.formStatusValues['data']['aadharPhotoCopy']  + ' - '+ this.formStatusValues['status']);
+      console.log(' status kyc2 ' + this.userAllKYCData['fingerPrintLeft'] + ' - ' + this.formStatusValues['status']);
 
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });
     }
+  }
+
+  private launchApp(){
+     launcher.packageLaunch("uds.com.fingerprint");
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {

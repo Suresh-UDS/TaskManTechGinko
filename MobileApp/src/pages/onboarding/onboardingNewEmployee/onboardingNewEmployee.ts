@@ -14,6 +14,7 @@ import { componentService } from '../../service/componentService';
 import { OnboardingService } from '../../service/onboarding.service';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Jsonp } from '../../../../node_modules/@angular/http';
 
 const imageUploadModal = {
   aadharPhotoCopy: String,
@@ -144,6 +145,7 @@ export class onboardingNewEmployee {
     let obj: any = {};
     var tempIndex;
     this.storeFormData(this.allFormValues).then(data => {
+      console.log(' store resolve '+ data);
       if (data == 'success') {
         this.storage.get('OnBoardingData').then((localStoragedData) => {
           tempIndex = localStoragedData['completed'].length;
@@ -155,13 +157,16 @@ export class onboardingNewEmployee {
           .subscribe((res) => {
             localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
             localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-            alert(JSON.stringify(res));
-            console.log("res ======="+JSON.stringify(res));
+        //    alert(JSON.stringify(res));
+            console.log("res ======="+JSON.stringify(res));          
+            console.log("res id======="+res['id']);
+
             this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
               this.componentService.closeAll();
+              console.log('res image -api ' + JSON.stringify(res));
               localStoragedData['completed'].splice(tempIndex, 1);
               this.storage.set('OnBoardingData', localStoragedData);
-              this.navCtrl.setRoot(onboardingExistEmployee);
+           // cg  this.navCtrl.setRoot(onboardingExistEmployee);
             }, err => {
 
             })
@@ -207,8 +212,7 @@ export class onboardingNewEmployee {
 
     let promise = new Promise((resolve, reject) => {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
-        console.log('get stored data');
-        console.log(localStoragedData);
+        console.log('get stored data' + localStoragedData);
         localStoragedData['actionRequired'][this.storedIndex] = localStoragedData['actionRequired'][this.storedIndex] || {};
         //obj[storeKeyName] = data
         // for(let key in data) {

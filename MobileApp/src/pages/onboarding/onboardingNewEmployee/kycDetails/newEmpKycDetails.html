@@ -89,25 +89,31 @@
                                 (click)="presentActionSheet('profile')" class="mdImage" />
                         </ion-avatar>
                     </div>
+                </div>        
 
-                    <div class="row form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="trequired">FingerPrint Right</label>
-                            <ion-avatar item-start class="inlineElement">
-                                <img [src]="userAllKYCData.fingerPrintRight" onError="src = 'assets/imgs/placeholder.png'"
-                                    (click)="presentActionSheet('fpRight')" class="mdImage" />
-                            </ion-avatar>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="trequired">FingerPrint Left</label>
-                            <ion-avatar item-start class="inlineElement">
-                                <img [src]="userAllKYCData.fingerPrintLeft" onError="src = 'assets/imgs/placeholder.png'"
-                                    (click)="presentActionSheet('fpLeft')" class="mdImage" />
-                            </ion-avatar>
-                        </div>
+                <div class="row form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                                <ion-buttons end>
+                                    <button (click)="launchApp()" small ion-button>Fingerprint Scanner</button>
+                                </ion-buttons>
+                            </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Right</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.fingerPrintRight" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpRight')" class="mdImage" />
+                        </ion-avatar>
                     </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Left</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.fingerPrintLeft" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpLeft')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
 
-                    <!-- <div class="row" style="align-items: center;">
+                <!-- <div class="row" style="align-items: center;">
                         <div class="col-md-4 col-sm-4 col-xs-4 padding0">
                             <label class="headerText trequired">KYC Details</label>
                         </div>
@@ -144,7 +150,6 @@
                             </div>
                         </div>
                     </div> -->
-                </div>
             </form>
         </div>
     </div>
