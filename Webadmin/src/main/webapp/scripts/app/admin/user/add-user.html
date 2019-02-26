@@ -1,9 +1,9 @@
 
 <div class="crud-form"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="initLoad();loadingAuto();">
-	<div class="" ng-controller="UserController">
+	<div class="" >
 		<div class="row" >
-			<div class="col-md-12">
+			<!--<div class="col-md-12">
 
 				<div class="alert alert-success" ng-show="success">
 					<strong>User saved!</strong>
@@ -22,14 +22,14 @@
 
 			</div>
             <div class="col-md-8">
-                <!--<h2 class="title">Add User</h2>-->
-            </div>
+                &lt;!&ndash;<h2 class="title">Add User</h2>&ndash;&gt;
+            </div>-->
 			<div class="col-md-12">
 
 				<div class="form-container table-container">
-					<label>* Mantatory Field</label>
-					<form ng-show="!success" name="form" role="form" novalidate
-						ng-submit="conform('save')"  class="form-horizontal">
+                    <label><span class="red-star">*</span> Mantatory Field</label>
+					<form  name="form" role="form" novalidate
+						ng-submit="conform('save')"  class="form-horizontal" autocomplete="off">
 
                        <div class="row">
                            <div class="col-md-12">
@@ -55,13 +55,9 @@
                                                        <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                               ng-show="form.UserRole.$error.required">User Role is
-                                                               required.</p>
-                                                           <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
-                                                              ng-show="form.UserRole.$error.minlength">User Role is
-                                                               required to be at least 5 character.</p>
-                                                           <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                                              ng-show="form.UserRole.$error.maxlength">User Role
-                                                               cannot be longer than 50 characters.</p>
+                                                               required.
+                                                           </p>
+
                                                        </div>
                                                    </div>
 
@@ -70,26 +66,25 @@
                                            <div class="col-md-4">
                                                <div class="form-group">
                                                    <label class="control-label">Username <span class="red-star">*</span></label>
-                                                   <input type="text" class="form-control" name="login"
-                                                          ng-model="user.login" ng-required="user.id == null"
-                                                          ng-pattern="/^[A-Za-z0-9\s]*$/" ng-minlength="5"
-                                                          ng-maxlength="50" required>
-                                                   <div ng-show="form.$submitted || form.login.$touched">
-                                                       <div ng-show="form.login.$dirty || form.login.$invalid">
+                                                   <input type="text" class="form-control" name="newUser"
+                                                          ng-model="user.login"
+                                                          ng-pattern="/^[A-Za-z0-9]*$/" ng-minlength="1"
+                                                          ng-maxlength="10" required>
+                                                   <div ng-show="form.$submitted || form.newUser.$touched">
+                                                       <div ng-show="form.newUser.$dirty || form.newUser.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
-                                                              ng-show="form.login.$error.required" translate-value-max="50">
+                                                              ng-show="form.newUser.$error.required">
                                                                Username is required.</p>
                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
-                                                              ng-show="form.login.$error.minlength"
-                                                              translate-value-max="50">Username is required to be at least
-                                                               5 character.</p>
+                                                              ng-show="form.newUser.$error.minlength"
+                                                              >Username is required to be at least
+                                                               1 character.</p>
                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
-                                                              ng-show="form.login.$error.maxlength"
-                                                              translate-value-max="50">Username cannot be longer than 50
+                                                              ng-show="form.newUser.$error.maxlength"
+                                                              >Username cannot be longer than 10
                                                                characters.</p>
                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                                              ng-show="form.login.$error.pattern">Username can only
-                                                               contain letters and digits.</p>
+                                                              ng-show="form.newUser.$error.pattern">Username can only contain letters and digits.</p>
                                                        </div>
                                                    </div>
                                                </div>
@@ -97,20 +92,20 @@
                                            <div class="col-md-4">
                                                <div class="form-group">
                                                    <label class="control-label">Password <span class="red-star">*</span></label>
-                                                   <input type="password" class="form-control" id="userPassword"
-                                                          name="password" ng-model="user.password" ng-minlength=8
+                                                   <input type="password" class="form-control"
+                                                          name="newUserPassword" ng-model="user.password" ng-minlength=8
                                                           ng-maxlength="20" required>
 
-                                                   <div ng-show="form.$submitted || form.password.$touched">
-                                                       <div ng-show="form.password.$dirty || form.password.$invalid">
+                                                   <div ng-show="form.$submitted || form.newUserPassword.$touched">
+                                                       <div ng-show="form.newUserPassword.$dirty || form.newUserPassword.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
-                                                              ng-show="form.password.$error.required">Your password is
+                                                              ng-show="form.newUserPassword.$error.required">Password is
                                                                required.</p>
                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
-                                                              ng-show="form.password.$error.minlength">Your password is
+                                                              ng-show="form.newUserPassword.$error.minlength">Password is
                                                                required to be at least 8 characters.</p>
                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                                              ng-show="form.password.$error.maxlength">Your password
+                                                              ng-show="form.newUserPassword.$error.maxlength">Password
                                                                cannot be longer than 20 characters.</p>
                                                        </div>
                                                    </div>
@@ -124,22 +119,29 @@
                                                <div class="form-group">
                                                    <label class="control-label">First Name<span class="red-star">*</span></label>
                                                    <input type="text" class="form-control InputTxtCaps" name="firstName"
-                                                          ng-model="user.firstName" ng-minlength="2" ng-maxlength="50"
+                                                          ng-model="user.firstName" ng-minlength="5" ng-maxlength="50"  ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
                                                           required>
 
                                                    <div ng-show="form.$submitted || form.firstName.$touched">
                                                        <div ng-show="form.firstname.$dirty || form.firstName.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                               ng-show="form.firstName.$error.required"
-                                                              translate-value-max="50">First Name is required.</p>
+                                                              translate-value-max="50">FirstName is required.
+                                                           </p>
                                                            <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                               ng-show="form.firstName.$error.minlength"
-                                                              translate-value-max="50">First Name is required to be at
-                                                               least 2 character.</p>
+                                                              translate-value-max="50">FirstName is required to be at
+                                                               least 5 character.
+                                                           </p>
                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                               ng-show="form.firstName.$error.maxlength"
-                                                              translate-value-max="50">First Name cannot be longer than
-                                                               50 characters.</p>
+                                                              translate-value-max="50">FirstName cannot be longer than
+                                                               50 characters.
+                                                           </p>
+                                                           <p class="help-block" style="width:100%;z-index:1002;background:#fff;color:maroon"
+                                                              ng-show="form.firstName.$error.pattern">
+                                                               FirstName can only contain letters,numbers and space.
+                                                           </p>
                                                        </div>
                                                    </div>
                                                </div>
@@ -148,7 +150,20 @@
                                                <div class="form-group">
                                                    <label class="control-label">Last Name</label>
                                                    <input type="text" class="form-control InputTxtCaps" name="lastName"
-                                                          ng-model="user.lastName" ng-maxlength="50">
+                                                          ng-model="user.lastName" ng-maxlength="50" ng-pattern="/^[A-Za-z0-9\s&-/]*$/">
+                                                   <div ng-show="form.$submitted || form.lastName.$touched">
+                                                       <div ng-show="form.lastName.$dirty || form.lastName.$invalid">
+                                                           <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                              ng-show="form.lastName.$error.maxlength"
+                                                              translate-value-max="50">LastName cannot be longer than
+                                                               50 characters.
+                                                           </p>
+                                                           <p class="help-block" style="width:100%;z-index:1002;background:#fff;color:maroon"
+                                                              ng-show="form.lastName.$error.pattern">
+                                                               LastName can only contain letters,numbers and space.
+                                                           </p>
+                                                       </div>
+                                                   </div>
                                                </div>
                                            </div>
                                            <div class="col-md-4">

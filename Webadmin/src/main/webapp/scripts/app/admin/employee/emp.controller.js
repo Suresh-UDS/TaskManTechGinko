@@ -114,8 +114,7 @@ angular.module('timeSheetApp')
 
 	$rootScope.exportStatusObj  ={};
 
-	$scope.NewEmployee= {};
-
+    $scope.selectAssignEmp = null;
 	/** Ui-select scopes **/
 	$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
 	$scope.client = {};
@@ -1056,10 +1055,10 @@ angular.module('timeSheetApp')
 		$scope.searchShiftFilter();
 	};
 
-	$scope.confirmSave = function() {
-		$scope.saveConfirmed = true;
-		$scope.saveEmployee();
-	}
+    $scope.confirmSave = function() {
+        $scope.saveConfirmed = true;
+        $scope.saveEmployee();
+    }
 
 	$scope.addDesignation = function () {
 
@@ -1260,34 +1259,47 @@ angular.module('timeSheetApp')
 		//console.log(employee);
 		//console.log("Transferring employee");
 		//console.log($scope.transferringEmployee);
-		employee.left = true;
-
+        //employee.left = true;
 		//console.log("Employee Left options");
 		//console.log($scope.markLeftOptions);
 
+
 		if($scope.markLeftOptions == 'delete'){
 			//console.log("delete and mark left");
+            $scope.loadingStart();
+            employee.left = true;
+            $('#leftModal').modal('hide');
 			EmployeeComponent.updateEmployee(employee).then(function(data){
 				EmployeeComponent.deleteJobsAndMarkEmployeeLeft(employee,new Date());
 				//console.log("Delete jobs and transfer this employee");
 				$scope.showNotifications('top','center','success','Employee Successfully Marked Left');
+                $scope.loadingStop();
 				$scope.search();
+                $scope.retain = 1;
 			}).catch(function(response){
 				//console.log(response);
 				$scope.showNotifications('top','center','danger','Error in marking Left');
+                $scope.loadingStop();
+
 			})
 		}else if ($scope.markLeftOptions == 'assign'){
+            //console.log('emp',$scope.employee.selectAssignEmp);
+            $('#leftModal').modal('hide');
+            employee.left = true;
 			//console.log("assign and mark left");
+            $scope.loadingStart();
 			EmployeeComponent.updateEmployee(employee).then(function(data){
-			    console.log('reliever emp',$scope.NewEmployee);
-				EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.NewEmployee,new Date());
+			    console.log('reliever emp',$scope.selectAssignEmp);
+				EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.employee.selectAssignEmp,new Date());
 				//console.log("Assign jobs to another employee and transfer this employee");
 				$scope.showNotifications('top','center','success','Employee Successfully Marked Left');
 				$scope.search();
+				$scope.retain = 1;
+                $scope.loadingStop();
 			}).catch(function(response){
 				//console.log(response);
-
 				$scope.showNotifications('top','center','danger','Error in marking Left');
+                $scope.loadingStop();
 			})
 		}
 
@@ -1703,7 +1715,7 @@ angular.module('timeSheetApp')
 
 			//console.log('Reliever details',response);
 			$scope.showNotifications('top','center','success','Reliever  updated successfully ');
-			$rootScope.retain=1;
+			$scope.retain=1;
 			$scope.search();
 			$scope.cancelReliever();
 			$rootScope.loadingStop();
@@ -2763,8 +2775,8 @@ angular.module('timeSheetApp')
 			$("#relieverOthModal").removeClass("in", 2000);
 			$scope.reqEmp = true;
 			$scope.reqOth = false;
-			//$scope.relieverOthName = null;
-			//$scope.relieverOthMobile = null;
+			$scope.relieverOthName = null;
+			$scope.relieverOthMobile = null;
 
 		}else if(relieverType2 == 'Other'){
 
@@ -2772,9 +2784,9 @@ angular.module('timeSheetApp')
 			$("#relieverOthModal").addClass("in");
 			$scope.reqEmp = false;
 			$scope.reqOth = true;
-			//$scope.selectedReliever = {};
-			//$scope.selectedReliever.id = null;
-			//$scope.selectedReliever.empId = null;
+			$scope.selectedReliever = {};
+			$scope.selectedReliever.id = null;
+			$scope.selectedReliever.empId = null;
 
 		}
 
@@ -2908,7 +2920,7 @@ angular.module('timeSheetApp')
 	 * */
 
 	 $scope.clearFields =function(){
-     $scope.NewEmployee = "";
+     $scope.selectAssignEmp = null;
 	 }
 
 	 $scope.takenEmpConfirm = function (id){
@@ -2919,23 +2931,26 @@ angular.module('timeSheetApp')
 
      $scope.takenEmp = function () {
              $scope.loadingStart();
+             $('#takenEmpModal').modal('hide');
             EmployeeComponent.unAssignReliever({employeeId:$scope.takenEmpId}).then(function(){
                 $scope.success = 'OK';
-                $scope.showNotifications('top','center','success','Employee Taken  Successfully..!!');
-                 $scope.searchFilter();
+                $scope.showNotifications('top','center','success','Employee UnRelieved  Successfully..!!');
+                 $scope.search();
+                 $scope.retain = 1;
                  $scope.loadingStop();
             }).catch(function(){
-                $scope.showNotifications('top','center','danger','Unable To Take Employee.');
+                $scope.showNotifications('top','center','danger','Unable To UnRelieve Employee.');
                 $scope.loadingStop();
             });
      }
-
+     $scope.markLeftOptions = "delete";
      $scope.haveTickets = false;
      $scope.getEmployeeOpenTickets = function (id) {
           $scope.haveTickets = false;
          EmployeeComponent.getEmployeeOpenTickets(id).then(function(response){
              if(response.length > 0){
                 $scope.haveTickets = true;
+                $scope.markLeftOptions = "assign";
              }
          }).catch(function(){
              $scope.haveTickets = false;
