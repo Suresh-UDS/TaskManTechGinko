@@ -164,7 +164,7 @@ angular.module('timeSheetApp')
 			$scope.success = 'OK';
 			$scope.saveLoad = false;
 			//$scope.loadUsers();
-			//$scope.showNotifications('top','center','success','User Created Successfully');
+			$scope.showNotifications('top','center','success','User Created Successfully');
 			$location.path('/users');
 		}).catch(function (response) {
 			$scope.success = null;
@@ -172,11 +172,14 @@ angular.module('timeSheetApp')
 			$scope.btnDisable = false;
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 				$scope.errorUserExists = true;
+                $scope.showNotifications('top','center','danger', 'User already exists!.. Please choose another one');
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
+                $scope.showNotifications('top','center','danger', 'User Not Saved!.. For insufficient data.');
 			} else {
 				$scope.error = 'ERROR';
+                $scope.showNotifications('top','center','danger', 'User Not Saved!.. Please try again later.');
 			}
 		});
 	};
@@ -254,11 +257,14 @@ angular.module('timeSheetApp')
 			//console.log('Error - '+ response.data);
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 				$scope.errorUserExists = true;
+                $scope.showNotifications('top','center','danger', 'User already exists!.. Please choose another one');
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
+                $scope.showNotifications('top','center','danger', 'User Not Updated!.. For insufficient data.');
 			} else {
 				$scope.error = 'ERROR';
+                $scope.showNotifications('top','center','danger', 'User Not Updated!.. Please try again later.');
 			}
 		});
 	};
