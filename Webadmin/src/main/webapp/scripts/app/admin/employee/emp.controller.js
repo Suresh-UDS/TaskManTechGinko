@@ -486,7 +486,8 @@ angular.module('timeSheetApp')
 			$scope.dupSite = $scope.projectSiteList.find(isSite);
 
 			if(($scope.dupProject && $scope.dupSite)){
-				$scope.showNotifications('top','center','warning','Client and Site already exist!!!');
+				//$scope.showNotifications('top','center','warning','Client and Site already exist!!!');
+                alert('Client and Site already exist!!!');
 				return;
 			}
 
@@ -501,13 +502,16 @@ angular.module('timeSheetApp')
 		}else{
 
 			if(!$scope.selectedProject && !$scope.selectedSite){
-				$scope.showNotifications('top','center','warning','Please select Client & Site !!!');
+				//$scope.showNotifications('top','center','warning','Please select Client & Site !!!');
+                alert('Please select Client & Site !!!');
 
 			}else if(!$scope.selectedProject){
-				$scope.showNotifications('top','center','warning','Please select Client!!!');
+				//$scope.showNotifications('top','center','warning','Please select Client!!!');
+                alert('Please select Client!!!');
 
 			}else if(!$scope.selectedSite){
-				$scope.showNotifications('top','center','warning','Please select Site!!!');
+				//$scope.showNotifications('top','center','warning','Please select Site!!!');
+                alert('Please select Site!!!');
 
 			}
 			return;
@@ -572,7 +576,8 @@ angular.module('timeSheetApp')
 			$scope.checkSite = $scope.projectSiteList.find(isSite);
 
 			if(!$scope.checkProj && !$scope.checkSite){
-             $scope.showNotifications('top','center','warning','Please add  represent client and site first..!!');
+             //$scope.showNotifications('top','center','warning','Please add  represent client and site first..!!');
+             alert('Please add  represent client and site first..!!');
              return;
 			}
 			var loc = {
@@ -602,13 +607,15 @@ angular.module('timeSheetApp')
 			$scope.dupZone = $scope.locationList.find(isZone);
 
 			if(($scope.dupBlock && $scope.dupFloor && $scope.dupZone)){
-             $scope.showNotifications('top','center','warning','Location already exist..!!');
+             //$scope.showNotifications('top','center','warning','Location already exist..!!');
+                alert('Location already exist..!!');
              return;
 			}
 
 			$scope.locationList.push(loc);
 			//console.log('loc list -' + $scope.locationList)
 		}else{
+            alert('Please select Block , Floor & Zone !!!');
 			return;
 		}
 	};
@@ -2597,21 +2604,22 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.approveImage = function(employee){
+        $scope.saveLoad = true;
 		EmployeeComponent.approveImage(employee).then(function(response){
-
 			if(response.status == 200){
-
-
 				//console.log("Image Approved");
 				$scope.showNotifications('top','center','success','Face Id Approved');
 			}else{
 				$scope.showNotifications('top','center','warning','Failed to approve Face Id');
 				//console.log("Failed to approve image");
-
-
 			}
+			$scope.retain=1;
 			$scope.search();
-		})
+            $scope.saveLoad = false;
+		}).catch(function () {
+            $scope.showNotifications('top','center','warning','Failed to approve Face Id');
+            $scope.saveLoad = false;
+        });
 	}
 
 
@@ -2784,9 +2792,9 @@ angular.module('timeSheetApp')
 			$("#relieverOthModal").addClass("in");
 			$scope.reqEmp = false;
 			$scope.reqOth = true;
-			$scope.selectedReliever = {};
-			$scope.selectedReliever.id = null;
-			$scope.selectedReliever.empId = null;
+			$scope.selectedReliever = null;
+			/*$scope.selectedReliever.id = null;
+			$scope.selectedReliever.empId = null;*/
 
 		}
 
