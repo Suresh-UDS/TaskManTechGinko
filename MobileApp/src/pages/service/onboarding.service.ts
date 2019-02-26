@@ -97,31 +97,42 @@ export class OnboardingService {
         })
     }
     imageUpLoad(filename, key, id) {
+        let type = null;
+        if (key.match("fingerPrintRight")) {
+            key = 'impressen';
+            type = 'right';
+        } else if (key.match("fingerPrintLeft")) {
+            key = 'impressen';
+            type = 'left';
+        }
 
-        console.log('imageupload id- '+ id);
+
+        console.log('imageupload id- ' + id + ' + ' + key);
 
         let promise = new Promise((resolve, reject) => {
-            let name = filename.substring(filename.lastIndexOf('/') + 1);
+            //let name = filename.substring(filename.lastIndexOf('/') + 1);
             //let path = filename.substring(0, filename.lastIndexOf('/') + 1);
+
             const fileTransfer: FileTransferObject = this.transfer.create();
-            console.log('file name == ' + name);
+            //  console.log('file name == ' + name);
             console.log("file path == " + filename);
             var options: FileUploadOptions = {
                 fileKey: "file",
                 fileName: key,
                 httpMethod: 'POST',
                 params: {
-                    id: id
+                    id: id,
+                    type: type
                 }
             }
 
             fileTransfer.upload(filename, this.BASE_URL + '/api/onboard/' + key, options)
                 .then((data) => {
-        //            alert('success')
-                    console.log('image response - '  +  data);
+                    //alert('success')
+                    console.log('image response - ' + JSON.stringify(data));
                     resolve(data);
                 }, (err) => {
-        //            alert('error');
+                    //            alert('error');
                     console.error('image err-' + err);
                     reject(err);
                 });

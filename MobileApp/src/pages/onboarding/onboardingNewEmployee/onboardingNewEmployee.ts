@@ -158,7 +158,8 @@ export class onboardingNewEmployee {
             localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
             localStoragedData['actionRequired'].splice(this.storedIndex, 1);
         //    alert(JSON.stringify(res));
-            console.log("res ======="+JSON.stringify(res));          
+            console.log("res ======="+JSON.stringify(res));
+          
             console.log("res id======="+res['id']);
 
             this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
