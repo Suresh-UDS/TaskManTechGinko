@@ -18,17 +18,12 @@
                 <div class="titleCon">
                     <h3>{{title}}</h3>
                 </div>
-
 				<div class="form-container table-container jobcards">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('update')" class="form-horizontal">
-
-
-
                         <div class="row">
-
                             <div class="col-md-6">
-
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Job Details - ID - {{job.id}}</div>
                                     <div class="panel-body" style="min-height: 345px;">
@@ -235,7 +230,7 @@
                                                         <!--required-->
                                                         <!--autocomplete="off" />-->
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select required class="form-control " ng-model="selectedSite"  ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id"
+                                                        <select required class="form-control" name="siteName" ng-model="selectedSite"  ng-change="loadEmployees();loadBlocks();" ng-options="site as site.name for site in sites track by site.id"
                                                         tabindex="2">
                                                             <option value="">Select Site...</option>
                                                         </select>
@@ -259,7 +254,7 @@
                                                     <label class="control-label">Block </label>
                                                     <div class="dropdown">
                                                         <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                       <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="(block | uppercase) for  block in blocks track by block" tabindex="4">
+                                                       <select class="form-control" name="block" ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="(block | uppercase) for  block in blocks track by block" tabindex="4">
                                                         	<option value="">Select Block...</option>
                                                     	  </select>
                                                         <div ng-show="form.$submitted || form.block.$touched || form.block.$dirty">
@@ -279,7 +274,7 @@
                                                     <label class="control-label">Floor </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="(floor | uppercase) for floor in floors track by floor" tabindex="5">
+													<select class="form-control" name="floor" ng-model="selectedFloor" ng-change="loadZones()"  ng-options="(floor | uppercase) for floor in floors track by floor" tabindex="5">
                                                         <option value="">Select Floor...</option>
                                                     	</select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
@@ -299,7 +294,7 @@
                                                     <label class="control-label">Zone </label>
                                                     <div class="dropdown">
                                                      <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-													<select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" tabindex="6">
+													<select class="form-control" name="zone" ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones track by zone" tabindex="6">
                                                         <option value="">Select Zone...</option>
                                                     </select>
                                                    	 <div ng-show="form.$submitted || form.floor.$touched || form.zone.$dirty">
@@ -338,7 +333,7 @@
                                                 <div class="form-group">
                                                     <label class="label-control">Start date<span class="red-star">*</span> </label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text"  ng-model="selectPlannedStartTime"  class="form-control datetimepicker" autocomplete="off"  id="jobStartDate" required tabindex="11"/>
+                                                    <input type="text"  ng-model="selectPlannedStartTime"  class="form-control datetimepicker" autocomplete="off"  id="jobStartDate" required tabindex="11" onkeydown="return false"/>
 
                                                 </div>
 
@@ -620,7 +615,7 @@
                                                     </p> -->
 
                                                      <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" ng-required="job.schedule != 'ONCE'" tabindex="30" />
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" ng-required="job.schedule != 'ONCE'" tabindex="30" onkeydown="return false" />
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched || form.scheduleEndDate.$dirty">
                                                         <div ng-show="form.scheduleEndDate.$dirty || form.scheduleEndDate.$invalid">

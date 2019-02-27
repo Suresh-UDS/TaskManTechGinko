@@ -58,12 +58,11 @@
                                                   <tr>
 
                                                       <td>Location</td>
-                                                      <td><span ng-if="job.block">{{job.block}},</span>
-                                                          <span ng-if="job.floor">{{job.floor}},</span>
-                                                          <span ng-if="job.zone">{{job.zone}}</span>
-                                                          <span ng-if="!job.block">-</span>
-                                                          <span ng-if="!job.floor">-</span>
-                                                          <span ng-if="!job.zone">-</span>
+                                                      <td>
+                                                          <span ng-if="job.block && job.floor && job.zone">{{job.block}},{{job.floor}},{{job.zone}}</span>
+                                                          <span ng-if="job.block && job.floor && !job.zone">{{job.block}},{{job.floor}},-</span>
+                                                          <span ng-if="job.block && !job.floor && !job.zone">{{job.block}},-,-</span>
+                                                          <span ng-if="!job.block && !job.floor && !job.zone">-,-,-</span>
                                                       </td>
 
                                                   </tr>
@@ -78,7 +77,6 @@
                                                       <td>Asset</td>
                                                       <td><span ng-if="job.assetTitle">{{job.assetTitle}}</span>
                                                           <span ng-if="!job.assetTitle">No assets</span></td>
-
                                                   </tr>
 
                                                   </tbody>
@@ -104,17 +102,24 @@
                                                   <tbody>
                                                   <tr>
                                                       <td>Start date</td>
-                                                      <td>{{job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                      <td>
+                                                          <span ng-if="job.plannedStartTime">{{job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</span>
+                                                          <span ng-if="!job.plannedStartTime">-</span>
+                                                      </td>
                                                   </tr>
                                                   <tr>
                                                       <td>End date</td>
-                                                      <td>{{job.plannedEndTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                      <td>
+                                                          <span ng-if="job.plannedEndTime">{{job.plannedEndTime | date :'dd-MMM-yyyy @ hh:mm a'}}</span>
+                                                          <span ng-if="!job.plannedEndTime">-</span>
+                                                      </td>
 
                                                   </tr>
                                                   <tr>
                                                       <td>Hours</td>
                                                       <td>
-                                                          {{job.plannedHours}}
+                                                          <span ng-if="job.plannedHours">{{job.plannedHours}}</span>
+                                                          <span ng-if="!job.plannedHours">-</span>
                                                       </td>
 
                                                   </tr>
@@ -122,7 +127,8 @@
 
                                                       <td>Status </td>
                                                       <td>
-                                                          {{job.jobStatus}}
+                                                          <span ng-if="job.jobStatus">{{job.jobStatus}}</span>
+                                                          <span ng-if="!job.jobStatus">-</span>
                                                       </td>
 
                                                   </tr>
@@ -148,7 +154,8 @@
 
                                                       <td>Type </td>
                                                       <td>
-                                                          {{job.jobType}}
+                                                          <span ng-if="job.jobType">{{job.jobType}}</span>
+                                                          <span ng-if="!job.jobType">-</span>
                                                       </td>
 
                                                   </tr>
@@ -183,24 +190,32 @@
                                                   <tbody>
                                                   <tr>
                                                       <td>Start date</td>
-                                                      <td>{{job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                      <td>
+                                                          <span ng-if="job.plannedStartTime">{{job.plannedStartTime | date :'dd-MMM-yyyy @ hh:mm a'}}</span>
+                                                          <span ng-if="!job.plannedStartTime">-</span>
+                                                      </td>
                                                   </tr>
                                                   <tr>
                                                       <td>End date</td>
-                                                      <td>{{job.actualEndTime  | date :'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                      <td>
+                                                          <span ng-if="job.actualEndTime">{{job.actualEndTime  | date :'dd-MMM-yyyy @ hh:mm a'}}</span>
+                                                          <span ng-if="!job.actualEndTime">-</span>
+                                                      </td>
 
                                                   </tr>
                                                   <tr>
                                                       <td>Hours</td>
                                                       <td>
-                                                          {{job.actualHours}}
+                                                          <span ng-if="job.actualHours">{{job.actualHours}}</span>
+                                                          <span ng-if="!job.actualHours">-</span>
                                                       </td>
 
                                                   </tr>
                                                   <tr>
                                                       <td>Minutes</td>
                                                       <td>
-                                                          {{job.actualMinutes}}
+                                                          <span ng-if="job.actualMinutes">{{job.actualMinutes}}</span>
+                                                          <span ng-if="!job.actualMinutes">-</span>
                                                       </td>
 
                                                   </tr>
@@ -257,7 +272,7 @@
                                             <!--<a id="{{ 'jobPhoto-' + $index }}" href="#" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImages(job.employeeEmpId,image.photoOut, $index)">-->
                                             <!--<img data-ng-src="/api/employee/{{job.employeeEmpId}}/checkInOut/{{image.photoOut}}" width="30px" height="30px"/>-->
                                             <!--</a>-->
-                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
+                                            <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(image.url)" >
                                                 <img ng-src="{{image.url}}" width="150px" height="150px">
 
                                             </a>
@@ -314,7 +329,7 @@
             	</div>
 
         	</div>
-        	
+
         	              <div class="row">
                             <div class="panel panel-default">
                                 <div class="panel-heading">Materials</div>

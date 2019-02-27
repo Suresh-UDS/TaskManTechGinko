@@ -15,29 +15,20 @@
                 </div>
             </div> -->
 			<div class="col-md-12">
-
-
                 <!-- <div class="titleCon">
                     <h3>Add Job</h3>
                 </div> -->
-
-
 				<div class="form-container table-container jobcards">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('save')"  class="form-horizontal">
-
                         <div class="row">
-
                             <div class="col-md-6">
-
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Job</div>
                                     <div class="panel-body" style="min-height: 295px;">
-
                                         <div class="row">
-
                                             <div class="col-md-12">
-
                                                 <div class="form-group">
                                                     <label class="control-label">Title <span class="red-star">*</span></label>
                                                     <input id='jobName'
@@ -348,7 +339,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Start date<span class="red-star">*</span></label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime"  autocomplete="off" tabindex="9" required/>
+                                                    <input type="text" class="form-control datetimepicker"  id="jobStartDate"  ng-model="selectPlannedStartTime"  autocomplete="off" tabindex="9" required onkeydown="return false"/>
 
                                                 </div>
                                                 <!--<div class="form-group label-floating">-->
@@ -573,7 +564,7 @@
                                                     <label class="control-label font-size15">Select frequency </label>
 
                                                     <div class="" ng-if="job.schedule == 'ONCE'">
-                                                        <label class="pdng-top15" for="ONCE">Not applicable</label>
+                                                        <label class="pdng-top15">Not applicable</label>
                                                     </div>
                                                     <div class="" ng-if="job.schedule == 'DAY'">
                                                         <div class="checkbox">
@@ -661,7 +652,7 @@
                                     </span>
                                                     </p> -->
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate" name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" ng-required="job.schedule != 'ONCE'"  tabindex="25"/>
+                                                    <input type="text" class="form-control datetimepicker" ng-model="selectScheduleEndDate"  name='scheduleEndDate' autocomplete="off" id="scheduleEndDate" ng-disabled="job.schedule == 'ONCE'" ng-required="job.schedule != 'ONCE'"  tabindex="25" onkeydown="return false"/>
 
 
                                                     <div ng-show="form.$submitted || form.scheduleEndDate.$touched || form.scheduleEndDate.$dirty">
