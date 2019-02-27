@@ -325,6 +325,12 @@ public class EmployeeResource {
         return employeeService.findAll(SecurityUtils.getCurrentUserId());
     }
 
+    @RequestMapping(value = "/employee/mappable", method = RequestMethod.GET)
+    public List<EmployeeDTO> getMapableEmployees() {
+        log.info("--Invoked EmployeeResource.getMapableEmployees --");
+        return employeeService.findAll(SecurityUtils.getCurrentUserId());
+    }
+
     @RequestMapping(value = "/employee/site/{siteId}", method = RequestMethod.GET)
     public List<EmployeeDTO> findBySiteId(@PathVariable Long siteId) {
         log.info("--Invoked EmployeeResource.findAll --");
