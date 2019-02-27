@@ -32,6 +32,7 @@ import javax.transaction.Transactional;
 
 import com.ts.app.domain.*;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.SiteRepository;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.csv.CSVFormat;
@@ -162,6 +163,9 @@ public class ExportUtil {
 
     @Inject
     private EmployeeRepository employeeRepository;
+
+    @Inject
+    private SiteRepository siteRepository;
 
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content,
 			final String empId, ExportResult result) {
@@ -2558,7 +2562,10 @@ public class ExportUtil {
 					dataRow.createCell(2).setCellValue(transaction.getTitle());
 					dataRow.createCell(3).setCellValue(transaction.getAssetType());
 					dataRow.createCell(4).setCellValue(transaction.getAssetGroup());
-					dataRow.createCell(5).setCellValue(transaction.getProjectName());
+					if(transaction.getSiteId() > 0) {
+					    String client = siteRepository.findOne(transaction.getSiteId()).getProject().getName();
+                        dataRow.createCell(5).setCellValue(client);
+                    }
 					dataRow.createCell(6).setCellValue(transaction.getSiteName());
 					dataRow.createCell(7).setCellValue(transaction.getBlock());
 					dataRow.createCell(8).setCellValue(transaction.getFloor());

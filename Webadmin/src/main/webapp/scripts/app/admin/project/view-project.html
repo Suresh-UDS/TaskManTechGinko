@@ -34,10 +34,13 @@
                                         <td>Address</td>
                                         <td >{{project.address}}</td>
                                     </tr>
-                                    
+
                                     <tr>
                                         <td>Client Group</td>
-                                        <td >{{project.clientGroup}}</td>
+                                        <td >
+                                            <span style="text-transform: capitalize" ng-if='project.clientGroup'>{{project.clientGroup}}</span>
+                                            <span style="text-transform: capitalize" ng-if='!project.clientGroup'>-</span>
+                                        </td>
                                     </tr>
 
                                     </tbody>

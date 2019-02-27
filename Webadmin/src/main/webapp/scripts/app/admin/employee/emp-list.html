@@ -98,7 +98,7 @@
             <div class="pull-right">
                 <!-- Material switch -->
                 <div class="switch">
-                    <span>Show Deleted Employees</span>
+                    <span>Show Inactive Employees</span>
                     <label>
                         <input type="checkbox" ng-model="showInActive" ng-click="searchFilter();">
                         <span class="lever"></span>
@@ -276,9 +276,12 @@
 
                                 <td has-permission="Employee:Edit"
                                     ng-if="!employee.faceAuthorised && employee.faceIdEnrolled">
-                                    <button class="btn btn-success" style="padding: 5px 10px;"
+                                    <button class="btn btn-success ld ld-over-inverse" style="padding: 5px 10px;"  ng-class="{'running':saveLoad}"
                                             has-permission="Employee:Create"
-                                            ng-click="approveImage(employee)" title="Click to approve">Approve</button>
+                                            ng-click="approveImage(employee)" ng-disabled="saveLoad" title="Click to approve">Approve
+                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                                    </button>
+
                                 </td>
                                 <td has-permission="Employee:Edit"
                                     ng-if="employee.faceAuthorised && employee.faceIdEnrolled"><p
@@ -767,83 +770,69 @@
 </div>
 <div class="modal fade" id="leftModal"  role="dialog"
      aria-labelledby="leftModal" aria-hidden="true">
-    <div class="modal-dialog modal-notice">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">
-                    <i class="material-icons">clear</i>
-                </button>
-                <h5 class="modal-title" id="isLeftModal">Mark Employee as Left
-                    ?</h5>
-                <div ng-hide="haveTickets">
+    <form ng-submit="updateEmployeeLeft(employee)" name="leftForm" novalidate>
+        <div class="modal-dialog modal-notice">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h5 class="modal-title margn-btm-8" id="isLeftModal">Mark Employee as Left
+                        ?</h5>
                     <div>
-                        <input type="radio"  ng-model="markLeftOptions" value="delete"> Delete
-                        Jobs and Mark Left <input type="radio"
-                                                  ng-model="markLeftOptions" value="assign"> Assign Jobs to
-                        New Employee and Mark Left
-                    </div>
+                        <div class="radio" ng-hide="haveTickets">
+                            <label>
+                                <input type="radio"  ng-model="markLeftOptions"  value="delete"> Delete
+                                Jobs and Mark Left
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" ng-model="markLeftOptions"  value="assign"> <p ng-show="haveTickets">Assign Tickets and  Jobs to
+                                New Employee and Mark Left</p>
+                                <p ng-show="!haveTickets">Assign Jobs to
+                                New Employee and Mark Left</p>
+                            </label>
+                        </div>
 
-                    <div id="assign" ng-if="markLeftOptions != 'delete' && markLeftOptions == 'assign'">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <div class="form-group">
-                                    <div class="dropdown">
-                                    <span class="form-control-feedback d-sm-arrow-icon"><i
-                                        class="material-icons">keyboard_arrow_down</i></span>
-                                        <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
-                                        <select
-                                            class="form-control siteList" ng-model="NewEmployee"
-                                            ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
-                                            <option value="">Select Employee..</option>
-                                        </select>
-                                        <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                        <div id="assign" ng-if="markLeftOptions != 'delete' && markLeftOptions == 'assign'">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" >Assign Employee<span class="red-star" ng-if="markLeftOptions == 'assign'">*</span></label>
+                                        <div class="dropdown">
+                                        <span class="form-control-feedback d-sm-arrow-icon"><i
+                                            class="material-icons">keyboard_arrow_down</i></span>
+                                            <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
+                                            <select class="form-control"  ng-model='employee.selectAssignEmp' name="selectAssignEmp" ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0" ng-required="markLeftOptions == 'assign'" autofocus>
+                                                <option value="">Select Employee..</option>
+                                            </select>
+                                            <div ng-show="leftForm.$submitted || leftForm.selectAssignEmp.$touched || leftForm.selectAssignEmp.$dirty">
+                                                <div ng-show="leftForm.selectAssignEmp.$dirty || leftForm.selectAssignEmp.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="leftForm.selectAssignEmp.$error.required">Assign employee is required.</p>
+                                                </div>
+                                            </div>
+                                            <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
-                <div ng-show="haveTickets">
-                    <div>
-                        <input type="hidden" ng-model="markLeftOptions" value="assign"> Assign Jobs to
-                        New Employee and Mark Left
-                    </div>
-
-                    <div>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <div class="form-group">
-                                    <div class="dropdown">
-                                    <span class="form-control-feedback d-sm-arrow-icon"><i
-                                        class="material-icons">keyboard_arrow_down</i></span>
-                                        <span class="form-control-feedback d-sm-arrow-icon" ng-if="markLeftEmployeeArray"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <span  class="form-control-feedback d-sm-arrow-icon orange-color" ng-show="!markLeftEmployeeArray"><i class="ld ld-ring ld-spin" ></i></span>
-                                        <select
-                                            class="form-control siteList" ng-model="NewEmployee"
-                                            ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in markLeftEmployeeArray" ng-disabled="markLeftEmployeeArray.length==0">
-                                            <option value="">Select Employee..</option>
-                                        </select>
-                                        <span ng-if="markLeftEmployeeArray.length==0"><p class="error-msg margin0">No Employees</p></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-info btn-round" ng-disabled="leftForm.$invalid">Yes</button>
+                    <button type="button" class="btn btn-info btn-round"
+                            data-dismiss="modal">No</button>
                 </div>
-
-            </div>
-            <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal" ng-click="updateEmployeeLeft(employee)">Yes</button>
-                <button type="button" class="btn btn-info btn-round"
-                        data-dismiss="modal">No</button>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="modal fade" id="siteTransferModal"
@@ -1880,7 +1869,7 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+				                                    <ui-select ng-model="client.selected" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)"  ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients..." >{{$select.selected.name}}
 														   <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -1903,7 +1892,7 @@
 				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+						                                <ui-select ng-model="regionsListOne.selected"  on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
 														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -1927,7 +1916,7 @@
 				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+					                                <ui-select ng-model="branchsListOne.selected"  on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
 													       <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -2020,23 +2009,25 @@
 
 <!-- Take employee confirmation dialog -->
 <div class="row">
-    <div id="takenEmpModal" data-backdrop="false" class="modal fade deleteModal"
-         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="delete-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    Are you sure to take the Employee<br>
-                </div>
-                <div class="delete-footer">
-                    <button type="button" ng-click="takenEmp()"
-                            class="btn btn-success text-danger" data-dismiss="modal">Confirm</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <form name="unRelieveForm" novalidate ng-submit="takenEmp()">
+        <div id="takenEmpModal" data-backdrop="false" class="modal fade deleteModal"
+             tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="delete-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Are you sure to unrelieve the Employee<br>
+                    </div>
+                    <div class="delete-footer">
+                        <button type="submit"
+                                class="btn btn-success text-danger" >Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <!-- End of take employee confirmation dialog -->

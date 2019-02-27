@@ -31,36 +31,60 @@
 
                                             <tr ng-if="site.region">
                                                 <td>Region</td>
-                                                <td  ng-if="site.region">{{site.region | uppercase}}</td>
+                                                <td >
+                                                    <span ng-if="site.region">{{site.region | uppercase}}</span>
+                                                    <span ng-if="!site.region">-</span>
+                                                </td>
                                             </tr>
 
                                             <tr ng-if="site.branch">
                                                 <td>Branch</td>
-                                                <td  ng-if="site.branch">{{site.branch | uppercase}}</td>
+                                                <td >
+                                                    <span ng-if="site.branch">{{site.branch | uppercase}}</span>
+                                                    <span ng-if="!site.branch">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Site Name</td>
-                                                <td  ng-if="site.name"> {{site.name | uppercase}}</td>
+                                                <td>
+                                                    <span  ng-if="site.name"> {{site.name | uppercase}}</span>
+                                                    <span  ng-if="!site.name">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Address</td>
-                                                <td ng-if="site.address">{{site.address | capitalize}}</td>
+                                                <td >
+                                                    <span ng-if="site.address">{{site.address | capitalize}}</span>
+                                                    <span ng-if="!site.address">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>City</td>
-                                                <td ng-if="site.city">{{site.city | uppercase }}</td>
+                                                <td >
+                                                    <span  ng-if="site.city">{{site.city | uppercase }}</span>
+                                                    <span  ng-if="!site.city">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>State</td>
-                                                <td ng-if="site.state">{{site.state | uppercase }}</td>
+                                                <td >
+                                                    <span  ng-if="site.state">{{site.state | uppercase }}</span>
+                                                    <span  ng-if="!site.state">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Pin Code</td>
-                                                <td>{{site.pinCode}}</td>
+                                                <td>
+                                                    <span  ng-if="site.pinCode">{{site.pinCode}}</span>
+                                                    <span  ng-if="!site.pinCode">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Country</td>
-                                                <td ng-if="site.country">{{site.country | uppercase}}</td>
+                                                <td >
+                                                    <span  ng-if="site.country">{{site.country | uppercase}}</span>
+                                                    <span  ng-if="!site.country">-</span>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -73,22 +97,31 @@
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">Location Details</div>
-                                <div class="panel-body" style="min-height: 310px;">
+                                <div class="panel-body">
 
                                     <div class="table-responsive">
                                         <table class="table">
                                             <tbody>
                                             <tr>
                                                 <td>Site Location (Latitude)</td>
-                                                <td>{{site.addressLat}}</td>
+                                                <td>
+                                                    <span  ng-if="site.addressLat">{{site.addressLat}}</span>
+                                                    <span  ng-if="!site.addressLat">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Site Location (Longitude)</td>
-                                                <td>{{site.addressLng}}</td>
+                                                <td>
+                                                    <span  ng-if="site.addressLng">{{site.addressLng}}</span>
+                                                    <span  ng-if="!site.addressLng">-</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Geo Fence Radius (in Kms.)</td>
-                                                <td>{{site.radius}}</td>
+                                                <td>
+                                                    <span  ng-if="site.radius">{{site.radius}}</span>
+                                                    <span  ng-if="!site.radius">-</span>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -99,40 +132,37 @@
                             </div>
 
                         </div>
-
-                    </div>
-
-                    <div class="row">
 
                         <div class="col-md-6 col-lg-6">
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">Shift Timings Details</div>
-                                <div class="panel-body" style="min-height: 250px;">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-offset-1 col-md-10">
+                                            <div class="table table-striped">
+                                                <table class="table tblCenter">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>From Time</td>
+                                                        <td>To Time</td>
+                                                    </tr>
+                                                    <tr  ng-repeat=" item in shiftItems">
+                                                        <td>{{item.startTime | date:'hh:mm a'}}</td>
+                                                        <td>{{item.endTime | date:'hh:mm a'}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" align="center" ng-if="shiftItems.length==0">No Shifts</td>
+                                                    </tr>
 
-                                    <div class="table table-bordered">
-                                        <table class="table">
-                                            <tbody>
-                                            <tr>
-                                                <td>From Time</td>
-                                                <td>To Time</td>
-                                            </tr>
-                                            <tr  ng-repeat=" item in shiftItems">
-                                                <td>{{item.startTime | date:'hh:mm a'}}</td>
-                                                <td>{{item.endTime | date:'hh:mm a'}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" align="center" ng-show="!shiftItems">No Shifts</td>
-                                            </tr>
-
-                                            </tbody>
-                                        </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
 
                     <div class="row">

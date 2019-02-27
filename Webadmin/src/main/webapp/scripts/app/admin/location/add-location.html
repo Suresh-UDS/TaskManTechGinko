@@ -23,6 +23,7 @@
 
                         <div class="row">
                             <div class="col-md-4 col-md-offset-4">
+                                <label><span class="red-star">*</span> Mantatory Field</label>
                                 <div class="card formcard">
 
                                     <div class="card-content">
@@ -32,8 +33,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Client<span class="red-star">*</span> </label>
                                                     <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                              
-	                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="true">
+
+	                                                <ui-select ng-model="SelectClient.selected"  name="projectName" on-select="loadDepSitesList(SelectClient.selected)" ng-disabled="clientDisable" ng-required="true">
 													  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 													  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
 													    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>
@@ -45,7 +46,7 @@
 	                                                          ng-show="form.projectName.$error.required">
 	                                                           Client name is required.
 	                                                       </p>
-	                                                      
+
 	                                                   </div>
 	                                               </div>
 
@@ -56,9 +57,9 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
 	                                                    <label class="control-label">Site<span class="red-star">*</span> </label>
-	
+
 	                                                    <span ng-show="!siteDisable && !SelectSite.selected" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                              
+
 		                                               <ui-select ng-model="SelectSite.selected"  name="siteName" ng-disabled="siteDisable || SelectSites.length == 0" ng-required="true">
 														  <ui-select-match placeholder="Select sites..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="SelectSite in SelectSites | filter: $select.search" >
@@ -72,7 +73,7 @@
 		                                                          ng-show="form.siteName.$error.required">
 		                                                           Site name is required.
 		                                                       </p>
-		                                                       
+
 		                                                   </div>
 	                                                    </div>
                                                     </div>
@@ -100,7 +101,7 @@
 			                                                        ng-show="form.selectedBlock.$error.maxlength">
 			                                                         Block name cannot be longer than 50 characters.
 			                                                     </p>
-			                                                     
+
 			                                                 </div>
 			                                             </div>
                                                     </div>
@@ -128,7 +129,7 @@
 			                                                        ng-show="form.selectedFloor.$error.maxlength">
 			                                                         Floor name cannot be longer than 50 characters.
 			                                                     </p>
-			                                                     
+
 			                                                 </div>
 			                                             </div>
                                                     </div>
@@ -157,7 +158,7 @@
 			                                                        ng-show="form.selectedZone.$error.maxlength">
 			                                                         Zone name cannot be longer than 50 characters.
 			                                                     </p>
-			                                                     
+
 			                                                 </div>
 			                                             </div>
                                                     </div>
@@ -171,7 +172,7 @@
                                                 <div class="col-md-12 txt-align-rgt">
                                                     <div class="form-group">
 
-                                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" 
+                                                        <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
                                                                 type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                             <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
