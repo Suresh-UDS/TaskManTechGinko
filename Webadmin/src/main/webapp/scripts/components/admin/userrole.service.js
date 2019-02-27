@@ -5,7 +5,7 @@ angular.module('timeSheetApp')
         return {
         	createUserRole: function (userRole, callback) {
                 var cb = callback || angular.noop;
-                console.log('userRole -' + userRole.name);	
+                console.log('userRole -' + userRole.name);
                 return UserRole.save(userRole,
                     function () {
                         return cb(userRole);
@@ -25,6 +25,11 @@ angular.module('timeSheetApp')
                       return response.data;
                   });
             },
+            excludeAdmin:function(){
+                return $http.get('api/userRole/exclude').then(function (response) {
+                    return response.data;
+                })
+            },
             updateUserRole: function (userRole, callback) {
                 var cb = callback || angular.noop;
 
@@ -38,7 +43,7 @@ angular.module('timeSheetApp')
                     }.bind(this)).$promise;
             },
             deleteUserRole: function (userRole, callback) {
-            	
+
                 var cb = callback || angular.noop;
 
                 return UserRoleDelete.deleteUserRole(userRole,
@@ -55,6 +60,6 @@ angular.module('timeSheetApp')
             		return response.data;
             	});
             }
-        
+
         };
     });

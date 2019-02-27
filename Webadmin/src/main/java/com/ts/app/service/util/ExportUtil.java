@@ -2435,14 +2435,14 @@ public class ExportUtil {
                         dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() : "");
                     }
 					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
-                    if(StringUtils.isNotBlank(transaction.getAssignedToLastName())){
+                    if(StringUtils.isNotBlank(transaction.getClosedByLastName())){
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
                     }else{
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName()  : "");
                     }
 					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getRemarks())? transaction.getRemarks():"");
-					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getComments())? transaction.getComments():"");
+					dataRow.createCell(15).setCellValue(StringUtils.isNotBlank(transaction.getComments())? transaction.getComments():"");
 				}
 
 //				for (int i = 0; i < TICKET_HEADER.length; i++) {

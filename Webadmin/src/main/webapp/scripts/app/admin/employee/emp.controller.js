@@ -860,7 +860,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.loadUserRoles = function () {
-		UserRoleComponent.findAll().then(function (data) {
+		UserRoleComponent.excludeAdmin().then(function (data) {
 			$scope.userRoles = data;
 		});
 	};

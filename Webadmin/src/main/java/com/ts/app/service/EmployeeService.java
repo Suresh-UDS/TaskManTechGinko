@@ -361,11 +361,14 @@ public class    EmployeeService extends AbstractService {
             if(employee.isLeft() || employeeUpdate.getActive().equalsIgnoreCase(Employee.ACTIVE_NO)) {
                 user.setActivated(false);
                 user.setActive(Employee.ACTIVE_NO);
+                employeeUpdate.setActive(Employee.ACTIVE_NO);
             }
             user.setFirstName(employee.getName());
             user.setLastName(employee.getLastName());
             user.setEmail(employeeUpdate.getEmail());
+
         }
+
         employeeUpdate.setUser(user);
         if(employee.getUserRoleId() > 0) {
             UserRoleDTO userRoleDTO = userRoleService.findOne(employee.getUserRoleId());
@@ -688,6 +691,22 @@ public class    EmployeeService extends AbstractService {
         if(CollectionUtils.isNotEmpty(entities)) {
             for(Employee empEntity : entities) {
                 empList.add(mapToModel(empEntity));
+            }
+        }
+        return empList;
+    }
+
+    public List<EmployeeDTO> findMapableEmployees(long userId) {
+        User user = userRepository.findOne(userId);
+        List<EmployeeDTO> entities = null;
+        entities = findAll(userId);
+        //return mapperUtil.toModelList(entities, EmployeeDTO.class);
+        List<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
+        if(CollectionUtils.isNotEmpty(entities)) {
+            for(EmployeeDTO empEntity : entities) {
+                if(empEntity.getUserId()>0){
+                    empList.add(empEntity);
+                }
             }
         }
         return empList;

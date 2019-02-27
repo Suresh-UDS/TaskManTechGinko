@@ -39,7 +39,7 @@ public class UserRoleResource {
 	 * POST /saveUserRole -> saveUserRole the UserRole.
 	 */
 	@RequestMapping(value = "/userRole", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed 
+	@Timed
 	public ResponseEntity<?> saveUserRole(@Valid @RequestBody UserRoleDTO userRoleDTO, HttpServletRequest request) {
 		log.info("Inside the saveUserRole -" + userRoleDTO.getName());
 		try {
@@ -76,20 +76,21 @@ public class UserRoleResource {
 	@RequestMapping(value = "/userRole", method = RequestMethod.GET)
 	public List<UserRoleDTO> findAll() {
 		log.info("--Invoked UserRoleResource.findAll --");
-		return userRoleService.findAndExclude();
+		return userRoleService.findAll();
 	}
 
     @RequestMapping(value = "/userRole/exclude", method = RequestMethod.GET)
     public List<UserRoleDTO> findExcludeRole() {
         log.info("--Invoked UserRoleResource.findExcludeRole --");
         return userRoleService.findAndExclude();
+//        return userRoleService.findAll();
     }
 
 	@RequestMapping(value = "/userRole/{id}", method = RequestMethod.GET)
 	public UserRoleDTO get(@PathVariable Long id) {
 		return userRoleService.findOne(id);
 	}
-	
+
 	@RequestMapping(value = "/userRole/search",method = RequestMethod.POST)
 	public SearchResult<UserRoleDTO> searchUserRoles(@RequestBody SearchCriteria searchCriteria) {
 		SearchResult<UserRoleDTO> result = null;

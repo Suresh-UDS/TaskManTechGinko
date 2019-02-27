@@ -95,7 +95,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.loadUserRoles = function () {
-		UserRoleComponent.findAll().then(function (data) {
+		UserRoleComponent.excludeAdmin().then(function (data) {
 			$scope.userRoles = data;
 			//console.log("User Roles",$scope.userRoles)
 			/** Ui-select scope **/
@@ -145,6 +145,17 @@ angular.module('timeSheetApp')
 
 		});
 	};
+
+	$scope.loadMapableEmployees = function () {
+        $scope.loading = true;
+        $scope.loadingStart();
+        $scope.employees ='';
+        EmployeeComponent.findMapableEmployees().then(function (data) {
+            $scope.loadingStop();
+            $scope.employees = data;
+            $scope.loading = false;
+        })
+    };
 
 	$scope.saveUser = function () {
 		$scope.saveLoad = true;
