@@ -637,7 +637,9 @@
                                       <tbody>
                                       <tr>
                                           <td>Asset Type</td>
-                                          <td>{{manufacturer.assetType}}</td>
+                                          <td>
+                                              {{manufacturer.assetType}}
+                                          </td>
                                       </tr>
                                       <tr>
                                           <td>Manufacturer Name</td>
@@ -645,22 +647,34 @@
                                       </tr>
                                       <tr>
                                           <td>Contact First Name</td>
-                                          <td>{{manufacturer.contactFirstName}}</td>
+                                          <td>
+                                              <span ng-if="manufacturer.contactFirstName">{{manufacturer.contactFirstName}}</span>
+                                              <span ng-if="!manufacturer.contactFirstName">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
                                           <td>Contact Last Name</td>
-                                          <td>{{manufacturer.contactLastName}}</td>
+                                          <td>
+                                              <span ng-if="manufacturer.contactLastName">{{manufacturer.contactLastName}}</span>
+                                              <span ng-if="!manufacturer.contactLastName">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
                                           <td>Phone No</td>
-                                          <td>{{manufacturer.phone}}</td>
+                                          <td>
+                                              <span ng-if="manufacturer.phone">{{manufacturer.phone}}</span>
+                                              <span ng-if="!manufacturer.phone">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
                                           <td>Email</td>
-                                          <td>{{manufacturer.email}}</td>
+                                          <td>
+                                              <span ng-if="manufacturer.email">{{manufacturer.email}}</span>
+                                              <span ng-if="!manufacturer.email">-</span>
+                                          </td>
 
                                       </tr>
                                       </tbody>
@@ -678,34 +692,52 @@
                                       <tbody>
                                       <tr>
                                           <td>Line 1 </td>
-                                          <td class="caps">{{manufacturer.addressLine1}}</td>
+                                          <td class="caps">
+                                              <span ng-if="manufacturer.addressLine1">{{manufacturer.addressLine1}}</span>
+                                              <span ng-if="!manufacturer.addressLine1">-</span>
+                                          </td>
                                       </tr>
                                       <tr>
                                           <td>Line 2</td>
-                                          <td class="caps">{{manufacturer.addressLine2}}</td>
+                                          <td class="caps">
+                                              <span ng-if="manufacturer.addressLine2">{{manufacturer.addressLine2}}</span>
+                                              <span ng-if="!manufacturer.addressLine2">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
                                           <td>City</td>
-                                          <td class="caps">{{manufacturer.city}}</td>
+                                          <td class="caps">
+                                              <span ng-if="manufacturer.city">{{manufacturer.city}}</span>
+                                              <span ng-if="!manufacturer.city">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
 
                                           <td>State</td>
-                                          <td class="caps">{{manufacturer.state}}</td>
+                                          <td class="caps">
+                                              <span ng-if="manufacturer.state">{{manufacturer.state}}</span>
+                                              <span ng-if="!manufacturer.state">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
 
                                           <td>Pin Code</td>
-                                          <td>{{manufacturer.pincode}}</td>
+                                          <td>
+                                              <span ng-if="manufacturer.pincode">{{manufacturer.pincode}}</span>
+                                              <span ng-if="!manufacturer.pincode">-</span>
+                                          </td>
 
                                       </tr>
                                       <tr>
 
                                           <td>Country</td>
-                                          <td class="caps">{{manufacturer.country}}</td>
+                                          <td class="caps">
+                                              <span ng-if="manufacturer.country">{{manufacturer.country}}</span>
+                                              <span ng-if="!manufacturer.country">-</span>
+                                          </td>
 
                                       </tr>
                                       </tbody>
@@ -771,10 +803,10 @@
                                 <div class="dropdown">
                                     <div class="form-group">
                                         <label class="control-label">Select Asset Type</label>
-                                       
+
                                         <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                         <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                               
+
 	                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
 										  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 										  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>

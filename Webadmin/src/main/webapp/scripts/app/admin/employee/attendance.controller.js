@@ -470,12 +470,16 @@ angular.module('timeSheetApp')
 	$scope.addRemarks = function(remarks){
 		//console.log("remarks clicked");
 		//console.log($scope.attendanceRemarksId);
+        $('#remarksModal').modal('hide');
 		AttendanceComponent.addRemarks($scope.attendanceRemarksId,remarks).then(function (data) {
 			$scope.showNotifications('top','center','success','Remarks Added to the attendance');
+            $scope.attendanceRemarks = null;
 			//console.log(data);
 			// $scope.showNotifications('top','center','danger','Site Already Exists');
 			$scope.search();
-		})
+		}).catch(function () {
+            $scope.showNotifications('top','center','danger','Remarks Added to the attendance Failed');
+        });
 	};
 
 
@@ -1074,7 +1078,7 @@ angular.module('timeSheetApp')
 					}else if(!exportStatusObj.exportStatus){
 						$scope.stop();
 					}else {
-						exportStatuObj.exportFile = '#';
+						$rootScope.exportStatusObj.exportFile = '#';
 					}
 				}
 
@@ -1239,7 +1243,7 @@ angular.module('timeSheetApp')
 					}else if(!exportStatusObj.exportStatus){
 						$scope.stop();
 					}else {
-						exportStatuObj.exportFile = '#';
+                        $rootScope.exportStatusObj.exportFile = '#';
 					}
 				}
 

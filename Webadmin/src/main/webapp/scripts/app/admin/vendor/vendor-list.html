@@ -21,7 +21,7 @@
             </button>
 
             <button class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"  title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
-                <i class="material-icons">import_contacts</i> Export Excel
+                <i class="material-icons">file_download</i> Export Excel
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
@@ -510,23 +510,35 @@
                                         </tr>
                                         <tr>
                                             <td>Contact First Name</td>
-                                            <td>{{vendor.contactFirstName}}</td>
+                                            <td>
+                                                <span ng-if="vendor.contactFirstName">{{vendor.contactFirstName}}</span>
+                                                <span ng-if="!vendor.contactFirstName">-</span>
+                                            </td>
 
                                         </tr>
                                         <tr>
                                             <td>Contact Last Name</td>
-                                            <td>{{vendor.contactLastName}}</td>
+                                            <td>
+                                                <span ng-if="vendor.contactLastName">{{vendor.contactLastName}}</span>
+                                                <span ng-if="!vendor.contactLastName">-</span>
+                                            </td>
 
                                         </tr>
 
                                         <tr>
                                             <td>Phone No</td>
-                                            <td>{{vendor.phone}}</td>
+                                            <td>
+                                                <span ng-if="vendor.phone">{{vendor.phone}}</span>
+                                                <span ng-if="!vendor.phone">-</span>
+                                            </td>
 
                                         </tr>
                                         <tr>
                                             <td>Email</td>
-                                            <td>{{vendor.email}}</td>
+                                            <td>
+                                                <span ng-if="vendor.email">{{vendor.email}}</span>
+                                                <span ng-if="!vendor.email">-</span>
+                                            </td>
 
                                         </tr>
 
@@ -550,29 +562,45 @@
                                         <tbody>
                                         <tr>
                                             <td>Line 1 </td>
-                                            <td class="caps">{{vendor.addressLine1}}</td>
+                                            <td class="caps">
+                                                <span ng-if="vendor.addressLine1">{{vendor.addressLine1}}</span>
+                                                <span ng-if="!vendor.addressLine1">-</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Line 2</td>
-                                            <td class="caps">{{vendor.addressLine2}}</td>
-
+                                            <td class="caps">
+                                                <span ng-if="vendor.addressLine2">{{vendor.addressLine2}}</span>
+                                                <span ng-if="!vendor.addressLine2">-</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>City</td>
-                                            <td class="caps">{{vendor.city}}</td>
-
+                                            <td class="caps">
+                                                <span ng-if="vendor.city">{{vendor.city}}</span>
+                                                <span ng-if="!vendor.city">-</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>State</td>
-                                            <td class="caps">{{vendor.state}}</td>
+                                            <td class="caps">
+                                                <span ng-if="vendor.state">{{vendor.state}}</span>
+                                                <span ng-if="!vendor.state">-</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Pin Code</td>
-                                            <td>{{vendor.pincode}}</td>
+                                            <td>
+                                                <span ng-if="vendor.pincode">{{vendor.pincode}}</span>
+                                                <span ng-if="!vendor.pincode">-</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Country</td>
-                                            <td class="caps">{{vendor.country}}</td>
+                                            <td class="caps">
+                                                <span ng-if="vendor.country">{{vendor.country}}</span>
+                                                <span ng-if="!vendor.country">-</span>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -638,10 +666,10 @@
                                 <div class="dropdown">
                                     <div class="form-group">
                                         <label class="label-control">Search Vendor Name</label>
-                                        
+
                                         <span ng-show="vendorFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                         <span ng-show="!vendorFilterDisable && !vendorsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                               
+
 	                                    <ui-select ng-model="vendorsListOne.selected"  ng-disabled="vendorFilterDisable">
 										  <ui-select-match placeholder="Select Vendor..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 										  <ui-select-choices repeat="vendorsListOne in vendorsLists | filter: $select.search"  null-option="allVendors" loose-null>

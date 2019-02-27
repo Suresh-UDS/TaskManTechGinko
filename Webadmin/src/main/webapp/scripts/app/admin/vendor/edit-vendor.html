@@ -23,7 +23,7 @@
             <div class="col-md-12">
                 <div class="">
                     <div class="">
-
+                   <label><span class="red-star">*</span> Mantatory Field</label>
     			<form ng-show="!success" name="formEdit" role="form" novalidate
     						ng-submit="conform('update')"
     						onClick="" class="form-horizontal">
@@ -43,7 +43,7 @@
                                                        class='form-control InputTxtCapsAll' name='name' type='text' value=""
                                                        ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required tabindex="1" />
 
-                                                <div ng-show="formEdit.$submitted || formEdit.name.$touched">
+                                                <div ng-show="formEdit.$submitted || formEdit.name.$touched || formEdit.name.$dirty">
                                                     <div ng-show="formEdit.name.$dirty || formEdit.name.$invalid">
                                                         <p class="help-block" style="color:maroon"
                                                            ng-show="formEdit.name.$error.required">
@@ -83,9 +83,9 @@
                                                 <input id='mobNum' ng-model="vendor.phone"
                                                        class='form-control' name='phone' ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" type='text' value=""
                                                 tabindex="6" />
-                                                <div ng-show="formEdit.$submitted || formEdit.phone.$touched">
+                                                <div ng-show="formEdit.$submitted || formEdit.phone.$touched || formEdit.phone.$dirty">
                                                     <div ng-show="formEdit.phone.$dirty || formEdit.phone.$invalid">
-                                                     
+
                                                       <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                          ng-show="formEdit.phone.$error.minlength">
                                                           phone no. is required to be at least 10 numbers.
@@ -100,7 +100,7 @@
                                                       </p>
                                                     </div>
                                                   </div>
-                                                
+
 
                                             </div>
                                         </div>
@@ -110,7 +110,7 @@
                                                 <input id='email' ng-model="vendor.email"
                                                        class='form-control' name='email' pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50" type='email' value=""
                                                 tabindex="7" />
-                                                 <div ng-show="formEdit.$submitted || formEdit.email.$touched">
+                                                 <div ng-show="formEdit.$submitted || formEdit.email.$touched || formEdit.email.$dirty">
                                                      <div ng-show="formEdit.email.$dirty || formEdit.email.$invalid">
                                                           <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
                                                              ng-show="formEdit.email.$error.pattern">
@@ -184,7 +184,7 @@
                                                 <input id='pinCode' ng-model="vendor.pincode"
                                                        class='form-control' name='pinCode'  ng-pattern='/^[0-9]{1,6}$/' type='text' value=""
                                                 tabindex="10" />
-                                                <div ng-show="formEdit.$submitted || formEdit.pinCode.$touched">
+                                                <div ng-show="formEdit.$submitted || formEdit.pinCode.$touched || formEdit.pinCode.$dirty">
                                                     <div ng-show="formEdit.pinCode.$dirty || formEdit.pinCode.$invalid">
                                                     <p class="help-block" style="color:maroon"
                                                        ng-show="form.pinCode.$error.required">

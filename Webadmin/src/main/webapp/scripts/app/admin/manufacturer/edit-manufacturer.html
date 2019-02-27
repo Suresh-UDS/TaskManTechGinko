@@ -20,6 +20,7 @@
             <div class="col-md-12">
                 <div class="">
                     <div class="">
+                        <label><span class="red-star">*</span> Mantatory Field</label>
                         <form  name="formEdit" role="form" novalidate
                         						ng-submit="conform('update')"
                         						onClick="" class="form-horizontal">
@@ -40,7 +41,7 @@
                                                                     tabindex="1">
                                                                         <option value="">Select Asset Type...</option>
                                                                     </select>
-                                                                    <div ng-show="formEdit.$submitted || formEdit.assetType.$touched">
+                                                                    <div ng-show="formEdit.$submitted || formEdit.assetType.$touched || formEdit.assetType.$dirty">
                                                                         <div ng-show="formEdit.assetType.$dirty || formEdit.assetType.$invalid">
                                                                             <p class="help-block" style="color:maroon"
                                                                                ng-show="formEdit.assetType.$error.required">
@@ -55,10 +56,10 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label class="control-label">Manufacturer Name<span class="red-star">*</span></label>
-                                                                    <input id='manufacturerName' ng-model="manufacturer.name"
+                                                                    <input id='manufacturerName' ng-model="manufacturer.name" ng-minlength='5' ng-maxlength='50'
                                                                            class='form-control InputTxtCapsAll' name='manufacturerName' type='text' value=""
                                                                            required tabindex="3" />
-                                                                    <div ng-show="formEdit.$submitted || formEdit.manufacturerName.$touched">
+                                                                    <div ng-show="formEdit.$submitted || formEdit.manufacturerName.$touched || formEdit.manufacturerName.$dirty">
                                                                         <div ng-show="formEdit.manufacturerName.$dirty || formEdit.manufacturerName.$invalid">
                                                                             <p class="help-block" style="color:maroon"
                                                                                ng-show="formEdit.manufacturerName.$error.required">
@@ -70,7 +71,7 @@
                                                                             </p>
                                                                             <p class="help-block" style="color:maroon"
                                                                                ng-show="formEdit.manufacturerName.$error.maxlength">
-                                                                                Manufacturer name cannot be longer than 250 characters.
+                                                                                Manufacturer name cannot be longer than 50 characters.
                                                                             </p>
                                                                             <p class="help-block" style="color:maroon"
                                                                                ng-show="formEdit.manufacturerName.$error.pattern">
@@ -105,9 +106,9 @@
                                                                     <input id='mobNum' ng-model="manufacturer.phone"
                                                                            class='form-control' name='phone' type='text' ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" value=""
                                                                    tabindex="9" />
-                                                                   <div ng-show="formEdit.$submitted || formEdit.phone.$touched">
+                                                                   <div ng-show="formEdit.$submitted || formEdit.phone.$touched || formEdit.phone.$dirty">
 					                                                    <div ng-show="formEdit.phone.$dirty || formEdit.phone.$invalid">
-					                                                     
+
 					                                                      <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
 					                                                         ng-show="formEdit.phone.$error.minlength">
 					                                                          phone no. is required to be at least 10 numbers.
@@ -131,7 +132,7 @@
                                                                     <input id='email' ng-model="manufacturer.email"
                                                                            class='form-control' pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50" name='email' type='email' value=""
                                                                    tabindex="10" />
-                                                                   <div ng-show="formEdit.$submitted || formEdit.email.$touched">
+                                                                   <div ng-show="formEdit.$submitted || formEdit.email.$touched || formEdit.email.$dirty">
 				                                                     <div ng-show="formEdit.email.$dirty || formEdit.email.$invalid">
 				                                                          <p class="help-block" style="color:maroon"
 				                                                             ng-show="formEdit.email.$error.pattern">
@@ -207,7 +208,7 @@
                                                                     <input id='pinCode' ng-model="manufacturer.pincode"
                                                                            class='form-control' name='pinCode' ng-pattern='/^[0-9]{1,6}$/' type='text' value=""
                                                                    tabindex="11"  />
-                                                                   <div ng-show="formEdit.$submitted || formEdit.pinCode.$touched">
+                                                                   <div ng-show="formEdit.$submitted || formEdit.pinCode.$touched || formEdit.pinCode.$dirty">
 					                                                    <div ng-show="formEdit.pinCode.$dirty || formEdit.pinCode.$invalid">
 					                                                    <p class="help-block" style="color:maroon"
 					                                                       ng-show="form.pinCode.$error.required">

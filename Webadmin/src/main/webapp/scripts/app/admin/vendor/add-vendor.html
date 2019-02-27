@@ -17,7 +17,7 @@
             <div class="col-md-12">
                 <div class="">
                     <div class="">
-
+                        <label><span class="red-star">*</span> Mantatory Field</label>
             			<form ng-show="!success" name="formSave" role="form" novalidate
             						ng-submit="conform('save')"
             						onClick="" class="form-horizontal">
@@ -37,7 +37,7 @@
                                                         <input id='manufacturerName' ng-model="vendor.name"
                                                                class='form-control InputTxtCapsAll' name='name' type='text' value=""
                                                                ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required tabindex="1" />
-                                                        <div ng-show="formSave.$submitted || formSave.name.$touched">
+                                                        <div ng-show="formSave.$submitted || formSave.name.$touched || formSave.name.$dirty">
                                                             <div ng-show="formSave.name.$dirty || formSave.name.$invalid">
                                                                 <p class="help-block" style="color:maroon"
                                                                    ng-show="formSave.name.$error.required">
@@ -79,9 +79,9 @@
                                                         <input id='mobNum' ng-model="vendor.phone"
                                                                class='form-control' name='phone' ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" type='text' value=""
                                                                 tabindex="6" />
-                                                        <div ng-show="formSave.$submitted || formSave.phone.$touched">
+                                                        <div ng-show="formSave.$submitted || formSave.phone.$touched || formSave.phone.$dirty">
                                                           <div ng-show="formSave.phone.$dirty || formSave.phone.$invalid">
-                                                           
+
                                                             <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                                                ng-show="formSave.phone.$error.minlength">
                                                                 phone no. is required to be at least 10 numbers.
@@ -106,7 +106,7 @@
                                                         <input id='email' ng-model="vendor.email"
                                                                class='form-control' name='email' type='email' value="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50"
                                                         tabindex="7" />
-                                                      <div ng-show="formSave.$submitted || formSave.email.$touched">
+                                                      <div ng-show="formSave.$submitted || formSave.email.$touched || formSave.email.$dirty">
                                                        <div ng-show="formSave.email.$dirty || formSave.email.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:990;background:#fff;color:maroon"
                                                                ng-show="formSave.email.$error.pattern">
@@ -179,7 +179,7 @@
                                                         <input id='pinCode' ng-model="vendor.pincode"
                                                                class='form-control' name='pinCode' ng-pattern='/^[0-9]{1,6}$/' type='text' value=""
                                                         tabindex="10"/>
-                                                    <div ng-show="formSave.$submitted || formSave.pinCode.$touched">
+                                                    <div ng-show="formSave.$submitted || formSave.pinCode.$touched || formSave.pinCode.$dirty">
                                                         <div ng-show="formSave.pinCode.$dirty || formSave.pinCode.$invalid">
 	                                                       <p class="help-block" style="color:maroon"
 	                                                          ng-show="form.pinCode.$error.required">

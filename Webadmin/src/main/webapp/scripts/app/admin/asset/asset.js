@@ -72,13 +72,13 @@ angular.module('timeSheetApp')
                         controller: 'AssetController'
                     }
                 },
-                resolve: {
-
-                },
-                 params:{
+                params:{
                   project:null,
                   site:null
-                 }
+                 },
+                resolve: {
+
+                }
             })
             .state('schedule-list', {
                 parent: 'manage',
@@ -134,7 +134,7 @@ angular.module('timeSheetApp')
             }
         }).state('qr-code-list', {
             parent: 'manage',
-            url: '/qr-code-list/:qrStatus/:ids/:siteId',
+            url: '/qr-code-list?qrStatus&ids&siteId',
             //controller: 'AssetController',
             data: {
                 authorities: [],
@@ -145,6 +145,11 @@ angular.module('timeSheetApp')
                     templateUrl: 'scripts/app/admin/asset/qr-code-list.html',
                     controller: 'AssetController'
                 }
+            },
+            params:{
+                qrStatus:null,
+                ids:null,
+                siteId:null,
             },
             resolve: {
 
