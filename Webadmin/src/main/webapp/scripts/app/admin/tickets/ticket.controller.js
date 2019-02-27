@@ -267,16 +267,16 @@ angular.module('timeSheetApp')
 	$scope.cancelTicket = function () {
 
 		if($scope.status == 1){
-
 			$location.path('/assets');
+			return false;
 
 		}if($scope.status == 2){
-
 			$location.path('/view-quotation/'+ $scope.qid);
+            return false;
 
 		}else{
-
 			$location.path('/tickets');
+            return false;
 		}
 
 

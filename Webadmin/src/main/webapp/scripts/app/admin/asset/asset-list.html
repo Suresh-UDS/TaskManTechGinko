@@ -317,10 +317,11 @@
 						Are you sure to delete the asset?<br>
 					</div>
 					<div class="delete-footer">
-						<button type="button" ng-click="deleteAsset()"
-							class="btn btn-danger-outline text-danger" data-dismiss="modal">Confirm</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
+                        <form name="deleteForm" ng-submit="deleteAsset()" role="form" novalidate>
+                            <button type="submit"
+                                class="btn btn-danger text-danger">Confirm</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </form>
 					</div>
 				</div>
 			</div>

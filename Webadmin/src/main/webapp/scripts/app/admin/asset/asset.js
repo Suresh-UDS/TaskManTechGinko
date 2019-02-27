@@ -72,7 +72,7 @@ angular.module('timeSheetApp')
                         controller: 'AssetController'
                     }
                 },
-                params:{
+                 params:{
                   project:null,
                   site:null
                  },

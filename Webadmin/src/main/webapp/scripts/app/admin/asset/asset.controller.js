@@ -2248,12 +2248,15 @@ angular.module('timeSheetApp')
 
 
 			$scope.deleteAsset = function () {
+			    $('#deleteModal').modal('hide');
 				AssetComponent.remove($scope.deleteAssetId).then(function(){
-
 					$scope.success = 'OK';
 					$scope.showNotifications('top','center','success','Asset has been deleted successfully!!');
-					$scope.loadAssets();
-				});
+					$scope.retain = 1;
+					$scope.search();
+				}).catch(function () {
+                    $scope.showNotifications('top','center','danger','Unable to delete asset!!');
+                });
 			}
 
 			$scope.deleteConfirmDoc = function (id,type){

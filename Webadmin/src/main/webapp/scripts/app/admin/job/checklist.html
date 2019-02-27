@@ -14,17 +14,14 @@
 
     </div>
 
-    <div class="row">
-        <form name="form" novalidate>
+    <form name="form" novalidate>
+       <div class="row">
             <div class="col-md-12">
+                <label><span class="red-star">*</span> Mandatory Field</label>
                 <div class="card margin-TB-5" >
-
                     <div class="card-content">
-
                         <div class="row">
-
                             <div class="col-md-4">
-
                                 <div class="form-group pdng-top15">
                                     <label class="control-label">Name<span class="red-star">*</span></label>
                                     <input type="text" name="checklistName" class="form-control InputTxtCapsAll" ng-model="checklist.name" ng-required="true">
@@ -34,38 +31,30 @@
                                               ng-show="form.checklistName.$error.required">
                                                Checklist name is required.
                                            </p>
-
                                        </div>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="col-md-4">
-
                                 <div class="form-group pdng-top15">
-                                    <label class="control-label">Item</label>
+                                    <label class="control-label">Item<span class="red-star">*</span></label>
                                     <input type="text" class="form-control" ng-model="newChecklistItem.name">
                                     <div ng-show="checklistError">
                                       <p class="help-block" style="color: maroon">Item is required</p>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="col-md-3">
-
                                 <button class="btn btn-success margn-top30" name="addChecklist" ng-click="addChecklistItem()">
                                     <span class="btn-label">
                                         <i class="material-icons">add</i>
                                     </span>
                                     Add
                                 </button>
-
                             </div>
 
                         </div>
-
-
-
 
                         <div class="row col-md-10 addedActionList pdng-top15" ng-hide="!(checklistItems.length > 0)">
 
@@ -120,9 +109,8 @@
 
                 </div>
             </div>
-        </form>
-    </div>
-
+        </div>
+    </form>
 
 
     <div class="row" ng-init="loadChecklists()">
@@ -147,8 +135,8 @@
                                <td>{{checklist.id}}</td>
                                 <td>{{checklist.name | uppercase}}</td>
                                 <td>
-                                	<label  ng-repeat=" item in checklist.items">{{item.name}}</label>
-
+                                	<span ng-if="checklist.items"><label  ng-repeat=" item in checklist.items">{{item.name}}</label></span>
+                                	<span ng-if="!checklist.items">-</span>
                                 </td>
                                 <td>
                                     <a  ng-class="{active: $state.includes('admin')}" ng-click="loadChecklist(checklist.id,'edit')"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
@@ -180,39 +168,11 @@
             </div>
         </div>
     </div>
+    <!-- Pagination directive start -->
 
+    <pagination-new></pagination-new>
 
-
-    <div class="row">
-
-        <div class="col-md-6"></div>
-        <div class="col-md-6 text-right">
-            <ul class="pagination pagination-warning">
-
-                <li class="paging-first" ID="first">
-                    <a href="#" id="first" ng-click="first()">
-                        <i id="first" class=" fa fa-step-backward"></i></a>
-                </li>
-                <li class="prev paging-previous" id="previous">
-                    <a id="previous" href="#" ng-click="previous()"> prev</a>
-                </li>
-
-                <li class="active">
-                    <a href="javascript:void(0);">{{pages.currPage}}</a>
-                </li>
-                <li class="next paging-next" id="next">
-                    <a id="next" href="#" ng-click="next()" >next</a>
-                </li>
-                <li class="paging-last" id="last">
-                    <a id="last" href="#" ng-click="last()"><i id="last" class="fa fa-step-forward"></i></a>
-                </li>
-
-            </ul>
-        </div>
-
-    </div>
-
-
+    <!-- Pagination directive end -->
 
     <div class="row">
 
@@ -255,7 +215,6 @@
 							Cancel</button>
 						<button type="button"
 							class="btn btn-danger delete-multiple-confirmation-button"
-							data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
 							Delete</button>
 					</div>
 				</div>

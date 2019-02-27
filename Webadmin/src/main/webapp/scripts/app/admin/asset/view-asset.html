@@ -52,7 +52,7 @@
 
                                         <li class=""><a href=".StatusHistory" data-toggle="tab"
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
-                                       	
+
                                        	<li class=""><a href=".sparesHistory" data-toggle="tab"
                                        	ng-click="loadAssetSpares()">Spares</a></li>
 
@@ -81,12 +81,18 @@
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Asset Group</td>
-                                                                       <td>{{assetDetail.assetGroup}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.assetGroup">{{assetDetail.assetGroup}}</span>
+                                                                           <span ng-if="!assetDetail.assetGroup">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Status </td>
-                                                                       <td>{{assetDetail.status}}                                               </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.status">{{assetDetail.status}}</span>
+                                                                           <span ng-if="!assetDetail.status">-</span>
+                                                                       </td>
 
                                                                    </tr>
 
@@ -114,24 +120,36 @@
                                                                    </tr> -->
                                                                    <tr>
                                                                        <td>Site</td>
-                                                                       <td>{{assetDetail.siteName}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.siteName">{{assetDetail.siteName}}</span>
+                                                                           <span ng-if="!assetDetail.siteName">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Block</td>
-                                                                       <td>{{assetDetail.block}} </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.block">{{assetDetail.block}}</span>
+                                                                           <span ng-if="!assetDetail.block">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
 
                                                                        <td>Floor  </td>
-                                                                       <td>{{assetDetail.floor}} </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.floor">{{assetDetail.floor}}</span>
+                                                                           <span ng-if="!assetDetail.floor">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
 
                                                                        <td>Zone  </td>
-                                                                       <td>{{assetDetail.zone}}  </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.zone">{{assetDetail.zone}}</span>
+                                                                           <span ng-if="!assetDetail.zone">-</span>
+                                                                       </td>
 
                                                                    </tr>
 
@@ -158,37 +176,58 @@
                                                                    <tbody>
                                                                    <tr>
                                                                        <td>Manufacturer </td>
-                                                                       <td>{{assetDetail.manufacturerName}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.manufacturerName">{{assetDetail.manufacturerName}}</span>
+                                                                           <span ng-if="!assetDetail.manufacturerName">-</span>
+                                                                       </td>
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Model Number</td>
-                                                                       <td>{{assetDetail.modelNumber}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.modelNumber">{{assetDetail.modelNumber}}</span>
+                                                                           <span ng-if="!assetDetail.modelNumber">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Serial Number</td>
-                                                                       <td>{{assetDetail.serialNumber}}  </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.serialNumber">{{assetDetail.serialNumber}}</span>
+                                                                           <span ng-if="!assetDetail.serialNumber">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Acquired Date</td>
-                                                                       <td>{{assetDetail.acquiredDate | date :  'dd-MM-yyyy'}} </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.acquiredDate">{{assetDetail.acquiredDate | date :  'dd-MM-yyyy'}}</span>
+                                                                           <span ng-if="!assetDetail.acquiredDate">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Purchase price</td>
-                                                                       <td>{{assetDetail.purchasePrice}} </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.purchasePrice">{{assetDetail.purchasePrice}}</span>
+                                                                           <span ng-if="!assetDetail.purchasePrice">-</span>
+                                                                       </td>
 
                                                                    </tr>
 
                                                                    <tr>
                                                                        <td>Current Price</td>
-                                                                       <td>{{assetDetail.currentPrice}}   </td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.currentPrice">{{assetDetail.currentPrice}}</span>
+                                                                           <span ng-if="!assetDetail.currentPrice">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Estimated dispose price</td>
-                                                                       <td>{{assetDetail.estimatedDisposePrice}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.estimatedDisposePrice">{{assetDetail.estimatedDisposePrice}}</span>
+                                                                           <span ng-if="!assetDetail.estimatedDisposePrice">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <!-- <tr>
@@ -222,22 +261,32 @@
                                                                    <tr>
                                                                        <td>Name</td>
                                                                        <td>
-                                                                           {{assetDetail.amcVendorName}}
+                                                                           <span ng-if="assetDetail.amcVendorName">{{assetDetail.amcVendorName}}</span>
+                                                                           <span ng-if="!assetDetail.amcVendorName">-</span>
                                                                        </td>
                                                                    </tr>
                                                                    <tr>
                                                                        <td>Warranty Type</td>
-                                                                       <td> {{assetDetail.warrantyType}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.warrantyType">{{assetDetail.warrantyType}}</span>
+                                                                           <span ng-if="!assetDetail.warrantyType">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>From Date</td>
-                                                                       <td> {{assetDetail.warrantyFromDate | date :  'dd-MM-yyyy'}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.warrantyFromDate">{{assetDetail.warrantyFromDate | date :  'dd-MM-yyyy'}}</span>
+                                                                           <span ng-if="!assetDetail.warrantyFromDate">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <tr>
                                                                        <td>To Date</td>
-                                                                       <td> {{assetDetail.warrantyToDate | date :  'dd-MM-yyyy'}}</td>
+                                                                       <td>
+                                                                           <span ng-if="assetDetail.warrantyToDate">{{assetDetail.warrantyToDate | date :  'dd-MM-yyyy'}}</span>
+                                                                           <span ng-if="!assetDetail.warrantyToDate">-</span>
+                                                                       </td>
 
                                                                    </tr>
                                                                    <!-- <tr>
@@ -320,17 +369,17 @@
                                                           <div class="row">
                                                              <div class="col-md-7">
 
-                                                             <p><span class="txtBold">Asset</span>  : {{assetDetail.title | uppercase}}</p>
-                                                             <p><span class="txtBold">Type </span> : {{assetDetail.assetType | uppercase}}</p>
-                                                             <p><span class="txtBold">Group</span>  : {{assetDetail.assetGroup | uppercase}}</p>
+                                                             <p><span class="txtBold">Asset</span>  : <span ng-if="assetDetail.title">{{assetDetail.title | uppercase}}</span><span ng-if="!assetDetail.title">-</span></p>
+                                                             <p><span class="txtBold">Type </span> : <span ng-if="assetDetail.assetType">{{assetDetail.assetType | uppercase}}</span><span ng-if="!assetDetail.assetType">-</span></p>
+                                                             <p><span class="txtBold">Group</span>  : <span ng-if="assetDetail.assetGroup">{{assetDetail.assetGroup | uppercase}}</span><span ng-if="!assetDetail.assetGroup">-</span></p>
 
 
                                                              </div>
                                                              <div class="col-md-5">
 
-                                                             <p><span class="txtBold">Site</span> : {{assetDetail.siteName | uppercase}}</p>
-                                                             <p><span class="txtBold">Manufacturer</span>  : {{assetDetail.manufacturerName | uppercase}}</p>
-                                                             <p><span class="txtBold">Vendor</span>  : {{assetDetail.amcVendorName | uppercase}}</p>
+                                                             <p><span class="txtBold">Site</span> : <span ng-if="assetDetail.siteName">{{assetDetail.siteName | uppercase}}</span><span ng-if="!assetDetail.siteName">-</span></p>
+                                                             <p><span class="txtBold">Manufacturer</span>  : <span ng-if="assetDetail.manufacturerName">{{assetDetail.manufacturerName | uppercase}}</span><span ng-if="!assetDetail.manufacturerName">-</span></p>
+                                                             <p><span class="txtBold">Vendor</span>  : <span ng-if="assetDetail.amcVendorName">{{assetDetail.amcVendorName | uppercase}}</span><span ng-if="!assetDetail.amcVendorName">-</span></p>
 
 
                                                              </div>
@@ -1019,7 +1068,7 @@
                                             <!-- Pagination directive end -->
 
                                        </div>
-                                       
+
                                        <div class="tab-pane fade sparesHistory" id="sparesHistory" >
 
                                            <div class="table-responsive tablecard">
@@ -1027,7 +1076,7 @@
 
                                                             <thead>
                                                             <tr>
-                                                            
+
                                                             	<th>JobId</th>
                                                             	<th>JobTitle</th>
                                                                 <th>MaterialName</th>
