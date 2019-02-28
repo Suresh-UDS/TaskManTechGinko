@@ -1911,12 +1911,12 @@ angular.module('timeSheetApp')
 			$scope.cancel = function () {
 
 				if($scope.checkStatus == 1){
-
 					$location.path('/tickets');
+					return false;
 
 				}else{
-
 					$location.path('/jobs');
+                    return false;
 				}
 
 

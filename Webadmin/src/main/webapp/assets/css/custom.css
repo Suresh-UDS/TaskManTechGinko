@@ -2476,4 +2476,9 @@ ul.ckLstDot li:before {
    text-align: center;
 }
 
+span.AppliedFilterTxtCon span.label-info{
+    line-height: 25px !important;
+}
+
+
 
