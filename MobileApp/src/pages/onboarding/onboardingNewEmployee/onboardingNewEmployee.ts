@@ -39,10 +39,12 @@ export class onboardingNewEmployee {
   allFormValues = {};
   formLoadingProgress: any = 'pie0';
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
-  constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService, 
-    public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService, 
-    private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams, 
+  constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService,
+    public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService,
+    private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams,
     private navCtrl: NavController) {
+
+
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
@@ -72,6 +74,13 @@ export class onboardingNewEmployee {
     { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false }
   ];
   ionViewDidLoad() {
+
+    this.storage.get('onboardingFormStatus').then(data => {
+      let dataAll;
+      dataAll = data['index'];
+      console.log('key_userdt'+ dataAll);
+    });
+
     let index;
     if (this.navPreviousData) {
       //alert(this.navPreviousData);
@@ -85,6 +94,8 @@ export class onboardingNewEmployee {
       this.currentIndex = 0;
     }
     this.loadComponent(this.wizardObj[index]['component']);
+
+
   }
   nextWizard(index) {
     console.log('next');
@@ -134,7 +145,24 @@ export class onboardingNewEmployee {
     confirmAlert.present();
   }
   getFormStatusDetails(data) {
+
+    // this.storage.get('onboardingCurrentIndex').then(currentIndex => {
+
+    //   currentIndex = currentIndex['index'];
+    //   console.log('index2 = ' + currentIndex);
+    //   this.storage.get('OnBoardingData').then((localStoragedData) => {      
+    //     console.log('key4 -stored data-' +  JSON.stringify(localStoragedData['actionRequired'][this.currentIndex]));
+    //     console.log('key5 -stored data-' + localStoragedData['actionRequired'][this.currentIndex]['pageStatus'][0]);
+    //   });
+    // });
+   
     if (data['status']) {
+     // if (this.wizardObj[this.currentIndex].index == 5) {
+        // this.storage.get('OnBoardingData').then((localStoragedData) => {
+          // console.log('key3 -stored data-' + localStoragedData['actionRequired'][this.currentIndex]['pageStatus']);
+          //localStoragedData['actionRequired'][this.storedIndex]['pageStatus']
+        // });
+      //}
       this.wizardObj[this.currentIndex]['formStatus'] = data['status'];
       Object.assign(this.allFormValues, data['data']);
     } else {
@@ -145,37 +173,37 @@ export class onboardingNewEmployee {
     let obj: any = {};
     var tempIndex;
     this.storeFormData(this.allFormValues).then(data => {
-      console.log(' store resolve '+ data);
+      console.log(' store resolve ' + data);
       if (data == 'success') {
         this.storage.get('OnBoardingData').then((localStoragedData) => {
           tempIndex = localStoragedData['completed'].length;
           //if (this.network.type != 'none') {
           this.componentService.showLoader("Loading OnBoarding");
           console.log("loading ========" + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-      //   alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+          //   alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
           this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex])
-          .subscribe((res) => {
-            localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
-            localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-        //    alert(JSON.stringify(res));
-            console.log("res ======="+JSON.stringify(res));
-          
-            console.log("res id======="+res['id']);
+            .subscribe((res) => {
+              localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
+              localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+              //    alert(JSON.stringify(res));
+              console.log("res =======" + JSON.stringify(res));
 
-            this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
+              console.log("res id=======" + res['id']);
+
+              this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
+                this.componentService.closeAll();
+                console.log('res image -api ' + JSON.stringify(res));
+                localStoragedData['completed'].splice(tempIndex, 1);
+                this.storage.set('OnBoardingData', localStoragedData);
+                // cg  this.navCtrl.setRoot(onboardingExistEmployee);
+              }, err => {
+
+              })
+            }, (error) => {
+              alert(JSON.stringify(error));
               this.componentService.closeAll();
-              console.log('res image -api ' + JSON.stringify(res));
-              localStoragedData['completed'].splice(tempIndex, 1);
-              this.storage.set('OnBoardingData', localStoragedData);
-           // cg  this.navCtrl.setRoot(onboardingExistEmployee);
-            }, err => {
-
+              this.componentService.showToastMessage('Server Unreachable', 'bottom');
             })
-          }, (error) => {
-            alert(JSON.stringify(error));
-            this.componentService.closeAll();
-            this.componentService.showToastMessage('Server Unreachable', 'bottom');
-          })
           // } else {
           //   localStoragedData['completed'][tempIndex]['isSync'] = false;
           //   this.storage.set('OnBoardingData', localStoragedData);
@@ -192,11 +220,11 @@ export class onboardingNewEmployee {
 
       for (var i = 0; i < imageUpload.length; i++) {
         this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
-        .then(function (res) {
-          console.log('image upload ' + res);
-        }, function (err) {
-          console.log(err);
-        })
+          .then(function (res) {
+            console.log('image upload ' + res);
+          }, function (err) {
+            console.log(err);
+          })
       }
       if (i == imageUpload.length) {
         resolve('success')

@@ -44,6 +44,20 @@ export class OnboardingService {
                 return Observable.throw(error.json());
             })
     }
+    getEmployeeListByProjectId(projectId): Observable<any> {
+        return this.getAllOnboardingUser();
+        //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
+        // let url = this.BASE_URL + '/api/onboard/getEmployeeListByProjectId/' + projectId;
+        // return this.http.get(url).map(
+        //     response => {
+        //         console.log('project Id res::' + response.json());
+        //         return response.json();
+        //     }).catch(error => {
+        //         console.log("error in getting all projects");
+        //         console.log(error);
+        //         return Observable.throw(error.json());
+        //     })
+    }
     getEmployeeListByWbs(wbsId): Observable<any> {
         //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
         let url = this.BASE_URL + '/api/onboard/getEmployeeListByWbs/' + wbsId;
@@ -59,7 +73,7 @@ export class OnboardingService {
     }
     saveOnboardingUser(object) {
         //object = JSON.stringify(object);
-        object['isSync'] = false;
+        object['isSync'] = true;
         //cg change to true
         return this.http.post(this.BASE_URL + '/api/onboard/employees', object).map(
             response => {
@@ -71,7 +85,7 @@ export class OnboardingService {
     }
 
     getAllOnboardingUser(): Observable<any> {
-        return this.http.get('assets/data/emp_old.json').map(
+        return this.http.get('assets/data/project.json').map(
             response => {
                 return JSON.parse(response['_body']);
             }).catch(error => {
@@ -87,17 +101,17 @@ export class OnboardingService {
             console.log('employee id =======');
             this.leaddetails = response.json();
             for (var i = 0; i < this.leaddetails.length; i++) {
-                console.log('res init2' + this.leaddetails[i].wbsId); //here you'll get sendernewcall value for all entry
+                console.log('res init2' + this.leaddetails[i].projectId); //here you'll get sendernewcall value for all entry
             }
             console.log('resp_init ' + this.leaddetails[0]);
-            return this.leaddetails[0].wbsId;
+            return this.leaddetails[0].projectId;
         }).catch(error => {
             console.log(error);
             return Observable.throw(error.json);
         })
     }
     imageUpLoad(filename, key, id) {
-        let type = null;
+        let type = '';
         if (key.match("fingerPrintRight")) {
             key = 'impressen';
             type = 'right';

@@ -33,6 +33,8 @@
         aadharPhotoCopy: 'assets/imgs/placeholder.png',
         employeeSignature: 'assets/imgs/placeholder.png',
         profilePicture: 'assets/imgs/placeholder.png',
+        fingerPrintRight:'assets/imgs/placeholder.png',
+        fingerPrintLeft:'assets/imgs/placeholder.png',
         prePrintedStatement: 'assets/imgs/placeholder.png'
     }
 }

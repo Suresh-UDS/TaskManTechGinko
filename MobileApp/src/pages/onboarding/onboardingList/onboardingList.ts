@@ -71,7 +71,7 @@ export class onboardingExistEmployee implements OnInit {
 
 
       this.storage.get('OnBoardingData').then((localStoragedData) => {  
-        this.onboardingService.getEmployeeListByWbs(this.wbsId).subscribe(res => {
+        this.onboardingService.getEmployeeListByProjectId(this.wbsId).subscribe(res => {
           let objectsKeys;
           let objectsValues;
 
