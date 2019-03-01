@@ -93,8 +93,9 @@ angular.module('timeSheetApp')
 			$scope.userGroups = data;
 		});
 	};
-
+    $scope.userRolesSpin = false;
 	$scope.loadUserRoles = function () {
+        $scope.userRolesSpin = true;
 		UserRoleComponent.excludeAdmin().then(function (data) {
 			$scope.userRoles = data;
 			//console.log("User Roles",$scope.userRoles)
@@ -109,8 +110,11 @@ angular.module('timeSheetApp')
 			}
 			$scope.roleDisable = false;
 			//
+            $scope.userRolesSpin = false;
 
-		});
+		}).catch(function () {
+            $scope.userRolesSpin = false;
+        });
 	};
 
 	// Load User Role for selectbox //
@@ -132,8 +136,9 @@ angular.module('timeSheetApp')
 	}
 	//
 
-
+    $scope.empSpin = false;
 	$scope.loadEmployee = function () {
+        $scope.empSpin = true;
 		$scope.loading = true;
 		$scope.loadingStart();
 		$scope.employees = '';
@@ -142,11 +147,14 @@ angular.module('timeSheetApp')
 			$scope.loadingStop();
 			$scope.employees = data;
 			$scope.loading=false;
+            $scope.empSpin = false;
 
-		});
+		}).catch(function () {
+            $scope.empSpin = false;
+        });
 	};
 
-	$scope.loadMapableEmployees = function () {
+	/*$scope.loadMapableEmployees = function () {
         $scope.loading = true;
         $scope.loadingStart();
         $scope.employees ='';
@@ -155,7 +163,7 @@ angular.module('timeSheetApp')
             $scope.employees = data;
             $scope.loading = false;
         })
-    };
+    };*/
 
 	$scope.saveUser = function () {
 		$scope.saveLoad = true;
@@ -229,8 +237,20 @@ angular.module('timeSheetApp')
 			UserComponent.findOne($stateParams.id).then(function (data) {
 				$scope.user = data;
 				//console.log('User Role list',$scope.user);
-				$scope.selectedRole = {id : $scope.user.userRoleId, name : $scope.user.userRole};
-				$scope.selectedEmployee = {id : $scope.user.employeeId,name : $scope.user.employeeName};
+
+                if($scope.user.userRole && $scope.user.userRole.id){
+                    $scope.selectedRole = $scope.user.userRole;
+
+                }else{
+                    $scope.selectedRole = "";
+
+                }
+                if($scope.selectedEmployee){
+                    $scope.selectedEmployee = {id : $scope.user.employeeId,name : $scope.user.employeeName};
+                }else{
+                    $scope.selectedEmployee = "";
+                }
+
 				$scope.loadingStop();
 				//console.log("selected employee",$scope.selectedEmployee);
 			});
