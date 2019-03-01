@@ -110,6 +110,9 @@ ion-backdrop
 #onboardingEmp .form-control {
   height: 29px !important;
 }
+#onboardingEmp .img {
+  image-orientation: from-image;
+}
 #onboardingEmp .label-md[stacked] {
   font-size: 11px;
   text-transform: capitalize;

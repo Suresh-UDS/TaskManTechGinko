@@ -35,33 +35,42 @@ export class onboardingExistEmployee implements OnInit {
       this.wbsId = Ids['siteId'];
     });
   }
-  ngOnInit() {
-
-
-  }
   ionViewWillEnter() {
+    //  this.component.showLoader("Updating....");
+    this.storage.get('OnBoardingData').then((data) => {
+      if (data) {
+        this.actionRequiredEmp = data['actionRequired'];
+         this.completedEmp = data["completed"];
+        this.onSegmentChange();
+        this.getPercentage();
+      } 
+        // this.component.closeLoader();
+    })
+  }
+
+  ngOnInit() {
     this.component.showLoader("Please wait....");
 
     console.log('onboard home Empid ' + window.localStorage.getItem('employeeId'));
     console.log('onboard home UserId ' + window.localStorage.getItem('employeeUserId'));
-  //  console.log('onboard home EmpName ' + window.localStorage.getItem('employeeDetails'));
+    //  console.log('onboard home EmpName ' + window.localStorage.getItem('employeeDetails'));
 
 
     if (this.network.type != 'none') {
-        console.log(' network ' + this.network.type);
+      console.log(' network ' + this.network.type);
     } else {
-        console.log(' No network ');
-        this.component.showToastMessage(' No network ','bottom');
-        this.storage.get('OnBoardingData').then((data) => {
-          if (!data) {          
-            this.actionRequiredEmp = data['actionRequired'];
-            this.completedEmp = data["completed"];
-            this.onSegmentChange();
-            this.getPercentage();
-            this.component.closeLoader();
-            this.component.showToastMessage('Server Unreachable', 'bottom');
-      }
-    })
+      console.log(' No network ');
+      this.component.showToastMessage(' No network ', 'bottom');
+      this.storage.get('OnBoardingData').then((data) => {
+        if (!data) {
+          this.actionRequiredEmp = data['actionRequired'];
+          this.completedEmp = data["completed"];
+          this.onSegmentChange();
+          this.getPercentage();
+          this.component.closeLoader();
+          this.component.showToastMessage('Server Unreachable', 'bottom');
+        }
+      })
     }
 
     this.onboardingService.initGetEmployeeListByWbs().subscribe(response => {
@@ -70,14 +79,14 @@ export class onboardingExistEmployee implements OnInit {
       this.wbsId = response;
 
 
-      this.storage.get('OnBoardingData').then((localStoragedData) => {  
+      this.storage.get('OnBoardingData').then((localStoragedData) => {
         this.onboardingService.getEmployeeListByProjectId(this.wbsId).subscribe(res => {
           let objectsKeys;
           let objectsValues;
 
           console.log('onboard EMP ' + res.length);
           for (var i = 0; i < res.length; i++) {
-            if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {        
+            if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
               localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
               this.storage.set('OnBoardingData', localStoragedData);
             }
@@ -88,6 +97,7 @@ export class onboardingExistEmployee implements OnInit {
           this.getPercentage();
           this.component.closeLoader();
         }, err => {
+          console.log('onbList3');
           this.actionRequiredEmp = localStoragedData['actionRequired'];
           this.completedEmp = localStoragedData["completed"];
           this.onSegmentChange();
@@ -98,15 +108,18 @@ export class onboardingExistEmployee implements OnInit {
       });
 
     },
-     err=> {
-      // this.actionRequiredEmp = localStoragedData['actionRequired'];
-      //  this.completedEmp = localStoragedData["completed"];
-      this.onSegmentChange();
-      this.getPercentage();
-      this.component.closeLoader();
-      this.component.showToastMessage('Server Unreachable', 'bottom');
+      err => {
+        console.log('onbList2');
+        // this.actionRequiredEmp = localStoragedData['actionRequired'];
+        //  this.completedEmp = localStoragedData["completed"];
+        this.onSegmentChange();
+        this.getPercentage();
+        this.component.closeLoader();
+        this.component.showToastMessage('Server Unreachable', 'bottom');
         console.log(err);
-    })
+      })
+
+      this.component.closeLoader();
   }
   addNewEmpyoee() {
     let obj = {

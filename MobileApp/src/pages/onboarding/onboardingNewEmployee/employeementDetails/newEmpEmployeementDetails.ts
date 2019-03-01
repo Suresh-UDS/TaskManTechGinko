@@ -74,7 +74,6 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     let value = this.nomineeForms.controls[0]['controls']['fromEmployed'].value;
     let toEmployed = this.nomineeForms.controls[0]['controls']['toEmployed'].value;
     if (value) {
-
       var formattedMinDate = moment(value, "YYYY-MM-DD").add(60, 'days').format('YYYY-MM-DD');
       //var formattedMinDate = moment(value, "YYYY-MM-DD").add(30, 'days');
       // var mindate = new Date(value);
@@ -151,7 +150,7 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
 
   addPreviousEmp(): FormGroup {
     return this.fb.group({
-      isEmploymentEarlier: [false],
+      isEmploymentEarlier: [true],
       name: [''],
       fromEmployed: [''],
       toEmployed: [''],

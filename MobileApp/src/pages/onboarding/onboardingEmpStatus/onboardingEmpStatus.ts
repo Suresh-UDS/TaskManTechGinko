@@ -81,8 +81,9 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
           this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
 
 
-
+          console.log('key_1', this.onboardingFormStatus[i]['status']);
           this.storage.set('PageStatus',this.onboardingFormStatus);
+          
           
           // localStoragedData['actionRequired'][currentIndex]['pageStatus'][i] = Math.floor(keyPercentage);
           // console.log('key2 EmpStatus ' +   localStoragedData['actionRequired'][currentIndex]['pageStatus'][i]);        

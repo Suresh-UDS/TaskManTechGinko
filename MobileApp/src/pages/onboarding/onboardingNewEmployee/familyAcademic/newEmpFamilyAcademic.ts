@@ -23,27 +23,34 @@ export class newEmpFamilyAndAcademic implements OnInit {
       educationQualification: this.fb.array([this.setEducation()]),
       nomineeDetail: this.fb.array([])
     });
+    let getEpfCount;
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
       this.storage.get('OnBoardingData').then(localStoragedData => {
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')) {
-            let getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
+            getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
+            console.log('empfamily ' + getEpfCount);
             if (getEpfCount > 0) {
               for (let i = 0; i < getEpfCount; i++) {
                 this.addNominees();
               }
               this.updateFormData();
-
-            } else {
-              this.addNominees();
+            } else{
+              getEpfCount = undefined;
             }
           } else {
+            console.log('empfamily else');
             this.addNominees();
           }
         }
 
+
       });
+      if (getEpfCount === undefined) {
+        this.addNominees();
+        console.log('empfamily else222 ' +getEpfCount);
+      }
     })
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
@@ -69,6 +76,7 @@ export class newEmpFamilyAndAcademic implements OnInit {
         this.messageService.formDataMessage(formStatusValues);
       }
     });
+
   }
   get nomineeForms() {
     return this.onboardingFamilyAcademicForm.get('nomineeDetail') as FormArray
@@ -88,6 +96,8 @@ export class newEmpFamilyAndAcademic implements OnInit {
       contactNumber: [''],
       nominePercentage: ['', [Validators.required, Validators.max(100)]]
     })
+
+
     this.nomineeForms.push(nominee);
     // let length = this.nomineeList.length + 1;
     // if (length <= 3) {
@@ -134,6 +144,7 @@ export class newEmpFamilyAndAcademic implements OnInit {
   //this.index = this.index + 1;
   //}
   removeNominees(index) {
+    console.log('empfam2- ' +index+ ' - '+this.nomineeForms.at(index));
     this.nomineeForms.removeAt(index);
   }
   // ngAfterViewInit() {

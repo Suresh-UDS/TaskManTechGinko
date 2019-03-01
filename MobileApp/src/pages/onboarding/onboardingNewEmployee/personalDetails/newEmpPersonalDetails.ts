@@ -37,16 +37,20 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       // caste: new FormControl('', [Validators.required]),
       bloodGroup: [''],
       // SpeciallyAbled: new FormControl('', [Validators.required]),
-      identificationMark1: ['', [Validators.required]],
-      identificationMark2: [''],
+      identificationMark1: ['', [Validators.required, Validators.maxLength(50),
+        Validators.pattern('^[a-zA-Z ]*$')]],
+      identificationMark2: ['',[, Validators.maxLength(50),
+        Validators.pattern('^[a-zA-Z ]*$')]],
       relationshipDetails: this.fb.array([
         this.fb.group({
-          name: ['', [Validators.required]],
+          name: ['', [Validators.required, Validators.maxLength(50),
+            Validators.pattern('^[a-zA-Z ]*$')]],
           relationship: 'Father',
           contactNumber: '',
         }),
         this.fb.group({
-          name: ['', [Validators.required]],
+          name: ['', [Validators.required, Validators.maxLength(50),
+            Validators.pattern('^[a-zA-Z ]*$')]],
           relationship: 'Mother',
           contactNumber: '',
         })
@@ -133,6 +137,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
     if (dateOfJoining < formattedMinDate) {
       this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
+    }else{
+      this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formattedMinDate);
     }
   }
   ngAfterViewInit() {
@@ -147,11 +153,14 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
           //   this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
           // }'DD-MM-YYYY').format('YYYY-MM-DD');
-          var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'], 'DD-MM-YYYY').format('YYYY-MM-DD');
-          var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'], 'DD-MM-YYYY').format('YYYY-MM-DD');
 
-          this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(formatDateOfBirthDate);
-          this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formatDateOfJoiningDate);
+          console.log('perDOB - ' + localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']);
+
+         // var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+         // var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+
+          this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']);
+          this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining']);
 
           this.onboardingPersonalDetailsForm.controls['identificationMark1'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0]);
           this.onboardingPersonalDetailsForm.controls['identificationMark2'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);

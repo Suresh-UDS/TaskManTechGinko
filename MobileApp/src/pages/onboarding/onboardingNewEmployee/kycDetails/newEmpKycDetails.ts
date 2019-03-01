@@ -180,6 +180,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       destinationType: this.camera.DestinationType.FILE_URI,
       mediaType: this.camera.MediaType.PICTURE,
       encodingType: this.camera.EncodingType.JPEG,
+      correctOrientation:true
     };
     if (imageType == 'album') {
       // options.saveToPhotoAlbum = false
@@ -227,7 +228,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   }
   createBankDetails(): FormGroup {
     return this.fb.group({
-      accountNo: ['', [Validators.required]],
+      accountNo: ['', [Validators.required, Validators.maxLength(15)]],
       ifsc: ['', [Validators.required]]
     });
   }

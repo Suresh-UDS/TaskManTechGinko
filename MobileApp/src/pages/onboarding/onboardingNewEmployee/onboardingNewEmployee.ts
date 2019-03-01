@@ -74,13 +74,15 @@ export class onboardingNewEmployee {
     { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false }
   ];
   ionViewDidLoad() {
-
-    this.storage.get('onboardingFormStatus').then(data => {
+    this.storage.get('PageStatus').then(data => {
       let dataAll;
-      dataAll = data['index'];
-      console.log('key_userdt'+ dataAll);
+      console.log('key_userdt1 ' + data);
+      for (var i = 0; i < data.length; i++) {
+        dataAll = data[i]['status'];
+        console.log('key_userdt2 ' + dataAll);
+      }
     });
-
+    console.log('key_userdt3');
     let index;
     if (this.navPreviousData) {
       //alert(this.navPreviousData);
@@ -94,7 +96,6 @@ export class onboardingNewEmployee {
       this.currentIndex = 0;
     }
     this.loadComponent(this.wizardObj[index]['component']);
-
 
   }
   nextWizard(index) {
@@ -123,6 +124,9 @@ export class onboardingNewEmployee {
     //ComponentRef.instance.parentcount = this.onboardingNewEmpData;
   }
   formFinalSubmit() {
+
+    //object assign 
+    
     const thisScope = this;
     const confirmAlert = this.alertCtrl.create({
       title: 'OnBoarding Submit',
@@ -155,13 +159,13 @@ export class onboardingNewEmployee {
     //     console.log('key5 -stored data-' + localStoragedData['actionRequired'][this.currentIndex]['pageStatus'][0]);
     //   });
     // });
-   
+
     if (data['status']) {
-     // if (this.wizardObj[this.currentIndex].index == 5) {
-        // this.storage.get('OnBoardingData').then((localStoragedData) => {
-          // console.log('key3 -stored data-' + localStoragedData['actionRequired'][this.currentIndex]['pageStatus']);
-          //localStoragedData['actionRequired'][this.storedIndex]['pageStatus']
-        // });
+      // if (this.wizardObj[this.currentIndex].index == 5) {
+      // this.storage.get('OnBoardingData').then((localStoragedData) => {
+      // console.log('key3 -stored data-' + localStoragedData['actionRequired'][this.currentIndex]['pageStatus']);
+      //localStoragedData['actionRequired'][this.storedIndex]['pageStatus']
+      // });
       //}
       this.wizardObj[this.currentIndex]['formStatus'] = data['status'];
       Object.assign(this.allFormValues, data['data']);
@@ -181,6 +185,8 @@ export class onboardingNewEmployee {
           this.componentService.showLoader("Loading OnBoarding");
           console.log("loading ========" + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
           //   alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+          //gopicg
+          //localStoragedData['actionRequired'][this.storedIndex]['projectId']
           this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex])
             .subscribe((res) => {
               localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
@@ -195,7 +201,8 @@ export class onboardingNewEmployee {
                 console.log('res image -api ' + JSON.stringify(res));
                 localStoragedData['completed'].splice(tempIndex, 1);
                 this.storage.set('OnBoardingData', localStoragedData);
-                // cg  this.navCtrl.setRoot(onboardingExistEmployee);
+                // cg
+                this.navCtrl.setRoot(onboardingExistEmployee);
               }, err => {
 
               })

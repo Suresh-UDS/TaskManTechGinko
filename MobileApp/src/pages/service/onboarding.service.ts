@@ -45,18 +45,19 @@ export class OnboardingService {
             })
     }
     getEmployeeListByProjectId(projectId): Observable<any> {
-        return this.getAllOnboardingUser();
-        //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
-        // let url = this.BASE_URL + '/api/onboard/getEmployeeListByProjectId/' + projectId;
-        // return this.http.get(url).map(
-        //     response => {
-        //         console.log('project Id res::' + response.json());
-        //         return response.json();
-        //     }).catch(error => {
-        //         console.log("error in getting all projects");
-        //         console.log(error);
-        //         return Observable.throw(error.json());
-        //     })
+      //  return this.getAllOnboardingUser();
+        // //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
+        let url = this.BASE_URL + '/api/onboard/getEmployeeListByProjectId/' + projectId;
+        return this.http.get(url).map(
+            response => {
+                console.log('project Id res::' + response.json());
+                return response.json();
+            }).catch(error => {
+                console.log("error in getting all projects");
+                console.log(error);
+                return Observable.throw(error.json());
+            })
+
     }
     getEmployeeListByWbs(wbsId): Observable<any> {
         //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
@@ -103,7 +104,7 @@ export class OnboardingService {
             for (var i = 0; i < this.leaddetails.length; i++) {
                 console.log('res init2' + this.leaddetails[i].projectId); //here you'll get sendernewcall value for all entry
             }
-            console.log('resp_init ' + this.leaddetails[0]);
+            console.log('resp_init ' + this.leaddetails[0].projectId);
             return this.leaddetails[0].projectId;
         }).catch(error => {
             console.log(error);
