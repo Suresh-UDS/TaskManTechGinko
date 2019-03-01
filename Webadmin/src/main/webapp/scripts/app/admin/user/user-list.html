@@ -54,8 +54,17 @@
 
 
     <div class="row" ng-init="init()">
-
         <div class="col-md-12">
+            <div class="pull-right mar10px">
+                <!-- Material switch -->
+                <div class="switch">
+                    <span>Show Inactive Users</span>
+                    <label>
+                        <input type="checkbox" ng-model="showInActive" ng-click="searchFilter();">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </div>
             <div class="card margin-TB-5 TableCard">
 
                 <div class="card-content">

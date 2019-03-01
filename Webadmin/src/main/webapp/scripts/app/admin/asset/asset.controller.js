@@ -1432,6 +1432,12 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria.assetCode =null;
 				}
 
+                if($scope.showInActive){
+                    $scope.searchCriteria.showInActive = true;
+                }else{
+                    $scope.searchCriteria.showInActive = false;
+                }
+
 				//----
 				if($scope.pageSort){
 					$scope.searchCriteria.sort = $scope.pageSort;

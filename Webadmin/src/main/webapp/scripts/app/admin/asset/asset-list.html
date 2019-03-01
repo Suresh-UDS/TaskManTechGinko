@@ -136,7 +136,16 @@
     <div class="row" ng-init="loadProjects();loadAssetType();loadAssetGroup();">
 
         <div class="col-md-12">
-
+            <div class="pull-right">
+                <!-- Material switch -->
+                <div class="switch">
+                    <span>Show Inactive Assets</span>
+                    <label>
+                        <input type="checkbox" ng-model="showInActive" ng-click="searchFilter();">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </div>
             <div class="card tablecard margin-TB-5">
                 <div class="card-content">
 

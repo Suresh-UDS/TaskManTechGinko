@@ -178,10 +178,9 @@ angular.module('timeSheetApp')
 		console.log("Module actions>>>>",+$scope.confirmModuleAction);
 //		$scope.user = user;
 		ModuleActionComponent.deleteModuleAction($scope.confirmModuleAction).then(function () {
-            alert($scope.confirmModuleAction);
             $scope.success = 'OK';
             $scope.showNotifications('top','center','success','Module Actions Deleted Successfully..!!');
-            $state.search();
+            $scope.search();
         }).catch(function () {
             $scope.showNotifications('top','center','danger','Module Actions Unable to Delete..!!');
         });

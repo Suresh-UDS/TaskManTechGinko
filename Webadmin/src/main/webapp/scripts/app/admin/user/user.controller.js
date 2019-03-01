@@ -405,6 +405,11 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.userRole = null;
 		}
 
+        if($scope.showInActive){
+            $scope.searchCriteria.showInActive = true;
+        }else{
+            $scope.searchCriteria.showInActive = false;
+        }
 
 		//----
 		if($scope.pageSort){

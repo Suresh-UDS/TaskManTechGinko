@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
                         return cb(err);
                     }.bind(this)).$promise;
             },
-            deleteModuleAction: function (moduleAction, callback) {
+            /*deleteModuleAction: function (moduleAction, callback) {
 
                 var cb = callback || angular.noop;
 
@@ -49,6 +49,19 @@ angular.module('timeSheetApp')
                         //this.logout();
                         return cb(err);
                     }.bind(this)).$promise;
+            },*/
+            deleteModuleAction: function (id, callback) {
+
+                var cb = callback || angular.noop;
+
+                return  $http.delete('api/applicationModule/'+ id).then(
+                    function (response) {
+                        return cb(response);
+                    }).catch(
+                    function (err) {
+                        console.log(JSON.stringify(err));
+                        return cb(err);
+                    })
             },
             search: function(searchCriteria) {
             	return $http.post('api/applicationModule/search', searchCriteria).then(function (response) {
