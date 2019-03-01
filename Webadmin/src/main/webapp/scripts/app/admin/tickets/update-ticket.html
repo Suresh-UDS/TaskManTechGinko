@@ -11,6 +11,11 @@
     </div>
     <div  >
             <div class="cardsCon editTicketCon">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><span class="red-star">*</span> Mandatory Field</label>
+                    </div>
+                </div>
                 <form ng-show="!success" name="form" role="form" novalidate
                       ng-submit="conform('update')"  >
 
@@ -207,16 +212,25 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Employee </label>
+                                        <label class="control-label">Employee <span class="red-star">*</span></label>
                                         <span ng-show="empSpin && !employees"  class="form-control-feedback d-md-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                         <span ng-show="!empSpin" class="form-control-feedback d-md-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                         <select
                                             name="employee"
                                             ng-model="selectedEmployee"
-                                            class="form-control searchable-input floatL" ng-options="emp as emp.name + ' ' + emp.lastName group by emp.designation for emp in employees track by emp.id" tabindex="3">
+                                            class="form-control searchable-input floatL" ng-options="emp as emp.name + ' ' + emp.lastName group by emp.designation for emp in employees track by emp.id" tabindex="3" required>
                                             <option value="">Select Employee</option>
 
                                         </select>
+                                        <div ng-show="form.$submitted || form.employee.$touched">
+                                            <div
+                                                ng-show="form.employee.$dirty || form.employee.$invalid">
+
+                                                <p class="help-block" style="color:maroon"
+                                                   ng-show="form.employee.$error.required">
+                                                    Employee is required
+                                            </div>
+                                        </div>
 
                                         <div ng-show="form.$submitted || form.employee.$touched">
                                             <div

@@ -925,24 +925,30 @@ angular
 
 					$scope.approveQuotation = function(quotation) {
 					  //console.log(quotation)
+                        $('#approveQuotationModal').modal('hide');
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									console.log(response);
 									$scope.showNotifications('top','center','success','Quotation approved Successfully');
 									//$scope.loadAllQuotations();
 									//$location.path('/quotation-list');
-									$scope.refreshPage();
+									//$scope.refreshPage();
+                                    $scope.retain = 1;
+                                    $scope.search();
 								})
 					}
 
 					$scope.rejectQuotation = function(quotation) {
+                        $('#rejectQuotationModal').modal('hide');
 						RateCardComponent.rejectQuotation(quotation).then(
 								function(response) {
 									console.log(response);
 									$scope.showNotifications('top','center','success','Quotation rejected Successfully');
 									//$scope.loadAllQuotations();
 									//$location.path('/quotation-list');
-									$scope.refreshPage();
+									//$scope.refreshPage();
+                                    $scope.retain = 1;
+                                    $scope.search();
 								})
 					}
 
@@ -967,13 +973,14 @@ angular
 					 if($scope.status == 1){
 
 			        	 $location.path('/tickets');
+			        	 return false;
 
 			         }else{
 
 			         	/** @reatin - retaining scope value.**/
                         $rootScope.retain=1;
-
 			         	$location.path('/quotation-list');
+			         	return false;
 			         }
 
 

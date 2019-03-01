@@ -2463,7 +2463,7 @@ ul.ckLstDot li:before {
  }
 
  /* datepicker cursor modified css*/
- input.datepicker,input.timepicker {
+ input.datepicker,input.timepicker,input.datetimepicker {
    color: transparent;
    text-shadow: 0 0 0 #000;
 
@@ -2475,5 +2475,10 @@ ul.ckLstDot li:before {
 .tblCenter tr td{
    text-align: center;
 }
+
+span.AppliedFilterTxtCon span.label-info{
+    line-height: 25px !important;
+}
+
 
 

@@ -247,43 +247,46 @@
     </div>
 </div>
 
+<!-- Pagination directive start -->
+
+<pagination-new></pagination-new>
+
+<!-- Pagination directive end -->
+
 <div class="modal fade" id="approveQuotationModal" tabindex="-1" role="dialog" aria-labelledby="approveQuotationModal" aria-hidden="true">
-    <div class="modal-dialog modal-notice">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
-                <h5 class="modal-title" id="isLeftModal">Approve Quotation ?</h5>
-            </div>
-            <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="approveQuotation(quotation)">Yes</button>
-                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+    <form name="approveForm" ng-submit="approveQuotation(quotation)" role="form" novalidate>
+        <div class="modal-dialog modal-notice">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                    <h5 class="modal-title">Approve Quotation ?</h5>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-info btn-round"  >Yes</button>
+                    <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="modal fade" id="rejectQuotationModal" tabindex="-1" role="dialog" aria-labelledby="rejectQuotationModal" aria-hidden="true">
-    <div class="modal-dialog modal-notice">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
-                <h5 class="modal-title" id="isLeftModal">Reject Quotation ?</h5>
-            </div>
-            <div class="modal-footer ">
-                <button type="button" class="btn btn-info btn-round" data-dismiss="modal" ng-click="rejectQuotation(quotation)">Yes</button>
-                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+    <form name="rejectForm" ng-submit="rejectQuotation(quotation)" role="form" novalidate>
+        <div class="modal-dialog modal-notice">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                    <h5 class="modal-title" id="isLeftModal">Reject Quotation ?</h5>
+                </div>
+                <div class="modal-footer ">
+                    <button type="submit" class="btn btn-info btn-round" >Yes</button>
+                    <button type="button" class="btn btn-info btn-round" data-dismiss="modal">No</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
-
-
-   <!-- Pagination directive start -->
-
-    <pagination-new></pagination-new>
-
-    <!-- Pagination directive end -->
 
 
 <!-- BasicFilterModal -->
@@ -486,7 +489,7 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+				                                    <ui-select ng-model="client.selected"  on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
 															<a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -509,7 +512,7 @@
 				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+						                                <ui-select ng-model="regionsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
 														       <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -533,7 +536,7 @@
 				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+					                                <ui-select ng-model="branchsListOne.selected"  on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
 													           <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">

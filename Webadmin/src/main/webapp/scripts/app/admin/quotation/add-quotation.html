@@ -21,6 +21,7 @@
 				<!--<h3>Add Quotation</h3>-->
 				<!--</div>-->
 				<div class="form-container table-container AddQuotationContent ">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
 						 class="form-horizontal" >
 
@@ -103,7 +104,7 @@
 
                                                         <span ng-show="!clientDisable && !SelectClient.selected" class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
 
-		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" ng-disabled="clientDisable" ng-required="!ticketQuot">
+		                                                <ui-select ng-model="SelectClient.selected"  name="projectName" on-select="loadDepSitesList(SelectClient.selected)" ng-disabled="clientDisable" ng-required="!ticketQuot">
 														  <ui-select-match placeholder="Select clients..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="SelectClient in SelectClients | filter: $select.search"  ng-click="loadDepSitesList(SelectClient.selected)">
 														    <span ng-bind-html="SelectClient.name | highlight: $select.search"></span>

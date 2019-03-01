@@ -749,7 +749,7 @@ angular.module('timeSheetApp')
 			//
 			$scope.checkSite  = function(){
 				if($scope.searchCriteria.siteId == undefined || $scope.searchCriteria.siteId == 0){
-					$scope.showNotifications('top','center','danger','Please select site before select employee.');
+                    alert('Please select site before select employee.');
 				}
 
 			}
@@ -1911,12 +1911,12 @@ angular.module('timeSheetApp')
 			$scope.cancel = function () {
 
 				if($scope.checkStatus == 1){
-
 					$location.path('/tickets');
+					return false;
 
 				}else{
-
 					$location.path('/jobs');
+                    return false;
 				}
 
 
