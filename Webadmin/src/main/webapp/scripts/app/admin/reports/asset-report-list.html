@@ -28,7 +28,7 @@
             </button>-->
 
             <button ng-show="assetsData.length" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='xlsx')}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
-                <i class="material-icons">import_contacts</i> Export Excel
+                <i class="material-icons">file_download</i> Export Excel
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
             </button>
@@ -45,7 +45,7 @@
     </div>
 
     <div class="AppliedFilterCon" >
-             
+
             <span class="AppliedFilterTxtCon">
                 <span
 		            class="tag label label-info" style="margin-right: 10px"
@@ -505,7 +505,7 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+				                                    <ui-select ng-model="client.selected" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)"  ng-disabled="clientFilterDisable">
 													  <ui-select-match placeholder="Select clients...">{{$select.selected.name}}
 													    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -528,9 +528,9 @@
 				                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-						                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+						                                <ui-select ng-model="regionsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 														  <ui-select-match placeholder="Select region...">{{$select.selected.name}}
-														     <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+														     <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
@@ -552,9 +552,9 @@
 				                                 <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                 <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-					                                <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+					                                <ui-select ng-model="branchsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 													  <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
-													      <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													      <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -577,7 +577,7 @@
 
 				                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
 													  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
-													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"  
+													      <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
@@ -630,10 +630,10 @@
 				                                <div class="dropdown" ng-init="loadAllAssetTypes();">
 				                                    <div class="form-group">
 				                                        <label class="control-label">Asset Type</label>
-				                                       
+
 				                                        <span ng-show="assetTypeDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!assetTypeDisable && !assetTypesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-				                                               
+
 					                                    <ui-select ng-model="assetTypesListOne.selected"  ng-disabled="assetTypeDisable">
 														  <ui-select-match placeholder="Select Asset Type..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
 														  <ui-select-choices repeat="assetTypesListOne in assetTypesLists | filter: $select.search"  null-option="allAssetType" loose-null>
@@ -651,10 +651,10 @@
 				                                <div class="dropdown" ng-init="loadAllAssetGroups();">
 				                                    <div class="form-group">
 				                                        <label class="control-label">Asset Group</label>
-				                                       
+
 				                                        <span ng-show="assetGroupDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 				                                        <span ng-show="!assetGroupDisable && !assetGroupsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-				                                               
+
 					                                    <ui-select ng-model="assetGroupsListOne.selected"  ng-disabled="assetGroupDisable">
 														  <ui-select-match placeholder="Select Asset Group..." allow-clear="true">{{$select.selected.assetgroup}}</ui-select-match>
 														  <ui-select-choices repeat="assetGroupsListOne in assetGroupsLists | filter: $select.search"  null-option="allAssetGroup" loose-null>
