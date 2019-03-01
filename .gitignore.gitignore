@@ -1,0 +1,243 @@
+/SiteLocationService/node/**
+/SiteLocationService/node_modules/**
+
+/SiteLocationService/.idea/**
+
+
+######################
+# Project Specific
+######################
+/Webadmin/src/main/webapp/dist
+
+######################
+# Node
+######################
+/Webadmin/node/**
+/Webadmin/node_modules/**
+
+######################
+# SASS
+######################
+/Webadmin/.sass-cache/**
+
+######################
+# Eclipse
+######################
+/Webadmin/*.pydevproject
+/Webadmin/.project
+/Webadmin/.metadata
+/Webadmin/bin/**
+/Webadmin/tmp/**
+/Webadmin/tmp/**/*
+/Webadmin/*.tmp
+/Webadmin/*.bak
+/Webadmin/*.swp
+/Webadmin/*~.nib
+/Webadmin/local.properties
+/Webadmin/.classpath
+/Webadmin/.settings/**
+/Webadmin/.loadpath
+/Webadmin/src/main/resources/rebel.xml
+
+# External tool builders
+/Webadmin/.externalToolBuilders/**
+
+# Locally stored "Eclipse launch configurations"
+/Webadmin/*.launch
+
+# CDT-specific
+/Webadmin/.cproject
+
+# PDT-specific
+/Webadmin/.buildpath
+
+######################
+# Intellij
+######################
+.idea/**
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
+
+######################
+# Maven
+######################
+/Webadmin//log/**
+/Webadmin//target/**
+
+######################
+# Gradle
+######################
+/Webadmin/.gradle/**
+/Webadmin/gradle/**
+/Webadmin/.cache-main
+/Webadmin/.cache-tests
+/Webadmin/.jhipster/**
+/Webadmin/.npmrc
+######################
+# Package Files
+######################
+/Webadmin/*.jar
+/Webadmin/*.war
+/Webadmin/*.ear
+/Webadmin/*.db
+
+######################
+# Windows
+######################
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+######################
+# Mac OSX
+######################
+.DS_Store
+.svn
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+######################
+# Directories
+######################
+/Webadmin/build/**
+/Webadmin/bin/**
+/Webadmin/spring_loaded/**
+/Webadmin/deploy/**
+
+######################
+# Logs
+######################
+/Webadmin/*.log
+
+######################
+# Others
+######################
+/Webadmin/*.class
+/Webadmin/*.*~
+/Webadmin/*~
+/Webadmin/.merge_file*
+
+######################
+# Gradle Wrapper
+######################
+/Webadmin/!gradle/wrapper/gradle-wrapper.jar
+
+
+# Mobile App
+/MobileApp/www/*
+/MobileApp/node_modules/*
+/MobileApp/platforms/*
+/MobileApp/plugins/*
+MobileApp/www/*
+
+/
+
+Webadmin/src/main/webapp/index - recent.html
+Webadmin/src/main/webapp/index - Copy-old.html
+Webadmin/src/main/webapp/index - Copy-01.html
+
+MobileApp/.idea/workspace.xml
+MobileApp/.idea/vcs.xml
+MobileApp/.idea/modules.xml
+MobileApp/.idea/inspectionProfiles/profiles_settings.xml
+MobileApp/.sourcemaps/4.js.map
+MobileApp/.sourcemaps/3.js.map
+MobileApp/.sourcemaps/2.js.map
+MobileApp/.sourcemaps/1.js.map
+MobileApp/.sourcemaps/0.js.map
+MobileApp/.sourcemaps/main.js.map
+MobileApp/www/build
+Webadmin/src/main/webapp/assets-01/sass/md/plugins/_plugin-nouislider.scss
+Webadmin/src/main/webapp/assets-01/sass/md/plugins/_perfect-scrollbar.scss
+Webadmin/src/main/webapp/assets-01/sass/md/plugins/_animate.scss
+Webadmin/src/main/webapp/assets-01/sass/md/mixins/_vendor-prefixes.scss
+Webadmin/src/main/webapp/assets-01/sass/md/mixins/_transparency.scss
+Webadmin/src/main/webapp/assets-01/sass/md/mixins/_chartist.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_variables.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_typography.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_togglebutton.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_tabs.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_tables.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_sidebar-and-main-panel.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_shadows.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_ripples.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_responsive.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_radios.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_popups.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_pills.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_pagination.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_navbars.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_mixins.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_misc.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_inputs.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_inputs-size.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_forms.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_footers.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_dropdown.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_dialogs.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_colors.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_checkboxes.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_chartist.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_cards.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_buttons.scss
+Webadmin/src/main/webapp/assets-01/sass/md/_alerts.scss
+Webadmin/src/main/webapp/assets-01/sass/material-dashboard.scss
+Webadmin/src/main/webapp/assets-01/js/prettify.js
+Webadmin/src/main/webapp/assets-01/js/perfect-scrollbar.jquery.min.js
+Webadmin/src/main/webapp/assets-01/js/material.min.js
+Webadmin/src/main/webapp/assets-01/js/material-dashboard.js
+Webadmin/src/main/webapp/assets-01/js/material-bootstrap-wizard.js
+Webadmin/src/main/webapp/assets-01/js/jquery.bootstrap.wizard.js
+Webadmin/src/main/webapp/assets-01/js/jquery-3.2.1.min.js
+Webadmin/src/main/webapp/assets-01/js/demo.js
+Webadmin/src/main/webapp/assets-01/js/chartist.min.js
+Webadmin/src/main/webapp/assets-01/js/bootstrap.min.js
+Webadmin/src/main/webapp/assets-01/js/bootstrap-notify.js
+Webadmin/src/main/webapp/assets-01/js/arrive.min.js
+Webadmin/src/main/webapp/assets-01/img/tim_80x80.png
+Webadmin/src/main/webapp/assets-01/img/sidebar-4.jpg
+Webadmin/src/main/webapp/assets-01/img/sidebar-3.jpg
+Webadmin/src/main/webapp/assets-01/img/sidebar-2.jpg
+Webadmin/src/main/webapp/assets-01/img/sidebar-1.jpg
+Webadmin/src/main/webapp/assets-01/img/new_logo.png
+Webadmin/src/main/webapp/assets-01/img/mask.png
+Webadmin/src/main/webapp/assets-01/img/favicon.png
+Webadmin/src/main/webapp/assets-01/img/faces/marc.jpg
+Webadmin/src/main/webapp/assets-01/img/cover.jpeg
+Webadmin/src/main/webapp/assets-01/img/apple-icon.png
+Webadmin/src/main/webapp/assets-01/css/material-dashboard.css
+Webadmin/src/main/webapp/assets-01/css/material-bootstrap-wizard.css
+Webadmin/src/main/webapp/assets-01/css/demo1.css
+Webadmin/src/main/webapp/assets-01/css/demo.css
+Webadmin/src/main/webapp/assets-01/css/custom.css
+Webadmin/src/main/webapp/assets-01/css/bootstrap.min.css
+Webadmin/src/main/webapp/assets-01/css/bootstrap.min-1.css
+QuotationService/.idea/workspace.xml
+QuotationService/.idea/vcs.xml
+QuotationService/.idea/modules.xml
+
+Webadmin/src/main/webapp/bower_components/*
+
+MobileApp/.idea/
+QuotationService/.idea/
+QuotationService/package-lock.json
+QuotationService/node_modules/*
+
+MobileApp/www/build/
+
+QuotationService/node_modules
+
+Webadmin/node_modules
+Webadmin/node_modules_1
+Webadmin/src/main/webapp/bower_components
+Webadmin/src/main/webapp/bower_components_1
