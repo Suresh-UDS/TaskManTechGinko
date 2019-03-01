@@ -16,7 +16,7 @@
                 <!--</div>-->
             </div>
             <div class="col-md-12">
-
+                <label><span class="red-star">*</span> Mandatory Field</label>
                 <div class="form-container table-container">
                     <form ng-show="!success" name="form" role="form" novalidate
                           ng-submit="saveFeedbackMapping()"  class="form-horizontal">
@@ -196,7 +196,7 @@
                                             <div class="col-md-9 txt-align-rgt">
                                                 <div class="form-group">
 
-                                                    <button class="btn btn-success ld ld-over-inverse" type="submit" 
+                                                    <button class="btn btn-success ld ld-over-inverse" type="submit"
                                                             id="form-button-save" ng-disabled="form.$invalid || btnDisable">
                                                         <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                     </button>

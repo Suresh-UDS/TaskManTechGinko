@@ -135,7 +135,13 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.removeItem = function(ind) {
-		$scope.feedbackItems.splice(ind,1);
+	    var conRemove =window.confirm('Are you sure to remove item in this list..!!!');
+            if(conRemove){
+                $scope.feedbackItems.splice(ind,1);
+                return false;
+            }else{
+                return false;
+            }
 	}
 
 
