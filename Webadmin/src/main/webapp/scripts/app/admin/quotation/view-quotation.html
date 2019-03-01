@@ -161,7 +161,7 @@
                                             <div class="col-md-4 ">
                                                 <button class="btn btn-primary" ng-if="(quotation.ticketId > 0)" ui-sref="view-ticket({id:quotation.ticketId,qid:quotation._id,status:2})">
                                                     <i class="material-icons">remove_red_eye</i>View Ticket</button>
-                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0) && ticketStatus != 'Closed'"  has-permission="Tickets:Close" ng-click="closeTicket(quotation.ticketId)"   onClick="$('#closeTicket').modal()" data-target="#myModal" >
+                                                <button class="btn btn-primary" ng-if="(quotation.ticketId > 0) && ticketStatus != 'Closed'"  has-permission="Ticket:Close" ng-click="closeTicket(quotation.ticketId)"   onClick="$('#closeTicket').modal()" data-target="#myModal" >
                                                     <i class="material-icons">remove_red_eye</i>Close Ticket</button>
                                                 <a ng-if="(quotation.ticketId > 0) && ticketStatus == 'Closed'" ng-class="{active: $state.includes('admin')}" class="btn btn-simple btn-info">Ticket# {{quotation.ticketId}} Closed </a>
                                             </div>
