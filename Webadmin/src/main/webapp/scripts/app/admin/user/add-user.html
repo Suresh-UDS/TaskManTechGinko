@@ -41,17 +41,18 @@
                                            <div class="col-md-4">
                                                <div class="form-group">
                                                    <label class="control-label">User Role <span class="red-star">*</span> </label>
-                                                   <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                   <span ng-show="userRolesSpin && !userRoles"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                   <span ng-show="!userRolesSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                    <!--<input type="text" class="form-control"-->
                                                            <!--ng-model="selectedRole"-->
                                                           <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
                                                           <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
                                                           <!--required >-->
-                                                   <select class="form-control " ng-model="selectedRole"  ng-options="role as (role.name | uppercase) for role in userRoles" required>
+                                                   <select class="form-control " ng-model="selectedRole" name="UserRole" ng-options="role as (role.name | uppercase) for role in userRoles" required>
                                                        <option value="">Select Roles...</option>
                                                    </select>
 
-                                                   <div ng-show="form.$submitted || form.UserRole.$touched">
+                                                   <div ng-show="form.$submitted || form.UserRole.$touched || form.UserRole.$dirty">
                                                        <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                               ng-show="form.UserRole.$error.required">User Role is
@@ -122,7 +123,7 @@
                                                           ng-model="user.firstName" ng-minlength="5" ng-maxlength="50"  ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
                                                           required>
 
-                                                   <div ng-show="form.$submitted || form.firstName.$touched">
+                                                   <div ng-show="form.$submitted || form.firstName.$touched || form.lastName.$dirty">
                                                        <div ng-show="form.firstname.$dirty || form.firstName.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                                               ng-show="form.firstName.$error.required"
@@ -151,7 +152,7 @@
                                                    <label class="control-label">Last Name</label>
                                                    <input type="text" class="form-control InputTxtCaps" name="lastName"
                                                           ng-model="user.lastName" ng-maxlength="50" ng-pattern="/^[A-Za-z0-9\s&-/]*$/">
-                                                   <div ng-show="form.$submitted || form.lastName.$touched">
+                                                   <div ng-show="form.$submitted || form.lastName.$touched || form.lastName.$dirty">
                                                        <div ng-show="form.lastName.$dirty || form.lastName.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                               ng-show="form.lastName.$error.maxlength"
@@ -169,11 +170,11 @@
                                            <div class="col-md-4">
                                                <div class="form-group">
                                                    <label class="control-label">Email <span class="red-star">*</span></label>
-                                                   <input type="email" class="form-control" name="email"
+                                                   <input type="email" class="form-control" name="email" value=""
                                                           ng-model="user.email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" ng-maxlength="50" required>
 
-                                                   <div ng-show="form.$submitted || form.email.$touched">
-                                                       <div ng-show="form.email.$invalid">
+                                                   <div ng-show="form.$submitted || form.email.$touched || form.email.$dirty">
+                                                       <div ng-show="form.email.$dirty || form.email.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                               ng-show="form.email.$error.required">Email is required.</p>
 
@@ -193,18 +194,19 @@
 
                                        </div>
                                        <div class="row">
-
-                                           <div class="col-md-4" ng-init="loadMapableEmployees()">
+                                          <!-- ng-init="loadMapableEmployees()"-->
+                                           <div class="col-md-4"  ng-init="loadEmployee()">
                                                <div class="form-group " >
                                                    <label class="control-label">Employee</label>
-                                                   <span class="form-control-feedback d-big-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                   <span ng-show="empSpin && !employees"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                   <span ng-show="!empSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
                                                    <div>
                                                        <!--<input type="text" class="form-control" name='employeeName'-->
                                                               <!--ng-model="selectedEmployee"-->
                                                               <!--uib-typeahead="emp as emp.name for emp in employees | filter:$viewValue | limitTo:5"-->
                                                               <!--autocomplete="off" />-->
 
-                                                       <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.name for emp in employees">
+                                                       <select class="form-control " ng-model="selectedEmployee"  ng-options="emp as emp.fullName +' '+ emp.lastName group by emp.designation for emp in employees | filter: {designation : '!' + 'Client'}">
                                                            <option value="">Select Employees...</option>
                                                        </select>
 
@@ -269,7 +271,7 @@
                                         <!--</span> Save-->
                                                    <!--</button>-->
 
-                                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" ng-click="conform('save')" ng-disabled="form.$invalid || btnDisable"
+                                                   <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"  ng-disabled="form.$invalid || btnDisable"
                                                            type="submit" id="form-button-save" >
                                                        <span class="btn-label"><i class="material-icons">check</i></span> Save
                                                        <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>

@@ -49,10 +49,12 @@ angular.module('timeSheetApp')
                         if(text == 'cancel')
                         {
                             $scope.cancel();
+                            return false;
                         }
                         else if(text == 'save')
                         {
                             $scope.saveParameterConfig();
+                            return false;
                         }
                     };
       //console.log($stateParams)
@@ -398,10 +400,10 @@ angular.module('timeSheetApp')
 
          $scope.cancel = function() {
                 $scope.selectedAssetType = "";
-                $scope.selectedParameter = {};
-                $scope.selectedParameterUOM = {};
+                $scope.selectedParameter = "";
+                $scope.selectedParameterUOM = "";
                 $scope.selectedRule = "";
-                $scope.selectedThreshold =null;
+                $scope.selectedThreshold ="";
                 $scope.validationRequired.value = false;
                 $scope.consumptionMonitoringRequired.value = false;
                 $scope.alertRequired.value = false;
