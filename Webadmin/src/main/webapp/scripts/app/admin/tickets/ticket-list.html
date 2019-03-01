@@ -28,7 +28,7 @@
 
         </div>
         <div class="col-md-6 txt-align-rgt">
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="create-ticket"  has-permission="Tickets:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="create-ticket"  has-permission="Ticket:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
@@ -223,16 +223,16 @@
                                         <!-- <a ng-class="{active: $state.includes('admin')}" ui-sref="view-ticket({ id: ticket.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a> -->
                                         <a title="View" ng-class="{active: $state.includes('admin')}"  ng-click="viewTicket(ticket.id)" data-toggle="modal" data-target="#RightModal-view" class="btn btn-simple btn-info"><i class="material-icons">remove_red_eye</i></a>
 
-                                        <a  ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Edit" title="Edit" ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a  ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Ticket:Edit" title="Edit" ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" has-permission="Jobs:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
+                                        <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" has-permission="Job:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
                                         <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && !ticket.quotationId)" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
 
-                                        <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" has-permission="Jobs:View" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
+                                        <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" has-permission="Job:View" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
                                         <a ng-if="(ticket.quotationId)" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:View" ui-sref="view-quotation({id : ticket.quotationId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Quotation</a>
 
-                                        <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Close"  ng-click="closeTicket(ticket.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
-                                        <a ng-if="ticket.status == 'Closed'"  has-permission="Tickets:Reopen"  class="btn btn-simple btn-info"  ng-click="reopenTicket(ticket.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal">Reopen ticket</a>
+                                        <a ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Ticket:Close"  ng-click="closeTicket(ticket.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"   class="btn btn-simple btn-info">close ticket</a>
+                                        <a ng-if="ticket.status == 'Closed'"  has-permission="Ticket:Reopen"  class="btn btn-simple btn-info"  ng-click="reopenTicket(ticket.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal">Reopen ticket</a>
 
                                     </div>
 

@@ -223,11 +223,11 @@
                                     ng-click="back('cancel')" id="cancel-button">
                                 <i class=""></i> Back
                             </button>
-                            <button class="btn btn-info" type="button" ng-if="(tickets.status != 'Closed')"ng-class="{active: $state.includes('admin')}" has-permission="Tickets:Close"   ng-click="closeTicket(tickets.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"
+                            <button class="btn btn-info" type="button" ng-if="(tickets.status != 'Closed')"ng-class="{active: $state.includes('admin')}" has-permission="Ticket:Close"   ng-click="closeTicket(tickets.id)"   onClick="$('#closeTicket').modal()" data-target="#myModal"
                                      >
                                 <i class=""></i> close ticket
                             </button>
-                            <button class="btn btn-sucess" type="button" has-permission="Tickets:Reopen" ng-if="tickets.status == 'Closed'"  ng-click="reopenTicket(tickets.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal"
+                            <button class="btn btn-sucess" type="button" has-permission="Ticket:Reopen" ng-if="tickets.status == 'Closed'"  ng-click="reopenTicket(tickets.id)"   onClick="$('#reopenModalNew').modal()" data-target="#myModal"
                                      >
                                 <i class=""></i> Reopen ticket
                             </button>
