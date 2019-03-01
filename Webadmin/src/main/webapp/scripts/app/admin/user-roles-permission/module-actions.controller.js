@@ -76,23 +76,28 @@ angular.module('timeSheetApp')
 			$scope.selectedActions = [];
 			$scope.moduleActions = {};
 			$scope.loadModuleActions();
+            $scope.showNotifications('top','center','success','Module Actions Created Successfully');
 			$location.path('/app-module-actions');
 		}).catch(function (response) {
 			$scope.success = null;
 			console.log(response.data);
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                $scope.showNotifications('top','center','danger', 'Module actions already exists!.. Please choose another one');
 				$scope.errorModuleActionExists = true;
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
+                $scope.showNotifications('top','center','danger', 'Module actions Not Saved!.. For insufficient data.');
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
 			} else {
 				$scope.error = 'ERROR';
+                $scope.showNotifications('top','center','danger', 'Module actions Not Saved!.. Please try again later.');
 			}
 		});
 	};
 
 	$scope.cancelModuleAction = function () {
 		$scope.selectedActions = [];
+		$scope.isEdit = false;
 	};
 
 	$scope.loadActions = function() {
@@ -112,7 +117,7 @@ angular.module('timeSheetApp')
 	}
 
 
-
+    $scope.isEdit = false;
 	$scope.loadModuleAction = function(id) {
 		console.log('loadModuleAction -' + id);
 		$scope.loadingStart();
@@ -124,7 +129,11 @@ angular.module('timeSheetApp')
 				$scope.selectedActions.push(data.moduleActions[i]);
 			}
 
-		});
+            $scope.isEdit = true;
+
+		}).catch(function () {
+            $scope.isEdit = false;
+        });
 
 		$scope.initLoad();
 
@@ -139,33 +148,44 @@ angular.module('timeSheetApp')
 			$scope.selectedActions = [];
 			$scope.moduleActions = {};
 			$scope.loadModuleActions();
+            $scope.showNotifications('top','center','success','Module Actions updated Successfully');
 			$location.path('/user-roles');
 		}).catch(function (response) {
 			$scope.success = null;
 			console.log('Error - '+ response.data);
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                $scope.showNotifications('top','center','danger', 'Module actions already exists!.. Please choose another one');
 				$scope.errorModuleActionExists = true;
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
+                $scope.showNotifications('top','center','danger', 'Module actions Not Updated!.. For insufficient data.');
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
 			} else {
 				$scope.error = 'ERROR';
+                $scope.showNotifications('top','center','danger', 'Module actions Not Updated!.. Please try again later.');
 			}
 		});
 	};
 
-	$scope.deleteConfirm = function (user){
+	$scope.deleteConfirm = function (moduleAction){
 		console.log('...>>>delete confirm<<<');
 		$scope.confirmModuleAction = moduleAction;
-		console.log(moduleAction.id);
+		console.log(moduleAction);
 	}
 
 	$scope.deleteModuleAction = function () {
-		console.log("user>>>>",+$scope.confirmModuleAction);
+	    $('#deleteModal').modal('hide');
+		console.log("Module actions>>>>",+$scope.confirmModuleAction);
 //		$scope.user = user;
-		ModuleActionComponent.deleteModuleAction($scope.confirmModuleAction);
-		$scope.success = 'OK';
-		$state.reload();
+		ModuleActionComponent.deleteModuleAction($scope.confirmModuleAction).then(function () {
+            alert($scope.confirmModuleAction);
+            $scope.success = 'OK';
+            $scope.showNotifications('top','center','success','Module Actions Deleted Successfully..!!');
+            $state.search();
+        }).catch(function () {
+            $scope.showNotifications('top','center','danger','Module Actions Unable to Delete..!!');
+        });
+
 	};
 
 
