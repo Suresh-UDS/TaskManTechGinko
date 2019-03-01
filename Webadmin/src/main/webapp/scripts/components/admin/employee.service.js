@@ -270,6 +270,21 @@ angular.module('timeSheetApp')
                 })
             },
 
+            assignJobsAndMarkLeft: function(employee, reliever,fromDate){
+
+                var data= {
+                    employeeId:employee.id,
+                    employeeEmpId: employee.empId,
+                    relieverEmpId:reliever.empId,
+                    relieverId: reliever.id,
+                    relievedFromDate:fromDate
+                }
+                return $http.post('api/employee/assignJobsAndMarkLeft',data).then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+
             findAllDesginations: function () {
                 return $http.get('api/designation').then(function (response) {
                     console.log("Designation");

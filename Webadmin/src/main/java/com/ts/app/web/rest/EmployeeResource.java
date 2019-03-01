@@ -592,12 +592,13 @@ public class EmployeeResource {
 
         log.info("Inside assign jobs and mark left Reliever" + reliever.getEmployeeId() + " , "+reliever.getRelieverId());
 
-        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
-        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        EmployeeDTO selectedEmployee = employeeService.findOne(reliever.getEmployeeId());
+        EmployeeDTO selectedReliever = employeeService.findOne(reliever.getRelieverId());
+        log.debug("Employee details in assign jobs and mark left"+selectedEmployee);
         selectedEmployee.setLeft(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
-            jobService.deleteJobsForEmployee(selectedEmployee,reliever.getRelievedFromDate());
+            jobService.assignJobsForDifferentEmployee(selectedEmployee,selectedReliever,reliever.getRelievedFromDate());
         }catch(Exception e) {
             throw new TimesheetException(e, selectedEmployee);
         }

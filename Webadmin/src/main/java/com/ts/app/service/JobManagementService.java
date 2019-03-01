@@ -2070,26 +2070,80 @@ public class JobManagementService extends AbstractService {
         Employee relieverDetails = mapperUtil.toEntity(reliever,Employee.class);
         for(Job job: allJobsList){
             JobDTO jobDTO = mapperUtil.toModel(job,JobDTO.class);
-            jobDTO.setEmployeeId(relieverDetails.getId());
-            JobDTO editedJob = updateJob(jobDTO, SecurityUtils.getCurrentUserId());
-            log.debug("Edited job details - "+editedJob.getEmployeeId());
-            log.debug("Edited job details - "+editedJob.getId());
+
+            log.debug("Job details in assign employee and mark left - job service - "+jobDTO.getId());
+
+            if(jobDTO.getParentJobId()>0){
+                log.debug("Parent job found while updating employee to mark left - "+jobDTO.getParentJobId());
+                List<SchedulerConfig> parentJobConfig = schedulerConfigRepository.findJobSchedule(jobDTO.getParentJobId());
+                for(SchedulerConfig schedulerConfig: parentJobConfig){
+                    log.debug("Scheduler config for parent job - "+schedulerConfig.getId());
+                    schedulerConfigRepository.delete(schedulerConfig.getId());
+                }
+
+                Job oldParentJob = jobRepository.findOne(jobDTO.getParentJobId());
+                oldParentJob.setEmployee(relieverDetails);
+                Job parentJob = jobRepository.save(oldParentJob);
+                log.debug("Updated employee details for parentJob - "+parentJob.getEmployee().getName());
+                JobDTO parentJobDTO = mapperUtil.toModel(parentJob,JobDTO.class);
+                SchedulerConfigDTO schConfDto = new SchedulerConfigDTO();
+                schConfDto.setSchedule(parentJobDTO.getSchedule());
+                schConfDto.setType("CREATE_JOB");
+                StringBuffer data = new StringBuffer();
+                data.append("title="+parentJobDTO.getTitle());
+                data.append("&description="+parentJobDTO.getDescription());
+                data.append("&siteId="+parentJobDTO.getSiteId());
+                data.append("&empId="+parentJobDTO.getEmployeeId());
+                data.append("&plannedStartTime="+parentJobDTO.getPlannedStartTime());
+                data.append("&plannedEndTime="+parentJobDTO.getPlannedEndTime());
+                data.append("&plannedHours="+parentJobDTO.getPlannedHours());
+                data.append("&location="+parentJobDTO.getLocationId());
+                data.append("&frequency="+ (StringUtils.isEmpty(parentJobDTO.getFrequency()) ? "" : parentJobDTO.getFrequency()));
+                data.append("&duration="+(StringUtils.isEmpty(parentJobDTO.getDuration()) ? "1" : parentJobDTO.getDuration()));
+                schConfDto.setData(data.toString());
+                schConfDto.setStartDate(parentJobDTO.getPlannedStartTime());
+                schConfDto.setEndDate(parentJobDTO.getPlannedEndTime());
+                schConfDto.setScheduleEndDate(parentJobDTO.getScheduleEndDate());
+                schConfDto.setScheduleDailyExcludeWeekend(parentJobDTO.isScheduleDailyExcludeWeekend());
+                schConfDto.setScheduleWeeklySunday(parentJobDTO.isScheduleWeeklySunday());
+                schConfDto.setScheduleWeeklyMonday(parentJobDTO.isScheduleWeeklyMonday());
+                schConfDto.setScheduleWeeklyTuesday(parentJobDTO.isScheduleWeeklyTuesday());
+                schConfDto.setScheduleWeeklyWednesday(parentJobDTO.isScheduleWeeklyWednesday());
+                schConfDto.setScheduleWeeklyThursday(parentJobDTO.isScheduleWeeklyThursday());
+                schConfDto.setScheduleWeeklyFriday(parentJobDTO.isScheduleWeeklyFriday());
+                schConfDto.setScheduleWeeklySaturday(parentJobDTO.isScheduleWeeklySaturday());
+
+                schedulerService.save(schConfDto,parentJob);
+            }else{
+                job.setEmployee(relieverDetails);
+                Job updateJobDetails = jobRepository.save(job);
+                log.debug("Update job details - "+updateJobDetails.getId()+ " - "+updateJobDetails.getEmployee().getName());
+            }
         }
 
-        List<Ticket> allTicketList = new ArrayList<Ticket>();
-
-        ZonedDateTime startDate = ZonedDateTime.ofInstant(checkInDateFrom.toInstant(), ZoneId.systemDefault());
-
-        allTicketList = ticketRepository.findByEmployeeAndStartDate(employee.getId());
-
-        for (Ticket ticket: allTicketList){
-            ticket.setEmployee(relieverDetails);
-            Ticket editedTicket = ticketRepository.save(ticket);
-            log.debug("Edited ticket details - "+ticket.getEmployee().getId());
-            log.debug("Edited ticket details - "+ticket.getId());
+        List<Ticket> ticketList = ticketRepository.findEmployeeUnClosedTickets(employee.getId());
+        log.debug("Tickets found - "+ticketList.size());
+        for (Ticket ticket:ticketList){
+            log.debug("Ticket found - "+ticket.getId());
+            TicketDTO ticketDTO = mapperUtil.toModel(ticket, TicketDTO.class);
+            if(ticketDTO.getJobId()>0){
+                Job job = jobRepository.findOne(ticketDTO.getJobId());
+                job.setEmployee(relieverDetails);
+                Job updateJobDetails = jobRepository.save(job);
+                log.debug("Updated job details of ticket - "+updateJobDetails.getId()+ " - "+updateJobDetails.getEmployee().getName());
+                ticket.setAssignedTo(relieverDetails);
+                Ticket updatedTicketDetails = ticketRepository.save(ticket);
+                log.debug("Updated ticket details - "+updatedTicketDetails.getId()+ " - "+updatedTicketDetails.getEmployee().getName());
+            }else{
+                ticket.setAssignedTo(relieverDetails);
+                Ticket updatedTicketDetails = ticketRepository.save(ticket);
+                log.debug("Updated ticket details - "+updatedTicketDetails.getId()+ " - "+updatedTicketDetails.getEmployee().getName());
+            }
         }
+
 
     }
+
 
     public void deleteJobsForEmployee(EmployeeDTO employee, Date fromDate){
 

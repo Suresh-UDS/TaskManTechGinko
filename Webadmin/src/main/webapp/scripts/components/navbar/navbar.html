@@ -336,25 +336,25 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                                 <p>User</p>
                             </a>
                         </li>
-                        <li has-authority="ROLE-ADMIN" ui-sref-active="active" has-permission="UserGroup:List">
+                        <li has-authority="ROLE_ADMIN" ui-sref-active="active" has-permission="UserGroup:List">
                             <a ui-sref="userGroups" ng-click="dbFilterBtn();">
                                 <i class="material-icons">group</i>
                                 <p>User Group</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-authority="ROLE-ADMIN" has-permission="UserRole:List"  >
+                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" has-permission="UserRole:List"  >
                             <a ui-sref="user-roles" ng-click="dbFilterBtn();">
                                 <i class="material-icons">group</i>
                                 <p>User Roles</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-authority="ROLE-DEVELOPER"  has-permission="ModuleActions:List" >
+                        <li ui-sref-active="active" has-authority="ROLE_ADMIN"  has-permission="ModuleActions:List" >
                             <a ui-sref="app-module-actions" ng-click="dbFilterBtn();">
                                 <i class="material-icons">view_module</i>
                                 <p>App Module & Actions</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-permission="RolePermission:List"  >
+                        <li ui-sref-active="active" has-authority="ROLE_ADMIN" has-permission="RolePermission:List"  >
                             <a ui-sref="role-permission" ng-click="dbFilterBtn();">
                                 <i class="material-icons">how_to_reg</i>
                                 <p>Role Permission</p>
@@ -396,12 +396,12 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
 
 
 
-            <li ui-sref-active="active" has-permission="RateCard:List">
-                <a ui-sref="rateCardList" ng-click="dbFilterBtn();">
-                    <i class="material-icons">assignment</i>
-                    <p>Rate Card </p>
-                </a>
-            </li>
+            <!--<li ui-sref-active="active" has-permission="RateCard:List">-->
+                <!--<a ui-sref="rateCardList" ng-click="dbFilterBtn();">-->
+                    <!--<i class="material-icons">assignment</i>-->
+                    <!--<p>Rate Card </p>-->
+                <!--</a>-->
+            <!--</li>-->
 
 
 

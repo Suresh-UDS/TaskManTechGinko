@@ -1822,7 +1822,7 @@ public class    EmployeeService extends AbstractService {
 
     public List<Ticket> getPendingTickets(long employeeId){
         Employee employee = employeeRepository.findOne(employeeId);
-        List<Ticket> tickets = ticketRepository.findByEmployeeAndStartDate(employee.getId());
+        List<Ticket> tickets = ticketRepository.findEmployeeUnClosedTickets(employee.getId());
         return tickets;
     }
 }
