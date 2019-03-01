@@ -200,8 +200,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Employee <span class="red-star">*</span> </label>
-                                        <span class="form-control-feedback d-md-arrow-icon" ng-hide="siteAssetList"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="siteAssetList"><i class="ld ld-ring ld-spin" ></i></span>
+                                        <span class="form-control-feedback d-md-arrow-icon" ng-show="!empSpin"><i class="material-icons">keyboard_arrow_down</i></span>
+                                        <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="empSpin && !employees"><i class="ld ld-ring ld-spin" ></i></span>
                                         <select
 
                                             name="employee"

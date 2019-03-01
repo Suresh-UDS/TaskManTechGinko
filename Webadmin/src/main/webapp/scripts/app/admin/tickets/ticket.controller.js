@@ -432,6 +432,7 @@ angular.module('timeSheetApp')
 					$scope.selectedSite = $scope.siteObj;
 					$scope.searchCriteria.siteId = $scope.siteObj.id;
 					$scope.searchCriteria.list = true;
+                    $scope.employees = "";
 					EmployeeComponent.search($scope.searchCriteria).then(function (data) {
 						$scope.selectedEmployee = null;
 						$scope.employees = data.transactions;
@@ -628,6 +629,7 @@ angular.module('timeSheetApp')
 			}
 
 			//console.log('Employee Load',$scope.searchCriteria);
+            $scope.employees = "";
 			EmployeeComponent.search($scope.searchCriteria).then(function (data) {
 				$scope.selectedEmployee = null;
 				$scope.employees = data.transactions;
@@ -668,6 +670,7 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.list = true;
 			$scope.searchCriteria.module = 'Ticket';
 			$scope.searchCriteria.action = 'Add';
+            $scope.employees = "";
 			EmployeeComponent.search($scope.searchCriteria).then(function (data) {
 				//$scope.selectedEmployee = null;
 				$scope.employees = data.transactions;
@@ -685,6 +688,7 @@ angular.module('timeSheetApp')
 		$scope.employeeFilterDisable = true;
 		$scope.empLists[0] = $scope.allEmp;
 		$scope.searchCriteria.list = true;
+        $scope.employees = "";
 		if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id != 0) {
 			var empSearchCriteria = {siteId:$scope.sitesListOne.selected.id,list :true};
 			EmployeeComponent.search(empSearchCriteria).then(function (data) {
@@ -735,6 +739,7 @@ angular.module('timeSheetApp')
 			$scope.siteAssetList = true;
 
 			$scope.searchCriteria.siteId = $scope.selectedSite.id;
+            $scope.assets ="";
 			AssetComponent.search($scope.searchCriteria).then(function(data) {
 				//console.log('Asset based tickets -- ',data);
 				$scope.assets = data.transactions;
@@ -812,6 +817,7 @@ angular.module('timeSheetApp')
 						if($scope.tickets.siteId){
 							$scope.siteAssetList = true;
 							var astObjt = {siteId:$scope.tickets.siteId, list:true};
+                            $scope.assets ="";
 							AssetComponent.search(astObjt).then(function(data) {
 								console.log('Asset based tickets -- ',data);
 								$scope.assets = data.transactions;
