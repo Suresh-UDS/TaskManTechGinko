@@ -180,7 +180,7 @@
             <!-- Main panel end -->
             <div ng-show="searchFilterCriteria.projectId || searchFilterCriteria.siteId">
                 <!-- Job panel start -->
-                <div class="panel panel-default" has-permission="DashboardJob:View">
+                <div class="panel panel-default" has-permission="Job:List">
                     <div class="panel-heading" role="tab" id="headingTwo">
                         <a class="collapsed" role="button" data-toggle="collapse"
                            data-parent="#accordion" data-target="#collapseTwo"
@@ -275,7 +275,7 @@
                 <!-- Job panel end -->
                 <!-- Attendance panel start -->
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" has-permission="DashboardAttendance:View" id="headingThree">
+                    <div class="panel-heading" role="tab" has-permission="Attendance:List" id="headingThree">
                         <a class="collapsed" role="button" data-toggle="collapse"
                            data-parent="#accordion" data-target="#collapseThree"
                            aria-expanded="false" aria-controls="collapseTwo">
@@ -290,7 +290,7 @@
                         <div class="panel-body">
                             <div class="row">
 
-                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                <div class="col-md-3 col-lg-3 col-sm-4" has-permission="Employee:List">
                                     <a ui-sref="employees" ng-click="dbdEmpFilter('');">
                                         <div class="card blueBg cardWithbg">
                                             <div class="card-header">
@@ -379,7 +379,7 @@
                 <!-- Attendance panel end -->
                 <!-- Tickets panel start -->
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" has-permission="DashboardTicket:View" id="headingFour">
+                    <div class="panel-heading" role="tab" has-permission="Ticket:List" id="headingFour">
                         <a class="collapsed" role="button" data-toggle="collapse"
                            data-parent="#accordion" data-target="#collapseFour"
                            aria-expanded="false" aria-controls="collapseTwo">
@@ -495,7 +495,7 @@
                 <!-- Tickets panel end -->
                 <!-- Quotation panel start -->
                 <div class="panel panel-default" >
-                    <div class="panel-heading" role="tab" has-permission="DashboardQuotation:View" id="headingFive">
+                    <div class="panel-heading" role="tab" has-permission="Quotation:List" id="headingFive">
                         <a class="collapsed" role="button" data-toggle="collapse"
                            data-parent="#accordion" data-target="#collapseFive"
                            aria-expanded="false" aria-controls="collapseFive">
