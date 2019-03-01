@@ -2160,8 +2160,7 @@ public class JobManagementService extends AbstractService {
         if(CollectionUtils.isNotEmpty(jobList)) {
         		for(Job job : jobList) {
         		    log.debug("Job id - "+job.getId());
-        			job.getChecklistItems().clear();
-        			if(job.isScheduled()){
+        			if(job.isScheduled() && job.getParentJob().getId()>0){
                         List<SchedulerConfig> schedulerConfiglist = schedulerConfigRepository.findJobSchedule(job.getParentJob().getId());
                         if(schedulerConfiglist.size()>0){
                             for (SchedulerConfig schedulerConfig:schedulerConfiglist){
@@ -2171,8 +2170,16 @@ public class JobManagementService extends AbstractService {
                             }
                         }
                     }
-        			jobRepository.saveAndFlush(job);
-        			jobRepository.delete(job.getId());
+
+                    if(job != null && !StringUtils.isEmpty(job.getSchedule()) && !job.getSchedule().equalsIgnoreCase("ONCE")) {
+        			    job.setActive(Job.ACTIVE_NO);
+        			    jobRepository.save(job);
+                    }else{
+                        job.getChecklistItems().clear();
+                        jobRepository.saveAndFlush(job);
+                        jobRepository.delete(job.getId());
+                    }
+
         		}
         }
 //        jobRepository.deleteInBatch(jobList);

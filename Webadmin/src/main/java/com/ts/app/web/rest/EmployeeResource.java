@@ -543,8 +543,8 @@ public class EmployeeResource {
 
         log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
 
-        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
-        EmployeeDTO selectedReliever = employeeService.findByEmpId(reliever.getRelieverEmpId());
+        EmployeeDTO selectedEmployee = employeeService.findOne(reliever.getEmployeeId());
+        EmployeeDTO selectedReliever = employeeService.findOne(reliever.getRelieverId());
         selectedEmployee.setRelieved(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
@@ -560,7 +560,7 @@ public class EmployeeResource {
 
         log.info("Inside assign Reliever" + reliever.getEmployeeId() + " , "+ reliever.getRelieverId());
 
-        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedEmployee = employeeService.findOne(reliever.getEmployeeId());
         selectedEmployee.setRelieved(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
@@ -576,7 +576,7 @@ public class EmployeeResource {
 
         log.info("Inside mark left Reliever" + reliever.getEmployeeId() + " , "+reliever.getEmployeeEmpId());
 
-        EmployeeDTO selectedEmployee = employeeService.findByEmpId(reliever.getEmployeeEmpId());
+        EmployeeDTO selectedEmployee = employeeService.findOne(reliever.getEmployeeId());
         selectedEmployee.setLeft(true);
         try {
             employeeService.updateEmployee(selectedEmployee,false);
