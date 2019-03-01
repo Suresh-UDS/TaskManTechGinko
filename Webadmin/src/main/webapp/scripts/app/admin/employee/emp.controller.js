@@ -1297,7 +1297,7 @@ angular.module('timeSheetApp')
             $scope.loadingStart();
 			EmployeeComponent.updateEmployee(employee).then(function(data){
 			    console.log('reliever emp',$scope.selectAssignEmp);
-				EmployeeComponent.assignJobsAndTransferEmployee(employee,$scope.employee.selectAssignEmp,new Date());
+				EmployeeComponent.assignJobsAndMarkLeft(employee,$scope.employee.selectAssignEmp,new Date());
 				//console.log("Assign jobs to another employee and transfer this employee");
 				$scope.showNotifications('top','center','success','Employee Successfully Marked Left');
 				$scope.search();
