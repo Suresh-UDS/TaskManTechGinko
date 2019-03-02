@@ -123,8 +123,7 @@ export class newEmpFamilyAndAcademic implements OnInit {
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('educationQualification')) {
-        console.log('datta ===');
-        console.log(localStoragedData);
+        console.log('fam_datta === '+ JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));        
         this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
         // for (let list in localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']) {
         //   this.onboardingFamilyAcademicForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'][list]);

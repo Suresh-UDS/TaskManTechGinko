@@ -127,6 +127,10 @@ export class onboardingNewEmployee {
 
     //object assign 
     
+    this.storeFormData(this.allFormValues).then(data => {
+      console.log('newEMP_resolve ' + data);
+    })
+  
     const thisScope = this;
     const confirmAlert = this.alertCtrl.create({
       title: 'OnBoarding Submit',
@@ -192,8 +196,8 @@ export class onboardingNewEmployee {
               localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
               localStoragedData['actionRequired'].splice(this.storedIndex, 1);
               //    alert(JSON.stringify(res));
-              console.log("res =======" + JSON.stringify(res));
 
+              console.log("res =======" + JSON.stringify(res));
               console.log("res id=======" + res['id']);
 
               this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
@@ -248,7 +252,7 @@ export class onboardingNewEmployee {
 
     let promise = new Promise((resolve, reject) => {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
-        console.log('get stored data' + localStoragedData);
+        console.log('get_stored_data' +JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         localStoragedData['actionRequired'][this.storedIndex] = localStoragedData['actionRequired'][this.storedIndex] || {};
         //obj[storeKeyName] = data
         // for(let key in data) {

@@ -194,6 +194,7 @@ export class newEmpContactDetails implements OnInit {
     if (this.formStatusValues['status'] && this.addressProofImage) {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
       let contactNo = JSON.stringify(this.formStatusValues['data']['emergencyConatctNo']);
+      console.log('EmpCont - '+ contactNo);
       //this.formStatusValues['data']['emergencyConatctNo'] = [];
       this.formStatusValues['data']['emergencyConatctNo'] = [contactNo]
       //this.formStatusValues['data']['emergencyConatctNo'];
