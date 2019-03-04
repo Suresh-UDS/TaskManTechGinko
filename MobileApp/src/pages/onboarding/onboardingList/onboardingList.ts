@@ -84,10 +84,11 @@ export class onboardingExistEmployee implements OnInit {
           let objectsKeys;
           let objectsValues;
 
-          console.log('onboard EMP ' + res.length);
+          // console.log('onboard_EMP_projectId ' + res[0]['customer']['project']['projectId']);
+
           for (var i = 0; i < res.length; i++) {
             if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];            
               this.storage.set('OnBoardingData', localStoragedData);
             }
           }
@@ -119,10 +120,11 @@ export class onboardingExistEmployee implements OnInit {
         console.log(err);
       })
 
-      this.component.closeLoader();
+      // this.component.closeLoader();
   }
   addNewEmpyoee() {
     let obj = {
+      projectId: this.wbsId ,
       index: this.actionRequiredEmp.length,
       action: 'add'
     }
@@ -133,6 +135,7 @@ export class onboardingExistEmployee implements OnInit {
   updateEmployeeDetails(index) {
     console.log('index = ' + index);
     let obj = {
+     
       index: index,
       action: 'update'
     }

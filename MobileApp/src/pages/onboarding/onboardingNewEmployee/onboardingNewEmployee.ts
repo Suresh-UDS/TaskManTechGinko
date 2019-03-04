@@ -44,13 +44,23 @@ export class onboardingNewEmployee {
     private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams,
     private navCtrl: NavController) {
 
-
+      console.log('projectId TYPESc' );
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      console.log('projectId TYPESc ' + data['projectId']);
       this.storage.get('OnBoardingData').then((localStoragedData) => {
-        if (localStoragedData['actionRequired'][this.storedIndex]) {
+        console.log('projectId TYPES123 ' +JSON.stringify(data));
+        
+         if (localStoragedData['actionRequired'][this.storedIndex]) {
+          // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
+            console.log('no projectId');
+    
+          // }
           this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);
+        }else{
+          Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+          this.storage.set('OnBoardingData', localStoragedData);            
         }
       });
     })
@@ -74,6 +84,11 @@ export class onboardingNewEmployee {
     { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false }
   ];
   ionViewDidLoad() {
+
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+      console.log('projectId TYPES12345 ' +JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+    });
+
     this.storage.get('PageStatus').then(data => {
       let dataAll;
       console.log('key_userdt1 ' + data);
@@ -126,11 +141,11 @@ export class onboardingNewEmployee {
   formFinalSubmit() {
 
     //object assign 
-    
+
     this.storeFormData(this.allFormValues).then(data => {
       console.log('newEMP_resolve ' + data);
     })
-  
+
     const thisScope = this;
     const confirmAlert = this.alertCtrl.create({
       title: 'OnBoarding Submit',
@@ -252,7 +267,7 @@ export class onboardingNewEmployee {
 
     let promise = new Promise((resolve, reject) => {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
-        console.log('get_stored_data' +JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+        console.log('get_stored_data' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         localStoragedData['actionRequired'][this.storedIndex] = localStoragedData['actionRequired'][this.storedIndex] || {};
         //obj[storeKeyName] = data
         // for(let key in data) {

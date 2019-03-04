@@ -99,6 +99,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           let obj = {
             branchName: '',
             project: [{}]
+            //gopi cg
           }
           fromStatusValues['data'] = obj;
         }
