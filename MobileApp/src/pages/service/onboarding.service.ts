@@ -103,6 +103,7 @@ export class OnboardingService {
             this.leaddetails = response.json();
             for (var i = 0; i < this.leaddetails.length; i++) {
                 console.log('res init2' + this.leaddetails[i].projectId); //here you'll get sendernewcall value for all entry
+                 window.localStorage.setItem('wbsId', this.leaddetails[i].wbsId);
             }
             console.log('resp_init ' + this.leaddetails[0].projectId);
             return this.leaddetails[0].projectId;

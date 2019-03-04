@@ -44,23 +44,25 @@ export class onboardingNewEmployee {
     private componentFactoryResolver: ComponentFactoryResolver, public alertCtrl: AlertController, private navParams: NavParams,
     private navCtrl: NavController) {
 
-      console.log('projectId TYPESc' );
+    console.log('projectId TYPESc');
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
       console.log('projectId TYPESc ' + data['projectId']);
+
+
       this.storage.get('OnBoardingData').then((localStoragedData) => {
-        console.log('projectId TYPES123 ' +JSON.stringify(data));
-        
-         if (localStoragedData['actionRequired'][this.storedIndex]) {
+        console.log('projectId TYPES123 ' + JSON.stringify(data));
+
+        if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
-            console.log('no projectId');
-    
+          console.log('no projectId');
+
           // }
           this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);
-        }else{
+        } else {
           Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
-          this.storage.set('OnBoardingData', localStoragedData);            
+          this.storage.set('OnBoardingData', localStoragedData);
         }
       });
     })
@@ -86,7 +88,7 @@ export class onboardingNewEmployee {
   ionViewDidLoad() {
 
     this.storage.get('OnBoardingData').then((localStoragedData) => {
-      console.log('projectId TYPES12345 ' +JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+      console.log('projectId TYPES12345 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
     });
 
     this.storage.get('PageStatus').then(data => {
@@ -141,7 +143,6 @@ export class onboardingNewEmployee {
   formFinalSubmit() {
 
     //object assign 
-
     this.storeFormData(this.allFormValues).then(data => {
       console.log('newEMP_resolve ' + data);
     })
@@ -258,12 +259,17 @@ export class onboardingNewEmployee {
     });
     return promise;
   }
+
   storeFormData(data) {
     //let storeKeyName = this.wizardObj[this.currentIndex]['key'];
     // alert(storeKeyName);
     //console.log(data);
     //let obj: any = {};
     //console.log('store fn start');
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
+      console.log('projectId TYPES_SUBMIT ' + data['projectId']);
+    });
 
     let promise = new Promise((resolve, reject) => {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
@@ -274,6 +280,22 @@ export class onboardingNewEmployee {
         //   localStoragedData['actionRequired'][this.storedIndex][key] = data[key];
         // }
         data['isSync'] = false;
+        // if (!localStoragedData['actionrequired'][this.storedIndex].hasOwnProperty('customer')) {
+          data['customer'] = [{
+            project: [{
+              'projectId': window.localStorage.getItem('projectId'),
+              wbs: [
+                {
+                  'wbsId': window.localStorage.getItem('wbsId')
+                }
+              ]
+            }]
+          }];
+        // }
+        console.log('projectId SUBMIT ' + JSON.stringify(data));
+        // data.projectId2 = window.localStorage.getItem('projectId');
+
+        //  console.log('projectId SUBMIT2 ' + data.customer.project.projectId2);
         Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
         this.storage.set('OnBoardingData', localStoragedData);
         resolve('success');

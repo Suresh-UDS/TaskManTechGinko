@@ -43,15 +43,17 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
     this.onboardingKYCForm = this.fb.group({
       aadharNumber: ['', [Validators.required]],
-      bankDetails: this.fb.array([this.createBankDetails()]),    
+      bankDetails: this.fb.array([this.createBankDetails()]),
     });
 
     this.onboardingKYCForm.setValidators([this.validateNumberMaxLength()]);
 
 
     this.initialKycImage();
+
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      console.log('kyc_index' + this.storedIndex);
     });
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
@@ -61,19 +63,17 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     })
     this.onboardingKycSubscription = this.onboardingKYCForm.statusChanges.subscribe(status => {
       console.log(status);
-      console.log('KYCdataaa==' + JSON.stringify(this.onboardingKYCForm.value));
+      console.log('KYCdataaa== ' + JSON.stringify(this.onboardingKYCForm.value));
       if (status == 'VALID') {
         this.formStatusValues = {
           status: true,
           data: this.onboardingKYCForm.value
         }
-        //this.messageService.formDataMessage(fromStatusValues);
       } else {
         this.formStatusValues = {
           status: false,
           data: {}
         }
-        //this.messageService.formDataMessage(fromStatusValues);
       }
       this.sendValidationMessage();
     });
@@ -91,40 +91,6 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     }
   }
 
-  // getSelectedKyc(type) {
-  //   if (this.selectedKycData) {
-  //     this.userSelectedKYC.push({ type: type, imageFront: 'assets/imgs/placeholder.png', imageBack: 'assets/imgs/placeholder.png' });
-  //     this.selectedKycData = '';
-  //     this.validationCountKYCImgages = -1
-  //     this.sendValidationMessage();
-  //   }
-  // }
-  // deleteKycDetails(index) {
-  //   this.userSelectedKYC.splice(index, 1);
-  //   if (this.userSelectedKYC.length == 0) {
-  //     this.validationCountKYCImgages = -1
-  //     this.sendValidationMessage();
-  //   }
-  // }
-  // getImageData(imageContainer) {
-  //   const options: CameraOptions = {
-  //     quality: 80,
-  //     destinationType: this.camera.DestinationType.NATIVE_URI,
-  //     //encodingType: this.camera.EncodingType.JPEG,
-  //     mediaType: this.camera.MediaType.ALLMEDIA
-  //   };
-
-  //   this.camera.getPicture(options).then((imageData) => {
-  //     if (imageContainer == 'sign') {
-  //       this.employeeSignature = imageData;
-  //     } else {
-  //       this.employeeProfile = imageData;
-  //     }
-  //     this.sendValidationMessage();
-  //   })
-  // }
-
-
   presentActionSheet(imageSide) {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'choose image from',
@@ -139,7 +105,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         {
           text: 'Pick from Gallery',
           handler: () => {
-            this.getImageData(imageSide, 'album');      
+            this.getImageData(imageSide, 'album');
           }
         },
       ]
@@ -164,13 +130,12 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   }
 
   getImageData(imageSide, imageType) {
-
     var options: CameraOptions = {
       quality: 50,
       destinationType: this.camera.DestinationType.FILE_URI,
       mediaType: this.camera.MediaType.PICTURE,
       encodingType: this.camera.EncodingType.JPEG,
-      correctOrientation:true
+      correctOrientation: true
     };
     if (imageType == 'album') {
       // options.saveToPhotoAlbum = false
@@ -180,14 +145,6 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       console.log('capture--- ' + imageData);
       let imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
 
-      //  console.log('normalize url---'+ this.getFileUri(imageURI));
-      //then use the method reasDataURL  btw. var_picture is ur image variable
-      //var imageURI = path;
-      // if (imageType == 'album') {
-      // imageURI = 'file://' + imageData;
-      // } else {
-      //   imageURI = imageData;
-      // }
 
       this.filePath.resolveNativePath(imageURI)
         .then(imageURI => {
@@ -212,8 +169,6 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         .catch(err => console.log(err));
 
       //  imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
-
-
     })
   }
   createBankDetails(): FormGroup {
@@ -236,52 +191,11 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     };
   }
 
-  // getPassBook(value) {
-  //   if (value) {
-  //     this.bankFieldValidation = true;
-  //     if (this.bankPassbook !== 'assets/imgs/placeholder.png') {
-  //       this.bankPassbookValidation = true;
-  //       this.sendValidationMessage();
-  //     } else {
-  //       this.bankPassbookValidation = false;
-  //       this.sendValidationMessage();
-  //     }
-  //   } else {
-  //     this.bankFieldValidation = false;
-  //   }
-  // }
-  // getKYCImage(index, imageSide) {
-  //   this.validationCountKYCImgages = 0;
-  //   const options: CameraOptions = {
-  //     quality: 80,
-  //     destinationType: this.camera.DestinationType.NATIVE_URI,
-  //     //encodingType: this.camera.EncodingType.JPEG,
-  //     mediaType: this.camera.MediaType.ALLMEDIA
-  //   };
 
-  //   this.camera.getPicture(options).then((imageData) => {
-  //     if (imageSide == 'front') {
-  //       this.userSelectedKYC[index]['imageFront'] = imageData;
-  //     } else {
-  //       this.userSelectedKYC[index]['imageBack'] = imageData;
-  //     }
-  //     for (let list of this.userSelectedKYC) {
-  //       if (list['imageFront'] !== 'assets/imgs/placeholder.png' && list['imageBack'] !== 'assets/imgs/placeholder.png') {
 
-  //       } else {
-  //         this.validationCountKYCImgages = this.validationCountKYCImgages + 1;
-  //       }
-  //     }
-  //     if (this.validationCountKYCImgages == 0) {
-  //       this.sendValidationMessage();
-  //     } else {
-  //       this.sendValidationMessage();
-  //     }
-  //   })
-  // }
   sendValidationMessage() {
     if ((this.formStatusValues['status']) &&
-      // (this.userAllKYCData['aadharNumber'] !== null) &&
+    //(this.userAllKYCData['aadharNumber'] !== null) &&
       (this.userAllKYCData['aadharPhotoCopy'] !== null) &&
       (this.userAllKYCData['employeeSignature'] !== null) &&
       (this.userAllKYCData['profilePicture'] !== null) &&
@@ -289,31 +203,31 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       (this.userAllKYCData['fingerPrintLeft'] !== null) &&
       (this.userAllKYCData['prePrintedStatement'] !== null)) {
 
-     console.log(' kyc-data1 - '+ JSON.stringify(this.formStatusValues['data']));
-     Object.assign( this.formStatusValues['data'], this.userAllKYCData,);
-      
-     console.log(' kyc-data2 - '+ JSON.stringify(this.formStatusValues['data']));
+      console.log(' kyc-data1 - ' + JSON.stringify(this.formStatusValues['data']));
+      Object.assign(this.formStatusValues['data'], this.userAllKYCData);
+
+      console.log(' kyc-data2 - ' + JSON.stringify(this.formStatusValues['data']));
       // this.formStatusValues['data']['aadharNumber'] = aadharNumber;  
       // this.formStatusValues['data'] = this.onboardingKYCForm.value;
 
       this.messageService.formDataMessage(this.formStatusValues);
-
-      console.log(' status_kyc1 ' + this.userAllKYCData['aadharNumber'] + ' - ' + 
-      this.formStatusValues['data']['aadharPhotoCopy']  + ' - '+ this.formStatusValues['status']);
+      console.log(' status_kyc1 ' + this.userAllKYCData['aadharNumber'] + ' - ' +
+        this.formStatusValues['data']['aadharPhotoCopy'] + ' - ' + this.formStatusValues['status']);
       console.log(' status_kyc2 ' + this.userAllKYCData['fingerPrintLeft'] + ' - ' + this.formStatusValues['status']);
-
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });
     }
   }
 
-  launchApp(){
-     launcher.packageLaunch("uds.com.fingerprint");
+  launchApp() {
+    launcher.packageLaunch("uds.com.fingerprint");
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
+      console.log('kyc_storedIndex ' +this.storedIndex);
       if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('aadharNumber')) {
-        console.log('KYCdatta viewinit===' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+        console.log('KYCdatta all === ' + JSON.stringify(localStoragedData['actionRequired']));
+        console.log('KYCdatta viewinit === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         this.userAllKYCData['aadharPhotoCopy'] = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopy'];
         // this.userAllKYCData['aadharNumber'] = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
         this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];
@@ -323,8 +237,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.userAllKYCData['fingerPrintLeft'] = localStoragedData['actionRequired'][this.storedIndex]['fingerPrintLeft'];
 
         this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['aadharNumber']);
-        console.log('kyc=aadhaar'+this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value); 
+        console.log('kyc=aadhaar' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
         //this.onboardingKYCForm.patchValue();
+
         this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
         // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
         //   this.onboardingKYCForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);

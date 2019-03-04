@@ -97,11 +97,11 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
         }
         if(this.formActionStatus == 'add') {
           let obj = {
-            branchName: '',
-            project: [{}]
+            // branchName: '',
+            // project: [{}]
             //gopi cg
           }
-          fromStatusValues['data'] = obj;
+          // fromStatusValues['data'] = obj;
         }
         fromStatusValues['data']['identificationMark'] = [
           fromStatusValues['data']['identificationMark1'],
@@ -158,8 +158,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
          // var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'], 'DD-MM-YYYY').format('YYYY-MM-DD');
          // var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'], 'DD-MM-YYYY').format('YYYY-MM-DD');
 
-          this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']);
-          this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining']);
+         //this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']);
+         //this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining']);
 
           this.onboardingPersonalDetailsForm.controls['identificationMark1'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0]);
           this.onboardingPersonalDetailsForm.controls['identificationMark2'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);

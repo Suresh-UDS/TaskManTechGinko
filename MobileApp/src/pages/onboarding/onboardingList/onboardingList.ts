@@ -40,11 +40,11 @@ export class onboardingExistEmployee implements OnInit {
     this.storage.get('OnBoardingData').then((data) => {
       if (data) {
         this.actionRequiredEmp = data['actionRequired'];
-         this.completedEmp = data["completed"];
+        this.completedEmp = data["completed"];
         this.onSegmentChange();
         this.getPercentage();
-      } 
-        // this.component.closeLoader();
+      }
+      // this.component.closeLoader();
     })
   }
 
@@ -77,6 +77,7 @@ export class onboardingExistEmployee implements OnInit {
       console.log('res init in page ' + response);
 
       this.wbsId = response;
+      window.localStorage.setItem('projectId', this.wbsId);
 
 
       this.storage.get('OnBoardingData').then((localStoragedData) => {
@@ -88,7 +89,7 @@ export class onboardingExistEmployee implements OnInit {
 
           for (var i = 0; i < res.length; i++) {
             if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];            
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
               this.storage.set('OnBoardingData', localStoragedData);
             }
           }
@@ -120,11 +121,11 @@ export class onboardingExistEmployee implements OnInit {
         console.log(err);
       })
 
-      // this.component.closeLoader();
+    // this.component.closeLoader();
   }
   addNewEmpyoee() {
     let obj = {
-      projectId: this.wbsId ,
+      projectId: this.wbsId,
       index: this.actionRequiredEmp.length,
       action: 'add'
     }
@@ -135,7 +136,7 @@ export class onboardingExistEmployee implements OnInit {
   updateEmployeeDetails(index) {
     console.log('index = ' + index);
     let obj = {
-     
+
       index: index,
       action: 'update'
     }
@@ -186,9 +187,9 @@ export class onboardingExistEmployee implements OnInit {
       console.log(Math.floor(objectPercentage / 5));
     }
   }
-  findSavedDuplication(array, key) {
+  findSavedDuplication(empdt, key) {
     let count = 0;
-    for (let list of array) {
+    for (let list of empdt) {
       if (list['employeeCode'] == key) {
         count = count + 1;
       }

@@ -196,7 +196,7 @@ export class newEmpContactDetails implements OnInit {
       let contactNo = JSON.stringify(this.formStatusValues['data']['emergencyConatctNo']);
       console.log('EmpCont - '+ contactNo);
       //this.formStatusValues['data']['emergencyConatctNo'] = [];
-      this.formStatusValues['data']['emergencyConatctNo'] = [contactNo]
+     // this.formStatusValues['data']['emergencyConatctNo'] = [contactNo]
       //this.formStatusValues['data']['emergencyConatctNo'];
       this.messageService.formDataMessage(this.formStatusValues);
     } else {
@@ -219,7 +219,7 @@ export class newEmpContactDetails implements OnInit {
 
           this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
           this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
-          this.onboardingContactDetailsForm.controls['emergencyConatctNo'].setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
+          // this.onboardingContactDetailsForm.controls['emergencyConatctNo'].setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]['contactDetails']) {
           //   this.onboardingContactDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails'][list]);
           // }

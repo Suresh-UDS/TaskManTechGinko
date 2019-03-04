@@ -12,36 +12,14 @@
                         <input class="form-control" type="number" formControlName="emergencyConatctNo">
                     </div>
                 </div>
-                <!-- <div class="row form-group">
-                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngIf="pFrom.contactNumber.errors && pFrom.contactNumber.touched"
-                        class="error-msg">
-                        <span *ngIf="pFrom.contactNumber.errors.shouldMinLength">
-                            Invalid Mobile Format
-                        </span>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 form-group" *ngIf="pFrom.emergencyConatctNo.errors && pFrom.emergencyConatctNo.touched"
-                        class="error-msg">
-                        <span *ngIf="pFrom.emergencyConatctNo.errors.notToEquivalent">
-                            Contact no and Emergency no should not equal
-                        </span>
-                    </div>
-                </div> -->
+         
 
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <h3 class="headerText">Present Address</h3>
                     </div>
                 </div>
-                <!-- <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
-                        <label class="control-label">House No</label>
-                        <input class="form-control" type="text" name="houseno" required>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
-                        <label class="control-label">Street Name</label>
-                        <input class="form-control" type="text" name="streetname" required>
-                    </div>
-                </div> -->
+                
                 <div *ngFor="let list of onboardingContactDetailsForm.get('communicationAddress').controls; let i = index;"
                     formArrayName="communicationAddress">
                     <div [formGroupName]="i">
@@ -75,7 +53,7 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <h3 class="headerText">Permanent Address</h3>
                     </div>
-                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                   <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <span>Same as present</span>
                         <ion-checkbox checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
                     </div> -->
@@ -91,7 +69,7 @@
                     </div>
                 </div> -->
                 <div *ngFor="let list of onboardingContactDetailsForm.get('permanentAddress').controls; let index = index;"
-                    formArrayName="permanentAddress">
+                                formArrayName="permanentAddress">
                     <div [formGroupName]="index">
                         <div class="row form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
@@ -112,7 +90,6 @@
                                         <ion-option *ngFor="let list of totalStates" [value]="list.key">{{list.name}}</ion-option>
                                     </ion-select>
                                 </ion-item>
-                                <!-- <input class="form-control" type="text" formControlName="permanentState"> -->
                             </div>
                         </div>
                     </div>
