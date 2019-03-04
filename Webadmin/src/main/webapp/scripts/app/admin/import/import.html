@@ -20,7 +20,7 @@
                 <div class="panel-heading">Client</div>
                 <div class="panel-body">
 
-                    <form name="importClientForm" ng-submit="importClients()" novalidate>
+                    <form name="importClientForm" ng-submit="importClients()" novalidate confirm-on-exit>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -36,7 +36,7 @@
                                                ng-show="importClientForm.clientFile.$error.required">
                                                Client file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                 <div class="panel-heading">Sites</div>
                 <div class="panel-body">
 
-                    <form name="importSiteForm" ng-submit="importSites()" novalidate>
+                    <form name="importSiteForm" ng-submit="importSites()" novalidate confirm-on-exit>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -82,7 +82,7 @@
                                                ng-show="importSiteForm.siteFile.$error.required">
                                                Site file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
 
@@ -139,7 +139,7 @@
                 <div class="panel-heading">Locations</div>
                 <div class="panel-body">
 
-                    <form name="importLocationForm" ng-submit="importLocations()" novalidate>
+                    <form name="importLocationForm" ng-submit="importLocations()" novalidate confirm-on-exit>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -155,7 +155,7 @@
                                                ng-show="importLocationForm.locationFile.$error.required">
                                                Location file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
 
@@ -181,7 +181,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Employees</div>
                 <div class="panel-body">
-                    <form name="importEmployeeForm" ng-submit="importEmployees()" novalidate>
+                    <form name="importEmployeeForm" ng-submit="importEmployees()" novalidate confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13">
@@ -196,7 +196,7 @@
                                                ng-show="importEmployeeForm.employeeFile.$error.required">
                                                Employee file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                   </div>
@@ -226,7 +226,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Jobs</div>
                 <div class="panel-body">
-                    <form name="importJobForm" ng-submit="importJobs()" novalidate>
+                    <form name="importJobForm" ng-submit="importJobs()" novalidate confirm-on-exit>
                         <div class="row">
 
                             <div class="form-group label-floating" >
@@ -242,7 +242,7 @@
                                                ng-show="importJobForm.jobFile.$error.required">
                                                Job file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Employee Shift</div>
                 <div class="panel-body">
-                    <form name="importEmployeeShiftForm" novalidate>
+                    <form name="importEmployeeShiftForm" novalidate confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
@@ -286,7 +286,7 @@
                                                ng-show="importEmployeeShiftForm.employeeShiftFile.$error.required">
                                                Employee shift file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -312,7 +312,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Checklist</div>
                 <div class="panel-body">
-                    <form name="importChecklistForm" ng-submit="importChecklist()" novalidate>
+                    <form name="importChecklistForm" ng-submit="importChecklist()" novalidate confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
@@ -327,7 +327,7 @@
                                                ng-show="importChecklistForm.checklistFile.$error.required">
                                                Checklist file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +359,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Asset</div>
                 <div class="panel-body">
-                    <form name="importAssetForm" novalidate>
+                    <form name="importAssetForm" novalidate confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
@@ -374,7 +374,7 @@
                                                ng-show="importAssetForm.assetFile.$error.required">
                                                Asset file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -400,7 +400,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Asset PPM</div>
                 <div class="panel-body">
-                    <form name="importAssetPPMForm" novalidate>
+                    <form name="importAssetPPMForm" novalidate confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
@@ -415,7 +415,7 @@
                                                ng-show="importAssetPPMForm.assetPPMFile.$error.required">
                                                Asset PPM file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -444,7 +444,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Asset AMC</div>
                 <div class="panel-body">
-                    <form name="importAssetAMCForm" novalidate>
+                    <form name="importAssetAMCForm" novalidate confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >
@@ -459,7 +459,7 @@
                                                ng-show="importAssetAMCForm.assetAMCFile.$error.required">
                                                Asset AMC file is required.
                                             </p>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -480,12 +480,12 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">Inventory Master</div>
                 <div class="panel-body">
-                    <form name="importInventoryForm" >
+                    <form name="importInventoryForm" confirm-on-exit>
                         <div class="row">
                             <div class="form-group label-floating" >
                                 <div class="col-md-6 pdng-top13" >

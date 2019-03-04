@@ -70,7 +70,7 @@
                                                 <div class="tab-content">
                                                     <div class="tab-pane fade general active in " id="general">
                                                         <form name="form" role="form" novalidate
-                                                          class="form-horizontal" ng-submit="conform('save')">
+                                                          class="form-horizontal" confirm-on-exit ng-submit="conform('save')">
                                                         <div class="row" >
 
                                                             <div class="col-md-6">
@@ -826,7 +826,7 @@
                                                     </div>
                                                     <div class="tab-pane fade config" id="config">
                                                       <form name="form2" role="form"
-                                                    class="form-horizontal"  ng-submit="saveAssetParamConfig()">
+                                                    class="form-horizontal"  ng-submit="saveAssetParamConfig()" confirm-on-exit>
                                                         <div class="panel panel-default" style="min-height: 300px;">
                                                             <div class="panel-heading">
                                                                 Config
@@ -1181,7 +1181,7 @@
                                                     </form>
                                                     </div>
                                                     <div class="tab-pane fade ppmschedule" id="ppmschedule" >
-                                                        <form name="form3" role="form"  ng-submit="savePPMSchedule()" novalidate
+                                                        <form name="form3" role="form"  ng-submit="savePPMSchedule()" confirm-on-exit novalidate
                                                     class="form-horizontal" >
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
@@ -1503,7 +1503,7 @@
                                                     </div>
                                                     <div class="tab-pane fade amcschedule" id="amc-schedule" >
                                                         <form name="form4" role="form" novalidate
-                                                        class="form-horizontal" ng-submit="saveAmcSchedule()">
+                                                        class="form-horizontal" ng-submit="saveAmcSchedule()" confirm-on-exit>
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">New Schedule</div>
                                                             <div class="panel-body">
@@ -1875,7 +1875,7 @@
 
 
                                                                 <div class="row">
-                                                                 <form name="importClientForm" role="form" novalidate class="ng-pristine ng-valid">
+                                                                 <form name="importClientForm" role="form" confirm-on-exit novalidate class="ng-pristine ng-valid">
                                                                     <div class="col-md-6">
 
                                                                         <div class="row">
@@ -1951,7 +1951,7 @@
 
                                                                     </div>
                                                                    </form>
-                                                                   <form name="importClientForm1" role="form" novalidate class="ng-pristine ng-valid">
+                                                                   <form name="importClientForm1" role="form" confirm-on-exit novalidate class="ng-pristine ng-valid">
                                                                     <div class="col-md-6">
 
                                                                        <div class="row" >
