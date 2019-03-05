@@ -18,7 +18,7 @@ angular.module('timeSheetApp')
 
 	$scope.selectedSite =null;
 	$scope.pager = {};
-
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	$scope.settings = {
 			shiftWiseAttendanceEmailIds : [],
 			dayWiseAttendanceEmailIds : [],
@@ -89,6 +89,28 @@ angular.module('timeSheetApp')
 
 	$scope.addTicketEmail = function() {
 		var email = $scope.ticketEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.ticketEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.ticketEmailIds.length;i++){
+               if($scope.settings.ticketEmailIds[i] == email){
+                   alert("Email is already exist..!!");
+                   return false;
+               }
+            }
+        }
 		if(!$scope.settings.ticketEmailIds) {
 			$scope.settings.ticketEmailIds = [];
 		}
@@ -102,6 +124,30 @@ angular.module('timeSheetApp')
 
 	$scope.addQuotationEmail = function() {
 		var email = $scope.quotationEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+               if(email.length > 50){
+                   alert("Email cannot be longer than 50 characters.");
+                   return false;
+               }
+            }
+        }
+
+        if($scope.settings.quotationEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.quotationEmailIds.length;i++){
+                if($scope.settings.quotationEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
+
 		if(!$scope.settings.quotationEmailIds) {
 			$scope.settings.quotationEmailIds = [];
 		}
@@ -115,6 +161,28 @@ angular.module('timeSheetApp')
 
 	$scope.addShiftWiseAttendanceEmail = function() {
 		var email = $scope.shiftWiseAttendanceEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.shiftWiseAttendanceEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.shiftWiseAttendanceEmailIds.length;i++){
+                if($scope.settings.shiftWiseAttendanceEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.shiftWiseAttendanceEmailIds) {
 			$scope.settings.shiftWiseAttendanceEmailIds = [];
 		}
@@ -128,6 +196,28 @@ angular.module('timeSheetApp')
 
 	$scope.addDayWiseAttendanceEmail = function() {
 		var email = $scope.dayWiseAttendanceEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.dayWiseAttendanceEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.dayWiseAttendanceEmailIds.length;i++){
+                if($scope.settings.dayWiseAttendanceEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.dayWiseAttendanceEmailIds) {
 			$scope.settings.dayWiseAttendanceEmailIds = [];
 		}
@@ -141,6 +231,28 @@ angular.module('timeSheetApp')
 
 	$scope.addOverdueEmail = function() {
 		var email = $scope.overdueEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.overdueEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.overdueEmailIds.length;i++){
+                if($scope.settings.overdueEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.overdueEmailIds) {
 			$scope.settings.overdueEmailIds = [];
 		}
@@ -154,6 +266,28 @@ angular.module('timeSheetApp')
 
 	$scope.addEodJobEmail = function() {
 		var email = $scope.eodJobEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.eodJobEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.eodJobEmailIds.length;i++){
+                if($scope.settings.eodJobEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.eodJobEmailIds) {
 			$scope.settings.eodJobEmailIds = [];
 		}
@@ -167,6 +301,28 @@ angular.module('timeSheetApp')
 
 	$scope.addFeedbackEmail = function() {
 		var email = $scope.feedbackEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.feedbackEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.feedbackEmailIds.length;i++){
+                if($scope.settings.feedbackEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.feedbackEmailIds) {
 			$scope.settings.feedbackEmailIds = [];
 		}
@@ -181,6 +337,28 @@ angular.module('timeSheetApp')
 
 	$scope.addFeedbackReportEmail = function() {
 		var email = $scope.feedbackReportEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.feedbackReportEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.feedbackReportEmailIds.length;i++){
+                if($scope.settings.feedbackReportEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.feedbackReportEmailIds) {
 			$scope.settings.feedbackReportEmailIds = [];
 		}
@@ -195,6 +373,28 @@ angular.module('timeSheetApp')
 
 	$scope.addReadingEmail = function() {
 		var email = $scope.readingEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.readingEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.readingEmailIds.length;i++){
+                if($scope.settings.readingEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.readingEmailIds) {
 			$scope.settings.readingEmailIds = [];
 		}
@@ -208,6 +408,28 @@ angular.module('timeSheetApp')
 
 	$scope.addAssetBreakdownEmail = function() {
 		var email = $scope.assetEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.assetEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.assetEmailIds.length;i++){
+                if($scope.settings.assetEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.assetEmailIds) {
 			$scope.settings.assetEmailIds = [];
 		}
@@ -222,6 +444,28 @@ angular.module('timeSheetApp')
 	//PPM Job alert
 	$scope.addPPMEmail = function() {
 		var email = $scope.ppmEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.ppmEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.ppmEmailIds.length;i++){
+                if($scope.settings.ppmEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.ppmEmailIds) {
 			$scope.settings.ppmEmailIds = [];
 		}
@@ -236,6 +480,28 @@ angular.module('timeSheetApp')
 	//AMC Job alert
 	$scope.addAMCEmail = function() {
 		var email = $scope.amcEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.amcEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.amcEmailIds.length;i++){
+                if($scope.settings.amcEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.amcEmailIds) {
 			$scope.settings.amcEmailIds = [];
 		}
@@ -250,6 +516,28 @@ angular.module('timeSheetApp')
 	//Warranty Expire alert
 	$scope.addWarrantyEmail = function() {
 		var email = $scope.warrantyEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.warrantyEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.warrantyEmailIds.length;i++){
+                if($scope.settings.warrantyEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.warrantyEmailIds) {
 			$scope.settings.warrantyEmailIds = [];
 		}
@@ -263,6 +551,28 @@ angular.module('timeSheetApp')
 
 	$scope.addDayWiseReportEmail = function() {
 		var email = $scope.dayWiseReportEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.dayWiseReportEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.dayWiseReportEmailIds.length;i++){
+                if($scope.settings.dayWiseReportEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.dayWiseReportEmailIds) {
 			$scope.settings.dayWiseReportEmailIds = [];
 		}
@@ -277,6 +587,28 @@ angular.module('timeSheetApp')
 	// Muster roll report alert
 	$scope.addMusterRollEmail = function() {
 		var email = $scope.musterRollEmail;
+        if(!email){
+            alert("Please fill out the field..!!");
+            return false;
+        }else{
+            if(!regex.test(email)){
+                alert("Please enter valid email..!!");
+                return false;
+            }else{
+                if(email.length > 50){
+                    alert("Email cannot be longer than 50 characters.");
+                    return false;
+                }
+            }
+        }
+        if($scope.settings.musterRollEmailIds.length > 0){
+            for(var i=0; i < $scope.settings.musterRollEmailIds.length;i++){
+                if($scope.settings.musterRollEmailIds[i] == email){
+                    alert("Email is already exist..!!");
+                    return false;
+                }
+            }
+        }
 		if(!$scope.settings.musterRollEmailIds) {
 			$scope.settings.musterRollEmailIds = [];
 		}
@@ -295,23 +627,27 @@ angular.module('timeSheetApp')
 			$scope.projects = data;
 		});
 	};
-
+    $scope.siteSpin = false;
 	$scope.loadSites = function () {
-		$scope.showLoader();
+		//$scope.showLoader();
+        $scope.sites = "";
 		console.log('selected project - ' + JSON.stringify($scope.selectedProject));
 		if($scope.selectedProject) {
+            $scope.siteSpin = true;
 			ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
 				$scope.sites = data;
-				$scope.hideLoader();
-
+				//$scope.hideLoader();
+                $scope.siteSpin = false;
 			});
-		}else {
+		}
+
+		/*else {
 			SiteComponent.findAll().then(function (data) {
 				$scope.sites = data;
 				$scope.hideLoader();
 
 			});
-		}
+		}*/
 	};
 
 	$scope.showLoader = function(){
@@ -349,30 +685,45 @@ angular.module('timeSheetApp')
 
 	}
 
+	$scope.settingsLoader = false;
 	$scope.loadSettings = function() {
-		var projectId = 0;
-		var siteId = 0;
+	    $scope.settingsLoadingStart();
+		var projectId;
+		var siteId;
 		if($scope.selectedProject) {
 			projectId = $scope.selectedProject.id;
-		}
+		}else{
+            projectId = 0;
+        }
 		if($scope.selectedSite) {
 			siteId = $scope.selectedSite.id;
-		}
-		$scope.showLoader();
+		}else{
+            siteId = 0;
+        }
+		//$scope.showLoader();
+        $scope.settingsLoader = true;
+        //console.log('pId',projectId);
+        //console.log('sId',siteId);
 		SettingsComponent.findAll(projectId, siteId).then(function(data) {
 			console.log('all settings response- '+ JSON.stringify(data));
 			if(data) {
 				$scope.settings = data;
 			}
-			$scope.hideLoader();
-		})
+            $scope.settingsLoader = false;
+            $scope.settingsLoadingStop();
+			//$scope.hideLoader();
+		}).catch(function () {
+            $scope.settingsLoadingStop();
+        });
 	}
 
 	$scope.showNotifications= function(position,alignment,color,msg){
 		demo.showNotification(position,alignment,color,msg);
 	}
 
-	$scope.cancelEmployee = function() {
+	$scope.cancelSettings = function() {
+
+        $scope.loadPageTop();
 
 		//$location.path('/app_settings');
 
@@ -382,7 +733,7 @@ angular.module('timeSheetApp')
 
 		$scope.settings = "";
 
-		$scope.loadPageTop();
+
 	}
 
 	//init load
@@ -391,6 +742,28 @@ angular.module('timeSheetApp')
 
 
 	}
+
+        $scope.settingsLoadingStart = function(){
+
+            $('.pageCenter').addClass('pageTopCenter');
+            $('.pageTopCenter').show();
+            $('.overlay').show();
+            $scope.noscroll = true;
+
+
+        }
+
+        $scope.settingsLoadingStop = function(){
+
+            //console.log("Calling loader");
+            $('.pageTopCenter').hide();
+            $('.pageCenter').removeClass('pageTopCenter');
+            $('.overlay').hide();
+            $scope.noscroll = false;
+
+
+
+        }
 
 });
 
