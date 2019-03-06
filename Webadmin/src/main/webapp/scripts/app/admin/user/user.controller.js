@@ -142,7 +142,7 @@ angular.module('timeSheetApp')
 		$scope.loading = true;
 		$scope.loadingStart();
 		$scope.employees = '';
-		EmployeeComponent.findAll().then(function (data) {
+		EmployeeComponent.findMapableEmployees().then(function (data) {
 			//$scope.selectedEmployee = null;
 			$scope.loadingStop();
 			$scope.employees = data;
@@ -644,6 +644,17 @@ angular.module('timeSheetApp')
 	$scope.showNotifications= function(position,alignment,color,msg){
 		demo.showNotification(position,alignment,color,msg);
 	}
+
+    $scope.userStatus = function () {
+	    if(!$scope.user.activated){
+            if(confirm("On deactivating user, Employee can't login, but the jobs and tickets assigned will remain the same")) {
+                $scope.user.activated = false;
+            }else{
+                $scope.user.activated = true;
+            }
+        }
+
+    };
 
 
 });

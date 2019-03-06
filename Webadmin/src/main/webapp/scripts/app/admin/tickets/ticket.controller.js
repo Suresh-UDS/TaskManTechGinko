@@ -1378,11 +1378,11 @@ angular.module('timeSheetApp')
              $scope.searchCriteria.assetTitle = $stateParams.asset.title;
         }
 
-        if($scope.showInActive){
+       /* if($scope.showInActive){
             $scope.searchCriteria.showInActive = true;
         }else{
             $scope.searchCriteria.showInActive = false;
-        }
+        }*/
 
 		//console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
 		//-------

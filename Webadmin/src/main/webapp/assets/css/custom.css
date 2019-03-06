@@ -1307,7 +1307,9 @@ input.InputFirstCaps::first-letter
 {
     text-transform: uppercase;
 }
-
+.tablecard{
+    padding-bottom: 10px !important;
+}
 
 
 
