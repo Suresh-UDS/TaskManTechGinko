@@ -64,6 +64,12 @@ public class UserSpecification implements Specification<User> {
                 "%" + searchCriteria.getUserEmail().toLowerCase() + "%"));
         }
 
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
+
         log.debug("UserSpecification toPredicate - searchCriteria userRole -" + searchCriteria.getUserRole());
         if (searchCriteria.getUserRole() != null && searchCriteria.getUserRole() !="") {
             predicates.add(builder.like(builder.lower(root.get("userRole").get("name")),

@@ -63,7 +63,13 @@ public class AssetSpecification implements Specification<Asset> {
 		/*if (searchCriteria.getAcquiredDate() != null) {
 			predicates.add(builder.equal(root.get("acquiredDate"), searchCriteria.getAcquiredDate()));
 		}*/
-		
+
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
+        log.debug("Show active status from criteria - "+searchCriteria.isShowInActive());
 		if(searchCriteria.getAcquiredDate() != null){
         	if(root.get("acquiredDate") != null) {
             	//Date plannedDate = (Date)root.get("acquiredDate");
@@ -90,25 +96,25 @@ public class AssetSpecification implements Specification<Asset> {
         		predicates.add(builder.between(root.get("acquiredDate"), fromDt,toDt));
         	}
     	}
-		
-		if(searchCriteria.getAssetCreatedDate() != null) { 
+
+		if(searchCriteria.getAssetCreatedDate() != null) {
 			log.debug("Asset created date -" + searchCriteria.getAssetCreatedDate());
 			Calendar createdDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 			createdDateTo.setTime(searchCriteria.getAssetCreatedDate());
 			createdDateTo.set(Calendar.HOUR_OF_DAY, 23);
 			createdDateTo.set(Calendar.MINUTE,59);
 			createdDateTo.set(Calendar.SECOND,0);
-			
+
 			predicates.add(builder.between(root.get("createdDate"), DateUtil.convertToZDT(searchCriteria.getAssetCreatedDate()), DateUtil.convertToZDT(createdDateTo.getTime())));
 		}
-		
-		predicates.add(builder.equal(root.get("active"), "Y"));
+
+//		predicates.add(builder.equal(root.get("active"), "Y"));
 
 		query.orderBy(builder.desc(root.get("createdDate")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("AssetSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
-		
+
 		if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
     		orPredicates.add(builder.equal(root.get("site").get("user").get("id"),  searchCriteria.getUserId()));
 		}else if(searchCriteria.getSiteId() > 0) {
