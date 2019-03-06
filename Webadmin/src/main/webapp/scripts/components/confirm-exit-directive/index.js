@@ -11,7 +11,7 @@ angular.module('confirmMsg',[])
             }*/
             var form = $scope[attrs.name];
             $scope.$on('$stateChangeStart', function(event, next, current) {
-                if (form.$dirty) {
+                if (form.$dirty && !form.$submitted) {
                     if(confirm("are you sure want to leave page without saving?")) {
                         return true;
                     }else{
@@ -32,7 +32,7 @@ angular.module('confirmMsg',[])
             }*/
             var form = $scope[attrs.name];
             $scope.$on('$stateChangeStart', function(event, next, current) {
-                if (form.$dirty || form.$touched) {
+                if ((form.$dirty || form.$touched) && !form.$submitted) {
                     if(confirm("are you sure want to leave page without saving?")) {
                         return true;
                     }else{
