@@ -37,6 +37,7 @@ export class onboardingNewEmployee {
   currentIndex = 0;
   storedIndex;
   allFormValues = {};
+  currentFormValues = {};
   formLoadingProgress: any = 'pie0';
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
   constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService,
@@ -58,7 +59,7 @@ export class onboardingNewEmployee {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
           console.log('no projectId');
 
-          // }
+          // }}
           this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);
         } else {
           Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
@@ -67,9 +68,7 @@ export class onboardingNewEmployee {
       });
     })
 
-    this.messageService.currentMessage.subscribe(data => {
-      this.getFormStatusDetails(data);
-    })
+  
     if (navParams.get('pageData')) {
       this.navPreviousData = navParams.get('pageData');
     } else {
@@ -86,7 +85,10 @@ export class onboardingNewEmployee {
     { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false }
   ];
   ionViewDidLoad() {
-
+    // this.viewContainer.clear();
+    this.messageService.currentMessage.subscribe(data => {
+      this.getFormStatusDetails(data);
+    })
     this.storage.get('OnBoardingData').then((localStoragedData) => {
       console.log('projectId TYPES12345 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
     });
@@ -117,7 +119,7 @@ export class onboardingNewEmployee {
   }
   nextWizard(index) {
     console.log('next');
-    this.storeFormData(this.allFormValues).then(data => {
+    this.storeFormData(this.currentFormValues).then(data => {
       console.log('promise return');
       console.log(data)
       if (this.wizardObj.length > index) {
@@ -143,9 +145,9 @@ export class onboardingNewEmployee {
   formFinalSubmit() {
 
     //object assign 
-    this.storeFormData(this.allFormValues).then(data => {
-      console.log('newEMP_resolve ' + data);
-    })
+    // this.storeFormData(this.allFormValues).then(data => {
+    //   console.log('newEMP_resolve ' + data);
+    // })
 
     const thisScope = this;
     const confirmAlert = this.alertCtrl.create({
@@ -188,15 +190,61 @@ export class onboardingNewEmployee {
       // });
       //}
       this.wizardObj[this.currentIndex]['formStatus'] = data['status'];
-      Object.assign(this.allFormValues, data['data']);
+      this.currentFormValues = data['data'];
+
     } else {
       this.wizardObj[this.currentIndex]['formStatus'] = false;
     }
   }
+  // formFinalOperation() {
+  //   let obj: any = {};
+  //   var tempIndex;
+    
+  //       this.storage.get('OnBoardingData').then((localStoragedData) => {
+  //         tempIndex = localStoragedData['completed'].length;
+  //         //if (this.network.type != 'none') {
+  //         this.componentService.showLoader("Loading OnBoarding");
+  //         console.log("loading ========" + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+  //         //   alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+  //         //gopicg
+  //         //localStoragedData['actionRequired'][this.storedIndex]['projectId']
+  //         this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex])
+  //           .subscribe((res) => {
+  //             localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
+  //             localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+  //             //    alert(JSON.stringify(res));
+
+  //             console.log("res =======" + JSON.stringify(res));
+  //             console.log("res id=======" + res['id']);
+
+  //             this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
+  //               this.componentService.closeAll();
+  //               console.log('res image -api ' + JSON.stringify(res));
+  //               localStoragedData['completed'].splice(tempIndex, 1);
+  //               this.storage.set('OnBoardingData', localStoragedData);
+  //               // cg
+  //               this.navCtrl.setRoot(onboardingExistEmployee);
+  //             }, err => {
+
+  //             })
+  //           }, (error) => {
+  //             alert(JSON.stringify(error));
+  //             this.componentService.closeAll();
+  //             this.componentService.showToastMessage('Server Unreachable', 'bottom');
+  //           })
+  //         // } else {
+  //         //   localStoragedData['completed'][tempIndex]['isSync'] = false;
+  //         //   this.storage.set('OnBoardingData', localStoragedData);
+  //         //   this.navCtrl.setRoot(onboardingExistEmployee);
+  //         // }
+  //       });
+      
+  // }
+
   formFinalOperation() {
     let obj: any = {};
     var tempIndex;
-    this.storeFormData(this.allFormValues).then(data => {
+    this.storeFormData(this.currentFormValues).then(data => {
       console.log(' store resolve ' + data);
       if (data == 'success') {
         this.storage.get('OnBoardingData').then((localStoragedData) => {
@@ -297,6 +345,7 @@ export class onboardingNewEmployee {
 
         //  console.log('projectId SUBMIT2 ' + data.customer.project.projectId2);
         Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+        console.log('projectId SUBMIT ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         this.storage.set('OnBoardingData', localStoragedData);
         resolve('success');
       });
