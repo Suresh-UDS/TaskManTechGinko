@@ -114,7 +114,7 @@
 
                            <div class="col-md-6">
 
-                               <div class="panel panel-default">
+                               <div class="panel panel-default" style="min-height:317px;">
                                    <div class="panel-heading">Contact Info</div>
                                    <div class="panel-body">
 
@@ -184,7 +184,7 @@
                                                    <label class="control-label">Phone</label>
                                                    <input id='phone' ng-model="project.phone"
                                                           class='form-control' name='phone' type='phone' value=""
-                                                          ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9\s&-/]*$/" tabindex="5" autofocus />
+                                                          ng-minlength='10' ng-maxlength='13' ng-pattern="/^[0-9\+-/]*$/" tabindex="5" autofocus />
                                                    <div ng-show="form.$submitted || form.phone.$touched || form.phone.$dirty">
                                                        <div ng-show="form.phone.$dirty || form.phone.$invalid">
                                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"

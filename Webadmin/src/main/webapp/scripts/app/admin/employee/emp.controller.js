@@ -1274,7 +1274,7 @@ angular.module('timeSheetApp')
 		if($scope.markLeftOptions == 'delete'){
 			//console.log("delete and mark left");
             $scope.loadingStart();
-            employee.left = true;
+            //employee.left = true;
             $('#leftModal').modal('hide');
 			EmployeeComponent.updateEmployee(employee).then(function(data){
 				EmployeeComponent.deleteJobsAndMarkEmployeeLeft(employee,new Date());
@@ -1292,7 +1292,7 @@ angular.module('timeSheetApp')
 		}else if ($scope.markLeftOptions == 'assign'){
             //console.log('emp',$scope.employee.selectAssignEmp);
             $('#leftModal').modal('hide');
-            employee.left = true;
+            //employee.left = true;
 			//console.log("assign and mark left");
             $scope.loadingStart();
 			EmployeeComponent.updateEmployee(employee).then(function(data){

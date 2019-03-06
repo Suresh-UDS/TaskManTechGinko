@@ -170,7 +170,7 @@
                                                     <label class="control-label">Phone Number<span class="red-star">*</span></label>
                                                     <input id='employeePhone' ng-model="employee.phone" class='form-control'
                                                            name='employeePhone' type='text' value=""
-                                                           ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/"  required tabindex="6" />
+                                                           ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s+-/]*$/"  required tabindex="6" />
                                                     <div ng-show="form.$submitted || form.employeePhone.$touched || form.employeePhone.$dirty">
                                                         <div ng-show="form.employeePhone.$dirty || form.employeePhone.$invalid">
                                                             <p class="help-block" style="color:maroon"
