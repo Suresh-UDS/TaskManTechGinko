@@ -551,7 +551,7 @@
                                      <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                      <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                     <ui-select ng-model="client.selected" name="searchClient"  ng-disabled="clientFilterDisable" required>
+				                     <ui-select ng-model="client.selected" name="searchClient" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)"  ng-disabled="clientFilterDisable" required>
 									  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
 									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -585,7 +585,7 @@
                                        <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                        <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-	                                <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+	                                <ui-select ng-model="regionsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
 									  <ui-select-match placeholder="Select region..." >{{$select.selected.name}}
 									       <a ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -606,7 +606,7 @@
 		                               <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 		                               <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-		                               <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+		                               <ui-select ng-model="branchsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
 									  <ui-select-match placeholder="Select branch..."  >{{$select.selected.name}}
 									  <a ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -628,7 +628,7 @@
                                    <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
 	                               <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-	                               <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+	                               <ui-select ng-model="sitesListOne.selected"  on-select="searchLocations();loadFeedbackMasters();" ng-disabled="siteFilterDisable || sitesLists.length == 1">
 									  <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
 									  <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -648,7 +648,7 @@
                     <div class="TailsCon">
                         <div class="TailsContent">
                             <ul class="blocksListCon">
-                                <li ng-repeat="item in filteredLocations"   ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit"   ng-show="(($index < (vm.page * vm.numRecords)) && ($index >= ((vm.page - 1) * vm.numRecords)))">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
+                                <li ng-repeat="item in filteredLocations"   ng-click="genZoneReport(item.projectId,item.siteId,item.block, item.floor,item.zone,searchForm)" ng-class="item.zone == selectedZone && item.block== selectedBlock && item.floor== selectedFloor ? 'active' : ''"> <a type="submit">{{ item.block }}<br/>{{item.floor}}<br/>{{item.zone}}</a></li>
                             </ul>
 
                             <div class="clear"></div>
@@ -656,6 +656,7 @@
                             <!--<div class="pos-abs back"><button ng-click="vm.back()"><i class="material-icons">keyboard_arrow_left</i></button></div>-->
                         </div>
                     </div>
+
 
                 </div>
                 <div class="modal-footer">

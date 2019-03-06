@@ -1075,8 +1075,10 @@ span.red-star
 
 .blocksListCon li a
 {
-  color:#333;
-  padding: 35px 5px;
+    color:#333;
+  /*padding: 35px 5px;*/
+    margin: 25px 0px;
+    display: block;
 }
 .clear
 {
@@ -1113,12 +1115,13 @@ ul.blocksListCon
     float: left;
     border: 2px solid #b9b9b9;
     margin: 3px;
-    padding-top: 35px;
-    /*padding: 30px 15px 15px 15px;*/
+    /*padding-top: 35px;
+    padding: 30px 15px 15px 15px;*/
     text-align: center;
     cursor: pointer;
     border-left: 6px solid #b9b9b9;
     border-radius: 5px;
+
 }
 .blocksListCon li:hover
 {

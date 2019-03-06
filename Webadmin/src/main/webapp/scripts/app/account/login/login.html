@@ -59,8 +59,8 @@
              <img src="assets/img/icons/ICON-6.png" alt="Small Icon">
         </span>
 
-        <div class="col-lg-4 col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-4 col-lg-offset-4" style="margin-top: 6%;">
-            <form name="form" role="form" ng-submit="login($event)">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-4 col-lg-offset-4" style="margin-top: 5%;">
+            <form name="form" role="form" ng-submit="login($event)" >
                 <div class="card card-login card-hidden">
                     <div class="card-header text-center" data-background-color="orange">
                         <h4 class="card-title">Login</h4>
@@ -77,7 +77,7 @@
                                             </span>
                             <div class="form-group" >
                                 <label class="control-label">User Name</label>
-                                <input type="text" id="username"  ng-model="username" class="form-control" required>
+                                <input type="text" id="username" name="username"  ng-model="username" class="form-control" required>
                             </div>
                         </div>
 
@@ -87,16 +87,18 @@
                                             </span>
                             <div class="form-group">
                                 <label class="control-label">Password</label>
-                                <input type="password" id="password"
+                                <input type="password" name="password" id="password"
                                        ng-model="password" class="form-control" required>
                             </div>
                         </div>
                         <div class="input-group">
                             <div class="form-group pad-btm0 rememberMe">
-                               <!-- <label for="rememberMe">
-                                    <input type="checkbox" id="rememberMe" ng-model="rememberMe" checked >
-                                    <span>Remember me</span>
-                                </label>-->
+                                <div class="checkbox">
+                                    <label for="rememberMe">
+                                        <input type="checkbox" id="rememberMe" ng-model="rememberMe" ng-checked="rememberMe" >
+                                        <span>Remember me</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

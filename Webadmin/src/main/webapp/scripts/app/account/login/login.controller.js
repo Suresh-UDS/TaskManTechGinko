@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth) {
+    .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth,$remember,$forget,$parse) {
         $rootScope.loginView = true;
         if($rootScope.loginView == true){
             $(".content").addClass("remove-mr");
@@ -10,9 +10,17 @@ angular.module('timeSheetApp')
 
         $scope.user = {};
         $scope.errors = {};
-        $scope.rememberMe = true;
         $scope.oldPassword='';
         $scope.newPassword='';
+
+        // Cookie values get
+        if($remember.getCookie('username')){
+            $scope.rememberMe = true;
+            $scope.username = $remember.getCookie('username');
+        }
+        if($remember.getCookie('password')){
+            $scope.password = $remember.getCookie('password');
+        }
 
         //$timeout(function (){angular.element('[ng-model="username"]').focus();});
 
@@ -36,6 +44,15 @@ angular.module('timeSheetApp')
                     $rootScope.isLoggedIn = true;
                     $rootScope.retainUrl();
                 }
+                // Cookie set and unset
+                if($scope.rememberMe){
+                    $remember.setCookie('username', $scope.username,300);
+                    $remember.setCookie('password', $scope.password,300);
+                }else{
+                    $forget.unsetCookie('username','');
+                    $forget.unsetCookie('password','');
+                }
+
                 $rootScope.resLoader=true;
                 $rootScope.inits();
 
