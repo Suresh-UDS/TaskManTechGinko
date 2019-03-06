@@ -328,7 +328,7 @@ public class EmployeeResource {
     @RequestMapping(value = "/employee/mappable", method = RequestMethod.GET)
     public List<EmployeeDTO> getMapableEmployees() {
         log.info("--Invoked EmployeeResource.getMapableEmployees --");
-        return employeeService.findAll(SecurityUtils.getCurrentUserId());
+        return employeeService.findMapableEmployees(SecurityUtils.getCurrentUserId());
     }
 
     @RequestMapping(value = "/employee/site/{siteId}", method = RequestMethod.GET)

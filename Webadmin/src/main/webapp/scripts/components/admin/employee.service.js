@@ -345,6 +345,13 @@ angular.module('timeSheetApp')
                 console.log('<< Response',response);
                     return response.data;
                 });
+            },
+
+            findMapableEmployees: function () {
+                return $http.get('api/employee/mappable').then(function (response) {
+                    console.log(response);
+                    return response.data;
+                });
             }
 
         };
