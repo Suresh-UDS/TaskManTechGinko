@@ -1068,7 +1068,7 @@
                                     <label class="label-control">Name<span class="red-star">*</span></label>
                                     <input id="relieverOthName" type="text" class="form-control" ng-model="relieverOthName"
                                            name="relieverOthName" autocomplete="off" tabindex="1" ng-required="reqOth"
-                                           ng-minlength=5 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" tabindex="6"/>
+                                           ng-minlength=5 ng-maxlength=50 ng-pattern="/^[A-Za-z\s/]*$/" tabindex="6"/>
                                     <div ng-show="relieverForm.$submitted || relieverForm.relieverOthName.$touched || relieverForm.relieverOthName.$dirty">
                                         <div ng-show="relieverForm.relieverOthName.$dirty || form.relieverOthName.$invalid || relieverForm.relieverOthName.$touched">
                                             <p class="help-block" style="width:100%;z-index:970;background:#fff;color:maroon"
@@ -1085,7 +1085,7 @@
                                             </p>
                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                ng-show="relieverForm.relieverOthName.$error.pattern">
-                                                Name can only contain letters,numbers and space.
+                                                Name can only contain letters and space.
                                             </p>
                                         </div>
                                     </div>
@@ -1096,7 +1096,7 @@
                                 <div class="form-group">
                                     <label class="label-control">Mobile<span class="red-star">*</span></label>
                                     <input id="relieverOthMobile" type="text" class="form-control" ng-model="relieverOthMobile"  name="relieverOthMobile"
-                                           autocomplete="off" tabindex="2" ng-required="reqOth" ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" tabindex="7"/>
+                                           autocomplete="off" tabindex="2" ng-required="reqOth" ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s+-/]*$/" tabindex="7"/>
                                     <div ng-show="relieverForm.$submitted || relieverForm.relieverOthMobile.$touched || relieverForm.relieverOthMobile.$dirty">
                                         <div ng-show="relieverForm.relieverOthMobile.$dirty || relieverForm.relieverOthMobile.$invalid">
                                             <p class="help-block" style="color:maroon"

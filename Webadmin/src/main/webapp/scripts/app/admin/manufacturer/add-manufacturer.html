@@ -113,7 +113,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Phone No</label>
                                                     <input id='mobNum' ng-model="manufacturer.phone"
-                                                           class='form-control' name='phone' ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s&-/]*$/" type='text' value=""
+                                                           class='form-control' name='phone' ng-minlength=10 ng-maxlength=13 ng-pattern="/^[0-9\s+-/]*$/" type='text' value=""
                                                     tabindex="9" />
                                                     <div ng-show="formSave.$submitted || formSave.phone.$touched || formSave.phone.$dirty">
                                                           <div ng-show="formSave.phone.$dirty || formSave.phone.$invalid">

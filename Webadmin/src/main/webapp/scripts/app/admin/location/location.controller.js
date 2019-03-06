@@ -1497,7 +1497,13 @@ angular.module('timeSheetApp')
 	 * Ui select allow-clear modified function start
 	 *
 	 * */
+    $scope.clearClient = function($event) {
+        $event.stopPropagation();
+        $scope.SelectClient.selected = undefined;
+        $scope.SelectSite.selected = undefined;
+        $scope.SelectSites = "";
 
+    };
 
 	$scope.clearProject = function($event) {
 		$event.stopPropagation();
