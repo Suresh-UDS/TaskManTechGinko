@@ -191,7 +191,15 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th>Site
+                                <th style="min-width: 100px;">Site
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
                                 </th>
                                 <th>Issue
                                     <span class="sortingIcons">
