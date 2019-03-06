@@ -2157,6 +2157,7 @@ public class JobManagementService extends AbstractService {
 
         List<Job> jobList = new ArrayList<Job>();
         jobList = jobRepository.findByStartDateAndEmployee(employee.getId(),fromDt);
+        List<Job> jobsTobeDeleted = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(jobList)) {
         		for(Job job : jobList) {
         		    log.debug("Job id - "+job.getId());
@@ -2166,23 +2167,25 @@ public class JobManagementService extends AbstractService {
                             for (SchedulerConfig schedulerConfig:schedulerConfiglist){
                                 log.debug("Scheduler config details - "+schedulerConfig.getId());
                                 schedulerConfig.setActive(SchedulerConfig.ACTIVE_NO);
-                                schedulerConfigRepository.save(schedulerConfig);
+                                schedulerConfigRepository.delete(schedulerConfig);
+
                             }
                         }
-                    }
-
-                    if(job != null && !StringUtils.isEmpty(job.getSchedule()) && !job.getSchedule().equalsIgnoreCase("ONCE")) {
-        			    job.setActive(Job.ACTIVE_NO);
-        			    jobRepository.save(job);
-                    }else{
+                        Job parentJob = jobRepository.findOne(job.getParentJob().getId());
+                        parentJob.setActive(Job.ACTIVE_NO);
                         job.getChecklistItems().clear();
-                        jobRepository.saveAndFlush(job);
-                        jobRepository.delete(job.getId());
+                        jobRepository.save(job);
+                        jobRepository.save(parentJob);
+                        jobsTobeDeleted.add(job);
+
                     }
+                    job.getChecklistItems().clear();
+        			job.setActive(Job.ACTIVE_NO);
+                    jobRepository.saveAndFlush(job);
 
         		}
         }
-//        jobRepository.deleteInBatch(jobList);
+        jobRepository.deleteInBatch(jobsTobeDeleted);
 
     }
 
