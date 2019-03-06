@@ -698,14 +698,15 @@ public class    EmployeeService extends AbstractService {
 
     public List<EmployeeDTO> findMapableEmployees(long userId) {
         User user = userRepository.findOne(userId);
-        List<EmployeeDTO> entities = null;
-        entities = findAll(userId);
+        List<Employee> entities = null;
+        entities = employeeRepository.findAllMappable();
         //return mapperUtil.toModelList(entities, EmployeeDTO.class);
         List<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
         if(CollectionUtils.isNotEmpty(entities)) {
-            for(EmployeeDTO empEntity : entities) {
-                if(empEntity.getUserId()>0){
-                    empList.add(empEntity);
+            for(Employee empEntity : entities) {
+                EmployeeDTO employeeDTO = mapperUtil.toModel(empEntity,EmployeeDTO.class);
+                if(employeeDTO.getUserId()>0){
+                    empList.add(employeeDTO);
                 }
             }
         }
