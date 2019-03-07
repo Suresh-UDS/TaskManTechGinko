@@ -99,7 +99,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <label class="headerText trequired">Present Address Proof</label>
                         <ion-avatar item-start class="inlineElemet">
-                            <img [src]="addressProof" (load)="imgSuccessLoaded()" onError="src = 'assets/imgs/placeholder.png'; imgErrorFunction()" (click)="getProofmage()" class="mdImage" />
+                            <img [src]="addressProof" (load)="imgSuccessLoaded()" onError="src = 'assets/imgs/placeholder.png'; imgErrorFunction()" (click)="presentActionSheet()" class="mdImage" />
                         </ion-avatar>
                     </div>
                 </div>

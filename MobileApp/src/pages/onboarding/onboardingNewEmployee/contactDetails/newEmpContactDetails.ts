@@ -3,6 +3,9 @@ import { onBoardingDataService } from '../onboarding.messageData.service';
 import { FormGroup, FormControl, Validators, FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Camera, CameraOptions } from "@ionic-native/camera";
 import { Storage } from '@ionic/storage';
+import { normalizeURL, ActionSheet, ActionSheetController } from 'ionic-angular';
+import { FilePath } from '@ionic-native/file-path';
+import { File } from '@ionic-native/file';
 
 @Component({
   selector: 'page-contactDetails-new',
@@ -17,7 +20,7 @@ export class newEmpContactDetails implements OnInit {
   storedIndex;
   mobnumPattern = "^((\\+91-?)|0)?[0-9]{10}$";
   PhoneNumberErrorMessage;
-  addressProofImage;
+  addressProofImage = false;
   totalStates = [
     { name: 'Assam', key: 'assam' },
     { name: 'Andhra Pradesh', key: 'andhrapradesh' },
@@ -53,7 +56,8 @@ export class newEmpContactDetails implements OnInit {
     { name: 'Daman and Diu', key: 'daman and diu' },
     { name: 'Lakshadweep', key: 'lakshadweep' }
   ]
-  constructor(private fb: FormBuilder, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
+  constructor(private fb: FormBuilder, private actionSheetCtrl: ActionSheetController, private file: File,
+    private storage: Storage, private filePath: FilePath, private camera: Camera, private messageService: onBoardingDataService) { }
   ngOnInit() {
 
     this.storage.get('onboardingCurrentIndex').then(data => {
@@ -76,30 +80,6 @@ export class newEmpContactDetails implements OnInit {
     })
 
     this.onboardingContactDetailsSubscription = this.onboardingContactDetailsForm.statusChanges.subscribe(status => {
-      // console.log(data['contactNumber'].length);
-      // //alert(this.onboardingContactDetailsForm.status)
-
-      // if (data['contactNumber'].toString().length == 10) {
-      //   this.PhoneNumberErrorMessage = 'Invalid Phone Number';
-      //   return;
-
-      // } else if (data['contactNumber'] !== data['emergencyConatctNo']) {
-      //   this.PhoneNumberErrorMessage = 'Number length should be 10'
-      //   return;
-      // } else if ((this.onboardingContactDetailsForm.status == 'VALID') && (data['contactNumber'].length == 10) && (data['contactNumber'] !== data['emergencyConatctNo'])) {
-      //   this.formStatusValues = {
-      //     status: true,
-      //     data: this.onboardingContactDetailsForm.value
-      //   }
-      //   this.sendValidationMessage();
-      // } else {
-      //   this.formStatusValues = {
-      //     status: false,
-      //     data: {}
-      //   }
-      //   this.sendValidationMessage();
-      // }
-      //console.log('contact form = ' + status);
       console.log(this.onboardingContactDetailsForm.value);
       if (status == 'VALID') {
         this.formStatusValues = {
@@ -156,20 +136,55 @@ export class newEmpContactDetails implements OnInit {
       state: [''],
     });
   }
-  getProofmage() {
-    const options: CameraOptions = {
-      quality: 80,
-      destinationType: this.camera.DestinationType.NATIVE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      correctOrientation:true
-    };
 
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'choose image from',
+      buttons: [
+        {
+          text: 'Take a photo',
+          handler: () => {
+            console.log("Quotation sheet Controller");
+            this.getProofmage('')
+          }
+        },
+        {
+          text: 'Pick from Gallery',
+          handler: () => {
+            this.getProofmage( 'album');
+          }
+        },
+      ]
+    });
+    actionSheet.present();
+  }
+
+  getProofmage(imageType) {
+    var options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      mediaType: this.camera.MediaType.PICTURE,
+      encodingType: this.camera.EncodingType.JPEG,
+      correctOrientation: true
+    };
+    if (imageType == 'album') {
+      options.sourceType = this.camera.PictureSourceType.SAVEDPHOTOALBUM
+    }
     this.camera.getPicture(options).then((imageData) => {
-      imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
-      this.addressProof = imageData;
-      this.addressProofImage = true;
-      this.sendValidationMessage();
+      console.log('capture--- ' + imageData);
+
+      let imageURI = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+
+      this.filePath.resolveNativePath(imageURI)
+        .then(imageURI => {
+          console.log(' get file path -- ' + imageURI)
+
+          this.addressProof = imageURI;
+          this.addressProofImage = true;        
+          this.sendValidationMessage();
+
+        });
     })
   }
 
@@ -194,9 +209,9 @@ export class newEmpContactDetails implements OnInit {
     if (this.formStatusValues['status'] && this.addressProofImage) {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
       let contactNo = JSON.stringify(this.formStatusValues['data']['emergencyConatctNo']);
-      console.log('EmpCont - '+ JSON.stringify([contactNo]));
-            
-      this.formStatusValues['data']['emergencyConatctNo'] = [contactNo];            
+      console.log('EmpCont - ' + JSON.stringify([contactNo]));
+
+      this.formStatusValues['data']['emergencyConatctNo'] = [contactNo];
       this.messageService.formDataMessage(this.formStatusValues);
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });
@@ -217,9 +232,12 @@ export class newEmpContactDetails implements OnInit {
           console.log(localStoragedData['actionRequired'][this.storedIndex]);
 
           this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
+
+          console.log('address_proof ' + JSON.stringify(this.addressProof));
+
           this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
           this.onboardingContactDetailsForm.controls['emergencyConatctNo']
-                .setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
+            .setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]['contactDetails']) {
           //   this.onboardingContactDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails'][list]);
           // }

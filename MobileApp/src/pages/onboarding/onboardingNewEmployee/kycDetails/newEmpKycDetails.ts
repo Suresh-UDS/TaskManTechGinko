@@ -177,6 +177,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
 
   sendValidationMessage() {
+
+    console.log('kycValidation '+this.userAllKYCData['fingerPrintRight']);
     if ((this.formStatusValues['status']) &&
       //(this.userAllKYCData['aadharNumber'] !== null) &&
       (this.userAllKYCData['aadharPhotoCopy'] !== null) &&

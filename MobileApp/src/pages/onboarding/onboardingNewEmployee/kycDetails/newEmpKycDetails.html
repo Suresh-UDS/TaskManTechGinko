@@ -45,9 +45,8 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.prePrintedStatement"
-                                onError="src = 'assets/imgs/placeholder.png'" (click)="presentActionSheet('passbook')"
-                                class="passbookImage" />
+                            <img [src]="userAllKYCData.prePrintedStatement" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('passbook')" class="passbookImage" />
                         </ion-avatar>
                     </div>
                 </div>
@@ -77,24 +76,20 @@
                         </ion-buttons>
                     </div>
 
-                    <div class="row form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="trequired">FingerPrint Right</label>
-                            <ion-avatar item-start class="inlineElement">
-                                <img [src]="userAllKYCData.fingerPrintRight"
-                                    onError="src = 'assets/imgs/placeholder.png'"
-                                    (click)="presentActionSheet('fpRight')" class="mdImage" />
-                            </ion-avatar>
-                        </div>
-                   
-                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="trequired">FingerPrint Left</label>
-                            <ion-avatar item-start class="inlineElement">
-                                <img [src]="userAllKYCData.fingerPrintLeft"
-                                    onError="src = 'assets/imgs/placeholder.png'" (click)="presentActionSheet('fpLeft')"
-                                    class="mdImage" />
-                            </ion-avatar>
-                        </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Right</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.fingerPrintRight" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpRight')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Left</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.fingerPrintLeft" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpLeft')" class="mdImage" />
+                        </ion-avatar>
                     </div>
                 </div>
 
