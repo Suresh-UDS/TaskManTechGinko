@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('confirmMsg',[])
-.directive('confirmOnExit', function() {
+.directive('confirmOnExit', function($rootScope) {
     return {
         link: function($scope, elem, attrs) {
             /*window.onbeforeunload = function(){
@@ -11,18 +11,21 @@ angular.module('confirmMsg',[])
             }*/
             var form = $scope[attrs.name];
             $scope.$on('$stateChangeStart', function(event, next, current) {
-                if (form.$dirty && !form.$submitted) {
-                    if(confirm("are you sure want to leave page without saving?")) {
-                        return true;
-                    }else{
-                        event.preventDefault();
+                if(!$rootScope.confirmBoxHide){
+                    if (form.$dirty && !form.$submitted) {
+                        if(confirm("are you sure want to leave page without saving?")) {
+                            return true;
+                        }else{
+                            event.preventDefault();
+                        }
                     }
                 }
+
             });
         }
     };
 })
-.directive('confirmOnExitTouch', function() {
+.directive('confirmOnExitTouch', function($rootScope) {
     return {
         link: function($scope, elem, attrs) {
             /*window.onbeforeunload = function(){
@@ -32,11 +35,13 @@ angular.module('confirmMsg',[])
             }*/
             var form = $scope[attrs.name];
             $scope.$on('$stateChangeStart', function(event, next, current) {
-                if ((form.$dirty || form.$touched) && !form.$submitted) {
-                    if(confirm("are you sure want to leave page without saving?")) {
-                        return true;
-                    }else{
-                        event.preventDefault();
+                if(!$rootScope.confirmBoxHide){
+                    if ((form.$dirty || form.$touched) && !form.$submitted) {
+                        if(confirm("are you sure want to leave page without saving?")) {
+                            return true;
+                        }else{
+                            event.preventDefault();
+                        }
                     }
                 }
             });

@@ -31,8 +31,10 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
                  $rootScope.accountName = response.login;
              });*/
 
+
         $rootScope.logout = function () {
             Auth.logout();
+            $rootScope.confirmBoxHide = true;
             $state.go('login');
             $rootScope.resLoader=false;
         };

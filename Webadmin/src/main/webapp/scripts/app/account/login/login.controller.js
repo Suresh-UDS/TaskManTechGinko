@@ -52,7 +52,7 @@ angular.module('timeSheetApp')
                     $forget.unsetCookie('username','');
                     $forget.unsetCookie('password','');
                 }
-
+                $rootScope.confirmBoxHide = false;
                 $rootScope.resLoader=true;
                 $rootScope.inits();
 
