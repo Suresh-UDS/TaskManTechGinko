@@ -75,7 +75,7 @@ export class newEmpContactDetails implements OnInit {
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
         this.onboardingContactDetailsForm.reset();
-        this.addressProof = 'assets/imgs/placeholder.png';
+        this.addressProof = null;
       }
     })
 
@@ -103,6 +103,8 @@ export class newEmpContactDetails implements OnInit {
         const srtingData = control1.value.toString();
         if (srtingData.length !== 10) {
           control1.setErrors({ shouldMinLength: true });
+        } else {
+          control1.setErrors(null);
         }
       }
       return;
@@ -115,6 +117,8 @@ export class newEmpContactDetails implements OnInit {
       if (control1.value && control2.value) {
         if (control1.value.toString() === control2.value.toString()) {
           control2.setErrors({ notToEquivalent: true });
+        } else {
+          control2.setErrors(null);
         }
       }
       return;
@@ -152,7 +156,7 @@ export class newEmpContactDetails implements OnInit {
         {
           text: 'Pick from Gallery',
           handler: () => {
-            this.getProofmage( 'album');
+            this.getProofmage('album');
           }
         },
       ]
@@ -181,7 +185,7 @@ export class newEmpContactDetails implements OnInit {
           console.log(' get file path -- ' + imageURI)
 
           this.addressProof = imageURI;
-          this.addressProofImage = true;        
+          this.addressProofImage = true;
           this.sendValidationMessage();
 
         });
@@ -206,12 +210,14 @@ export class newEmpContactDetails implements OnInit {
   // }
 
   sendValidationMessage() {
-    if (this.formStatusValues['status'] && this.addressProofImage) {
+    if (this.formStatusValues['status'] && (this.addressProof !== null)) {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
-      let contactNo = JSON.stringify(this.formStatusValues['data']['emergencyConatctNo']);
-      console.log('EmpCont - ' + JSON.stringify([contactNo]));
+      let contactNo = [] 
+      contactNo[0] = this.formStatusValues['data']['emergencyConatctNo'];
 
-      this.formStatusValues['data']['emergencyConatctNo'] = [contactNo];
+      console.log('EmpCont - ' + JSON.stringify(contactNo));
+
+      this.formStatusValues['data']['emergencyConatctNo'] = contactNo;
       this.messageService.formDataMessage(this.formStatusValues);
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });

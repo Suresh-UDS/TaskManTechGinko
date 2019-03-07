@@ -79,15 +79,15 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     });
   }
 
-
+  
   initialKycImage() {
     this.userAllKYCData = {
-      aadharPhotoCopy: 'assets/imgs/placeholder.png',
-      employeeSignature: 'assets/imgs/placeholder.png',
-      profilePicture: 'assets/imgs/placeholder.png',
-      prePrintedStatement: 'assets/imgs/placeholder.png',
-      fingerPrintRight: 'assets/imgs/placeholder.png',
-      fingerPrintLeft: 'assets/imgs/placeholder.png'
+      aadharPhotoCopy: null,
+      employeeSignature:  null,
+      profilePicture:  null,
+      prePrintedStatement:  null,
+      thumbImpressenRight:  null,
+      thumbImpressenLeft:  null
     }
   }
 
@@ -143,9 +143,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
           } else if (imageSide == 'profile') {
             this.userAllKYCData['profilePicture'] = imageURI;
           } else if (imageSide == 'fpRight') {
-            this.userAllKYCData['fingerPrintRight'] = imageURI;
+            this.userAllKYCData['thumbImpressenRight'] = imageURI;
           } else if (imageSide == 'fpLeft') {
-            this.userAllKYCData['fingerPrintLeft'] = imageURI;
+            this.userAllKYCData['thumbImpressenLeft'] = imageURI;
           }
           this.sendValidationMessage();
         })
@@ -178,15 +178,21 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
   sendValidationMessage() {
 
-    console.log('kycValidation '+this.userAllKYCData['fingerPrintRight']);
+    console.log('kycValidation '+JSON.stringify(this.userAllKYCData));
+
     if ((this.formStatusValues['status']) &&
       //(this.userAllKYCData['aadharNumber'] !== null) &&
       (this.userAllKYCData['aadharPhotoCopy'] !== null) &&
+      (this.userAllKYCData['aadharPhotoCopy'] != "") &&
       (this.userAllKYCData['employeeSignature'] !== null) &&
+      (this.userAllKYCData['employeeSignature'] != "") &&
       (this.userAllKYCData['profilePicture'] !== null) &&
-      (this.userAllKYCData['fingerPrintRight'] !== null) &&
-      (this.userAllKYCData['fingerPrintLeft'] !== null) &&
-      (this.userAllKYCData['prePrintedStatement'] !== null)) {
+      (this.userAllKYCData['thumbImpressenRight'] !== null) &&
+      (this.userAllKYCData['profilePicture'] != "") &&
+      (this.userAllKYCData['thumbImpressenLeft'] !== null) &&
+      (this.userAllKYCData['thumbImpressenLeft'] != "") &&
+      (this.userAllKYCData['prePrintedStatement'] !== null) && 
+      (this.userAllKYCData['prePrintedStatement'] != "")) {
 
       console.log(' kyc-data1 - ' + JSON.stringify(this.formStatusValues['data']));
       Object.assign(this.formStatusValues['data'], this.userAllKYCData);
@@ -198,7 +204,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       this.messageService.formDataMessage(this.formStatusValues);
       console.log(' status_kyc1 ' + this.userAllKYCData['aadharNumber'] + ' - ' +
         this.formStatusValues['data']['aadharPhotoCopy'] + ' - ' + this.formStatusValues['status']);
-      console.log(' status_kyc2 ' + this.userAllKYCData['fingerPrintLeft'] + ' - ' + this.formStatusValues['status']);
+      console.log(' status_kyc2 ' + this.userAllKYCData['thumbImpressenLeft'] + ' - ' + this.formStatusValues['status']);
     } else {
       this.messageService.formDataMessage({ status: false, data: {} });
     }
@@ -218,8 +224,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];
         this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['profilePicture'];
         this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['prePrintedStatement'];
-        this.userAllKYCData['fingerPrintRight'] = localStoragedData['actionRequired'][this.storedIndex]['fingerPrintRight'];
-        this.userAllKYCData['fingerPrintLeft'] = localStoragedData['actionRequired'][this.storedIndex]['fingerPrintLeft'];
+        this.userAllKYCData['thumbImpressenRight'] = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenRight'];
+        this.userAllKYCData['thumbImpressenLeft'] = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
 
         this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['aadharNumber']);
         console.log('kyc=aadhaar' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);

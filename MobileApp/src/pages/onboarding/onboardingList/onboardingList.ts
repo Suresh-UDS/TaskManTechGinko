@@ -12,6 +12,7 @@ import { componentService } from '../../service/componentService';
 
 import { Storage } from '@ionic/storage';
 import { onBoardingModel } from './onboarding';
+import { onBoardingDataModel } from './onboardingDataModel';
 
 @Component({
   selector: 'page-onboarding-list',
@@ -125,6 +126,13 @@ export class onboardingExistEmployee implements OnInit {
       action: 'add'
     }
     this.storage.set('onboardingCurrentIndex', obj);
+
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+      localStoragedData["actionRequired"][obj.index] = onBoardingDataModel;
+      delete onBoardingDataModel['id'];
+      this.storage.set('OnBoardingData', localStoragedData); 
+    });
+    
     console.log("index === " + this.actionRequiredEmp.length);
     this.navCtrl.push(onboardingNewEmployee);
   }

@@ -68,8 +68,7 @@
                         <input class="form-control" type="text" name="pstreetname" required>
                     </div>
                 </div> -->
-                <div *ngFor="let list of onboardingContactDetailsForm.get('permanentAddress').controls; let index = index;"
-                                formArrayName="permanentAddress">
+                <div *ngFor="let list of onboardingContactDetailsForm.get('permanentAddress').controls; let index = index;" formArrayName="permanentAddress">
                     <div [formGroupName]="index">
                         <div class="row form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
@@ -99,7 +98,8 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <label class="headerText trequired">Present Address Proof</label>
                         <ion-avatar item-start class="inlineElemet">
-                            <img [src]="addressProof" (load)="imgSuccessLoaded()" onError="src = 'assets/imgs/placeholder.png'; imgErrorFunction()" (click)="presentActionSheet()" class="mdImage" />
+                            <img [src]="addressProof" (load)="imgSuccessLoaded()"
+                             onError="src = 'assets/imgs/placeholder.png'; imgErrorFunction()" (click)="presentActionSheet()" class="mdImage" />
                         </ion-avatar>
                     </div>
                 </div>

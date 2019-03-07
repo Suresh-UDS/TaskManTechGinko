@@ -22,8 +22,8 @@ const imageUploadModal = {
   employeeSignature: String,
   prePrintedStatement: String,
   addressProof: String,
-  fingerPrintRight: String,
-  fingerPrintLeft: String
+  thumbImpressenRight: String,
+  thumbImpressenLeft: String
 }
 
 @Component({
@@ -68,7 +68,7 @@ export class onboardingNewEmployee {
       });
     })
 
-  
+
     if (navParams.get('pageData')) {
       this.navPreviousData = navParams.get('pageData');
     } else {
@@ -199,7 +199,7 @@ export class onboardingNewEmployee {
   // formFinalOperation() {
   //   let obj: any = {};
   //   var tempIndex;
-    
+
   //       this.storage.get('OnBoardingData').then((localStoragedData) => {
   //         tempIndex = localStoragedData['completed'].length;
   //         //if (this.network.type != 'none') {
@@ -238,7 +238,7 @@ export class onboardingNewEmployee {
   //         //   this.navCtrl.setRoot(onboardingExistEmployee);
   //         // }
   //       });
-      
+
   // }
 
   formFinalOperation() {
@@ -258,16 +258,18 @@ export class onboardingNewEmployee {
           this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex])
             .subscribe((res) => {
               localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
-              localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-              //    alert(JSON.stringify(res));
-
+              //localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+              
               console.log("res =======" + JSON.stringify(res));
+
+              localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];  
               console.log("res id=======" + res['id']);
 
               this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
                 this.componentService.closeAll();
-                console.log('res image -api ' + JSON.stringify(res));
-                localStoragedData['completed'].splice(tempIndex, 1);
+                console.log('res_image_api ' + JSON.stringify(res));
+                //localStoragedData['completed'].splice(tempIndex, 1);
+                localStoragedData['actionRequired'].splice(this.storedIndex, 1);
                 this.storage.set('OnBoardingData', localStoragedData);
                 // cg
                 this.navCtrl.setRoot(onboardingExistEmployee);
@@ -327,18 +329,21 @@ export class onboardingNewEmployee {
         // for(let key in data) {
         //   localStoragedData['actionRequired'][this.storedIndex][key] = data[key];
         // }
+        // if (localStoragedData['actionRequired'][this.storedIndex]['employeeCode'] == ''
+        // && localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] !== null) {          
+        // }
+
         data['isSync'] = false;
-        // if (!localStoragedData['actionrequired'][this.storedIndex].hasOwnProperty('customer')) {
-          data['customer'] = [{
-            project: [{
-              'projectId': window.localStorage.getItem('projectId'),
-              wbs: [
-                {
-                  'wbsId': window.localStorage.getItem('wbsId')
-                }
-              ]
-            }]
-          }];
+        data['customer'] = [{
+          project: [{
+            'projectId': window.localStorage.getItem('projectId'),
+            wbs: [
+              {
+                'wbsId': window.localStorage.getItem('wbsId')
+              }
+            ]
+          }]
+        }];
         // }
         console.log('projectId SUBMIT ' + JSON.stringify(data));
         // data.projectId2 = window.localStorage.getItem('projectId');
