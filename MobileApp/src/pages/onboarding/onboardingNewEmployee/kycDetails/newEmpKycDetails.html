@@ -14,18 +14,7 @@
                     </div> -->
                 </div>
 
-                <!-- <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">DOA as on card</label>
-                        <input class="form-control" type="date" name="doaasAadharCard" [(ngModel)]="kycFormData.doaAatharCard"
-                            required>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">City as on Aadhar Card</label>
-                        <input class="form-control" type="text" name="cityasAatharCard" [(ngModel)]="kycFormData.cityAatharCard"
-                            required>
-                    </div>
-                </div> -->
+
 
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
@@ -35,22 +24,10 @@
                                 (click)="presentActionSheet('front')" class="mdImage" />
                         </ion-avatar>
                     </div>
-                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
-                        <label class="trequired">Aathar Back View</label>
-                        <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.aatharBack" (click)="getImageData('back')" class="mdImage" />
-                        </ion-avatar>
-                    </div> -->
+
                 </div>
 
                 <div class="row form-group">
-                    <!-- <div padding class="col-md-12 col-sm-12 col-xs-12 padding0">
-                        <div class="col-md-3 col-sm-3 col-xs-3 padding0">
-                            <ion-toggle checked="false" name="checkingBankAccount" (ionChange)="getPassBook(hasBankAccount)"
-                                [(ngModel)]="hasBankAccount"></ion-toggle>
-                        </div>
-                        <span class="spanText">Has Bank Details</span>
-                    </div> -->
                     <div *ngFor="let list of onboardingKYCForm.get('bankDetails').controls; let i = index;"
                         formArrayName="bankDetails">
                         <div [formGroupName]="i">
@@ -68,8 +45,9 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.prePrintedStatement" onError="src = 'assets/imgs/placeholder.png'"
-                                (click)="presentActionSheet('passbook')" class="passbookImage" />
+                            <img [src]="userAllKYCData.prePrintedStatement"
+                                onError="src = 'assets/imgs/placeholder.png'" (click)="presentActionSheet('passbook')"
+                                class="passbookImage" />
                         </ion-avatar>
                     </div>
                 </div>
@@ -90,27 +68,33 @@
                                 (click)="presentActionSheet('profile')" class="mdImage" />
                         </ion-avatar>
                     </div>
-                </div>        
+                </div>
 
                 <div class="row form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12 padding0">
-                                <ion-buttons end>
-                                    <button (click)="launchApp()" small ion-button>Fingerprint Scanner</button>
-                                </ion-buttons>
-                            </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="trequired">FingerPrint Right</label>
-                        <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.fingerPrintRight" onError="src = 'assets/imgs/placeholder.png'"
-                                (click)="presentActionSheet('fpRight')" class="mdImage" />
-                        </ion-avatar>
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <ion-buttons end>
+                            <button (click)="launchApp()" small ion-button>Fingerprint Scanner</button>
+                        </ion-buttons>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="trequired">FingerPrint Left</label>
-                        <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.fingerPrintLeft" onError="src = 'assets/imgs/placeholder.png'"
-                                (click)="presentActionSheet('fpLeft')" class="mdImage" />
-                        </ion-avatar>
+
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <label class="trequired">FingerPrint Right</label>
+                            <ion-avatar item-start class="inlineElement">
+                                <img [src]="userAllKYCData.fingerPrintRight"
+                                    onError="src = 'assets/imgs/placeholder.png'"
+                                    (click)="presentActionSheet('fpRight')" class="mdImage" />
+                            </ion-avatar>
+                        </div>
+                   
+                        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                            <label class="trequired">FingerPrint Left</label>
+                            <ion-avatar item-start class="inlineElement">
+                                <img [src]="userAllKYCData.fingerPrintLeft"
+                                    onError="src = 'assets/imgs/placeholder.png'" (click)="presentActionSheet('fpLeft')"
+                                    class="mdImage" />
+                            </ion-avatar>
+                        </div>
                     </div>
                 </div>
 

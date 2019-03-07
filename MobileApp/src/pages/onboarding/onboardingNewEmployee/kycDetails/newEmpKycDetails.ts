@@ -62,7 +62,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       }
     })
     this.onboardingKycSubscription = this.onboardingKYCForm.statusChanges.subscribe(status => {
-      console.log(status);
+      console.log('KYCdataaa '+ status);
       console.log('KYCdataaa== ' + JSON.stringify(this.onboardingKYCForm.value));
       if (status == 'VALID') {
         this.formStatusValues = {
@@ -113,22 +113,6 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     actionSheet.present();
   }
 
-  private getFileUri = (url: any) => {
-    var scope = this;
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      var reader = new FileReader();
-      reader.onloadend = function () {
-        console.log(' reader ' + reader.result);
-        scope.imageURIto = reader.result;
-      }
-      reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-  }
-
   getImageData(imageSide, imageType) {
     var options: CameraOptions = {
       quality: 50,
@@ -163,12 +147,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
           } else if (imageSide == 'fpLeft') {
             this.userAllKYCData['fingerPrintLeft'] = imageURI;
           }
-
           this.sendValidationMessage();
         })
         .catch(err => console.log(err));
-
-      //  imageURI = this.DomSanitizer.bypassSecurityTrustUrl(imageData);
     })
   }
   createBankDetails(): FormGroup {
@@ -185,6 +166,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         const srtingData = control1.value.toString();
         if (srtingData.length !== 12) {
           control1.setErrors({ shouldMinLength: true });
+        } else {
+          control1.setErrors(null);
         }
       }
       return;
@@ -195,7 +178,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
   sendValidationMessage() {
     if ((this.formStatusValues['status']) &&
-    //(this.userAllKYCData['aadharNumber'] !== null) &&
+      //(this.userAllKYCData['aadharNumber'] !== null) &&
       (this.userAllKYCData['aadharPhotoCopy'] !== null) &&
       (this.userAllKYCData['employeeSignature'] !== null) &&
       (this.userAllKYCData['profilePicture'] !== null) &&
@@ -224,7 +207,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      console.log('kyc_storedIndex ' +this.storedIndex);
+      console.log('kyc_storedIndex ' + this.storedIndex);
       if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('aadharNumber')) {
         console.log('KYCdatta all === ' + JSON.stringify(localStoragedData['actionRequired']));
         console.log('KYCdatta viewinit === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
@@ -239,11 +222,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['aadharNumber']);
         console.log('kyc=aadhaar' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
         //this.onboardingKYCForm.patchValue();
-
         this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
-        // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
-        //   this.onboardingKYCForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
-        // }
         this.sendValidationMessage();
       }
     });
