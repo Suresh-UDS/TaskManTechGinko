@@ -112,7 +112,7 @@
                                                     <label class="control-label">Name<span class="red-star">*</span></label>
                                                     <input id='employeeName' ng-model="employee.name" class='form-control InputTxtCapsAll'
                                                            name='employeeName' type='text' value=""
-                                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required tabindex="4" />
+                                                           ng-minlength=5 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required tabindex="4" />
                                                     <div ng-show="form.$submitted || form.employeeName.$touched || form.employeeName.$dirty">
                                                         <div ng-show="form.employeeName.$dirty || form.employeeName.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"

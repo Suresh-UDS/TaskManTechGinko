@@ -287,11 +287,11 @@
 
                                         <div class="HoverBx">
 
-                                            <a ng-click="getCheckInDetails(employee.id)" title="View" has-permission="Job:View" ui-sref="view-job({ id: job.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
+                                            <a ng-click="getCheckInDetails(employee.id)"  title="View" has-permission="Job:View" ui-sref="view-job({ id: job.id })"   class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                            <a ng-if="job.status !='COMPLETED'" ng-class="{active: $state.includes('admin')}" title="Edit" has-permission="Job:Edit" ui-sref="edit-job({ id: job.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                            <a ng-if="job.status !='COMPLETED'" ng-hide="showInActive" ng-class="{active: $state.includes('admin')}" title="Edit" has-permission="Job:Edit" ui-sref="edit-job({ id: job.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                            <a ng-class="{active: $state.includes('admin')}" title="Delete" has-permission="Job:Delete" ng-click="deleteConfirm(job)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                            <a ng-class="{active: $state.includes('admin')}" ng-hide="showInActive" title="Delete" has-permission="Job:Delete" ng-click="deleteConfirm(job)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                             <!--<a title="Checklist Details" ng-if="job.checklistItems" data-toggle="modal"-->
                                                <!--data-target="#checkListViewModal" ng-click="selectJobShowChecklist(job)"> <i class="material-icons">info</i></a>-->
