@@ -77,7 +77,7 @@ export class onboardingExistEmployee implements OnInit {
 
             for (var i = 0; i < res.length; i++) {
 
-              //if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+              if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
 
                 if(res[i]["submitted"]){
                   localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
@@ -88,7 +88,7 @@ export class onboardingExistEmployee implements OnInit {
 
                 this.storage.set('OnBoardingData', localStoragedData);
 
-              //}
+              }
 
             }
             //console.log(onBoardingModel);

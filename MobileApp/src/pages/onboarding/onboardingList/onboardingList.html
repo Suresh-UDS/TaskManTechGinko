@@ -48,7 +48,7 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="AppConfig.s3Bucket+list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />                  
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -117,7 +117,7 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="AppConfig.s3Bucket+list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''"  onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
