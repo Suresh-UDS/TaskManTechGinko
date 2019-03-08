@@ -48,8 +48,7 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'"
-                                    class="mdImage" />
+                                <img [src]="AppConfig.s3Bucket+list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -116,10 +115,9 @@
                 </ion-item> -->
                 <ion-card-content (click)="onboardingUserView(list)">
                     <ion-row class="margin0">
-
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['religion']" class="mdImage" />
+                                <img [src]="AppConfig.s3Bucket+list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -151,50 +149,8 @@
                                 </ion-item>
                             </ion-list>
                         </ion-col>
-                        <!-- <ion-col col-3 class="padding-left0 ver-center">
-                            <div class="padding-bottom5">
-                                <button ion-button clear color="primary">
-                                    <i class="material-icons">refresh</i> Update
-                                </button>
-                            </div>
-                        </ion-col> -->
                     </ion-row>
                 </ion-card-content>
-                <!-- <ion-card-content>
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col col-6 class="text-center flex45">
-                                <ion-avatar item-start class="inlineElement">
-                                    <img src="assets/imgs/placeholder.png" class="mdImage" />
-                                </ion-avatar>
-                               
-                            </ion-col>
-                            <ion-col col-6>
-                                <ion-list>
-                                    <ion-item>
-                                        
-                                        <h2 class="textColor">John</h2>
-                                    </ion-item>
-                                    <ion-item>
-                                       
-                                        Admin
-                                    </ion-item>
-                                    <ion-item>
-                                        
-                                        #emp0003
-                                    </ion-item>
-                                    <ion-item>
-                                        <button ion-button icon-start>
-                                            <ion-icon name="eye"></ion-icon>
-                                            <div>View</div>
-                                        </button>
-                                    </ion-item>
-                                </ion-list>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </ion-card-content>
-             -->
             </ion-card>
         </div>
     </div>

@@ -13,6 +13,7 @@ import { componentService } from '../../service/componentService';
 import { Storage } from '@ionic/storage';
 import { onBoardingModel } from './onboarding';
 import { onBoardingDataModel } from './onboardingDataModel';
+import {AppConfig} from '../../service/app-config';
 
 @Component({
   selector: 'page-onboarding-list',
@@ -28,6 +29,7 @@ export class onboardingExistEmployee implements OnInit {
   errormsg;
   hideFilter = true;
   wbsId;
+  AppConfig = AppConfig;
 
   constructor(private storage: Storage, private network: Network, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController,
     public component: componentService) {
@@ -65,16 +67,29 @@ export class onboardingExistEmployee implements OnInit {
         window.localStorage.setItem('projectId', projectId);
 
         this.storage.get('OnBoardingData').then((localStoragedData) => {
+
+          localStoragedData["completed"] = [];
+
           this.onboardingService.getEmployeeListByProjectId(projectId).subscribe(res => {
             let objectsKeys;
             let objectsValues;
 
 
             for (var i = 0; i < res.length; i++) {
-              if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-                localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+
+              //if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+
+                if(res[i]["submitted"]){
+                  localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
+                }
+                else{
+                  localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+                }
+
                 this.storage.set('OnBoardingData', localStoragedData);
-              }
+
+              //}
+
             }
             //console.log(onBoardingModel);
             this.actionRequiredEmp = localStoragedData['actionRequired'];
@@ -127,11 +142,7 @@ export class onboardingExistEmployee implements OnInit {
     }
     this.storage.set('onboardingCurrentIndex', obj);
 
-    this.storage.get('OnBoardingData').then((localStoragedData) => {
-      localStoragedData["actionRequired"][obj.index] = onBoardingDataModel;
-      delete onBoardingDataModel['id'];
-      this.storage.set('OnBoardingData', localStoragedData); 
-    });
+    
     
     console.log("index === " + this.actionRequiredEmp.length);
     this.navCtrl.push(onboardingNewEmployee);

@@ -1,5 +1,5 @@
-export const onBoardingDataModel =  
-    {
+export const onBoardingDataModel =
+{
     id: "",
     employeeName: "",
     employeeCode: "",
@@ -17,7 +17,7 @@ export const onBoardingDataModel =
     prePrintedStatement: "",
     tempId: "",
     thumbImpressenRight: "",
-    thumbImpressenLeft: "", 
+    thumbImpressenLeft: "",
     relationshipDetails: "",
     nomineeDetail: "",
     identificationMark: "",
@@ -28,42 +28,42 @@ export const onBoardingDataModel =
     previousEmployee: "",
     epfNo: "",
     bankDetails: [
-    {
-    name: "",
-    accountNo: "",
-    isActive: "",
-    ifsc: ""
-    }
+        {
+            name: "",
+            accountNo: "",
+            isActive: "",
+            ifsc: ""
+        }
     ],
     customer: [
-    {
-    branchName: "",
-    project: [
-    {
-    projectId: "",
-    projectName: "",
-    projectDes: "",
-    wbs: [
-    {
-    wbsId: "",
-    wbsName: "",
-    wbsDes: "",
-    position: "",
-    positionDescription: "",
-    activityDescription: "",
-    activityNo: "",
-    activityId: "",
-    gross: ""
-    }
-    ]
-    }
-    ]
-    }
+        {
+            branchName: "",
+            project: [
+                {
+                    projectId: "",
+                    projectName: "",
+                    projectDes: "",
+                    wbs: [
+                        {
+                            wbsId: "",
+                            wbsName: "",
+                            wbsDes: "",
+                            position: "",
+                            positionDescription: "",
+                            activityDescription: "",
+                            activityNo: "",
+                            activityId: "",
+                            gross: ""
+                        }
+                    ]
+                }
+            ]
+        }
     ],
     uanno: "",
     esino: "",
     addressProof: "",
-    sync: false
-    }
+    sync: false,
+    submitted : false
+}
 
- 

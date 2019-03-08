@@ -15,6 +15,9 @@ import { OnboardingService } from '../../service/onboarding.service';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Jsonp } from '../../../../node_modules/@angular/http';
+import { onBoardingDataModel } from '../onboardingList/onboardingDataModel';
+
+import * as _ from 'underscore';
 
 const imageUploadModal = {
   aadharPhotoCopy: String,
@@ -119,14 +122,51 @@ export class onboardingNewEmployee {
   }
   nextWizard(index) {
     console.log('next');
-    this.storeFormData(this.currentFormValues).then(data => {
-      console.log('promise return');
-      console.log(data)
-      if (this.wizardObj.length > index) {
-        this.currentIndex = this.currentIndex + 1;
-        this.loadComponent(this.wizardObj[this.currentIndex]['component']);
+
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      
+      this.storedIndex = data['index'];
+      
+      if(data['action'] == "add"){
+
+        this.storage.get('OnBoardingData').then((localStoragedData) => {
+
+          if(!localStoragedData["actionRequired"][this.storedIndex]){
+
+            localStoragedData["actionRequired"][this.storedIndex] = onBoardingDataModel;
+            delete onBoardingDataModel['id'];
+            this.storage.set('OnBoardingData', localStoragedData); 
+            
+          }
+
+          this.storeFormData(this.currentFormValues).then(data => {
+            console.log('promise return');
+            console.log(data)
+            if (this.wizardObj.length > index) {
+              this.currentIndex = this.currentIndex + 1;
+              this.loadComponent(this.wizardObj[this.currentIndex]['component']);
+            }
+          });
+
+        });
+
       }
+      else{
+
+        this.storeFormData(this.currentFormValues).then(data => {
+          console.log('promise return');
+          console.log(data)
+          if (this.wizardObj.length > index) {
+            this.currentIndex = this.currentIndex + 1;
+            this.loadComponent(this.wizardObj[this.currentIndex]['component']);
+          }
+        });
+
+      }
+
     });
+ 
+    
   }
   PreviousWizard(index) {
     if (index > 0) {
@@ -248,7 +288,28 @@ export class onboardingNewEmployee {
       console.log(' store resolve ' + data);
       if (data == 'success') {
         this.storage.get('OnBoardingData').then((localStoragedData) => {
-          tempIndex = localStoragedData['completed'].length;
+
+          localStoragedData['actionRequired'][this.storedIndex]["submitted"] = true;
+
+          let empCode = localStoragedData['actionRequired'][this.storedIndex]["employeeCode"];
+
+          tempIndex = _.findIndex(localStoragedData['completed'],{employeeCode:empCode});
+
+          if(tempIndex == -1){
+
+            tempIndex = localStoragedData['completed'].length;
+
+            console.log("Completed List ",localStoragedData['completed']);
+
+            console.log("loading ========" + empCode);
+
+            console.log("loading ========" + tempIndex);
+
+            console.log("loading ========" + JSON.stringify(localStoragedData['completed'][tempIndex]));
+
+          }
+          
+
           //if (this.network.type != 'none') {
           this.componentService.showLoader("Loading OnBoarding");
           console.log("loading ========" + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));

@@ -32,11 +32,7 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
     });
-    // this.storage.get('OnBoardingData').then(localStoragedData => {
-    //   if (localStoragedData['actionRequired'].length && localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']) {
-    //     this.getStoredEpfCount = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['totalEpf'];
-    //   }
-    // });
+
     this.onboardingEmployeeMentForm = this.fb.group({
       previousEmployee: this.fb.array([this.addPreviousEmp()])
     });
@@ -94,45 +90,29 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     let value = this.nomineeForms.controls[0]['controls']['isEmploymentEarlier']['value'];
 
     let empName = this.nomineeForms.controls[0]['controls']['name'];
-    let fromEmp = this.nomineeForms.controls[0]['controls']['fromEmployed'];
-    let toEmp = this.nomineeForms.controls[0]['controls']['toEmployed'];
+    // let fromEmp = this.nomineeForms.controls[0]['controls']['fromEmployed'];
+    // let toEmp = this.nomineeForms.controls[0]['controls']['toEmployed'];
 
     let empDesignation = this.nomineeForms.controls[0]['controls']['designation'];
-    let empAddress = this.nomineeForms.controls[0]['controls']['address'];
-    let empAreaWork = this.nomineeForms.controls[0]['controls']['areaOfWork'];
+    // let empAddress = this.nomineeForms.controls[0]['controls']['address'];
+    // let empAreaWork = this.nomineeForms.controls[0]['controls']['areaOfWork'];
 
     if (!value) {
       this.earlierEmployer = false;
       empName.clearValidators();
       empName.disable();
-      fromEmp.clearValidators();
-      fromEmp.disable();
-      toEmp.clearValidators();
-      toEmp.disable();
 
       empDesignation.clearValidators();
       empDesignation.disable();
-
-      empAddress.clearValidators();
-      empAddress.disable();
-
-      empAreaWork.clearValidators();
-      empAreaWork.disable();
 
     } else {
       this.earlierEmployer = true;
       empName.setValidators([Validators.required]);
       empName.enable();
-      fromEmp.setValidators([Validators.required]);
-      fromEmp.enable();
-      toEmp.setValidators([Validators.required]);
-      toEmp.enable()
+     
       empDesignation.setValidators([Validators.required]);
       empDesignation.enable();
-      empAddress.setValidators([Validators.required]);
-      empAddress.enable();
-      empAreaWork.setValidators([Validators.required]);
-      empAreaWork.enable();
+      
     }
   }
 
@@ -140,11 +120,11 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     return this.fb.group({
       isEmploymentEarlier: [true],
       name: [''],
-      fromEmployed: [''],
-      toEmployed: [''],
+      // fromEmployed: [''],
+      // toEmployed: [''],
       designation: [''],
-      address: [''],
-      areaOfWork: ['']
+      // address: [''],
+      // areaOfWork: ['']
     })
   }
 
@@ -158,7 +138,8 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
 
           this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
 
-          console.log('EMPfromTo dt2--'+JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee']['fromEmployed']));
+          console.log('EMPfromTo_dt2--'+JSON.stringify(localStoragedData['actionRequired']
+          [this.storedIndex]['previousEmployee']['fromEmployed']));
 
           let fromempDate = localStoragedData['actionRequired'][this.storedIndex]['previousEmployee']['fromEmployed'];
           let toEmpDate = localStoragedData['actionRequired'][this.storedIndex]['previousEmployee']['toEmployed'];

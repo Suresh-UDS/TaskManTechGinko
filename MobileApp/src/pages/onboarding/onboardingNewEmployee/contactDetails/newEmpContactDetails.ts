@@ -13,11 +13,12 @@ import { File } from '@ionic-native/file';
 })
 export class newEmpContactDetails implements OnInit {
 
-  addressProof = 'assets/imgs/placeholder.png'
+  addressProof = ''
   onboardingContactDetailsForm: FormGroup;
   onboardingContactDetailsSubscription;
   formStatusValues: any = {};
   storedIndex;
+  IMG_BASE_URL = 'https://s3zappyweb.s3.ap-south-1.amazonaws.com/uat/expenseDocuments/';
   mobnumPattern = "^((\\+91-?)|0)?[0-9]{10}$";
   PhoneNumberErrorMessage;
   addressProofImage = false;
@@ -192,8 +193,8 @@ export class newEmpContactDetails implements OnInit {
     })
   }
 
-  // setValuePermanent() {
-  //   let value = this.onboardingContactDetailsForm.get('checkSameAsPresent').value;
+  //  setValuePermanent() {
+  //    let value = this.onboardingContactDetailsForm.get('checkSameAsPresent').value;
   //   if (value) {
   //     this.onboardingContactDetailsForm.setValue({
   //       permanentAddress: this.onboardingContactDetailsForm.get('communicationAddress').value,
@@ -210,12 +211,19 @@ export class newEmpContactDetails implements OnInit {
   // }
 
   sendValidationMessage() {
-    if (this.formStatusValues['status'] && (this.addressProof !== null)) {
+    if (this.formStatusValues['status'] && this.addressProof !== null
+      && this.addressProof != "") {
       this.formStatusValues['data']['addressProof'] = this.addressProof;
-      let contactNo = [] 
-      contactNo[0] = this.formStatusValues['data']['emergencyConatctNo'];
+      let contactNo = [];
 
-      console.log('EmpCont - ' + JSON.stringify(contactNo));
+      if (!Array.isArray(this.formStatusValues['data']['emergencyConatctNo'])) {
+        contactNo[0] = this.formStatusValues['data']['emergencyConatctNo'];
+        console.log('EmpCont - ' + JSON.stringify(contactNo));
+      }
+      else {
+        contactNo = this.formStatusValues['data']['emergencyConatctNo'];
+        console.log('EmpCont2 - ' + JSON.stringify(contactNo));
+      } 
 
       this.formStatusValues['data']['emergencyConatctNo'] = contactNo;
       this.messageService.formDataMessage(this.formStatusValues);
@@ -235,18 +243,22 @@ export class newEmpContactDetails implements OnInit {
 
         if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('contactNumber')) {
 
-          console.log(localStoragedData['actionRequired'][this.storedIndex]);
+          console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
 
           this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
+          console.log(' - address - ' + this.addressProof);
 
-          console.log('address_proof ' + JSON.stringify(this.addressProof));
+          if (this.addressProof !== null && this.addressProof.includes('addressProof')) {
+            this.addressProof = this.IMG_BASE_URL + this.addressProof;
+          }
+
+          console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']));
 
           this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
-          this.onboardingContactDetailsForm.controls['emergencyConatctNo']
-            .setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
-          // for (let list in localStoragedData['actionRequired'][this.storedIndex]['contactDetails']) {
-          //   this.onboardingContactDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails'][list]);
-          // }
+          if (localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'] !== null) {
+            this.onboardingContactDetailsForm.controls['emergencyConatctNo']
+              .setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
+          }
         }
       }
     });
