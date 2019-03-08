@@ -49,10 +49,10 @@ public class MaterialIndentSpecification implements Specification<MaterialIndent
 			predicates.add(builder.like(builder.lower(root.get("indentRefNumber")),
 					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
 		}
-		if(searchCriteria.getIndentStatus() != null) { 
+		if(searchCriteria.getIndentStatus() != null) {
 			predicates.add(builder.equal(root.get("indentStatus"), searchCriteria.getIndentStatus()));
 		}
-		if(searchCriteria.getRequestedDate() != null) { 
+		if(searchCriteria.getRequestedDate() != null) {
 			log.debug("Inventory transaction created date -" + searchCriteria.getRequestedDate());
 			Calendar endCal = Calendar.getInstance();
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
@@ -60,7 +60,7 @@ public class MaterialIndentSpecification implements Specification<MaterialIndent
 			endCal.set(Calendar.SECOND, 0);
 			predicates.add(builder.between(root.get("requestedDate"), searchCriteria.getRequestedDate(), DateUtil.convertToTimestamp(endCal.getTime())));
 		}
-		if(searchCriteria.getIssuedDate() != null) { 
+		if(searchCriteria.getIssuedDate() != null) {
 			log.debug("Inventory transaction created date -" + searchCriteria.getIssuedDate());
 			Calendar endCaltime = Calendar.getInstance();
 			endCaltime.set(Calendar.HOUR_OF_DAY, 23);
@@ -68,14 +68,20 @@ public class MaterialIndentSpecification implements Specification<MaterialIndent
 			endCaltime.set(Calendar.SECOND, 0);
 			predicates.add(builder.between(root.get("issuedDate"), searchCriteria.getIssuedDate(), DateUtil.convertToTimestamp(endCaltime.getTime())));
 		}
-		
-		predicates.add(builder.equal(root.get("active"), "Y"));
+
+//		predicates.add(builder.equal(root.get("active"), "Y"));
+
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
 
 		query.orderBy(builder.desc(root.get("createdDate")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("MaterialIndentSpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
-		
+
 		if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
     		orPredicates.add(builder.equal(root.get("site").get("user").get("id"),  searchCriteria.getUserId()));
 		}else if(searchCriteria.getSiteId() > 0) {

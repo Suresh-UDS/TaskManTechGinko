@@ -69,7 +69,13 @@ public class SlaSpecification implements Specification<SlaConfig> {
             predicates.add(builder.between(root.get("createdDate"), DateUtil.convertToZDT(searchCriteria.getSlaCreatedDate()), DateUtil.convertToZDT(createdDateTo.getTime())));
         }
 
-        predicates.add(builder.equal(root.get("active"), "Y"));
+//        predicates.add(builder.equal(root.get("active"), "Y"));
+
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
 
         query.orderBy(builder.desc(root.get("createdDate")));
 
