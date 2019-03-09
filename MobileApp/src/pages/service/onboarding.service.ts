@@ -23,7 +23,7 @@ export class OnboardingService {
     }
 
     AllProjects(): Observable<any> {
-        return this.http.get(this.BASE_URL + '/api/onboard/getProjectList').map(
+        return this.http.get(this.config.Url + 'api/onboard/getProjectList').map(
             response => {
                 console.log(response.json());
                 return response.json();
@@ -35,7 +35,7 @@ export class OnboardingService {
     }
     allSites(id): Observable<any> {
         console.log(id);
-        return this.http.get(this.BASE_URL + '/api/onboard/getWBSListByProjectIds/[' + id + ']').map(
+        return this.http.get(this.config.Url + 'api/onboard/getWBSListByProjectIds/[' + id + ']').map(
             response => {
                 console.log(response.json());
                 return response.json();
@@ -47,7 +47,7 @@ export class OnboardingService {
     getEmployeeListByProjectId(projectId): Observable<any> {
       //  return this.getAllOnboardingUser();
         // //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
-        let url = this.BASE_URL + '/api/onboard/getEmployeeListByProjectId/' + projectId;
+        let url = this.config.Url + 'api/onboard/getEmployeeListByProjectId/' + projectId;
         return this.http.get(url).map(
             response => {
                 console.log('project Id res::' + response.json());
@@ -61,7 +61,7 @@ export class OnboardingService {
     }
     getEmployeeListByWbs(wbsId): Observable<any> {
         //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
-        let url = this.BASE_URL + '/api/onboard/getEmployeeListByWbs/' + wbsId;
+        let url = this.config.Url + 'api/onboard/getEmployeeListByWbs/' + wbsId;
         return this.http.get(url).map(
             response => {
                 console.log(response.json());
@@ -76,7 +76,7 @@ export class OnboardingService {
         //object = JSON.stringify(object);
         object['isSync'] = true;
         //cg change to true
-        return this.http.post(this.BASE_URL + '/api/onboard/employees', object).map(
+        return this.http.post(this.config.Url + 'api/onboard/employees', object).map(
             response => {
                 return response.json();
             }).catch(error => {
@@ -97,7 +97,7 @@ export class OnboardingService {
     initGetEmployeeListByWbs(): Observable<any> {
         //  let url = 'http://172.16.1.45:8080/api/getWbsDetailsByEmpIds/['+ empId+']';
         //  let url =  'http://172.16.1.57:8090/api/onboard/getWbsDetailsByEmpIds/[3892]';
-        let url = this.BASE_URL + '/api/onboard/getWbsDetailsByEmpIds/[' + window.localStorage.getItem('empUserId') + ']';
+        let url = this.config.Url + 'api/onboard/getWbsDetailsByEmpIds/[' + window.localStorage.getItem('empUserId') + ']';
         return this.http.get(url).map(response => {
             console.log('employee id =======');
             this.leaddetails = response.json();
@@ -142,9 +142,9 @@ export class OnboardingService {
                 }
             }
 
-            console.log("image upload => " + this.BASE_URL + '/api/onboard/' + key)
+            console.log("image upload => " + this.config.Url + 'api/onboard/' + key)
 
-            fileTransfer.upload(filename, this.BASE_URL + '/api/onboard/' + key, options)
+            fileTransfer.upload(filename, this.config.Url + 'api/onboard/' + key, options)
                 .then((data) => {
                     //alert('success')
                     console.log('image response - ' + JSON.stringify(data));
