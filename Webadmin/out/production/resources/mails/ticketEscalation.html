@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.sla.ticket.title}">Escalation Alert</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.sla.greeting}">
+</p>
+
+
+<p th:text="#{email.sla.content(${siteName}, ${level})}">
+
+</p>
+<br>
+<br>
+<p>Here are the escalation details...</p><br>
+
+<span th:text="#{email.sla.id(${id})}"></span>
+
+<span th:text="#{email.sla.title(${title})}"></span>
+
+<span th:text="#{email.sla.description(${desc})}"></span>
+
+<span th:text = "#{email.sla.url}"></span>
+
+<a th:href="${url}">View Ticket</a>
+
+
+<p>
+    <span th:text="#{email.sla.text}">Regards, </span>
+    <br/>
+    <em th:text="#{email.signature}">.</em>
+</p>
+</body>
+</html>
