@@ -103,12 +103,14 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.ticketEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.ticketEmailIds.length;i++){
-               if($scope.settings.ticketEmailIds[i] == email){
-                   alert("Email is already exist..!!");
-                   return false;
-               }
+        if($scope.settings.ticketEmailIds){
+            if($scope.settings.ticketEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.ticketEmailIds.length;i++){
+                    if($scope.settings.ticketEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
+                }
             }
         }
 		if(!$scope.settings.ticketEmailIds) {
@@ -139,14 +141,18 @@ angular.module('timeSheetApp')
             }
         }
 
-        if($scope.settings.quotationEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.quotationEmailIds.length;i++){
-                if($scope.settings.quotationEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.quotationEmailIds){
+            if($scope.settings.quotationEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.quotationEmailIds.length;i++){
+                    if($scope.settings.quotationEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
+
 
 		if(!$scope.settings.quotationEmailIds) {
 			$scope.settings.quotationEmailIds = [];
@@ -175,14 +181,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.shiftWiseAttendanceEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.shiftWiseAttendanceEmailIds.length;i++){
-                if($scope.settings.shiftWiseAttendanceEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.shiftWiseAttendanceEmailIds){
+            if($scope.settings.shiftWiseAttendanceEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.shiftWiseAttendanceEmailIds.length;i++){
+                    if($scope.settings.shiftWiseAttendanceEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.shiftWiseAttendanceEmailIds) {
 			$scope.settings.shiftWiseAttendanceEmailIds = [];
 		}
@@ -210,14 +219,18 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.dayWiseAttendanceEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.dayWiseAttendanceEmailIds.length;i++){
-                if($scope.settings.dayWiseAttendanceEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.dayWiseAttendanceEmailIds){
+            if($scope.settings.dayWiseAttendanceEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.dayWiseAttendanceEmailIds.length;i++){
+                    if($scope.settings.dayWiseAttendanceEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
+
         }
+
 		if(!$scope.settings.dayWiseAttendanceEmailIds) {
 			$scope.settings.dayWiseAttendanceEmailIds = [];
 		}
@@ -245,14 +258,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.overdueEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.overdueEmailIds.length;i++){
-                if($scope.settings.overdueEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.overdueEmailIds){
+            if($scope.settings.overdueEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.overdueEmailIds.length;i++){
+                    if($scope.settings.overdueEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.overdueEmailIds) {
 			$scope.settings.overdueEmailIds = [];
 		}
@@ -280,14 +296,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.eodJobEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.eodJobEmailIds.length;i++){
-                if($scope.settings.eodJobEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.eodJobEmailIds){
+            if($scope.settings.eodJobEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.eodJobEmailIds.length;i++){
+                    if($scope.settings.eodJobEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.eodJobEmailIds) {
 			$scope.settings.eodJobEmailIds = [];
 		}
@@ -315,14 +334,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.feedbackEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.feedbackEmailIds.length;i++){
-                if($scope.settings.feedbackEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.feedbackEmailIds){
+            if($scope.settings.feedbackEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.feedbackEmailIds.length;i++){
+                    if($scope.settings.feedbackEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.feedbackEmailIds) {
 			$scope.settings.feedbackEmailIds = [];
 		}
@@ -351,14 +373,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.feedbackReportEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.feedbackReportEmailIds.length;i++){
-                if($scope.settings.feedbackReportEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.feedbackReportEmailIds){
+            if($scope.settings.feedbackReportEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.feedbackReportEmailIds.length;i++){
+                    if($scope.settings.feedbackReportEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.feedbackReportEmailIds) {
 			$scope.settings.feedbackReportEmailIds = [];
 		}
@@ -387,14 +412,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.readingEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.readingEmailIds.length;i++){
-                if($scope.settings.readingEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.readingEmailIds){
+            if($scope.settings.readingEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.readingEmailIds.length;i++){
+                    if($scope.settings.readingEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.readingEmailIds) {
 			$scope.settings.readingEmailIds = [];
 		}
@@ -422,14 +450,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.assetEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.assetEmailIds.length;i++){
-                if($scope.settings.assetEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.assetEmailIds){
+            if($scope.settings.assetEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.assetEmailIds.length;i++){
+                    if($scope.settings.assetEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.assetEmailIds) {
 			$scope.settings.assetEmailIds = [];
 		}
@@ -458,14 +489,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.ppmEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.ppmEmailIds.length;i++){
-                if($scope.settings.ppmEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.ppmEmailIds){
+            if($scope.settings.ppmEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.ppmEmailIds.length;i++){
+                    if($scope.settings.ppmEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.ppmEmailIds) {
 			$scope.settings.ppmEmailIds = [];
 		}
@@ -494,14 +528,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.amcEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.amcEmailIds.length;i++){
-                if($scope.settings.amcEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.amcEmailIds){
+            if($scope.settings.amcEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.amcEmailIds.length;i++){
+                    if($scope.settings.amcEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.amcEmailIds) {
 			$scope.settings.amcEmailIds = [];
 		}
@@ -530,14 +567,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.warrantyEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.warrantyEmailIds.length;i++){
-                if($scope.settings.warrantyEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.warrantyEmailIds){
+            if($scope.settings.warrantyEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.warrantyEmailIds.length;i++){
+                    if($scope.settings.warrantyEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.warrantyEmailIds) {
 			$scope.settings.warrantyEmailIds = [];
 		}
@@ -565,14 +605,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.dayWiseReportEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.dayWiseReportEmailIds.length;i++){
-                if($scope.settings.dayWiseReportEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.dayWiseReportEmailIds){
+            if($scope.settings.dayWiseReportEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.dayWiseReportEmailIds.length;i++){
+                    if($scope.settings.dayWiseReportEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.dayWiseReportEmailIds) {
 			$scope.settings.dayWiseReportEmailIds = [];
 		}
@@ -601,14 +644,17 @@ angular.module('timeSheetApp')
                 }
             }
         }
-        if($scope.settings.musterRollEmailIds.length > 0){
-            for(var i=0; i < $scope.settings.musterRollEmailIds.length;i++){
-                if($scope.settings.musterRollEmailIds[i] == email){
-                    alert("Email is already exist..!!");
-                    return false;
+        if($scope.settings.musterRollEmailIds){
+            if($scope.settings.musterRollEmailIds.length > 0){
+                for(var i=0; i < $scope.settings.musterRollEmailIds.length;i++){
+                    if($scope.settings.musterRollEmailIds[i] == email){
+                        alert("Email is already exist..!!");
+                        return false;
+                    }
                 }
             }
         }
+
 		if(!$scope.settings.musterRollEmailIds) {
 			$scope.settings.musterRollEmailIds = [];
 		}
