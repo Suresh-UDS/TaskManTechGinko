@@ -754,6 +754,21 @@ angular.module('timeSheetApp')
 			console.log('all settings response- '+ JSON.stringify(data));
 			if(data) {
 				$scope.settings = data;
+				if($scope.settings.dayWiseAttendanceAlertTime){
+                    $scope.selectedDayWiseAttnEmailTime = $filter('date')($scope.settings.dayWiseAttendanceAlertTime, 'MM/dd/yyyy HH:mm a');
+                    $scope.selectedDayWiseAttnEmailTimeSer = new Date($scope.settings.dayWiseAttendanceAlertTime);
+                    $scope.settings.dayWiseAttendanceAlertTime = $scope.selectedDayWiseAttnEmailTimeSer;
+                }
+                if($scope.settings.feedbackReportTime){
+                    $scope.selectedFeedbackReportTime = $filter('date')($scope.settings.feedbackReportTime, 'MM/dd/yyyy HH:mm a');
+                    $scope.selectedFeedbackReportTimeSer = new Date($scope.settings.feedbackReportTime);
+                    $scope.settings.feedbackReportTime = $scope.selectedFeedbackReportTimeSer;
+                }
+                if($scope.settings.dayWiseReportAlertTime){
+                    $scope.selectedDayWiseReportEmailTime = $filter('date')($scope.settings.dayWiseReportAlertTime, 'MM/dd/yyyy HH:mm a');
+                    $scope.selectedDayWiseReportEmailTimeSer = new Date($scope.settings.dayWiseReportAlertTime);
+                    $scope.settings.dayWiseReportAlertTime = $scope.selectedDayWiseReportEmailTimeSer;
+                }
 			}
             $scope.settingsLoader = false;
             $scope.settingsLoadingStop();
