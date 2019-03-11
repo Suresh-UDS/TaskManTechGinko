@@ -19,6 +19,7 @@ import {LoginPage} from "../login/login";
 import{SiteListPage} from "../site-list/site-list";
 import {DBService} from "../service/dbService";
 import {AttendanceService} from "../service/attendanceService";
+import {AssetService} from "../service/assetService";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -63,7 +64,7 @@ export class DashboardPage {
     slideIndex:any;
     attendance:any;
 
-  constructor(public renderer: Renderer,public attendanceService:AttendanceService,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
+  constructor(public renderer: Renderer,public attendanceService:AttendanceService,public assetService:AssetService,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
               private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
@@ -455,30 +456,52 @@ export class DashboardPage {
             },{
                 text:'Sync',
                 handler:()=>{
-                    this.componentService.showLoader("Data Sync")
+                    this.setDataSync();
+                    this.componentService.showLoader("Data Sync");
                     this.markOfflineAttendance().then(response=>{
                         console.log(response);
                         this.dbService.dropAttendance().then(
                             response=>{
-                                this.dbService.setSites().then(data=>{
-                                    console.log(data);
-                                    this.dbService.getSite().then(response=>{
-                                        console.log(response);
-                                        this.dbService.setEmployee().then(response=>{
+                                // this.dbService.dropEmployee().then(response=>{
+                                    this.dbService.setSites().then(data=>{
+                                        console.log(data);
+                                        this.dbService.getSite().then(response=>{
                                             console.log(response);
-                                            this.componentService.closeLoader();
+                                            this.dbService.setEmployee().then(response=>{
+                                                console.log(response);
+                                                this.componentService.closeAll();
+                                                demo.showSwal('success-message-and-ok','Success','Data Sync Successful');
+
+                                            },err=>{
+                                                console.log(err);
+                                                this.componentService.closeAll();
+                                                demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+
+                                            })
                                         },err=>{
-                                            console.log(err)
+                                            console.log(err);
+                                            this.componentService.closeAll();
+                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+
                                         })
                                     },err=>{
-                                        console.log(err)
+                                        console.log(err);
+                                        this.componentService.closeAll();
+                                        demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+
                                     })
-                                },err=>{
-                                    console.log(err);
-                                })
+                                // },err=>{
+                                //     console.log(err);
+                                //     this.componentService.closeAll();
+                                //     demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+                                // });
+
                         },
                             error=>{
-                                console.log(error)
+                                console.log(error);
+                                this.componentService.closeAll();
+                                demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+
                             })
 
 
@@ -490,15 +513,23 @@ export class DashboardPage {
                                 console.log(response);
                                 this.dbService.setEmployee().then(response=>{
                                     console.log(response);
-                                    this.componentService.closeLoader();
+                                    this.componentService.closeAll();
+                                    demo.showSwal('success-message-and-ok','Success','Data Sync Successful');
+
                                 },err=>{
-                                    console.log(err)
+                                    console.log(err);
+                                    this.componentService.closeAll();
+                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                 })
                             },err=>{
-                                console.log(err)
+                                console.log(err);
+                                this.componentService.closeAll();
+                                demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                             })
                         },err=>{
                             console.log(err);
+                            this.componentService.closeAll();
+                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                         })
                     })
 
@@ -514,7 +545,7 @@ export class DashboardPage {
             setTimeout(() => {
                 this.dbService.getAttendance().then(response=>{
                     console.log(response);
-                    // this.componentService.closeLoader()
+                    // this.componentService.closeAll()
                     var data:any;
                     data = response;
                     for(var i=0;i<data.length;i++) {
@@ -536,7 +567,7 @@ export class DashboardPage {
                                 },
                                 error2 => {
                                     console.log("Error in syncing attendance to server");
-                                    this.componentService.closeLoader()
+                                    this.componentService.closeAll()
                                     this.componentService.showToastMessage("Error in syncing attendance to server","center")
                                 })
                         }
@@ -562,7 +593,7 @@ export class DashboardPage {
                     },
                     error2 => {
                         console.log("Error in syncing attendance to server");
-                        this.componentService.closeLoader()
+                        this.componentService.closeAll()
                         this.componentService.showToastMessage("Error in syncing attendance to server","bottom")
                     })
             },3000)
@@ -591,13 +622,149 @@ export class DashboardPage {
 
                     }, error2 => {
                         console.log("Error in syncing attendance to server");
-                        this.componentService.closeLoader()
+                        this.componentService.closeAll()
                         this.componentService.showToastMessage("Error in syncing attendance to server","center")
                     })
             }, 3000)
 
         })
 
+    }
+
+    setDataSync()
+    {
+        this.componentService.showLoader("Data Sync");
+        this.dbService.getReading().then(
+            response=> {
+                console.log(response)
+                this.saveReadingToServer(response).then(
+                    response=>{
+                        this.dbService.dropReadingTable().then(
+                            response=>{
+                                console.log(response);
+                                this.dbService.dropPPMJobTable().then(
+                                    response=>{
+                                        console.log(response);
+                                        this.dbService.dropAMCJobTable().then(
+                                            response=>{
+                                                console.log(response);
+                                                this.setData().then(
+                                                    response=>{
+                                                        console.log(response);
+                                                    },
+                                                    error=>{
+                                                        console.log(error)
+                                                    })
+                                            })
+                                    }
+                                )
+                            }
+                        );
+
+                    },
+                    error=>{
+                        this.componentService.closeAll();
+                        this.componentService.showToastMessage("Error server sync","bottom")
+                    })
+            },error=>{
+                this.setData().then(
+                    response=>{
+                        console.log(response);
+                    },
+                    error=>{
+                        console.log(error)
+                    })
+            })
+    }
+
+    setData()
+    {
+        return new Promise((resolve,reject)=>{
+            setTimeout(()=>{
+                this.dbService.setAsset().then(
+                    response=>{
+                        console.log(response)
+                        this.dbService.getAsset().then(
+                            response=>{
+                                console.log(response)
+                                this.dbService.setPPM().then(
+                                    response=>{
+                                        console.log(response)
+                                        this.dbService.setAMC().then(
+                                            response=>{
+                                                console.log(response)
+                                                this.dbService.setConfig().then(
+                                                    response=>{
+                                                        console.log(response)
+                                                        this.dbService.setJobs().then(
+                                                            response=>{
+                                                                console.log(response);
+                                                            })
+                                                        // this.dbService.setPPMJobs().then(
+                                                        //     response=>{
+                                                        //         console.log(response)
+                                                        //         this.dbService.setAMCJobs().then(
+                                                        //             response=> {
+                                                        console.log(response)
+                                                        this.dbService.setTickets().then(
+                                                            response => {
+                                                                console.log(response)
+                                                                // this.dbService.setSites().then(
+                                                                //     response=> {
+                                                                //         console.log(response)
+                                                                // this.dbService.setEmployee().then(
+                                                                //     response=> {
+                                                                //         console.log(response)
+                                                                this.dbService.setViewReading().then(
+                                                                    response => {
+                                                                        console.log(response)
+                                                                        this.dbService.setAssetPreviousReading().then(
+                                                                            response => {
+                                                                                console.log(response)
+                                                                                resolve("data s")
+                                                                                this.componentService.closeAll();
+                                                                                demo.showSwal('success-message-and-ok','Success','Data Sync Successful');
+                                                                            })
+                                                                    })
+                                                                // })
+                                                                // })
+                                                            })
+                                                    })
+                                            })
+                                    })
+                                // })
+                                // })
+                            })
+                    })
+
+
+            },3000)
+        })
+    }
+
+    saveReadingToServer(readings)
+    {
+        return new Promise((resolve,reject)=>{
+            for(var i=0;i<readings.length;i++)
+            {
+                this.assetService.saveReading({name:readings[i].name,uom:readings[i].uom,initialValue:readings[i].initialValue,finalValue:readings[i].finalValue,consumption:readings[i].consumption,assetId:readings[i].assetId,assetParameterConfigId:readings[i].assetParameterConfigId}).subscribe(
+                    response => {
+                        if(response.errorStatus){
+                            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                        }else{
+                            console.log("save reading sync to server");
+                            console.log(response);
+                            resolve("s")
+                        }
+
+                    },
+                    error => {
+                        console.log("save readings error sync to server");
+                        reject("no")
+                    })
+            }
+
+        })
     }
 
 }
