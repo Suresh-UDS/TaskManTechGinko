@@ -238,6 +238,12 @@ public class InventoryManagementResource {
 		return content;
 	}
 
+	@RequestMapping(value = "/delete/transaction/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteMaterialTransaction(@PathVariable("id") long id) {
+	    inventoryService.deleteTransaction(id);
+	    return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 

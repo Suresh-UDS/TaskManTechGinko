@@ -341,7 +341,7 @@ public class MaterialIndentService extends AbstractService {
 							}
 							
 						} else {
-							itemDto.setErrorMessage("Issued quantity not availbale in store stock.");
+							itemDto.setErrorMessage("Issued quantity not available in store stock.");
 							itemDto.setErrorStatus(true);
 							itemDto.setStatus("400");
 						}
