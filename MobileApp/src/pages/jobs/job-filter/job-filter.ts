@@ -68,6 +68,22 @@ export class JobFilter{
             {name:"UDS Plumbing Assets"}
         ];
         this.empPlace='Employee';
+
+        this.emp = null;
+        this.selectedSite = null;
+        this.selectedProject = null;
+        this.fromDate = new Date();
+        this.toDate = new Date();
+
+        this.searchCriteria = {
+            projectId:null,
+            siteId:null,
+            employeeId:null,
+            checkInDateTimeFrom:new Date(),
+            checkInDateTimeTo: new Date()
+
+        }
+
     }
 
     ionViewDidLoad() {
@@ -267,14 +283,22 @@ export class JobFilter{
     }
 
     filterJob(){
-        this.searchCriteria = {
-            fromDate:this.fromDate,
-            toDate:this.toDate,
-            selectedSite:this.selectedSite.id,
-            selectedProject:this.selectedProject.id,
-            selectedEmployee:this.employ
-        };
-        console.log("searchCriteria",this.searchCriteria);
+        console.log("searchCriteria" );
+        console.log(this.selectedSite);
+        console.log(this.selectedProject);
+        console.log(this.emp);
+        console.log(this.fromDate);
+        console.log(this.toDate);
+        if(this.selectedProject && this.selectedProject.id>0){
+            this.searchCriteria.projectId = this.selectedProject.id;
+        }
+        if(this.selectedSite && this.selectedSite.id>0){
+            this.searchCriteria.siteId = this.selectedSite.id;
+        }
+        if(this.emp && this.emp.id>0){
+            this.searchCriteria.employeeId = this.selectedProject.id;
+        }
+
         this.viewCtrl.dismiss(this.searchCriteria);
     }
 

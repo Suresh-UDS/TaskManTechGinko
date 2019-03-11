@@ -61,7 +61,7 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 			predicates.add(builder.like(builder.lower(root.get("name")),
 					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
 		}
-		if(searchCriteria.getIndentRefNumber() != null) { 
+		if(searchCriteria.getIndentRefNumber() != null) {
 			predicates.add(builder.like(builder.lower(root.get("materialIndent").get("indentRefNumber")),
 					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
 		}
@@ -72,7 +72,7 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if (searchCriteria.getTransactionType() != null) {
 			predicates.add(builder.equal(root.get("transactionType"), searchCriteria.getTransactionType()));
 		}
-		if(searchCriteria.getTransactionDate() != null) { 
+		if(searchCriteria.getTransactionDate() != null) {
 			log.debug("Inventory transaction created date -" + searchCriteria.getTransactionDate());
 			Calendar endCal = Calendar.getInstance();
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
@@ -80,14 +80,19 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 			endCal.set(Calendar.SECOND, 0);
 			predicates.add(builder.between(root.get("transactionDate"), searchCriteria.getTransactionDate(), DateUtil.convertToTimestamp(endCal.getTime())));
 		}
-		
-		predicates.add(builder.equal(root.get("active"), "Y"));
+
+
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
 
 		query.orderBy(builder.desc(root.get("createdDate")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("InventorySpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
-		
+
 		if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
     		orPredicates.add(builder.equal(root.get("site").get("user").get("id"),  searchCriteria.getUserId()));
 		}else if(searchCriteria.getSiteId() > 0) {

@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {NavController, NavParams, PopoverController,ViewController} from "ionic-angular";
+import {AlertController, NavController, NavParams, PopoverController, ViewController} from "ionic-angular";
 import {SiteService} from "../service/siteService";
 import {JobService} from "../service/jobService";
 import {Ticket} from "./ticket";
@@ -71,7 +71,7 @@ export class CreateTicket {
   private siteIdd: any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public siteService:SiteService,public camera:Camera,public popoverCtrl: PopoverController,
                 public jobService:JobService, public cs:componentService, public employeeService:EmployeeService,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
-                private transfer: FileTransfer,viewCtrl:ViewController) {
+                private transfer: FileTransfer,viewCtrl:ViewController, public alertController:AlertController) {
       this.sites=[];
       this.employee=[];
       this.severities = ['Low','Medium','High'];
@@ -219,7 +219,8 @@ export class CreateTicket {
       console.log(this.empSelect);
       var searchCriteria = {
         currPage : 1,
-        siteId:this.site.siteId
+        siteId:this.site.siteId,
+        list:true
       };
       this.employeeService.searchEmployees(searchCriteria).subscribe(
         response=> {
@@ -268,82 +269,105 @@ export class CreateTicket {
   createTicket(){
           if(this.title && this.description  && this.emp )
           {
-            console.log("creating ticket..",this.emp);
-              this.eMsg="";
-            this.siteId = this.siteIdd;
-            console.log( this.siteId);
-              this.userId=this.site.userId;
-              console.log("category" + this.category);
-              this.newTicket={
-                  "title":this.title,
-                  "siteId":this.siteId,
-                  "description":this.description,
-                  "comments":this.comments,
-                  "employeeId":this.emp.id,
-                  "userId":this.userId,
-                  "severity":this.severity,
-                  "category":this.category,
+              let alert =this.alertController.create({
+                  title:'Create Ticket',
+                  message:'Are you sure, you want to create ticket ?',
+                  buttons:[{
+                      text:'Cancel',
+                      role:'cancel',
+                      handler:()=>{
+                          console.log('Cancel clicked');
 
-              };
-              console.log("new ticket",this.newTicket);
+                      }
+                  },{
+                      text:'Confirm',
+                      handler:()=> {
+                          console.log("creating ticket..", this.emp);
+                          this.eMsg = "";
+                          this.siteId = this.siteIdd;
+                          console.log(this.siteId);
+                          this.userId = this.site.userId;
+                          console.log("category" + this.category);
+                          this.newTicket = {
+                              "title": this.title,
+                              "siteId": this.siteId,
+                              "description": this.description,
+                              "comments": this.comments,
+                              "employeeId": this.emp.id,
+                              "userId": this.userId,
+                              "severity": this.severity,
+                              "category": this.category,
 
-              if(this.assetDetails)
-              {
-                  this.newTicket.assetId = this.assetDetails.id;
+                          };
+                          console.log("new ticket", this.newTicket);
 
-              }
-
-              this.jobService.createTicket(this.newTicket).subscribe(
-                  response=> {
-                      if(response.errorStatus){
-                          demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
-                      }else{
-                          console.log(response);
-
-                          //Ticket image upload on successfully creating ticket.
-                          if(this.takenImages.length>0){
-                              for(var i=0;i<this.takenImages.length;i++){
-                                  let token_header=window.localStorage.getItem('session');
-                                  let options: FileUploadOptions = {
-                                      fileKey: 'ticketFile',
-                                      fileName:response.employeeEmpId+'_ticketImage_'+response.id,
-                                      headers:{
-                                          'X-Auth-Token':token_header
-                                      },
-                                      params:{
-                                          ticketId:response.id
-                                      }
-                                  };
-
-                                  this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/ticket/image/upload', options)
-                                      .then((data) => {
-                                          console.log(data);
-                                          console.log("image upload");
-                                          this.cs.closeLoader();
-                                      }, (err) => {
-                                          console.log(err);
-                                          console.log("image upload fail");
-                                          this.cs.closeLoader();
-                                      })
-                              }
-
+                          if (this.assetDetails) {
+                              this.newTicket.assetId = this.assetDetails.id;
 
                           }
 
-                          this.navCtrl.setRoot(Ticket);
-                      }
-                      },
+                          this.jobService.createTicket(this.newTicket).subscribe(
+                              response => {
+                                  if (response.errorStatus) {
+                                      demo.showSwal('warning-message-and-confirmation-ok', response.errorMessage)
+                                  } else {
+                                      console.log(response);
+                                      this.cs.closeAll();
+                                      demo.showSwal('success-message-and-ok','Ticket','Ticket Created Sucessfully..');
 
-                  error=>{
-                      console.log(error);
-                      if(error.type==3)
-                      {
-                          this.msg='Server Unreachable'
-                      }
+                                      //Ticket image upload on successfully creating ticket.
+                                      if (this.takenImages.length > 0) {
+                                          for (var i = 0; i < this.takenImages.length; i++) {
+                                              let token_header = window.localStorage.getItem('session');
+                                              let options: FileUploadOptions = {
+                                                  fileKey: 'ticketFile',
+                                                  fileName: response.employeeEmpId + '_ticketImage_' + response.id + '.jpg',
+                                                  headers: {
+                                                      'X-Auth-Token': token_header
+                                                  },
+                                                  params: {
+                                                      ticketId: response.id
+                                                  }
+                                              };
 
-                      this.cs.showToastMessage(this.msg,'bottom');
-                  }
-              )
+                                              this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/ticket/image/upload', options)
+                                                  .then((data) => {
+                                                      console.log(data);
+                                                      console.log("image upload");
+                                                      this.cs.closeLoader();
+
+                                                  }, (err) => {
+                                                      console.log(err);
+                                                      console.log("image upload fail");
+                                                      this.cs.closeAll();
+                                                      // demo.showSwal('warning-message-and-confirmation-ok','Unable to create Ticket, please try again later');
+
+                                                  })
+                                          }
+
+
+                                      }else {
+                                          this.cs.closeAll();
+                                      }
+
+                                      this.navCtrl.setRoot(Ticket);
+                                  }
+                              },
+
+                              error => {
+                                  console.log(error);
+                                  if (error.type == 3) {
+                                      this.msg = 'Server Unreachable'
+                                  }
+
+                                  this.cs.showToastMessage(this.msg, 'bottom');
+                              }
+                          )
+                      }
+                  }]
+              })
+
+              alert.present()
           }
           else
           {

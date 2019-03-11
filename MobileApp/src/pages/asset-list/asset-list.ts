@@ -39,7 +39,6 @@ declare  var demo;
 export class AssetList {
 
     assetList:any;
-
     searchCriteria:any;
     page:1;
     totalPages:0;
@@ -206,6 +205,7 @@ export class AssetList {
                                                                 },
                                                                 error=>{
                                                                     console.log(error)
+
                                                                 })
                                                             })
                                                         }
@@ -274,17 +274,41 @@ export class AssetList {
                                                                                                         response => {
                                                                                                             console.log(response)
                                                                                                             resolve("data s")
-                                                                                                            this.componentService.closeLoader();
+                                                                                                            this.componentService.closeAll();
+                                                                                                            demo.showSwal('success-message-and-ok','Success','Data Sync Successful');
+
+                                                                                                        },err=>{
+                                                                                                            this.componentService.closeAll();
+                                                                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+
                                                                                                         })
+                                                                                                },err=>{
+                                                                                                    this.componentService.closeAll();
+                                                                                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                                                                                 })
                                                                                             // })
                                                                                             // })
+                                                                                        },err=>{
+                                                                                            this.componentService.closeAll();
+                                                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                                                                         })
+                                                                                },err=>{
+                                                                                            this.componentService.closeAll();
+                                                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                                                                 })
-                                                                        })
-                                                                })
+                                                                        },err=>{
+                                                            this.componentService.closeAll();
+                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+                                                        })
+                                                                },err=>{
+                                                    this.componentService.closeAll();
+                                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
+                                                })
                                                         // })
                                                 // })
+                                },err=>{
+                                    this.componentService.closeAll();
+                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                 })
                         })
 
@@ -489,6 +513,10 @@ export class AssetList {
 
 
     }
+
+
+
+
 
 
 }

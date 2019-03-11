@@ -106,7 +106,7 @@ export class OfflineAttendance {
 
         this.dbService.getSiteEmployee(this.siteId).then((response)=>{
                 console.log(response);
-                this.component.closeLoader()
+                this.component.closeLoader();
                 this.employeeList = response;
             },
             (error)=>{
@@ -179,23 +179,29 @@ export class OfflineAttendance {
 
         this.dbService.setAttendance(attendanceData).then(response=>{
             console.log(response);
-            this.dbService.updateEmployee(employee.employeeId,true,false).then(response=>{
+            this.dbService.updateEmployee(employee.employeeId,true,true).then(response=>{
                 console.log(response);
                 this.dbService.getSiteEmployee(this.siteId).then((response)=>{
                         console.log(response);
                         // this.component.closeLoader()
                         this.employeeList = response;
-                        this.component.closeLoader()
+                        this.component.closeLoader();
+                        demo.showSwal('success-message-and-ok','Success','Attendance Successfully marked offline, \nPlease sync to server...');
                     },
                     (error)=>{
                         console.log(error);
+                        demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+error);
                         // this.component.closeLoader()
                     });
             },err=>{
-                console.log(err)
+                console.log(err);
+                demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
             })
         },err=>{
-            console.log(err)
+            console.log(err);
+            demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
         })
 
         // window.localStorage.setItem('attendanceCheckInData',JSON.stringify(attendanceData));
@@ -222,23 +228,31 @@ export class OfflineAttendance {
         this.dbService.setAttendance(attendanceData).then(response=>{
             console.log(response);
                 this.component.closeLoader()
-            this.dbService.updateEmployee(employee.employeeId,true,true).then(response=>{
+            this.dbService.updateEmployee(employee.employeeId,true,false).then(response=>{
                 console.log(response);
                 this.dbService.getSiteEmployee(this.siteId).then((response)=>{
                         console.log(response);
                         // this.component.closeLoader()
                         this.employeeList = response;
-                        this.component.closeLoader()
+                        this.component.closeLoader();
+                        demo.showSwal('success-message-and-ok','Success','Attendance Successfully marked offline, \nPlease sync to server...');
+
                     },
                     (error)=>{
                         console.log(error);
                         // this.component.closeLoader()
+                        demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+error);
+
                     });
             },err=>{
                 console.log(err)
+                demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
             })
         },err=>{
             console.log(err)
+            demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
         })
 
         // window.localStorage.setItem('attendanceCheckOutData',JSON.stringify(attendanceData));

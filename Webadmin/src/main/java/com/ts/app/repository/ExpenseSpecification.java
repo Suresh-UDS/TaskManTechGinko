@@ -106,7 +106,13 @@ public class ExpenseSpecification implements Specification<Expense> {
 
         }
 
-        predicates.add(builder.equal(root.get("active"), "Y"));
+//        predicates.add(builder.equal(root.get("active"), "Y"));
+
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
 
         query.orderBy(builder.desc(root.get("id")));
 

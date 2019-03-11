@@ -14,6 +14,7 @@ import {ObjectUnsubscribedError} from "rxjs/Rx";
 import {JobService} from "./jobService";
 import {componentService} from "./componentService";
 import {AttendanceService} from "./attendanceService";
+import {timeout} from "rxjs/operator/timeout";
 
 
 @Injectable()
@@ -77,6 +78,11 @@ export class DBService {
     //***create table from api response***/
 
     //Asset table
+
+    createAndInitializeTables(){
+
+    }
+
     setAsset()
     {
         console.log(this.db);
@@ -90,7 +96,7 @@ export class DBService {
                     console.log("Database connection")
                     console.log(this.db)
 
-                    this.db.executeSql("DROP TABLE assetList", {})
+                    this.db.executeSql("DELETE FROM  assetList", {})
                     console.log("Set AssetList Data");
                     var assetList;
                     var param = [];
@@ -161,7 +167,7 @@ export class DBService {
                 this.siteService.searchSite().subscribe(
                     response => {
                         console.log("Get site response");//
-                        sites = response.json();
+                        sites = response;
                         console.log(sites)//
                         if (sites.length > 0) {
                             for (var i = 0; i < sites.length; i++) {
@@ -171,9 +177,9 @@ export class DBService {
                     },
                     error => {
                         console.log("Get Site error");
-                    })
+                    });
                 var tablename = 'site'
-                var createQuery = "create table if not exists site(id INT,name TEXT)"
+                var createQuery = "create table if not exists site(id INT ,name TEXT)";
                 var insertQuery = "insert into site(id,name) values(?,?)";
                 var updateQuery = "update site set name=? where id=? ";
                 setTimeout(() => {
@@ -331,7 +337,7 @@ export class DBService {
 
               // for (var i = 0; i < this.selectAsset.length; i++) {
 
-                    var search = {report:true,checkInDateTimeFrom:new Date()};
+                    var search = {report:true,checkInDateTimeFrom:new Date(),scheduled:true};
                     this.jobService.getJobs(search).subscribe(
                         response => {
                             console.log("Getting Jobs response");
@@ -541,11 +547,18 @@ export class DBService {
                         report:true
                     };
                     this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
+                        employee = [];
                         employee = response.transactions;
                         console.log(employee);
                         if (employee.length > 0) {
                             for (var i = 0; i < employee.length; i++) {
-                                param.push([employee[i].id,employee[i].empId, employee[i].id, employee[i].fullName,employee[i].active,employee[i].faceAuthorised,employee[i].checkedIn,false,employee[i].siteId,employee[i].siteName,employee[i].attendanceId]);
+                                if(employee[i].attendanceId>0){
+                                    param.push([employee[i].id,employee[i].empId, employee[i].id, employee[i].fullName,employee[i].active,employee[i].faceAuthorised,employee[i].checkedIn,true,this.selectSite[j],employee[i].siteName,employee[i].attendanceId]);
+
+                                }else{
+                                    param.push([employee[i].id,employee[i].empId, employee[i].id, employee[i].fullName,employee[i].active,employee[i].faceAuthorised,employee[i].checkedIn,false,this.selectSite[j],employee[i].siteName,employee[i].attendanceId]);
+
+                                }
                             }
                         }
                     })
@@ -880,6 +893,15 @@ export class DBService {
                 resolve("Drop table attendance")
             },3000)
         })
+    }
+
+    dropEmployee(){
+                return new Promise((resolve, reject)=>{
+                    setTimeout(()=>{
+                        this.db.executeSql('DELETE FROM employee');
+                        resolve("Drop table employee");
+                    },3000)
+                })
     }
 
             //Attendance set
@@ -1485,7 +1507,7 @@ export class DBService {
                 console.log("**************")
                 console.log(this.db);
                 console.log("Select Site Table");
-                var addQuery = "select * from employee";
+                var addQuery = "select DISTINCT * from employee";
                 this.db.executeSql(addQuery,{}).then((data)=> {
                     if (data.rows.length > 0) {
                         for (var i = 0; i < data.rows.length; i++) {

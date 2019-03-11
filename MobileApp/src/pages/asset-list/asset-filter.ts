@@ -44,6 +44,7 @@ export class AssetFilter {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
                 public siteService:SiteService, public assetService:AssetService) {
+
     }
 
     ionViewDidLoad() {

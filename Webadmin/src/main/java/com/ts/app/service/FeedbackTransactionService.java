@@ -63,7 +63,7 @@ public class FeedbackTransactionService extends AbstractService {
 
 	@Inject
 	private Environment env;
-	
+
 	@Inject
 	private UserRepository userRepository;
 
@@ -72,7 +72,7 @@ public class FeedbackTransactionService extends AbstractService {
 
     @Inject
     private ReportUtil reportUtil;
-    
+
     @Inject
     private LocationRepository locationRepository;
 
@@ -127,12 +127,12 @@ public class FeedbackTransactionService extends AbstractService {
 				items.add(item);
 			}
 			rating = (cumRating / items.size()); //calculate the overall rating.
-			
+
 
 		}else {
 			rating = 5;
 		}
-		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);	
+		sendFeedbackNotification(feedbackTransDto, feedbackAlertItems);
 		feedbackTrans.setRating(rating);
 		feedbackTrans.setResults(items);
 		Pageable pageRequest = createPageRequest(1,1);
@@ -158,8 +158,8 @@ public class FeedbackTransactionService extends AbstractService {
         		}else if(StringUtils.isNotBlank(feedbackTransDto.getReviewerCode())) {
         			title.append(" given by " + feedbackTransDto.getReviewerCode());
         		}
-        		
-        		
+
+
         		ticketDTO.setTitle(title.toString());
         		if(CollectionUtils.isNotEmpty(feedbackAlertItems)) {
         			StringBuffer sb = new StringBuffer();
@@ -180,7 +180,7 @@ public class FeedbackTransactionService extends AbstractService {
 		feedbackTransDto = mapperUtil.toModel(feedbackTrans, FeedbackTransactionDTO.class);
 		return feedbackTransDto;
 	}
-	
+
 	private void sendFeedbackNotification(FeedbackTransactionDTO feedbackTransDto,List<String> feedbackAlertItems) {
 		//send notifications
 		Setting feedbackAlertSetting = null;
@@ -230,11 +230,11 @@ public class FeedbackTransactionService extends AbstractService {
        		if(StringUtils.isNotBlank(feedbackTransDto.getRemarks())) {
        			remarks.append(feedbackTransDto.getRemarks());
        		}
-       		
+
        		String pattern = "MM-dd-yyyy";
        		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
        		String date = simpleDateFormat.format(new Date());
-       		
+
        		String block = feedbackTransDto.getBlock();
        		String floor = feedbackTransDto.getFloor();
        		String zone = feedbackTransDto.getZone();
@@ -255,13 +255,11 @@ public class FeedbackTransactionService extends AbstractService {
        		if(feedbackTransDto.getSiteName().contains(" ")) {
        			siteName = feedbackTransDto.getSiteName().replaceAll(" ", "%20");
        		}
-       		
-       		
-       		
+
 			String feedbackReportUrl = env.getProperty("reports.feedback-report.url");
 			String feedbackUrl = feedbackReportUrl+"/"+feedbackTransDto.getProjectId()+"/"+projectName+"/"+feedbackTransDto.getSiteId()+"/"+siteName+"/"+block+"/"+floor+"/"+zone+"/"+date;
 			mailService.sendFeedbackAlert(alertEmailIds, feedbackTransDto.getZone(), feedbackLocation.toString(), givenBy.toString(), remarks.toString(), new Date(), feedbackAlertItems, feedbackUrl);
-		}	
+		}
 	}
 
 	public List<FeedbackTransactionDTO> findAll(int currPage) {
@@ -311,7 +309,7 @@ public class FeedbackTransactionService extends AbstractService {
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
 			endCal.set(Calendar.MINUTE, 59);
 			endCal.set(Calendar.SECOND, 0);
-			searchCriteria.setCheckInDateTimeTo(endCal.getTime());            
+			searchCriteria.setCheckInDateTimeTo(endCal.getTime());
 	        	java.sql.Date fromDt = DateUtil.convertToSQLDate(DateUtil.convertUTCToIST(startCal));
 	        	ZonedDateTime fromTime = fromDt.toLocalDate().atStartOfDay(ZoneId.of("Asia/Kolkata"));
 	        	fromTime = fromTime.withHour(0);
@@ -459,19 +457,19 @@ public class FeedbackTransactionService extends AbstractService {
 					reportResult.setWeeklyZone(weeklyZoneList);
 					reportResult.setWeeklySite(weeklySiteList);
 					// end
-					
+
 					List<Location> locs = locationRepository.findBySite(searchCriteria.getSiteId());
 					Map<String, FeedbackQuestionRating> qratings = new HashMap<String,FeedbackQuestionRating>();
-					
+
 					String block = searchCriteria.getBlock();
 					String floor = searchCriteria.getFloor();
 					String zone = searchCriteria.getZone();
-					
+
 					if(CollectionUtils.isNotEmpty(locs)) {
 						for(Location loc : locs) {
 							boolean locMatch = false;
-							if(StringUtils.isNotBlank(block) 
-									&& StringUtils.isNotBlank(floor) 
+							if(StringUtils.isNotBlank(block)
+									&& StringUtils.isNotBlank(floor)
 									&& StringUtils.isNotBlank(zone) ) {
 								if(block.equalsIgnoreCase(loc.getBlock())
 										&& floor.equalsIgnoreCase(loc.getFloor())
@@ -491,7 +489,7 @@ public class FeedbackTransactionService extends AbstractService {
 									log.debug("FeedbackMapping - " + (feedbackMapping != null ? feedbackMapping.getId() : null ));
 								}
 								if(feedbackMapping != null) {
-								
+
 									List<Object[]> questionRatings = getQuestionRatings(searchCriteria,feedbackMapping,fromTime,toTime,weeklyFromDate,weeklyToDate);
 									log.debug("Question ratings - " + (questionRatings != null ? questionRatings.size() : null ));
 									if(CollectionUtils.isNotEmpty(questionRatings)) {
@@ -598,7 +596,7 @@ public class FeedbackTransactionService extends AbstractService {
 
 
 	}
-	
+
 	private String getLocationFromSearchCriteria(SearchCriteria searchCriteria) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(searchCriteria.getSiteName());
@@ -648,7 +646,7 @@ public class FeedbackTransactionService extends AbstractService {
 			overallRating = feedbackTransactionRepository.getWeeklyOverallRating(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
 		} else if(searchCriteria.getProjectId() > 0){
 			overallRating = feedbackTransactionRepository.getWeeklyOverallRatingByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
-		} 
+		}
 		return overallRating;
 	}
 
@@ -662,7 +660,7 @@ public class FeedbackTransactionService extends AbstractService {
 			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCount(searchCriteria.getSiteId(),weeklyFromDate,weeklyToDate);
 		} else if(searchCriteria.getProjectId() > 0){
 			feedbackCount = feedbackTransactionRepository.getWeeklyFeedbackCountByProject(searchCriteria.getProjectId(),weeklyFromDate,weeklyToDate);
-		} 
+		}
 
 		return feedbackCount;
 	}

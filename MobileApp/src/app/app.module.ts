@@ -91,6 +91,7 @@ import {ViewTicket} from "../pages/ticket/view-ticket";
 import {FeedbackGridPage} from "../pages/feedback/feedback-grid";
 import {AppVersion} from "@ionic-native/app-version";
 import {HasPermission} from "../components/has-permission/has-permission";
+import {DatabaseProvider} from "../providers/database-provider";
 import {AssetList} from "../pages/asset-list/asset-list";
 import {AssetFilter} from "../pages/asset-list/asset-filter";
 import {AssetView} from "../pages/asset-view/asset-view";
@@ -144,7 +145,6 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
-
 
 @NgModule({
   declarations: [
@@ -245,6 +245,7 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
       ExpenseDetails,
       AddExpense,
     AddMaterial
+
   ],
   imports: [
     BrowserModule,
@@ -358,50 +359,54 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
       ExpenseDetails,
       AddExpense,
     AddMaterial,
+
     // WheelSelector
     FeedbackGridFinish
+
+
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
-    NativeAudio,
-    AttendanceService,
-    EmployeeService,
-    FeedbackService,
-    JobService,
-    QuotationService,
-    SiteService,
-    AssetService,
-    DBService,
+      NativeAudio,
+      AttendanceService,
+      EmployeeService,
+      FeedbackService,
+      JobService,
+      QuotationService,
+      SiteService,
+      AssetService,
+      DBService,
     authService,
     HttpClient,
     Geolocation,
-    BackgroundMode,
+      BackgroundMode,
     Geofence,
-    // GoogleMaps,
-    Toast,
-    OneSignal,
+      // GoogleMaps,
+      Toast,
+      OneSignal,
     componentService,
-    OneSignal,
-    BatteryStatus,
+      OneSignal,
+      BatteryStatus,
     Toast,
     FileTransfer,
     File,
-    DatePicker,
-    AppVersion,
-    QRScanner,
-    FabContainer,
-    Diagnostic,
-    SQLite,
-    Network,
-    Market,
-    LocationAccuracy,
-    BackgroundGeolocation,
-    LocationProvider,
-    InventoryService,
+      DatePicker,
+      AppVersion,
+      QRScanner,
+      FabContainer,
+      Diagnostic,
+      SQLite,
+      Network,
+      Market,
+      LocationAccuracy,
+      BackgroundGeolocation,
+      LocationProvider,
+      InventoryService,
     ExpenseService,
-    PurchaseRequisitionService,
+      PurchaseRequisitionService,
+      DatabaseProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

@@ -142,7 +142,7 @@
         </ion-col>
     </ion-row>
 
-    <ion-row has-permission="TicketsView" class="margin0" *ngIf="jobDetails.ticketId>0">
+    <ion-row has-permission="TicketView" class="margin0" *ngIf="jobDetails.ticketId>0">
 
         <ion-col col-6>
             <ion-card class="new-card-md">
@@ -253,7 +253,7 @@
 
 <!--<ion-footer *ngIf="jobDetails.status !='COMPLETED'">-->
     <!--<ion-toolbar class="align-right" *ngIf="jobDetails.status !='COMPLETED'">-->
-        <!--<button has-permission="TicketsView" *ngIf="jobDetails.ticketId>0" class="btn btn-success center pull-left" (click)="gotoTicket()" >View Ticket</button>-->
+        <!--<button has-permission="TicketView" *ngIf="jobDetails.ticketId>0" class="btn btn-success center pull-left" (click)="gotoTicket()" >View Ticket</button>-->
         <!--<button *ngIf="jobDetails.status !='COMPLETED'" class="btn btn-success center pull-right" type="submit" (click)="completeJob(jobDetails)">Complete Job</button>-->
     <!--</ion-toolbar>-->
 <!--</ion-footer>-->
