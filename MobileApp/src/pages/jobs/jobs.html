@@ -5,10 +5,10 @@
         </button>
         <ion-title>Jobs</ion-title>
         <ion-buttons right>
-        <button ion-button class="fnt-black" icon-only (click)="presentModal()" class="padding-right10">
-          <ion-icon name="funnel"></ion-icon>
-        </button>
-            <button color="primary" ion-button clear has-permission="JobsCreate" class="add-btn" (click)="addJob()" ><ion-icon name="add"></ion-icon></button>
+        <!--<button ion-button class="fnt-black" icon-only (click)="presentModal()" class="padding-right10">-->
+          <!--<ion-icon name="funnel"></ion-icon>-->
+        <!--</button>-->
+            <button color="primary" ion-button clear has-permission="JobCreate" class="add-btn" (click)="addJob()" ><ion-icon name="add"></ion-icon></button>
 
         </ion-buttons>
     </ion-navbar>
@@ -32,7 +32,7 @@
     </ion-fab>
 
     <!--<ion-fab top right edge >-->
-    <!--<button has-permission="JobsCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
+    <!--<button has-permission="JobCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->
     <!--</ion-fab>-->
 
     <div [ngSwitch]="categories">
@@ -55,7 +55,7 @@
 
             <div  class="white-bg" *ngFor="let job of todaysJobs" >
 
-                <div class="padding-left16 padding-top5" *ngIf="job.parentJobId <=0 && job.schedule=='ONCE' && job.scheduled == true ">
+                <div class="padding-left16 padding-top5" *ngIf=" job.schedule=='ONCE' ">
                     <ion-row class="margin0">
 
                         <ion-col col-2 class="ver-center">
@@ -118,13 +118,13 @@
 
                     <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
                         <div>
-                            <button has-permission="JobsView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
+                            <button has-permission="JobView" ion-button clear color="primary"><ion-icon name="md-eye" (click)="viewJob(job)" class="fnt-24 act-btn-view"></ion-icon></button>
                         </div>
                         <!--<div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">-->
                         <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                         <!--</div>-->
                         <div >
-                            <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                            <button has-permission="JobEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                         </div>
                         <div *ngIf="userType === 'ADMIN' || userType === 'TECHNICIAN' || userType === 'FACILITYMANAGER' || userType === 'SUPERVISOR'">
                             <button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24 act-btn-view"></ion-icon></button>
@@ -160,7 +160,7 @@
             </div>
 
             <div  class="white-bg" *ngFor="let job of allJobs" >
-                <div class="padding-left16 padding-top5" *ngIf="job.schedule == 'ONCE' && job.schedule==null ||job.parentJobId <=0">
+                <div class="padding-left16 padding-top5" *ngIf="job.parentJobId <=0 && job.schedule=='ONCE' && job.scheduled == true ">
                 <ion-row class="margin0">
 
                     <ion-col col-2 class="ver-center">
@@ -222,13 +222,13 @@
 
                 <ion-item-options class="ActionBtns" (click)="close(slidingItem)">
                     <div>
-                        <button has-permission="JobsView" ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
+                        <button has-permission="JobView" ion-button clear color="primary" (click)="viewJob(job)"><ion-icon name="md-eye" class="fnt-24 act-btn-view"></ion-icon></button>
                     </div>
                     <!--<div>-->
                         <!--<button ion-button clear color="clr-blue"><ion-icon name="md-create" class="fnt-24"></ion-icon></button>-->
                     <!--</div>-->
                     <div>
-                        <button has-permission="JobsEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
+                        <button has-permission="JobEdit" ion-button clear color="secondary" *ngIf="job.status !='COMPLETED'" (click)="compeleteJob(job)"><ion-icon name="md-checkmark-circle" class="fnt-24 act-btn-view"></ion-icon></button>
                     </div>
                     <!--<div>-->
                         <!--<button ion-button clear color="danger"><ion-icon name="md-close-circle" class="fnt-24"></ion-icon></button>-->

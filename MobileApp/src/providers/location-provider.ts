@@ -52,77 +52,68 @@ export class LocationProvider {
 
     }
 
-    startTracking():Promise<any> {
+    startTracking():Observable<any> {
 
         // Background Tracking
 
-        return new Promise((resolve => {
+        let config = {
+            desiredAccuracy: 0,
+            stationaryRadius: 20,
+            distanceFilter: 10,
+            debug: false,
+            // interval: 2000
+            stopOnTerminate:true
+        };
 
-            let config = {
-                desiredAccuracy: 0,
-                stationaryRadius: 20,
-                distanceFilter: 10,
-                debug: false,
-                interval: 20000,
-                stopOnTerminate:true
-            };
+        this.backgroundGeolocation.configure(config).subscribe((location) => {
 
-            this.backgroundGeolocation.configure(config).subscribe((location) => {
+            console.log('BackgroundGeolocation:  ' + location.latitude + ',' + location.longitude);
 
-                console.log('BackgroundGeolocation:  ' + location.latitude + ',' + location.longitude);
+            // Run update inside of Angular's zone
+            this.zone.run(() => {
+                this.lat = location.latitude;
+                this.lng = location.longitude;
+            });
 
-                // Run update inside of Angular's zone
-                this.zone.run(() => {
-                    this.lat = location.latitude;
-                    this.lng = location.longitude;
-                });
+        }, (err) => {
 
-            }, (err) => {
+            console.log(err);
 
-                console.log(err);
+        });
+
+        // Turn ON the background-geolocation system.
+        this.backgroundGeolocation.start();
+
+
+        // Foreground Tracking
+
+        let options = {
+            // frequency: 3000,
+            enableHighAccuracy: true
+        };
+
+        this.watch = this.geolocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) => {
+
+            console.log(position);
+
+            // Run update inside of Angular's zone
+            this.zone.run(() => {
+                this.lat = position.coords.latitude;
+                this.lng = position.coords.longitude;
+                window.localStorage.setItem('lat',JSON.stringify(position.coords.latitude));
+                window.localStorage.setItem('lng',JSON.stringify(position.coords.longitude));
 
             });
 
-            // Turn ON the background-geolocation system.
-            this.backgroundGeolocation.start();
 
+        });
 
-            // Foreground Tracking
+        this.location={
+            lat:this.lat,
+            lng:this.lng
+        };
 
-            let options = {
-                frequency: 30000,
-                enableHighAccuracy: true
-            };
-
-            this.watch = this.geolocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) => {
-
-                console.log(position);
-
-                // Run update inside of Angular's zone
-                this.zone.run(() => {
-                    this.lat = position.coords.latitude;
-                    this.lng = position.coords.longitude;
-                    window.localStorage.setItem('lat',JSON.stringify(position.coords.latitude));
-                    window.localStorage.setItem('lng',JSON.stringify(position.coords.longitude));
-
-                });
-
-
-            });
-
-            this.location={
-                lat:this.lat,
-                lng:this.lng
-            };
-
-            resolve({location:this.location});
-
-        }));
-
-
-
-
-        // return this.location;
+        return this.location;
 
     }
 
@@ -130,7 +121,7 @@ export class LocationProvider {
 
         console.log('stopTracking');
 
-        // this.backgroundGeolocation.finish();
+        this.backgroundGeolocation.finish();
         this.watch.unsubscribe();
         this.backgroundGeolocation.stop();
     }

@@ -67,6 +67,7 @@ export class JobsPage {
 
         this.loadTodaysJobs();
 
+
     }
 
     ionViewDidLoad() {
@@ -440,6 +441,22 @@ export class JobsPage {
     presentModal() {
         const modal = this.modalCtrl.create(JobFilter);
         modal.present();
+        modal.onDidDismiss(searchCriteria=>{
+            if(searchCriteria){
+                this.jobService.getJobs(searchCriteria).subscribe(response=>{
+                        console.log("All jobs of current user");
+                        console.log(response);
+                        this.allJobs = response.transactions;
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.component.closeLoader();
+                    },
+                    err=>{
+                        this.component.closeLoader();
+                        this.component.showToastMessage('Unable to fetch Jobs','bottom');
+                })
+            }
+        })
     }
 
     scanQR(){

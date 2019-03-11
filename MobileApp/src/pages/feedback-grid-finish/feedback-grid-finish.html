@@ -9,6 +9,10 @@
       <div class="input-group width-full" margin-top="">
         <img src="img/logo.png"  alt="feedback image" width="25%">
 
+        <div>
+          <p style="color: white">Please give rating for your overall satisfaction...</p>
+        </div>
+
           <div >
             <ion-list radio-group [(ngModel)]="overallFeedback" class="margin-auto width-full q-type2 padding-left10">
               <ion-item class="inline-block width18" align-center no-lines >
@@ -30,40 +34,40 @@
 
           </div>
 
-      <div class="row" style="margin-right: -5px !important;">
-        <div class="input-group" col-4 margin-top="">
-                    <span class="input-group-addon"  style="color: #fff !important;" >
-                        <i class="material-icons">face</i>
-                    </span>
-          <div class="form-group label-floating" >
-            <label class="control-label" style="color: #fff !important;" >User Name</label>
-            <input class="form-control" style="color: #fff !important;" type="text" [(ngModel)]="userName" name="username">
-          </div>
-        </div>
-        <div class="input-group" col-4 margin-top="">
-                    <span class="input-group-addon" style="color: #fff !important;">
-                        <i class="material-icons">person</i>
-                    </span>
-          <div class="form-group label-floating">
-            <label class="control-label" style="color: #fff !important;">Code</label>
-            <input class="form-control" style="color: #fff !important;" [(ngModel)]="userCode" type="text" name="">
-          </div>
-        </div>
-        <div class="input-group" col-4 margin-top="">
-                    <span class="input-group-addon"  style="color: #fff !important;">
-                        <i class="material-icons">feedback</i>
-                    </span>
-          <div class="form-group label-floating" >
-            <label class="control-label" style="color: #fff !important;">Remarks</label>
-            <input class="form-control" style="color: #fff !important;" [(ngModel)]="remarks" type="text" name="">
-          </div>
-        </div>
-      </div>
+      <!--<div class="row" style="margin-right: -5px !important;">-->
+        <!--<div class="input-group" col-4 margin-top="">-->
+                    <!--<span class="input-group-addon"  style="color: #fff !important;" >-->
+                        <!--<i class="material-icons">face</i>-->
+                    <!--</span>-->
+          <!--<div class="form-group label-floating" >-->
+            <!--<label class="control-label" style="color: #fff !important;" >User Name</label>-->
+            <!--<input class="form-control" style="color: #fff !important;" type="text" [(ngModel)]="userName" name="username">-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="input-group" col-4 margin-top="">-->
+                    <!--<span class="input-group-addon" style="color: #fff !important;">-->
+                        <!--<i class="material-icons">person</i>-->
+                    <!--</span>-->
+          <!--<div class="form-group label-floating">-->
+            <!--<label class="control-label" style="color: #fff !important;">Code</label>-->
+            <!--<input class="form-control" style="color: #fff !important;" [(ngModel)]="userCode" type="text" name="">-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="input-group" col-4 margin-top="">-->
+                    <!--<span class="input-group-addon"  style="color: #fff !important;">-->
+                        <!--<i class="material-icons">feedback</i>-->
+                    <!--</span>-->
+          <!--<div class="form-group label-floating" >-->
+            <!--<label class="control-label" style="color: #fff !important;">Remarks</label>-->
+            <!--<input class="form-control" style="color: #fff !important;" [(ngModel)]="remarks" type="text" name="">-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
       </div>
 
-      <button type="button" class="bg-none" style="color: #ff9800" text-center (click)="start(userName,userCode)">
+      <button type="button" class="bg-none" style="color: #ff9800" text-center (click)="start()">
         Skip & Submit</button><br>
-      <button class="btn btn-warning btn-wd btn-lg" text-center (click)="start(userName,userCode)" style="margin-top: 10px; !important;">
+      <button class="btn btn-warning btn-wd btn-lg" text-center (click)="start()" style="margin-top: 10px; !important;">
         Submit
       </button>
 

@@ -44,6 +44,7 @@ import {ExpensePage} from "../pages/expense/expense";
 import {Indent} from "../pages/indent/indent";
 import {IndentList} from "../pages/indent-list/indent-list";
 import{ExpenseDetails} from "../pages/expense-details/expense-details";
+import {DatabaseProvider} from "../providers/database-provider";
 
 @Component({
   templateUrl: 'app.html'
@@ -54,6 +55,7 @@ export class MyApp {
   rootPage: any = TabsPage;
   userName:any;
   userType :any;
+  version:0.0;
     counter=0;
     pushEvent:any;
 
@@ -62,7 +64,7 @@ export class MyApp {
   constructor(public platform: Platform,private ionicApp: IonicApp,public menuCtrl:MenuController,private backgroundMode: BackgroundMode,
               public statusBar: StatusBar,public component:componentService,public toastCtrl: ToastController,
               public splashScreen: SplashScreen, private oneSignal: OneSignal, public events:Events, private batteryStatus: BatteryStatus,
-              private appVersion:AppVersion, private authService:authService) {
+              private appVersion:AppVersion, private authService:authService, private databaseProvider:DatabaseProvider) {
     this.initializeApp();
 
           //
@@ -143,16 +145,16 @@ export class MyApp {
       { title: 'Site', component: SitePage,active:false,icon:'device_hub',permission:'SiteList'},
       // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
       // { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
-      { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobsList'},
-      { title: 'Assets', component: AssetList,active:false,icon:'assessment',permission:'AssetsList'},
-      { title: 'Tickets', component: Ticket,active:false,icon:'tab',permission:'TicketsList'},
+      { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobList'},
+      { title: 'Assets', component: AssetList,active:false,icon:'assessment',permission:'AssetList'},
+      { title: 'Tickets', component: Ticket,active:false,icon:'tab',permission:'TicketList'},
       { title: 'Attendance', component: SiteListPage,active:false,icon:'content_paste',permission:'AttendanceList'},
       // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
       { title: 'Quotation', component: QuotationPage,active:false,icon:'receipt',permission:'QuotationList'},
-      // { title: 'Expense', component: ExpensePage,active:false,icon:'pie_chart',permission:'AttendanceList'},
-      // { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'widgets',permission:'FeedbackList'},
-      // {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
-      // { title:'IndentList',component:IndentList,active:false,icon:'shopping_cart',permission:'AttendanceList'},
+      { title: 'Expense', component: ExpensePage,active:false,icon:'pie_chart',permission:'AttendanceList'},
+      { title: 'InventoryMaster', component:InventoryMaster,active:false,icon:'widgets',permission:'FeedbackList'},
+      {title:'Indent',component:Indent,active:false,icon:'build',permission:'TicketsList'},
+      { title:'IndentList',component:IndentList,active:false,icon:'shopping_cart',permission:'AttendanceList'},
       { title: 'Feedback', component: InitFeedbackPage,active:false,icon:'feedback',permission:'FeedbackList'},
       { title: 'ChangePassword', component:ChangePassword,active:false,icon:'lock',permission:'FeedbackList'}
       // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
@@ -173,6 +175,14 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+        this.authService.getCurrentVersion('Android').subscribe(response=>{
+            console.log("Response in component for version controll");
+            console.log(response);
+            this.version=response[0].displayVersion;
+
+        });
+
         this.menuCtrl.swipeEnable(false);
         console.log("Version details");
         console.log("current version"+"0.4.0");
@@ -225,6 +235,7 @@ export class MyApp {
   logout(){
     this.nav.setRoot(LoginPage);
     window.localStorage.clear();
+    this.databaseProvider.dropAllTables();
   }
 
 

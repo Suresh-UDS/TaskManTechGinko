@@ -51,7 +51,7 @@
                                 <ion-select  [(ngModel)]="category" class="select-box  padding-left0  popover-con" interface="popover"  placeholder="Choose category">
                                     <ion-option  class="popover-con" value="HOUSEKEEPING">HOUSEKEEPING</ion-option>
                                     <ion-option class="popover-con" value="ELECTRICAL">ELECTRICAL</ion-option>
-                                    <ion-option class="popover-con" value="PLUMPING">PLUMPING</ion-option>
+                                    <ion-option class="popover-con" value="PLUMBING">PLUMBING</ion-option>
                                     <ion-option class="popover-con" value="HVAC">HVAC</ion-option>
                                     <ion-option class="popover-con" value="CARPENTRY">CARPENTRY</ion-option>
                                     <ion-option class="popover-con" value="PESTCONTROL">PESTCONTROL</ion-option>
@@ -156,7 +156,7 @@
                         </ion-col>
 
 
-                        <button has-permission="JobsCreate" type="submit" class="btn btn-warning pull-right margin-auto" (click)="addJob()">Add</button>
+                        <button has-permission="JobCreate" type="submit" class="btn btn-warning pull-right margin-auto" (click)="addJob()">Add</button>
 
                         <div class="clearfix"></div>
                     </ion-row>

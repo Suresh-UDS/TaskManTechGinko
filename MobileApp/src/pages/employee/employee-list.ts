@@ -74,6 +74,26 @@ export class EmployeeList {
         })
     }
 
+    getLocation(){
+        this.locationProvider.startTracking();
+
+        let config = {
+            desiredAccuracy: 0,
+            stationaryRadius: 20,
+            distanceFilter: 10,
+            debug: false,
+            // interval: 2000
+        };
+
+        this.backgroundGeolocation.configure(config).subscribe((response) => {
+
+            this.lattitude = response.latitude;
+            this.longitude = response.longitude;
+            this.locationProvider.stopTracking();
+
+        });
+    }
+
     stop(){
         this.locationProvider.stopTracking();
     }
@@ -81,7 +101,19 @@ export class EmployeeList {
     ionViewDidLoad() {
 
         console.log("Location on enter");
-        this.locationProvider.startTracking();
+        console.log(this.locationProvider.lat);
+        console.log(this.locationProvider.lng);
+
+        console.log('ionViewDidLoad SiteListPage');
+        var options={
+            timeout:3000
+        };
+        this.lattitude=parseFloat(window.localStorage.getItem('lat'));
+        this.longitude=parseFloat(window.localStorage.getItem('lng'));
+        if(this.lattitude>0){
+        }else{
+            this.getLocation();
+        }
     }
 
     getEmployeeAttendance(empId){
@@ -160,8 +192,8 @@ export class EmployeeList {
         this.camera.getPicture(options).then((imageData) => {
             let base64Image = 'data:image/jpeg;base64,' + imageData;
             var employeeName = employee.fullName+employee.empId;
-            this.component.showLoader("Getting Face..")
             this.checkProximity(this.site.id,base64Image,mode,attendanceMode,employee);
+
             // this.enrollFace(employee,base64Image);
             // this.navCtrl.push(AttendanceViewPage,imageData)
         }, (err) => {
@@ -185,55 +217,48 @@ export class EmployeeList {
         )
     }
 
+
+
     checkProximity(siteId,imageData,mode,attendanceMode,employee){
 
-        this.component.closeAll();
-        this.component.showLoader("Getting Location...");
+        // this.component.showLoader('Getting Location..');
+        // demo.showSwal('success-message-and-ok','Success','Checking Site Proximity');
 
-        var lat = Number(localStorage.getItem('lat'));
-        var lng = Number(localStorage.getItem('lng'));
-
-        if(lat && lat>0){
-            this.locationProvider.stopTracking();
-            this.attendanceService.checkSiteProximity(siteId,lat,lng).subscribe(
-                response=> {
-                    this.component.closeAll();
-                    this.locationProvider.stopTracking();
-                    this.verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData);
-                    // demo.showSwal('feedback-success','Success','Face Enrolled Successfully');
-
-                },error=>{
-                    console.log("errors");
-                    setTimeout(()=>{
-                        var lat = Number(localStorage.getItem('lat'));
-                        var lng = Number(localStorage.getItem('lng'));
-
-                        if(lat && lat>0){
-                            this.locationProvider.stopTracking();
-                            this.attendanceService.checkSiteProximity(siteId,lat,lng).subscribe(
-                                response=> {
-                                    this.component.closeAll();
-                                    this.locationProvider.stopTracking();
-                                    this.verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData);
-                                    // demo.showSwal('feedback-success','Success','Face Enrolled Successfully');
-
-                                },error2 => {
-                                    this.component.closeAll();
-                                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
-                                });
-                        }
-                    },2000);
-                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
-                    // this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
-                })
-        }else{
             this.component.closeAll();
-            console.log("error in getting current location");
-            demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
-            // this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+            this.component.showLoader("Verifying Location...");
 
-        }
+            console.log(this.lattitude);
+            console.log(this.longitude);
+            if(this.lattitude && this.longitude){
+                console.log("if condition verified");
 
+                if(this.lattitude && this.lattitude>0){
+                    this.attendanceService.checkSiteProximity(siteId,this.lattitude,this.longitude).subscribe(
+                        response=> {
+                            this.component.closeAll();
+                            this.verifyFaceAndMarkAttendance(employee,mode,this.lattitude,this.longitude,attendanceMode,imageData);
+                            // demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
+
+                        },error=>{
+                            console.log("errors");
+                            this.component.closeAll();
+                            demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Please check-in/out from site location   ");
+                            // this.verifyFaceAndMarkAttendance(employee,mode,response.latitude,response.longitude,attendanceMode,imageData);
+
+
+                        })
+                }else{
+                    this.component.closeAll();
+                    console.log("error in getting current location");
+                    demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
+                    // this.verifyFaceAndMarkAttendance(employee,mode,attendanceMode,imageData);
+                }
+
+            }else{
+                this.component.closeLoader();
+                this.component.closeAll();
+                demo.showSwal('warning-message-and-confirmation-ok',"Location Error", "Error in getting location..");
+            }
     }
 
     verifyFaceAndMarkAttendance(employee,mode,lat,lng,attendanceMode,imageData){
@@ -245,21 +270,22 @@ export class EmployeeList {
             this.component.showLoader('Enrolling Face Id');
             employee.enrolled_face = imageData;
             this.employeeService.enrollFace(employee).subscribe(response=>{
-                this.component.closeAll();
                 if(response.errorStatus){
+                    this.component.closeAll();
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
+                    this.component.closeAll();
                     var verificationResponse = response;
                     console.log(verificationResponse);
                     // this.component.showToastMessage('Face Enrolled successfully..','bottom');
-                    demo.showSwal('feedback-success','Success','Face Enrolled Successfully');
+                    demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
 
                 }
 
             },error=>{
                 this.component.closeAll();
                 var msg='Error in Detecting Face..';
-                this.component.showLoader(msg);
+                demo.showSwal('warning-message-and-confirmation-ok',msg);
                 console.log("Error");
                 console.log(error)
             })
@@ -289,7 +315,7 @@ export class EmployeeList {
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
                 this.getEmployees();
-                demo.showSwal('feedback-success','Success','Face Verified and Attendance marked Successfully');
+                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
         },error=>{
@@ -311,7 +337,7 @@ export class EmployeeList {
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
                 this.getEmployees();
-                demo.showSwal('feedback-success','Success','Face Verified and Attendance marked Successfully');
+                demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }
         },error=>{
