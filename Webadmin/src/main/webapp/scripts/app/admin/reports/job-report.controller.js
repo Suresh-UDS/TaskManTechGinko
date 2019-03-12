@@ -796,7 +796,7 @@ angular.module('timeSheetApp')
 					//console.log("Pagination",$scope.pager);
 					//console.log("jobs",$scope.jobs);
 
-					$scope.pages.currPage = $scope.pages.currPage;
+					$scope.pages.currPage = $scope.pages.currPage == 0 ? 1 : $scope.pages.currPage;
 					$scope.pages.totalPages = data.totalPages;
 
 					if($scope.jobs && $scope.jobs.length > 0 ){
@@ -1058,7 +1058,7 @@ angular.module('timeSheetApp')
 
 
 			$scope.clearProject = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.client.selected = undefined;
 				$scope.regionsListOne.selected = undefined;
 				$scope.branchsListOne.selected = undefined;
@@ -1071,7 +1071,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.clearRegion = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.regionsListOne.selected = undefined;
 				$scope.branchsListOne.selected = undefined;
 				$scope.sitesListOne.selected = undefined;
@@ -1091,7 +1091,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.clearSite = function($event) {
-				$event.stopPropagation(); 
+				$event.stopPropagation();
 				$scope.sitesListOne.selected = null;
 
 
