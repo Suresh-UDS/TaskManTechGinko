@@ -15,6 +15,8 @@ export class newEmpFamilyAndAcademic implements OnInit {
   nomineeList: any = [];
   onboardingFamilyAcademicData;
   storedIndex;
+  remainTotal = 100;
+  nomineeTotalPercentage;
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
@@ -50,12 +52,13 @@ export class newEmpFamilyAndAcademic implements OnInit {
         this.addNominees();
         console.log('empfamily else222 ' + getEpfCount);
       }
-    })
+    });
+
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
         this.onboardingFamilyAcademicForm.reset();
       }
-    })
+    });
 
     this.onboardingFamilyAcademicSubscription = this.onboardingFamilyAcademicForm.statusChanges.subscribe(status => {
       console.log(status);
@@ -66,6 +69,23 @@ export class newEmpFamilyAndAcademic implements OnInit {
           data: this.onboardingFamilyAcademicForm.value
         }
         //formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
+        let totPercent = 0;
+        console.log('nominee_length ' + this.nomineeForms.length);
+        for (let i = 0; i < this.nomineeForms.length; i++) {
+          console.log('nominee_length_per= ' + JSON.stringify(this.nomineeForms.controls[i]['controls']['nominePercentage'].value));
+          if (this.nomineeForms.controls[i]['controls']['nominePercentage'].value !== null) {
+            totPercent = totPercent + this.nomineeForms.controls[i]['controls']['nominePercentage'].value;;
+            console.log('nominee_length_perrr ' + JSON.stringify(totPercent));
+          }
+          if (totPercent > 100) {
+            console.log('nominee_length_per_100 ' + JSON.stringify(totPercent));
+          } else {
+            this.remainTotal = 100 - totPercent;
+            //gopicg
+          }
+        }
+
+
         this.messageService.formDataMessage(formStatusValues);
       } else {
         let formStatusValues = {
@@ -75,7 +95,6 @@ export class newEmpFamilyAndAcademic implements OnInit {
         this.messageService.formDataMessage(formStatusValues);
       }
     });
-
   }
   get nomineeForms() {
     return this.onboardingFamilyAcademicForm.get('nomineeDetail') as FormArray
@@ -91,24 +110,25 @@ export class newEmpFamilyAndAcademic implements OnInit {
       name: ['', [Validators.required]],
       relationship: ['', [Validators.required]],
       contactNumber: [''],
-      nominePercentage: ['', [Validators.required, Validators.max(100)]]
+      nominePercentage: ['', [Validators.required, Validators.max(this.remainTotal)]]
     })
     this.nomineeForms.push(nominee);
   }
+
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('educationQualification')) {
         console.log('fam_datta === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-        this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);        
+        this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
       }
     });
   }
-  
+
   removeNominees(index) {
     console.log('empfam2- ' + index + ' - ' + this.nomineeForms.at(index));
     this.nomineeForms.removeAt(index);
   }
-  
+
 
   ngOnDestroy() {
     this.onboardingFamilyAcademicSubscription.unsubscribe();
