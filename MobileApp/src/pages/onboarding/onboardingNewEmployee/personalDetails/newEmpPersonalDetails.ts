@@ -36,17 +36,17 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
       dateOfJoining: ['', [Validators.required]],
-      religion: ['', [Validators.required]],
+      religion: [''],
       bloodGroup: [''],
-      identificationMark1: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
-      identificationMark2: ['', [, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+      identificationMark1: ['', [Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+      identificationMark2: ['', [ Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
       relationshipDetails: this.fb.array([
         this.fb.group({
           name: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
           relationship: 'Father', contactNumber: '',
         }),
         this.fb.group({
-          name: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+          name: ['', [Validators.required,Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
           relationship: 'Mother', contactNumber: '',
         })
       ])

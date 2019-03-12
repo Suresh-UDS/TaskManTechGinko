@@ -66,7 +66,7 @@ export class newEmpContactDetails implements OnInit {
     });
     this.onboardingContactDetailsForm = this.fb.group({
       contactNumber: ['', [Validators.required]],
-      emergencyConatctNo: ['', [Validators.required]],
+      emergencyConatctNo: [''],
       communicationAddress: this.fb.array([this.addCommunicationAddress()]),
       permanentAddress: this.fb.array([this.addPermanentAddress()])
     });
