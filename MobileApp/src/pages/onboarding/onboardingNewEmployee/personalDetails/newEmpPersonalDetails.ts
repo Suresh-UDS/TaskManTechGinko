@@ -46,7 +46,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           relationship: 'Father', contactNumber: '',
         }),
         this.fb.group({
-          name: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+          name: ['', [ Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
           relationship: 'Mother', contactNumber: '',
         })
       ])

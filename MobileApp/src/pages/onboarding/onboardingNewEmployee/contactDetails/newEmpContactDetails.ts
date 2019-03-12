@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { onBoardingDataService } from '../onboarding.messageData.service';
-import { FormGroup, FormControl, Validators, FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, NgForm, FormArray, Validators, FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Camera, CameraOptions } from "@ionic-native/camera";
 import { Storage } from '@ionic/storage';
 import { normalizeURL, ActionSheet, ActionSheetController } from 'ionic-angular';
@@ -65,6 +65,7 @@ export class newEmpContactDetails implements OnInit {
       this.storedIndex = data['index'];
     });
     this.onboardingContactDetailsForm = this.fb.group({
+      checkSameAsPresent: [false],
       contactNumber: ['', [Validators.required]],
       emergencyConatctNo: ['', [Validators.required]],
       communicationAddress: this.fb.array([this.addCommunicationAddress()]),
@@ -193,22 +194,49 @@ export class newEmpContactDetails implements OnInit {
     })
   }
 
-  //  setValuePermanent() {
-  //    let value = this.onboardingContactDetailsForm.get('checkSameAsPresent').value;
-  //   if (value) {
-  //     this.onboardingContactDetailsForm.setValue({
-  //       permanentAddress: this.onboardingContactDetailsForm.get('communicationAddress').value,
-  //       permanentCity: this.onboardingContactDetailsForm.get('communicationCity').value,
-  //       permanentState: this.onboardingContactDetailsForm.get('communicationState').value
-  //     })
-  //   } else {
-  //     this.onboardingContactDetailsForm.setValue({
-  //       permanentAddress: '',
-  //       permanentCity: '',
-  //       permanentState: ''
-  //     })
-  //   }
+
+  // addEmployee(){
+  //   let fg = this.onboardingContactDetailsForm. (new Employee());
+  //   this.empFormArray.push(fg);	  
   // }
+
+  get permAddrForm() {
+    return this.onboardingContactDetailsForm.get('permanentAddress') as FormArray
+  }
+
+  get commAddrForm() {
+    return this.onboardingContactDetailsForm.get('communicationAddress') as FormArray
+  }
+
+  emptyArray() {
+    while (this.permAddrForm.controls.length > 0) {
+      this.permAddrForm.removeAt(0);
+    }
+  }
+
+  setValuePermanent() {
+    let values = this.onboardingContactDetailsForm.get('checkSameAsPresent').value;
+    console.log('updatedEmpConvalues ' +JSON.stringify(this.commAddrForm.controls[0]['controls']['address'].value));
+    
+    this.emptyArray();
+
+    if (values) {
+      const addrDt = this.fb.group({
+        address: this.commAddrForm.controls[0]['controls']['address'].value,
+        city: this.commAddrForm.controls[0]['controls']['city'].value,
+        state: this.commAddrForm.controls[0]['controls']['state'].value
+     })
+      this.permAddrForm.push(addrDt);
+     
+    } else {
+      const addrDt = this.fb.group({
+        address: '',
+        city: '',
+        state: ''
+     })
+     this.permAddrForm.push(addrDt);     
+    }
+  }
 
   sendValidationMessage() {
     if (this.formStatusValues['status'] && this.addressProof !== null
@@ -223,7 +251,7 @@ export class newEmpContactDetails implements OnInit {
       else {
         contactNo = this.formStatusValues['data']['emergencyConatctNo'];
         console.log('EmpCont2 - ' + JSON.stringify(contactNo));
-      } 
+      }
 
       this.formStatusValues['data']['emergencyConatctNo'] = contactNo;
       this.messageService.formDataMessage(this.formStatusValues);
