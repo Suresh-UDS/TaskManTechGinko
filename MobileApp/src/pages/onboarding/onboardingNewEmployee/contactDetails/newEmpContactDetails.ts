@@ -215,6 +215,7 @@ export class newEmpContactDetails implements OnInit {
   }
 
   setValuePermanent() {
+  
     let values = this.onboardingContactDetailsForm.get('checkSameAsPresent').value;
     console.log('updatedEmpConvalues ' +JSON.stringify(this.commAddrForm.controls[0]['controls']['address'].value));
     
@@ -235,6 +236,23 @@ export class newEmpContactDetails implements OnInit {
         state: ''
      })
      this.permAddrForm.push(addrDt);     
+    }
+  
+    console.log('Inside Permanent Code122', 'permanent');
+
+    let address = this.permAddrForm.controls[0]['controls']['address'];
+    let city = this.permAddrForm.controls[0]['controls']['city'];
+    let state = this.permAddrForm.controls[0]['controls']['state'];
+    if (values) {
+      console.log('Inside Permanent Code123', 'permanent1');
+      city.disable();
+      address.disable();
+      state.disable();
+    } else {
+      console.log('Inside Permanent Code1234', 'permanent2');
+      address.enable();
+      city.enable();
+      state.enable();
     }
   }
 
@@ -291,6 +309,7 @@ export class newEmpContactDetails implements OnInit {
       }
     });
   }
+ 
   ngOnDestroy() {
     this.onboardingContactDetailsSubscription.unsubscribe();
   }
