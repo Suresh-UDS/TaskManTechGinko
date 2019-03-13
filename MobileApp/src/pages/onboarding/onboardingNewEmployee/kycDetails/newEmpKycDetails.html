@@ -93,30 +93,39 @@
                     </div>
                 </div>
 
-                <!-- <div class="row form-group">
+                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="trequired">Driving License</label>
+                        <label>Driving License</label>
                         <ion-avatar item-start class="inlineElement">
                             <img [src]="userAllKYCData.drivingLicense" onError="src = 'assets/imgs/placeholder.png'"
-                                (click)="presentActionSheet('drivingLicense')" class="mdImage" />
+                                (click)="presentActionSheet('dLine')" class="mdImage" />
                         </ion-avatar>
                     </div>
 
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="trequired">Pancard</label>
+                        <label>Pancard</label>
                         <ion-avatar item-start class="inlineElement">
                             <img [src]="userAllKYCData.pancardCopy" onError="src = 'assets/imgs/placeholder.png'"
-                                (click)="presentActionSheet('pancardCopy')" class="mdImage" />
+                                (click)="presentActionSheet('panCard')" class="mdImage" />
                         </ion-avatar>
                     </div>
-                </div> -->
-                <!-- <div class="row form-group">
-                    <div <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                        <label class="trequired">Voter Id</label>
+                </div> 
+                
+                <div class="row form-group">                    
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <label>Voter Id</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.voterId" onError="src = 'assets/imgs/placeholder.png'" (click)="presentActionSheet('voterId')"
+                            <img [src]="userAllKYCData.voterId" onError="src = 'assets/imgs/placeholder.png'" 
+                            (click)="presentActionSheet('voter')"
                                 class="mdImage" />
                         </ion-avatar>
+                    </div>
+                </div>
+
+
+                <!-- <div class="row form-group">
+                    <div <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        
                     </div>
                 </div> -->
 

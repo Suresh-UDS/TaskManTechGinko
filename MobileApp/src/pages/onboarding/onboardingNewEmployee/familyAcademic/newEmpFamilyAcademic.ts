@@ -67,28 +67,29 @@ export class newEmpFamilyAndAcademic implements OnInit {
     this.onboardingFamilyAcademicSubscription = this.onboardingFamilyAcademicForm.statusChanges.subscribe(status => {
       console.log(status);
       console.log(this.onboardingFamilyAcademicForm.value)
-      if (status == 'VALID') {
+
+      let totPercent = 0;
+      console.log('nominee_length ' + this.nomineeForms.length);
+      for (let i = 0; i < this.nomineeForms.length; i++) {
+        console.log('nominee_length_per= ' + JSON.stringify(this.nomineeForms.controls[i]['controls']['nominePercentage'].value));
+        if (this.nomineeForms.controls[i]['controls']['nominePercentage'].value !== null) {
+          totPercent = totPercent + this.nomineeForms.controls[i]['controls']['nominePercentage'].value;;
+          console.log('nominee_length_perrr ' + JSON.stringify(totPercent));
+        }
+        if (totPercent > 100) {
+          console.log('nominee_length_per_100 ' + JSON.stringify(totPercent));
+        } else {
+          this.remainTotal = 100 - totPercent;
+          //gopicg
+        }
+      }
+
+      if (totPercent == 100 && status == 'VALID') {
         let formStatusValues = {
           status: true,
           data: this.onboardingFamilyAcademicForm.value
         }
         //formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
-        let totPercent = 0;
-        console.log('nominee_length ' + this.nomineeForms.length);
-        for (let i = 0; i < this.nomineeForms.length; i++) {
-          console.log('nominee_length_per= ' + JSON.stringify(this.nomineeForms.controls[i]['controls']['nominePercentage'].value));
-          if (this.nomineeForms.controls[i]['controls']['nominePercentage'].value !== null) {
-            totPercent = totPercent + this.nomineeForms.controls[i]['controls']['nominePercentage'].value;;
-            console.log('nominee_length_perrr ' + JSON.stringify(totPercent));
-          }
-          if (totPercent > 100) {
-            console.log('nominee_length_per_100 ' + JSON.stringify(totPercent));
-          } else {
-            this.remainTotal = 100 - totPercent;
-            //gopicg
-          }
-        }
-
 
         this.messageService.formDataMessage(formStatusValues);
       } else {

@@ -65,7 +65,7 @@
                     <p item-end class="text-right">{{userData['emergencyConatctNo'][0]}}</p>
                 </ion-item>
 
-                <ion-item>
+                <ion-item *ngIf="userData.communicationAddress !== null && userData.communicationAddress!=''" >
                     <p item-start class="text-left">Address</p>
                     <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}</p>
                     <p item-end class="text-right">{{userData['communicationAddress'][0]['city']}}</p>
@@ -135,6 +135,18 @@
                     <ion-slide item-start class="Thumb Impression Proof">
                         <p> Thumb Impresssion Right </p>
                         <img [src]="AppConfig.s3Bucket+userData['thumbImpressenRight']" class="image" />
+                    </ion-slide>
+                    <ion-slide  *ngIf="userData.pancardCopy !== null && userData.pancardCopy!=''" item-start class="pan card">
+                        <p> Pancard </p>
+                        <img [src]="AppConfig.s3Bucket+userData['pancardCopy']" class="image" />
+                    </ion-slide>
+                    <ion-slide *ngIf="userData.drivingLicense !== null && userData.drivingLicense!=''" item-start class="Driving License">
+                        <p> Driving License </p>
+                        <img [src]="AppConfig.s3Bucket+userData['drivingLicense']" class="image" />
+                    </ion-slide>
+                    <ion-slide  *ngIf="userData.voterId !== null && userData.voterId!=''" item-start class="voterId" >
+                        <p> Voter Id </p>
+                        <img [src]="AppConfig.s3Bucket+userData['voterId']" class="image" />
                     </ion-slide>
                 </ion-slides>
             </ion-list>

@@ -26,7 +26,10 @@ const imageUploadModal = {
   prePrintedStatement: String,
   addressProof: String,
   thumbImpressenRight: String,
-  thumbImpressenLeft: String
+  thumbImpressenLeft: String,
+  drivingLicense: String,
+  pancardCopy: String,
+  voterId: String
 }
 
 @Component({

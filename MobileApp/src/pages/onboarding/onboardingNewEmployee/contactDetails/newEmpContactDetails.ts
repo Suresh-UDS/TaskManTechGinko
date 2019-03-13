@@ -82,11 +82,12 @@ export class newEmpContactDetails implements OnInit {
     })
 
     this.onboardingContactDetailsSubscription = this.onboardingContactDetailsForm.statusChanges.subscribe(status => {
-      console.log(this.onboardingContactDetailsForm.value);
+      console.log('emp_contact2 '+ this.onboardingContactDetailsForm.value);
+      console.log('emp_contact3 '+ this.onboardingContactDetailsForm.getRawValue());
       if (status == 'VALID') {
         this.formStatusValues = {
           status: true,
-          data: this.onboardingContactDetailsForm.value
+          data: this.onboardingContactDetailsForm.getRawValue()
         }
       } else {
         this.formStatusValues = {
@@ -215,10 +216,10 @@ export class newEmpContactDetails implements OnInit {
   }
 
   setValuePermanent() {
-  
+
     let values = this.onboardingContactDetailsForm.get('checkSameAsPresent').value;
-    console.log('updatedEmpConvalues ' +JSON.stringify(this.commAddrForm.controls[0]['controls']['address'].value));
-    
+    console.log('updatedEmpConvalues ' + JSON.stringify(this.commAddrForm.controls[0]['controls']['address'].value));
+
     this.emptyArray();
 
     if (values) {
@@ -226,18 +227,18 @@ export class newEmpContactDetails implements OnInit {
         address: this.commAddrForm.controls[0]['controls']['address'].value,
         city: this.commAddrForm.controls[0]['controls']['city'].value,
         state: this.commAddrForm.controls[0]['controls']['state'].value
-     })
+      })
       this.permAddrForm.push(addrDt);
-     
+
     } else {
       const addrDt = this.fb.group({
         address: '',
         city: '',
         state: ''
-     })
-     this.permAddrForm.push(addrDt);     
+      })
+      this.permAddrForm.push(addrDt);
     }
-  
+
     console.log('Inside Permanent Code122', 'permanent');
 
     let address = this.permAddrForm.controls[0]['controls']['address'];
@@ -309,7 +310,7 @@ export class newEmpContactDetails implements OnInit {
       }
     });
   }
- 
+
   ngOnDestroy() {
     this.onboardingContactDetailsSubscription.unsubscribe();
   }
