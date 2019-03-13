@@ -12,14 +12,14 @@
                         <input class="form-control" type="number" formControlName="emergencyConatctNo">
                     </div>
                 </div>
-         
+
 
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <h3 class="headerText">Present Address</h3>
                     </div>
                 </div>
-                
+
                 <div *ngFor="let list of onboardingContactDetailsForm.get('communicationAddress').controls; let i = index;"
                     formArrayName="communicationAddress">
                     <div [formGroupName]="i">
@@ -53,10 +53,12 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <h3 class="headerText">Permanent Address</h3>
                     </div>
-                 <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <span>Same as present</span>
-                        <ion-checkbox checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
-                    </div> 
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <ion-item>
+                            <ion-label>Same as present</ion-label>                           
+                            <ion-checkbox checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
+                        </ion-item>
+                    </div>
                 </div>
                 <!-- <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group label-floating">
@@ -68,7 +70,8 @@
                         <input class="form-control" type="text" name="pstreetname" required>
                     </div>
                 </div> -->
-                <div *ngFor="let list of onboardingContactDetailsForm.get('permanentAddress').controls; let index = index;" formArrayName="permanentAddress">
+                <div *ngFor="let list of onboardingContactDetailsForm.get('permanentAddress').controls; let index = index;"
+                    formArrayName="permanentAddress">
                     <div [formGroupName]="index">
                         <div class="row form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
@@ -98,8 +101,8 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <label class="headerText trequired">Present Address Proof</label>
                         <ion-avatar item-start class="inlineElemet">
-                            <img [src]="addressProof" (load)="imgSuccessLoaded()"
-                             onError="src = 'assets/imgs/placeholder.png'; imgErrorFunction()" (click)="presentActionSheet()" class="mdImage" />
+                            <img [src]="addressProof" (load)="imgSuccessLoaded()" onError="src = 'assets/imgs/placeholder.png'; imgErrorFunction()"
+                                (click)="presentActionSheet()" class="mdImage" />
                         </ion-avatar>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FilePath } from '@ionic-native/file-path';
 import * as launcher from '../../../../assets/js/start-app';
 import { AppConfig } from "../../../service/app-config";
+import { ValidateUrl } from "./ValidateFn"
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 // import { ImagePicker } from '@ionic-native/image-picker/ngx';
@@ -32,7 +33,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   //   { name: 'Passport' },
   //   { name: 'Provident Fund' }
   // ];
-  constructor(private filePath: FilePath, private DomSanitizer: DomSanitizer, private fb: FormBuilder, private transfer: FileTransfer,
+  constructor(private filePath: FilePath, private fb: FormBuilder, private transfer: FileTransfer,
     private storage: Storage, private camera: Camera,
     private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService, private file: File) { }
 
@@ -44,8 +45,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       bankDetails: this.fb.array([this.createBankDetails()]),
     });
 
-    this.onboardingKYCForm.setValidators([this.validateNumberMaxLength(), this.validateIFSCCode()]);
-
+    this.onboardingKYCForm.setValidators([this.validateNumberMaxLength()]);
 
     this.initialKycImage();
 
@@ -61,6 +61,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     })
     this.onboardingKycSubscription = this.onboardingKYCForm.statusChanges.subscribe(status => {
       console.log('KYCdataaa ' + status);
+      console.log('KYCdataaa111 ' + this.onboardingKYCForm.controls.bankDetails.value[0]['ifsc'].ValidateUrl);      
+      
       console.log('KYCdataaa== ' + JSON.stringify(this.onboardingKYCForm.value));
       if (status == 'VALID') {
         this.formStatusValues = {
@@ -166,9 +168,10 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   createBankDetails(): FormGroup {
     return this.fb.group({
       accountNo: ['', [Validators.required, Validators.maxLength(20)]],
-      ifsc: ['', [Validators.required, Validators.maxLength(11)]]
+      ifsc: ['', [Validators.required ,ValidateUrl, Validators.minLength(11),Validators.maxLength(11)]]
     });
   }
+
 
   private validateIFSCCode(): ValidatorFn {
     return (group: FormGroup): ValidationErrors => {
@@ -227,12 +230,12 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       (this.userAllKYCData['profilePicture'] != "") &&
       (this.userAllKYCData['thumbImpressenLeft'] !== null) &&
       (this.userAllKYCData['thumbImpressenLeft'] != "") &&
-      (this.userAllKYCData['drivingLicense'] !== null) &&
-      (this.userAllKYCData['drivingLicense'] != "") &&
-      (this.userAllKYCData['voterId'] !== null) &&
-      (this.userAllKYCData['voterId'] != "") &&
-      (this.userAllKYCData['pancardCopy'] !== null) &&
-      (this.userAllKYCData['pancardCopy'] != "") &&
+      // (this.userAllKYCData['drivingLicense'] !== null) &&
+      // (this.userAllKYCData['drivingLicense'] != "") &&
+      // (this.userAllKYCData['voterId'] !== null) &&
+      // (this.userAllKYCData['voterId'] != "") &&
+      // (this.userAllKYCData['pancardCopy'] !== null) &&
+      // (this.userAllKYCData['pancardCopy'] != "") &&
       (this.userAllKYCData['prePrintedStatement'] !== null) &&
       (this.userAllKYCData['prePrintedStatement'] != "")) {
 
@@ -297,25 +300,25 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         }
 
 
-        this.userAllKYCData['voterId'] = localStoragedData['actionRequired'][this.storedIndex]['voterId'];
-        if (this.userAllKYCData['voterId'] !== null &&
-          this.userAllKYCData['voterId'].includes('voterId')) {
-          this.userAllKYCData['voterId'] = this.IMG_BASE_URL + this.userAllKYCData['voterId'];
-        }
+        // this.userAllKYCData['voterId'] = localStoragedData['actionRequired'][this.storedIndex]['voterId'];
+        // if (this.userAllKYCData['voterId'] !== null &&
+        //   this.userAllKYCData['voterId'].includes('voterId')) {
+        //   this.userAllKYCData['voterId'] = this.IMG_BASE_URL + this.userAllKYCData['voterId'];
+        // }
 
 
-        this.userAllKYCData['pancardCopy'] = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
-        if (this.userAllKYCData['pancardCopy'] !== null &&
-          this.userAllKYCData['pancardCopy'].includes('pancardCopy')) {
-          this.userAllKYCData['pancardCopy'] = this.IMG_BASE_URL + this.userAllKYCData['pancardCopy'];
-        }
+        // this.userAllKYCData['pancardCopy'] = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
+        // if (this.userAllKYCData['pancardCopy'] !== null &&
+        //   this.userAllKYCData['pancardCopy'].includes('pancardCopy')) {
+        //   this.userAllKYCData['pancardCopy'] = this.IMG_BASE_URL + this.userAllKYCData['pancardCopy'];
+        // }
 
 
-        this.userAllKYCData['drivingLicense'] = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
-        if (this.userAllKYCData['drivingLicense'] !== null &&
-          this.userAllKYCData['drivingLicense'].includes('drivingLicense')) {
-          this.userAllKYCData['drivingLicense'] = this.IMG_BASE_URL + this.userAllKYCData['drivingLicense'];
-        }
+        // this.userAllKYCData['drivingLicense'] = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
+        // if (this.userAllKYCData['drivingLicense'] !== null &&
+        //   this.userAllKYCData['drivingLicense'].includes('drivingLicense')) {
+        //   this.userAllKYCData['drivingLicense'] = this.IMG_BASE_URL + this.userAllKYCData['drivingLicense'];
+        // }
 
 
         this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['aadharNumber']);

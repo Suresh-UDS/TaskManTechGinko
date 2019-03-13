@@ -30,8 +30,10 @@ export class newEmpFamilyAndAcademic implements OnInit {
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
       this.storage.get('OnBoardingData').then(localStoragedData => {
+        console.log('empfamily data ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         if (localStoragedData['actionRequired'][this.storedIndex]) {
-          if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')) {
+          if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')
+            && localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'] != null) {
             getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
             console.log('empfamily ' + getEpfCount);
             if (getEpfCount > 0) {
@@ -46,12 +48,14 @@ export class newEmpFamilyAndAcademic implements OnInit {
             console.log('empfamily else');
             this.addNominees();
           }
+        } else {
+          console.log('empfamily store');
         }
       });
-      if (getEpfCount === undefined) {
-        this.addNominees();
-        console.log('empfamily else222 ' + getEpfCount);
-      }
+      // if (getEpfCount === undefined) {
+      //   this.addNominees();
+      //   console.log('empfamily else222 ' + getEpfCount);
+      // }
     });
 
     this.messageService.clearMessageSource.subscribe(data => {
@@ -96,6 +100,8 @@ export class newEmpFamilyAndAcademic implements OnInit {
       }
     });
   }
+
+
   get nomineeForms() {
     return this.onboardingFamilyAcademicForm.get('nomineeDetail') as FormArray
   }
