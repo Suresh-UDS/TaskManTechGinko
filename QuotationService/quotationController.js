@@ -856,11 +856,16 @@ module.exports = {
         sortVal = {'createdDate' : -1};
       }
 
+        if(req.body && req.body.report){
+            var quotQuery = Quotation.find(quotCriterias).sort(sortVal);
+        }else{
+            var quotQuery = Quotation.find(quotCriterias).skip((req.body.currPage-1)*10).limit(req.body.sortNum).sort(sortVal);
+        }
       
 
       console.log("currPage",req.body.currPage +"coloumn:order" + JSON.stringify(sortVal));
 
-      var quotQuery = Quotation.find(quotCriterias).skip((req.body.currPage-1)*10).limit(req.body.sortNum).sort(sortVal);
+      // var quotQuery = Quotation.find(quotCriterias).skip((req.body.currPage-1)*10).limit(req.body.sortNum).sort(sortVal);
 
       console.log("Search criteria",quotCriterias);
       quotQuery.exec(function(err,quotations){

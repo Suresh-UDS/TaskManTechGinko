@@ -1557,7 +1557,13 @@ public class SchedulerHelperService extends AbstractService {
 						"email.notification.daywiseReports.client.group.alert", site.getId(), proj.getId());
 				Setting eodReports = null;
 				if (CollectionUtils.isNotEmpty(settings)) {
-					eodReports = settings.get(0);
+					List<Setting> eodSettings = settings;
+					for(Setting eodSetting : eodSettings) {
+					    if(eodSetting.getSettingValue().equalsIgnoreCase("true")) {
+                            eodReports = eodSetting;
+                        }
+                    }
+
 				}
 				List<Setting> emailSettings = settingRepository.findSettingByKeyAndSiteIdOrProjectId(
 						"email.notification.daywiseReports.emails", site.getId(), proj.getId());
@@ -1654,8 +1660,8 @@ public class SchedulerHelperService extends AbstractService {
 							}
 						}else {
 	//						sb.append("<td></td>");
-							sb.append("<td></td>");
-//							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
+							sb.append("<td>0</td>");
 							sb.append("<td>0</td>");
 							sb.append("<td><b>0</b></td>");
 						}
@@ -1696,8 +1702,8 @@ public class SchedulerHelperService extends AbstractService {
 											null, null, exportTicketResult);
 									files.add(exportTicketResult.getFile());
 								}else {
-									sb.append("<td></td>");
-									sb.append("<td></td>");
+									sb.append("<td>0</td>");
+									sb.append("<td>0</td>");
 		//							sb.append("<td>0</td>");
 									sb.append("<td>0</td>");
 									sb.append("<td><b>0</b></td>");
@@ -1705,8 +1711,8 @@ public class SchedulerHelperService extends AbstractService {
 
 							} else {
 								log.debug("no tickets found on the daterange");
-								sb.append("<td></td>");
-								sb.append("<td></td>");
+								sb.append("<td>0</td>");
+								sb.append("<td>0</td>");
 		//						sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
 								sb.append("<td><b>0</b></td>");
@@ -1716,14 +1722,15 @@ public class SchedulerHelperService extends AbstractService {
 						ExportResult exportQuotationResult = new ExportResult();
 						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
 							List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
-
+                            sc.setReport(true);
 							Object quotationObj = quotationService.getQuotations(sc);
 							if (quotationObj != null) {
 								ObjectMapper mapper = new ObjectMapper();
 								mapper.findAndRegisterModules();
 								mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 								mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
-								try {
+                                mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+                                try {
 									quotationResults = mapper.readValue((String) quotationObj,
 											new TypeReference<List<QuotationDTO>>() {
 											});
@@ -1770,8 +1777,8 @@ public class SchedulerHelperService extends AbstractService {
 										*/
 										sb.append("<td>"+ quotationSummary.getTotalPending() +"</td>");
 										sb.append("<td>"+ quotationSummary.getTotalSubmitted() +"</td>");
-										sb.append("<td>" + quotationSummary.getTotalApproved() + "</td>");
-										sb.append("<td></td>");
+										sb.append("<td>"+ quotationSummary.getTotalApproved() + "</td>");
+										sb.append("<td>"+ quotationSummary.getTotalRejected() +"</td>");
 										sb.append("<td><b>" + quotationSummary.getTotalCount() + "</b></td>");
 
 									}
@@ -1779,8 +1786,8 @@ public class SchedulerHelperService extends AbstractService {
 											exportQuotationResult);
 									files.add(exportQuotationResult.getFile());
 								}else {
-									sb.append("<td></td>");
-									sb.append("<td></td>");
+									sb.append("<td>0</td>");
+									sb.append("<td>0</td>");
 									sb.append("<td>0</td>");
 									sb.append("<td>0</td>");
 									sb.append("<td><b>0</b></td>");
@@ -1791,7 +1798,7 @@ public class SchedulerHelperService extends AbstractService {
 								sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
 								sb.append("<td>0</td>");
-								sb.append("<td></td>");
+								sb.append("<td>0</td>");
 								sb.append("<td><b>0</b></td>");
 							}
 						}

@@ -580,17 +580,18 @@ public class RateCardService extends AbstractService {
             request.put("sortByAsc", searchCriteria.isSortByAsc());
             request.put("sortNum", searchCriteria.getSort());
             request.put("siteIds", siteIds);
+            request.put("report", searchCriteria.isReport());
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/search", requestEntity, String.class);
+                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
             quotationList = response.getBody();
 
         }catch(Exception e) {
-            log.error("Error while calling location service ", e);
+            log.error("Error while calling Quotation service ", e);
             e.printStackTrace();
         }
 
