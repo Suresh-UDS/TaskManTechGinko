@@ -50,13 +50,15 @@
 
 
                 <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <h3 class="headerText">Permanent Address</h3>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <ion-item>
-                            <ion-label>Same as present</ion-label>                           
-                            <ion-checkbox checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                            <ion-item no-padding="">
+                                <ion-label class="label-text" stacked>Same as Present</ion-label>
+                                <ion-checkbox   color="primary" checked="false" formControlName="checkSameAsPresent" (ionChange)="setValuePermanent()"></ion-checkbox>
                         </ion-item>
                     </div>
                 </div>
