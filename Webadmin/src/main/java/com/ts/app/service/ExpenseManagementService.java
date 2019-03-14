@@ -98,7 +98,12 @@ public class ExpenseManagementService extends AbstractService {
 
 //            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
         }
+        if(expenseDTO.getProjectId()>0){
+            Project project = projectRepository.findOne(expenseDTO.getProjectId());
+            expense.setProject(project);
 
+//            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
+        }
         expense.setMode(expenseDTO.getMode());
         expense.setCurrency(expenseDTO.getCurrency());
         expense.setPaymentType(expenseDTO.getPaymentType());
@@ -121,7 +126,7 @@ public class ExpenseManagementService extends AbstractService {
         if (Objects.equals(expenseDTO.getMode(), "credit")){
                 expense.setBalanceAmount(totalBalanceAmount + expenseDTO.getCreditAmount());
                 expense.setCreditAmount(expenseDTO.getCreditAmount());
-
+                expense.setCreditedDate(new Date());
         }
 
 

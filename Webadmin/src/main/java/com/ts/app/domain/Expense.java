@@ -19,6 +19,10 @@ public class Expense extends AbstractAuditingEntity {
     @JoinColumn(name = "siteId", nullable = true)
     private Site site;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectId", nullable = true)
+    private Project project;
+
     private String description;
 
     private double debitAmount;
@@ -53,6 +57,14 @@ public class Expense extends AbstractAuditingEntity {
 
     @OneToMany(mappedBy="expense",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ExpenseDocument> documents;
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public long getId() {
         return id;
