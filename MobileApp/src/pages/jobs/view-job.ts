@@ -22,6 +22,7 @@ export class ViewJobPage {
     categories:any;
 
     checkListItems:any;
+    materialItems:any;
     takenImages:any;
     showIcon:any;
     index:any;
@@ -33,6 +34,7 @@ export class ViewJobPage {
         this.spinner=true;
         this.categories = 'details';
         this.checkListItems=[];
+        this.materialItems = [];
         this.takenImages=[];
         this.jobDetails=[];
         this.jobDetails=this.navParams.get('job');
@@ -68,6 +70,7 @@ export class ViewJobPage {
                     console.log(response);
                     this.jobDetails = response;
                     this.checkListItems = this.jobDetails.checklistItems;
+                    this.materialItems = this.jobDetails.jobMaterials;
                     if(response.images.length>0){
                         console.log("Images available");
                         this.completedImages=[];

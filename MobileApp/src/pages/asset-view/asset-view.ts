@@ -57,7 +57,9 @@ export class AssetView {
     ticketSearchCriteria:any;
     readingSearchCriteria:any;
     fileTransfer: FileTransferObject = this.transfer.create();
-
+  assetMaterial: any;
+  jobMaterials: any;
+  jobMaterialsList : any;
 
     constructor(public dbService:DBService,public camera: Camera,@Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private transfer: FileTransfer,private modalCtrl:ModalController,private datePicker: DatePicker,
@@ -69,7 +71,9 @@ export class AssetView {
     this.spinner=true;
     this.PPMJobs=[];
     this.AMCJobs=[];
-
+    this.assetMaterial = [];
+    this.jobMaterials = [];
+    this.jobMaterialsList = [];
   }
     showCalendar()
     {
@@ -940,8 +944,33 @@ export class AssetView {
         )
     }
 
-
-
+    getMaterials(assetdetails){
+      var search = {
+        siteId:assetdetails.siteId,
+        assetId:assetdetails.id
+      }
+      this.assetService.getAssetMaterial(search).subscribe(
+        response=>{
+          console.log("Asset materials");
+          console.log(response);
+          this.assetMaterial = response;
+          for(var i=0;i<this.assetMaterial.length; i++){
+            console.log("jobmaterials",this.assetMaterial[i].jobMaterials);
+            // this.jobMaterialsList = this.assetMaterial[i].jobMaterials;
+            this.jobMaterialsList = this.assetMaterial[i].jobMaterials;
+            console.log("materials",this.jobMaterialsList);
+            for(var j=0; j<this.jobMaterialsList.length; j++){
+              this.jobMaterials.push(this.jobMaterialsList[j])
+              console.log("jobmateriallist",this.jobMaterials)
+            }
+              // this.jobMaterials.push(this.jobMaterialsList[j]);
+          }
+        },err=>{
+          console.log("Error in getting asset materials");
+          console.log(err);
+        }
+      )
+    }
 
 
 }
