@@ -15,7 +15,6 @@ angular.module('timeSheetApp')
 	$scope.selectedProject = null;
 	//$scope.selectedSite = null;
 	$scope.selectedStatus = null;
-	$scope.searchCriteria = {};
 	//$scope.selectedEmployee = null;
 	$scope.pages = { currPage : 1};
 	$scope.cTicket ={};

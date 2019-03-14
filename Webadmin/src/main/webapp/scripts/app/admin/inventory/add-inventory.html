@@ -14,8 +14,13 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
+            <div class="row">
+                <div class="col-md-12">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
+                </div>
+            </div>
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="saveInventory()">
+                  ng-submit="conform('save')" confirm-on-exit>
 
                 <div class="row">
 
@@ -28,10 +33,30 @@
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group  ">
+                                        <div class="form-group">
                                             <label class="control-label">Name <span class="red-star">*</span></label>
-                                            <input type="text" class="form-control"   name='inventory-name'
-                                                   ng-model="inventory.name" ng-minlength='2' ng-maxlength='50' required autocomplete="off"/>
+                                            <input type="text" class="form-control"   name='inventoryName'
+                                                   ng-model="inventory.name" ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\s&-/]*$/" required autocomplete="off" tabindex="1"/>
+                                            <div ng-show="form.$submitted || form.inventoryName.$touched || form.inventoryName.$dirty">
+                                                <div ng-show="form.inventoryName.$dirty || form.inventoryName.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.inventoryName.$error.required">
+                                                        Material name is required.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.inventoryName.$error.minlength">
+                                                        Material name is required to be at least 2 character.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                       ng-show="form.inventoryName.$error.maxlength">
+                                                        Material name cannot be longer than 50 characters.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                       ng-show="form.inventoryName.$error.pattern">
+                                                        Material name can only contain letters,numbers and space.
+                                                    </p>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -43,9 +68,18 @@
                                                 <div class="col-md-10 pad-r-0px">
                                                     <label class="control-label">Group <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" ng-model="selectedItemGroup" ng-options="materialItmGroup as materialItmGroup.itemGroup for materialItmGroup in materialItmGroups">
+                                                    <select class="form-control" ng-model="selectedItemGroup"  name="itemGroup" ng-options="materialItmGroup as materialItmGroup.itemGroup for materialItmGroup in materialItmGroups" required tabindex="4">
                                                         <option value="">Select Item Group ..</option>
                                                     </select>
+                                                    <div ng-show="form.$submitted || form.itemGroup.$touched || form.itemGroup.$dirty">
+                                                        <div ng-show="form.itemGroup.$dirty || form.itemGroup.$invalid">
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                               ng-show="form.itemGroup.$error.required">
+                                                                Group is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-2 RightAddBtn">
                                                     <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" data-toggle="modal"  data-target="#addItemGroup"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
@@ -58,14 +92,44 @@
                                     <div class="col-md-12">
                                         <div class="form-group ">
                                             <label class="control-label">Item Code <span class="red-star">*</span> </label>
-                                            <input type="text" class="form-control"   name='item'
-                                                   ng-model="inventory.itemCode"  required autocomplete="off"/>
+                                            <input type="text" class="form-control"   name='itemCode'
+                                                   ng-model="inventory.itemCode" ng-minlength='2' ng-maxlength='50' ng-pattern="/^[A-Za-z0-9\&-/]*$/" required autocomplete="off" tabindex="5"/>
+                                            <div ng-show="form.$submitted || form.itemCode.$touched || form.itemCode.$dirty">
+                                                <div ng-show="form.itemCode.$dirty || form.itemCode.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.itemCode.$error.required">
+                                                        Item code is required.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.itemCode.$error.minlength">
+                                                        Item code is required to be at least 2 character.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                       ng-show="form.itemCode.$error.maxlength">
+                                                        Item code cannot be longer than 50 characters.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                       ng-show="form.itemCode.$error.pattern">
+                                                        Item code can only contain letters,numbers.
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group ">
                                             <label class="control-label">Description  </label>
-                                            <textarea class="form-control" ng-model="inventory.description" placeholder="Description here...." rows="7"></textarea>
+                                            <textarea class="form-control" name="description" ng-maxlength='255' ng-model="inventory.description" placeholder="Description here...." rows="7" tabindex="7"></textarea>
+                                            <div ng-show="form.$submitted || form.description.$touched || form.description.$dirty">
+                                                <div ng-show="form.description.$dirty || form.description.$invalid">
+
+                                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                                       ng-show="form.description.$error.maxlength">
+                                                        Description cannot be longer than 255 characters.
+                                                    </p>
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -80,7 +144,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="panel panel-default">
-                            <div class="panel-heading">Location <span class="red-star">*</span></div>
+                            <div class="panel-heading">Location</div>
                             <div class="panel-body">
 
                                 <div class="row">
@@ -91,9 +155,18 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Client <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" ng-model="client" ng-change="loadAllSites()" ng-options="project as project.name for project in projects" required>
+                                                    <select class="form-control" ng-model="client" name="project" ng-change="loadAllSites()" ng-options="project as project.name for project in projects" required tabindex="2">
                                                         <option value="">Select Client...</option>
                                                     </select>
+                                                    <div ng-show="form.$submitted || form.project.$touched || form.project.$dirty">
+                                                        <div ng-show="form.project.$dirty || form.project.$invalid">
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                               ng-show="form.project.$error.required">
+                                                                Client is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,9 +177,18 @@
                                                 <div class="form-group">
                                                     <label class="control-label">Select Site <span class="red-star">*</span></label>
                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <select class="form-control" ng-model="projectSite"  ng-options="site as site.name for site in sites">
+                                                    <select class="form-control" ng-model="projectSite" name="site"  ng-options="site as site.name for site in sites" required tabindex="3">
                                                         <option value="">Select Site...</option>
                                                     </select>
+                                                    <div ng-show="form.$submitted || form.site.$touched || form.site.$dirty">
+                                                        <div ng-show="form.site.$dirty || form.site.$invalid">
+                                                            <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                               ng-show="form.site.$error.required">
+                                                                Site is required.
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -117,7 +199,7 @@
                             </div>
                         </div>
 
-                        <div class="panel panel-default">
+                        <div class="panel panel-default" style="min-height: 225px;">
                             <div class="panel-heading">Manufacturer Details </div>
                             <div class="panel-body" ng-init="$scope.loadManufacturer()">
                                 <div class="row">
@@ -127,9 +209,18 @@
 
                                             <label class="control-label">Manufacturer</label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select class="form-control" ng-model="selectedManufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers">
+                                            <select class="form-control" ng-model="selectedManufacturer" name="manufacturer" ng-options="manufacturer as manufacturer.name for manufacturer in manufacturers" tabindex="6">
                                                 <option value="">Select Manufacturer</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.manufacturer.$touched || form.manufacturer.$dirty">
+                                                <div ng-show="form.manufacturer.$dirty || form.manufacturer.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.manufacturer.$error.required">
+                                                        Manufacturer is required.
+                                                    </p>
+
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -144,7 +235,7 @@
 
                 <div class="row">
 
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">Stock Information</div>
                             <div class="panel-body">
@@ -154,11 +245,20 @@
 
                                         <div class="form-group selectcon is-empty">
 
-                                            <label class="control-label">UOM</label>
+                                            <label class="control-label">UOM<span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select class="form-control" ng-model="selectedUOM" ng-options="materialUOM for materialUOM in materialUOMs">
+                                            <select class="form-control" ng-model="selectedUOM" name="uom" ng-options="materialUOM for materialUOM in materialUOMs" required tabindex="8">
                                                 <option value="">Select UOM</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.uom.$touched || form.uom.$dirty">
+                                                <div ng-show="form.uom.$dirty || form.uom.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.uom.$error.required">
+                                                        UOM is required.
+                                                    </p>
+
+                                                </div>
+                                            </div>
 
                                         </div>
 
@@ -167,26 +267,65 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group ">
-                                            <label class="control-label">Store Stock </label>
+                                            <label class="control-label">Store Stock <span class="red-star">*</span></label>
                                             <input type="number" class="form-control"   name='storestock'
-                                                   ng-model="inventory.storeStock"  required autocomplete="off"/>
+                                                   ng-model="inventory.storeStock" min="0" required autocomplete="off" tabindex="9"/>
+                                            <div ng-show="form.$submitted || form.storestock.$touched || form.storestock.$dirty">
+                                                <div ng-show="form.storestock.$dirty || form.storestock.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.storestock.$error.required">
+                                                        Store stock is required.
+                                                    </p>
+
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group  ">
-                                            <label class="control-label">Min Stock</label>
-                                            <input type="number" class="form-control"   name='minstock'
-                                                   ng-model="inventory.minimumStock" required autocomplete="off"/>
+                                            <label class="control-label">Min Stock<span class="red-star">*</span></label>
+                                            <input type="number" class="form-control"   name='minStock'
+                                                   ng-model="inventory.minimumStock" min="0" ng-pattern="/^[0-9]{1,7}$/" ng-change="checkMinMax()" required autocomplete="off" tabindex="10"/>
+                                            <div ng-show="form.$submitted || form.minStock.$touched || form.minStock.$dirty">
+                                                <div ng-show="form.minStock.$dirty || form.minStock.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.minStock.$error.required">
+                                                        Min stock is required.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon" ng-show="minError">
+                                                        Min stock must below max stock.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                       ng-show="form.minStock.$error.pattern">
+                                                        Min stock must not negative value.
+                                                    </p>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group  ">
-                                            <label class="control-label">Max Stock</label>
+                                            <label class="control-label">Max Stock<span class="red-star">*</span></label>
                                             <input type="number" class="form-control"   name='maxStock'
-                                                   ng-model="inventory.maximumStock" required autocomplete="off"/>
+                                                   ng-model="inventory.maximumStock" min="0"  ng-pattern="/^[0-9]{1,7}$/" ng-change="checkMinMax()" required autocomplete="off" tabindex="11"/>
+                                            <div ng-show="form.$submitted || form.maxStock.$touched || form.maxStock.$dirty">
+                                                <div ng-show="form.maxStock.$dirty || form.maxStock.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                       ng-show="form.maxStock.$error.required">
+                                                        Max stock is required.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon" ng-show="maxError">
+                                                        Max stock must above min stock.
+                                                    </p>
+                                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                       ng-show="form.maxStock.$error.pattern">
+                                                        Max stock must not negative value.
+                                                    </p>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -205,11 +344,11 @@
 
                     <div class="col-md-12">
 
-                        <button ng-click="cancelInventory()"
-                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
+                        <button type="button" ng-click="conform('cancel')"
+                                id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons" tabindex="13">close</i> Cancel</button>
 
-                        <button type="submit" type="submit"
-                                id="form-button-save"  class="btn btn-success pull-right"><span class="btn-label">
+                        <button type="submit"
+                                id="form-button-save"  class="btn btn-success pull-right" ng-disabled="form.$invalid || minError || maxError" tabindex="12"><span class="btn-label">
                                             <i class="material-icons">check</i>
                                         </span>Create inventory</button>
 
@@ -261,11 +400,11 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add Item Group</h4>
+                <h4 class="modal-title">Add Item Group<span class="red-star">*</span></h4>
             </div>
             <div class="modal-body">
 
-                <form name="itemGroupForm" novalidate>
+                <form name="itemGroupForm" ng-submit="addMaterialItemGroup()" novalidate>
                     <div class="row">
                         <div class="col-md-12">
                             <input class="" id="itemgroupName"  ng-model="materialItemGroup.itemGroup" ng-maxlength="50"   name="itemgroupName" type="text" value="" ng-pattern="/^[A-Za-z0-9\s]*$/" required />
@@ -287,7 +426,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 txt-align-center">
-                            <input type="submit"  ng-click="addMaterialItemGroup()" ng-disabled="itemGroupForm.$invalid" data-dismiss="modal" class="btn btn-success" name="add" value="Add" >
+                            <input type="submit"   ng-disabled="itemGroupForm.$invalid"  class="btn btn-success" name="add" value="Add" >
                         </div>
                     </div>
                 </form>
