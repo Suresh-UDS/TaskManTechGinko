@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="viewInventory();loadingStart();loadingStop();">
+<div class="crud-form" ng-init="viewInventory();">
 
 
     <div class="margn-top30">
@@ -23,39 +23,10 @@
                         <div class="tab-pane fade in active Inventory" id="Inventory">
 
                             <div class="row">
-
                                 <div class="col-md-6">
-
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">Location </div>
-                                        <div class="panel-body">
-                                            <div class="table-responsive">
-                                                <table class="table">
-
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Client</td>
-                                                        <td>{{inventoryViews.projectName}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Site</td>
-                                                        <td>{{inventoryViews.siteName}}</td>
-
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <div class="col-md-6">
-
                                     <div class="panel panel-default">
                                         <div class="panel-heading">Inventory Details</div>
                                         <div class="panel-body">
-
 
                                             <div class="table-responsive">
                                                 <table class="table">
@@ -87,36 +58,55 @@
 
                                         </div>
                                     </div>
-
-
                                 </div>
-                                <div class="col-md-6">
 
-                                    <div class="panel panel-default">
+                                <div class="col-md-6">
+                                    <div class="panel panel-default" style="min-height:262px;">
+                                        <div class="panel-heading">Location </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table">
+
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Client</td>
+                                                        <td>{{inventoryViews.projectName}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Site</td>
+                                                        <td>{{inventoryViews.siteName}}</td>
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="panel panel-default" style="min-height:196px;">
                                         <div class="panel-heading">Stock Information </div>
                                         <div class="panel-body">
 
                                             <div class="table-responsive">
                                                 <table class="table">
+                                                    <thead>
+                                                    <th>UOM </th>
+                                                    <th>Min Stock</th>
+                                                    <th>Max Stock</th>
+                                                    <th>Store Stock</th>
+                                                    </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td>UOM </td>
                                                         <td>{{inventoryViews.uom}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Min Stock</td>
+
                                                         <td>{{inventoryViews.minimumStock}}</td>
 
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Max Stock</td>
                                                         <td>{{inventoryViews.maximumStock}}</td>
 
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Store Stock</td>
                                                         <td>{{inventoryViews.storeStock}}</td>
-
                                                     </tr>
 
                                                     </tbody>
@@ -126,8 +116,8 @@
                                         </div>
                                     </div>
 
-
                                 </div>
+
                                 <div class="col-md-6">
 
                                     <div class="panel panel-default">
@@ -155,9 +145,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
 
                             </div>
 

@@ -426,7 +426,7 @@ angular.module('timeSheetApp')
 
 	/** Ui-select function **/
 
-	$scope.loadDepSitesList = function (searchProject) {     
+	$scope.loadDepSitesList = function (searchProject) {
 		$scope.siteSpin = true;
 		$scope.searchProject = searchProject;
 		if(jQuery.isEmptyObject($scope.searchProject) == true){
@@ -759,7 +759,7 @@ angular.module('timeSheetApp')
 			$scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
 			$scope.totalCountPages = data.totalCount;
 
-			$scope.pages.currPage = data.currPage;
+			$scope.pages.currPage = data.currPage == 0 ? 1 : data.currPage;
 			$scope.pages.totalPages = data.totalPages;
 
 			if($scope.ticketsData && $scope.ticketsData.length > 0 ){
@@ -1097,7 +1097,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.clearProject = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.client.selected = undefined;
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
@@ -1110,7 +1110,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearRegion = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
 		$scope.sitesListOne.selected = undefined;
@@ -1130,7 +1130,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearSite = function($event) {
-		$event.stopPropagation(); 
+		$event.stopPropagation();
 		$scope.sitesListOne.selected = null;
 
 

@@ -212,11 +212,11 @@ public class FeedbackService extends AbstractService {
 		if(feedbackMappingDto.getId() > 0) {
 			updateFeedbackMapping(feedbackMappingDto);
 		}else {
-			List<FeedbackMapping> feedbackMappings = feedbackMappingRepository.findOneByLocation(feedbackMappingDto.getSiteId(), feedbackMappingDto.getBlock(), feedbackMappingDto.getFloor(), feedbackMappingDto.getZone()); 
+			List<FeedbackMapping> feedbackMappings = feedbackMappingRepository.findOneByLocation(feedbackMappingDto.getSiteId(), feedbackMappingDto.getBlock(), feedbackMappingDto.getFloor(), feedbackMappingDto.getZone());
 			FeedbackMapping feedbackMapping = CollectionUtils.isNotEmpty(feedbackMappings)  ? feedbackMappings.get(0) : null;
 			if(feedbackMapping == null) {
 				feedbackMapping = mapperUtil.toEntity(feedbackMappingDto, FeedbackMapping.class);
-	
+
 				if(feedbackMappingDto.getProjectId() > 0) {
 					Project project = projectRepository.findOne(feedbackMappingDto.getProjectId());
 					feedbackMapping.setProject(project);
@@ -290,11 +290,17 @@ public class FeedbackService extends AbstractService {
 			List<FeedbackMapping> allFeedbackList = new ArrayList<FeedbackMapping>();
 			List<FeedbackMappingDTO> transactions = null;
 			if(!searchCriteria.isFindAll()) {
-				if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
-					page = feedbackMappingRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
-				}else if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) { 
+				if(StringUtils.isNotEmpty(searchCriteria.getBlock())) {
+                    page = feedbackMappingRepository.findBySiteBlock(searchCriteria.getSiteId(), searchCriteria.getBlock(), pageRequest);
+                }else if(StringUtils.isNotEmpty(searchCriteria.getFloor())) {
+                    page = feedbackMappingRepository.findBySiteFloor(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), pageRequest);
+                }else if(StringUtils.isNotEmpty(searchCriteria.getZone())) {
+                    page = feedbackMappingRepository.findByLocation(searchCriteria.getSiteId(), searchCriteria.getBlock(), searchCriteria.getFloor(), searchCriteria.getZone(), pageRequest);
+                }else if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() > 0) {
 					page = feedbackMappingRepository.findByClientAndSite(searchCriteria.getProjectId(), searchCriteria.getSiteId(), pageRequest);
-				}
+				}else if(searchCriteria.getProjectId() > 0 && searchCriteria.getSiteId() == 0) {
+                    page = feedbackMappingRepository.findByClient(searchCriteria.getProjectId(), pageRequest);
+                }
 			}else {
 
 				if(user.isAdmin()) {
@@ -315,7 +321,7 @@ public class FeedbackService extends AbstractService {
 			if(page != null) {
 				log.debug("Size of page" +page.getSize());
 				allFeedbackList.addAll(page.getContent());
-				if(transactions ==  null) { 
+				if(transactions ==  null) {
 					transactions = new ArrayList<FeedbackMappingDTO>();
 				}
 				for(FeedbackMapping feedbackMapping : allFeedbackList) {
