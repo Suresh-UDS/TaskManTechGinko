@@ -1729,7 +1729,8 @@ public class SchedulerHelperService extends AbstractService {
 								mapper.findAndRegisterModules();
 								mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 								mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
-								try {
+                                mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+                                try {
 									quotationResults = mapper.readValue((String) quotationObj,
 											new TypeReference<List<QuotationDTO>>() {
 											});
