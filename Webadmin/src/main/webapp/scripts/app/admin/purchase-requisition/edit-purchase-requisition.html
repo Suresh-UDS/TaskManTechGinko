@@ -18,7 +18,7 @@
                   ng-submit="saveInventory()">
 
 
-                <div class="card margin-TB-5 tablecard">
+                <div class="card margin-TB-5 tablecard addFrom">
 
                     <div class="card-content">
 
@@ -238,11 +238,20 @@
                         <button type="submit" ng-click="cancelPurchase()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="submit"
-                                id="form-button-save" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid"
-                                class="btn btn-success pull-right" ng-click="updatePurchaseReq()"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Update Purchase Requisition</button>
+                        <!--<button type="submit"-->
+                                <!--id="form-button-save" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid"-->
+                                <!--class="btn btn-success pull-right" ng-click="updatePurchaseReq()"><span class="btn-label">-->
+                                            <!--<i class="material-icons">check</i>-->
+                                        <!--</span>Update Purchase Requisition</button>-->
+
+
+                        <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                type="submit" id="form-button-save" ng-click="conform('update')" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid" tabindex="16">
+                            <span class="btn-label"><i class="material-icons">check</i></span> Update Purchase Requisition
+                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                        </button>
+
+
 
                         <div class="clearfix"></div>
                     </div>

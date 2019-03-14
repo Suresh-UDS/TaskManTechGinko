@@ -3,35 +3,54 @@
 angular.module('timeSheetApp')
     .controller('IndentController', function ($rootScope, $scope, $state, $timeout,
     		ProjectComponent, SiteComponent, EmployeeComponent, InventoryComponent, IndentComponent, $http, $stateParams, $location, PaginationComponent) {
-	
+
 		$scope.selectedProject = {};
-	
+
 		$scope.selectedSite = {};
-		
+
 		$scope.selectedEmployee = {};
-		
+
 		$scope.selectedItemCode = {};
-		
+
 		$scope.selectedMaterialItems = [];
-		
+
 		$scope.indentObject = {};
-		
+
 		$scope.selectedRefNumber = null;
-		
+
 		$rootScope.loginView = false;
-	
+
 		$scope.pages = { currPage : 1};
-	
+
 		$scope.pager = {};
-	
+
 	    $scope.noData = false;
-	    
+
 	    $scope.issuedQty = null;
-			
-		$scope.refreshPage = function() { 
+
+		$scope.refreshPage = function() {
 			 $scope.clearFilter();
 		}
-		
+
+        $scope.conform = function(text)
+        {
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel' || text == 'back'){
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                // $scope.cancelEmployee();
+            }else if(text == 'save'){
+                $scope.saveIndent();
+            }else if(text == 'update'){
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updateIndent()
+            }
+        };
         $scope.clearFilter = function() {
             $scope.selectedSite = null;
             $scope.selectedProject = null;
@@ -48,7 +67,7 @@ angular.module('timeSheetApp')
             }
             $scope.search();
         };
-		
+
 		//init load
 		$scope.initLoad = function(){
 			$scope.loadProjects();
@@ -56,18 +75,18 @@ angular.module('timeSheetApp')
 		    $scope.loadAllUOM();
 		    $scope.searchFilter();
 		 }
-	
+
 		$scope.initList = function() {
 			$scope.loadMaterialIndents();
 			$scope.setPage(1);
 		}
-		
-		$scope.loadMaterialIndents = function() { 
+
+		$scope.loadMaterialIndents = function() {
 			$scope.refreshPage();
 	    	$scope.search();
 	    	$location.path('/indent-list');
 		}
-		
+
 		$scope.loadProjects = function() {
         	ProjectComponent.findAll().then(function (data) {
         		console.log("All projects");
@@ -164,12 +183,17 @@ angular.module('timeSheetApp')
         };
 
 
+        //sites
+        $scope.siteSpin = false;
         $scope.loadSites = function () {
+
         	console.log("selected project - " + JSON.stringify($scope.selectedProject));
         	if($scope.selectedProject) {
+                $scope.siteSpin = true;
             	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                     $scope.sites = data;
-
+                    $scope.siteSpin = false;
+                    // alert(JSON.stringify($scope.sites));
                 });
         	}else {
             	SiteComponent.findAll().then(function (data) {
@@ -177,58 +201,70 @@ angular.module('timeSheetApp')
                 });
         	}
         };
-        
-        $scope.loadAllSites = function() { 
+
+        $scope.loadAllSites = function() {
         	SiteComponent.findAll().then(function (data) {
                 $scope.sites = data;
             });
         }
-        
-        $scope.loadAllEmployee = function() { 
+
+        $scope.loadAllEmployee = function() {
         	EmployeeComponent.findAll().then(function (data) {
                 $scope.employees = data;
             });
         }
-        
+
+        //Employees
+        $scope.empSpin = false;
         $scope.loadEmployees = function () {
+
             if($scope.selectedSite && $scope.selectedSite.id){
+                $scope.empSpin = true;
                var empParam = {siteId: $scope.selectedSite.id, list: true};
                EmployeeComponent.search(empParam).then(function (data) {
                    console.log(data);
                    $scope.employees = data.transactions;
+                   $scope.empSpin = false;
+                   $scope.employees = $scope.employees === null ? [] : $scope.employees;
                });
             }
         }
-        
-        $scope.loadMaterials = function() { 
+
+        //Material
+        $scope.matSpin = false;
+        $scope.loadMaterials = function() {
+
         	$scope.search = {};
-        	if($scope.selectedSite && $scope.selectedProject) { 
+        	if($scope.selectedSite && $scope.selectedProject) {
+                $scope.matSpin = true;
         		$scope.search.projectId = $scope.selectedProject.id;
     			$scope.search.siteId = $scope.selectedSite.id;
-            	InventoryComponent.search($scope.search).then(function(data) { 
+            	InventoryComponent.search($scope.search).then(function(data) {
     				console.log(data);
     				$scope.materials = data.transactions;
+                    $scope.matSpin = false;
+                    $scope.materials = $scope.materials === null ? [] : $scope.materials;
     			});
         	}
         }
-        
-        $scope.loadAllUOM = function() { 
-        	InventoryComponent.getMaterialUOM().then(function(data){ 
+
+        $scope.loadAllUOM = function() {
+        	InventoryComponent.getMaterialUOM().then(function(data){
         		console.log(data);
         		$scope.UOMs = data;
         	});
         }
-		
-		$scope.viewIndents = function() { 
-			IndentComponent.findById($stateParams.id).then(function(data) { 
+
+		$scope.viewIndents = function() {
+			IndentComponent.findById($stateParams.id).then(function(data) {
 				console.log(data);
 				$scope.loadingStop();
 				$scope.materialIndentObj = data;
 			});
 		}
-		
+
 		$scope.editIndent = function() {
-			IndentComponent.findById($stateParams.id).then(function(data) { 
+			IndentComponent.findById($stateParams.id).then(function(data) {
 				console.log(data);
 				$scope.loadingStop();
 				$scope.editIndentObj = data;
@@ -240,25 +276,25 @@ angular.module('timeSheetApp')
 				$scope.search = {};
 				$scope.search.projectId = $scope.editIndentObj.projectId;
 				$scope.search.siteId = $scope.editIndentObj.siteId;
-				InventoryComponent.search($scope.search).then(function(data) { 
+				InventoryComponent.search($scope.search).then(function(data) {
 					console.log(data);
 					$scope.materials = data.transactions;
 				});
-				
+
 			});
 		}
-		
+
 		$scope.change = function() {
 			console.log($scope.selectedItemCode);
 			$scope.selectedItemName = $scope.selectedItemCode.name;
 			$scope.selectedStoreStock = $scope.selectedItemCode.storeStock;
 			$scope.selectedQuantity = "";
 		}
-		
-		$scope.addMaterialItem = function() { 
+
+		$scope.addMaterialItem = function() {
 			$scope.material = {};
 			$scope.materialItems = $scope.materialItems ? $scope.materialItems : [];
-			if($scope.selectedItemCode.storeStock > $scope.selectedQuantity){
+			if($scope.selectedItemCode.storeStock >=  $scope.selectedQuantity){
 				if(checkDuplicateInObject($scope.selectedItemCode.id, $scope.materialItems)) {
 					$scope.showNotifications('top','center','danger','Already exists same item in the list');
 				}else{
@@ -270,17 +306,26 @@ angular.module('timeSheetApp')
 					$scope.material.materialUom = $scope.selectedItemCode.uom;
 					$scope.material.pendingQuantity = $scope.selectedQuantity;
 					$scope.materialItems.push($scope.material);
+
+                    $scope.selectedItemName = null;
+                    $scope.selectedItemCode = {};
+                    $scope.selectedStoreStock = null;
+                    $scope.selectedQuantity = null;
+
+
 				}
 			}else{
 				$scope.showNotifications('top','center','danger','Quantity cannot execeeds to store stock');
 			}
-			
+
 		}
-		
+
 		function checkDuplicateInObject(id, array) {
 			var isDuplicate = false;
-			if(array != null){ 
-				array.map(function(item){ 
+			if(array != null){
+				array.map(function(item){
+
+
 					if(item.materialId === id){
 						return isDuplicate = true;
 					}
@@ -288,42 +333,45 @@ angular.module('timeSheetApp')
 			}
 			return isDuplicate;
 		}
-		
+
 		$scope.saveIndent = function() {
+            $scope.saveLoad = true;
 			if($scope.selectedProject) {
 				$scope.indentObject.projectId = $scope.selectedProject.id;
 			}
 			if($scope.selectedSite) {
 				$scope.indentObject.siteId = $scope.selectedSite.id;
 			}
-			if($scope.selectedEmployee) { 
+			if($scope.selectedEmployee) {
 				$scope.indentObject.requestedById = $scope.selectedEmployee.id;
 			}
-			if($scope.materialItems) { 
+			if($scope.materialItems) {
 				$scope.indentObject.items = $scope.materialItems;
 			}
 			$scope.indentObject.indentRefNumber = $scope.selectedRefNumber;
 			$scope.indentObject.requestedDate = new Date();
 			console.log($scope.indentObject);
 			$scope.loadingStart();
-			IndentComponent.create($scope.indentObject).then(function(response) { 
+			IndentComponent.create($scope.indentObject).then(function(response) {
 				console.log(response);
+                $scope.saveLoad = false;
 				$scope.loadingStop();
-				if(response.status === 201 && response.statusText==="Created") { 
+				if(response.status === 201 && response.statusText==="Created") {
 					$scope.showNotifications('top','center','success','Material Indent has been added successfully.');
 					$location.path('/indent-list');
 				}else{
 					$scope.showNotifications('top','center','danger','Material Indent has not been created.');
 				}
-			}).catch(function(response){ 
+			}).catch(function(response){
+                $scope.saveLoad = false;
 				console.log(response);
 				$scope.success = null;
                 $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to create Material Indent. Please try again later..');
-			}); 
-			
+			});
+
 		}
-		
+
 		$scope.validate = function(material, issuedQty) {
 			console.log(material);
 			console.log(issuedQty);
@@ -333,39 +381,41 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
 			}
-			
+
 		}
-		
+
 		$scope.saveIndentTrans = function() {
 			console.log("save indent transaction called");
 			console.log($scope.materialIndentObj);
 			$scope.loadingStart();
-			if($scope.materialIndentObj) { 
-				if($scope.materialIndentObj.items.length > 0) { 
-					console.log($scope.materialIndentObj);				
+			if($scope.materialIndentObj) {
+				if($scope.materialIndentObj.items.length > 0) {
+					console.log($scope.materialIndentObj);
 					$scope.materialIndentObj.items.map(function(item) {
-						if(item.currentQuantity >= 0) { 
+						if(item.currentQuantity >= 0) {
 							item.issuedQuantity = item.currentQuantity;
 						}
 					});
 				}
 				console.log($scope.materialIndentObj);
-				IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) { 
+				IndentComponent.createTransaction($scope.materialIndentObj).then(function(data) {
 					console.log(data);
 					$scope.loadingStop();
 					$scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
 					$location.path('/inventory-transaction-list');
-				}).catch(function(data){ 
+				}).catch(function(data){
 					$scope.success = null;
 	                $scope.loadingStop();
 	                $scope.showNotifications('top','center','danger','Unable to view Material Transaction.');
 				});
 			}
-			
+
 		}
-		
+
+
+
 		$scope.showUpdateBtn = false;
-		
+
 		$scope.editMaterial = function(index, item) {
 			console.log(item);
 			console.log(index);
@@ -377,9 +427,9 @@ angular.module('timeSheetApp')
 			$scope.selectedStoreStock = $scope.updateMaterial.materialStoreStock;
 			$scope.selectedQuantity = $scope.updateMaterial.pendingQuantity;
 		}
-		
+
 		$scope.updateMaterialItem = function(){
-			if($scope.updateMaterial.materialStoreStock > $scope.selectedQuantity){
+			if($scope.updateMaterial.materialStoreStock >= $scope.selectedQuantity){
 				$scope.updateMaterial.quantity = $scope.selectedQuantity;
 				$scope.updateMaterial.pendingQuantity =  $scope.selectedQuantity;
 				console.log($scope.indexOf);
@@ -387,43 +437,46 @@ angular.module('timeSheetApp')
 				updateItems($scope.indexOf, $scope.updateMaterial);
 			}else{
 				$scope.showNotifications('top','center','danger','Quantity cannot execeeds to store stock');
-			}	
+			}
 		}
-		
+
 		$scope.selectedRow = null;
-		
+
 		function updateItems(index, object) {
+            $scope.showUpdateBtn = false;
 			$scope.materialItems[index] = object;
 			$scope.selectedRow = index;
 			$scope.selectedItemName = null;
 			$scope.selectedItemCode = {};
 			$scope.selectedStoreStock = null;
 			$scope.selectedQuantity = null;
-			$timeout(function(){ 
+			$timeout(function(){
 				$scope.selectedRow = null;
 			},1000);
-		}	
-		
-		$scope.updateIndent = function() { 
+		}
+
+		$scope.updateIndent = function() {
+            $scope.saveLoad = true;
 			if($scope.selectedProject) {
 				$scope.editIndentObj.projectId = $scope.selectedProject.id;
 			}
 			if($scope.selectedSite) {
 				$scope.editIndentObj.siteId = $scope.selectedSite.id;
 			}
-			if($scope.selectedEmployee) { 
+			if($scope.selectedEmployee) {
 				$scope.editIndentObj.requestedById = $scope.selectedEmployee.id;
 			}
-			if($scope.materialItems) { 
+			if($scope.materialItems) {
 				$scope.editIndentObj.items = $scope.materialItems;
 			}
 			$scope.editIndentObj.indentRefNumber = $scope.selectedRefNumber;
-			
+
 			console.log($scope.editIndentObj);
-			IndentComponent.update($scope.editIndentObj).then(function(resp){ 
+			IndentComponent.update($scope.editIndentObj).then(function(resp){
 				console.log(resp);
 				$scope.loadingStop();
-				if(resp.status === 200 && resp.statusText==="OK") { 
+                $scope.saveLoad = false;
+				if(resp.status === 200 && resp.statusText==="OK") {
 					$scope.showNotifications('top','center','success','Material Indent has been updated successfully.');
 					$location.path('/indent-list');
 				}else{
@@ -431,12 +484,13 @@ angular.module('timeSheetApp')
 				}
 			}).catch(function(resp){
 				console.log(resp);
+                $scope.saveLoad = false;
 				$scope.success = null;
                 $scope.loadingStop();
                 $scope.showNotifications('top','center','danger','Unable to update Material Indent. Please try again later..');
 			});
 		}
-		
+
         $scope.search = function () {
             $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
@@ -448,7 +502,7 @@ angular.module('timeSheetApp')
         	}
         	$scope.searchCriteria.currPage = currPageVal;
         	console.log('Selected  indent -' + JSON.stringify($scope.selectedIndent));
-        	
+
         	if(!$scope.selectedIndentlist) {
         		if($rootScope.selectedIndentlist) {
             		$scope.searchCriteria = $rootScope.selectedIndentlist;
@@ -467,13 +521,13 @@ angular.module('timeSheetApp')
 	        		$scope.searchCriteria.indentlistId = 0;
 	        	}
         	}
-        	if($scope.searchProject) { 
+        	if($scope.searchProject) {
         		$scope.searchCriteria.projectId = $scope.searchProject.id;
         	}
-        	if($scope.searchSite) { 
+        	if($scope.searchSite) {
         		$scope.searchCriteria.siteId = $scope.searchSite.id;
         	}
-        	if($scope.searchRequestedDate) { 
+        	if($scope.searchRequestedDate) {
         		$scope.searchCriteria.requestedDate = $scope.searchRequestedDate;
         	}
         	if($scope.searchIssuedDate) {
@@ -516,7 +570,7 @@ angular.module('timeSheetApp')
             });
 
         };
-        
+
         $scope.showNotifications= function(position,alignment,color,msg){
            $rootScope.overlayShow();
            demo.showNotification(position,alignment,color,msg);
@@ -524,12 +578,12 @@ angular.module('timeSheetApp')
               $rootScope.overlayHide() ;
             }, 5000);
         }
-        
+
 		//Loading Page go to top position
 		$scope.loadPageTop = function(){
 		    $("#loadPage").animate({scrollTop: 0}, 2000);
 		}
-	
+
        // Page Loader Function
         $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
         $scope.loadingAuto = function(){
@@ -539,7 +593,7 @@ angular.module('timeSheetApp')
 
             }, 2000);
         }
-        
+
         $scope.loadingStop = function(){
             console.log("Calling loader");
             $('.pageCenter').hide();$('.overlay').hide();
@@ -561,7 +615,7 @@ angular.module('timeSheetApp')
             $scope.pages.currPage = page;
             $scope.search();
         };
-        
+
         $('#dateFilterRequestedDate').datetimepicker().on('dp.show', function (e) {
             return $(this).data('DateTimePicker');
         });
@@ -570,7 +624,7 @@ angular.module('timeSheetApp')
             $scope.searchRequestedDate = e.date._d;
             $scope.requestedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
-        
+
         $('#dateFilterIssuedDate').datetimepicker().on('dp.show', function (e) {
             return $(this).data('DateTimePicker');
         });
@@ -578,7 +632,7 @@ angular.module('timeSheetApp')
         $('input#dateFilterIssuedDate').on('dp.change', function(e){
             $scope.searchIssuedDate = e.date._d;
             $scope.issuedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-        });	
+        });
 
 
 });
