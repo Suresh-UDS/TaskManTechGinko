@@ -20,7 +20,7 @@
             <ion-list>
                 <ion-list-header>
                     Basic Details
-                </ion-list-header>                
+                </ion-list-header>
                 <ion-item *ngFor="let list of userData['relationshipDetails']">
                     <p item-start class="text-left">{{list.relationship}} Name</p>
                     <p item-end class="text-right">{{list.name}}</p>
@@ -65,17 +65,16 @@
                     <p item-end class="text-right">{{userData['emergencyConatctNo'][0]}}</p>
                 </ion-item>
 
-                <ion-item *ngIf="userData.communicationAddress !== null && userData.communicationAddress!=''" >
+                <ion-item *ngIf="userData.communicationAddress !== null && userData.communicationAddress!=''">
                     <p item-start class="text-left">Address</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['city']}}</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['state']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}
+                        <br>{{userData['communicationAddress'][0]['city']}}<br>{{userData['communicationAddress'][0]['state']}}</p>
                 </ion-item>
                 <ion-item *ngIf="userData.permanentAddress !== null && userData.permanentAddress != ''">
                     <p item-start class="text-left">permanentAddress</p>
-                    <p item-end class="text-right">{{userData['permanentAddress'][0]['address']}}</p>
-                    <p item-end class="text-right">{{userData['permanentAddress'][0]['city']}}</p>
-                    <p item-end class="text-right">{{userData['permanentAddress'][0]['state']}}</p>
+                    <p item-end class="text-right">{{userData['permanentAddress'][0]['address']}}
+                        <br>{{userData['permanentAddress'][0]['city']}}
+                        <br>{{userData['permanentAddress'][0]['state']}}</p>
                 </ion-item>
 
                 <ion-list-header>
@@ -108,6 +107,10 @@
                     <p item-end class="text-right">{{userData['bankDetails'][0]['accountNo']}}</p>
                 </ion-item>
                 <ion-item>
+                    <p item-start class="text-left">IFSC</p>
+                    <p item-end class="text-right">{{userData['bankDetails'][0]['ifsc']}}</p>
+                </ion-item>
+                <ion-item>
                     <p item-start class="text-left">Aadhar Number</p>
                     <p item-end class="text-right">{{userData['aadharNumber']}}</p>
                 </ion-item>
@@ -136,7 +139,7 @@
                         <p> Thumb Impresssion Right </p>
                         <img [src]="AppConfig.s3Bucket+userData['thumbImpressenRight']" class="image" />
                     </ion-slide>
-                    <ion-slide  *ngIf="userData.pancardCopy !== null && userData.pancardCopy!=''" item-start class="pan card">
+                    <ion-slide *ngIf="userData.pancardCopy !== null && userData.pancardCopy!=''" item-start class="pan card">
                         <p> Pancard </p>
                         <img [src]="AppConfig.s3Bucket+userData['pancardCopy']" class="image" />
                     </ion-slide>
@@ -144,7 +147,7 @@
                         <p> Driving License </p>
                         <img [src]="AppConfig.s3Bucket+userData['drivingLicense']" class="image" />
                     </ion-slide>
-                    <ion-slide  *ngIf="userData.voterId !== null && userData.voterId!=''" item-start class="voterId" >
+                    <ion-slide *ngIf="userData.voterId !== null && userData.voterId!=''" item-start class="voterId">
                         <p> Voter Id </p>
                         <img [src]="AppConfig.s3Bucket+userData['voterId']" class="image" />
                     </ion-slide>
