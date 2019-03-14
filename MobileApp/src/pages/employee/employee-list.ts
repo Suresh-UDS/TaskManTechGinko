@@ -224,7 +224,7 @@ export class EmployeeList {
         // this.component.showLoader('Getting Location..');
         // demo.showSwal('success-message-and-ok','Success','Checking Site Proximity');
 
-            this.component.closeAll();
+            // this.component.closeAll();
             this.component.showLoader("Verifying Location...");
 
             console.log(this.lattitude);

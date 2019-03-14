@@ -43,7 +43,14 @@ ul.checkList li
     background-color: #52bcdc!important;
     border-color: #2cadd4!important;
 }
-
+.addFrom span.d-arrow-icon
+{
+    padding-top: 28px;
+}
+.addFrom span.spinner
+{
+    padding-top: 24px !important;
+}
 .box-cell {
     display: table-cell;
     overflow: hidden;

@@ -169,7 +169,10 @@ export class CreateTicket {
       // window.localStorage.setItem('site',this.site.id);
       console.log(this.empSelect);
       var searchCriteria = {
-        currPage : 1,
+        // currPage : 1,
+        action:"Add",
+        module:"Ticket",
+        list : true,
         siteId:this.site.id
       };
       console.log("searchcriteria",searchCriteria);
@@ -182,7 +185,7 @@ export class CreateTicket {
           {
             this.empSelect=false;
             this.empPlace="Employee";
-            this.employee=response.transactions;
+            this.employee= response.transactions;
             console.log("employeeresponse",this.employee);
           }
           else
@@ -218,7 +221,7 @@ export class CreateTicket {
       // window.localStorage.setItem('site',this.site.id);
       console.log(this.empSelect);
       var searchCriteria = {
-        currPage : 1,
+        // currPage : 1,
         siteId:this.site.siteId,
         list:true
       };

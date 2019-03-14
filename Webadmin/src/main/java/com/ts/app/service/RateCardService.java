@@ -580,6 +580,7 @@ public class RateCardService extends AbstractService {
             request.put("sortByAsc", searchCriteria.isSortByAsc());
             request.put("sortNum", searchCriteria.getSort());
             request.put("siteIds", siteIds);
+            request.put("report", searchCriteria.isReport());
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
@@ -590,7 +591,7 @@ public class RateCardService extends AbstractService {
             quotationList = response.getBody();
 
         }catch(Exception e) {
-            log.error("Error while calling location service ", e);
+            log.error("Error while calling Quotation service ", e);
             e.printStackTrace();
         }
 
