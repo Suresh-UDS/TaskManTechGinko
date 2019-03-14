@@ -1722,7 +1722,7 @@ public class SchedulerHelperService extends AbstractService {
 						ExportResult exportQuotationResult = new ExportResult();
 						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
 							List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
-
+                            sc.setReport(true);
 							Object quotationObj = quotationService.getQuotations(sc);
 							if (quotationObj != null) {
 								ObjectMapper mapper = new ObjectMapper();
