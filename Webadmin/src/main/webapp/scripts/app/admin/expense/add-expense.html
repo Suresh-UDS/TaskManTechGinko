@@ -15,7 +15,7 @@
 
         <div class="cardsCon addSiteCon">
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="expenseData()">
+                  ng-submit="conform('save')">
                 <div class="card margin-TB-5 tablecard">
 
                     <div class="card-content">
@@ -137,7 +137,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Payment type  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select class="form-control" ng-model="selectedPaymentType" required>
+                                            <select class="form-control" ng-model="selectedPaymentType" >
                                                 <option value="">Select </option>
                                                 <option value="CASH">Cash </option>
                                                 <option value="CARD">Card</option>
@@ -388,10 +388,17 @@
                     <div class="col-md-12">
                         <button type="button" ng-click="cancelExpense()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
-                        <button type="submit"
-                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">
-                            <span class="btn-label"><i class="material-icons">check</i></span>Add Expense
+
+                        <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                type="submit" id="form-button-save"  ng-disabled="form.$invalid" tabindex="16">
+                            <span class="btn-label"><i class="material-icons">check</i></span> Add Expense
+                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                         </button>
+
+                        <!--<button type="submit"-->
+                                <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">-->
+                            <!--<span class="btn-label"><i class="material-icons">check</i></span>Add Expense-->
+                        <!--</button>-->
                         <div class="clearfix"></div>
                     </div>
 
