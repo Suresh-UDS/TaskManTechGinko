@@ -616,19 +616,25 @@ angular.module('timeSheetApp')
                 },1000);
 
             }
-
+            $scope.isValid = false;
             $scope.validateNumber = function(item, currentAprQty) {
 //            	alert('validate');
-            	if(item.quantity > currentAprQty) {
+            	var apprQty = item.approvedQty ? item.approvedQty : 0; 
+            	if(currentAprQty > 0 && (item.quantity > currentAprQty || (item.quantity - apprQty) >= currentAprQty)) {
             		console.log(currentAprQty);
+            		$scope.isValid = true;
             	}else{
-            		$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+            		$scope.showNotifications('top','center','danger','Invalid Approved Quantity');
             	}
             }
 
                 $scope.updatePurchaseReq = function(status) {
+                		if(status == 'APPROVED' && !$scope.isValid) {
+                			$scope.showNotifications('top','center','danger','Invalid Approved Quantity');
+                			return;
+                		}
                     $scope.saveLoad = true;
-                	console.log(status);
+                		console.log(status);
                     if($scope.selectedProject) {
                         $scope.purchaseReqObj.projectId = $scope.selectedProject.id;
                     }

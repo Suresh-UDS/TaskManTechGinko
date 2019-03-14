@@ -536,7 +536,7 @@ angular.module('timeSheetApp')
 				console.log("save issued request");
 				material.currentQuantity = issuedQty;
 			}else{
-				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+				$scope.showNotifications('top','center','danger','Invalid Issue Qty');
 			}
 
 		}
@@ -548,7 +548,7 @@ angular.module('timeSheetApp')
 				console.log("save received request");
 				material.currentAprQty = approvedQty;
 			}else{
-				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a approved quantity');
+				$scope.showNotifications('top','center','danger','Invalid Issue Qty');
 			}
 
 		}

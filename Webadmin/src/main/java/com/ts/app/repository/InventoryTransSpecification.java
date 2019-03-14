@@ -13,6 +13,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -57,7 +58,7 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if(searchCriteria.getJobId() != 0) {
 			predicates.add(builder.equal(root.get("job").get("id"), searchCriteria.getJobId()));
 		}
-		if (searchCriteria.getMaterialName() != null && searchCriteria.getMaterialName() != "") {
+		if (StringUtils.isNotEmpty(searchCriteria.getMaterialName())) {
 
 			predicates.add(builder.like(builder.lower(root.get("material").get("name")),
 					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
@@ -65,7 +66,7 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if(searchCriteria.getIndentRefNumber() > 0) {
             predicates.add(builder.equal(root.get("materialIndent").get("indentRefNumber").get("number"), searchCriteria.getIndentRefNumber()));
 		}
-		if (searchCriteria.getItemCode() != null && searchCriteria.getItemCode() !="") {
+		if (StringUtils.isNotEmpty(searchCriteria.getItemCode())) {
 			predicates.add(builder.like(builder.lower(root.get("material").get("itemCode")),
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
 		}
