@@ -15,7 +15,7 @@
 
         <div class="cardsCon addSiteCon">
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="expenseData()">
+                  ng-submit="conform('save')">
                 <div class="card margin-TB-5 tablecard">
 
                     <div class="card-content">
@@ -27,7 +27,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Client <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" name="project" class="form-control" required>
+                                            <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" name="project" class="form-control" ng-required="true">
                                                 <option value="">Select Client...</option>
                                             </select>
 
@@ -47,17 +47,17 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="getLatestEntry(selectedSite)" class="form-control" ng-click="checkProject()" required>
+                                            <span ng-show="siteSpin"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                            <span ng-show="!siteSpin" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="getLatestEntry(selectedSite);checkProject()" ng-disabled = "sites.length == 0" class="form-control" ng-required="true">
                                                 <option value="">Select Site...</option>
                                             </select>
 
-
+                                            <span ng-if="sites.length == 0"><p class="error-msg margin0 help-block" >No Sites</p></span>
                                             <div ng-show="form.$submitted || form.site.$touched || form.site.$dirty">
                                                 <div ng-show="form.site.$dirty || form.site.$invalid">
                                                     <p class="help-block" style="color: maroon"
                                                        ng-show="form.site.$error.required"> Please Select Site to Continue...</p>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -75,11 +75,17 @@
                                         <div class="form-group">
                                             <label class="control-label">TransactionMode  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-model="transactionMode" class="form-control" onselect="changeType()" required>
+                                            <select ng-model="transactionMode" class="form-control" name="transactionMode" onselect="changeType()" required>
                                                 <option value="">Select Type...</option>
                                                 <option value="credit">Credit</option>
                                                 <option value="debit">Debit</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.transactionMode.$touched || form.transactionMode.$dirty">
+                                                <div ng-show="form.transactionMode.$dirty || form.transactionMode.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.transactionMode.$error.required"> Please Select Transaction Mode...</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,7 +98,13 @@
                                 <div class="form-group">
                                     <label class="control-label">Date <span class="red-star">*</span></label>
                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                    <input type="text" class="form-control dateTimePicker" ng-model="selectedDate"  id="selectedDate" placeholder="{{selectedDate | date:'dd/MMM/yyyy'}}" />
+                                    <input type="text" class="form-control dateTimePicker" ng-model="selectedDate"  name="selectedDate" id="selectedDate" placeholder="{{selectedDate | date:'dd/MMM/yyyy'}}" />
+                                    <div ng-show="form.$submitted || form.selectedDate.$touched || form.selectedDate.$dirty">
+                                        <div ng-show="form.selectedDate.$dirty || form.selectedDate.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="form.selectedDate.$error.required"> Please Select Transaction Mode...</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -103,9 +115,15 @@
                                         <div class="form-group">
                                             <label class="control-label">Expense Category  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options="category.name for category in expenseCategories" ng-change="selectCategory(selectedCategory)" ng-model="selectedCategory" class="form-control">
+                                            <select ng-options="category.name for category in expenseCategories" name="selectedCategory" ng-change="selectCategory(selectedCategory)" ng-model="selectedCategory" class="form-control" required>
                                                 <option value="">Select Category...</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.selectedCategory.$touched || form.selectedCategory.$dirty">
+                                                <div ng-show="form.selectedCategory.$dirty || form.selectedCategory.$invalid">
+                                                    <p class="help-block" style="color: maroon"
+                                                       ng-show="form.selectedCategory.$error.required"> Please Select Transaction Mode...</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +137,8 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Payment type  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select class="form-control" ng-model="selectedPaymentType">
+                                            <select class="form-control" ng-model="selectedPaymentType" >
+                                                <option value="">Select </option>
                                                 <option value="CASH">Cash </option>
                                                 <option value="CARD">Card</option>
                                                 <option value="NETBANKING">Net Banking</option>
@@ -149,17 +168,34 @@
                             <div class="col-md-3">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Amount <span class="red-star">*</span></label>
-                                    <input ng-model="selectedAmount" type="number" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                    <input ng-model="selectedAmount" name="selectedAmount" type="number" min = 0 class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+
+                                    <div ng-show="form.$submitted || form.selectedAmount.$touched || form.selectedAmount.$dirty">
+                                        <div ng-show="form.selectedAmount.$dirty || form.selectedAmount.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="form.selectedAmount.$error.required"> Please Enter Amount...</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Receipt No <span class="red-star">*</span></label>
-                                    <input type="number" ng-model="receiptNumber" class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                    <input type="number" ng-model="receiptNumber" name="receiptNumber" min = 0 class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
 
-                                    <span class="material-input"></span></div>
+                                    <span class="material-input"></span>
+                                    <div ng-show="form.$submitted || form.receiptNumber.$touched || form.receiptNumber.$dirty">
+                                        <div ng-show="form.receiptNumber.$dirty || form.receiptNumber.$invalid">
+                                            <p class="help-block" style="color: maroon"
+                                               ng-show="form.receiptNumber.$error.required"> Please Enter Receipt No...</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="col-md-1">
@@ -274,7 +310,7 @@
                                         <div class="col-md-11">
                                             <div class="form-group">
                                                 <label class="control-label">Photo Title</label>
-                                                <input id='fileTitle'
+                                                <input id='photoTitle'
                                                        ng-model="uploadExpensePhoto.title"
                                                        class='form-control'
                                                        name='photoTitle'
@@ -348,23 +384,21 @@
 
                 </div>
 
-
-
-
-
-
                 <div class="row">
-
                     <div class="col-md-12">
-
-                        <button type="submit" ng-click="cancelExpense()"
+                        <button type="button" ng-click="cancelExpense()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="submit"
-                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Add Expense</button>
+                        <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                type="submit" id="form-button-save"  ng-disabled="form.$invalid" tabindex="16">
+                            <span class="btn-label"><i class="material-icons">check</i></span> Add Expense
+                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                        </button>
 
+                        <!--<button type="submit"-->
+                                <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right">-->
+                            <!--<span class="btn-label"><i class="material-icons">check</i></span>Add Expense-->
+                        <!--</button>-->
                         <div class="clearfix"></div>
                     </div>
 

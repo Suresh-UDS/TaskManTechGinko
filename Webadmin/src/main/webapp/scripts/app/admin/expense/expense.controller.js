@@ -15,13 +15,13 @@ angular.module('timeSheetApp')
 
         $scope.reimbursable = true;
 
-        $scope.selectedPaymentType = 'CASH';
+        $scope.selectedPaymentType = '';
 
-        $scope.transactionMode = "debit";
+        $scope.transactionMode = "";
 
         $scope.selectedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 
-        $scope.selectedAmount = 0;
+        $scope.selectedAmount;
 
         $scope.selectedCurrency='INR';
 
@@ -51,6 +51,26 @@ angular.module('timeSheetApp')
 
         $scope.pageSort = 10;
 
+
+        $scope.conform = function(text)
+        {
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel' || text == 'back'){
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                // $scope.cancelEmployee();
+            }else if(text == 'save'){
+                $scope.expenseData();
+            }else if(text == 'update'){
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updateIndent()
+            }
+        };
 
 
         //init load
@@ -146,8 +166,20 @@ angular.module('timeSheetApp')
 
                     console.log($stateParams.id);
                     ExpenseComponent.findOne($stateParams.id).then(function (data) {
-                        console.log(data);
+                        console.log("expense------------------",data);
                         $scope.expenseDetails = data;
+                        $scope.selectedProject = {id: $scope.expenseDetails.projectId };
+                        $scope.selectedSite = {id: $scope.expenseDetails.siteId };
+                        $scope.transactionMode = $scope.expenseDetails.mode;
+                        $scope.selectedDate = $scope.expenseDetails.expenseDate;
+                        $scope.selectedCategory = {name: $scope.expenseDetails.expenseCategory};
+                        $scope.selectedPaymentType = $scope.expenseDetails.paymentType;
+                        $scope.selectedCurrency = $scope.expenseDetails.currency;
+                        $scope.selectedAmount = $scope.expenseDetails.debitAmount;
+                        $scope.receiptNumber = $scope.expenseDetails.receiptNumber;
+                        $scope.billable = $scope.expenseDetails.billable;
+                        $scope.reimbursable = $scope.expenseDetails.reimbursable;
+                        $scope.description = $scope.expenseDetails;
                     })
 
                 }
@@ -160,9 +192,6 @@ angular.module('timeSheetApp')
                 };
 
                 $scope.expenseData = function(){
-
-
-
                     if($scope.selectedProject){
                         $scope.expenseDetails.projectId = $scope.selectedProject.id;
                     }
@@ -197,7 +226,8 @@ angular.module('timeSheetApp')
 
                     if($scope.selectedCurrency){
                         console.log($scope.selectedCurrency);
-                        $scope.expenseDetails.currency = $scope.selectedCurrency.code;
+                        // $scope.expenseDetails.currency = $scope.selectedCurrency.code;
+                        $scope.expenseDetails.currency = $scope.selectedCurrency;
                     }
 
                     if($scope.selectedAmount){
@@ -257,10 +287,11 @@ angular.module('timeSheetApp')
                 };
 
                 $scope.saveExpense = function(expenseDetails){
-                    console.log(expenseDetails);
+                    console.log("EXPENSE DETAIL.",expenseDetails);
                     ExpenseComponent.createExpense($scope.expenseDetails).then(function (data) {
                         console.log(data);
                         $scope.expenseSuccessResponse = data;
+                        $scope.showNotifications('top','center','success',"Expense Saved successfully..");
                         if($scope.selectedFile){
                             $scope.expenseFileUpload(data);
                         }
@@ -268,10 +299,6 @@ angular.module('timeSheetApp')
                         if($scope.selectedPhotoFile){
                             $scope.uploadExpensePhotoFile(data);
                         }
-
-                        $scope.showNotifications('top','center','success',"Expense Saved successfully..");
-
-
                         $scope.cancelExpense();
                     })
                 };
@@ -354,23 +381,36 @@ angular.module('timeSheetApp')
 
                 };
 
+                //sites
+                $scope.siteSpin = false;
                 $scope.loadSites = function () {
+                    $scope.siteSpin = true;
                 	console.log("selected project - " + JSON.stringify($scope.selectedProject));
                 	if($scope.selectedProject) {
                     	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                             $scope.sites = data;
+                            $scope.siteSpin = false;
 
                         });
                 	}else {
+                	    alert("sites")
                     	SiteComponent.findAll().then(function (data) {
                             $scope.sites = data;
                         });
                 	}
                 };
 
+        $scope.loadAllSites = function () {
+
+                SiteComponent.findAll().then(function (data) {
+                    $scope.sites = data;
+                });
+
+        };
+
                 $scope.loadExpenseCategories = function(){
                     ExpenseComponent.searchExpenseCategories().then(function (data) {
-                        console.log(data);
+                        console.log("Expense Cat ==================>",data);
                         $scope.expenseCategories = data;
 
                     })
@@ -462,9 +502,9 @@ angular.module('timeSheetApp')
                     console.log($scope.uploadExpenseFile);
 
 
-                    $rootScope.loadingStart();
+                    // $rootScope.loadingStart();
                     ExpenseComponent.uploadExpenseFile($scope.uploadExpenseFile).then(function(data){
-                        $scope.loadingStop();
+                        // $scope.loadingStop();
                         console.log("-- Upload file --",data);
                         if(data) {
                             $scope.uploadFiles =[];
@@ -477,11 +517,11 @@ angular.module('timeSheetApp')
                         $scope.selectedFile = "";
 
                     },function(err){
-                        $scope.loadingStop();
+                        // $scope.loadingStop();
                         console.log('Import error');
                         console.log(err);
                     }).catch(function(response){
-                        $scope.loadingStop();
+                        // $scope.loadingStop();
                         $scope.showNotifications('top','center','danger','Unable to  upload file..');
                     });
                 } else {

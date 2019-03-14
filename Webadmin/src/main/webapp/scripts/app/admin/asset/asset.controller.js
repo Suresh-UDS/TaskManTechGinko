@@ -2218,7 +2218,11 @@ angular.module('timeSheetApp')
 				//console.log('site selection - ' + JSON.stringify($scope.searchSite));
 				if(jQuery.isEmptyObject($scope.weekSchSite) == false) {
 					$scope.weekSchLoad = true;
-					AssetComponent.exportAsset52WeekSchedule({siteId:$scope.weekSchSite.id,assetId:$scope.weekSchAsset.id}).then(function(data){
+					var assetId = 0;
+					if($scope.weekSchAsset) {
+						assetId =$scope.weekSchAsset.id;
+					}
+					AssetComponent.exportAsset52WeekSchedule({siteId:$scope.weekSchSite.id,assetId:assetId}).then(function(data){
 						$scope.weekSchLoad = false;
 						//console.log("response for 52week schedule - "+ JSON.stringify(data));
 						if(data) {
