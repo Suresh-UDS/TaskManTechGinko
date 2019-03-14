@@ -3,15 +3,7 @@ package com.ts.app.domain;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "material_transaction")
@@ -67,7 +59,8 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	private MaterialTransactionType transactionType;
 	
 	private Timestamp transactionDate;
-	
+
+	@Column(name = "issuedQuantity", nullable = true)
 	private long issuedQuantity;
 	
 	public long getId() {
