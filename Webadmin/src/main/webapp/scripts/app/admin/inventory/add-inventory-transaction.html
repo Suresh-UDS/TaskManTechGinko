@@ -146,7 +146,7 @@
                                                            <label class="control-label">Purchase Ref.No<span class="red-star">*</span></label>
                                                            <span class="form-control-feedback d-md-arrow-icon" ng-show="!purchaseItemsSpin"><i class="material-icons">keyboard_arrow_down</i></span>
                                                            <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="purchaseItemsSpin"><i class="ld ld-ring ld-spin" ></i></span>
-                                                           <select class="form-control" ng-model="selectedPurchaseReq"  name="PurRefNo" ng-click="loadPurchaseItems()" ng-required="selectedTransactionType == 'RECEIVED'" ng-options="purchaseItem as purchaseItem.purchaseRefGenNumber for purchaseItem in purchaseItems">
+                                                           <select class="form-control" ng-model="selectedPurchaseReq"  name="PurRefNo" ng-change="loadPurchaseItems()" ng-required="selectedTransactionType == 'RECEIVED'" ng-options="purchaseItem as purchaseItem.purchaseRefGenNumber for purchaseItem in purchaseItems">
                                                                <option value="">Select Purchase Ref.No...</option>
                                                            </select>
                                                            <span ng-if="purchaseItems.length == 0"><p class="error-msg margin0">No Purchase Ref.No</p></span>
