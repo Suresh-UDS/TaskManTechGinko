@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class AssetPPMScheduleEventDTO extends BaseDTO {
+public class AssetScheduleEventDTO extends BaseDTO {
 
 	private long id;
 	private String title;
