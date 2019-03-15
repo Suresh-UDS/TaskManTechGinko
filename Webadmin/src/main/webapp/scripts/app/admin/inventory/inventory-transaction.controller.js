@@ -860,11 +860,9 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria.materialName = "";
             }
             if($scope.searchTransactionType) {
-                $scope.searchCriteria.materialTransactionType = $scope.searchTransactionType.id;
-                $scope.searchCriteria.materialTransactionTypeName = $scope.searchTransactionType.name;
+                $scope.searchCriteria.transactionType = $scope.searchTransactionType;
             }else{
-                $scope.searchCriteria.materialTransactionType = "";
-                $scope.searchCriteria.materialTransactionTypeName = "";
+                $scope.searchCriteria.transactionType = null;
             }
             if($scope.searchIndentNumber) {
                 $scope.searchCriteria.indentRefNumber = $scope.searchIndentNumber;
@@ -943,7 +941,7 @@ angular.module('timeSheetApp')
                         $scope.sitesListOne.selected = $scope.searchSite;
                     }
                     if($scope.localStorage.transactionType){
-                        $scope.searchTransactionType = {id:$scope.localStorage.materialTransactionType,name:$scope.localStorage.materialTransactionTypeName};
+                        $scope.searchTransactionType = $scope.localStorage.transactionType;
                     }else{
                         $scope.searchTransactionType = null;
                     }
