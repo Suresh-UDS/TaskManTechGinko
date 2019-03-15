@@ -335,6 +335,8 @@ angular.module('timeSheetApp')
         	        	}
                 	}
 
+
+
                     console.log("search criteria",$scope.searchCriteria);
                         $scope.expenses = '';
                         $scope.sitesLoader = false;
@@ -394,7 +396,6 @@ angular.module('timeSheetApp')
 
                         });
                 	}else {
-                	    alert("sites")
                     	SiteComponent.findAll().then(function (data) {
                             $scope.sites = data;
                         });
