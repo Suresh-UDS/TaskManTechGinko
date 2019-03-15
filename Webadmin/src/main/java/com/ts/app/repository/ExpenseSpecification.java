@@ -36,7 +36,12 @@ public class ExpenseSpecification implements Specification<Expense> {
         if(searchCriteria.getSiteId()!=0){
             predicates.add(builder.equal(root.get("site").get("id"),  searchCriteria.getSiteId()));
         }
-
+        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
+            predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
+        }
+        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
+            predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
+        }
         log.debug("Expense Specification toPredicate - expense category -"+ searchCriteria.getExpenseCategory());
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getExpenseCategory())){
             predicates.add(builder.equal(root.get("expenseCategory"),  searchCriteria.getExpenseCategory()));

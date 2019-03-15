@@ -16,12 +16,12 @@
         </div>
 
         <div class="col-md-6 txt-align-rgt">
-        
+
         	<button ng-show="purchaseReq.length" class="btn btn-info add-btn margn-tb0"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
-                <i class="material-icons">import_contacts</i> Export Excel
+                <i class="material-icons">file_download</i> Export Excel
                 <div class="ripple-container"></div>
             </button>
-            
+
             <a class="download-btn" href="{{exportFile(0)}}">{{exportMsg(0)}}</a>
             <div class="downloaderMd" ng-show="downloader"></div>
 
@@ -34,16 +34,42 @@
 
     </div>
 
-    <div class="AppliedFilterCon" ng-show="!searchCriteria.findAll || localStorage">
-            <span class="AppliedFilterTxtCon">
-                <span class="tag label label-info" style="margin-right: 10px" ng-show="searchCriteria.projectName || localStorage.projectName">
-                    Client: {{searchCriteria.projectName || localStorage.projectName}}
-                </span>
-
-                <span class="tag label label-info"  ng-show="searchCriteria.siteName || localStorage.siteName">
-                    Site: {{searchCriteria.siteName || localStorage.siteName}}
-                </span>
+    <div class="AppliedFilterCon" >
+          <span class="AppliedFilterTxtCon" ng-show="!searchCriteria.findAll || localStorage">
+             <span
+                 class="tag label label-info" style="margin-right: 10px"
+                 ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+                    Client: {{searchCriteras.projectName}}
             </span>
+             <span class="tag label label-info" style="margin-right: 10px"
+                   ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+                    Region: {{searchCriteras.region}}
+            </span>
+             <span class="tag label label-info" style="margin-right: 10px"
+                   ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+                    Branch: {{searchCriteras.branch}}
+            </span>
+             <span class="tag label label-info" style="margin-right: 10px"
+                   ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+                    Site: {{searchCriteras.siteName}}
+            </span>
+
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.issuedDate">
+                Requested Date: {{searchCriteras.issuedDate | date:'dd/MM/yyyy'}}
+            </span>
+
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.requestedDate">
+                Approved Date: {{searchCriteras.requestedDate | date:'dd/MM/yyyy'}}
+            </span>
+
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.purchaseRefNumber">
+                Purchase.Ref.No: {{searchCriteras.purchaseRefNumber}}
+            </span>
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.requestStatus">
+                Status: {{searchCriteras.requestStatus}}
+            </span>
+
+        </span>
     </div>
 
     <div class="row">
@@ -57,41 +83,41 @@
                                <tr>
 
                                    <th>Ref.No
-                                      <!--  <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                        <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('indentRefNumber')" ng-class="isActiveAsc == 'indentRefNumber' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('indentRefNumber')" ng-class="isActiveDesc == 'indentRefNumber' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
-                                        </span> -->
+                                        </span>
                                    </th>
                                    <th>Client
                                        <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('client')" ng-class="isActiveAsc == 'client' ? 'active' : ''" >
+                                            <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('client')" ng-class="isActiveDesc == 'client' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
                                    </th>
                                    <th>Site
                                        <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('site')" ng-class="isActiveAsc == 'site' ? 'active' : ''" >
+                                            <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('site')" ng-class="isActiveDesc == 'site' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
                                    </th>
                                    <th>Requested By
                                         <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('requestedBy')" ng-class="isActiveAsc == 'requestedBy' ? 'active' : ''" >
+                                            <span ng-click="columnAscOrder('requestedBy.name')" ng-class="isActiveAsc == 'requestedBy.name' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('requestedBy')" ng-class="isActiveDesc == 'requestedBy' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('requestedBy.name')" ng-class="isActiveDesc == 'requestedBy.name' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
@@ -108,10 +134,10 @@
                                    </th>
                                    <th>Approved By
                                        <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('approvedBy')" ng-class="isActiveAsc == 'approvedBy' ? 'active' : ''" >
+                                            <span ng-click="columnAscOrder('approvedBy.name')" ng-class="isActiveAsc == 'approvedBy.name' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('approvedBy')" ng-class="isActiveDesc == 'approvedBy' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('approvedBy.name')" ng-class="isActiveDesc == 'approvedBy.name' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                        </span>
@@ -346,7 +372,7 @@
                                         <div class="col-xs-12 col-md-6 col-sm-4">
                                             <div class="form-group" style="padding-top: 20px;" >
                                                 <div class="dropdown">
-                                                    <input type="text" ng-model="selectedReferenceNumber"
+                                                    <input type="text" ng-model="searchReferenceNumber"
                                                            class="form-control border-bottom-input"
                                                            placeholder="Reference No"
                                                            ng-model="searchReferenceNo"
@@ -360,7 +386,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Status</label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                        <select class="form-control" ng-model="selectedRequestStatus" ng-options="status for status in requestStatuses">
+                                                        <select class="form-control" ng-model="searchRequestStatus" ng-options="status for status in requestStatuses">
                                                             <option value="">Select Status</option>
                                                         </select>
                                                     </div>
@@ -369,14 +395,14 @@
                                         </div>
 
                                     </div>
-                                    
+
                                     <div class="row">
                                     <div class="col-xs-12 col-md-6 col-sm-4">
                                             <div class="form-group">
                                                 <div class="dropdown">
                                                     <label class="label-control">Requested Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="requestedDate"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="searchRequestedDate"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -385,7 +411,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Approved Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterApprovedDate" placeholder="DD/MM/YYYY"  ng-model="approvedDate"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterApprovedDate" placeholder="DD/MM/YYYY"  ng-model="searchApprovedDate"/>
                                                 </div>
                                             </div>
                                         </div>
