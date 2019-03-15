@@ -157,7 +157,7 @@
 
                                     <div class="HoverBx">
                                         <button  title="View"  ui-sref="view-purchase-requisition({id: purchase.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                        <a title="Edit"  ui-sref="edit-purchase-requisition({id: purchase.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a title="Edit"  ui-sref="edit-purchase-requisition({id: purchase.id })"  ng-if="purchase.requestStatus == 'PENDING'" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                         <a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal" ng-click="deleteConfirm(purchase.id)"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
                                     </div>
