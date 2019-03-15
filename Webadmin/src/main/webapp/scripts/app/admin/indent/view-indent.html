@@ -113,7 +113,7 @@
                                 <tfoot>
                                   <td colspan="3"></td>
                                   <td colspan="5" class="text-right">
-                                      <button class="btn btn-success" type="button" ng-click="saveIndentTrans()">
+                                      <button class="btn btn-success" type="button" ng-if="materialIndentObj.indentStatus === 'PENDING'" ng-click="saveIndentTrans()">
                                           Save
                                        </button>
                                       <button class="btn" type="button" ui-sref="indent-list" id="cancel-button">
