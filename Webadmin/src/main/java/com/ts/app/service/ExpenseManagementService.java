@@ -149,11 +149,19 @@ public class ExpenseManagementService extends AbstractService {
         SearchResult<ExpenseDTO> result = new SearchResult<ExpenseDTO>();
         User user = userRepository.findOne(searchCriteria.getUserId());
         Employee employee = user.getEmployee();
+        List<EmployeeProjectSite> sites = employee.getProjectSites();
 
         if (searchCriteria != null) {
-                if (user.isAdmin()) {
-                    searchCriteria.setAdmin(true);
+            List<Long> siteIds = new ArrayList<Long>();
+            if(employee != null && !user.isAdmin()) {
+                for (EmployeeProjectSite site : sites) {
+                    siteIds.add(site.getSite().getId());
+                    searchCriteria.setSiteIds(siteIds);
                 }
+            }else if(user.isAdmin()){
+                searchCriteria.setAdmin(true);
+            }
+
             Pageable pageRequest = null;
 
             if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {

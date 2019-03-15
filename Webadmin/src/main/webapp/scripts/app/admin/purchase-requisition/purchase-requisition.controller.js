@@ -15,6 +15,14 @@ angular.module('timeSheetApp')
     	$scope.pager = {};
 
     	$scope.pageSort = 10;
+
+        $scope.searchRequestStatus = null;
+        $scope.searchReferenceNumber = null;
+        $scope.searchRequestedDate = null;
+        $scope.searchApprovedDate = null;
+        $scope.searchRequestedDateSer = null;
+        $scope.searchApprovedDateSer = null;
+
         /** Ui-select scopes **/
         $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
         $scope.client = {};
@@ -54,6 +62,17 @@ angular.module('timeSheetApp')
 
 			 }
 
+            $scope.initList = function() {
+                $scope.loadPurchaseRequisition();
+                $scope.setPage(1);
+            }
+
+            $scope.loadPurchaseRequisition = function() {
+                $scope.refreshPage();
+                $scope.search();
+                $location.path('/purchase-requisition-list');
+            }
+
 			//Loading Page go to top position
 			$scope.loadPageTop = function(){
 			    //alert("test");
@@ -92,7 +111,7 @@ angular.module('timeSheetApp')
             if(text == 'cancel' || text == 'back'){
                 /** @reatin - retaining scope value.**/
                 $rootScope.retain=1;
-                // $scope.cancelEmployee();
+                 $scope.cancelPurchase();
             }else if(text == 'save'){
                 $scope.savePurchase()
             }else if(text == 'update'){
@@ -300,7 +319,7 @@ angular.module('timeSheetApp')
                };
 
 
-                $scope.isActiveAsc = 'id';
+                $scope.isActiveAsc = 'purchaseRefNumber';
                 $scope.isActiveDesc = '';
 
                 $scope.columnAscOrder = function(field){
@@ -308,8 +327,8 @@ angular.module('timeSheetApp')
                     $scope.isActiveAsc = field;
                     $scope.isActiveDesc = '';
                     $scope.isAscOrder = true;
-                    //$scope.search();
-                    $scope.loadSites();
+                    $scope.search();
+
                 }
 
                 $scope.columnDescOrder = function(field){
@@ -317,17 +336,18 @@ angular.module('timeSheetApp')
                     $scope.isActiveDesc = field;
                     $scope.isActiveAsc = '';
                     $scope.isAscOrder = false;
-                    //$scope.search();
-                    $scope.loadSites();
+                    $scope.search();
+
                 }
 
                 $scope.searchFilter = function () {
+                    $('.AdvancedFilterModal.in').modal('hide');
                     $scope.setPage(1);
                     $scope.search();
                  }
 
                 $scope.search = function () {
-                $scope.noData = false;
+                    $scope.noData = false;
                 var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
                 if(!$scope.searchCriteria) {
                     var searchCriteria = {
@@ -370,7 +390,7 @@ angular.module('timeSheetApp')
                     $scope.searchCriteria.isReport = false;
 
 
-                    if(!$scope.searchTransactionType && !$scope.searchItemCode && !$scope.searchItemName && !$scope.searchIndentNumber && !$scope.searchCreatedDate && !$scope.searchProject && !$scope.searchSite ) {
+                    if(!$scope.searchReferenceNumber && !$scope.searchRequestedDate && !$scope.searchApprovedDate && !$scope.searchRequestStatus  && !$scope.searchProject && !$scope.searchSite ) {
                         $scope.searchCriteria.findAll = true;
                     }
 
@@ -409,29 +429,26 @@ angular.module('timeSheetApp')
                     if($scope.searchRequestStatus) {
                         $scope.searchCriteria.requestStatus = $scope.searchRequestStatus;
                     }else{
-                        $scope.searchCriteria.requestStatus = "";
-                    }
-                    if($scope.searchItemName) {
-                        $scope.searchCriteria.materialName = $scope.searchItemName;
-                    }else{
-                        $scope.searchCriteria.materialName = "";
-                    }
-                    if($scope.searchTransactionType) {
-                        $scope.searchCriteria.transactionType = $scope.searchTransactionType;
-                    }else{
-                        $scope.searchCriteria.transactionType = null;
+                        $scope.searchCriteria.requestStatus = null;
                     }
                     if($scope.searchReferenceNumber) {
                         $scope.searchCriteria.purchaseRefNumber = $scope.searchReferenceNumber;
                     }else{
-                        $scope.searchCriteria.purchaseRefNumber = "";
+                        $scope.searchCriteria.purchaseRefNumber = null;
                     }
 
-                    if($scope.searchCreatedDate){
-                        $scope.searchCriteria.transactionDate = $scope.searchCreatedDateSer;
+                    if($scope.searchRequestedDateSer){
+                        $scope.searchCriteria.requestedDate = $scope.searchRequestedDateSer;
 
                     }else{
-                        $scope.searchCriteria.transactionDate = null;
+                        $scope.searchCriteria.requestedDate = null;
+                    }
+
+                    if($scope.searchApprovedDateSer){
+                        $scope.searchCriteria.approvedDate = $scope.searchApprovedDateSer;
+
+                    }else{
+                        $scope.searchCriteria.approvedDate = null;
                     }
 
                     if($scope.pageSort){
@@ -444,12 +461,12 @@ angular.module('timeSheetApp')
                         $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
                     }else{
-                        $scope.searchCriteria.columnName = 'id';
+                        $scope.searchCriteria.columnName = 'purchaseRefNumber';
                         $scope.searchCriteria.sortByAsc = true;
                     }
 
-                    $scope.inventoryTransactionlists = '';
-                    $scope.inventoryTranslistLoader = false;
+                    $scope.purchaseReq = '';
+                    $scope.purchaseReqLoader = false;
                     $scope.loadPageTop();
 
                     /* Localstorage (Retain old values while edit page to list) start */
@@ -508,9 +525,10 @@ angular.module('timeSheetApp')
                             }else{
                                 $scope.searchReferenceNumber  = null;
                             }
-
-                            $scope.searchCreatedDate = $filter('date')($scope.localStorage.transactionDate, 'dd/MM/yyyy');
-                            $scope.searchCreatedDateSer = new Date($scope.localStorage.transactionDate);
+                            $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
+                            $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
+                            $scope.searchApprovedDate = $filter('date')($scope.localStorage.approvedDate, 'dd/MM/yyyy');
+                            $scope.searchApprovedDateSer = new Date($scope.localStorage.approvedDate);
 
                         }
 
@@ -524,77 +542,13 @@ angular.module('timeSheetApp')
 
                     /* Localstorage (Retain old values while edit page to list) end */
 
-
-                if($scope.selectedRequestStatus) {
-                	$scope.searchCriteria.requestStatus = $scope.selectedRequestStatus;
-                }
-
-                if($scope.selectedReferenceNumber) {
-                	$scope.searchCriteria.purchaseRefNumber = $scope.selectedReferenceNumber;
-                }
-
-                if($scope.searchRequestedDate) {
-                	$scope.searchCriteria.requestedDate = $scope.searchRequestedDate;
-                }
-
-                if($scope.searchApprovedDate) {
-                	$scope.searchCriteria.approvedDate = $scope.searchApprovedDate;
-                }
-
-                if($scope.selectedColumn){
-
-                    $scope.searchCriteria.columnName = $scope.selectedColumn;
-                    $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
-
-                }else{
-                    $scope.searchCriteria.columnName ="id";
-                    $scope.searchCriteria.sortByAsc = true;
-                }
-
-                console.log("search criteria",$scope.searchCriteria);
-                    $scope.purchaseReq = '';
-                    $scope.purchaseReqLoader = false;
-                    $scope.loadPageTop();
-
-                     /* Localstorage (Retain old values while edit page to list) start */
-
-                     if($rootScope.retain == 1){
-                        $scope.localStorage = getLocalStorage.getSearch();
-                        console.log('Local storage---',$scope.localStorage);
-
-                        if($scope.localStorage){
-                                $scope.filter = true;
-                                $scope.pages.currPage = $scope.localStorage.currPage;
-                                if($scope.localStorage.projectId){
-                                   $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
-                                }else{
-                                   $scope.searchProject = null;
-                                }
-                                if($scope.localStorage.siteId){
-                                  $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
-                                }else{
-                                   $scope.searchSite = null;
-                                }
-
-                        }
-
-                        $rootScope.retain = 0;
-
-                        var searchCriterias  = $scope.localStorage;
-                     }else{
-
-                        var searchCriterias  = $scope.searchCriteria;
-                     }
-
-                     /* Localstorage (Retain old values while edit page to list) end */
-
-                    PurchaseComponent.search(searchCriterias).then(function (data) {
+                    PurchaseComponent.search($scope.searchCriteras).then(function (data) {
                     $scope.purchaseReq = data.transactions;
                     $scope.purchaseReqLoader = true;
 
 
                      /** retaining list search value.**/
-                    getLocalStorage.updateSearch(searchCriterias);
+                    getLocalStorage.updateSearch($scope.searchCriteras);
 
 
                      /*
@@ -608,7 +562,7 @@ angular.module('timeSheetApp')
                      console.log($scope.purchaseReq);
 
                     $scope.pages.currPage = data.currPage;
-                    $scope.pages.totalPages = data.totalPages;
+                    $scope.pages.totalPages = data.totalPages == 0 ? 1:data.totalPages;
 
                     if($scope.purchaseReq && $scope.purchaseReq.length > 0 ){
                         $scope.showCurrPage = data.currPage;
@@ -1067,7 +1021,10 @@ angular.module('timeSheetApp')
                 $scope.searchCriteria = {};
                 $scope.searchRequestedDate = null;
                 $scope.searchApprovedDate = null;
-                $scope.selectedRequestStatus = null;
+                $scope.searchRequestedDateSer = null;
+                $scope.searchApprovedDateSer = null;
+                $scope.searchRequestStatus = null;
+                $scope.searchReferenceNumber = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
 
@@ -1196,22 +1153,16 @@ angular.module('timeSheetApp')
               $interval.cancel(promise);
             };
 
-            $('#dateFilterRequestedDate').datetimepicker().on('dp.show', function (e) {
-                return $(this).data('DateTimePicker');
-            });
 
             $('input#dateFilterRequestedDate').on('dp.change', function(e){
-                $scope.searchRequestedDate = e.date._d;
-                $scope.requestedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                $scope.searchRequestedDateSer = e.date._d;
+                $scope.searchRequestedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
             });
 
-            $('#dateFilterApprovedDate').datetimepicker().on('dp.show', function (e) {
-                return $(this).data('DateTimePicker');
-            });
 
             $('input#dateFilterApprovedDate').on('dp.change', function(e){
-                $scope.searchApprovedDate = e.date._d;
-                $scope.approvedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+                $scope.searchApprovedDateSer = e.date._d;
+                $scope.searchApprovedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
             });
 
 

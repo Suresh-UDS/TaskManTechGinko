@@ -1,13 +1,14 @@
 package com.ts.app.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "expense")
-public class Expense extends AbstractAuditingEntity {
+public class Expense extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
