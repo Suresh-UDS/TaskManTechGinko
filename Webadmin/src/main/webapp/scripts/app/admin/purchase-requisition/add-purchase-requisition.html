@@ -244,7 +244,7 @@
 
 
                         <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                type="submit" id="form-button-save" ng-click="conform('save')" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid" tabindex="16">
+                                type="submit" id="form-button-save" ng-click="conform('save')" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || !purchaseItems || purchaseItems.length == 0" tabindex="16">
                             <span class="btn-label"><i class="material-icons">check</i></span> Add Purchase Requisition
                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                         </button>
