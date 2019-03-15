@@ -797,7 +797,7 @@ angular.module('timeSheetApp')
             }
 
             $scope.materialIndents = '';
-            $scope.purchaseReqLoader = false;
+            $scope.materialIndentsLoader = false;
             $scope.loadPageTop();
             /* Localstorage (Retain old values while edit page to list) start */
 
@@ -869,7 +869,7 @@ angular.module('timeSheetApp')
             IndentComponent.search($scope.searchCriteria).then(function (data) {
             	console.log(data);
                 $scope.materialIndents = data.transactions;
-                $scope.purchaseReqLoader = true;
+                $scope.materialIndentsLoader = true;
                 $scope.loadingStop();
 
                 /** retaining list search value.**/

@@ -119,7 +119,7 @@ public class ExpenseSpecification implements Specification<Expense> {
             predicates.add(builder.equal(root.get("active"), "Y"));
         }
 
-        query.orderBy(builder.desc(root.get("id")));
+        query.orderBy(builder.desc(root.get("createdDate")));
 
         List<Predicate> orPredicates = new ArrayList<>();
 
