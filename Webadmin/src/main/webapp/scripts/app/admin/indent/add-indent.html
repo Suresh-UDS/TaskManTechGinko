@@ -199,7 +199,7 @@
 
 
                         <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                type="submit" id="form-button-save"  ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid" tabindex="16">
+                                type="submit" id="form-button-save"  ng-disabled="!materialItems" tabindex="16">
                             <span class="btn-label"><i class="material-icons">check</i></span> Add Indent
                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                         </button>
