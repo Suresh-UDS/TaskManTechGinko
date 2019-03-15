@@ -164,7 +164,7 @@
 
                                         <div class="HoverBx">
                                             <button  title="View"  ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a title="Edit"  ui-sref="edit-indent({id: materialIndent.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                            <a title="Edit"  ui-sref="edit-indent({id: materialIndent.id })" ng-if="materialIndent.indentStatus =='PENDING'" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
                                             <a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
                                         </div>

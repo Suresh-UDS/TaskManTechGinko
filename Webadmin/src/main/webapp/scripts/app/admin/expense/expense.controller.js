@@ -335,6 +335,8 @@ angular.module('timeSheetApp')
         	        	}
                 	}
 
+
+
                     console.log("search criteria",$scope.searchCriteria);
                         $scope.expenses = '';
                         $scope.sitesLoader = false;
@@ -394,7 +396,6 @@ angular.module('timeSheetApp')
 
                         });
                 	}else {
-                	    alert("sites")
                     	SiteComponent.findAll().then(function (data) {
                             $scope.sites = data;
                         });
@@ -523,7 +524,7 @@ angular.module('timeSheetApp')
                         console.log(err);
                     }).catch(function(response){
                         // $scope.loadingStop();
-                        $scope.showNotifications('top','center','danger','Unable to  upload file..');
+                        // $scope.showNotifications('top','center','danger','Unable to  upload file..');
                     });
                 } else {
                     console.log('select a file');

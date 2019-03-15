@@ -69,6 +69,42 @@ public class PushService {
 		String content = messageSource.getMessage("push.newjob.alert.content", data, locale);
 		send(userIds, content);
 	}
+	
+	@Async
+	public void sendNewTicketAlert(long userIds[], Map<String,Object> values) {
+		Locale locale = Locale.forLanguageTag("en-US");
+		Context context = new Context(locale);
+		context.setVariable("dateTime", values.get("ticketDateTime"));
+		context.setVariable("site", values.get("site"));
+		context.setVariable("ticketId", values.get("ticketId"));
+		context.setVariable("ticketTitle", values.get("ticketTitle"));
+		//String emailContent = templateEngine.process("newJobAlertPush", context);
+		Object[] data = new Object[4];
+		data[0] = String.valueOf(values.get("ticketId"));
+		data[1] = values.get("ticketTitle");
+		data[2] = values.get("ticketDateTime");
+		data[3] = values.get("site");
+		String content = messageSource.getMessage("push.newticket.alert.content", data, locale);
+		send(userIds, content);
+	}
+	
+	@Async
+	public void sendClosedTicketAlert(long userIds[], Map<String,Object> values) {
+		Locale locale = Locale.forLanguageTag("en-US");
+		Context context = new Context(locale);
+		context.setVariable("dateTime", values.get("ticketDateTime"));
+		context.setVariable("site", values.get("site"));
+		context.setVariable("ticketId", values.get("ticketId"));
+		context.setVariable("ticketTitle", values.get("ticketTitle"));
+		//String emailContent = templateEngine.process("newJobAlertPush", context);
+		Object[] data = new Object[4];
+		data[0] = String.valueOf(values.get("ticketId"));
+		data[1] = values.get("ticketTitle");
+		data[2] = values.get("ticketDateTime");
+		data[3] = values.get("site");
+		String content = messageSource.getMessage("push.closedticket.alert.content", data, locale);
+		send(userIds, content);
+	}
 
 	@Async
 	public void send(long users[],String message) {

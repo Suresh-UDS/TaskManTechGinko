@@ -138,8 +138,8 @@ public class JobManagementResource {
 							userIds[ind] = user.getId();
 							ind++;
 						}
-						String message = "New job "+ jobDTO.getTitle() +" requested for site-" + jobDTO.getSiteName();
-						pushService.send(userIds, message);
+						//String message = "New job "+ jobDTO.getTitle() +" requested for site-" + jobDTO.getSiteName();
+						//pushService.send(userIds, message);
 						//jobService.saveNotificationLog(response.getId(), SecurityUtils.getCurrentUserId(), users, siteId, message);
 					}
 //				}
