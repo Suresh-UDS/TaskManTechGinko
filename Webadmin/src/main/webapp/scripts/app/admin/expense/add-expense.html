@@ -115,7 +115,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Expense Category  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options="category.name for category in expenseCategories" name="selectedCategory" ng-change="selectCategory(selectedCategory)" ng-model="selectedCategory" class="form-control" required>
+                                            <select ng-options="category.name for category in expenseCategories" name="selectedCategory" ng-change="selectCategory(selectedCategory)" ng-model="selectedCategory" class="form-control" >
                                                 <option value="">Select Category...</option>
                                             </select>
                                             <div ng-show="form.$submitted || form.selectedCategory.$touched || form.selectedCategory.$dirty">
@@ -390,7 +390,7 @@
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                type="submit" id="form-button-save"  ng-disabled="form.$invalid" tabindex="16">
+                                type="submit" id="form-button-save"  ng-disabled="(transactionMode == 'debit' ? !selectedCategory : '') || form.$invalid" tabindex="16">
                             <span class="btn-label"><i class="material-icons">check</i></span> Add Expense
                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                         </button>

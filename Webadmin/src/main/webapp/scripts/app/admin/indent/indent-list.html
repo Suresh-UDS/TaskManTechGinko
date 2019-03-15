@@ -32,6 +32,41 @@
 
     </div>
 
+    <div class="AppliedFilterCon" >
+          <span class="AppliedFilterTxtCon" ng-show="!searchCriteria.findAll || localStorage">
+             <span
+                 class="tag label label-info" style="margin-right: 10px"
+                 ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+                    Client: {{searchCriteras.projectName}}
+            </span>
+             <span class="tag label label-info" style="margin-right: 10px"
+                   ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+                    Region: {{searchCriteras.region}}
+            </span>
+             <span class="tag label label-info" style="margin-right: 10px"
+                   ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+                    Branch: {{searchCriteras.branch}}
+            </span>
+             <span class="tag label label-info" style="margin-right: 10px"
+                   ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+                    Site: {{searchCriteras.siteName}}
+            </span>
+
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.issuedDate">
+                Issued Date: {{searchCriteras.issuedDate | date:'dd/MM/yyyy'}}
+            </span>
+
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.requestedDate">
+                Received Date: {{searchCriteras.requestedDate | date:'dd/MM/yyyy'}}
+            </span>
+
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.indentRefNumber">
+                indent.Ref.No: {{searchCriteras.indentRefNumber}}
+            </span>
+
+        </span>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card TableCard">
@@ -41,13 +76,76 @@
                         <table class="table table-hover">
                             <thead>
                                <tr>
-                                   <th>Reference No</th>
-                                   <th>Client</th>
-                                   <th>Site</th>
-                                   <th>Requested By</th>
-                                   <th>Requested Date</th>
-                                   <th>Issued By</th>
-                                   <th>Issued Date</th>
+                                   <th>Reference No
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('indentRefNumber')" ng-class="isActiveAsc == 'indentRefNumber' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('indentRefNumber')" ng-class="isActiveDesc == 'indentRefNumber' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Client
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Site
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Requested By
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('requestedBy.name')" ng-class="isActiveAsc == 'requestedBy.name' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('requestedBy.name')" ng-class="isActiveDesc == 'requestedBy.name' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Requested Date
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('requestedDate')" ng-class="isActiveAsc == 'requestedDate' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('requestedDate')" ng-class="isActiveDesc == 'requestedDate' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Issued By
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('issuedBy.name')" ng-class="isActiveAsc == 'issuedBy.name' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('issuedBy.name')" ng-class="isActiveDesc == 'issuedBy.name' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
+                                   <th>Issued Date
+                                       <span class="sortingIcons">
+                                            <span ng-click="columnAscOrder('issuedDate')" ng-class="isActiveAsc == 'issuedDate' ? 'active' : ''" >
+                                                <i  class="fa fa-caret-up"></i>
+                                            </span>
+                                            <span ng-click="columnDescOrder('issuedDate')" ng-class="isActiveDesc == 'issuedDate' ? 'active' : ''">
+                                                 <i  ng-class="class" class="fa fa-caret-down"></i>
+                                            </span>
+                                        </span>
+                                   </th>
                                    <th>Actions</th>
                                </tr>
                             </thead>
@@ -164,7 +262,7 @@
 <div class="modal fade AdvancedFilterModal FilterModalCon" id="advancedFilter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="searchForm"   novalidate >
+            <form name="searchForm"  ng-submit="searchFilter()" novalidate >
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -184,54 +282,102 @@
                                     </h4>
                                 </a>
                             </div>
-                            <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 110px;">
+                            <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 225px;">
                                 <div class="panel-body">
 
-                                    <div class="row">
+                                    <div class="row" ng-init="loadProjects();">
 
-                                        <div class="col-xs-12 col-md-5">
-                                            <div class="form-group" >
+                                        <div class="col-xs-12 col-md-6 col-lg-6" >
+                                            <div class="form-group">
                                                 <div class="dropdown">
                                                     <label class="label-control">Client</label>
-                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchProject" ng-change="loadDepSites()" ng-options="project as project.name for project in projectsList track by project.id" ng-pattern="Select Client" ng-required>-->
-                                                    <!--<option value="">Select Client...</option>-->
-                                                    <!--</select>-->
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!clientFilterDisable" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <ui-select ng-model="searchProject" ng-disabled="clientFilterDisable" ng-change="loadDepSites(searchProject)">
-                                                        <ui-select-match placeholder="Select clients...">{{filter ? searchProject.name?searchProject.name:'Select Client' :searchProject}}</ui-select-match>
-                                                        <ui-select-choices  repeat="client in getClient($select.search) | filter: $select.search">
-                                                            <div ng-bind="client"></div>
+                                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="client.selected" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)">
+                                                        <ui-select-match placeholder="Select clients..."  allow-clear="true">{{$select.selected.name}}
+                                                            <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+
+                                                            <span ng-bind-html="client.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xs-12 col-md-5">
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="form-group" >
+
+                                                <div class="dropdown">
+                                                    <label class="label-control">Region</label>
+                                                    <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="regionsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+                                                        <ui-select-match placeholder="Select region...">{{$select.selected.name}}
+                                                            <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+                                                            <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <label class="label-control">Branch</label>
+                                                    <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="branchsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+                                                        <ui-select-match placeholder="Select branch..." >{{$select.selected.name}}
+                                                            <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+                                                            <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
                                             <div class="dropdown">
                                                 <div class="form-group">
                                                     <label class="label-control">Site</label>
-                                                    <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <!--<select class="form-control " ng-model="searchSite"  ng-options="site as site.name for site in sitesList track by site.id" ng-pattern="Select Site">-->
-                                                    <!--<option value="">Select Site...</option>-->
-                                                    <!--</select>-->
                                                     <span ng-show="siteSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                    <span ng-show="!siteSpin" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                    <!--<span class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                    <ui-select ng-model="searchSite" ng-disabled="siteFilterDisable || sites.length == 0" ng-change="selectSite(searchSite)">
-                                                        <ui-select-match placeholder="Select Site...">{{sites.length == 0 ? 'Select Site' : searchSite.searchStatus ? searchSite.name?searchSite.name:'Select Site' : hideSite ?searchSite :'Select Site' }}</ui-select-match>
-                                                        <ui-select-choices  repeat="site in getSite($select.search) | filter: $select.search">
-                                                            <div ng-bind="site"></div>
+                                                    <span ng-show="!siteSpin && !sitesListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="sitesListOne.selected"  ng-disabled="siteFilterDisable || sitesLists.length == 1">
+                                                        <ui-select-match placeholder="Select site..." >{{$select.selected.name}}
+                                                            <a   ng-click="clearSite($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
+                                                            <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
-                                                    <span ng-if="sites.length == 0"><p class="help-block">No sites</p></span>
+                                                    <span ng-if="sitesLists.length == 1"><p class="error-msg margin0">No sites</p></span>
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
 
                                 </div>
@@ -268,7 +414,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Requested Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="requestedDate"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="searchRequestedDate"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -277,7 +423,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Issued Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterIssuedDate" placeholder="DD/MM/YYYY"  ng-model="issuedDate"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterIssuedDate" placeholder="DD/MM/YYYY"  ng-model="searchIssuedDate"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -292,8 +438,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
-                    <button type="submit" class="btn btn-success btn-simple" ng-click ="searchFilter()" data-dismiss="modal" ng-disabled="searchForm.$invalid">Apply Filter</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple"  >Apply Filter</button>
                     <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
                 </div>
 
