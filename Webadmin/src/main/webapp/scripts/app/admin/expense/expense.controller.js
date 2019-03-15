@@ -524,7 +524,7 @@ angular.module('timeSheetApp')
                         console.log(err);
                     }).catch(function(response){
                         // $scope.loadingStop();
-                        $scope.showNotifications('top','center','danger','Unable to  upload file..');
+                        // $scope.showNotifications('top','center','danger','Unable to  upload file..');
                     });
                 } else {
                     console.log('select a file');
