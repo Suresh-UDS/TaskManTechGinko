@@ -75,7 +75,7 @@
                                         <div class="form-group">
                                             <label class="control-label">TransactionMode  <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-model="transactionMode" class="form-control" name="transactionMode" onselect="changeType()" required>
+                                            <select ng-model="transactionMode" class="form-control" name="transactionMode"  required>
                                                 <option value="">Select Type...</option>
                                                 <option value="credit">Credit</option>
                                                 <option value="debit">Debit</option>
@@ -153,7 +153,7 @@
 
                         <div class="row">
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Currency </label>
                                     <!--<select ng-options="currency.code for currency in currencies track by currency.code" ng-model="selectedCurrency" class="form-control">-->
@@ -165,7 +165,7 @@
                                     <span class="material-input"></span></div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Amount <span class="red-star">*</span></label>
                                     <input ng-model="selectedAmount" name="selectedAmount" type="number" min = 0 class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
@@ -182,7 +182,7 @@
 
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Receipt No <span class="red-star">*</span></label>
                                     <input type="number" ng-model="receiptNumber" name="receiptNumber" min = 0 class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="2" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
@@ -198,7 +198,7 @@
 
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <div class="checkbox">
                                     <label style="padding-top: 23px;">
                                         <input type="checkbox" ng-model="billable" name="billable"> Billable
