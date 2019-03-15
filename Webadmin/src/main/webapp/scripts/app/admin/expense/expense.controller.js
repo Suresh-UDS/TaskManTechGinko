@@ -139,7 +139,8 @@ angular.module('timeSheetApp')
                 });
 
                 $('#selectedDate').datetimepicker({
-                    format: 'DD/MM/YYYY'
+                    format: 'DD/MM/YYYY',
+                    	maxDate: new Date()
                 });
 
 

@@ -2,14 +2,13 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryTransactionController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent,$interval) {
+    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent,$interval,getLocalStorage) {
 
-        
     	$rootScope.loginView = false;
     	$scope.inventory = {};
     	$scope.editInventoryTrans = {};
-    	$scope.client = {};
-    	$scope.projectSite = {};
+    	$scope.project = null;
+    	$scope.projectSite = null;
     	$scope.selectedManufacturer = {};
     	$scope.selectedClient = {};
     	$scope.selectedSite = {};
@@ -24,7 +23,9 @@ angular.module('timeSheetApp')
         $scope.searchItemCode = null;
         $scope.searchItemName = null;
         $scope.searchItemGroup = null;
-        $scope.selectedTransactionType = null;
+        $scope.searchIndentNumber = null;
+        $scope.searchTransactionType = null;
+        $scope.selectedTransactionType = "RECEIVED";
         $scope.searchCreatedDate = "";
         $scope.searchCreatedDateSer = null;
         $scope.transactionCriteria = {};
@@ -32,17 +33,35 @@ angular.module('timeSheetApp')
         $scope.selectedItemCode = {};
     	$scope.pages = { currPage : 1};
     	$scope.pageSort = 10;
-    	
+        $scope.pager = {};
+
+        /** Ui-select scopes **/
+        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
+        $scope.client = {};
+        $scope.clients = [];
+        $scope.allSites = {id:0 , name: '-- ALL SITES --'};
+        $scope.sitesListOne = {};
+        $scope.sitesLists = [];
+        $scope.sitesListOne.selected =  null;
+        $scope.allRegions = {id:0 , name: '-- SELECT REGIONS --'};
+        $scope.regionsListOne = {};
+        $scope.regionsLists = [];
+        $scope.regionsListOne.selected =  null;
+        $scope.allBranchs = {id:0 , name: '-- SELECT BRANCHES --'};
+        $scope.branchsListOne = {};
+        $scope.branchsLists = [];
+        $scope.branchsListOne.selected =  null;
+
+        $scope.clientFilterDisable = true;
+        $scope.siteFilterDisable = true;
+
     	$rootScope.exportStatusObj  ={};
-    	
-    	$scope.refreshPage = function() { 
-    		 $scope.pages = {
-    	                currPage: 1,
-    	                totalPages: 0
-    	            }
-    		 $scope.clearFilter();
-    	}
-    	
+
+        $scope.refreshPage = function() {
+            $scope.clearFilter();
+            $scope.search();
+        }
+
 
         $scope.clearFilter = function() {
             $scope.selectedManufacturer = {};
@@ -52,26 +71,42 @@ angular.module('timeSheetApp')
             $scope.selectedStatus = null;
             $scope.searchItemName = null;
             $scope.searchItemGroup = null;
+            $scope.searchIndentNumber = null;
             $scope.searchCreatedDate = null
             $scope.searchSite ={};
             $scope.searchProject ={};
             $scope.selectedItemGroup ={};
-            $scope.selectedTransactionType = null;
+            $scope.searchTransactionType = null;
+
+            $scope.siteFilterDisable = true;
+            $scope.regionFilterDisable = true;
+            $scope.branchFilterDisable = true;
+            $scope.downloader=false;
+            $scope.downloaded = true;
+
+            /** Ui-select scopes **/
+            $scope.client.selected = null;
+            $scope.sitesLists =  [];
+            $scope.sitesListOne.selected =  null;
+            $scope.regionsLists =  [];
+            $scope.regionsListOne.selected =  null;
+            $scope.branchsLists =  [];
+            $scope.branchsListOne.selected =  null;
 
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
             }
-            $scope.search();
+            //$scope.search();
         };
-        
+
         $scope.initCalender = function(){
 
             demo.initFormExtendedDatetimepickers();
         }
 
         $scope.initCalender();
-    	
+
     	$scope.showNotifications= function(position,alignment,color,msg){
 
             /*if(nottifShow == true){*/
@@ -86,23 +121,160 @@ angular.module('timeSheetApp')
             /*}*/
 
         }
-    	
-    	$scope.loadProjects = function () {
+
+        $scope.loadProjects = function () {
+
             ProjectComponent.findAll().then(function (data) {
-                console.log("Loading all projects")
                 $scope.projects = data;
+                /** Ui-select scope **/
+                $scope.clients[0] = $scope.allClients;
+                //
+                for(var i=0;i<$scope.projects.length;i++)
+                {
+                    //$scope.uiClient[i] = $scope.projects[i].name;
+                    $scope.clients[i+1] = $scope.projects[i];
+                }
+
+                $scope.clientDisable = false;
+                $scope.clientFilterDisable = false;
             });
-        }
-    	
+        };
+
+        /** Ui-select function **/
+
+        $scope.loadDepSitesList = function (searchProject) {
+            if(searchProject){
+                $scope.siteSpin = true;
+                $scope.searchProject = searchProject;
+                if(jQuery.isEmptyObject($scope.searchProject) == false && $scope.searchProject.id == 0){
+                    SiteComponent.findAll().then(function (data) {
+                        //$scope.selectedSite = null;
+                        $scope.sitesList = data;
+                        $scope.sitesLists = [];
+                        $scope.sitesListOne.selected = null;
+                        $scope.sitesLists[0] = $scope.allSitesVal;
+
+                        for(var i=0;i<$scope.sitesList.length;i++)
+                        {
+                            $scope.sitesLists[i+1] = $scope.sitesList[i];
+                        }
+                        $scope.siteFilterDisable = false;
+                        $scope.siteSpin = false;
+                    });
+                }else{
+                    if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+                        var depProj=$scope.selectedProject.id;
+                    }else if(jQuery.isEmptyObject($scope.searchProject) == false){
+                        var depProj=$scope.searchProject.id;
+                    }else{
+                        var depProj=0;
+                    }
+
+                    ProjectComponent.findSites(depProj).then(function (data) {
+                        // $scope.selectedSite = null;
+                        $scope.sitesList = data;
+                        $scope.sitesLists = [];
+                        $scope.sitesListOne.selected = null;
+                        $scope.sitesLists[0] = $scope.allSitesVal;
+
+                        for(var i=0;i<$scope.sitesList.length;i++)
+                        {
+                            $scope.sitesLists[i+1] = $scope.sitesList[i];
+                        }
+                        $scope.siteFilterDisable = false;
+                        $scope.siteSpin = false;
+                    });
+                }
+            }
+
+        };
+
+        $scope.regionFilterDisable = true;
+        $scope.branchFilterDisable = true;
+
+        /*** UI select (Region List) **/
+        $scope.loadRegionsList = function (projectId, callback) {
+            $scope.regionSpin = true;
+            $scope.branchsLists = [];
+            $scope.branchsListOne.selected = null;
+            $scope.branchFilterDisable = true;
+            SiteComponent.getRegionByProject(projectId).then(function (response) {
+                // //console.log(response);
+                $scope.regionList = response;
+                $scope.regionsLists = [];
+                $scope.regionsListOne.selected = null;
+                $scope.regionsLists[0] = $scope.allRegions;
+
+
+                for(var i=0;i<$scope.regionList.length;i++)
+                {
+                    $scope.regionsLists[i+1] = $scope.regionList[i];
+                }
+
+                // //console.log('region list : ' + JSON.stringify($scope.regionList));
+                $scope.regionSpin = false;
+                $scope.regionFilterDisable = false;
+                //callback();
+            })
+        };
+
+        /*** UI select (Branch List) **/
+        $scope.loadBranchList = function (projectId, callback) {
+
+            if(projectId){
+
+                if($scope.regionsListOne.selected){
+                    //console.log($scope.regionsListOne.selected);
+                    $scope.branchSpin = true;
+                    SiteComponent.getBranchByProject(projectId,$scope.regionsListOne.selected.id).then(function (response) {
+                        //console.log(response);
+                        $scope.branchList = response;
+                        if($scope.branchList) {
+                            $scope.branchsLists = [];
+                            $scope.branchsListOne.selected = null;
+                            $scope.branchsLists[0] = $scope.allBranchs;
+
+                            for(var i=0;i<$scope.branchList.length;i++)
+                            {
+                                $scope.branchsLists[i+1] = $scope.branchList[i];
+                            }
+                            /* if($scope.branchList) {
+                                            for(var i = 0; i < $scope.branchList.length; i++) {
+                                                $scope.uiBranch.push($scope.branchList[i].name);
+                                            }*/
+                            $scope.branchSpin = false;
+                            $scope.branchFilterDisable = false;
+                        }
+                        else{
+                            //console.log('branch list : ' + JSON.stringify($scope.branchList));
+                            $scope.getSitesBYRegionOrBranch(projectId,$scope.regionsListOne.selected.name,null);
+                            $scope.branchSpin = false;
+                            $scope.branchFilterDisable = false;
+                            //callback();
+                        }
+
+                    })
+
+                }else{
+                    $scope.showNotifications('top','center','danger','Please Select Region to continue...');
+
+                }
+
+            }else{
+                $scope.showNotifications('top','center','danger','Please select Project to continue...');
+
+            }
+        };
+
     	$scope.loadAllSites = function () {
-    		if($scope.client) { 
-    			ProjectComponent.findSites($scope.client.id).then(function (data) {
+    		if($scope.project) {
+    			ProjectComponent.findSites($scope.project.id).then(function (data) {
                     $scope.searchSite = null;
                     $scope.sites = data;
                 });
     		}
         }
-    	
+
     	$scope.loadSites = function () {
             SiteComponent.findAll().then(function (data) {
                 $scope.selectedIndent = null;
@@ -110,7 +282,7 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         }
-    	
+
     	$scope.loadManufacturer = function () {
             ManufacturerComponent.findAll().then(function (data) {
                 //console.log("Loading all Manufacturer -- " , data);
@@ -118,143 +290,162 @@ angular.module('timeSheetApp')
                 $scope.loadingStop();
             });
         }
-    	
-    	$scope.loadSearchSites = function() { 
-    		if($scope.searchProject) { 
+
+    	$scope.loadSearchSites = function() {
+    		if($scope.searchProject) {
     			ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
                     $scope.searchSite = null;
                     $scope.sites = data;
                 });
     		}
     	}
-    	
+
     	$scope.loadUOM = function() {
     		InventoryComponent.getMaterialUOM().then(function(data){
     			console.log(data);
     			$scope.materialUOMs = data;
     		});
     	}
-    	
+
     	$scope.loadMaterialItmGroup = function () {
         	InventoryComponent.loadItemGroup().then(function (data) {
                 $scope.materialItmGroups = data;
                 $scope.loadingStop();
             });
         }
-    	
+
+
     	$scope.loadItems = function() {
+
+            if(!$scope.projectSite){
+                alert('Please select site before select Indent Req.No...!!!');
+                return false;
+            }
     		console.log($scope.selectedIndent);
     		$scope.materialItems = [];
     		$scope.selectedItems = [];
+
     		if($scope.selectedIndent) {
+
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
-    				if($scope.materialItems.length > 0) { 
-    					$scope.materialItems.map(function(item) { 
+    				if($scope.materialItems.length > 0) {
+    					$scope.materialItems.map(function(item) {
     						if(item.pendingQuantity <= 0) {
     							$scope.materialItems.splice(item, 1);
     						}
     					});
     				}
     				$scope.loadingStop();
+
     			});
     		}
-    		
+
     	}
-    	
+
     	$scope.loadPurchaseItems = function() {
+            if(!$scope.projectSite){
+    	        alert('Please select site before select Purchase Req.No...!!!');
+    	        return false;
+            }
     		console.log($scope.selectedPurchaseReq);
     		$scope.materialItems = [];
     		$scope.selectedItems = [];
+
     		if($scope.selectedPurchaseReq) {
     			PurchaseComponent.findById($scope.selectedPurchaseReq.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
+
     				$scope.loadingStop();
     			});
     		}
     	}
-    	
+        $scope.purchaseItemsSpin = false;
     	$scope.loadPurchases = function() {
     		console.log($scope.selectedPurchaseReq);
     		if($scope.projectSite) {
+                $scope.purchaseItemsSpin = true;
     			console.log($scope.projectSite);
-    			$scope.search = {};
-    			$scope.search.siteId = $scope.projectSite.id;
-    			$scope.search.requestStatus = "APPROVED";
-    			PurchaseComponent.search($scope.search).then(function(data) { 
+    			$scope.searchLoadPurchases = {};
+    			$scope.searchLoadPurchases.siteId = $scope.projectSite.id;
+    			$scope.searchLoadPurchases.requestStatus = "APPROVED";
+    			PurchaseComponent.search($scope.searchLoadPurchases).then(function(data) {
     				console.log(data);
     				$scope.purchaseItems = data.transactions;
+                    $scope.purchaseItemsSpin = false;
     			});
     		}
     	}
-    	
-    	$scope.loadIndents = function() { 
+        $scope.materialIndentsSpin = false;
+    	$scope.loadIndents = function() {
     		if($scope.projectSite) {
+                $scope.materialIndentsSpin = true;
     			console.log($scope.projectSite);
-    			$scope.search = {};
-    			$scope.search.siteId = $scope.projectSite.id;
-    			$scope.search.indentStatus = "PENDING";
-    			IndentComponent.search($scope.search).then(function(data) { 
-    				console.log(data);
+    			$scope.searchIndents = {};
+    			$scope.searchIndents.siteId = $scope.projectSite.id;
+    			$scope.searchIndents.indentStatus = "PENDING";
+    			IndentComponent.search($scope.searchIndents).then(function(data) {
+    				console.log('indent>>>',data);
     				$scope.materialIndents = data.transactions;
+                    $scope.materialIndentsSpin = false;
     			});
     		}
     	}
-    	
-    	$scope.loadTransactionType = function() { 
-    		InventoryTransactionComponent.getTransactionType().then(function(data) { 
+
+    	$scope.loadTransactionType = function() {
+    		InventoryTransactionComponent.getTransactionType().then(function(data) {
     			console.log(data);
     			$scope.transactionTypes = data;
     			$scope.loadingStop();
     		});
     	}
-    	
-    	$scope.loadStocks = function() { 
-    		if($scope.selectedMaterialItem) { 
+
+    	$scope.loadStocks = function() {
+    		if($scope.selectedMaterialItem) {
     			$scope.inventory.storeStock = $scope.selectedMaterialItem.storeStock;
     		}
     	}
-    	
+
     	$scope.cancelInventoryTrans = function(){
             $location.path('/inventory-transaction-list');
     	}
-    	
+
     	 $('input#searchCreatedDate').on('dp.change', function(e){
              $scope.searchCreatedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
              $scope.searchCreatedDateSer = e.date._d;
     	 });
-    	
-        
-        $scope.loadMaterialTrans = function() { 
+
+
+        $scope.loadMaterialTrans = function() {
         	$scope.refreshPage();
         	$scope.search();
         	$location.path('/inventory-transaction-list');
         }
-        
+
         $scope.inventory.transactionDate = new Date();
-        $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-        $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-        
+        $scope.selectIssueDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+        $scope.selectReceivedDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+
         $('#dateFilterIssuedDate').datetimepicker().on('dp.show', function (e) {
             return $(this).data('DateTimePicker');
         });
 
         $('input#dateFilterIssuedDate').on('dp.change', function(e){
             $scope.inventory.transactionDate = e.date._d;
-            $scope.ppmFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectIssueDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
-        
+
         $('#dateFilterReceivedDate').datetimepicker().on('dp.show', function (e) {
             return $(this).data('DateTimePicker');
         });
 
         $('input#dateFilterReceivedDate').on('dp.change', function(e){
             $scope.inventory.transactionDate = e.date._d;
-            $scope.ppmTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectReceivedDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
         });
-        
+
     	$scope.change = function() {
 			console.log($scope.selectedItemCode);
 			if($scope.selectedItemCode){
@@ -267,9 +458,9 @@ angular.module('timeSheetApp')
 				$scope.inventory.quantity = $scope.selectedItemCode.issuedQuantity;
 				$scope.inventory.uom = $scope.selectedItemCode.materialUom;
 			}
-			
+
 		}
-    	
+
 //    	$scope.site = true;
 //    	$scope.loadSiteItems = function() {
 //    		if($scope.projectSite) {
@@ -286,17 +477,17 @@ angular.module('timeSheetApp')
 //    			});
 //    		}
 //    	}
-    	
+
     	$scope.selectedItems = [];
-    	
+
     	$scope.checkSelected = function(material) {
     		$scope.selectedItems.push(material);
     	}
-    	
+
     	$scope.allItemsSelected = false;
-    	
+
         $scope.selectAll = function () {
-        	
+
             $scope.selectedItems = [];
 
             // Loop through all the entities and set their isChecked property
@@ -311,7 +502,7 @@ angular.module('timeSheetApp')
                 $scope.selectedItems = [];
             }
         };
-        
+
         $scope.selectedOne = function (material) {
 
             if($scope.selectedItems.indexOf(material) <= -1){
@@ -337,7 +528,7 @@ angular.module('timeSheetApp')
             //If not the check the "allItemsSelected" checkbox
             $scope.allItemsSelected = true;
         };
-        
+
         $scope.validate = function(material, issuedQty) {   // 2
 			console.log(material);
 			console.log(issuedQty);
@@ -345,11 +536,11 @@ angular.module('timeSheetApp')
 				console.log("save issued request");
 				material.currentQuantity = issuedQty;
 			}else{
-				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a required quantity');
+				$scope.showNotifications('top','center','danger','Invalid Issue Qty');
 			}
-			
+
 		}
-        
+
         $scope.validateReq = function(material, approvedQty) {   // 2
 			console.log(material);
 			console.log(approvedQty);
@@ -357,65 +548,96 @@ angular.module('timeSheetApp')
 				console.log("save received request");
 				material.currentAprQty = approvedQty;
 			}else{
-				$scope.showNotifications('top','center','danger','Quantity cannot exceeds a approved quantity');
+				$scope.showNotifications('top','center','danger','Invalid Issue Qty');
 			}
-			
+
 		}
-        
-        $scope.changeType = function() { 
+
+        $scope.changeType = function() {
         	$scope.selectedIndent = null;
         	$scope.selectedPurchaseReq = null;
         	$scope.materialItems = [];
         	$scope.selectedItems = [];
         }
-        
-        
+
+
+        //Conformation modal
+
+        $scope.conform = function(text)
+        {
+            //console.log($scope.selectedProject)
+            $rootScope.conformText = text;
+            $('#conformationModal').modal();
+
+        }
+        $rootScope.back = function (text) {
+            if(text == 'cancel' || text == 'back')
+            {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.cancelInventoryTrans();
+            }
+            else if(text == 'save')
+            {
+                $scope.saveInventoryTrans();
+            }
+            else if(text == 'update')
+            {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updateInventoryTrans();
+            }
+        };
+
+        //
+
+
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {
-    		if($scope.client){
-    			$scope.inventory.projectId = $scope.client.id;
+    		if($scope.project){
+    			$scope.inventory.projectId = $scope.project.id;
     		}
-    		
+
     		if($scope.projectSite){
     			$scope.inventory.siteId = $scope.projectSite.id;
     		}
-    		
+
     		if($scope.selectedItemCode){
     			$scope.inventory.materialId = $scope.selectedItemCode.materialId
     			$scope.inventory.materialGroupId = $scope.selectedItemCode.materialItemGroupId;
     		}
-    		
-    		if($scope.selectedTransactionType === 'ISSUED') { 
+
+    		if($scope.selectedTransactionType === 'ISSUED') {
     			$scope.inventory.transactionType = $scope.selectedTransactionType;
     			$scope.inventory.materialIndentId = $scope.selectedIndent.id;
     			$scope.inventory.items = $scope.selectedItems;
-    			if($scope.selectedItems.length > 0) { 
+    			if($scope.selectedItems.length > 0) {
     				$scope.selectedItems.map(function(item) {
-    					if(item.currentQuantity >= 0) { 
+    					if(item.currentQuantity >= 0) {
     						item.issuedQuantity = item.currentQuantity;
     					}
     				});
     			}
     		}
-    		
+
     		if($scope.selectedTransactionType === 'RECEIVED') {
     			$scope.inventory.transactionType = $scope.selectedTransactionType;
     			$scope.inventory.purchaseRequisitionId = $scope.selectedPurchaseReq.id;
     			$scope.inventory.prItems = $scope.selectedItems;
     			if($scope.selectedItems.length > 0) {
-    				$scope.selectedItems.map(function(item) { 
+    				$scope.selectedItems.map(function(item) {
     					if(item.currentAprQty >= 0) {
-    						item.approvedQty = item.currentAprQty; 
+    						item.approvedQty = item.currentAprQty;
     					}
     				});
     			}
     		}
-    		
+
     		console.log($scope.selectedItems);
-    		
+
     		console.log(JSON.stringify($scope.inventory));
-    		
-    		InventoryTransactionComponent.create($scope.inventory).then(function(response) { 
+
+    		InventoryTransactionComponent.create($scope.inventory).then(function(response) {
     			console.log(response);
                 $scope.loadingStop();
                 $scope.inventory = "";
@@ -435,18 +657,18 @@ angular.module('timeSheetApp')
                     $scope.error = 'ERROR';
                 }
             });
-    		
-    		
+
+
     	}
-    	
+
     	$scope.viewInventoryTrans = function() {
-    		InventoryTransactionComponent.findById($stateParams.id).then(function(data) { 
+    		InventoryTransactionComponent.findById($stateParams.id).then(function(data) {
     			console.log(data);
     			$scope.transactionViews = data;
     			$scope.loadingStop();
     		});
     	}
-        
+
         /* delete material */
         $scope.deleteConfirm = function (id){
         	$scope.inventoryId = id;
@@ -460,33 +682,33 @@ angular.module('timeSheetApp')
         	});
         }
         /* end delete material */
-        
+
     	$scope.editInventoryTrans = function() {
-    		InventoryTransactionComponent.findById($stateParams.id).then(function(data) { 
+    		InventoryTransactionComponent.findById($stateParams.id).then(function(data) {
     			console.log(data);
     			$scope.editInventoryTrans = data;
     			$scope.editInventoryTrans.id = data.id;
     			$scope.editInventoryTrans.name = data.name;
     			$scope.editInventoryTrans.itemCode = data.itemCode;
     			$scope.selectedSite = {id: data.siteId, name: data.siteName};
-    			$scope.client = {id: data.projectId, name: data.projectName};
+    			$scope.project = {id: data.projectId, name: data.projectName};
     			$scope.editInventoryTrans.storeStock = data.storeStock;
     		});
     	}
-    	
+
     	/* Update Material transaction */
     	$scope.updateInventoryTrans = function () {
             $scope.error = null;
             $scope.success =null;
             $scope.loadingStart();
-        	if($scope.client){
-    			$scope.editInventoryTrans.projectId = $scope.client.id;
+        	if($scope.project){
+    			$scope.editInventoryTrans.projectId = $scope.project.id;
     		}
-    		
+
     		if($scope.selectedSite){
     			$scope.editInventoryTrans.siteId = $scope.selectedSite.id;
     		}
-    		
+
             console.log('Inventory details ='+ JSON.stringify($scope.editInventory));
 
              InventoryTransactionComponent.update($scope.editInventoryTrans).then(function () {
@@ -507,47 +729,48 @@ angular.module('timeSheetApp')
             });;
 
     	};
-    	
+
     	/* end update Material */
-    	
+
     	$scope.searchFilter = function () {
+            $('.AdvancedFilterModal.in').modal('hide');
             $scope.setPage(1);
             $scope.search();
          }
-    	
+
     	$scope.typeCheck = function(ref) {
     		console.log('called...' +ref);
-    		$scope.search = {};
-    		$scope.search.indentRefNumber = ref;
-    		IndentComponent.search($scope.search).then(function(data){ 
+    		$scope.searchTypeCheck = {};
+    		$scope.searchTypeCheck.indentRefNumber = ref;
+    		IndentComponent.search($scope.searchTypeCheck).then(function(data){
     			console.log(data.transactions);
     			$scope.lists = data.transactions;
     		});
     	}
-    	
-    	   $scope.isActiveAsc = 'id';
-           $scope.isActiveDesc = '';
 
-           $scope.columnAscOrder = function(field){
-               $scope.selectedColumn = field;
-               $scope.isActiveAsc = field;
-               $scope.isActiveDesc = '';
-               $scope.isAscOrder = true;
-               //$scope.search();
-               $scope.loadSites();
-           }
+        $scope.isActiveAsc = 'id';
+        $scope.isActiveDesc = '';
 
-           $scope.columnDescOrder = function(field){
-               $scope.selectedColumn = field;
-               $scope.isActiveDesc = field;
-               $scope.isActiveAsc = '';
-               $scope.isAscOrder = false;
-               //$scope.search();
-               $scope.loadSites();
-           }
-    	
-    	
-    	$scope.search = function () {										// search material 
+        $scope.columnAscOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isActiveAsc = field;
+            $scope.isActiveDesc = '';
+            $scope.isAscOrder = true;
+            $scope.search();
+
+        }
+
+        $scope.columnDescOrder = function(field){
+            $scope.selectedColumn = field;
+            $scope.isActiveDesc = field;
+            $scope.isActiveAsc = '';
+            $scope.isAscOrder = false;
+            $scope.search();
+
+        }
+
+        // search material transactions
+    	$scope.search = function () {
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -556,111 +779,248 @@ angular.module('timeSheetApp')
             	$scope.searchCriteria = searchCriteria;
         	}
 
-        	$scope.searchCriteria.currPage = currPageVal;
-        	console.log('Selected  module action -' + $scope.selectedInventorylist);
+            $scope.searchCriteria.currPage = currPageVal;
+            $scope.searchCriteria.findAll = false;
 
-        	if(!$scope.selectedInventorylist) {
-        		if($rootScope.searchCriteriaInventorylist) {
-            		$scope.searchCriteria = $rootScope.searchCriteriaInventorylist;
-        		}else {
-        			$scope.searchCriteria.findAll = true;
-        		}
-
-        	}else {
-	        	if($scope.selectedInventorylist) {
-	        		$scope.searchCriteria.findAll = false;
-		        	$scope.searchCriteria.inventorylistId = $scope.selectedInventorylist.id;
-		        	$scope.searchCriteria.name = $scope.selectedInventorylist.name;
-		        	$scope.searchCriteria.activeFlag = $scope.selectedInventorylist.activeFlag;
-		        	console.log('selected inventory id ='+ $scope.searchCriteria.inventorylistId);
-	        	}else {
-	        		$scope.searchCriteria.inventorylistId = 0;
-	        	}
-        	}
-        	if($scope.searchProject) { 
-        		$scope.searchCriteria.projectId = $scope.searchProject.id;
-        	}
-        	if($scope.searchSite) { 
-        		$scope.searchCriteria.siteId = $scope.searchSite.id;
-        	}
-        	if($scope.selectedManufacturer) { 
-        		$scope.searchCriteria.manufacturerId = $scope.selectedManufacturer.id;
-        	}
-        	if($scope.searchItemCode) {
-        		$scope.searchCriteria.itemCode = $scope.searchItemCode;
-        	}
-        	if($scope.searchItemName) {
-        		$scope.searchCriteria.materialName = $scope.searchItemName;
-        	}
-            if($scope.searchItemGroup) { 
-            	$scope.searchCriteria.itemGroup = $scope.searchItemGroup;
+            if($scope.client.selected && $scope.client.selected.id !=0){
+                $scope.searchProject = $scope.client.selected;
+            }else if($stateParams.project){
+                $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
+                $scope.client.selected =$scope.searchProject;
+                $scope.projectFilterFunction($scope.searchProject);
+            }else{
+                $scope.searchProject = null;
             }
-            if($scope.selectedTransactionType){
-            	$scope.searchCriteria.transactionType = $scope.selectedTransactionType;
+            if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
+                $scope.searchRegion = $scope.regionsListOne.selected;
+            }else{
+                $scope.searchRegion = null;
+            }
+            if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
+                $scope.searchBranch = $scope.branchsListOne.selected;
+            }else{
+                $scope.searchBranch = null;
+            }
+            if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
+                $scope.searchSite = $scope.sitesListOne.selected;
+            }else if($stateParams.site){
+                $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
+                $scope.sitesListOne.selected = $scope.searchSite;
+            }else{
+                $scope.searchSite = null;
+            }
+
+            $scope.searchCriteria.isReport = false;
+
+
+            if(!$scope.searchTransactionType && !$scope.searchItemCode && !$scope.searchItemName && !$scope.searchIndentNumber && !$scope.searchCreatedDate && !$scope.searchProject && !$scope.searchSite ) {
+                $scope.searchCriteria.findAll = true;
+            }
+
+            if($scope.searchProject) {
+                $scope.searchCriteria.projectId = $scope.searchProject.id;
+                $scope.searchCriteria.projectName = $scope.searchProject.name;
+            }else{
+                $scope.searchCriteria.projectId = null;
+                $scope.searchCriteria.projectName = null;
+            }
+            if($scope.searchRegion) {
+                $scope.searchCriteria.regionId = $scope.searchRegion.id;
+                $scope.searchCriteria.region = $scope.searchRegion.name;
+
+            }else {
+                $scope.searchCriteria.regionId = null;
+                $scope.searchCriteria.region = null;
+            }
+
+            if($scope.searchBranch) {
+                $scope.searchCriteria.branchId = $scope.searchBranch.id;
+                $scope.searchCriteria.branch = $scope.searchBranch.name;
+
+            }else {
+                $scope.searchCriteria.branchId = null;
+                $scope.searchCriteria.branch = null;
+            }
+
+            if($scope.searchSite) {
+                $scope.searchCriteria.siteId = $scope.searchSite.id;
+                $scope.searchCriteria.siteName = $scope.searchSite.name;
+            }else{
+                $scope.searchCriteria.siteId = null;
+                $scope.searchCriteria.siteName = null
+            }
+            if($scope.searchItemCode) {
+                $scope.searchCriteria.itemCode = $scope.searchItemCode;
+            }else{
+                $scope.searchCriteria.itemCode = "";
+            }
+            if($scope.searchItemName) {
+                $scope.searchCriteria.materialName = $scope.searchItemName;
+            }else{
+                $scope.searchCriteria.materialName = "";
+            }
+            if($scope.searchTransactionType) {
+                $scope.searchCriteria.materialTransactionType = $scope.searchTransactionType.id;
+                $scope.searchCriteria.materialTransactionTypeName = $scope.searchTransactionType.name;
+            }else{
+                $scope.searchCriteria.materialTransactionType = "";
+                $scope.searchCriteria.materialTransactionTypeName = "";
             }
             if($scope.searchIndentNumber) {
-            	$scope.searchCriteria.indentRefNumber = $scope.searchIndentNumber;
+                $scope.searchCriteria.indentRefNumber = $scope.searchIndentNumber;
+            }else{
+                $scope.searchCriteria.indentRefNumber = "";
             }
+
+            if($scope.searchCreatedDate){
+                $scope.searchCriteria.transactionDate = $scope.searchCreatedDateSer;
+
+            }else{
+                $scope.searchCriteria.transactionDate = null;
+            }
+
             if($scope.pageSort){
                 $scope.searchCriteria.sort = $scope.pageSort;
             }
+
             if($scope.selectedColumn){
 
                 $scope.searchCriteria.columnName = $scope.selectedColumn;
                 $scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
             }else{
-                $scope.searchCriteria.columnName ="id";
+                $scope.searchCriteria.columnName = 'id';
                 $scope.searchCriteria.sortByAsc = true;
             }
-            if($scope.searchCreatedDate != "") {
-                if($scope.searchCreatedDate != undefined){
-                $scope.searchCriteria.transactionDate = $scope.searchCreatedDateSer;
-                $scope.searchCriteria.findAll = false;
-               }else{
-                $scope.searchCriteria.transactionDate = null;
-                $scope.searchCriteria.findAll = true;
-               }
-	   	     }else{
-	                $scope.searchCriteria.transactionDate = null;
-	   	     }
-        	console.log($scope.searchCriteria);
+
         	$scope.inventoryTransactionlists = '';
         	$scope.inventoryTranslistLoader = false;
         	$scope.loadPageTop();
+
+            /* Localstorage (Retain old values while edit page to list) start */
+
+            if($rootScope.retain == 1){
+                $scope.localStorage = getLocalStorage.getSearch();
+                //console.log('Local storage---',$scope.localStorage);
+
+                if($scope.localStorage){
+                    $scope.filter = true;
+                    $scope.pages.currPage = $scope.localStorage.currPage;
+                    if($scope.localStorage.projectId){
+
+                        $scope.searchProject = {id:$scope.localStorage.projectId,name:$scope.localStorage.projectName};
+                        $scope.client.selected = $scope.searchProject;
+                        //$scope.loadDepSitesList($scope.client.selected);
+                        $scope.projectFilterFunction($scope.searchProject);
+                    }else{
+                        $scope.searchProject = null;
+                        $scope.client.selected = $scope.searchProject;
+                    }
+                    if($scope.localStorage.regionId){
+                        $scope.searchRegion = {id:$scope.localStorage.regionId,name:$scope.localStorage.region};
+                        $scope.regionsListOne.selected = $scope.searchRegion;
+
+                        $scope.regionFilterFunction($scope.searchProject);
+                    }else{
+                        $scope.searchRegion = null;
+                        $scope.regionsListOne.selected = $scope.searchRegion;
+                    }
+                    if($scope.localStorage.branchId){
+                        $scope.searchBranch = {id:$scope.localStorage.branchId,name:$scope.localStorage.branch};
+                        $scope.branchsListOne.selected = $scope.searchBranch;
+                        $scope.branchFilterFunction($scope.searchProject,$scope.searchRegion);
+
+                    }else{
+                        $scope.searchBranch = null;
+                        $scope.branchsListOne.selected = $scope.searchBranch;
+                    }
+                    if($scope.localStorage.siteId){
+                        $scope.searchSite = {id:$scope.localStorage.siteId,name:$scope.localStorage.siteName};
+                        $scope.sitesListOne.selected = $scope.searchSite;
+                        $scope.siteFilterDisable=false;
+                    }else{
+                        $scope.searchSite = null;
+                        $scope.sitesListOne.selected = $scope.searchSite;
+                    }
+                    if($scope.localStorage.transactionType){
+                        $scope.searchTransactionType = {id:$scope.localStorage.materialTransactionType,name:$scope.localStorage.materialTransactionTypeName};
+                    }else{
+                        $scope.searchTransactionType = null;
+                    }
+
+                    if($scope.localStorage.itemCode){
+                        $scope.searchItemCode  = $scope.localStorage.itemCode;
+                    }else{
+                        $scope.searchItemCode  = null;
+                    }
+                    if($scope.localStorage.materialName){
+                        $scope.searchItemName  = $scope.localStorage.materialName;
+                    }else{
+                        $scope.searchItemName  = null;
+                    }
+                    if($scope.localStorage.itemGroup){
+                        $scope.searchItemGroup  = $scope.localStorage.itemGroup;
+                    }else{
+                        $scope.searchItemGroup  = null;
+                    }
+                    if($scope.localStorage.indentRefNumber){
+                        $scope.searchIndentNumber  = $scope.localStorage.indentRefNumber;
+                    }else{
+                        $scope.searchIndentNumber  = null;
+                    }
+
+                    $scope.searchCreatedDate = $filter('date')($scope.localStorage.transactionDate, 'dd/MM/yyyy');
+                    $scope.searchCreatedDateSer = new Date($scope.localStorage.transactionDate);
+
+                }
+
+                $rootScope.retain = 0;
+
+                $scope.searchCriteras  = $scope.localStorage;
+            }else{
+
+                $scope.searchCriteras  = $scope.searchCriteria;
+            }
+
+            /* Localstorage (Retain old values while edit page to list) end */
+
         	InventoryTransactionComponent.search($scope.searchCriteria).then(function (data) {
         		console.log(data);
                 $scope.inventoryTransactionlists = data.transactions;
                 $scope.loadingStop();
                 $scope.inventoryTranslistLoader = true;
+
+                /** retaining list search value.**/
+                getLocalStorage.updateSearch($scope.searchCriteras);
+
                 /*
                  ** Call pagination  main function **
              */
 	             $scope.pager = {};
 	             $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
 	             $scope.totalCountPages = data.totalCount;
-	
+
 	             console.log("Pagination",$scope.pager);
-	             console.log("Asset List - ", data);
-	
+	             console.log("Inventory Transaction List - ", data);
+
 	             $scope.pages.currPage = data.currPage;
-	             $scope.pages.totalPages = data.totalPages;
+                 $scope.pages.totalPages = data.totalPages == 0 ? 1:data.totalPages;
 	             $scope.loading = false;
-	
+
 	             if($scope.inventoryTransactionlists && $scope.inventoryTransactionlists.length > 0 ){
 	                 $scope.showCurrPage = data.currPage;
 	                 $scope.pageEntries = $scope.inventoryTransactionlists.length;
 	                 $scope.totalCountPages = data.totalCount;
 	                 $scope.pageSort = 10;
-	
+
 	             $scope.noData = false;
-	
+
 	             }else{
 	                  $scope.noData = true;
 	             }
 
             });
-        	
+
         };
 
         $scope.setPage = function (page) {
@@ -669,14 +1029,11 @@ angular.module('timeSheetApp')
                 return;
             }
             $scope.pages.currPage = page;
-            if($scope.searchModule =='Transactions'){
-                $scope.loadPPMJobs();
-            }else{
-            	$scope.search();
-            }
+            $scope.search();
+
 
         }
-        
+
         $scope.loadSubModule = function(cb){
             $scope.pages = { currPage : 1};
             $scope.pager = {};
@@ -685,14 +1042,14 @@ angular.module('timeSheetApp')
 
 
 			//init load
-			$scope.initLoad = function(){ 
-			     $scope.loadPageTop(); 
+			$scope.initLoad = function(){
+			     $scope.loadPageTop();
 			     $scope.loadProjects();
 			     $scope.loadManufacturer();
-			     $scope.loadUOM();			  
+			     $scope.loadUOM();
 			 }
-			
-			$scope.initTransactionList = function() { 
+
+			$scope.initTransactionList = function() {
 				$scope.loadMaterialTrans();
 			     $scope.setPage(1);
 			}
@@ -708,20 +1065,20 @@ angular.module('timeSheetApp')
 
                 $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
                 $scope.loadingAuto = function(){
-                    $scope.loadingStart(); 
+                    $scope.loadingStart();
                     $scope.loadtimeOut = $timeout(function(){
-                    
+
                     //console.log("Calling loader stop");
                     $('.pageCenter').hide();$('.overlay').hide();
-                            
+
                 }, 2000);
                    // alert('hi');
                 }
                 $scope.loadingStop = function(){
-                    
+
                     console.log("Calling loader");
                     $('.pageCenter').hide();$('.overlay').hide();
-                            
+
                 }
 
                 $scope.exportAllData = function(type){
@@ -747,8 +1104,8 @@ angular.module('timeSheetApp')
                           console.log(err);
                   });
                };
-                
-                
+
+
                 $scope.exportStatusMap = [];
                 $scope.exportStatus = function() {
                     //console.log('empId='+$scope.empId);
@@ -817,7 +1174,7 @@ angular.module('timeSheetApp')
                         }
 
                 };
-                
+
              // store the interval promise in this variable
                 var promise;
 
@@ -836,6 +1193,202 @@ angular.module('timeSheetApp')
                   $interval.cancel(promise);
                 };
 
-    
-      
-});
+        //Search Filter Site Load Function
+
+        $scope.projectFilterFunction = function (searchProject){
+            $scope.siteSpin = true;
+            ProjectComponent.findSites(searchProject.id).then(function (data) {
+                $scope.selectedSite = null;
+                $scope.sitesList = data;
+                $scope.sitesLists = [];
+                $scope.sitesLists[0] = $scope.allSites;
+
+                for(var i=0;i<$scope.sitesList.length;i++)
+                {
+                    $scope.sitesLists[i+1] = $scope.sitesList[i];
+                }
+                $scope.siteFilterDisable = false;
+                $scope.siteSpin = false;
+            });
+
+        };
+
+        //Search Filter Region Load Function
+
+        $scope.regionFilterFunction = function (searchProject){
+            $scope.regionSpin = true;
+            SiteComponent.getRegionByProject(searchProject.id).then(function (response) {
+                //console.log(response);
+                $scope.regionList = response;
+                $scope.regionsLists = [];
+                //$scope.regionsListOne.selected = null;
+                $scope.regionsLists[0] = $scope.allRegions;
+
+                for(var i=0;i<$scope.regionList.length;i++)
+                {
+                    $scope.regionsLists[i+1] = $scope.regionList[i];
+                }
+
+                //console.log('region list : ' + JSON.stringify($scope.regionList));
+                $scope.regionSpin = false;
+                $scope.regionFilterDisable = false;
+                //callback();
+            });
+        };
+
+        //Search Filter Branch Load Function
+
+        $scope.branchFilterFunction = function (searchProject,searchRegion){
+            $scope.branchSpin = true;
+            SiteComponent.getBranchByProject(searchProject.id,searchRegion.id).then(function (response) {
+                // //console.log('branch',response);
+                $scope.branchList = response;
+                if($scope.branchList) {
+                    $scope.branchsLists = [];
+                    // $scope.branchsListOne.selected = null;
+                    $scope.branchsLists[0] = $scope.allBranchs;
+
+                    for(var i=0;i<$scope.branchList.length;i++)
+                    {
+                        $scope.branchsLists[i+1] = $scope.branchList[i];
+                    }
+                    /* if($scope.branchList) {
+                             for(var i = 0; i < $scope.branchList.length; i++) {
+                                 $scope.uiBranch.push($scope.branchList[i].name);
+                             }*/
+                    $scope.branchSpin = false;
+                    $scope.branchFilterDisable = false;
+                }
+                else{
+                    //console.log('branch list : ' + JSON.stringify($scope.branchList));
+                    $scope.getSitesBYRegionOrBranch($scope.searchProject.id,$scope.searchRegion.name,null);
+                    $scope.branchSpin = false;
+                    $scope.branchFilterDisable = false;
+                    //callback();
+                }
+
+            })
+        };
+
+
+        $scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
+            if(branch){
+                $scope.siteFilterDisable = true;
+                $scope.siteSpin = true;
+                SiteComponent.getSitesByBranch(projectId,region,branch).then(function (data) {
+                    $scope.selectedSite = null;
+                    $scope.sitesList = data;
+                    $scope.sitesLists = [];
+                    $scope.sitesListOne.selected = null;
+                    $scope.sitesLists[0] = $scope.allSites;
+
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.sitesLists[i+1] = $scope.sitesList[i];
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                });
+
+            }else if(region){
+                $scope.siteFilterDisable = true;
+                $scope.siteSpin = true;
+
+                SiteComponent.getSitesByRegion(projectId,region).then(function (data) {
+                    $scope.selectedSite = null;
+                    $scope.sitesList = data;
+                    $scope.sitesLists = [];
+                    $scope.sitesListOne.selected = null;
+                    $scope.sitesLists[0] = $scope.allSites;
+
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.sitesLists[i+1] = $scope.sitesList[i];
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                })
+
+            }/*else if(projectId >0){
+            $scope.siteFilterDisable = true;
+            $scope.siteSpin = true;
+            ProjectComponent.findSites(projectId).then(function (data) {
+                $scope.selectedSite = null;
+                $scope.sitesList = data;
+                $scope.sitesLists = [];
+                $scope.sitesListOne.selected = null;
+                $scope.sitesLists[0] = $scope.allSites;
+
+                for(var i=0;i<$scope.sitesList.length;i++)
+                {
+                    $scope.sitesLists[i+1] = $scope.sitesList[i];
+                }
+                $scope.siteFilterDisable = false;
+                $scope.siteSpin = false;
+            });
+        }else{
+
+        }*/
+        };
+
+        /*
+         * Ui select allow-clear modified function start
+         *
+         * */
+
+
+        $scope.clearProject = function($event) {
+            $event.stopPropagation();
+            $scope.client.selected = undefined;
+            $scope.regionsListOne.selected = undefined;
+            $scope.branchsListOne.selected = undefined;
+            $scope.sitesListOne.selected = undefined;
+            $scope.regionFilterDisable = true;
+            $scope.branchFilterDisable = true;
+            $scope.siteFilterDisable = true;
+            $scope.empListOne.selected = undefined;
+            $scope.employeeFilterDisable = true;
+
+        };
+
+        $scope.clearRegion = function($event) {
+            $event.stopPropagation();
+            $scope.regionsListOne.selected = undefined;
+            $scope.branchsListOne.selected = undefined;
+            $scope.sitesListOne.selected = undefined;
+            $scope.branchFilterDisable = true;
+            $scope.siteFilterDisable = true;
+            $scope.empListOne.selected = undefined;
+            $scope.employeeFilterDisable = true;
+
+        };
+
+        $scope.clearBranch = function($event) {
+            $event.stopPropagation();
+            $scope.branchsListOne.selected = undefined;
+            $scope.sitesListOne.selected = undefined;
+            $scope.siteFilterDisable = true;
+            $scope.empListOne.selected = undefined;
+            $scope.employeeFilterDisable = true;
+
+        };
+
+        $scope.clearSite = function($event) {
+            $event.stopPropagation();
+            $scope.sitesListOne.selected = null;
+            $scope.empListOne.selected = undefined;
+            $scope.employeeFilterDisable = true;
+
+        };
+
+
+
+        /*
+         * Ui select allow-clear modified function end
+         *
+         * */
+
+
+
+
+    });

@@ -30,7 +30,7 @@
                  <a class="download-btn" href="javascript:void(0);">{{exportMsg(0)}}</a>
             </span>
 
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-inventory"  has-permission="Location:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-inventory"  has-permission="Inventory:Create" ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
@@ -183,9 +183,9 @@
                                 <td>{{inventoryItem.projectName}}</td>
                                 <td>{{inventoryItem.siteName}}</td>
                                 <td>
-                                    <button  title="View" ui-sref="view-inventory({ id: inventoryItem.id })"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                    <a title="Edit" ng-class="{active: $state.includes('admin')}" ui-sref="edit-inventory({id: inventoryItem.id})"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                    <a title="Delete" ng-class="{active: $state.includes('admin')}"   ng-click="deleteConfirm(inventoryItem.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
+                                    <button  title="View" ui-sref="view-inventory({ id: inventoryItem.id })" has-permission="Inventory:View"   class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                    <a title="Edit" ng-class="{active: $state.includes('admin')}" has-permission="Inventory:Edit" ui-sref="edit-inventory({id: inventoryItem.id})"    class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                    <a title="Delete" ng-class="{active: $state.includes('admin')}" has-permission="Inventory:Delete"   ng-click="deleteConfirm(inventoryItem.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
                                 </td>
                             </tr>
                             </tbody>

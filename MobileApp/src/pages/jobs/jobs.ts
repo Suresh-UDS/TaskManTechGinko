@@ -71,6 +71,7 @@ export class JobsPage {
     }
 
     ionViewDidLoad() {
+      this.loadTodaysJobs();
     }
 
     doRefresh(refresher,segment)

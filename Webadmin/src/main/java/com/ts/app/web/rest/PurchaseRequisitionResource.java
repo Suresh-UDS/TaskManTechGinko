@@ -44,12 +44,12 @@ public class PurchaseRequisitionResource {
 	
 	@RequestMapping(value="/save/purchaseRequest", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public ResponseEntity<?> saveInventory(@Valid @RequestBody PurchaseReqDTO purchaseReqDTO, HttpServletRequest request) { 
-		log.debug("inventory object: {}", purchaseReqDTO);
+	public ResponseEntity<?> savePurchaseReq(@Valid @RequestBody PurchaseReqDTO purchaseReqDTO, HttpServletRequest request) {
+		log.debug("purchaseReq object: {}", purchaseReqDTO);
 		try {
 			purchaseReqDTO = purchaseReqService.createPurchaseRequest(purchaseReqDTO);
 		}catch(Exception e) { 
-			throw new TimesheetException("Error while create material Indent" + e);
+			throw new TimesheetException("Error while create Purchase Requisition" + e);
 		}
 		return new ResponseEntity<>(purchaseReqDTO, HttpStatus.CREATED);
 	}

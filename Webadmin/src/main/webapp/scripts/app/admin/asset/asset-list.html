@@ -829,7 +829,7 @@
                                     <span class="form-control-feedback d-md-arrow-icon" ng-show="!weekSchAssetsSpain"><i class="material-icons">keyboard_arrow_down</i></span>
                                     <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="!weekSchAssets && weekSchAssetsSpain"><i class="ld ld-ring ld-spin" ></i></span>
                                      <select name="weekSchAsset" ng-model="weekSchAsset"
-                                         class="form-control searchable-input floatL" ng-options="weekSchAssetList as weekSchAssetList.title  for weekSchAssetList in weekSchAssets | orderBy:'title'" required>
+                                         class="form-control searchable-input floatL" ng-options="weekSchAssetList as weekSchAssetList.title  for weekSchAssetList in weekSchAssets | orderBy:'title'" >
                                          <option value="">Select Asset</option>
                                      </select>
                                      <div ng-show="weekSchSiteFrom.$submitted || weekSchSiteFrom.weekSchAsset.$touched">

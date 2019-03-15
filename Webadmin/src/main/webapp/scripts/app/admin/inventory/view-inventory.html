@@ -163,21 +163,21 @@
                                                      <thead>
                                                      <tr>
                                                          <th width="30%"> Transaction Type</th>
-                                                         <th>Store Stock</th>
                                                          <th>Qty</th>
                                                          <th>Date</th>
-                                                         <th class="text-right">Actions</th>
+                                                         <th>Store Stock</th>
+                                                         <!-- <th class="text-right">Actions</th> -->
                                                      </tr>
                                                      </thead>
                                                      <tbody>
                                                      <tr ng-repeat="materialTransaction in materialTransactions">
                                                          <td>{{materialTransaction.transactionType}}</td>
-                                                         <td>{{materialTransaction.storeStock}}</td>
                                                          <td>{{materialTransaction.issuedQuantity}}</td>
                                                          <td>{{materialTransaction.transactionDate | date: "dd-MM-yyyy" }}</td>
-                                                         <td class="text-right">
+                                                         <td>{{materialTransaction.storeStock}}</td>
+                                                         <!-- <td class="text-right">
                                                              <a title="Delete" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
-                                                         </td>
+                                                         </td> -->
                                                      </tr>
                                                        <tr ng-show="!materialTransactions">
                                                        	<td colspan="5" align="center">No Transactions Found</td>

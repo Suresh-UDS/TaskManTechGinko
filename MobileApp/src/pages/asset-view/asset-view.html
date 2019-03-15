@@ -1022,7 +1022,7 @@
 
 
     <ion-list *ngSwitchCase="'inventoryTransaction'" class="assetview-padding" style="margin-top:18px">
-        <div  *ngIf="(!jobMaterials ||jobMaterials.length < 0) && spinner" text-center class="margin-top25">
+        <div  *ngIf="(!jobMaterials ||jobMaterials.length == 0) && spinner" text-center class="margin-top25">
             <ion-spinner name="circles"></ion-spinner>
         </div>
         <div *ngIf="(!jobMaterials || jobMaterials.length < 0) && !spinner"  text-center>
@@ -1032,15 +1032,15 @@
                 </ion-card-content>
             </ion-card>
         </div>
-        <div class="white-bg col-md-8 padding-right0 margin-top10" *ngFor="let m of assetMaterial">
-            <div *ngFor="let j of m.jobMaterials" class="padding-top5 white-bg col-md-8 padding-right0 margin-top10">
+        <!--<div class="white-bg col-md-8 padding-right0 margin-top10">-->
+            <div *ngFor="let j of jobMaterials" class="padding-top5 white-bg col-md-8 padding-right0 margin-top10">
 
                     <ion-row class="margin0">
                         <ion-col col-6>
                             Job Id:
                         </ion-col>
                         <ion-col col-6>
-                            #{{j.jobId}}
+                              {{j.jobId}}
                         </ion-col>
                         <ion-col col-6>
                             Material Name:
@@ -1074,7 +1074,7 @@
                         </ion-col>
                     </ion-row>
             </div>
-        </div>
+        <!--</div>-->
     </ion-list>
 
 

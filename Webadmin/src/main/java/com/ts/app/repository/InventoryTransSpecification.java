@@ -13,6 +13,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -48,6 +49,12 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if (searchCriteria.getSiteId() != 0) {
 			predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
 		}
+        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
+            predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
+        }
+        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
+            predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
+        }
 		if (searchCriteria.getMaterialId() != 0) {
 			predicates.add(builder.equal(root.get("material").get("id"), searchCriteria.getMaterialId()));
 		}
@@ -57,16 +64,16 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if(searchCriteria.getJobId() != 0) {
 			predicates.add(builder.equal(root.get("job").get("id"), searchCriteria.getJobId()));
 		}
-		if (searchCriteria.getMaterialName() != null && searchCriteria.getMaterialName() != "") {
-			predicates.add(builder.like(builder.lower(root.get("name")),
+		if (StringUtils.isNotEmpty(searchCriteria.getMaterialName())) {
+
+			predicates.add(builder.like(builder.lower(root.get("material").get("name")),
 					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
 		}
-		if(searchCriteria.getIndentRefNumber() != null) {
-			predicates.add(builder.like(builder.lower(root.get("materialIndent").get("indentRefNumber")),
-					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
+		if(searchCriteria.getIndentRefNumber() > 0) {
+            predicates.add(builder.equal(root.get("materialIndent").get("indentRefNumber").get("number"), searchCriteria.getIndentRefNumber()));
 		}
-		if (searchCriteria.getItemCode() != null && searchCriteria.getItemCode() !="") {
-			predicates.add(builder.like(builder.lower(root.get("itemCode")),
+		if (StringUtils.isNotEmpty(searchCriteria.getItemCode())) {
+			predicates.add(builder.like(builder.lower(root.get("material").get("itemCode")),
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
 		}
 		if (searchCriteria.getTransactionType() != null) {

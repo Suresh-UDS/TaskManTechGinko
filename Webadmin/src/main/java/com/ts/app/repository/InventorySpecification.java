@@ -45,6 +45,12 @@ public class InventorySpecification implements Specification<Material> {
 		if (searchCriteria.getSiteId() != 0) {
 			predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
 		}
+        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
+            predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
+        }
+        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
+            predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
+        }
 		if (searchCriteria.getManufacturerId() != 0) {
 			predicates.add(builder.equal(root.get("manufacturer").get("id"), searchCriteria.getManufacturerId()));
 		}

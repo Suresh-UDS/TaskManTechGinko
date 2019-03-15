@@ -43,6 +43,7 @@
 
                                    <th>Date</th>
                                    <th>Site</th>
+                                   <th>Category</th>
                                    <th>Transaction type</th>
                                    <th>  Debit</th>
                                    <th> credit</th>
@@ -58,6 +59,7 @@
 
                                     <td>{{expense.createdDate | date:'dd/MMM/yyyy'}}</td>
                                     <td>{{expense.siteName}}</td>
+                                    <td>{{expense.expenseCategory}}</td>
                                     <td>{{expense.mode}}</td>
                                     <td>
                                         <span style="color: red">{{expense.debitAmount}}</span>

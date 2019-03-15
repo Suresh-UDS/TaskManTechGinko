@@ -45,9 +45,14 @@ public class MaterialIndentSpecification implements Specification<MaterialIndent
 		if(searchCriteria.getProjectId() != 0) {
 			predicates.add(builder.equal(root.get("project").get("id"), searchCriteria.getProjectId()));
 		}
-		if (searchCriteria.getIndentRefNumber() != null && searchCriteria.getIndentRefNumber() != "") {
-			predicates.add(builder.like(builder.lower(root.get("indentRefNumber")),
-					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
+        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
+            predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
+        }
+        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
+            predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
+        }
+		if (searchCriteria.getIndentRefNumber() > 0) {
+            predicates.add(builder.equal(root.get("indentRefNumber").get("number"), searchCriteria.getIndentRefNumber()));
 		}
 		if(searchCriteria.getIndentStatus() != null) {
 			predicates.add(builder.equal(root.get("indentStatus"), searchCriteria.getIndentStatus()));

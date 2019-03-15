@@ -208,9 +208,9 @@ public class SearchCriteria extends Paginator {
 
 	private Timestamp issuedDate;
 
-	private String indentRefNumber;
+	private long indentRefNumber;
 
-	private String purchaseRefNumber;
+	private long purchaseRefNumber;
 
 	private Timestamp approvedDate;
 
@@ -1126,14 +1126,6 @@ public class SearchCriteria extends Paginator {
 		this.transactionToDate = transactionToDate;
 	}
 
-	public String getIndentRefNumber() {
-		return indentRefNumber;
-	}
-
-	public void setIndentRefNumber(String indentRefNumber) {
-		this.indentRefNumber = indentRefNumber;
-	}
-
 	public Timestamp getRequestedDate() {
 		return requestedDate;
 	}
@@ -1150,13 +1142,6 @@ public class SearchCriteria extends Paginator {
 		this.issuedDate = issuedDate;
 	}
 
-	public String getPurchaseRefNumber() {
-		return purchaseRefNumber;
-	}
-
-	public void setPurchaseRefNumber(String purchaseRefNumber) {
-		this.purchaseRefNumber = purchaseRefNumber;
-	}
 
 	public Timestamp getApprovedDate() {
 		return approvedDate;
@@ -1406,5 +1391,21 @@ public class SearchCriteria extends Paginator {
 
     public void setShowInActive(boolean showInActive) {
         this.showInActive = showInActive;
+    }
+
+    public long getIndentRefNumber() {
+        return indentRefNumber;
+    }
+
+    public void setIndentRefNumber(long indentRefNumber) {
+        this.indentRefNumber = indentRefNumber;
+    }
+
+    public long getPurchaseRefNumber() {
+        return purchaseRefNumber;
+    }
+
+    public void setPurchaseRefNumber(long purchaseRefNumber) {
+        this.purchaseRefNumber = purchaseRefNumber;
     }
 }
