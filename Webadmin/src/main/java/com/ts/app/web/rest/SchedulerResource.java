@@ -102,5 +102,11 @@ public class SchedulerResource {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/scheduler/sla/ticket", method = RequestMethod.GET)
+	public ResponseEntity<?> runTicketSLA() {
+		schedulerService.slaTicketEscalationNotification();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+			
 	
 }

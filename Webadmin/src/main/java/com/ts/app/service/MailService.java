@@ -744,7 +744,26 @@ public class MailService {
         context.setVariable("title", title);
         context.setVariable("desc", description);
         String content = templateEngine.process("ticketEscalation", context);
-        String subject = messageSource.getMessage("email.sla.ticket.title", null, locale);
+        Object[] values = new Object[1];
+        values[0] = siteName;
+        String subject = messageSource.getMessage("email.sla.ticket.title", values, locale);
+        sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+    }
+	
+	@Async
+	public void sendJobEscalationEmail(String email, String siteName, int level, long id, String url, String title, String description) {
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("siteName", siteName);
+        context.setVariable("level", level);
+        context.setVariable("url", url);
+        context.setVariable("id", id);
+        context.setVariable("title", title);
+        context.setVariable("desc", description);
+        String content = templateEngine.process("jobEscalation", context);
+        Object[] values = new Object[1];
+        values[0] = siteName;
+        String subject = messageSource.getMessage("email.sla.job.title", values, locale);
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 

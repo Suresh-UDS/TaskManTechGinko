@@ -338,7 +338,7 @@
                                                                 <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
                                                                 <span ng-show="mangSpin && !allManagers"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                                 <span ng-show="!mangSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                <select class=" form-control " ng-model="selectedManager" ng-init="selectedManager = selected" ng-options="manager as manager.name + '-' + manager.empId group by manager.designation for manager in allManagers | orderBy:'name' track by manager.name"  name="manager" tabindex="11">
+                                                                <select class=" form-control " ng-model="selectedManager" ng-init="selectedManager = selected" ng-options="manager as manager.name + '-' + manager.empId group by manager.designation for manager in allManagers | orderBy:'name' track by manager.name+'-'+manager.empId"  name="manager" tabindex="11">
                                                                     <option value="">Select Manager...</option>
                                                                 </select>
                                                                 <div ng-show="form.$submitted || form.manager.$touched || form.manager.$dirty">

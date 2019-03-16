@@ -107,6 +107,9 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     @Query("SELECT t FROM Ticket t WHERE t.status <> 'Closed' order by t.createdDate asc ")
     List<Ticket> findAllActiveUnClosedTicket();
 
+    @Query("SELECT t FROM Ticket t WHERE t.status <> 'Closed' and t.site.id = :siteId order by t.createdDate asc ")
+    List<Ticket> findAllActiveUnClosedTicket(@Param("siteId") long siteId);
+
     @Query("SELECT t FROM Ticket t WHERE t.assignedTo.id =:empId")
     List<Ticket> findByEmployee(@Param("empId") long empId);
 

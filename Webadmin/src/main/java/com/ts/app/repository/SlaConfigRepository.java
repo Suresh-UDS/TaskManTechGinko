@@ -14,7 +14,10 @@ public interface SlaConfigRepository extends JpaRepository<SlaConfig, Long>, Jpa
 	
 	@Query("SELECT s FROM SlaConfig s WHERE s.active='Y' order by last_modified_date desc")
 	List<SlaConfig> findActiveSlaConfig();
-	
+
+	@Query("SELECT s FROM SlaConfig s WHERE s.active='Y' and s.processType='Tickets' and s.site.id=:siteId order by last_modified_date desc")
+	List<SlaConfig> findActiveSlaConfig(@Param("siteId") long siteId);
+
 	@Query("SELECT s FROM SlaConfig s WHERE s.site.id = :siteId and s.active='Y'")
 	Page<SlaConfig> findSlaBySiteId(@Param("siteId") long siteId, Pageable pageRequest);
 	
