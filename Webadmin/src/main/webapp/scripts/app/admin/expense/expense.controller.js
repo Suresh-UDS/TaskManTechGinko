@@ -535,7 +535,7 @@ angular.module('timeSheetApp')
 
                         ExpenseComponent.search($scope.searchCriteria).then(function (data) {
                             console.log('expense search>>',data);
-                        $scope.expenses = data.transaction;
+                        $scope.expenses = data.transactions;
                         $scope.expensesLoader = true;
 
                         /** retaining list search value.**/
