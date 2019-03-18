@@ -148,24 +148,24 @@ email:
             title: Completed job report
 reports:
     job-report:
-        url: http://52.221.57.9:8088/#/job-reports
+        url: http://54.169.54.254:8088/#/job-reports
     attendance-report:
-        url: http://52.221.57.9:8088/#/attendance-reports
+        url: http://54.169.54.254:8088/#/attendance-reports
     feedback-report:
-        url: http://52.221.57.9:8088/#/feedbacksList
+        url: http://54.169.54.254:8088/#/feedbacks
     asset-report:
-        url: http://52.221.57.9:8088/#/asset-report
+        url: http://54.169.54.254:8088/#/asset-report
     vendor-report:
-        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
+        url: http://54.169.54.254:8088/#/vendor-report
     pr-report:
-        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/pr-report
+        url: http://54.169.54.254:8088/#/pr-report
     inventory-report:
-        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/inventory-report
+        url: http://54.169.54.254:8088/#/inventory-report
 
 url:
-    ticket-view: http://52.221.57.9:8088/#/view-ticket/
-    quotation-view: http://52.221.57.9:8088/#/view-quotation/
-    job-view: http://52.221.57.9:8088/#/view-job/
+    ticket-view: http://54.169.54.254:8088/#/view-ticket/
+    quotation-view: http://54.169.54.254:8088/#/view-quotation/
+    job-view: http://54.169.54.254:8088/#/view-job/
 
 #facedetection:
 #    api:
