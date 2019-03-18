@@ -3667,8 +3667,8 @@ angular.module('timeSheetApp')
 
 			}
 
-			$scope.imgNotValid=true;
-			$scope.imgSizeHigh=true;
+			$scope.imgNotValid=false;
+			$scope.imgSizeHigh=false;
 
 
 			$scope.uploadImage = function (files) {
@@ -3697,8 +3697,8 @@ angular.module('timeSheetApp')
 
 			}
 
-			$scope.fileNotValid=true;
-			$scope.fileSizeHigh=true;
+			$scope.fileNotValid=false;
+			$scope.fileSizeHigh=false;
 
 			$scope.uploadfileValidation = function (files) {
 

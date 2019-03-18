@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initLoad();loadExpenses();">
 
     <div class="row">
 
@@ -46,16 +46,12 @@
                     Site: {{searchCriteras.siteName}}
             </span>
 
-            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.issuedDate">
-                Issued Date: {{searchCriteras.issuedDate | date:'dd/MM/yyyy'}}
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.expenseMode != null">
+                Transaction Type: {{searchCriteras.expenseMode}}
             </span>
 
-            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.requestedDate">
-                Received Date: {{searchCriteras.requestedDate | date:'dd/MM/yyyy'}}
-            </span>
-
-            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.indentRefNumber">
-                indent.Ref.No: {{searchCriteras.indentRefNumber}}
+            <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.expenseCategory != null">
+                Expense Category: {{searchCriteras.expenseCategory}}
             </span>
 
         </span>
@@ -102,15 +98,15 @@
                                    </th>
                                    <th>Transaction type
                                        <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('expenseType')" ng-class="isActiveAsc == 'expenseType' ? 'active' : ''" >
+                                            <span ng-click="columnAscOrder('mode')" ng-class="isActiveAsc == 'mode' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('expenseType')" ng-class="isActiveDesc == 'expenseType' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('mode')" ng-class="isActiveDesc == 'mode' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
                                    </th>
-                                   <th>  Debit</th>
+                                   <th> Debit</th>
                                    <th> credit</th>
                                    <th> Balance</th>
                                    <th> Payment type</th>
@@ -138,7 +134,8 @@
                                     </td>
                                     <td>{{expense.paymentType}}</td>
                                     <td class="text-center">
-                                        <button  title="View"  class="btn btn-simple btn-info btn-icon like" ui-sref="view-expense({ id: expense.id })"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                        <a data-toggle="modal" title="View Expense"  data-target="#RightModal-View" ng-click="viewExpense(expense.id)"  has-permission="Expense:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like" ui-sref="view-expense({ id: expense.id })"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
                                         <!--<a title="Edit"  ui-sref="edit-expense({id: expense.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
 
                                         <!--<a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>-->
@@ -262,7 +259,7 @@
                             <div id="collapseOne" class="panel-collapse collapse collapseOne in" role="tabpanel" aria-labelledby="headingOne" aria-expanded="true" style="height: 225px;">
                                 <div class="panel-body">
 
-                                    <div class="row" ng-init="loadProjects();">
+                                    <div class="row">
 
                                         <div class="col-xs-12 col-md-6 col-lg-6" >
                                             <div class="form-group">
@@ -377,7 +374,7 @@
 
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group no-padding" >
-                                                <div class="dropdown" ng-init="loadTransactionType()">
+                                                <div class="dropdown">
                                                     <div class="form-group">
                                                         <label class="control-label">Search TransactionType</label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -392,7 +389,7 @@
                                         </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group no-padding" >
-                                                <div class="dropdown" ng-init="loadExpenseCategories()">
+                                                <div class="dropdown">
                                                     <div class="form-group">
                                                         <label class="control-label">Select Category</label>
                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -424,3 +421,153 @@
     </div>
 </div>
 <!--  End Modal -->
+
+<div class="modal right fade" id="RightModal-View" tabindex="-1" role="dialog" aria-labelledby="RightModal">
+    <div class="modal-dialogNew" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">View Expense  Details - ({{viewExpenseDetails.id}}) </h4>
+            </div>
+
+            <div class="modal-body ViewContentPageCon">
+
+                <!--<div class="titleCon margn-btm-12">
+                    <h3>Id - ({{viewExpenseDetails.id}})</h3>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Expense  Details</div>
+                            <div class="panel-body" style="min-height: 350px;">
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>Site </td>
+                                            <td>{{viewExpenseDetails.siteName}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Debit Amount </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.debitAmount">{{viewExpenseDetails.debitAmount}}</span>
+                                                <span ng-if="!viewExpenseDetails.debitAmount">-</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td>Payment Mode </td>
+                                            <td>{{viewExpenseDetails.mode}}
+                                                <span ng-if="viewExpenseDetails.mode">{{viewExpenseDetails.mode}}</span>
+                                                <span ng-if="!viewExpenseDetails.mode">-</span>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>Expense Category  </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.expenseCategory">{{viewExpenseDetails.expenseCategory}}</span>
+                                                <span ng-if="!viewExpenseDetails.expenseCategory">-</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Expense Date </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.createdDate">{{viewExpenseDetails.createdDate}}</span>
+                                                <span ng-if="!viewExpenseDetails.createdDate">-</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Payment Type </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.paymentType">{{viewExpenseDetails.paymentType}}</span>
+                                                <span ng-if="!viewExpenseDetails.paymentType">-</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Billable </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.billable">{{viewExpenseDetails.billable}}</span>
+                                                <span ng-if="!viewExpenseDetails.billable">-</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Reimbursable </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.reimbursable">{{viewExpenseDetails.reimbursable}}</span>
+                                                <span ng-if="!viewExpenseDetails.reimbursable">-</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Balance Amount </td>
+                                            <td>
+                                                <span ng-if="viewExpenseDetails.balanceAmount">{{viewExpenseDetails.balanceAmount}}</span>
+                                                <span ng-if="!viewExpenseDetails.balanceAmount">-</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Uploaded Documents</td>
+                                            <td>
+
+                                            <div class="row" >
+
+                                                <div class="col-md-3 txt-align-center DocsCon" ng-repeat="uploadFile in viewExpenseDetails.expenseDocumentList" >
+                                                    <!--<div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                        <i class="material-icons">close</i>
+                                                    </div>-->
+                                                    <div class="DownloadBtn" style="right: 12%;">
+                                                        <a href="{{uploadFile.fileUrl}}" id="loop" title="download">
+                                                            <i class="material-icons">cloud_download</i>
+                                                        </a>
+                                                    </div>
+                                                    <a href="javascript:void(0);"  ng-click="">
+                                                        <img src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
+                                                    </a>
+                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
+                                                    <div  ng-if="uploadFile.id == download">
+                                                        <a href="{{content}}" download>download</a>
+                                                    </div>
+
+                                                </div>
+                                                <span  ng-if="viewExpenseDetails.expenseDocumentList.length == 0"  >
+                                                    No Documents
+                                                </span>
+
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 txt-align-rgt">
+                        <button class="btn btn-default" type="button"
+                                data-dismiss="modal" id="close-button-right">
+                            Close
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div><!--End View modal -->

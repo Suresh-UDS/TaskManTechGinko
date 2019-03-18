@@ -2638,19 +2638,18 @@ angular.module('timeSheetApp')
 	 */
 
 	$scope.setPage = function (page) {
-
 		if (page < 1 || page > $scope.pager.totalPages) {
 			return;
 		}
-		//alert(page);
 		$scope.pages.currPage = page;
 		if($scope.curUrl =='employeeShifts'){
 
 			$scope.searchShift();
+			return false;
 
 		}else{
-
 			$scope.search();
+            return false;
 		}
 
 	};
