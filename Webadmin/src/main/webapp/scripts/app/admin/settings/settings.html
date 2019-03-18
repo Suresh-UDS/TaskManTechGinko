@@ -259,11 +259,6 @@
 
                                 </div>
                             </div>
-
-
-
-
-
                         </div>
                     </div>
                     <div class="checkbox">
@@ -315,10 +310,6 @@
 
                                 </div>
                             </div>
-
-
-
-
 
                         </div>
                     </div>
@@ -905,7 +896,7 @@
 
                                 <div class="form-group pdng-top15">
                                     <label class="control-label">Muster Report Email List</label>
-                                    <input type="text" class="form-control" ng-model="musterRollEmail">
+                                    <input type="text" class="form-control" ng-model="musterRollEmail" autocomplete="off">
                                 </div>
 
                             </div>
@@ -935,6 +926,58 @@
 		                                    {{emailId}}
 		                                    <span class="badge badge-default badge-pill" ng-click="removeMusterEmail($index)"><i class="material-icons">remove_circle</i></span>
 		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            Send Purchase Requisition Alert <input type="checkbox" name="terms" ng-model="settings.purchaseReqEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Send Purchase Requisition Email List</label>
+                                    <input type="text" class="form-control" ng-model="purchaseReqEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addPurchaseReqEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">EMail ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                        <li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.purchaseReqEmailIds" ng-bind-html-unsafe="emailId">
+                                            {{emailId}}
+                                            <span class="badge badge-default badge-pill" ng-click="removePurchaseReqEmail($index)"><i class="material-icons">remove_circle</i></span>
+                                        </li>
 
 
                                     </ul>
