@@ -152,7 +152,7 @@ reports:
     attendance-report:
         url: http://54.169.54.254:8088/#/attendance-reports
     feedback-report:
-        url: http://54.169.54.254:8088/#/feedbacks
+        url: http://54.169.54.254:8088/#/feedbacksList
     asset-report:
         url: http://54.169.54.254:8088/#/asset-report
     vendor-report:
