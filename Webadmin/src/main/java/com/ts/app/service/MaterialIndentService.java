@@ -266,14 +266,61 @@ public class MaterialIndentService extends AbstractService {
 				if(transactions == null) {
 					transactions = new ArrayList<MaterialIndentDTO>();
 				}
-	        		for(MaterialIndent material : allIndentsList) {
-	        			transactions.add(mapperUtil.toModel(material, MaterialIndentDTO.class));
+	        		for(MaterialIndent materialIndent : allIndentsList) {
+	        			transactions.add(mapToModel(materialIndent));
 	        		}
 				buildSearchResult(searchCriteria, page, transactions,result);
 			}
 		}
 		return result;
 	}
+
+	public MaterialIndentDTO mapToModel(MaterialIndent materialIndent) {
+	    MaterialIndentDTO materialIndentDTO = new MaterialIndentDTO();
+	    materialIndentDTO.setId(materialIndent.getId());
+	    materialIndentDTO.setProjectId(materialIndent.getProject().getId());
+	    materialIndentDTO.setProjectName(materialIndent.getProject().getName());
+	    materialIndentDTO.setSiteId(materialIndent.getSite().getId());
+	    materialIndentDTO.setSiteName(materialIndent.getSite().getName());
+	    if(materialIndent.getRequestedBy() != null) {
+	        materialIndentDTO.setRequestedById(materialIndent.getRequestedBy().getId());
+	        materialIndentDTO.setRequestedByName(materialIndent.getRequestedBy().getName());
+	        materialIndentDTO.setRequestedDate(materialIndent.getRequestedDate());
+        }
+	    if(materialIndent.getIssuedBy() != null) {
+	        materialIndentDTO.setIssuedById(materialIndent.getIssuedBy().getId());
+	        materialIndentDTO.setIssuedByName(materialIndent.getIssuedBy().getName());
+	        materialIndentDTO.setIssuedDate(materialIndent.getIssuedDate());
+        }
+        Set<MaterialIndentItem> matIndentItems = materialIndent.getItems();
+        if(CollectionUtils.isNotEmpty(matIndentItems)) {
+            List<MaterialIndentItemDTO> matIndentItemDTOS = new ArrayList<>();
+            for(MaterialIndentItem indentItem : matIndentItems) {
+                MaterialIndentItemDTO matIndentItemDTO = new MaterialIndentItemDTO();
+                matIndentItemDTO.setId(indentItem.getId());
+                if(indentItem.getMaterial() != null) {
+                    matIndentItemDTO.setMaterialId(indentItem.getMaterial().getId());
+                    matIndentItemDTO.setMaterialItemCode(indentItem.getMaterial().getItemCode());
+                    matIndentItemDTO.setMaterialItemGroupId(indentItem.getMaterial().getItemGroupId());
+                    matIndentItemDTO.setMaterialName(indentItem.getMaterial().getName());
+                    matIndentItemDTO.setMaterialStoreStock(indentItem.getMaterial().getStoreStock());
+                    matIndentItemDTO.setMaterialUom(indentItem.getMaterial().getUom());
+                }
+                matIndentItemDTO.setIssuedQuantity(indentItem.getIssuedQuantity());
+                matIndentItemDTO.setPendingQuantity(indentItem.getPendingQuantity());
+                matIndentItemDTO.setQuantity(indentItem.getQuantity());
+                matIndentItemDTOS.add(matIndentItemDTO);
+            }
+            materialIndentDTO.setItems(matIndentItemDTOS);
+        }
+        materialIndentDTO.setIndentRefNumber(materialIndent.getIndentRefNumber().getNumber());
+        materialIndentDTO.setIndentStatus(materialIndent.getIndentStatus());
+        materialIndentDTO.setPurpose(materialIndent.getPurpose());
+        if(materialIndent.getTransaction() != null) {
+            materialIndentDTO.setTransactionId(materialIndent.getTransaction().getId());
+        }
+        return materialIndentDTO;
+    }
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<MaterialIndent> page, List<MaterialIndentDTO> transactions, SearchResult<MaterialIndentDTO> result) {
 		if (page != null) {
