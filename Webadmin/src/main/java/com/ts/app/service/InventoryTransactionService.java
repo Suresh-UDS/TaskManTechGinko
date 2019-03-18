@@ -469,13 +469,97 @@ public class InventoryTransactionService extends AbstractService{
 					transactions = new ArrayList<MaterialTransactionDTO>();
 				}
 	        		for(MaterialTransaction materialTrans : allMaterialsTrans) {
-	        			transactions.add(mapperUtil.toModel(materialTrans, MaterialTransactionDTO.class));
+	        			transactions.add(mapToModel(materialTrans));
 	        		}
 				buildSearchResult(searchCriteria, page, transactions,result);
 			}
 		}
 		return result;
 	}
+
+	public MaterialTransactionDTO mapToModel(MaterialTransaction materialTransaction) {
+	    MaterialTransactionDTO materialTransactionDTO = new MaterialTransactionDTO();
+	    materialTransactionDTO.setId(materialTransaction.getId());
+	    materialTransactionDTO.setProjectId(materialTransaction.getProject().getId());
+	    materialTransactionDTO.setProjectName(materialTransaction.getProject().getName());
+	    materialTransactionDTO.setSiteId(materialTransaction.getSite().getId());
+	    materialTransactionDTO.setSiteName(materialTransaction.getSite().getName());
+	    if(materialTransaction.getJob() != null) {
+	        materialTransactionDTO.setJobId(materialTransaction.getJob().getId());
+        }
+	    if(materialTransaction.getAsset() != null) {
+	        materialTransactionDTO.setAssetId(materialTransaction.getAsset().getId());
+        }
+	    if(materialTransaction.getMaterial() != null) {
+	        materialTransactionDTO.setMaterialId(materialTransaction.getMaterial().getId());
+	        materialTransactionDTO.setMaterialName(materialTransaction.getMaterial().getName());
+	        materialTransactionDTO.setMaterialItemCode(materialTransaction.getMaterial().getItemCode());
+        }
+	    if(materialTransaction.getMaterialGroup() != null) {
+	        materialTransactionDTO.setMaterialGroupId(materialTransaction.getMaterialGroup().getId());
+	        materialTransactionDTO.setMaterialGroupItemGroup(materialTransaction.getMaterialGroup().getItemGroup());
+        }
+	    if(materialTransaction.getMaterialIndent() != null) {
+	        materialTransactionDTO.setMaterialIndentId(materialTransaction.getMaterialIndent().getId());
+	        materialTransactionDTO.setMaterialIndentRefNumber(materialTransaction.getMaterialIndent().getIndentRefNumber().getNumber());
+            Set<MaterialIndentItem> matIndentItems = materialTransaction.getMaterialIndent().getItems();
+            if(CollectionUtils.isNotEmpty(matIndentItems)) {
+                List<MaterialIndentItemDTO> matIndentItemDTOS = new ArrayList<>();
+                for(MaterialIndentItem indentItem : matIndentItems) {
+                    MaterialIndentItemDTO matIndentItemDTO = new MaterialIndentItemDTO();
+                    matIndentItemDTO.setId(indentItem.getId());
+                    if(indentItem.getMaterial() != null) {
+                        matIndentItemDTO.setMaterialId(indentItem.getMaterial().getId());
+                        matIndentItemDTO.setMaterialItemCode(indentItem.getMaterial().getItemCode());
+                        matIndentItemDTO.setMaterialItemGroupId(indentItem.getMaterial().getItemGroupId());
+                        matIndentItemDTO.setMaterialName(indentItem.getMaterial().getName());
+                        matIndentItemDTO.setMaterialStoreStock(indentItem.getMaterial().getStoreStock());
+                        matIndentItemDTO.setMaterialUom(indentItem.getMaterial().getUom());
+                    }
+                    matIndentItemDTO.setIssuedQuantity(indentItem.getIssuedQuantity());
+                    matIndentItemDTO.setPendingQuantity(indentItem.getPendingQuantity());
+                    matIndentItemDTO.setQuantity(indentItem.getQuantity());
+                    matIndentItemDTOS.add(matIndentItemDTO);
+                }
+                materialTransactionDTO.setItems(matIndentItemDTOS);
+
+            }
+        }
+	    if(materialTransaction.getPurchaseRequisition() != null) {
+	        materialTransactionDTO.setPurchaseRequisitionId(materialTransaction.getPurchaseRequisition().getId());
+	        materialTransactionDTO.setPurchaseRefNumber(materialTransaction.getPurchaseRequisition().getPurchaseRefNumber().getNumber());
+            Set<PurchaseRequisitionItem> purchaseRequisitionItems = materialTransaction.getPurchaseRequisition().getItems();
+            if(CollectionUtils.isNotEmpty(purchaseRequisitionItems)) {
+                List<PurchaseReqItemDTO> purchaseReqItemDTOS = new ArrayList<>();
+                for(PurchaseRequisitionItem purchaseRequItem : purchaseRequisitionItems) {
+                    PurchaseReqItemDTO purchaseReqItemDTO = new PurchaseReqItemDTO();
+                    purchaseReqItemDTO.setId(purchaseRequItem.getId());
+                    if(purchaseRequItem.getMaterial() != null) {
+                        purchaseReqItemDTO.setMaterialId(purchaseRequItem.getMaterial().getId());
+                        purchaseReqItemDTO.setMaterialItemCode(purchaseRequItem.getMaterial().getItemCode());
+                        purchaseReqItemDTO.setMaterialItemGroupId(purchaseRequItem.getMaterial().getItemGroupId());
+                        purchaseReqItemDTO.setMaterialName(purchaseRequItem.getMaterial().getName());
+                        purchaseReqItemDTO.setMaterialStoreStock(purchaseRequItem.getMaterial().getStoreStock());
+                        purchaseReqItemDTO.setMaterialUom(purchaseRequItem.getMaterial().getUom());
+                    }
+                    purchaseReqItemDTO.setApprovedQty(purchaseRequItem.getApprovedQty());
+                    purchaseReqItemDTO.setPendingQty(purchaseRequItem.getPendingQty());
+                    purchaseReqItemDTO.setQuantity(purchaseRequItem.getQuantity());
+                    purchaseReqItemDTO.setUnitPrice(purchaseRequItem.getUnitPrice());
+                    purchaseReqItemDTOS.add(purchaseReqItemDTO);
+                }
+                materialTransactionDTO.setPrItems(purchaseReqItemDTOS);
+
+            }
+        }
+	    materialTransactionDTO.setQuantity(materialTransaction.getQuantity());
+	    materialTransactionDTO.setIssuedQuantity(materialTransaction.getIssuedQuantity());
+	    materialTransactionDTO.setStoreStock(materialTransaction.getStoreStock());
+	    materialTransactionDTO.setTransactionDate(materialTransaction.getTransactionDate());
+	    materialTransactionDTO.setTransactionType(materialTransaction.getTransactionType());
+
+        return materialTransactionDTO;
+    }
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<MaterialTransaction> page, List<MaterialTransactionDTO> transactions, SearchResult<MaterialTransactionDTO> result) {
 		if (page != null) {
