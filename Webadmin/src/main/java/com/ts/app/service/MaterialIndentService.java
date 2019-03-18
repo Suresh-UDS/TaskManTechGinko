@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -299,6 +300,7 @@ public class MaterialIndentService extends AbstractService {
 		matIndent.setIssuedDate(DateUtil.convertToTimestamp(new Date()));
 		Site site = siteRepository.findOne(materialIndentDto.getSiteId());
 		String siteName = site.getName();
+		long siteId = site.getId();
 		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialIndentDto.getItems();
 		Set<MaterialIndentItem> itemEntities = matIndent.getItems();
@@ -356,17 +358,28 @@ public class MaterialIndentService extends AbstractService {
 							purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
 							addPurchaseReqItem(purchaseRequest, materialItm);
 						
-							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
+							List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ, siteId);
 							
-							log.debug("Setting Email list -" + setting);
+							log.debug("Setting Email list -" + settings.toString());
 
-							if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+                            Setting purchaseReqSetting = null;
+                            if (CollectionUtils.isNotEmpty(settings)) {
+                                List<Setting> purchaseReqSettings = settings;
+                                for(Setting eodSetting : purchaseReqSettings) {
+                                    if(eodSetting.getSettingValue().equalsIgnoreCase("true")) {
+                                        purchaseReqSetting = eodSetting;
+                                    }
+                                }
 
-								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+                            }
 
-								if(settingEntity.getSettingValue().length() > 0) {
+							if(purchaseReqSetting != null && purchaseReqSetting.getSettingValue().equalsIgnoreCase("true") ) {
 
-									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								List<Setting> settingEntity = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS, siteId);
+                                Setting emailSetting = null;
+								if(CollectionUtils.isNotEmpty(settingEntity)) {
+                                    emailSetting = settingEntity.get(0);
+									List<String> emailLists = CommonUtil.convertToList(emailSetting.getSettingValue(), ",");
 									for(String email : emailLists) {
 										mailService.sendPurchaseRequest(email, materialItm.getItemCode(), siteName, materialItm.getName());
 									}
@@ -375,7 +388,10 @@ public class MaterialIndentService extends AbstractService {
 
 									log.info("There is no email ids registered");
 								}
-							}
+							} else {
+
+							    log.debug("Purchase request email setting is false for " + siteName);
+                            }
 							
 						} 
 						

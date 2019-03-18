@@ -227,18 +227,30 @@ public class InventoryTransactionService extends AbstractService{
 								
 								Site site = siteRepository.findOne(materialTransDTO.getSiteId());
 								String siteName = site.getName();
+								long siteId = site.getId();
 								
-								Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
+								List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ, siteId);
 								
-								log.debug("Setting Email list -" + setting);
+								log.debug("Setting Email list -" + settings.toString());
 
-								if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+                                Setting purchaseRequestSetting = null;
+                                if (CollectionUtils.isNotEmpty(settings)) {
+                                    List<Setting> purchaseRequestSettings = settings;
+                                    for(Setting purchaseReqSetting : purchaseRequestSettings) {
+                                        if(purchaseReqSetting.getSettingValue().equalsIgnoreCase("true")) {
+                                            purchaseRequestSetting = purchaseReqSetting;
+                                        }
+                                    }
 
-									Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+                                }
 
-									if(settingEntity.getSettingValue().length() > 0) {
+								if(purchaseRequestSetting != null && purchaseRequestSetting.getSettingValue().equalsIgnoreCase("true") ) {
 
-										List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+									List<Setting> settingEntity = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS, siteId);
+                                    Setting reqEmailSetting = null;
+									if(CollectionUtils.isNotEmpty(settingEntity)) {
+                                        reqEmailSetting = settingEntity.get(0);
+										List<String> emailLists = CommonUtil.convertToList(reqEmailSetting.getSettingValue(), ",");
 										for(String email : emailLists) {
 											mailService.sendPurchaseRequest(email, materialItm.getItemCode(), siteName, materialItm.getName());
 										}
@@ -247,7 +259,9 @@ public class InventoryTransactionService extends AbstractService{
 
 										log.info("There is no email ids registered");
 									}
-								}
+								} else {
+								    log.debug("Purchase request email setting is false for " + siteName);
+                                }
 								
 							} 
 							
