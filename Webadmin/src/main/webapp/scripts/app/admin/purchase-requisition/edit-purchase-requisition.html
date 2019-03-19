@@ -3,19 +3,19 @@
     <div  ng-init="loadPageTop();loadProjects();loadUOM();editPurchaseReq();">
 
 
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
-
-
         <!--<div class="card-header" data-background-color="red">-->
         <!--<h4 class="title">Add Site</h4>-->
         <!--<p class="category"></p>-->
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
+            <div class="row">
+                <div class="col-md-12">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
+                </div>
+            </div>
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="saveInventory()">
+                  ng-submit="saveInventory()" confirm-on-exit>
 
 
                 <div class="card margin-TB-5 tablecard addFrom">
@@ -235,7 +235,7 @@
 
                     <div class="col-md-12">
 
-                        <button type="button" ng-click="conform('back')" 
+                        <button type="button" ng-click="conform('cancel')"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <!--<button type="submit"-->

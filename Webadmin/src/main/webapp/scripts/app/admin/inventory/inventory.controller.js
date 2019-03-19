@@ -501,7 +501,8 @@ angular.module('timeSheetApp')
         	InventoryComponent.remove($scope.inventoryId).then(function(){
             	$scope.success = 'OK';
                 $scope.showNotifications('top','center','success','Material has been deleted successfully!!');
-            	$scope.loadMaterials();
+                $rootScope.retain=1;
+                $scope.search();
         	});
         }
         /* end delete material */
@@ -823,8 +824,13 @@ angular.module('timeSheetApp')
                         $scope.searchItemGroup  = null;
                     }
 
-                    $scope.searchCreatedDate = $filter('date')($scope.localStorage.materialCreatedDate, 'dd/MM/yyyy');
-                    $scope.searchCreatedDateSer = new Date($scope.localStorage.materialCreatedDate);
+                    if($scope.localStorage.materialCreatedDate){
+                        $scope.searchCreatedDate = $filter('date')($scope.localStorage.materialCreatedDate, 'dd/MM/yyyy');
+                        $scope.searchCreatedDateSer = new Date($scope.localStorage.materialCreatedDate);
+                    }else{
+                        $scope.searchCreatedDate = null;
+                        $scope.searchCreatedDateSer = null;
+                    }
 
                 }
 

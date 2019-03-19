@@ -14,8 +14,13 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
+            <div class="row">
+                <div class="col-md-12">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
+                </div>
+            </div>
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="saveInventory()">
+                  ng-submit="saveInventory()" confirm-on-exit>
 
 
                 <div class="card margin-TB-5 tablecard addFrom">
@@ -56,7 +61,7 @@
                                             <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="loadEmployees();loadPurchases();" ng-disabled = "sites.length == 0" class="form-control" required>
                                                 <option value="">Select...</option>
                                             </select>
-                                            <p style="height: 20px;"><span ng-if="sites.length == 0"  class="error-msg margin0">No Sites</span></p>
+                                            <p><span ng-if="sites.length == 0"  class="error-msg margin0">No Sites</span></p>
                                              <div ng-show="form.$submitted || form.site.$touched">
                                                 <div ng-show="form.site.$dirty || form.site.$invalid">
                                                     <p class="help-block" style="color: maroon"
@@ -231,7 +236,7 @@
 
                     <div class="col-md-12">
 
-                        <button type="submit" ng-click="cancelPurchase()"
+                        <button type="submit" ng-click="conform('cancel')"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <!--<button type="submit"-->

@@ -53,6 +53,13 @@ angular.module('timeSheetApp')
 
         $rootScope.exportStatusObj  ={};
 
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+        }
+
+        $scope.initCalender();
+
 			//init load
 			$scope.initLoad = function(){
 			    $scope.loadPageTop();
@@ -63,7 +70,8 @@ angular.module('timeSheetApp')
 			 }
 
             $scope.initList = function() {
-                $scope.loadPurchaseRequisition();
+                //$scope.loadPurchaseRequisition();
+                $scope.loadPageTop();
                 $scope.setPage(1);
             }
 
@@ -101,24 +109,49 @@ angular.module('timeSheetApp')
                 };
 
 
-        $scope.conform = function(text)
+        $scope.conform = function(text,val=null,type=null)
         {
+
             $rootScope.conformText = text;
+            $scope.pId = val;
+            $scope.type= type;
             $('#conformationModal').modal();
 
         }
         $rootScope.back = function (text) {
+
             if(text == 'cancel' || text == 'back'){
-                /** @reatin - retaining scope value.**/
+                /** @retain - retaining scope value.**/
                 $rootScope.retain=1;
                  $scope.cancelPurchase();
             }else if(text == 'save'){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.savePurchase()
+            }else if(text == 'APPROVED' && $scope.type){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updatePurchaseReq('APPROVED');
+            }else if(text == 'REJECTED' && $scope.type){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updatePurchaseReq('REJECTED');
             }else if(text == 'update'){
-                /** @reatin - retaining scope value.**/
+                /** @retain - retaining scope value.**/
                 $rootScope.retain=1;
                 $scope.updatePurchaseReq();
+            }else if(text == 'Approved'){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                submitPurchaseReq($scope.pId,'Approved');
+            }else if(text == 'Rejected'){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                submitPurchaseReq($scope.pId,'Rejected');
             }
+            $rootScope.conformText = "";
+            $scope.pId = null;
+            $scope.type= null;
         };
 
 
@@ -297,6 +330,7 @@ angular.module('timeSheetApp')
                 $scope.exportAllData = function(type){
                     $rootScope.exportStatusObj.exportMsg = '';
                     $scope.downloader=true;
+                    $scope.downloaded = false;
                     $scope.searchCriteria.exportType = type;
                     $scope.searchCriteria.report = true;
 
@@ -525,10 +559,22 @@ angular.module('timeSheetApp')
                             }else{
                                 $scope.searchReferenceNumber  = null;
                             }
-                            $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
-                            $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
-                            $scope.searchApprovedDate = $filter('date')($scope.localStorage.approvedDate, 'dd/MM/yyyy');
-                            $scope.searchApprovedDateSer = new Date($scope.localStorage.approvedDate);
+                            if($scope.localStorage.requestedDate){
+                                $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
+                                $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
+                            }else{
+                                $scope.searchRequestedDate = null;
+                                $scope.searchRequestedDateSer = null;
+                            }
+                            if($scope.localStorage.approvedDate){
+                                $scope.searchApprovedDate = $filter('date')($scope.localStorage.approvedDate, 'dd/MM/yyyy');
+                                $scope.searchApprovedDateSer = new Date($scope.localStorage.approvedDate);
+                            }else{
+                                $scope.searchApprovedDate = null;
+                                $scope.searchApprovedDateSer = null;
+                            }
+
+
 
                         }
 
@@ -881,8 +927,10 @@ angular.module('timeSheetApp')
             }
 
                 $scope.updatePurchaseReq = function(status) {
+                         $scope.loadingStart();
                 		if(status == 'APPROVED' && !$scope.isValid) {
                 			$scope.showNotifications('top','center','danger','Invalid Approved Quantity');
+                            $scope.loadingStop();
                 			return;
                 		}
                     $scope.saveLoad = true;
@@ -1027,6 +1075,8 @@ angular.module('timeSheetApp')
                 $scope.searchReferenceNumber = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
+                $scope.downloader=false;
+                $scope.downloaded = true;
 
                 $scope.siteFilterDisable = true;
                 $scope.regionFilterDisable = true;
@@ -1057,10 +1107,12 @@ angular.module('timeSheetApp')
 
 
             $scope.deletePurchase = function () {
+                $('.delete-confirmation').modal('hide');
                     PurchaseComponent.remove($scope.deletePurchaseId).then(function(){
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Purchase requisition has been deleted successfully!!');
-                        $scope.loadPurchaseReq();
+                        $rootScope.retain=1;
+                        $scope.searchFilter();
                     });
             }
 
@@ -1152,6 +1204,14 @@ angular.module('timeSheetApp')
             $scope.stop = function() {
               $interval.cancel(promise);
             };
+
+            $scope.downloaded = false;
+
+            $scope.clsDownload = function(){
+                $scope.downloaded = true;
+                $rootScope.exportStatusObj = {};
+                $scope.exportStatusMap = [];
+            }
 
 
             $('input#dateFilterRequestedDate').on('dp.change', function(e){
@@ -1319,8 +1379,6 @@ angular.module('timeSheetApp')
             $scope.regionFilterDisable = true;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
@@ -1331,8 +1389,6 @@ angular.module('timeSheetApp')
             $scope.sitesListOne.selected = undefined;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
@@ -1341,16 +1397,12 @@ angular.module('timeSheetApp')
             $scope.branchsListOne.selected = undefined;
             $scope.sitesListOne.selected = undefined;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
         $scope.clearSite = function($event) {
             $event.stopPropagation();
             $scope.sitesListOne.selected = null;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 

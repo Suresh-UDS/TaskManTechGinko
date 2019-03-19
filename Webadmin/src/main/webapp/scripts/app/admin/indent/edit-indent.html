@@ -1,6 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="initLoad();editIndent();loadingStart();">
+    <div  ng-init="initLoad();editIndent();">
 
 
         <div class="col-md-8">
@@ -38,7 +38,7 @@
                             <div class="col-md-4">
                                 <div class="form-group no-padding">
                                     <div class="dropdown">
-                                        <div class="form-group" ng-init="loadAllSites()">
+                                        <div class="form-group">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                             <select ng-options = "site as site.name for site in sites track by site.id" ng-change="loadEmployees()" ng-disabled="true" ng-model ="selectedSite" class="form-control">
@@ -173,7 +173,7 @@
 
                     <div class="col-md-12">
 
-                        <button type="button" ng-click="cancelIndent()"
+                        <button type="button" ng-click="conform('cancel')"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
 
