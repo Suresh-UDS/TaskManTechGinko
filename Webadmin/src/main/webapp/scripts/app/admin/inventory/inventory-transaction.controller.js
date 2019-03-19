@@ -77,6 +77,8 @@ angular.module('timeSheetApp')
             $scope.searchProject ={};
             $scope.selectedItemGroup ={};
             $scope.searchTransactionType = null;
+            $scope.downloader=false;
+            $scope.downloaded = true;
 
             $scope.siteFilterDisable = true;
             $scope.regionFilterDisable = true;
@@ -661,12 +663,16 @@ angular.module('timeSheetApp')
 
     	}
 
-    	$scope.viewInventoryTrans = function() {
-    		InventoryTransactionComponent.findById($stateParams.id).then(function(data) {
-    			console.log(data);
-    			$scope.transactionViews = data;
-    			$scope.loadingStop();
-    		});
+    	$scope.viewInventoryTrans = function(id) {
+    	    if(id){
+                $scope.loadingStart();
+                $scope.transactionViews = "";
+                InventoryTransactionComponent.findById(id).then(function(data) {
+                    console.log(data);
+                    $scope.transactionViews = data;
+                    $scope.loadingStop();
+                });
+            }
     	}
 
         /* delete material */
@@ -771,6 +777,7 @@ angular.module('timeSheetApp')
 
         // search material transactions
     	$scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -982,7 +989,7 @@ angular.module('timeSheetApp')
 
             /* Localstorage (Retain old values while edit page to list) end */
 
-        	InventoryTransactionComponent.search($scope.searchCriteria).then(function (data) {
+        	InventoryTransactionComponent.search($scope.searchCriteras).then(function (data) {
         		console.log(data);
                 $scope.inventoryTransactionlists = data.transactions;
                 $scope.loadingStop();
@@ -1048,40 +1055,15 @@ angular.module('timeSheetApp')
 			 }
 
 			$scope.initTransactionList = function() {
-				$scope.loadMaterialTrans();
+				//$scope.loadMaterialTrans();
+                 $scope.loadPageTop();
 			     $scope.setPage(1);
 			}
-
-			//Loading Page go to top position
-			$scope.loadPageTop = function(){
-			    //alert("test");
-			    //$("#loadPage").scrollTop();
-			    $("#loadPage").animate({scrollTop: 0}, 2000);
-			}
-
-               // Page Loader Function
-
-                $scope.loadingStart = function(){ $('.pageCenter').show();$('.overlay').show();}
-                $scope.loadingAuto = function(){
-                    $scope.loadingStart();
-                    $scope.loadtimeOut = $timeout(function(){
-
-                    //console.log("Calling loader stop");
-                    $('.pageCenter').hide();$('.overlay').hide();
-
-                }, 2000);
-                   // alert('hi');
-                }
-                $scope.loadingStop = function(){
-
-                    console.log("Calling loader");
-                    $('.pageCenter').hide();$('.overlay').hide();
-
-                }
 
                 $scope.exportAllData = function(type){
                     $rootScope.exportStatusObj.exportMsg = '';
                     $scope.downloader=true;
+                    $scope.downloaded = false;
                     $scope.searchCriteria.exportType = type;
                     $scope.searchCriteria.report = true;
 
@@ -1190,6 +1172,14 @@ angular.module('timeSheetApp')
                 $scope.stop = function() {
                   $interval.cancel(promise);
                 };
+
+                $scope.downloaded = false;
+
+                $scope.clsDownload = function(){
+                    $scope.downloaded = true;
+                    $rootScope.exportStatusObj = {};
+                    $scope.exportStatusMap = [];
+                }
 
         //Search Filter Site Load Function
 
@@ -1344,8 +1334,7 @@ angular.module('timeSheetApp')
             $scope.regionFilterDisable = true;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
+
 
         };
 
@@ -1356,8 +1345,7 @@ angular.module('timeSheetApp')
             $scope.sitesListOne.selected = undefined;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
+
 
         };
 
@@ -1366,16 +1354,13 @@ angular.module('timeSheetApp')
             $scope.branchsListOne.selected = undefined;
             $scope.sitesListOne.selected = undefined;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
+
 
         };
 
         $scope.clearSite = function($event) {
             $event.stopPropagation();
             $scope.sitesListOne.selected = null;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 

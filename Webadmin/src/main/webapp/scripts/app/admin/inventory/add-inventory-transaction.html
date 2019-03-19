@@ -15,7 +15,7 @@
 
            <div class="cardsCon addSiteCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveInventoryTrans()">
+                     ng-submit="saveInventoryTrans()" confirm-on-exit>
 
                    <div class="row">
                        <div class="col-md-12">
@@ -325,7 +325,7 @@
 
                        <div class="col-md-12">
 
-                           <button type="button" ng-click="cancelInventoryTrans()"
+                           <button type="button" ng-click="conform('cancel')"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                            <button type="submit"
