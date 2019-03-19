@@ -25,7 +25,8 @@ angular.module('timeSheetApp')
         $scope.searchItemGroup = null;
         $scope.searchIndentNumber = null;
         $scope.searchTransactionType = null;
-        $scope.selectedTransactionType = "RECEIVED";
+        //$scope.selectedTransactionType = "RECEIVED";
+        $scope.selectedTransactionType = null;
         $scope.searchCreatedDate = "";
         $scope.searchCreatedDateSer = null;
         $scope.transactionCriteria = {};
@@ -281,7 +282,6 @@ angular.module('timeSheetApp')
             SiteComponent.findAll().then(function (data) {
                 $scope.selectedIndent = null;
                 $scope.sites = data;
-                $scope.loadingStop();
             });
         }
 
@@ -289,7 +289,6 @@ angular.module('timeSheetApp')
             ManufacturerComponent.findAll().then(function (data) {
                 //console.log("Loading all Manufacturer -- " , data);
                 $scope.manufacturers = data;
-                $scope.loadingStop();
             });
         }
 
@@ -303,6 +302,7 @@ angular.module('timeSheetApp')
     	}
 
     	$scope.loadUOM = function() {
+            $scope.materialUOMs = "";
     		InventoryComponent.getMaterialUOM().then(function(data){
     			console.log(data);
     			$scope.materialUOMs = data;
@@ -310,9 +310,10 @@ angular.module('timeSheetApp')
     	}
 
     	$scope.loadMaterialItmGroup = function () {
+            $scope.materialItmGroups = "";
         	InventoryComponent.loadItemGroup().then(function (data) {
                 $scope.materialItmGroups = data;
-                $scope.loadingStop();
+
             });
         }
 
@@ -328,7 +329,7 @@ angular.module('timeSheetApp')
     		$scope.selectedItems = [];
 
     		if($scope.selectedIndent) {
-
+                $scope.materialItems = "";
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
@@ -356,11 +357,10 @@ angular.module('timeSheetApp')
     		$scope.selectedItems = [];
 
     		if($scope.selectedPurchaseReq) {
+                $scope.materialItems = "";
     			PurchaseComponent.findById($scope.selectedPurchaseReq.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
-
-    				$scope.loadingStop();
     			});
     		}
     	}
@@ -397,10 +397,10 @@ angular.module('timeSheetApp')
     	}
 
     	$scope.loadTransactionType = function() {
+            $scope.transactionTypes = "";
     		InventoryTransactionComponent.getTransactionType().then(function(data) {
     			console.log(data);
     			$scope.transactionTypes = data;
-    			$scope.loadingStop();
     		});
     	}
 
@@ -550,7 +550,7 @@ angular.module('timeSheetApp')
 				console.log("save received request");
 				material.currentAprQty = approvedQty;
 			}else{
-				$scope.showNotifications('top','center','danger','Invalid Issue Qty');
+				$scope.showNotifications('top','center','danger','Invalid Approve Qty');
 			}
 
 		}
@@ -690,16 +690,25 @@ angular.module('timeSheetApp')
         /* end delete material */
 
     	$scope.editInventoryTrans = function() {
-    		InventoryTransactionComponent.findById($stateParams.id).then(function(data) {
-    			console.log(data);
-    			$scope.editInventoryTrans = data;
-    			$scope.editInventoryTrans.id = data.id;
-    			$scope.editInventoryTrans.name = data.name;
-    			$scope.editInventoryTrans.itemCode = data.itemCode;
-    			$scope.selectedSite = {id: data.siteId, name: data.siteName};
-    			$scope.project = {id: data.projectId, name: data.projectName};
-    			$scope.editInventoryTrans.storeStock = data.storeStock;
-    		});
+            if(parseInt($stateParams.id) > 0){
+                $rootScope.loadingStart();
+                InventoryTransactionComponent.findById($stateParams.id).then(function(data) {
+                    $scope.editInventoryTrans = data;
+                    $scope.editInventoryTrans.id = data.id;
+                    $scope.editInventoryTrans.name = data.name;
+                    $scope.editInventoryTrans.itemCode = data.itemCode;
+                    $scope.selectedSite = {id: data.siteId, name: data.siteName};
+                    $scope.project = {id: data.projectId, name: data.projectName};
+                    $scope.editInventoryTrans.storeStock = data.storeStock;
+                    $rootScope.loadingStop();
+                }).catch(function () {
+                    $scope.showNotifications('top','center','danger','Unable to load Material Transaction');
+                    $location.path('/inventory-transaction-list');
+                    $rootScope.loadingStop();
+                })
+            }else{
+                $location.path('/inventory-transaction-list');
+            }
     	}
 
     	/* Update Material transaction */
