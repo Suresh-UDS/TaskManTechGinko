@@ -269,23 +269,24 @@ angular.module('timeSheetApp')
         }
 
     	$scope.loadSites = function () {
+            $scope.sites = "";
             SiteComponent.findAll().then(function (data) {
                 $scope.selectedSite = null;
                 $scope.sites = data;
-                $scope.loadingStop();
             });
         }
 
     	$scope.loadManufacturer = function () {
+            $scope.manufacturers = "";
             ManufacturerComponent.findAll().then(function (data) {
                 //console.log("Loading all Manufacturer -- " , data);
                 $scope.manufacturers = data;
-                $scope.loadingStop();
             });
         }
 
     	$scope.loadSearchSites = function() {
     		if($scope.searchProject) {
+                $scope.sites = "";
     			ProjectComponent.findSites($scope.searchProject.id).then(function (data) {
                     $scope.searchSite = null;
                     $scope.sites = data;
@@ -294,6 +295,7 @@ angular.module('timeSheetApp')
     	}
 
     	$scope.loadUOM = function() {
+            $scope.materialUOMs = "";
     		InventoryComponent.getMaterialUOM().then(function(data){
     			console.log(data);
     			$scope.materialUOMs = data;
@@ -342,9 +344,9 @@ angular.module('timeSheetApp')
         }
 
         $scope.loadMaterialItmGroup = function () {
+            $scope.materialItmGroups = "";
         	InventoryComponent.loadItemGroup().then(function (data) {
                 $scope.materialItmGroups = data;
-                $scope.loadingStop();
             });
         }
 
@@ -433,13 +435,22 @@ angular.module('timeSheetApp')
     	}
 
     	$scope.viewInventory = function() {
-            $rootScope.loadingStart();
-            $rootScope.loadPageTop();
-            InventoryComponent.findById($stateParams.id).then(function(data) {
-                $rootScope.loadingStop();
-    			console.log(data);
-    			$scope.inventoryViews = data;
-    		});
+            if(parseInt($stateParams.id) > 0) {
+                $rootScope.loadingStart();
+                $scope.inventoryViews = "";
+                InventoryComponent.findById($stateParams.id).then(function (data) {
+                    $rootScope.loadingStop();
+                    console.log(data);
+                    $scope.inventoryViews = data;
+                    $scope.inventoryViews.title = data.name;
+                }).catch(function () {
+                    $scope.showNotifications('top','center','danger','Unable to load Material');
+                    $location.path('/inventory-list');
+                    $rootScope.loadingStop();
+                })
+            }else{
+                $location.path('/inventory-list');
+            }
     	}
 
     	/* view material transactions */
@@ -495,33 +506,42 @@ angular.module('timeSheetApp')
         }
         /* end delete material */
 
-    	$scope.editInventory = function() {
-            $rootScope.loadingStart();
-            $rootScope.loadPageTop();
-    		InventoryComponent.findById($stateParams.id).then(function(data) {
-    		    $rootScope.loadingStop();
-    			console.log(data);
-    			$scope.editInventory = data;
-    			$scope.editInventory.id = data.id;
-    			$scope.editInventory.name = data.name;
-    			$scope.editInventory.itemCode = data.itemCode;
-    			$scope.selectedSite = {id: data.siteId, name: data.siteName};
-    			$scope.client = {id: data.projectId, name: data.projectName};
-    			$scope.selectedItemGroup = {id: data.itemGroupId, itemGroup: data.itemGroup};
-    			$scope.selectedManufacturer = {id: data.manufacturerId, name: data.manufacturerName};
-    			$scope.editInventory.minimumStock = data.minimumStock;
-    			$scope.editInventory.maximumStock = data.maximumStock;
-    			$scope.editInventory.storeStock = data.storeStock;
-//    			$scope.selectedUnit = {materialUOM: data.uom };
-    			if(data.uom){
-    				for(var i in $scope.materialUOMs){
-    					var unit = data.uom;
-    					if($scope.materialUOMs[i] === unit.toUpperCase()){
-    						$scope.selectedUnit = $scope.materialUOMs[i];
-    					}
-    				}
-    			}
-    		});
+    	$scope.editInventoryFunc = function() {
+            if(parseInt($stateParams.id) > 0){
+                $rootScope.loadingStart();
+                InventoryComponent.findById($stateParams.id).then(function(data) {
+                        console.log('inventory details',data);
+                        $scope.editInventory = data;
+                        $scope.editInventory.id = data.id;
+                        $scope.editInventory.name = data.name;
+                        $scope.editInventory.title = data.name;
+                        $scope.editInventory.itemCode = data.itemCode;
+                        $scope.selectedSite = {id: data.siteId, name: data.siteName};
+                        $scope.client = {id: data.projectId, name: data.projectName};
+                        $scope.selectedItemGroup = {id: data.itemGroupId, itemGroup: data.itemGroup};
+                        $scope.selectedManufacturer = {id: data.manufacturerId, name: data.manufacturerName};
+                        $scope.editInventory.minimumStock = data.minimumStock;
+                        $scope.editInventory.maximumStock = data.maximumStock;
+                        $scope.editInventory.storeStock = data.storeStock;
+                        //$scope.selectedUnit = {materialUOM: data.uom };
+                    if(data.uom){
+                        for(var i in $scope.materialUOMs){
+                            var unit = data.uom;
+                            if($scope.materialUOMs[i] === unit.toUpperCase()){
+                                $scope.selectedUnit = $scope.materialUOMs[i];
+                            }
+                        }
+                        $rootScope.loadingStop();
+                    }
+                }).catch(function () {
+                    $scope.showNotifications('top','center','danger','Unable to load Material');
+                    $location.path('/inventory-list');
+                    $rootScope.loadingStop();
+                })
+            }else{
+                $location.path('/inventory-list');
+            }
+
     	}
 
     	/* Update Material */
@@ -608,7 +628,8 @@ angular.module('timeSheetApp')
            }
 
 
-    	$scope.search = function () {										// search material
+    	$scope.search = function () {
+            $scope.noData = false;
         	var currPageVal = ($scope.pages ? $scope.pages.currPage : 1);
         	if(!$scope.searchCriteria) {
             	var searchCriteria = {
@@ -817,7 +838,7 @@ angular.module('timeSheetApp')
 
             /* Localstorage (Retain old values while edit page to list) end */
 
-        	InventoryComponent.search($scope.searchCriteria).then(function (data) {
+        	InventoryComponent.search($scope.searchCriteras).then(function (data) {
                 $scope.inventorylists = data.transactions;
                 $scope.loadingStop();
                 $scope.inventorylistLoader = true;
@@ -882,8 +903,9 @@ angular.module('timeSheetApp')
 			 }
 
 			$scope.initList = function() {
-				$scope.loadMaterials();
-				$scope.setPage(1);
+				//$scope.loadMaterials();
+                $scope.loadPageTop();
+                $scope.setPage(1);
 			}
 
 			//Loading Page go to top position
@@ -1187,8 +1209,6 @@ angular.module('timeSheetApp')
             $scope.regionFilterDisable = true;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
@@ -1199,8 +1219,6 @@ angular.module('timeSheetApp')
             $scope.sitesListOne.selected = undefined;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
@@ -1209,16 +1227,13 @@ angular.module('timeSheetApp')
             $scope.branchsListOne.selected = undefined;
             $scope.sitesListOne.selected = undefined;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
         $scope.clearSite = function($event) {
             $event.stopPropagation();
             $scope.sitesListOne.selected = null;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
+
 
         };
 
