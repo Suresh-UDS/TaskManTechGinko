@@ -3,9 +3,9 @@
     <div  ng-init="initLoad();loadingAuto();">
 
 
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
+        <!--<div class="col-md-8">
+            &lt;!&ndash;<h2 class="title">Add Site</h2>&ndash;&gt;
+        </div>-->
 
 
         <!--<div class="card-header" data-background-color="red">-->
@@ -38,14 +38,14 @@
                                             <select ng-options = "prj.name for prj in projects" name="project" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control" required>
                                                 <option value="">Select...</option>
                                             </select>
-                                             <div ng-show="form.$submitted || form.project.$touched">
+                                            <div ng-show="form.$submitted || form.project.$touched || form.project.$dirty">
                                                 <div ng-show="form.project.$dirty || form.project.$invalid">
-                                                    <p class="help-block" style="color: maroon"
-                                                       ng-show="form.project.$error.required">Client is
-                                                        required.</p>
-
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.project.$error.required">
+                                                        Client is required.
+                                                    </p>
                                                 </div>
-                                             </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -61,15 +61,15 @@
                                             <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="loadEmployees();loadPurchases();" ng-disabled = "sites.length == 0" class="form-control" required>
                                                 <option value="">Select...</option>
                                             </select>
-                                            <p><span ng-if="sites.length == 0"  class="error-msg margin0">No Sites</span></p>
-                                             <div ng-show="form.$submitted || form.site.$touched">
+                                            <div ng-show="form.$submitted || form.site.$touched || form.site.$dirty">
                                                 <div ng-show="form.site.$dirty || form.site.$invalid">
-                                                    <p class="help-block" style="color: maroon"
-                                                       ng-show="form.site.$error.required">Site is
-                                                        required.</p>
-
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.site.$error.required">
+                                                        Site is required.
+                                                    </p>
                                                 </div>
-                                             </div>
+                                            </div>
+                                            <p><span ng-if="sites.length == 0"  class="error-msg margin0">No Sites</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -85,10 +85,9 @@
                                             <!--<span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
                                             <span ng-show="empSpin"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                             <span ng-show="!empSpin" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "employee as employee.name for employee in employees" name="empName" ng-model ="selectedEmployee" ng-disabled = "employees.length == 0 "  class="form-control" required>
+                                            <select ng-options = "employee as employee.name for employee in employees" name="empName" ng-click="chkEmp();" ng-model ="selectedEmployee" ng-disabled = "employees.length == 0 "  class="form-control" required>
                                                 <option value="">Select...</option>
                                             </select>
-                                            <span ng-if="employees.length == 0 && !empSpin"><p class="error-msg margin0">No Employees</p></span>
                                             <div ng-show="form.$submitted || form.empName.$touched">
                                                 <div ng-show="form.empName.$dirty || form.empName.$invalid">
                                                     <p class="help-block" style="color: maroon"
@@ -97,6 +96,7 @@
 
                                                 </div>
                                             </div>
+                                            <span ng-if="employees.length == 0 && !empSpin"><p class="error-msg margin0">No Employees</p></span>
                                         </div>
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@
                         </div>
                         <h3 class="HeadingTxt">Item Details </h3>
                         <div class="row">
-                            <ng-form name="itemForm" novalidate>
+
                                 <div class="col-md-3">
                                     <div class="form-group no-padding">
                                         <div class="dropdown">
@@ -162,37 +162,42 @@
                                 <div class="col-md-2">
                                     <div class="form-group   is-empty">
                                         <label class="control-label">Quantity <span class="red-star">*</span></label>
-                                        <input type="number" class="form-control" name="quantity" min="1" ng-model="selectedQuantity" required>
-                                        <!--<div ng-show="itemForm.$submitted || itemForm.quantity.$touched">-->
-                                            <!--<div ng-show="itemForm.quantity.$dirty || itemForm.quantity.$invalid">-->
-                                                <!--<p class="help-block" style="color: maroon"-->
-                                                   <!--ng-show="itemForm.quantity.$error.required">Quantity is-->
-                                                    <!--required.</p>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
+                                        <input type="number" class="form-control" name="quantity" min = 1 ng-model="selectedQuantity">
+                                        <div ng-show="form.$submitted || form.quantity.$touched || form.quantity.$dirty">
+                                            <div ng-show="form.quantity.$dirty || form.quantity.$invalid">
+                                                <!--<p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.quantity.$error.required">
+                                                Quantity is required.
+                                                </p>-->
+                                                <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                   ng-show="form.quantity.$error.min">
+                                                    Minimum quantity  is 1.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
 
-                                    <button class="btn btn-success" ng-click="addPurchaseItem()"  ng-show="!isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <button type="button" class="btn btn-success" ng-click="addPurchaseItem()" ng-show="!isEdit"  ng-disabled="!selectedItemCode || !selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                     <span class="btn-label">
                                         <i class="material-icons">add</i>
                                     </span>
                                         Add
                                     </button>
 
-                                    <button class="btn btn-success" ng-click="updatePurchaseItems()"  ng-show="isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <button type="button" class="btn btn-success" ng-click="updatePurchaseItems()" ng-show="isEdit"  ng-disabled="!selectedItemCode || !selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                     <span class="btn-label">
                                         <i class="material-icons">add</i>
                                     </span>
                                         Update
                                     </button>
-                                    <button class="btn btn-danger" ng-click="clearPurchaseItems()"  ng-show="isEdit"  style="padding: 12px 20px; margin-top: 16px;">
+                                    <button type="button" class="btn btn-danger" ng-click="clearPurchaseItems()"    style="padding: 12px 20px; margin-top: 16px;">
                                         Clear
                                     </button>
 
                                 </div>
-                            </ng-form>
+
                         </div>
                         <div class="row">
                             <div class="col-md-12">
