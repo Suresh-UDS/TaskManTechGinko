@@ -66,12 +66,12 @@
                         <table class="table table-hover">
                             <thead>
                                <tr>
-                                   <th>Date
+                                   <th>Created Date
                                        <span class="sortingIcons">
-                                            <span ng-click="columnAscOrder('expenseDate')" ng-class="isActiveAsc == 'expenseDate' ? 'active' : ''" >
+                                            <span ng-click="columnAscOrder('createdDate')" ng-class="isActiveAsc == 'createdDate' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
-                                            <span ng-click="columnDescOrder('expenseDate')" ng-class="isActiveDesc == 'expenseDate' ? 'active' : ''">
+                                            <span ng-click="columnDescOrder('createdDate')" ng-class="isActiveDesc == 'createdDate' ? 'active' : ''">
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
@@ -530,8 +530,8 @@
                                                             <i class="material-icons">cloud_download</i>
                                                         </a>
                                                     </div>
-                                                    <a href="javascript:void(0);"  ng-click="">
-                                                        <img src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
+                                                    <a href="javascript:void(0);"   >
+                                                        <img ng-src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
                                                     </a>
                                                     <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
                                                     <div  ng-if="uploadFile.id == download">

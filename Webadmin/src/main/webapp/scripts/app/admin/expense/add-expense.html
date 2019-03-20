@@ -1,14 +1,12 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="initLoad();loadingAuto();">
+    <div  ng-init="initLoad();">
 
 
        <!-- <div class="col-md-8">
             &lt;!&ndash;<h2 class="title">Add Site</h2>&ndash;&gt;
         </div>-->
-        <div>
-            <label><span class="red-star">*</span> Mandatory Field</label>
-        </div>
+
 
 
         <!--<div class="card-header" data-background-color="red">-->
@@ -17,7 +15,9 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
-
+            <div>
+                <label><span class="red-star">*</span> Mandatory Field</label>
+            </div>
             <form ng-show="!success" name="form" role="form" novalidate
                   ng-submit="conform('save')" confirm-on-exit>
                 <div class="card margin-TB-5 tablecard">
@@ -38,7 +38,7 @@
                                             <div ng-show="form.$submitted || form.project.$touched || form.project.$dirty">
                                                 <div ng-show="form.project.$dirty || form.project.$invalid">
                                                     <p class="help-block" style="color: maroon"
-                                                       ng-show="form.project.$error.required"> Please Select Project to Continue...</p>
+                                                       ng-show="form.project.$error.required"> Client is required.</p>
 
                                                 </div>
                                             </div>
@@ -61,7 +61,7 @@
                                             <div ng-show="form.$submitted || form.site.$touched || form.site.$dirty">
                                                 <div ng-show="form.site.$dirty || form.site.$invalid">
                                                     <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
-                                                       ng-show="form.site.$error.required"> Please Select Site to Continue...</p>
+                                                       ng-show="form.site.$error.required"> Site is required.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                             <div ng-show="form.$submitted || form.transactionMode.$touched || form.transactionMode.$dirty">
                                                 <div ng-show="form.transactionMode.$dirty || form.transactionMode.$invalid">
                                                     <p class="help-block" style="color: maroon"
-                                                       ng-show="form.transactionMode.$error.required"> Please Select Transaction Mode...</p>
+                                                       ng-show="form.transactionMode.$error.required"> Transaction Mode is required.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,7 +106,7 @@
                                     <div ng-show="form.$submitted || form.selectedDate.$touched || form.selectedDate.$dirty">
                                         <div ng-show="form.selectedDate.$dirty || form.selectedDate.$invalid">
                                             <p class="help-block" style="color: maroon"
-                                               ng-show="form.selectedDate.$error.required"> Please Select Transaction Date...</p>
+                                               ng-show="form.selectedDate.$error.required"> Transaction Date is required.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                             <div ng-show="form.$submitted || form.selectedCategory.$touched || form.selectedCategory.$dirty">
                                                 <div ng-show="form.selectedCategory.$dirty || form.selectedCategory.$invalid">
                                                     <p class="help-block" style="color: maroon"
-                                                       ng-show="form.selectedCategory.$error.required"> Please Select Expense Category...</p>
+                                                       ng-show="form.selectedCategory.$error.required"> Expense Category is required.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,7 +151,7 @@
                                             <div ng-show="form.$submitted || form.selectedPaymentType.$touched || form.selectedPaymentType.$dirty">
                                                 <div ng-show="form.selectedPaymentType.$dirty || form.selectedPaymentType.$invalid">
                                                     <p class="help-block" style="color: maroon"
-                                                       ng-show="form.selectedPaymentType.$error.required"> Please Payment Type...</p>
+                                                       ng-show="form.selectedPaymentType.$error.required"> Payment Type is required.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,14 +178,29 @@
                             <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Amount <span class="red-star">*</span></label>
-                                    <input ng-model="selectedAmount" name="selectedAmount" type="number" min = 0 class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
+                                    <input ng-model="selectedAmount" name="selectedAmount" type="number" min = 1
+                                           class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched"
+                                            required autocomplete="off"
+                                           tabindex="0" aria-required="true" aria-invalid="true">
+                                    <div ng-show="form.$submitted || form.selectedAmount.$touched || form.selectedAmount.$dirty">
+                                        <div ng-show="form.selectedAmount.$dirty || form.selectedAmount.$invalid">
+                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                   ng-show="form.selectedAmount.$error.required">
+                                                Amount is required.
+                                            </p>
+                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                               ng-show="form.selectedAmount.$error.min">
+                                                Minimum amount  is 1.
+                                            </p>
+                                        </div>
+                                    </div>
 
                                     <span class="material-input"></span>
 
                                     <div ng-show="form.$submitted || form.selectedAmount.$touched || form.selectedAmount.$dirty">
                                         <div ng-show="form.selectedAmount.$dirty || form.selectedAmount.$invalid">
                                             <p class="help-block" style="color: maroon"
-                                               ng-show="form.selectedAmount.$error.required"> Please Enter Amount...</p>
+                                               ng-show="form.selectedAmount.$error.required"> Enter Amount is required.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -195,13 +210,19 @@
                             <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Receipt No <span class="red-star">*</span></label>
-                                    <input type="number" ng-model="receiptNumber" name="receiptNumber" min = 0 class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched" name="amount"  ng-minlength="1" ng-maxlength="50" required="" autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true">
-
+                                    <input type="number" ng-model="receiptNumber" name="receiptNumber" min = 1
+                                           class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-minlength ng-valid-maxlength ng-touched"
+                                           name="amount"
+                                           autocomplete="off" tabindex="0" aria-required="true" aria-invalid="true" required>
                                     <span class="material-input"></span>
                                     <div ng-show="form.$submitted || form.receiptNumber.$touched || form.receiptNumber.$dirty">
                                         <div ng-show="form.receiptNumber.$dirty || form.receiptNumber.$invalid">
                                             <p class="help-block" style="color: maroon"
-                                               ng-show="form.receiptNumber.$error.required"> Please Enter Receipt No...</p>
+                                               ng-show="form.receiptNumber.$error.required"> Receipt No is required</p>
+                                            <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                               ng-show="form.receiptNumber.$error.min">
+                                                Invalid receipt number.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
