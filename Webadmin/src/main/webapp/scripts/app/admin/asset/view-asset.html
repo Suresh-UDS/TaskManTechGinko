@@ -947,8 +947,7 @@
                                                                       <tr ng-show="assetReadings" ng-repeat="reading in assetReadings">
                                                                           <td> <a  ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
                                                                           <td>{{reading.createdDate | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
-                                                                          <td ng-show="reading.initialValue > 0">{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
-                                                                          <td ng-show="reading.value > 0">{{reading.value}}&nbsp; {{reading.uom}}</td>
+                                                                          <td>{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td>{{reading.finalValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td>{{reading.consumption}}&nbsp; {{reading.uom}}</td>
                                                                       </tr>

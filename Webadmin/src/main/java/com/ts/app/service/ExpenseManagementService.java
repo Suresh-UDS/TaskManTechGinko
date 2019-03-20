@@ -59,7 +59,7 @@ import com.ts.app.web.rest.dto.ExpenseDTO;
 @Transactional
 public class ExpenseManagementService extends AbstractService {
 
-    private final Logger log = LoggerFactory.getLogger(ExpenseManagementService.class);
+    private final Logger log = LoggerFactory.getLogger(FeedbackService.class);
 
     @Inject
     private ExpenseRepository expenseRepository;
@@ -98,12 +98,7 @@ public class ExpenseManagementService extends AbstractService {
 
 //            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
         }
-        if(expenseDTO.getProjectId()>0){
-            Project project = projectRepository.findOne(expenseDTO.getProjectId());
-            expense.setProject(project);
 
-//            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
-        }
         expense.setMode(expenseDTO.getMode());
         expense.setCurrency(expenseDTO.getCurrency());
         expense.setPaymentType(expenseDTO.getPaymentType());
@@ -112,7 +107,7 @@ public class ExpenseManagementService extends AbstractService {
         expense.setDescription(expenseDTO.getDescription());
 //        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
         Double totalBalanceAmount  = (getData(expenseDTO.getSiteId()).getTotalCreditAmount() - getData(expenseDTO.getSiteId()).getTotalDebitAmount());
-        expense.setActive(Expense.ACTIVE_YES);
+
         if(Objects.equals(expenseDTO.getMode(), "debit")){
             expense.setExpenseCategory(expenseDTO.getExpenseCategory());
             log.debug("Balance amount ------- "+getData(expenseDTO.getSiteId()).getTotalBalanceAmount());
@@ -126,7 +121,7 @@ public class ExpenseManagementService extends AbstractService {
         if (Objects.equals(expenseDTO.getMode(), "credit")){
                 expense.setBalanceAmount(totalBalanceAmount + expenseDTO.getCreditAmount());
                 expense.setCreditAmount(expenseDTO.getCreditAmount());
-                expense.setCreditedDate(new Date());
+
         }
 
 
@@ -149,19 +144,11 @@ public class ExpenseManagementService extends AbstractService {
         SearchResult<ExpenseDTO> result = new SearchResult<ExpenseDTO>();
         User user = userRepository.findOne(searchCriteria.getUserId());
         Employee employee = user.getEmployee();
-        List<EmployeeProjectSite> sites = employee.getProjectSites();
 
         if (searchCriteria != null) {
-            List<Long> siteIds = new ArrayList<Long>();
-            if(employee != null && !user.isAdmin()) {
-                for (EmployeeProjectSite site : sites) {
-                    siteIds.add(site.getSite().getId());
-                    searchCriteria.setSiteIds(siteIds);
+                if (user.isAdmin()) {
+                    searchCriteria.setAdmin(true);
                 }
-            }else if(user.isAdmin()){
-                searchCriteria.setAdmin(true);
-            }
-
             Pageable pageRequest = null;
 
             if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {

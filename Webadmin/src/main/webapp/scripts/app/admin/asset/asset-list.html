@@ -260,15 +260,15 @@
 
                                     <div class="HoverBx">
 
-										<a ui-sref="create-ticket({ assetId: asset.id })" ng-hide="showInActive" has-permission="Ticket:Create"  title="Create Ticket"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">bug_report</i></a>
+										<a ui-sref="create-ticket({ assetId: asset.id })"  has-permission="Ticket:Create"  title="Create Ticket"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">bug_report</i></a>
 
-                                        <a ui-sref="tickets({asset :{id:asset.id,title:asset.title}})" ng-hide="showInActive"  has-permission="Ticket:List"  title="Ticket List"  class="btn btn-simple btn-info btn-icon like" target="_blank"><i class="material-icons">list_alt</i></a>
+                                        <a ui-sref="tickets({asset :{id:asset.id,title:asset.title}})"  has-permission="Ticket:List"  title="Ticket List"  class="btn btn-simple btn-info btn-icon like" target="_blank"><i class="material-icons">list_alt</i></a>
 
                                         <a   has-permission="Asset:View" ui-sref="view-asset({ id: asset.id })"  has-permission="Assets:View"  title="View Asset"  class="btn btn-simple btn-info btn-icon like"><i class="material-icons">remove_red_eye</i></a>
 
-                                        <a  ng-class="{active: $state.includes('admin')}" ng-hide="showInActive"  has-permission="Asset:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                        <a  ng-class="{active: $state.includes('admin')}" has-permission="Asset:Edit" title="Edit Asset" ui-sref="edit-asset({ id: asset.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <a ng-class="{active: $state.includes('admin')}" ng-hide="showInActive" has-permission="Asset:Delete" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
+                                        <a ng-class="{active: $state.includes('admin')}" has-permission="Asset:Delete" title="Delete Asset"  ng-click="deleteConfirm(asset.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"   class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
 
                                     </div>
 
@@ -829,7 +829,7 @@
                                     <span class="form-control-feedback d-md-arrow-icon" ng-show="!weekSchAssetsSpain"><i class="material-icons">keyboard_arrow_down</i></span>
                                     <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="!weekSchAssets && weekSchAssetsSpain"><i class="ld ld-ring ld-spin" ></i></span>
                                      <select name="weekSchAsset" ng-model="weekSchAsset"
-                                         class="form-control searchable-input floatL" ng-options="weekSchAssetList as weekSchAssetList.title  for weekSchAssetList in weekSchAssets | orderBy:'title'" >
+                                         class="form-control searchable-input floatL" ng-options="weekSchAssetList as weekSchAssetList.title  for weekSchAssetList in weekSchAssets | orderBy:'title'" required>
                                          <option value="">Select Asset</option>
                                      </select>
                                      <div ng-show="weekSchSiteFrom.$submitted || weekSchSiteFrom.weekSchAsset.$touched">

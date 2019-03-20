@@ -26,7 +26,7 @@ angular.module('timeSheetApp')
                 });
             },
             search: function(searchCriteria) {
-                return $http.post('api/expenses/search', searchCriteria).then(function (response) {
+                return $http.post('api/expenses', searchCriteria).then(function (response) {
 
                     //console.log("response is--->>>"+JSON.stringify(response.data));
                     return response.data;

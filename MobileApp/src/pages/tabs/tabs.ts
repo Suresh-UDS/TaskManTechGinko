@@ -160,116 +160,28 @@ export class TabsPage {
           // this.component.showToastMessage('Session not available, please login','bottom');
           this.navCtrl.setRoot(LoginPage);
       }
-    // this.databaseProvider.getDatabaseState().subscribe(status=>{
-    //     console.log("Database status - "+status);
-    //     if(status){
-    //         this.databaseProvider.getSiteData().then(sites=>{
-    //             console.log("Site information from sqlite - ");
-    //             console.log(sites);
-    //             if(sites && sites.length>0){
-    //                 this.addSitesToTable();
-    //             }else{
-    //                 this.createTableAndAddSites();
-    //             }
-    //         },err=>{
-    //            console.log("Error in getting site information from sqlite");
-    //            console.log(err);
-    //
-    //         });
-    //
-    //     }
-    //
-    // })
+    this.databaseProvider.getDatabaseState().subscribe(status=>{
+        console.log("Database status - "+status);
+        if(status){
+            this.databaseProvider.getSiteData().then(sites=>{
+                console.log("Site information from sqlite - ");
+                console.log(sites);
+                if(sites && sites.length>0){
+                    this.databaseProvider.addSites();
+                    this.databaseProvider.addJobs();
+                }else{
+                    this.databaseProvider.createSiteTable();
+                }
+            },err=>{
+               console.log("Error in getting site information from sqlite");
+               console.log(err);
 
-  }
+            });
 
-  createTableAndAddSites(){
-      var searchCriteria = {
-          findAll:true,
-          currPage:1,
-          sort:10,
-          sortByAsc:true,
-          report:true
-      };
+        }
 
-      this.siteService.searchSites(searchCriteria).subscribe(
-          response=>{
-              this.sites=response.transactions;
-              this.databaseProvider.createSiteTable().then(data=>{
-                  this.createRelatedTables();
-                  console.log("Table created successfully");
-                  console.log(data);
-                  for (var i=0;i<this.sites.length;i++){
-                      var params = [{
-                          id:this.sites[i].id,
-                          name:this.sites[i].name
-                      }]
-                      this.databaseProvider.addSite(params).then(data=>{
-                          console.log("Site added to sqlite successfully");
-                          console.log(data);
+    })
 
-                      },err=>{
-                          console.log("Error in adding site to sqlite");
-                          console.log(err);
-                      })
-                  }
-              },err=>{
-                  console.log("Error in creating table");
-                  console.log(err);
-              })
-
-          },
-          error=> {
-              console.log('ionViewDidLoad SitePage:' + error);
-
-          }
-      );
-  }
-
-  addSitesToTable(){
-      var searchCriteria = {
-          findAll:true,
-          currPage:1,
-          sort:10,
-          sortByAsc:true,
-          report:true
-      };
-
-      this.siteService.searchSites(searchCriteria).subscribe(
-          response=>{
-              this.sites=response.transactions;
-              for (var i=0;i<this.sites.length;i++){
-                  var params = [{
-                      id:this.sites[i].id,
-                      name:this.sites[i].name
-                  }]
-                  this.databaseProvider.addSite(params).then(data=>{
-                      console.log("Site added to sqlite successfully");
-                      console.log(data);
-
-                  },err=>{
-                      console.log("Error in adding site to sqlite");
-                      console.log(err);
-                  })
-              }
-
-          },
-          error=> {
-              console.log('ionViewDidLoad SitePage:' + error);
-
-          }
-      );
-
-  }
-
-  addRelatedToTable(siteId){
-
-
-  }
-
-  createRelatedTables(){
-      this.databaseProvider.createEmployeeTable();
-      this.databaseProvider.createJobsTable();
   }
 
   ionViewWillEnter(){

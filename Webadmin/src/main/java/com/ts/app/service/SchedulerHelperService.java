@@ -1,31 +1,19 @@
 
 package com.ts.app.service;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import javax.inject.Inject;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Splitter;
+import com.ts.app.config.Constants;
+import com.ts.app.domain.*;
+import com.ts.app.domain.util.StringUtil;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.CommonUtil;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -44,57 +32,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Splitter;
-import com.ts.app.config.Constants;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.Attendance;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeAttendanceReport;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.EmployeeShift;
-import com.ts.app.domain.ExportContent;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.JobChecklist;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.MaintenanceType;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.SchedulerConfig;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Shift;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.util.StringUtil;
-import com.ts.app.repository.AssetRepository;
-import com.ts.app.repository.AttendanceRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.EmployeeShiftRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SchedulerConfigRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.CommonUtil;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ClientgroupDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.TicketDTO;
+import javax.inject.Inject;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Service class for managing Device information.
@@ -587,10 +536,10 @@ public class SchedulerHelperService extends AbstractService {
 		}
 	}
 
-	private Map<String, Long> extractAttendanceDataForReport(Date date,Project proj, Site site, Calendar cal, Calendar dayEndCal, List<EmployeeAttendanceReport> siteAttnList, Map<String, Map<String, Integer>> shiftWiseSummary,
-										List<Map<String, String>> siteShiftConsolidatedData, Map<String, List<Map<String, String>>> siteWiseConsolidatedMap,
-										List<Map<String, String>> consolidatedData, List<EmployeeAttendanceReport> empAttnList, StringBuilder content,
-										boolean shiftAlert) {
+	private Map<String, Long> extractAttendanceDataForReport(Date date, Project proj, Site site, Calendar cal, Calendar dayEndCal, List<EmployeeAttendanceReport> siteAttnList, Map<String, Map<String, Integer>> shiftWiseSummary,
+                                                             List<Map<String, String>> siteShiftConsolidatedData, Map<String, List<Map<String, String>>> siteWiseConsolidatedMap,
+                                                             List<Map<String, String>> consolidatedData, List<EmployeeAttendanceReport> empAttnList, StringBuilder content,
+                                                             boolean shiftAlert) {
 		Map<String, Long> employeeAttnCount = new HashMap<String, Long>();
 		long projEmployees = 0;
 		long projPresent = 0;
@@ -774,7 +723,7 @@ public class SchedulerHelperService extends AbstractService {
 			// List<Shift> shifts = site.getShifts();
 			shifts = siteRepository.findShiftsBySite(site.getId());
 			for (Employee emp : empNotMarkedAttn) {
-				EmployeeShift empShift = null;
+				List<EmployeeShift> empShift = null;
 				for (Shift shift : shifts) {
 					String startTime = shift.getStartTime();
 					String[] startTimeUnits = startTime.split(":");
@@ -805,7 +754,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 
-				if (empShift != null) { //only if a matching shift is found for the employee the employee detail needs to be added to the report
+				if (CollectionUtils.isNotEmpty(empShift)) { //only if a matching shift is found for the employee the employee detail needs to be added to the report
 					EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
 					empAttnRep.setEmpId(emp.getId());
 					empAttnRep.setEmployeeId(emp.getEmpId());
@@ -815,12 +764,12 @@ public class SchedulerHelperService extends AbstractService {
 					empAttnRep.setDesignation(emp.getDesignation());
 					empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
 					empAttnRep.setSiteName(site.getName());
-					Timestamp startTime = empShift.getStartTime();
+					Timestamp startTime = empShift.get(0).getStartTime();
 					Calendar startCal = Calendar.getInstance();
 					startCal.setTimeInMillis(startTime.getTime());
 					empAttnRep.setShiftStartTime(
 							startCal.get(Calendar.HOUR_OF_DAY) + ":" + startCal.get(Calendar.MINUTE));
-					Timestamp endTime = empShift.getEndTime();
+					Timestamp endTime = empShift.get(0).getEndTime();
 					Calendar endCal = Calendar.getInstance();
 					endCal.setTimeInMillis(endTime.getTime());
 					empAttnRep.setShiftEndTime(
@@ -954,7 +903,7 @@ public class SchedulerHelperService extends AbstractService {
 								// List<Shift> shifts = site.getShifts();
 								shifts = siteRepository.findShiftsBySite(site.getId());
 								for (Employee emp : empNotMarkedAttn) {
-									EmployeeShift empShift = null;
+									List<EmployeeShift> empShift = null;
 									for (Shift shift : shifts) {
 										String startTime = shift.getStartTime();
 										String[] startTimeUnits = startTime.split(":");
@@ -995,12 +944,12 @@ public class SchedulerHelperService extends AbstractService {
                                         empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
                                         empAttnRep.setSiteName(site.getName());
                                         if (empShift != null) {
-                                            Timestamp startTime = empShift.getStartTime();
+                                            Timestamp startTime = empShift.get(0).getStartTime();
                                             Calendar startCal = Calendar.getInstance();
                                             startCal.setTimeInMillis(startTime.getTime());
                                             empAttnRep.setShiftStartTime(startCal.get(Calendar.HOUR_OF_DAY) + ":"
                                                 + startCal.get(Calendar.MINUTE));
-                                            Timestamp endTime = empShift.getEndTime();
+                                            Timestamp endTime = empShift.get(0).getEndTime();
                                             Calendar endCal = Calendar.getInstance();
                                             endCal.setTimeInMillis(endTime.getTime());
                                             empAttnRep.setShiftEndTime(
@@ -1182,7 +1131,7 @@ public class SchedulerHelperService extends AbstractService {
 								log.debug("site - " + site.getId());
 								log.debug("shift start time - " + DateUtil.convertToTimestamp(shiftStartCal.getTime()));
 								log.debug("shift end time - " + DateUtil.convertToTimestamp(shiftEndCal.getTime()));
-								EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(),
+								List<EmployeeShift> empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(),
 										emp.getId(), DateUtil.convertToTimestamp(shiftStartCal.getTime()),
 										DateUtil.convertToTimestamp(shiftEndCal.getTime()));
 								log.debug("EmpShift - " + empShift);
@@ -1721,23 +1670,23 @@ public class SchedulerHelperService extends AbstractService {
 
 						ExportResult exportQuotationResult = new ExportResult();
 						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
-							List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
+                            List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
                             sc.setReport(true);
-							Object quotationObj = quotationService.getQuotations(sc);
-							if (quotationObj != null) {
-								ObjectMapper mapper = new ObjectMapper();
-								mapper.findAndRegisterModules();
-								mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-								mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+                            Object quotationObj = quotationService.getQuotations(sc);
+                            if (quotationObj != null) {
+                                ObjectMapper mapper = new ObjectMapper();
+                                mapper.findAndRegisterModules();
+                                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                                mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
                                 mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
                                 try {
-									quotationResults = mapper.readValue((String) quotationObj,
-											new TypeReference<List<QuotationDTO>>() {
-											});
-								} catch (IOException e) {
-									log.error("Error while converting quotation results to objects", e);
-								}
-							}
+                                    quotationResults = mapper.readValue((String) quotationObj,
+                                        new TypeReference<List<QuotationDTO>>() {
+                                        });
+                                } catch (IOException e) {
+                                    log.error("Error while converting quotation results to objects", e);
+                                }
+                            }
 
 							if (CollectionUtils.isNotEmpty(quotationResults)) {
 								// if report generation needed

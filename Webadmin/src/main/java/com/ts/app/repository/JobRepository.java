@@ -32,6 +32,12 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate and j.status = :currentJobStatus and j.active= 'Y'")
     long findJobCountBySiteIdAndStatus(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("currentJobStatus") JobStatus currentJobStatus);
 
+    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
+    long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
+    long findCurrentJobCountByDateRange(@Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
     long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
@@ -207,8 +213,8 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where j.asset.id = :assetId and j.plannedStartTime >= :startDate ")
     List<Job> findByAssetAndStartDate(@Param("assetId") long assetId, @Param("startDate") Date startDate);
 
-    @Query("SELECT j FROM Job j WHERE (j.status < 3) and j.plannedStartTime <= :currDate and j.site.id = :siteId and j.active = 'Y' order by j.createdDate asc")
-    List<Job> findAllActiveInCompleteJobs(@Param("currDate") Date currDate, @Param("siteId") long siteId);
+    @Query("SELECT j FROM Job j WHERE (j.status < 3) order by j.createdDate asc")
+    List<Job> findAllActiveUnClosedTicket();
 
     @Query("SELECT j FROM Job j WHERE j.maintenanceType = :ppmType")
 	List<Job> findAllPPMJobs(@Param("ppmType") String ppmType);
@@ -225,4 +231,10 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  (j.plannedStartTime between :fromDt and :toDt) and j.site.id = :siteId and j.employee.id = :employeeId and j.status = :jobStatus")
 	Page<Job> findByEmployeeAndStatus(@Param("siteId") long siteId, @Param("employeeId") long employeeId, @Param("jobStatus") JobStatus jobStatus, @Param("fromDt") Date fromDt, @Param("toDt") Date toDt, Pageable pageRequest);
 
+    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
+    long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
+    long findCurrentJobCountByDateRange(@Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
 }

@@ -132,7 +132,6 @@ angular.module('timeSheetApp')
 	$scope.loadChecklist = function(id,action) {
 		$scope.isEdit = (action == 'edit') ? true : false;
 		console.log('loadChecklist -' + id);
-        $scope.checklistItems=[];
 		ChecklistComponent.findOne(id).then(function (data) {
 			$scope.checklist = data;
 			for(var i in data.items) {

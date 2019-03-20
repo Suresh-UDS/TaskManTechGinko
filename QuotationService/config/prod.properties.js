@@ -1,7 +1,7 @@
 module.exports = {
 
 	db:{
-		url:'mongodb://10.1.2.132:27017,10.1.2.187:27017/quotation_svc?replicaSet=rs0',
+		url:'mongodb://172.31.28.83:27017,172.31.26.106:27017,172.31.23.89:27017/quotation_svc?replicaSet=fms',
 		schema : '/../app/schema',
         user:'nodedbuser',
         password:'T#nC0s'
@@ -14,18 +14,18 @@ module.exports = {
     		}
     	},
 
-	mailer : {
-		service : 'outlook365',
-		smtp: {
-			host: "smtp.office365.com",
-			secureConnection: false,
-			port: 587
-		},
-		tls:{ciphers:'SSLv3'},
-		username :'taskmanfms@uds.in',
-		password :'Nov@2018',
-		from:'taskmanfms@uds.in'
-	},
+    	mailer : {
+    		service : 'outlook365',
+    		smtp: {
+    			host: "smtp.office365.com",
+    			secureConnection: false,
+    			port: 587
+    		},
+			tls:{ciphers:'SSLv3'},
+    		username :'taskmanfms@uds.in',
+    		password :'Nov@2018',
+            from:'taskmanfms@uds.in'
+    	},
 
     	pushService : {
     		 baseUrl:'http://localhost:8001'

@@ -273,4 +273,22 @@ public class AmazonS3Utils {
         return expenseDocumentDTO;
     }
 
+
+    public ExpenseDocumentDTO uploadImageDoc(String fileName, MultipartFile multipartFile, ExpenseDocumentDTO expenseDocumentDTO) {
+
+        String fileUrl = "";
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+//            String fileName = generateFileName(multipartFile);
+            String nameOfFile = fileName;
+            fileUrl = amazonS3Service.uploadExpenseFileTos3bucket(nameOfFile, file);
+            expenseDocumentDTO.setFile(nameOfFile);
+            expenseDocumentDTO.setFileUrl(fileUrl);
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return expenseDocumentDTO;
+    }
+
 }

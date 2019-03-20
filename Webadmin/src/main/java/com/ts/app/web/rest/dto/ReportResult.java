@@ -39,6 +39,10 @@ public class ReportResult {
     long presentEmployeeCount;
 
     long absentEmployeeCount;
+    
+    long totalQuotationCount;
+    
+    long totalTicketsCount;
 
 	Map<JobType,Long> jobCountByType;
 
@@ -327,6 +331,22 @@ public class ReportResult {
 
 	public void setTotalTicketCount(long totalTicketCount) {
 		this.totalTicketCount = totalTicketCount;
+	}
+
+	public long getTotalQuotationCount() {
+		return totalQuotationCount;
+	}
+
+	public void setTotalQuotationCount(long totalQuotationCount) {
+		this.totalQuotationCount = totalQuotationCount;
+	}
+
+	public long getTotalTicketsCount() {
+		return totalTicketsCount;
+	}
+
+	public void setTotalTicketsCount(long totalTicketsCount) {
+		this.totalTicketsCount = totalTicketsCount;
 	}
     
     

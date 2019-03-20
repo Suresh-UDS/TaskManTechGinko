@@ -163,7 +163,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
             </li>
 
             <li  ng-class="{active: $state.includes('admin')}" has-permission="Inventory:List">
-                <a data-toggle="collapse" data-target="#Inventory" href="javascript:void(0);">
+                <a data-toggle="collapse" data-target="#Inventory" href="#">
                     <i class="material-icons">widgets</i>
                     <p> Inventory
                         <b class="caret"></b>
@@ -178,7 +178,7 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                                 <p>Master</p>
                             </a>
                         </li>
-                        <li ui-sref-active="active" has-permission="InventoryTransaction:List"  >
+                        <li ui-sref-active="active" has-permission="Inventory:List"  >
                             <a ui-sref="inventory-transaction-list">
                                 <i class="material-icons">widgets</i>
                                 <p>Issued / Received</p>

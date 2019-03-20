@@ -171,7 +171,7 @@
 														<option value="Low">Low</option>
 														<option value="Medium">Medium</option>
 														<option value="High">High</option>
-														<option value="Critical">Critical</option>
+														<option value="High">Critical</option>
 													</select>
                                                     <div ng-show="form.$submitted || form.category.$touched || form.category.$dirty">
                                                         <div ng-show="form.category.$dirty || form.category.$invalid">
@@ -253,12 +253,11 @@
 																{{slaEsc.level}}</span></td>
 														<td class="text-right">
 															<!--<a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
-                                                            <a
-                                                                ng-click="removeSlaConfirm($index)"
-                                                                ng-class="{active: $state.includes('admin')}"
-                                                                onClick="$('#deleteModal').modal()"
-                                                                data-target="#myModal" class="btn btn-simple btn-danger"><i
-                                                                class="material-icons">delete</i>
+															<a ng-click="removeSlaConfirm($index)"
+															ng-class="{active: $state.includes('admin')}"
+															onClick="$('#deleteModal').modal()"
+															data-target="#myModal" class="btn btn-simple btn-danger"><i
+																class="material-icons">delete</i>
                                                             </a>
 														</td>
 													</tr>

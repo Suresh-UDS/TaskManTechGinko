@@ -13,7 +13,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
@@ -49,12 +48,6 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if (searchCriteria.getSiteId() != 0) {
 			predicates.add(builder.equal(root.get("site").get("id"), searchCriteria.getSiteId()));
 		}
-        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
-            predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
-        }
-        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
-            predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
-        }
 		if (searchCriteria.getMaterialId() != 0) {
 			predicates.add(builder.equal(root.get("material").get("id"), searchCriteria.getMaterialId()));
 		}
@@ -64,22 +57,22 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 		if(searchCriteria.getJobId() != 0) {
 			predicates.add(builder.equal(root.get("job").get("id"), searchCriteria.getJobId()));
 		}
-		if (StringUtils.isNotEmpty(searchCriteria.getMaterialName())) {
-
-			predicates.add(builder.like(builder.lower(root.get("material").get("name")),
+		if (searchCriteria.getMaterialName() != null && searchCriteria.getMaterialName() != "") {
+			predicates.add(builder.like(builder.lower(root.get("name")),
 					"%" + searchCriteria.getMaterialName().toLowerCase() + "%"));
 		}
-		if(searchCriteria.getIndentRefNumber() > 0) {
-            predicates.add(builder.equal(root.get("materialIndent").get("indentRefNumber").get("number"), searchCriteria.getIndentRefNumber()));
+		if(searchCriteria.getIndentRefNumber() != null) { 
+			predicates.add(builder.like(builder.lower(root.get("materialIndent").get("indentRefNumber")),
+					"%" + searchCriteria.getIndentRefNumber().toLowerCase() + "%"));
 		}
-		if (StringUtils.isNotEmpty(searchCriteria.getItemCode())) {
-			predicates.add(builder.like(builder.lower(root.get("material").get("itemCode")),
+		if (searchCriteria.getItemCode() != null && searchCriteria.getItemCode() !="") {
+			predicates.add(builder.like(builder.lower(root.get("itemCode")),
 					"%" + searchCriteria.getItemCode().toLowerCase() + "%"));
 		}
 		if (searchCriteria.getTransactionType() != null) {
 			predicates.add(builder.equal(root.get("transactionType"), searchCriteria.getTransactionType()));
 		}
-		if(searchCriteria.getTransactionDate() != null) {
+		if(searchCriteria.getTransactionDate() != null) { 
 			log.debug("Inventory transaction created date -" + searchCriteria.getTransactionDate());
 			Calendar endCal = Calendar.getInstance();
 			endCal.set(Calendar.HOUR_OF_DAY, 23);
@@ -87,19 +80,14 @@ public class InventoryTransSpecification implements Specification<MaterialTransa
 			endCal.set(Calendar.SECOND, 0);
 			predicates.add(builder.between(root.get("transactionDate"), searchCriteria.getTransactionDate(), DateUtil.convertToTimestamp(endCal.getTime())));
 		}
-
-
-        if(searchCriteria.isShowInActive()) {
-            predicates.add(builder.equal(root.get("active"), "N"));
-        } else {
-            predicates.add(builder.equal(root.get("active"), "Y"));
-        }
+		
+		predicates.add(builder.equal(root.get("active"), "Y"));
 
 		query.orderBy(builder.desc(root.get("createdDate")));
 
 		List<Predicate> orPredicates = new ArrayList<>();
 		log.debug("InventorySpecification toPredicate - searchCriteria userId -" + searchCriteria.getUserId());
-
+		
 		if(searchCriteria.getSiteId() == 0 && !searchCriteria.isAdmin()){
     		orPredicates.add(builder.equal(root.get("site").get("user").get("id"),  searchCriteria.getUserId()));
 		}else if(searchCriteria.getSiteId() > 0) {

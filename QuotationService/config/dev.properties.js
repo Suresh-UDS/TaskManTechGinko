@@ -24,7 +24,7 @@ module.exports = {
         },
         tls:{ciphers:'SSLv3'},
         username :'taskmanfms@uds.in',
-        password :'Task@2018',
+        password :'Nov@2018',
         from:'taskmanfms@uds.in'
     },
 

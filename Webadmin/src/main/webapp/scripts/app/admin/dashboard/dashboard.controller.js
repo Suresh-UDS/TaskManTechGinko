@@ -74,6 +74,9 @@ angular.module('timeSheetApp')
             $scope.loadChartData();
             // $scope.loadTicketStatusFromInflux();
             // $scope.loadCharts();
+            $scope.loadAllJobs();
+            $scope.loadAllQuotations();
+            $scope.loadAllTickets();
         };
 
         // Load Charts function
@@ -305,13 +308,11 @@ angular.module('timeSheetApp')
                 $scope.closedTicketsTotalCount = data[0].closedCounts;
                 $scope.overAllTicketsTotalCount = data[0].totalCounts;
                 $scope.assignedTicketTotalCount = data[0].assignedCounts;
-                $scope.inProgressTicketCount = data[0].totalAssignedTicketCount;
             } else {
                 $scope.openTicketsTotalCount = 0;
                 $scope.closedTicketsTotalCount = 0;
                 $scope.overAllTicketsTotalCount = 0;
                 $scope.assignedTicketTotalCount = 0;
-                $scope.inProgressTicketCount = 0;
             }
 
         }
@@ -355,7 +356,6 @@ angular.module('timeSheetApp')
 
             $scope.assignedTicketTotalCount = response.totalAssignedTicketCount;
             $scope.openTicketTotalCnt = response.totalOpenTicketCount;
-            $scope.inProgressTicketCount = response.totalInProgressTicketCount;
 
             // if($scope.openTicketsTotalCount > 0) {
             //
@@ -530,7 +530,7 @@ angular.module('timeSheetApp')
                      $scope.loadCharts();
 
             		return false;
-            }else if ((e.date._d < $scope.selectedToDateSer)) {
+            }else if ((e.date._d <= $scope.selectedToDateSer)) {
 
                 $scope.selectedFromDateSer = new Date(e.date._d);
                 $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
@@ -571,7 +571,7 @@ angular.module('timeSheetApp')
                     $scope.loadCharts();
 
             		return false;
-            }else if($scope.selectedFromDateSer < e.date._d) {
+            }else if($scope.selectedFromDateSer <= e.date._d) {
             	$scope.selectedToDateSer = new Date(e.date._d);
                 $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy') ;
 
@@ -657,7 +657,51 @@ angular.module('timeSheetApp')
              });
         };
 
+        function dateConverter (dateString){
 
+            var str = dateString.split("/");
+
+            return new Date(str[2],(Number(str[1])-1),str[0]);
+
+        }
+
+        $scope.loadAllJobs = function(){
+
+            var fromDate = dateConverter($scope.selectedFromDate);
+            var toDate = dateConverter($scope.selectedToDate);
+
+            DashboardComponent.loadAllJobsByDate(fromDate,toDate).then(function(data){
+
+                $scope.currentJobCount = data.totalJobCount ? data.totalJobCount : 0;
+  
+            })
+        };     
+
+        $scope.loadAllQuotations = function(){
+
+            var fromDate = dateConverter($scope.selectedFromDate);
+            var toDate = dateConverter($scope.selectedToDate);
+
+            DashboardComponent.loadAllQuotationByDate(fromDate,toDate).then(function(data){
+
+                $scope.totalCurrentQuotationCount = data.totalCount ? data.totalCount : 0;
+  
+            })
+
+        }
+
+        $scope.loadAllTickets = function(){
+
+            var fromDate = dateConverter($scope.selectedFromDate);
+            var toDate = dateConverter($scope.selectedToDate);
+
+            DashboardComponent.loadAllTicketByDate(fromDate,toDate).then(function(data){
+
+                $scope.totalCurrenTicketsCount = data.totalTicketsCount ? data.totalTicketsCount : 0;
+  
+            })
+
+        }
 
         $scope.loadAllAttendanceCounts = function () {
 
@@ -807,6 +851,9 @@ angular.module('timeSheetApp')
             // $scope.loadAllAttendanceCounts();
         		// $scope.loadJobReport();
             // $scope.myChart.update();
+            $scope.loadAllJobs();
+            $scope.loadAllQuotations();
+            $scope.loadAllTickets();
 
         };
 
@@ -2093,14 +2140,17 @@ angular.module('timeSheetApp')
 
           $scope.localStorage = getLocalDbStorage.getSearch();
 
-          $scope.selectedFromDateSer = new Date($scope.localStorage.selectedFromDate);
-          $scope.selectedFromDate = $filter('date')($scope.localStorage.selectedFromDate, 'dd/MM/yyyy') ;
-
+          $scope.selectedFromDateSer = new Date();
+          $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy') ;
+ 
           /** root scope (searchCriteria) from date **/
           $rootScope.searchFilterCriteria.selectedFromDate = $scope.selectedFromDateSer;
 
-          $scope.selectedToDateSer = new Date($scope.localStorage.selectedToDate);
-          $scope.selectedToDate = $filter('date')($scope.localStorage.selectedToDate, 'dd/MM/yyyy') ;
+          // $scope.selectedToDateSer = new Date($scope.localStorage.selectedToDate);
+          // $scope.selectedToDate = $filter('date')($scope.localStorage.selectedToDate, 'dd/MM/yyyy') ;
+
+          $scope.selectedToDateSer = new Date();
+          $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy') ;
 
           /** root scope (searchCriteria) to date **/
           $rootScope.searchFilterCriteria.selectedToDate = $scope.selectedToDateSer;

@@ -39,6 +39,7 @@ import com.ts.app.service.AmazonS3Service;
 import com.ts.app.service.ImportService;
 import com.ts.app.service.JobManagementService;
 import com.ts.app.service.PushService;
+import com.ts.app.service.ReportService;
 import com.ts.app.service.SchedulerService;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.CacheUtil;
@@ -101,6 +102,9 @@ public class JobManagementResource {
 
 	@Inject
 	private AmazonS3Service amazonService;
+	
+	@Inject
+	private ReportService reportService;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -138,8 +142,8 @@ public class JobManagementResource {
 							userIds[ind] = user.getId();
 							ind++;
 						}
-						//String message = "New job "+ jobDTO.getTitle() +" requested for site-" + jobDTO.getSiteName();
-						//pushService.send(userIds, message);
+						String message = "New job "+ jobDTO.getTitle() +" requested for site-" + jobDTO.getSiteName();
+						pushService.send(userIds, message);
 						//jobService.saveNotificationLog(response.getId(), SecurityUtils.getCurrentUserId(), users, siteId, message);
 					}
 //				}
@@ -263,6 +267,14 @@ public class JobManagementResource {
 			result = jobService.findBySearchCrieria(searchCriteria,true);
 		}
 		return result;
+	}
+	
+	@RequestMapping(value = "/jobs/currentJobsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+	public ReportResult getCurrentJobCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
+		
+		long currentuserId = SecurityUtils.getCurrentUserId(); 
+		return reportService.getCurrentJobCount(currentuserId, fromDate, toDate);
+		
 	}
 
 	@RequestMapping(value = "/jobs/report/{uid}",method = RequestMethod.POST)
@@ -517,6 +529,12 @@ public class JobManagementResource {
     	amazonService.getAllFiles();
     }
 
-
+    @RequestMapping(value = "/jobs/currentJobsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+	public ReportResult getCurrentJobCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
+		
+		long currentuserId = SecurityUtils.getCurrentUserId(); 
+		return reportService.getCurrentJobCount(currentuserId, fromDate, toDate);
+		
+	}
 
 }

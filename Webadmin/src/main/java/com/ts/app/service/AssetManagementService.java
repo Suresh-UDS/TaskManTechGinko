@@ -1,15 +1,10 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Hibernate;
@@ -25,100 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.AssetAMCSchedule;
-import com.ts.app.domain.AssetDocument;
-import com.ts.app.domain.AssetGroup;
-import com.ts.app.domain.AssetPPMSchedule;
-import com.ts.app.domain.AssetParameterConfig;
-import com.ts.app.domain.AssetParameterReading;
-import com.ts.app.domain.AssetParameterReadingRule;
-import com.ts.app.domain.AssetReadingRule;
-import com.ts.app.domain.AssetSiteHistory;
-import com.ts.app.domain.AssetStatus;
-import com.ts.app.domain.AssetStatusHistory;
-import com.ts.app.domain.AssetStatusHistoryDTO;
-import com.ts.app.domain.AssetType;
-import com.ts.app.domain.Checklist;
-import com.ts.app.domain.ChecklistItem;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.FrequencyPrefix;
-import com.ts.app.domain.Job;
-import com.ts.app.domain.MaintenanceType;
-import com.ts.app.domain.Manufacturer;
-import com.ts.app.domain.ParameterConfig;
-import com.ts.app.domain.Project;
-import com.ts.app.domain.SchedulerConfig;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.Ticket;
-import com.ts.app.domain.User;
-import com.ts.app.domain.Vendor;
-import com.ts.app.domain.WarrantyType;
-import com.ts.app.repository.AssetAMCRepository;
-import com.ts.app.repository.AssetDocumentRepository;
-import com.ts.app.repository.AssetGroupRepository;
-import com.ts.app.repository.AssetParamReadingRepository;
-import com.ts.app.repository.AssetParamRuleRepository;
-import com.ts.app.repository.AssetParameterConfigRepository;
-import com.ts.app.repository.AssetPpmScheduleRepository;
-import com.ts.app.repository.AssetReadingRuleRepository;
-import com.ts.app.repository.AssetRepository;
-import com.ts.app.repository.AssetSiteHistoryRepository;
-import com.ts.app.repository.AssetSpecification;
-import com.ts.app.repository.AssetStatusHistoryRepository;
-import com.ts.app.repository.AssetTypeRepository;
-import com.ts.app.repository.CheckInOutImageRepository;
-import com.ts.app.repository.CheckInOutRepository;
-import com.ts.app.repository.ChecklistItemRepository;
-import com.ts.app.repository.ChecklistRepository;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.JobRepository;
-import com.ts.app.repository.LocationRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.NotificationRepository;
-import com.ts.app.repository.ParameterConfigRepository;
-import com.ts.app.repository.PricingRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SchedulerConfigRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.TicketRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.repository.VendorRepository;
-import com.ts.app.repository.WarrantyTypeRepository;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.CommonUtil;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.PagingUtil;
-import com.ts.app.service.util.QRCodeUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetDocumentDTO;
-import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
-import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
-import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
-import com.ts.app.web.rest.dto.AssetScheduleEventDTO;
-import com.ts.app.web.rest.dto.AssetSiteHistoryDTO;
-import com.ts.app.web.rest.dto.AssetTypeDTO;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ChecklistItemDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.TicketDTO;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing Asset information.
@@ -218,9 +121,6 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetPpmScheduleRepository assetPpmScheduleRepository;
-
-	@Inject
-	private AssetAMCRepository assetAmcScheduleRepository;
 
 	@Inject
 	private ChecklistRepository checklistRepository;
@@ -870,7 +770,7 @@ public class AssetManagementService extends AbstractService {
 			site = siteRepository.findOne(siteId);
 		}
 		if(CollectionUtils.isNotEmpty(assets)) {
-			List<AssetScheduleEventDTO> eventDTOs = new ArrayList<AssetScheduleEventDTO>();
+			List<AssetPPMScheduleEventDTO> eventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
 			Calendar startCal = Calendar.getInstance();
 			startCal.set(Calendar.MONTH, 0);
 			startCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -883,13 +783,9 @@ public class AssetManagementService extends AbstractService {
 			endCal.set(Calendar.MINUTE, 59);
 			for(Asset asset : assets) {
 				if(site == null) site = asset.getSite();
-				List<AssetScheduleEventDTO> assetPPMSchedules = getAssetPPMScheduleCalendar(asset.getId(), startCal.getTime(), endCal.getTime());
-				if(CollectionUtils.isNotEmpty(assetPPMSchedules)) {
-					eventDTOs.addAll(assetPPMSchedules);
-				}
-				List<AssetScheduleEventDTO> assetAMCSchedules = getAssetAMCScheduleCalendar(asset.getId(), startCal.getTime(), endCal.getTime());
-				if(CollectionUtils.isNotEmpty(assetAMCSchedules)) {
-					eventDTOs.addAll(assetAMCSchedules);
+				List<AssetPPMScheduleEventDTO> assetSchedules = getAssetPPMScheduleCalendar(asset.getId(), startCal.getTime(), endCal.getTime());
+				if(CollectionUtils.isNotEmpty(assetSchedules)) {
+					eventDTOs.addAll(assetSchedules);
 				}
 			}
 			exportUtil.write52WeekScheduleToFile(site.getName(), eventDTOs, result);
@@ -905,12 +801,12 @@ public class AssetManagementService extends AbstractService {
 	 * @param endDate
 	 * @return
 	 */
-	public List<AssetScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
-		List<AssetScheduleEventDTO> assetPPMScheduleEventDTOs = null;
+	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
+		List<AssetPPMScheduleEventDTO> assetPPMScheduleEventDTOs = null;
 		String type = MaintenanceType.valueOf("PPM").getValue();
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
-			assetPPMScheduleEventDTOs = new ArrayList<AssetScheduleEventDTO>();
+			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
 			
 			Calendar lastDate = Calendar.getInstance();
 			if(endDate == null) {
@@ -935,8 +831,8 @@ public class AssetManagementService extends AbstractService {
 				if(schStartCal.after(currCal)) {
 					currCal.setTime(schStartCal.getTime());
 				}
-				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(schEndCal) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
-					AssetScheduleEventDTO assetPPMScheduleEvent = new AssetScheduleEventDTO();
+				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
 					Asset asset = ppmSchedule.getAsset();
@@ -950,74 +846,12 @@ public class AssetManagementService extends AbstractService {
 					assetPPMScheduleEvent.setStart(currCal.getTime());
 					assetPPMScheduleEvent.setAllDay(true);
 					assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
-					assetPPMScheduleEvent.setMaintenanceType(MaintenanceType.PPM.name());
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
 					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());
 				}
 			}
 		}
 		return assetPPMScheduleEventDTOs;
-	}
-	
-	/**
-	 * Returns a list of asset AMC schedule events for the given asset Id and date range.
-	 *
-	 * @param assetId
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 */
-	public List<AssetScheduleEventDTO> getAssetAMCScheduleCalendar(long assetId, Date startDate, Date endDate) {
-		List<AssetScheduleEventDTO> assetScheduleEventDTOs = null;
-		List<AssetAMCSchedule> assetAMCSchedules = assetAmcScheduleRepository.findAssetAMCScheduleByAssetId(assetId);
-		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
-			assetScheduleEventDTOs = new ArrayList<AssetScheduleEventDTO>();
-			
-			Calendar lastDate = Calendar.getInstance();
-			if(endDate == null) {
-				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getMaximum(Calendar.DAY_OF_MONTH));
-			}else {
-				lastDate.setTime(endDate);
-			}
-			lastDate.set(Calendar.HOUR_OF_DAY, 23);
-			lastDate.set(Calendar.MINUTE, 59);
-
-			for(AssetAMCSchedule amcSchedule : assetAMCSchedules) {
-				Calendar currCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
-				currCal.setTime(startDate);
-				currCal.set(Calendar.HOUR_OF_DAY, 0);
-				currCal.set(Calendar.MINUTE, 0);
-				Date schStartDate = amcSchedule.getStartDate();
-				Date schEndDate = amcSchedule.getEndDate();
-				Calendar schStartCal = Calendar.getInstance();
-				schStartCal.setTime(schStartDate);
-				Calendar schEndCal = Calendar.getInstance();
-				schEndCal.setTime(schEndDate);
-				if(schStartCal.after(currCal)) {
-					currCal.setTime(schStartCal.getTime());
-				}
-				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(schEndCal) && !currCal.after(lastDate)) { //if AMC schedule starts before current date and not after the last date of the month.
-					AssetScheduleEventDTO assetAMCScheduleEvent = new AssetScheduleEventDTO();
-					assetAMCScheduleEvent.setId(amcSchedule.getId());
-					assetAMCScheduleEvent.setTitle(amcSchedule.getTitle());
-					Asset asset = amcSchedule.getAsset();
-					assetAMCScheduleEvent.setAssetId(asset.getId());
-					assetAMCScheduleEvent.setAssetTitle(asset.getTitle());
-					assetAMCScheduleEvent.setAssetCode(asset.getCode());
-					assetAMCScheduleEvent.setFrequency(amcSchedule.getFrequency());
-					assetAMCScheduleEvent.setFrequencyDuration(amcSchedule.getFrequencyDuration());
-					assetAMCScheduleEvent.setFrequencyPrefix(amcSchedule.getFrequencyPrefix());
-					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
-					assetAMCScheduleEvent.setStart(currCal.getTime());
-					assetAMCScheduleEvent.setAllDay(true);
-					assetAMCScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
-					assetAMCScheduleEvent.setMaintenanceType(MaintenanceType.AMC.name());
-					assetScheduleEventDTOs.add(assetAMCScheduleEvent);
-					addDays(currCal, amcSchedule.getFrequency(), amcSchedule.getFrequencyDuration());
-				}
-			}
-		}
-		return assetScheduleEventDTOs;
 	}
 
 	private void addDays(Calendar dateTime , String scheduleType, int duration) {

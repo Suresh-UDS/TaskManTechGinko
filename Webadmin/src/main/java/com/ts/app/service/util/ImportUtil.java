@@ -1,31 +1,8 @@
 package com.ts.app.service.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
+import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -33,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.format.CellFormatType;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -45,8 +23,16 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.io.*;
+import java.nio.file.FileSystem;
+import java.nio.file.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Component
@@ -855,7 +841,7 @@ public class ImportUtil {
 					cellNo = 0;
 					log.debug("cell type =" + currentRow.getCell(0).getNumericCellValue()+"\t"+currentRow.getCell(9).getNumericCellValue());
 					SiteDTO siteDTO = new SiteDTO();
-					siteDTO.setProjectId((int)currentRow.getCell(0).getNumericCellValue());
+					siteDTO.setProjectId((int)(currentRow.getCell(0).getNumericCellValue()));
 					cellNo = 1;
 					siteDTO.setName(currentRow.getCell(1).getStringCellValue());
 					cellNo = 7;
@@ -1174,16 +1160,17 @@ public class ImportUtil {
 					cellNo = 18;
 					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
 					cellNo = 19;
-					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
-					if(assetCode != null) {
-					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
-					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
-					    if(isDuplicate) {
-                            continue;
-                        } else {
-                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-                        }
-                    }
+                    assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+//					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
+//					if(assetCode != null) {
+//					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
+//					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
+//					    if(isDuplicate) {
+//                            continue;
+//                        } else {
+//                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+//                        }
+//                    }
 					cellNo = 20;
 					assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 					assetManagementService.saveAsset(assetDTO);
@@ -1911,8 +1898,7 @@ public class ImportUtil {
 		return value;
 	}
 
-	private boolean isDuplicateCode(String code, long siteId) {
-	    String assetCode = siteId+"_"+code;
+	private boolean isDuplicateCode(String assetCode, long siteId) {
         List<Asset> asset = assetRepository.findAssetCodeBySite(siteId, assetCode);
         if(asset.size() > 0) {
             return true;

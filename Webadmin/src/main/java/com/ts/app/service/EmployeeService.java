@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
@@ -1814,6 +1815,20 @@ public class    EmployeeService extends AbstractService {
         result.setTransactions(transactions);
         return;
 
+    }
+    
+    public ExpenseDocumentDTO uploadFile(MultipartFile file, String fileName) {
+        // TODO Auto-generated method stub
+        Date uploadDate = new Date();
+        ExpenseDocumentDTO expenseDocumentDTO = new ExpenseDocumentDTO();
+        expenseDocumentDTO = amazonS3utils.uploadImageDoc(fileName, file, expenseDocumentDTO);
+        expenseDocumentDTO.setFile(expenseDocumentDTO.getFile());
+        expenseDocumentDTO.setUploadedDate(uploadDate);
+        expenseDocumentDTO.setTitle(expenseDocumentDTO.getTitle());
+        ExpenseDocument expenseDocument = mapperUtil.toEntity(expenseDocumentDTO, ExpenseDocument.class);
+        expenseDocument.setActive(AssetDocument.ACTIVE_YES);
+        expenseDocumentDTO.setFileUrl(expenseDocumentDTO.getFileUrl());
+        return expenseDocumentDTO;
     }
 
     public List<EmployeeDTO> getEmployeeWithoutLeft(SearchCriteria searchCriteria) {

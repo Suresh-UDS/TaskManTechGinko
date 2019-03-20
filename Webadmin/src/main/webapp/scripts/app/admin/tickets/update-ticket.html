@@ -231,6 +231,16 @@
                                                     Employee is required
                                             </div>
                                         </div>
+
+                                        <div ng-show="form.$submitted || form.employee.$touched">
+                                            <div
+                                                ng-show="form.employee.$dirty || form.employee.$invalid">
+
+                                                <p class="help-block" style="color:maroon"
+                                                   ng-show="form.employee.$error.required">
+                                                    Required
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>

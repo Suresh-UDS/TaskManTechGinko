@@ -122,6 +122,15 @@ public class DateUtil {
 		return StringUtils.EMPTY;
 	}
 	
+	public static String formatToZonedDateTimeString(ZonedDateTime zonedDateTime) {
+		if(zonedDateTime != null) {
+	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+	        String strDate = dtFormat.format(zonedDateTime);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
+	}
+	
 	public static ZonedDateTime convertToZDT(Date date) {
 		ZonedDateTime zdt = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.of("Asia/Kolkata"));
 		return zdt;

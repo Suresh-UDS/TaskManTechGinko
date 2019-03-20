@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "ticket")
@@ -47,7 +48,7 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "assigned_to_id", nullable = true)
     private Employee assignedTo;
 
-    private Date assignedOn;
+    private ZonedDateTime assignedOn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "closed_by_id", nullable = true)
@@ -57,7 +58,7 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "asset_id", nullable = true)
     private Asset asset;
 
-    private Date closedOn;
+    private ZonedDateTime closedOn;
 
     private String reportingTo;
 
@@ -219,12 +220,12 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.assignedTo = assignedTo;
 	}
 
-	public Date getAssignedOn() {
+	public ZonedDateTime getAssignedOn() {
 		return assignedOn;
 	}
 
-	public void setAssignedOn(Date assignedOn) {
-		this.assignedOn = assignedOn;
+	public void setAssignedOn() {
+		this.assignedOn = ZonedDateTime.now();
 	}
 
 	public Employee getClosedBy() {
@@ -235,12 +236,12 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.closedBy = closedBy;
 	}
 
-	public Date getClosedOn() {
+	public ZonedDateTime getClosedOn() {
 		return closedOn;
 	}
 
-	public void setClosedOn(Date closedOn) {
-		this.closedOn = closedOn;
+	public void setClosedOn() {
+		this.closedOn = ZonedDateTime.now();
 	}
 
 	public String getCategory() {

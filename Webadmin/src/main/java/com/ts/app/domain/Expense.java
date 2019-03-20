@@ -1,14 +1,13 @@
 package com.ts.app.domain;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "expense")
-public class Expense extends AbstractAuditingEntity implements Serializable {
+public class Expense extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,10 +18,6 @@ public class Expense extends AbstractAuditingEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteId", nullable = true)
     private Site site;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projectId", nullable = true)
-    private Project project;
 
     private String description;
 
@@ -58,14 +53,6 @@ public class Expense extends AbstractAuditingEntity implements Serializable {
 
     @OneToMany(mappedBy="expense",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ExpenseDocument> documents;
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
 
     public long getId() {
         return id;

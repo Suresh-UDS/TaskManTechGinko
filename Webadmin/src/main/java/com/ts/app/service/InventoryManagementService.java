@@ -377,9 +377,16 @@ public class InventoryManagementService extends AbstractService{
 	}
 
 
-    public void deleteTransaction(long id) {
-        MaterialTransaction materialTrsn = inventTransactionRepository.findOne(id);
-        materialTrsn.setActive(MaterialTransaction.ACTIVE_NO);
-        inventTransactionRepository.save(materialTrsn);
-    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

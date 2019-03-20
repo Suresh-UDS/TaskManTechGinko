@@ -173,15 +173,6 @@ angular.module('timeSheetApp')
 	$scope.loadDepSitesList = function (searchProject) {
 		$scope.siteSpin = true;
 		$scope.searchProject = searchProject;
-        $scope.floorFilterDisable = true;
-        $scope.zoneFilterDisable = true;
-        $scope.blockLists = [];
-        $scope.blocksListOne.selected = undefined;
-        $scope.floorsLists = [];
-        $scope.floorsListOne.selected = undefined;
-        $scope.zonesLists = [];
-        $scope.zonesListOne.selected = undefined;
-
 		if(jQuery.isEmptyObject($scope.searchProject) == true){
 			SiteComponent.findAll().then(function (data) {
 				$scope.selectedSite = null;
@@ -243,15 +234,6 @@ angular.module('timeSheetApp')
 		$scope.branchsLists = [];
 		$scope.branchsListOne.selected = null;
 		$scope.branchFilterDisable = true;
-        $scope.blockFilterDisable = true;
-        $scope.floorFilterDisable = true;
-        $scope.zoneFilterDisable = true;
-        $scope.blockLists = [];
-        $scope.blocksListOne.selected = undefined;
-        $scope.floorsLists = [];
-        $scope.floorsListOne.selected = undefined;
-        $scope.zonesLists = [];
-        $scope.zonesListOne.selected = undefined;
 		SiteComponent.getRegionByProject(projectId).then(function (response) {
 			// //console.log(response);
 			$scope.regionList = response;
@@ -274,15 +256,7 @@ angular.module('timeSheetApp')
 
 	/*** UI select (Branch List) **/
 	$scope.loadBranchList = function (projectId, callback) {
-        $scope.blockFilterDisable = true;
-        $scope.floorFilterDisable = true;
-        $scope.zoneFilterDisable = true;
-        $scope.blockLists = [];
-        $scope.blocksListOne.selected = undefined;
-        $scope.floorsLists = [];
-        $scope.floorsListOne.selected = undefined;
-        $scope.zonesLists = [];
-        $scope.zonesListOne.selected = undefined;
+
 		if(projectId){
 
 			if($scope.regionsListOne.selected){
@@ -404,12 +378,6 @@ angular.module('timeSheetApp')
 	    };*/
 
 	$scope.loadDepBlocksList = function (site) {
-        $scope.floorFilterDisable = true;
-        $scope.zoneFilterDisable = true;
-        $scope.floorsLists = [];
-        $scope.floorsListOne.selected = undefined;
-        $scope.zonesLists = [];
-        $scope.zonesListOne.selected = undefined;
 		if(site){
 			$scope.blockLists = [];
 			$scope.blocksListOne.selected = null;
@@ -525,12 +493,9 @@ angular.module('timeSheetApp')
 	    };*/
 
 	$scope.loadDepFloorsList = function (searchBlock) {
-        $scope.floorFilterDisable = true;
-        $scope.zoneFilterDisable = true;
-        $scope.floorsLists = [];
-        $scope.floorsListOne.selected = undefined;
-        $scope.zonesLists = [];
-        $scope.zonesListOne.selected = undefined;
+
+		$scope.floorsLists = [];
+		$scope.floorsListOne.selected = null;
 		if($scope.client.selected){
 			$scope.searchProject = $scope.client.selected;
 		}else{
@@ -1469,14 +1434,6 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
-        $scope.floorFilterDisable = true;
-        $scope.zoneFilterDisable = true;
-        $scope.blockLists = [];
-        $scope.blocksListOne.selected = undefined;
-        $scope.floorsLists = [];
-        $scope.floorsListOne.selected = undefined;
-        $scope.zonesLists = [];
-        $scope.zonesListOne.selected = undefined;
 		if(branch){
 			$scope.siteFilterDisable = true;
 			$scope.siteSpin = true;

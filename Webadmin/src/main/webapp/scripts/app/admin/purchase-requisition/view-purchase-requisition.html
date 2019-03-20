@@ -95,7 +95,7 @@
                                         <td>{{items.quantity}}</td>
                                         <td>{{items.approvedQty ? items.approvedQty : "Nil"}}</td>
                                         <td width="10%">
-                                            <input type="number" class="form-control" ng-model="items.currentAprQty" ng-disabled="purchaseReqObj.requestStatus === 'REJECTED'" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
+                                            <input type="number" class="form-control" ng-model="items.currentAprQty" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
                                         </td>
                                     </tr>
                                     </tbody>

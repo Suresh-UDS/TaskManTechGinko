@@ -52,7 +52,7 @@ public class TicketDTO extends BaseDTO {
     
     private String assignedToLastName;
 
-    private Date assignedOn;
+    private ZonedDateTime assignedOn;
 
     private long closedById;
 
@@ -60,7 +60,7 @@ public class TicketDTO extends BaseDTO {
     
     private String closedByLastName;
 
-    private Date closedOn;
+    private ZonedDateTime closedOn;
 
     private String comments;
     
@@ -232,11 +232,11 @@ public class TicketDTO extends BaseDTO {
 		this.assignedToName = assignedToName;
 	}
 
-	public Date getAssignedOn() {
+	public ZonedDateTime getAssignedOn() {
 		return assignedOn;
 	}
 
-	public void setAssignedOn(Date assignedOn) {
+	public void setAssignedOn(ZonedDateTime assignedOn) {
 		this.assignedOn = assignedOn;
 	}
 
@@ -256,11 +256,11 @@ public class TicketDTO extends BaseDTO {
 		this.closedByName = closedByName;
 	}
 
-	public Date getClosedOn() {
+	public ZonedDateTime getClosedOn() {
 		return closedOn;
 	}
 
-	public void setClosedOn(Date closedOn) {
+	public void setClosedOn(ZonedDateTime closedOn) {
 		this.closedOn = closedOn;
 	}
 

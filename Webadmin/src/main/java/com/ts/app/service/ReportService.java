@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -47,7 +48,10 @@ public class ReportService extends AbstractService {
 
     @Inject
     private UserRepository userRepository;
-
+    
+    @Inject
+    private EmployeeProjectSiteRepository employeeProjectSiteRepository;
+    
     @Inject
     private AttendanceRepository attendanceRepository;
 
@@ -59,6 +63,10 @@ public class ReportService extends AbstractService {
 
     @PersistenceContext
 	private EntityManager manager;
+    
+    @Inject
+    private EmployeeProjectSiteRepository employeeProjectSiteRepository;
+    
 
 	public ReportResult getJobStats(Long siteId, Date selectedDate) {
 		java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
@@ -70,6 +78,68 @@ public class ReportService extends AbstractService {
 		reportResult.setAssignedJobCount(assignedJobCount);
 		reportResult.setCompletedJobCount(completedJobCount);
 		reportResult.setOverdueJobCount(overdueJobCount);
+		return reportResult;
+	}
+	
+	public ReportResult getCurrentJobCount(long currentuserId,Date fromDate,Date toDate) {
+
+		java.sql.Date sqlFromDate = new java.sql.Date(DateUtils.toCalendar(fromDate).getTimeInMillis());
+		java.sql.Date sqlToDate = new java.sql.Date(DateUtils.toCalendar(toDate).getTimeInMillis());
+		
+		List<Long> siteIds;
+		List<Site> sites ;
+		long currentJobCount = 0;
+		
+		User user = userRepository.findOne(currentuserId);
+		Employee employee = user.getEmployee();
+		
+		if(employee != null && !user.isAdmin()) {
+			
+			siteIds  = employeeProjectSiteRepository.getSiteIdsByEmployeeId(employee.getId());
+			//List<Long> siteIds= sites.stream().map(site -> site.getId()).collect(Collectors.toList());
+			
+			currentJobCount = jobRepository.findCurrentJobCountBySiteIdsAndDateRange(siteIds,sqlFromDate,sqlToDate);
+		
+		}
+		else {
+			
+			currentJobCount = jobRepository.findCurrentJobCountByDateRange(sqlFromDate, sqlToDate);
+		}
+  
+		ReportResult reportResult = new ReportResult();
+		reportResult.setTotalJobCount(currentJobCount);
+		
+		return reportResult;
+	}
+	
+	public ReportResult getCurrentTicketsCount(long currentuserId,Date fromDate,Date toDate) {
+
+		java.sql.Date sqlFromDate = new java.sql.Date(DateUtils.toCalendar(fromDate).getTimeInMillis());
+		java.sql.Date sqlToDate = new java.sql.Date(DateUtils.toCalendar(toDate).getTimeInMillis());
+		
+		List<Long> siteIds;
+		List<Site> sites ;
+		long totalTicketsCount = 0;
+		
+		User user = userRepository.findOne(currentuserId);
+		Employee employee = user.getEmployee();
+		
+		if(employee != null && !user.isAdmin()) {
+			
+			siteIds  = employeeProjectSiteRepository.getSiteIdsByEmployeeId(employee.getId()); 
+			
+			totalTicketsCount = ticketRepository.findCurrentTicketsCountBySiteIdsAndDateRange(siteIds,sqlFromDate,sqlToDate);
+		
+		}
+		else {
+			
+			totalTicketsCount = ticketRepository.findCurrentTicketsCountByDateRange(sqlFromDate,sqlToDate);
+			
+		}
+  
+		ReportResult reportResult = new ReportResult();
+		reportResult.setTotalTicketsCount(totalTicketsCount);;
+		
 		return reportResult;
 	}
 
@@ -140,14 +210,14 @@ public class ReportService extends AbstractService {
         log.debug(String.valueOf(completedJobTAT));
         return reportResult;
     }
-    
+
     public ReportResult jobCountByProjectAndStatusAndDateRange(Long projectId, Date selectedDate, Date endDate) {
         java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
         java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
 
         log.debug("selected Date  in report result"+selectedDate);
         log.debug("end date in report result"+endDate);
- 
+
         long assignedJobCount = jobRepository.findJobCountByProjectAndStatusDateRange(projectId, sqlDate,sqlEndDate, JobStatus.ASSIGNED);
         long completedJobCount = jobRepository.findJobCountByProjectAndStatusDateRange(projectId,sqlDate,sqlEndDate, JobStatus.COMPLETED);
         long overdueJobCount = jobRepository.findJobCountByProjectAndStatusDateRange(projectId, sqlDate,sqlEndDate, JobStatus.OVERDUE);
@@ -166,7 +236,7 @@ public class ReportService extends AbstractService {
         //log.debug(String.valueOf(completedJobTAT));
         return reportResult;
     }
-    
+
     public ReportResult jobCountByProjectRegionAndStatusAndDateRange(Long projectId, String region, Date selectedDate, Date endDate) {
         java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
         java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
@@ -192,7 +262,7 @@ public class ReportService extends AbstractService {
         //log.debug(String.valueOf(completedJobTAT));
         return reportResult;
     }
-    
+
     public ReportResult jobCountByProjectRegionBranchAndStatusAndDateRange(Long projectId, String region, String branch, Date selectedDate, Date endDate) {
         java.sql.Date sqlDate = new java.sql.Date(DateUtils.toCalendar(selectedDate).getTimeInMillis());
         java.sql.Date sqlEndDate = new java.sql.Date(DateUtils.toCalendar(endDate).getTimeInMillis());
@@ -468,7 +538,7 @@ public class ReportService extends AbstractService {
     }
 
 
-    public ReportResult getAttendanceStatsByRegion(long userId, Long projectId,String region, Date selectedDate, Date endDate) {
+    public ReportResult getAttendanceStatsByRegion(long userId, Long projectId, String region, Date selectedDate, Date endDate) {
         log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
         Calendar startCal = DateUtils.toCalendar(selectedDate);
         startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -498,7 +568,7 @@ public class ReportService extends AbstractService {
         return reportResult;
     }
 
-    public ReportResult getAttendanceStatsByBranch(long userId, Long projectId,String region,String branch, Date selectedDate, Date endDate) {
+    public ReportResult getAttendanceStatsByBranch(long userId, Long projectId, String region, String branch, Date selectedDate, Date endDate) {
         log.info("Attendance report params : projectId - "+ projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate );
         Calendar startCal = DateUtils.toCalendar(selectedDate);
         startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -597,7 +667,7 @@ public class ReportService extends AbstractService {
         //create sql dates
         java.sql.Date sqlFromDate = DateUtil.convertToSQLDate(startCal.getTime());
         java.sql.Date sqlToDate = DateUtil.convertToSQLDate(endCal.getTime());
-        
+
         long totalNewTicketCount = 0;
         long totalOpenTicketCount = 0;
         long totalInProgressTicketCount = 0;
@@ -609,13 +679,13 @@ public class ReportService extends AbstractService {
         log.info("Ticket report params : siteId - "+ siteIds + ", startZDate - " + startZDate + ", endZDate -" + endZDate );
 
         totalNewTicketCount = ticketRepository.findCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
-        
+
         totalOpenTicketCount = ticketRepository.findOpenTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
-        
+
         totalInProgressTicketCount = ticketRepository.findInProgressTicketsBySiteIdAndDateRange(siteIds, startZDate, endZDate);
 
         totalPendingTicketCount = ticketRepository.findOpenCountBySiteIdAndDateRange(siteIds, startZDate, endZDate);
-        
+
         totalAssignedTicketCount = ticketRepository.findAssignedCountBySiteIdStatusAndDateRange(siteIds, startZDate, endZDate);
 
         totalClosedTicketCount = ticketRepository.findClosedCountBySiteIdStatusAndDateRange(siteIds, sqlFromDate, sqlToDate);
@@ -698,7 +768,7 @@ public class ReportService extends AbstractService {
         return reportResult;
     }
 
-    public ReportResult getTicketStatsDateRangeByRegion(long userId,long projectId, String region, Date selectedDate, Date endDate) {
+    public ReportResult getTicketStatsDateRangeByRegion(long userId, long projectId, String region, Date selectedDate, Date endDate) {
         log.info("Ticket report params : projectId - " + projectId + ", selectedDate - " + selectedDate + ", endDate -" + endDate);
         List<Long> siteIds = siteRepository.findByRegion(projectId, region);
 
@@ -710,7 +780,7 @@ public class ReportService extends AbstractService {
         return getTicketStatsDateRangeByBranchorRegion(siteIds,selectedDate,endDate);
     }
 
-    public ReportResult getTicketStatsDateRangeByBranchorRegion(List<Long> siteIds,Date selectedDate, Date endDate){
+    public ReportResult getTicketStatsDateRangeByBranchorRegion(List<Long> siteIds, Date selectedDate, Date endDate){
 
         Calendar startCal = DateUtils.toCalendar(selectedDate);
         startCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -864,6 +934,66 @@ public class ReportService extends AbstractService {
     }
 
 
+    public ReportResult getCurrentJobCount(long currentuserId,Date fromDate,Date toDate) {
 
+		java.sql.Date sqlFromDate = new java.sql.Date(DateUtils.toCalendar(fromDate).getTimeInMillis());
+		java.sql.Date sqlToDate = new java.sql.Date(DateUtils.toCalendar(toDate).getTimeInMillis());
+		
+		List<Long> siteIds;
+		List<Site> sites ;
+		long currentJobCount = 0;
+		
+		User user = userRepository.findOne(currentuserId);
+		Employee employee = user.getEmployee();
+		
+		if(employee != null && !user.isAdmin()) {
+			
+			siteIds  = employeeProjectSiteRepository.getSiteIdsByEmployeeId(employee.getId());
+			//List<Long> siteIds= sites.stream().map(site -> site.getId()).collect(Collectors.toList());
+			
+			currentJobCount = jobRepository.findCurrentJobCountBySiteIdsAndDateRange(siteIds,sqlFromDate,sqlToDate);
+		
+		}
+		else {
+			
+			currentJobCount = jobRepository.findCurrentJobCountByDateRange(sqlFromDate, sqlToDate);
+		}
+  
+		ReportResult reportResult = new ReportResult();
+		reportResult.setTotalJobCount(currentJobCount);
+		
+		return reportResult;
+	}
+    
+    public ReportResult getCurrentTicketsCount(long currentuserId,Date fromDate,Date toDate) {
+
+		java.sql.Date sqlFromDate = new java.sql.Date(DateUtils.toCalendar(fromDate).getTimeInMillis());
+		java.sql.Date sqlToDate = new java.sql.Date(DateUtils.toCalendar(toDate).getTimeInMillis());
+		
+		List<Long> siteIds;
+		List<Site> sites ;
+		long totalTicketsCount = 0;
+		
+		User user = userRepository.findOne(currentuserId);
+		Employee employee = user.getEmployee();
+		
+		if(employee != null && !user.isAdmin()) {
+			
+			siteIds  = employeeProjectSiteRepository.getSiteIdsByEmployeeId(employee.getId()); 
+			
+			totalTicketsCount = ticketRepository.findCurrentTicketsCountBySiteIdsAndDateRange(siteIds,sqlFromDate,sqlToDate);
+		
+		}
+		else {
+			
+			totalTicketsCount = ticketRepository.findCurrentTicketsCountByDateRange(sqlFromDate,sqlToDate);
+			
+		}
+  
+		ReportResult reportResult = new ReportResult();
+		reportResult.setTotalTicketsCount(totalTicketsCount);;
+		
+		return reportResult;
+	}
 
 }

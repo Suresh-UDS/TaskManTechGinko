@@ -107,15 +107,24 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     @Query("SELECT t FROM Ticket t WHERE t.status <> 'Closed' order by t.createdDate asc ")
     List<Ticket> findAllActiveUnClosedTicket();
 
-    @Query("SELECT t FROM Ticket t WHERE t.status <> 'Closed' and t.site.id = :siteId order by t.createdDate asc ")
-    List<Ticket> findAllActiveUnClosedTicket(@Param("siteId") long siteId);
-
     @Query("SELECT t FROM Ticket t WHERE t.assignedTo.id =:empId")
     List<Ticket> findByEmployee(@Param("empId") long empId);
+    
+    @Query("SELECT count(t.id) from Ticket t where t.site.id in (:siteIds) and (t.assignedOn between :selDate and :endDate) ")
+    long findCurrentTicketsCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT count(t.id) from Ticket t where (t.assignedOn between :selDate and :endDate) ")
+    long findCurrentTicketsCountByDateRange( @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
     @Query("SELECT t FROM Ticket t WHERE t.assignedTo.id =:empId and (t.status= 'Assigned' or t.status = 'In Progress' or t.status = 'Open') ")
     List<Ticket> findEmployeeUnClosedTickets(@Param("empId") long empId);
 
+    @Query("SELECT count(t.id) from Ticket t where t.site.id in (:siteIds) and (t.assignedOn between :selDate and :endDate) ")
+    long findCurrentTicketsCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
+    @Query("SELECT count(t.id) from Ticket t where (t.assignedOn between :selDate and :endDate) ")
+    long findCurrentTicketsCountByDateRange( @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    
     //@Query("select sum(cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.createdDate) as timediff, t.id as id from Ticket t where t.site.id IN (:siteIds) and t.status <> 'Closed'  and t.createdDate between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ")
 	//long findPendingCountBySiteIdDateRangeAndGroupByDays(@Param("siteIds") List<Long> siteIds,  @Param("min") int min, @Param("max") int max, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 

@@ -34,14 +34,8 @@ public class VendorSpecification implements Specification<Vendor> {
 			predicates.add(builder.like(builder.lower(root.get("name")),
 					"%" + searchCriteria.getVendorName().toLowerCase() + "%"));
 		}
-
-//		predicates.add(builder.equal(root.get("active"), "Y"));
-
-        if(searchCriteria.isShowInActive()) {
-            predicates.add(builder.equal(root.get("active"), "N"));
-        } else {
-            predicates.add(builder.equal(root.get("active"), "Y"));
-        }
+		
+		predicates.add(builder.equal(root.get("active"), "Y"));
 
 		query.orderBy(builder.desc(root.get("name")));
 

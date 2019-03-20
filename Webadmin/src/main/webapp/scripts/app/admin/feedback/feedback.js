@@ -14,8 +14,8 @@ angular.module('timeSheetApp')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/feedback/feedback-list.html',
-                        controller: 'FeedbackController'
-                        //controllerAs:'vm'
+                        controller: 'FeedbackController',
+                        controllerAs:'vm'
                     }
                 },
                 resolve: {
@@ -33,8 +33,8 @@ angular.module('timeSheetApp')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/feedback/feedback-list.html',
-                        controller: 'FeedbackController'
-                        //controllerAs:'vm'
+                        controller: 'FeedbackController',
+                        controllerAs:'vm'
                     }
                 },
                 resolve: {

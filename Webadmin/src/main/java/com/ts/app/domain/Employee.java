@@ -167,7 +167,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.manager = manager;
     }
 
-    public Set<Employee> getSubOrdinates() {
+    public Set<Employee> getSubOrdinates() 
+    {
         return subOrdinates;
     }
 

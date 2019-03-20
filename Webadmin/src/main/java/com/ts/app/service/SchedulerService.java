@@ -165,7 +165,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createDailyTask() {
 		if (env.getProperty("scheduler.dailyJob.enabled").equalsIgnoreCase("true")) {
             log.debug("Daily jobs enabled");
@@ -186,11 +186,11 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	
+
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createWeeklyTask() {
 		if (env.getProperty("scheduler.weeklyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -287,7 +287,7 @@ public class SchedulerService extends AbstractService {
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createMonthlyTask() {
 		if (env.getProperty("scheduler.monthlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -329,7 +329,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createFortnightlyTask() {
 		if (env.getProperty("scheduler.fortnightlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -362,7 +362,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createQuarterlyTask() {
 		if (env.getProperty("scheduler.quarterlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -394,7 +394,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createHalfYearlyTask() {
 		if (env.getProperty("scheduler.halfyearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -426,7 +426,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void createYearlyTask() {
 		if (env.getProperty("scheduler.yearlyJob.enabled").equalsIgnoreCase("true")) {
 			Calendar cal = Calendar.getInstance();
@@ -458,13 +458,13 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
+//	@Scheduled(initialDelay = 60000, fixedRate = 900000) // Runs every 15 mins
 	public void overDueTaskCheck() {
 		schedulerHelperService.overdueJobReport();
 	}
 
 	//@Scheduled(initialDelay = 60000,fixedRate = 900000) //Runs every 15 mins
-	//@Scheduled(cron = "0 0 19 1/1 * ?")
+//	@Scheduled(cron = "0 0 19 1/1 * ?")
 	public void endOfDayReportSchedule() {
 
 
@@ -585,7 +585,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	//@Scheduled(cron = "0 */30 * * * ?")
+//	@Scheduled(cron = "0 */30 * * * ?")
 	public void attendanceShiftReportSchedule() {
 		Calendar cal = Calendar.getInstance();
 		schedulerHelperService.generateDetailedAttendanceReport(cal.getTime(), true, false, false);
@@ -601,23 +601,23 @@ public class SchedulerService extends AbstractService {
 	}
 
 //	@Scheduled(cron = "0 0 9 1 * ?")
-	//@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceMusterrollReportSchedule() {
-		log.info("Attendance muster roll report scheduler invoked");
-		Calendar startCal = Calendar.getInstance();
-		startCal.add(Calendar.MONTH, -1);
-		startCal.set(Calendar.DAY_OF_MONTH, 1);
-		startCal.set(Calendar.HOUR_OF_DAY,0);
-		startCal.set(Calendar.MINUTE,0);
+        log.info("Attendance muster roll report scheduler invoked");
+        Calendar startCal = Calendar.getInstance();
+        startCal.add(Calendar.MONTH, -1);
+        startCal.set(Calendar.DAY_OF_MONTH, 1);
+        startCal.set(Calendar.HOUR_OF_DAY,0);
+        startCal.set(Calendar.MINUTE,0);
         startCal.set(Calendar.DAY_OF_MONTH, startCal.getActualMinimum(Calendar.DAY_OF_MONTH));
-		Calendar endCal = Calendar.getInstance();
-		endCal.add(Calendar.MONTH, -1);
+        Calendar endCal = Calendar.getInstance();
+        endCal.add(Calendar.MONTH, -1);
         endCal.set(Calendar.DAY_OF_MONTH, 1);
-		endCal.set(Calendar.HOUR_OF_DAY,23);
-		endCal.set(Calendar.MINUTE,59);
-		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		long siteId = 0;
-		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
+        endCal.set(Calendar.HOUR_OF_DAY,23);
+        endCal.set(Calendar.MINUTE,59);
+        endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        long siteId = 0;
+        schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime(), true, false);
 	}
 
 //	@Scheduled(cron="0 */30 * * * ?") // runs every 30 mins
@@ -640,7 +640,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.feedbackDetailedReport();
 	}
 
-	
+
 
 	/*public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
@@ -807,108 +807,104 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */30 * * * ?")
+//	@Scheduled(cron = "0 */5 * * * ?")
 	public void slaTicketEscalationNotification()
 	{
 		String mailStatus = "";
 		log.debug(">>> Tickets ");
+		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
 //		String subject = "test";
 //		String content = "Escalation mail for ticket";
-		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
-		List<Ticket> tickets = new ArrayList<Ticket>();
 		for(SlaConfig slaConfig : slaConfigs)
 		{
+			List<Ticket> tickets = new ArrayList<Ticket>();
 			if(slaConfig.getProcessType().equals("Tickets"))
 			{
-				tickets = ticketRepository.findAllActiveUnClosedTicket(slaConfig.getSite().getId());
+				tickets = ticketRepository.findAllActiveUnClosedTicket();
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
 				for(SlaEscalationConfig slaEscalationConfig : slaEscalationConfigs)
 				{
-					int eschours = slaEscalationConfig.getHours();
-					int escmins = slaEscalationConfig.getMinutes();
-					String email = slaEscalationConfig.getEmail();
-					hours += eschours;
-					for(Ticket ticket : tickets) {
-					    String siteName = ticket.getSite().getName();
-
-					    String url = env.getProperty("url.ticket-view");
-
-					    url += ticket.getId();
-
-						for(String cat : category)
+						int eschours = slaEscalationConfig.getHours();
+						int escmins = slaEscalationConfig.getMinutes();
+						String email = slaEscalationConfig.getEmail();
+						hours += eschours;
+						for(Ticket ticket : tickets)
 						{
-							if(cat.equalsIgnoreCase(ticket.getCategory()));
+						    String siteName = ticket.getSite().getName();
+
+						    String url = env.getProperty("url.ticket-view");
+
+						    url += ticket.getId();
+
+							for(String cat : category)
 							{
-								log.debug("Ticket category matches -" + ticket.getCategory());
-								if(slaEscalationConfig.getLevel() > ticket.getEscalationStatus())
+								if(cat.equalsIgnoreCase(ticket.getCategory()));
 								{
-									log.debug("SLA escalation level match -" + slaEscalationConfig.getLevel());
-									java.time.ZonedDateTime date = ticket.getCreatedDate().plusHours(hours).plusMinutes(escmins);
-									if(date.isBefore(currentDate) || date.equals(currentDate))
+									if(slaEscalationConfig.getLevel() > ticket.getEscalationStatus())
 									{
-										log.debug("SLA escalation date time -" + date);
-										if(slaConfig.getSeverity().equalsIgnoreCase(ticket.getSeverity()))
+										java.time.ZonedDateTime date = ticket.getCreatedDate().plusHours(hours).plusMinutes(escmins);
+										if(date.isBefore(currentDate) || date.equals(currentDate))
 										{
-											log.debug("Ticket severity -" + ticket.getSeverity());
-											try {
-												mailService.sendEscalationEmail(email,siteName,slaEscalationConfig.getLevel(),ticket.getId(),url,ticket.getTitle(),ticket.getDescription());
-											} catch (Exception e) {
-												// TODO Auto-generated catch block
-												e.printStackTrace();
-											}
-											log.debug("Mail Status " + mailStatus);
-											//if(mailStatus.equals("success"))
-											//{
-												SLANotificationLog slaNotificationLog = new SLANotificationLog();
-												slaNotificationLog.setProcessId(ticket.getId());
-												slaNotificationLog.setSiteId(slaConfig.getSite().getId());
-												slaNotificationLog.setProcessType(slaConfig.getProcessType());
-												slaNotificationLog.setBeginDate(ticket.getCreatedDate());
-												slaNotificationLog.setEscalationDate(currentDate);
-												slaNotificationLog.setLevel(slaEscalationConfig.getLevel());
-												slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
-												try
+											if(slaConfig.getSeverity().equals(ticket.getSeverity()))
+											{
+												try {
+													mailService.sendEscalationEmail(email,siteName,slaEscalationConfig.getLevel(),ticket.getId(),url,ticket.getTitle(),ticket.getDescription());
+												} catch (Exception e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												log.debug("Mail Status " + mailStatus);
+												if(mailStatus.equals("success"))
 												{
-													slaConfigService.slaEscalationNotificationSave(slaNotificationLog);
+													SLANotificationLog slaNotificationLog = new SLANotificationLog();
+													slaNotificationLog.setProcessId(ticket.getId());
+													slaNotificationLog.setSiteId(slaConfig.getSite().getId());
+													slaNotificationLog.setProcessType(slaConfig.getProcessType());
+													slaNotificationLog.setBeginDate(ticket.getCreatedDate());
+													slaNotificationLog.setEscalationDate(currentDate);
+													slaNotificationLog.setLevel(slaEscalationConfig.getLevel());
+													slaNotificationLog.setEmails(slaEscalationConfig.getEmail());
 													try
 													{
-														slaConfigService.slaTicketEscalationStatusUpdate(ticket);
+														slaConfigService.slaEscalationNotificationSave(slaNotificationLog);
+														try
+														{
+															slaConfigService.slaTicketEscalationStatusUpdate(ticket);
+														}
+														catch(Exception e)
+														{
+															e.printStackTrace();
+														}
 													}
 													catch(Exception e)
 													{
 														e.printStackTrace();
 													}
+													ticket.setId(ticket.getId());
+													ticket.setEscalationStatus(slaEscalationConfig.getLevel());
+
 												}
-												catch(Exception e)
-												{
-													e.printStackTrace();
-												}
-												ticket.setId(ticket.getId());
-												ticket.setEscalationStatus(slaEscalationConfig.getLevel());
-												ticketRepository.save(ticket);		
-											//}
+											}
 										}
 									}
 								}
 							}
 						}
-					}	
+					}
 				}
 			}
 		}
-	}
-	
-	@Scheduled(cron = "0 */30 * * * ?")
+
+	//@Scheduled(cron = "0 */5 * * * ?")
 	public void slaJobEscalationNotification()
 	{
 		String mailStatus = "";
 		log.debug(">>> Job Escalation ");
 		List<SlaConfig> slaConfigs = slaConfigRepository.findActiveSlaConfig();
 		java.time.ZonedDateTime currentDate = java.time.ZonedDateTime.now();
-		java.sql.Date currDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
 //		String subject = "test";
 //		String content = "Escalation mail for job";
 		for(SlaConfig slaConfig : slaConfigs)
@@ -916,7 +912,7 @@ public class SchedulerService extends AbstractService {
 			List<Job> jobs = new ArrayList<Job>();
 			if(slaConfig.getProcessType().equals("Jobs"))
 			{
-				jobs = jobRepository.findAllActiveInCompleteJobs(currDate, slaConfig.getSite().getId());
+				jobs = jobRepository.findAllActiveUnClosedTicket();
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
@@ -953,8 +949,8 @@ public class SchedulerService extends AbstractService {
 												e.printStackTrace();
 											}
 											log.debug("Mail Status " + mailStatus);
-											//if(mailStatus.equals("success"))
-											//{
+											if(mailStatus.equals("success"))
+											{
 												SLANotificationLog slaNotificationLog = new SLANotificationLog();
 												slaNotificationLog.setProcessId(job.getId());
 												slaNotificationLog.setSiteId(slaConfig.getSite().getId());
@@ -973,7 +969,6 @@ public class SchedulerService extends AbstractService {
 												}
 												job.setId(job.getId());
 												job.setEscalationStatus(slaEscalationConfig.getLevel());
-												jobRepository.save(job);
 												try
 												{
 													slaConfigService.slaJobEscalationStatusUpdate(job);
@@ -982,7 +977,7 @@ public class SchedulerService extends AbstractService {
 												{
 													e.printStackTrace();
 												}
-											//}
+											}
 										}
 									}
 								}
@@ -994,7 +989,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 
-	@Scheduled(cron="0 */30 * * * ?")
+	//@Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		log.info("Daywise report scheduler invoked");
 		Calendar cal = Calendar.getInstance();

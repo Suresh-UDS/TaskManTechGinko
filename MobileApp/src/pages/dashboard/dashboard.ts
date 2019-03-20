@@ -20,6 +20,7 @@ import{SiteListPage} from "../site-list/site-list";
 import {DBService} from "../service/dbService";
 import {AttendanceService} from "../service/attendanceService";
 import {AssetService} from "../service/assetService";
+import {DatabaseProvider} from "../../providers/database-provider";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -65,7 +66,7 @@ export class DashboardPage {
     attendance:any;
 
   constructor(public renderer: Renderer,public attendanceService:AttendanceService,public assetService:AssetService,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService, private databaseProvider: DatabaseProvider) {
 
 
       this.rateCard=CreateQuotationPage;
@@ -538,6 +539,13 @@ export class DashboardPage {
         })
 
         alert.present();
+    }
+
+    getSiteTable(){
+        this.databaseProvider.getSiteData().then(sites=>{
+            console.log("Sites from SQLite");
+            console.log(sites);
+        })
     }
 
     markOfflineAttendance(){

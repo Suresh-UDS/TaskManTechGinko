@@ -66,4 +66,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	@Query("SELECT distinct p FROM Project p join p.employeeProjSites e WHERE p.name like '%' || :name || '%' and e.employee.id in (:empIds) and p.active = 'Y'")
 	Page<Project> findAllByName(@Param("name") String name, @Param("empIds") List<Long> empIds, Pageable pageRequest);
+
+	@Query("SELECT distinct p FROM Project p WHERE p.id in (:projectIds) and p.active = 'Y'")
+	List<Project> findProjectsByIds(@Param("projectIds") List<String> projectIds);
+
 }

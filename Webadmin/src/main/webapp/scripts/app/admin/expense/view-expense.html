@@ -34,7 +34,7 @@
 
                                 <tr>
                                     <td>Expense Date </td>
-                                    <td>{{expenseDetails.createdDate}}</td>
+                                    <td>{{expenseDetails.expenseDate}}</td>
                                 </tr>
 
                                 <tr>
@@ -60,80 +60,11 @@
                                 <tr>
                                     <td>Uploaded Documents</td>
                                     <td>
-                                        <div ng-repeat="uploadFile in expenseDetails.expenseDocumentList">
-                                            <!--<a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadExpenseImage(img.fileUrl)" >-->
-                                                <!--<img src="{{img.fileUrl}}" width="150px" height="150px">-->
-                                            <!--</a>-->
+                                        <div ng-repeat="img in expenseDetails.expenseDocumentList">
+                                            <a onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadExpenseImage(img.fileUrl)" >
+                                                <img src="{{img.fileUrl}}" width="150px" height="150px">
 
-
-                                            <div class="panel-heading" ng-if="uploadFile.type === 'document'" >
-                                                Documents
-                                            </div>
-                                            <div class="panel-body" ng-if="uploadFile.type === 'document'" >
-
-                                                <div class="row docsRow" >
-
-                                                    <div class="col-md-2 txt-align-center DocsCon" >
-                                                        <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
-                                                            <i class="material-icons">close</i>
-                                                        </div>
-                                                        <div class="DownloadBtn">
-                                                            <a href="{{uploadFile.fileUrl}}" id="loop">
-                                                                <i class="material-icons">cloud_download</i>
-                                                            </a>
-                                                        </div>
-                                                        <a href="#"  ng-click="">
-                                                            <img src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
-                                                        </a>
-                                                        <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
-                                                        <div  ng-if="uploadFile.id == download">
-                                                            <a href="{{content}}" download>download</a>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row docsRow txt-align-center" ng-if="!uploadFile.file && uploadFile.type === 'document'"  >
-
-                                                    <h4>No Documents</h4>
-
-                                                </div>
-                                            </div>
-
-                                                <div class="panel-heading" ng-if="uploadFile.type === 'image'" >
-                                                    Image
-                                                </div>
-                                                <div class="panel-body" ng-if="uploadFile.type === 'image'" >
-
-                                                    <div class="row docsRow"  >
-
-                                                        <div class="col-md-2 txt-align-center DocsCon" >
-                                                            <div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
-                                                                <i class="material-icons">close</i>
-                                                            </div>
-                                                            <div class="DownloadBtn">
-                                                                <a href="{{uploadFile.fileUrl}}" id="loop">
-                                                                    <i class="material-icons">cloud_download</i>
-                                                                </a>
-                                                            </div>
-
-                                                            <a href="#"  ng-click="">
-                                                                <img src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
-                                                            </a>
-                                                            <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
-                                                            <div  ng-if="uploadFile.id == download">
-                                                                <a href="{{content}}" download>download</a>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="row docsRow txt-align-center" ng-if="!uploadFile.file && uploadFile.type === 'image' "  >
-
-                                                        <h4>No Documents</h4>
-
-                                                    </div>
-                                                </div>
-
-
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

@@ -60,13 +60,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetScheduleEventDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.MailService;
 import com.ts.app.service.SettingsService;
 import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetScheduleEventDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AttendanceDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
@@ -1472,7 +1472,7 @@ public class ExportUtil {
 	}
 
 
-	public ExportResult write52WeekScheduleToFile(String siteName, List<AssetScheduleEventDTO> content, ExportResult result) {
+	public ExportResult write52WeekScheduleToFile(String siteName, List<AssetPPMScheduleEventDTO> content, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -1527,13 +1527,11 @@ public class ExportUtil {
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 		long prevAssetIdInLoop = 0;
 		String freqCode = null;
-		String maintenanceType = null;
 		Row dataRow = null;
-		for (AssetScheduleEventDTO scheduleEvent : content) {
+		for (AssetPPMScheduleEventDTO scheduleEvent : content) {
 			String currFreqCode = getFrequencyCode(scheduleEvent.getFrequency());
-			String currMaintType = scheduleEvent.getMaintenanceType();
-			if(scheduleEvent.getAssetId() != prevAssetIdInLoop || StringUtils.isEmpty(freqCode) || !freqCode.equalsIgnoreCase(currFreqCode)
-					|| StringUtils.isEmpty(maintenanceType) || !maintenanceType.equalsIgnoreCase(currMaintType)) {
+
+			if(scheduleEvent.getAssetId() != prevAssetIdInLoop || StringUtils.isEmpty(freqCode) || !freqCode.equalsIgnoreCase(currFreqCode)) {
 				dataRow = xssfSheet.getRow(rowNum++);
 
 				dataRow.getCell(0).setCellValue(scheduleEvent.getTitle());
@@ -1548,7 +1546,7 @@ public class ExportUtil {
 			dataRow.getCell(weekDataCell).setCellValue(currFreqCode);
 			prevAssetIdInLoop = scheduleEvent.getAssetId();
 			freqCode = currFreqCode;
-			maintenanceType = currMaintType;
+
 		}
 
 		log.info(filePath + " 52 week asset ppm schedules excel file was created successfully !!!");
@@ -2436,13 +2434,13 @@ public class ExportUtil {
                     }else{
                         dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() : "");
                     }
-					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
+					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToZonedDateTimeString(transaction.getAssignedOn()) : "");
                     if(StringUtils.isNotBlank(transaction.getClosedByLastName())){
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
                     }else{
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName()  : "");
                     }
-					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
+					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToZonedDateTimeString(transaction.getClosedOn()) : "");
 					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getRemarks())? transaction.getRemarks():"");
 					dataRow.createCell(15).setCellValue(StringUtils.isNotBlank(transaction.getComments())? transaction.getComments():"");
 				}

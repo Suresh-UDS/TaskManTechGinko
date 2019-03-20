@@ -42,6 +42,21 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
+            loadAllJobsByDate: function(fromDate,toDate){
+                return $http.get('api/jobs/currentJobsCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
+                    return response.data;
+                })
+            },
+            loadAllQuotationByDate: function(fromDate,toDate){
+                return $http.get('api/reports/quotation/currentQuotationCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
+                    return response.data;
+                })
+            }, 
+            loadAllTicketByDate: function(fromDate,toDate){
+                return $http.get('api/reports/ticket/currentTicketsCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
+                    return response.data;
+                })
+            },
 
             loadTicketChartDataByProject: function(projectId,fromDate,toDate){
                 return $http.get('api/reports/ticket/project/'+projectId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
@@ -69,6 +84,22 @@ angular.module('timeSheetApp')
 
             loadAllJobsByCategoryCnt: function () {
                 return $http.get('api/reports/jobType/count').then(function (response) {
+                    return response.data;
+                })
+            },
+
+            loadAllJobsByDate: function(fromDate,toDate){
+                return $http.get('api/jobs/currentJobsCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
+                    return response.data;
+                })
+            },
+            loadAllQuotationByDate: function(fromDate,toDate){
+                return $http.get('api/reports/quotation/currentQuotationCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
+                    return response.data;
+                })
+            }, 
+            loadAllTicketByDate: function(fromDate,toDate){
+                return $http.get('api/reports/ticket/currentTicketsCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
                     return response.data;
                 })
             },

@@ -48,7 +48,7 @@ import com.ts.app.service.util.ImportUtil;
 import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
 import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.AssetDocumentDTO;
-import com.ts.app.web.rest.dto.AssetScheduleEventDTO;
+import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
 import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
 import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
 import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
@@ -449,12 +449,12 @@ public class AssetResource {
 
 	@RequestMapping(path = "/assets/{assetId}/ppmschedule/calendar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public List<AssetScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
+	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
 		log.debug(">>> Asset Resource getAssetPPMScheduleCalendar request <<<");
 		log.debug("AssetId <<< " + searchCriteria.getAssetId() + " - startDate - "
 				+ searchCriteria.getCheckInDateTimeFrom() + " - endDate - " + searchCriteria.getCheckInDateTimeTo());
 
-		List<AssetScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(),
+		List<AssetPPMScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(),
 				searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo());
 		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response);
 		return response;

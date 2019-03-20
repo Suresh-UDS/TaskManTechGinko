@@ -7,11 +7,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.*;
+import com.ts.app.domain.*; 
+import com.ts.app.repository.EmployeeProjectSiteRepository;
+import com.ts.app.repository.MusterrollHistoryRepository;
 import com.ts.app.repository.SiteRepository;
-import com.ts.app.service.*;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.SiteDTO;
+import com.ts.app.repository.UserRepository;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -26,22 +27,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.ts.app.domain.Measurements.JobStatusMeasurement;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.RateCardService;
+import com.ts.app.service.ReportDatabaseService;
+import com.ts.app.service.ReportService;
+import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.service.SchedulerService;
+import com.ts.app.service.SiteService;
 import com.ts.app.service.util.ReportDatabaseUtil;
+import com.ts.app.web.rest.dto.QuotationDTO;
 import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
-import org.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import java.util.*;
+import com.ts.app.web.rest.dto.SiteDTO;
 
 
 /**
@@ -59,7 +58,12 @@ public class ReportResource {
 	@Inject
 	@Lazy
 	private SchedulerHelperService schedulerHelperService;
+	
+	@Inject
+    private EmployeeProjectSiteRepository employeeProjectSiteRepository;
 
+	@Inject
+	private RateCardService rateCardService ;
 	//@Inject
 //    private ReportDatabaseUtil reportDatabaseUtil;
 
@@ -68,10 +72,15 @@ public class ReportResource {
 
 	@Inject
     private SchedulerService schedulerService;
-
+	
 	@Inject
-    private SiteService siteService;
-
+	private SiteService siteService;
+ 
+	@Inject
+	private UserRepository userRepository;
+  
+	@Inject
+	private MusterrollHistoryRepository musterrollHistoryRepository;
 
 	@RequestMapping(value = "/reports/attendance/site/{siteId}/selectedDate/{selectedDate}", method = RequestMethod.GET)
 	public ReportResult getAttendanceStatusBySite(@PathVariable Long siteId, @PathVariable("selectedDate") Date selectedDate) {
@@ -163,9 +172,37 @@ public class ReportResource {
 		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
 		endCal.set(Calendar.HOUR_OF_DAY,23);
 		endCal.set(Calendar.MINUTE,59);
+		// Maintain Musterroll History 
+		MusterrollHistory history = new MusterrollHistory();
+		history.setSiteId(siteId);
+		history.setMonth(Calendar.DAY_OF_MONTH);
+		history.setYear(Calendar.DAY_OF_YEAR);
+		history.setFileLocation("");
+		history.setStatus("generated");
+		musterrollHistoryRepository.save(history);
+		// Maintain Musterroll History
 		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime() , true, onDemand);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/reports/attendance/musterroll/history", method = RequestMethod.POST)
+	public ResponseEntity<?> sendMusterrollHistory(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand, @RequestParam(value = "siteId", required = false) long siteId) {
+		Calendar startCal = Calendar.getInstance();
+		Calendar endCal = Calendar.getInstance();
+		if(attnDate != null) {
+			startCal.setTime(attnDate);
+			endCal.setTime(attnDate);
+		}
+		startCal.set(Calendar.DAY_OF_MONTH, 1);
+		startCal.set(Calendar.HOUR_OF_DAY, 0);
+		startCal.set(Calendar.MINUTE,0);
+		endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		endCal.set(Calendar.HOUR_OF_DAY,23);
+		endCal.set(Calendar.MINUTE,59);
+
+		schedulerHelperService.generateMusterRollAttendanceReport(siteId, startCal.getTime(), endCal.getTime() , true, onDemand);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}	
 
 	@RequestMapping(value = "/reports/daily", method = RequestMethod.GET)
 	public ResponseEntity<?> generateDailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date reportDate, @RequestParam(value="projectId", required=false) long projectId) {
@@ -279,16 +316,56 @@ public class ReportResource {
     				}
     				searchCriteria.setSiteIds(siteIds);
     			}
-    		}else {
-                List<Long> siteIds = new ArrayList<Long>();
-                siteIds.add(searchCriteria.getSiteId());
-                searchCriteria.setSiteIds(siteIds);
-            }
+    		}
     		QuotationDTO quotationSummary = reportService.getQuotationCountSummary(searchCriteria);
     		return new ResponseEntity<>(quotationSummary, HttpStatus.OK);
         //List<QuotationReportCounts> reportTodayPoints = reportDatabaseUtil.getQuotationCounts(searchCriteria);
         //return new ResponseEntity<>(reportTodayPoints, HttpStatus.OK);
     }
+    
+    @RequestMapping(value = "/reports/ticket/currentTicketsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+	public ReportResult currentTicketsCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
+		
+		long currentuserId = SecurityUtils.getCurrentUserId(); 
+		return reportService.getCurrentTicketsCount(currentuserId, fromDate, toDate);
+
+	}
+	
+	@RequestMapping(value = "/reports/quotation/currentQuotationCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+	public Object currentQuotationCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
+		
+		Object result = null;
+		SearchCriteria searchCriteria = new SearchCriteria();
+ 
+		long currentuserId = SecurityUtils.getCurrentUserId();
+		 
+		searchCriteria.setQuotationCreatedDate(fromDate);
+		searchCriteria.setToDate(toDate);
+		
+		User user = userRepository.findOne(currentuserId);
+		Employee employee = user.getEmployee();
+		
+		List<Long> siteIds = null;
+		
+		if(employee != null && !user.isAdmin()) {
+			
+			siteIds  = employeeProjectSiteRepository.getSiteIdsByEmployeeId(employee.getId()); 
+			
+			
+		}
+		else {
+		 
+			siteIds = employeeProjectSiteRepository.getSiteAllIds();
+			
+		}
+		
+		searchCriteria.setSiteIds(siteIds);
+		 
+		result = rateCardService.getQuotationSummary(searchCriteria,siteIds);
+		
+        return result;
+
+	}
 
 //    @RequestMapping(value = "/reports/attendance", method = RequestMethod.GET)
 //    public ResponseEntity<?> getAttnCounts() {

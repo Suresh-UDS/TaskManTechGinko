@@ -25,9 +25,9 @@ import static springfox.documentation.builders.PathSelectors.regex;
  * case, you can use a specific Spring profile for this class, so that only front-end developers
  * have access to the Swagger view.
  */
-@Configuration
-@EnableSwagger2
-@Profile("!"+Constants.SPRING_PROFILE_PRODUCTION)
+//@Configuration
+//@EnableSwagger2
+//@Profile("swagger")
 public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);

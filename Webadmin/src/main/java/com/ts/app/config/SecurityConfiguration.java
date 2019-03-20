@@ -70,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/scripts/**/*.{js,html}").antMatchers("/bower_components/**")
             .antMatchers("/i18n/**").antMatchers("/assets/**").antMatchers("/swagger-ui/index.html")
-            .antMatchers("/test/**").antMatchers("/console/**");
+            .antMatchers("/test/**").antMatchers("/console/**").antMatchers("/api/onboard/**");
     }
 
     @Override
@@ -119,6 +119,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	        .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
 	        .antMatchers("/api/audits/**").hasAuthority(AuthoritiesConstants.ADMIN)
 	        //.antMatchers("/api/**").authenticated()
+	        .antMatchers("/api/onboard/**").permitAll()
 	        .antMatchers("/project/**").authenticated()
 	        .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
 	        .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)

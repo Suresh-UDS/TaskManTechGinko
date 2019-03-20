@@ -17,10 +17,6 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
 
     private String siteName;
 
-    private long projectId;
-
-    private String projectName;
-
     private String description;
 
     private double debitAmount;
@@ -68,22 +64,6 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
     private List<ExpenseDocument> expenseDocumentList;
 
     private List<CategoryWiseExpense> categoryWiseExpenses;
-
-    public long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
 
     public long getId() {
         return id;

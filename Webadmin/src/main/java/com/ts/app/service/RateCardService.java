@@ -566,6 +566,12 @@ public class RateCardService extends AbstractService {
 
             }
 
+            if (searchCriteria.isReport()){
+                request.put("report",searchCriteria.isReport());
+            }else{
+                request.put("report",false);
+            }
+
             request.put("approvedBy",searchCriteria.getQuotationApprovedBy());
             request.put("status",searchCriteria.getQuotationStatus());
             request.put("submittedDate", searchCriteria.getQuotationSubmittedDate());
@@ -584,14 +590,14 @@ public class RateCardService extends AbstractService {
             log.debug("Request body " + request.toString());
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
             log.debug("Rate card service end point"+quotationSvcEndPoint);
-                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation", requestEntity, String.class);
+                ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/search", requestEntity, String.class);
             log.debug("Response freom push service "+ response.getStatusCode());
             log.debug("response from push service"+response.getBody());
 //            rateCardDTOList = (List<RateCardDTO>) response.getBody();
             quotationList = response.getBody();
 
         }catch(Exception e) {
-            log.error("Error while calling Quotation service ", e);
+            log.error("Error while calling location service ", e);
             e.printStackTrace();
         }
 
@@ -667,10 +673,21 @@ public class RateCardService extends AbstractService {
 
             JSONObject request = new JSONObject();
             TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-            df.setTimeZone(tz);
-            String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
-            String toDate = df.format(searchCriteria.getToDate());
+            
+            searchCriteria.getToDate().setHours(23);
+            searchCriteria.getToDate().setMinutes(59);
+            searchCriteria.getToDate().setSeconds(59);
+            
+            log.debug("get Quotations from date : "+searchCriteria.getQuotationCreatedDate());
+            log.debug("get Quotations from date : "+searchCriteria.getToDate());
+            
+
+            DateFormat fdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            DateFormat tdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+//            fdf.setTimeZone(tz);
+//            tdf.setTimeZone(tz);
+            String createdDate = fdf.format(searchCriteria.getQuotationCreatedDate());
+            String toDate = tdf.format(searchCriteria.getToDate());
             request.put("createdDate", createdDate);
             request.put("toDate", toDate);
             request.put("siteIds", siteIds);

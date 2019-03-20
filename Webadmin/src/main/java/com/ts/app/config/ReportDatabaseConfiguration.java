@@ -13,11 +13,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.concurrent.TimeUnit;
 
-//@Configuration
+@Configuration
 public class ReportDatabaseConfiguration {
-
+	
 	private final Logger log = LoggerFactory.getLogger(ReportDatabaseConfiguration.class);
-
+	
 //	@Value("${influxdb.url}")
 //	private String url;
 //
@@ -36,8 +36,8 @@ public class ReportDatabaseConfiguration {
 //	@Bean
 //	public InfluxDB initializeInfluxDbConnection() {
 //
-//	    log.debug("Influxdb url : " +url);
-//	    log.debug("Influxdb username : " +username);
+//	    log.debug("Influxdb url :" +url);
+//	    log.debug("Influxdb username :" +username);
 //	    log.debug("Influxdb password :" +password);
 //	    log.debug("Influxdb retention policy :" +retentionPolicy);
 //

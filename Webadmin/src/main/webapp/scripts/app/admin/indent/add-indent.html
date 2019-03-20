@@ -14,11 +14,11 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
-            <form ng-show="!success" name="form" role="form"  novalidate
-                  ng-submit="conform('save')">
+            <form ng-show="!success" name="form" role="form" novalidate
+                  ng-submit="">
 
 
-                <div class="card margin-TB-5 tablecard addFrom">
+                <div class="card margin-TB-5 tablecard">
 
                     <div class="card-content">
 
@@ -30,7 +30,7 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Client <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "prj.name for prj in projects" name="project" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control" required>
+                                            <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
                                                 <option value="">Select Client...</option>
                                             </select>
                                         </div>
@@ -42,14 +42,10 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
-                                            <span ng-show="siteSpin"  class="form-control-feedback d-arrow-icon orange-color spinner"><i class="ld ld-ring ld-spin" ></i></span>
-                                            <span ng-show="!siteSpin" class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-
-                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="loadEmployees();loadMaterials()" ng-disabled = "sites.length == 0" class="form-control" required>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "site.name for site in sites" ng-model = "selectedSite" ng-change="loadEmployees();loadMaterials()" class="form-control">
                                                 <option value="">Select Site...</option>
                                             </select>
-                                            <p style="height: 20px;"><span ng-if="sites.length == 0"  class="error-msg margin0">No Sites</span></p>
-                                            <!--<span ng-if="sites.length == 0"><p class="error-msg margin0">No Sites</p></span>-->
                                         </div>
                                     </div>
                                 </div>
@@ -63,13 +59,10 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Employee<span class="red-star">*</span></label>
-                                            <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                            <span ng-show="empSpin"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                            <span ng-show="!empSpin" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "employee as employee.name for employee in employees" name="empName" ng-model ="selectedEmployee"  ng-disabled = "employees.length == 0 " class="form-control" required>
+                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "employee as employee.name for employee in employees" ng-model ="selectedEmployee" class="form-control">
                                                 <option value="">Select Employee...</option>
                                             </select>
-                                            <span ng-if="employees.length == 0"><p class="error-msg margin0">No Employees</p></span>
                                         </div>
                                     </div>
                                 </div>
@@ -97,14 +90,10 @@
                                         <div class="dropdown">
                                             <div class="form-group">
                                                 <label class="control-label">Select ItemCode<span class="red-star">*</span></label>
-                                                <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
-                                                <span ng-show="matSpin && !materials"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                <span ng-show="!matSpin" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-
-                                                <select ng-options = "material as material.itemCode for material in materials" ng-model="selectedItemCode" ng-change="change()" ng-disabled = "materials.length == 0" class="form-control" >
+                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                <select ng-options = "material as material.itemCode for material in materials" ng-model="selectedItemCode" ng-change="change()" class="form-control">
                                                     <option value="">Select ItemCode...</option>
                                                 </select>
-                                                <span ng-if="materials.length == 0"><p class="error-msg margin0">No Material</p></span>
                                             </div>
                                         </div>
                                     </div>
@@ -112,14 +101,14 @@
                             <div class="col-md-3">
                           		<div class="form-group   is-empty">
                                     <label class="control-label">Item Name <span class="red-star">*</span></label>
-                                    <input type="text" ng-model="selectedItemName" class="form-control" ng-disabled="true" >
+                                    <input type="text" ng-model="selectedItemName" class="form-control" ng-disabled="true">
                                     <span class="material-input"></span>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Store Stock <span class="red-star">*</span></label>
-                                    <input type="text" ng-model="selectedStoreStock" class="form-control" ng-disabled="true" >
+                                    <input type="text" ng-model="selectedStoreStock" class="form-control" ng-disabled="true">
                                     <span class="material-input"></span>
                                 </div>
 
@@ -127,7 +116,7 @@
                             <div class="col-md-2">
                                <div class="form-group   is-empty">
                                     <label class="control-label">Quantity <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control" min = 0 ng-model="selectedQuantity" >
+                                    <input type="number" class="form-control" ng-model="selectedQuantity">
                                     <span class="material-input"></span>
                                </div>
                             </div>
@@ -192,18 +181,10 @@
                         <button type="button" ng-click="cancelIndent()"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <!--<button type="button" ng-click="conform('save')"-->
-                                <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
-                                            <!--<i class="material-icons">check</i>-->
-                                        <!--</span>Add Indent</button>-->
-
-
-                        <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                type="submit" id="form-button-save"  ng-disabled="!materialItems" tabindex="16">
-                            <span class="btn-label"><i class="material-icons">check</i></span> Add Indent
-                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
-                        </button>
-
+                        <button type="button" ng-click="saveIndent()"
+                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
+                                            <i class="material-icons">check</i>
+                                        </span>Add Indent</button>
 
                         <div class="clearfix"></div>
                     </div>

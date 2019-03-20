@@ -829,7 +829,7 @@ angular.module('timeSheetApp')
 			$scope.employeesLoader = true;
 
 			//console.log("Employee search result list -", $scope.employees);
-			$scope.pages.currPage = data.currPage ==0 ? 1 : data.currPage;
+			$scope.pages.currPage = data.currPage;
 			$scope.pages.totalPages = data.totalPages;
 
 			/*
@@ -1247,7 +1247,7 @@ angular.module('timeSheetApp')
 
 
 	$scope.clearProject = function($event) {
-		$event.stopPropagation();
+		$event.stopPropagation(); 
 		$scope.client.selected = undefined;
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
@@ -1260,7 +1260,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearRegion = function($event) {
-		$event.stopPropagation();
+		$event.stopPropagation(); 
 		$scope.regionsListOne.selected = undefined;
 		$scope.branchsListOne.selected = undefined;
 		$scope.sitesListOne.selected = undefined;
@@ -1280,7 +1280,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.clearSite = function($event) {
-		$event.stopPropagation();
+		$event.stopPropagation(); 
 		$scope.sitesListOne.selected = null;
 
 

@@ -1,7 +1,14 @@
 package com.ts.app;
 
-import com.ts.app.config.Constants;
-import com.ts.app.config.JHipsterProperties;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -11,17 +18,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
+import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
+import com.ts.app.config.Constants;
+import com.ts.app.config.JHipsterProperties;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class, LiquibaseAutoConfiguration.class })
@@ -90,5 +94,10 @@ public class Application {
 
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
+    }
+    
+    @Bean
+    public RestTemplate getRestTemplate() {
+       return new RestTemplate();
     }
 }
