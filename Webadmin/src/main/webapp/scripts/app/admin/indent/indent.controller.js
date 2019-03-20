@@ -607,7 +607,7 @@ angular.module('timeSheetApp')
 					console.log(data);
 					$scope.loadingStop();
 					$scope.showNotifications('top','center','success','Material Transaction has been added successfully.');
-					$location.path('/inventory-transaction-list');
+					$location.path('/indent-list');
 				}).catch(function(data){
 					$scope.success = null;
 	                $scope.loadingStop();
