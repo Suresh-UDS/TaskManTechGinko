@@ -102,7 +102,7 @@ public class JobManagementResource {
 
 	@Inject
 	private AmazonS3Service amazonService;
-	
+
 	@Inject
 	private ReportService reportService;
 
@@ -268,14 +268,14 @@ public class JobManagementResource {
 		}
 		return result;
 	}
-	
-	@RequestMapping(value = "/jobs/currentJobsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
-	public ReportResult getCurrentJobCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
-		
-		long currentuserId = SecurityUtils.getCurrentUserId(); 
-		return reportService.getCurrentJobCount(currentuserId, fromDate, toDate);
-		
-	}
+
+//	@RequestMapping(value = "/jobs/currentJobsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+//	public ReportResult getCurrentJobCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
+//
+//		long currentuserId = SecurityUtils.getCurrentUserId();
+//		return reportService.getCurrentJobCount(currentuserId, fromDate, toDate);
+//
+//	}
 
 	@RequestMapping(value = "/jobs/report/{uid}",method = RequestMethod.POST)
 	public SearchResult<JobDTO> jobReport(@PathVariable("uid") String uid) {
@@ -531,10 +531,10 @@ public class JobManagementResource {
 
     @RequestMapping(value = "/jobs/currentJobsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
 	public ReportResult getCurrentJobCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
-		
-		long currentuserId = SecurityUtils.getCurrentUserId(); 
+
+		long currentuserId = SecurityUtils.getCurrentUserId();
 		return reportService.getCurrentJobCount(currentuserId, fromDate, toDate);
-		
+
 	}
 
 }

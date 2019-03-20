@@ -32,12 +32,12 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate and j.status = :currentJobStatus and j.active= 'Y'")
     long findJobCountBySiteIdAndStatus(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("currentJobStatus") JobStatus currentJobStatus);
 
-    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
-    long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
-    
-    @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
-    long findCurrentJobCountByDateRange(@Param("selDate") Date selDate, @Param("endDate") Date endDate);
-    
+//    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
+//    long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+//
+//    @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
+//    long findCurrentJobCountByDateRange(@Param("selDate") Date selDate, @Param("endDate") Date endDate);
+
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
     long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
@@ -233,8 +233,8 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
 
     @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
     long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
-    
+
     @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
     long findCurrentJobCountByDateRange(@Param("selDate") Date selDate, @Param("endDate") Date endDate);
-    
+
 }

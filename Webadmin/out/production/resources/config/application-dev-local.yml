@@ -21,13 +21,15 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://54.169.54.254:3306/Taskman?useUnicode=true&characterEncoding=utf8
+#        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: root
+#        password: admin123
+        password: tgadmin123#
         #username: UDSTaskMan
         #password: Rd32018Uds
     jpa:
@@ -45,7 +47,7 @@ spring:
         host: smtp.office365.com
         port: 587
         username: taskmanfms@uds.in
-        password: Ta$k@1234
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
@@ -65,6 +67,8 @@ liquibase:
 
 server:
     port: 8088
+    compression: on
+    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
 
 upload:
     file:
@@ -91,9 +95,9 @@ attendance:
         report:
             template:
                 path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
-    generalShift: 
+    generalShift:
         startTime: 09:00
-        endTime: 17:00                    
+        endTime: 17:00
 quotation:
     file:
         path:  /opt/quotation
@@ -237,17 +241,17 @@ scheduler:
    attendanceConsolidatedReport:
       enabled: false
    feedbackreport:
-      enabled: false 
+      enabled: false
    attendanceMusterRollReport:
-      enabled: false   
+      enabled: false
    dayWiseJobReport:
-      enabled: false 
+      enabled: false
    dayWiseTicketReport:
       enabled: false
    dayWiseQuotationReport:
-      enabled: false 
+      enabled: false
    dayWiseAttendanceReport:
-      enabled: false 
+      enabled: false
 
 default.user.password: uds12345
 
@@ -257,13 +261,15 @@ google:
           callback:
               host: localhost
               port: 8080
-              
+
 influxdb:
    url: http://127.0.0.1:8086
    username: root
    password: root
    dbname: dashboard
-              
+   retention-policy: one_year_policy
+   gzip: true
+
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

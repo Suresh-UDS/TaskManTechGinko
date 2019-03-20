@@ -245,7 +245,7 @@ public class AttendanceService extends AbstractService {
                 log.debug("Shift timing "+ emp.getId());
                 log.debug("Shift timing "+startCal.getTime());
                 log.debug("Shift timing "+endCal.getTime());
-                EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+                List<EmployeeShift> empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
 
                 Calendar checkInCal = Calendar.getInstance();
                 checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
@@ -836,7 +836,7 @@ public class AttendanceService extends AbstractService {
                                 searchCriteria.setSiteIds(siteIds);
 //                                page = attendanceRepository.findByMultipleSitesAndCheckInTime(siteIds, startDate, toDate, pageRequest);
                             }
-                            
+
                             if (employee != null) {
                                 Hibernate.initialize(employee.getSubOrdinates());
                                 int levelCnt = 1;
@@ -846,7 +846,7 @@ public class AttendanceService extends AbstractService {
                                 subEmpList.addAll(subEmpIds);
                                 searchCriteria.setSubordinateIds(subEmpList);
                             }
-                            
+
                             page = attendanceRepository.findAll(new AttendanceSpecification(searchCriteria, isAdmin), pageRequest);
 
                         }
