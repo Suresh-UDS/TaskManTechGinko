@@ -1479,11 +1479,20 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.searchDescription = "";
 				}
-
-				$scope.selectedDateFrom = $filter('date')($scope.localStorage.fromDate, 'dd/MM/yyyy');
-				$scope.selectedDateTo = $filter('date')($scope.localStorage.toDate, 'dd/MM/yyyy');
-				$scope.selectedDateFromSer = new Date($scope.localStorage.fromDate);
-				$scope.selectedDateToSer = new Date($scope.localStorage.toDate);
+                if($scope.localStorage.fromDate){
+                    $scope.selectedDateFrom = $filter('date')($scope.localStorage.fromDate, 'dd/MM/yyyy');
+                    $scope.selectedDateFromSer = new Date($scope.localStorage.fromDate);
+                }else{
+                    $scope.selectedDateFrom = null;
+                    $scope.selectedDateFromSer = null;
+                }
+                if($scope.localStorage.toDate){
+                    $scope.selectedDateTo = $filter('date')($scope.localStorage.toDate, 'dd/MM/yyyy');
+                    $scope.selectedDateToSer = new Date($scope.localStorage.toDate);
+                }else{
+                    $scope.selectedDateTo = null;
+                    $scope.selectedDateToSer = null;
+                }
 
 			}
 

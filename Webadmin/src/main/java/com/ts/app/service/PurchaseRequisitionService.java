@@ -291,13 +291,62 @@ public class PurchaseRequisitionService extends AbstractService {
 					transactions = new ArrayList<PurchaseReqDTO>();
 				}
 	        		for(PurchaseRequisition request : allReqsList) {
-	        			transactions.add(mapperUtil.toModel(request, PurchaseReqDTO.class));
+	        			transactions.add(mapToModel(request));
 	        		}
 				buildSearchResult(searchCriteria, page, transactions,result);
 			}
 		}
 		return result;
 	}
+
+	public PurchaseReqDTO mapToModel(PurchaseRequisition requestEntity) {
+	    PurchaseReqDTO requestEntityDTO = new PurchaseReqDTO();
+	    requestEntityDTO.setId(requestEntity.getId());
+	    requestEntityDTO.setProjectId(requestEntity.getProject().getId());
+        requestEntityDTO.setProjectName(requestEntity.getProject().getName());
+        requestEntityDTO.setSiteId(requestEntity.getSite().getId());
+        requestEntityDTO.setSiteName(requestEntity.getSite().getName());
+        requestEntityDTO.setRequestedById(requestEntity.getRequestedBy().getId());
+        requestEntityDTO.setRequestedByName(requestEntity.getRequestedBy().getName());
+        requestEntityDTO.setRequestedDate(requestEntity.getRequestedDate());
+        if(requestEntity.getApprovedBy() != null) {
+            requestEntityDTO.setApprovedById(requestEntity.getApprovedBy().getId());
+            requestEntityDTO.setApprovedByName(requestEntity.getApprovedBy().getName());
+            requestEntityDTO.setApprovedDate(requestEntity.getApprovedDate());
+        }
+        Set<PurchaseRequisitionItem> purchaseRequisitionItems = requestEntity.getItems();
+        if(CollectionUtils.isNotEmpty(purchaseRequisitionItems)) {
+            List<PurchaseReqItemDTO> purchaseReqItemDTOS = new ArrayList<>();
+            for(PurchaseRequisitionItem purchaseRequItem : purchaseRequisitionItems) {
+                PurchaseReqItemDTO purchaseReqItemDTO = new PurchaseReqItemDTO();
+                purchaseReqItemDTO.setId(purchaseRequItem.getId());
+                if(purchaseRequItem.getMaterial() != null) {
+                    purchaseReqItemDTO.setMaterialId(purchaseRequItem.getMaterial().getId());
+                    purchaseReqItemDTO.setMaterialItemCode(purchaseRequItem.getMaterial().getItemCode());
+                    purchaseReqItemDTO.setMaterialItemGroupId(purchaseRequItem.getMaterial().getItemGroupId());
+                    purchaseReqItemDTO.setMaterialName(purchaseRequItem.getMaterial().getName());
+                    purchaseReqItemDTO.setMaterialStoreStock(purchaseRequItem.getMaterial().getStoreStock());
+                    purchaseReqItemDTO.setMaterialUom(purchaseRequItem.getMaterial().getUom());
+                }
+                purchaseReqItemDTO.setApprovedQty(purchaseRequItem.getApprovedQty());
+                purchaseReqItemDTO.setPendingQty(purchaseRequItem.getPendingQty());
+                purchaseReqItemDTO.setQuantity(purchaseRequItem.getQuantity());
+                purchaseReqItemDTO.setUnitPrice(purchaseRequItem.getUnitPrice());
+                purchaseReqItemDTOS.add(purchaseReqItemDTO);
+            }
+            requestEntityDTO.setItems(purchaseReqItemDTOS);
+
+        }
+        requestEntityDTO.setRequestStatus(requestEntity.getRequestStatus());
+        requestEntityDTO.setPurchaseOrderNumber(requestEntity.getPurchaseOrderNumber());
+        requestEntityDTO.setPurchaseRefGenNumber(requestEntity.getPurchaseRefNumber().getNumber());
+        if(requestEntity.getTransaction() != null) {
+            requestEntityDTO.setTransactionId(requestEntity.getTransaction().getId());
+        }
+
+        return requestEntityDTO;
+
+    }
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<PurchaseRequisition> page, List<PurchaseReqDTO> transactions, SearchResult<PurchaseReqDTO> result) {
 		if (page != null) {

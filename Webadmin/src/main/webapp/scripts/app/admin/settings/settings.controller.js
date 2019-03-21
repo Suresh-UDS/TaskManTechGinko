@@ -34,7 +34,8 @@ angular.module('timeSheetApp')
 			amcEmailIds : [],
 			warrantyEmailIds: [],
 			dayWiseReportEmailIds: [],
-			musterRollEmailIds : []
+			musterRollEmailIds : [],
+            purchaseReqEmailIds : []
 	};
 
 
@@ -619,6 +620,44 @@ angular.module('timeSheetApp')
 	$scope.removeMusterEmail = function(index) {
 		$scope.settings.musterRollEmailIds.splice(index,1);
 	};
+
+        $scope.addPurchaseReqEmail = function() {
+            var email = $scope.purchaseReqEmail;
+            if(!email){
+                alert("Please fill out the field..!!");
+                return false;
+            }else{
+                if(!regex.test(email)){
+                    alert("Please enter valid email..!!");
+                    return false;
+                }else{
+                    if(email.length > 50){
+                        alert("Email cannot be longer than 50 characters.");
+                        return false;
+                    }
+                }
+            }
+            if($scope.settings.purchaseReqEmailIds){
+                if($scope.settings.purchaseReqEmailIds.length > 0){
+                    for(var i=0; i < $scope.settings.purchaseReqEmailIds.length;i++){
+                        if($scope.settings.purchaseReqEmailIds[i] == email){
+                            alert("Email is already exist..!!");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            if(!$scope.settings.purchaseReqEmailIds) {
+                $scope.settings.purchaseReqEmailIds = [];
+            }
+            $scope.settings.purchaseReqEmailIds.push(email);
+            $scope.purchaseReqEmail = '';
+        };
+
+        $scope.removePurchaseReqEmail = function(ind) {
+            $scope.settings.purchaseReqEmailIds.splice(ind,1);
+        };
 
 	$scope.loadProjects = function () {
 		console.log("Loading all projects")

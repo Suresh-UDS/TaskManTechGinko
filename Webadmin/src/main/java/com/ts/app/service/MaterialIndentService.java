@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.ts.app.domain.AbstractAuditingEntity;
@@ -265,14 +266,61 @@ public class MaterialIndentService extends AbstractService {
 				if(transactions == null) {
 					transactions = new ArrayList<MaterialIndentDTO>();
 				}
-	        		for(MaterialIndent material : allIndentsList) {
-	        			transactions.add(mapperUtil.toModel(material, MaterialIndentDTO.class));
+	        		for(MaterialIndent materialIndent : allIndentsList) {
+	        			transactions.add(mapToModel(materialIndent));
 	        		}
 				buildSearchResult(searchCriteria, page, transactions,result);
 			}
 		}
 		return result;
 	}
+
+	public MaterialIndentDTO mapToModel(MaterialIndent materialIndent) {
+	    MaterialIndentDTO materialIndentDTO = new MaterialIndentDTO();
+	    materialIndentDTO.setId(materialIndent.getId());
+	    materialIndentDTO.setProjectId(materialIndent.getProject().getId());
+	    materialIndentDTO.setProjectName(materialIndent.getProject().getName());
+	    materialIndentDTO.setSiteId(materialIndent.getSite().getId());
+	    materialIndentDTO.setSiteName(materialIndent.getSite().getName());
+	    if(materialIndent.getRequestedBy() != null) {
+	        materialIndentDTO.setRequestedById(materialIndent.getRequestedBy().getId());
+	        materialIndentDTO.setRequestedByName(materialIndent.getRequestedBy().getName());
+	        materialIndentDTO.setRequestedDate(materialIndent.getRequestedDate());
+        }
+	    if(materialIndent.getIssuedBy() != null) {
+	        materialIndentDTO.setIssuedById(materialIndent.getIssuedBy().getId());
+	        materialIndentDTO.setIssuedByName(materialIndent.getIssuedBy().getName());
+	        materialIndentDTO.setIssuedDate(materialIndent.getIssuedDate());
+        }
+        Set<MaterialIndentItem> matIndentItems = materialIndent.getItems();
+        if(CollectionUtils.isNotEmpty(matIndentItems)) {
+            List<MaterialIndentItemDTO> matIndentItemDTOS = new ArrayList<>();
+            for(MaterialIndentItem indentItem : matIndentItems) {
+                MaterialIndentItemDTO matIndentItemDTO = new MaterialIndentItemDTO();
+                matIndentItemDTO.setId(indentItem.getId());
+                if(indentItem.getMaterial() != null) {
+                    matIndentItemDTO.setMaterialId(indentItem.getMaterial().getId());
+                    matIndentItemDTO.setMaterialItemCode(indentItem.getMaterial().getItemCode());
+                    matIndentItemDTO.setMaterialItemGroupId(indentItem.getMaterial().getItemGroupId());
+                    matIndentItemDTO.setMaterialName(indentItem.getMaterial().getName());
+                    matIndentItemDTO.setMaterialStoreStock(indentItem.getMaterial().getStoreStock());
+                    matIndentItemDTO.setMaterialUom(indentItem.getMaterial().getUom());
+                }
+                matIndentItemDTO.setIssuedQuantity(indentItem.getIssuedQuantity());
+                matIndentItemDTO.setPendingQuantity(indentItem.getPendingQuantity());
+                matIndentItemDTO.setQuantity(indentItem.getQuantity());
+                matIndentItemDTOS.add(matIndentItemDTO);
+            }
+            materialIndentDTO.setItems(matIndentItemDTOS);
+        }
+        materialIndentDTO.setIndentRefNumber(materialIndent.getIndentRefNumber().getNumber());
+        materialIndentDTO.setIndentStatus(materialIndent.getIndentStatus());
+        materialIndentDTO.setPurpose(materialIndent.getPurpose());
+        if(materialIndent.getTransaction() != null) {
+            materialIndentDTO.setTransactionId(materialIndent.getTransaction().getId());
+        }
+        return materialIndentDTO;
+    }
 
 	private void buildSearchResult(SearchCriteria searchCriteria, Page<MaterialIndent> page, List<MaterialIndentDTO> transactions, SearchResult<MaterialIndentDTO> result) {
 		if (page != null) {
@@ -299,6 +347,7 @@ public class MaterialIndentService extends AbstractService {
 		matIndent.setIssuedDate(DateUtil.convertToTimestamp(new Date()));
 		Site site = siteRepository.findOne(materialIndentDto.getSiteId());
 		String siteName = site.getName();
+		long siteId = site.getId();
 		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialIndentDto.getItems();
 		Set<MaterialIndentItem> itemEntities = matIndent.getItems();
@@ -356,17 +405,28 @@ public class MaterialIndentService extends AbstractService {
 							purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
 							addPurchaseReqItem(purchaseRequest, materialItm);
 						
-							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ);
+							List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ, siteId);
 							
-							log.debug("Setting Email list -" + setting);
+							log.debug("Setting Email list -" + settings.toString());
 
-							if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+                            Setting purchaseReqSetting = null;
+                            if (CollectionUtils.isNotEmpty(settings)) {
+                                List<Setting> purchaseReqSettings = settings;
+                                for(Setting eodSetting : purchaseReqSettings) {
+                                    if(eodSetting.getSettingValue().equalsIgnoreCase("true")) {
+                                        purchaseReqSetting = eodSetting;
+                                    }
+                                }
 
-								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS);
+                            }
 
-								if(settingEntity.getSettingValue().length() > 0) {
+							if(purchaseReqSetting != null && purchaseReqSetting.getSettingValue().equalsIgnoreCase("true") ) {
 
-									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+								List<Setting> settingEntity = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS, siteId);
+                                Setting emailSetting = null;
+								if(CollectionUtils.isNotEmpty(settingEntity)) {
+                                    emailSetting = settingEntity.get(0);
+									List<String> emailLists = CommonUtil.convertToList(emailSetting.getSettingValue(), ",");
 									for(String email : emailLists) {
 										mailService.sendPurchaseRequest(email, materialItm.getItemCode(), siteName, materialItm.getName());
 									}
@@ -375,7 +435,10 @@ public class MaterialIndentService extends AbstractService {
 
 									log.info("There is no email ids registered");
 								}
-							}
+							} else {
+
+							    log.debug("Purchase request email setting is false for " + siteName);
+                            }
 							
 						} 
 						

@@ -1,12 +1,6 @@
 <div class="crud-form"
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
-    <div  ng-init="initLoad();loadingStart();">
-
-
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
-
+    <div  ng-init="initLoad();">
 
         <!--<div class="card-header" data-background-color="red">-->
         <!--<h4 class="title">Add Site</h4>-->
@@ -14,11 +8,15 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
-            <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="">
+            <div>
+                <label><span class="red-star">*</span> Mandatory Field</label>
+            </div>
+
+            <form ng-show="!success" name="form" role="form"  novalidate
+                  ng-submit="conform('save')" confirm-on-exit>
 
 
-                <div class="card margin-TB-5 tablecard">
+                <div class="card margin-TB-5 tablecard addFrom">
 
                     <div class="card-content">
 
@@ -30,9 +28,17 @@
                                         <div class="form-group">
                                             <label class="control-label">Select Client <span class="red-star">*</span></label>
                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "prj.name for prj in projects" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control">
+                                            <select ng-options = "prj.name for prj in projects" name="project" ng-model = "selectedProject" ng-change = "loadSites()" class="form-control" required>
                                                 <option value="">Select Client...</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.project.$touched || form.project.$dirty">
+                                                <div ng-show="form.project.$dirty || form.project.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.project.$error.required">
+                                                        Client is required.
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -42,10 +48,22 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Site <span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "site.name for site in sites" ng-model = "selectedSite" ng-change="loadEmployees();loadMaterials()" class="form-control">
+                                            <span ng-show="siteSpin"  class="form-control-feedback d-arrow-icon orange-color spinner"><i class="ld ld-ring ld-spin" ></i></span>
+                                            <span ng-show="!siteSpin" class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                            <select ng-options = "site.name for site in sites" name="site" ng-model = "selectedSite" ng-change="loadEmployees();loadMaterials()" ng-disabled = "sites.length == 0" class="form-control" required>
                                                 <option value="">Select Site...</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.site.$touched || form.site.$dirty">
+                                                <div ng-show="form.site.$dirty || form.site.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.site.$error.required">
+                                                        Site is required.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <p style="height: 20px;"><span ng-if="sites.length == 0"  class="error-msg margin0">No Sites</span></p>
+                                            <!--<span ng-if="sites.length == 0"><p class="error-msg margin0">No Sites</p></span>-->
                                         </div>
                                     </div>
                                 </div>
@@ -59,10 +77,21 @@
                                     <div class="dropdown">
                                         <div class="form-group">
                                             <label class="control-label">Select Employee<span class="red-star">*</span></label>
-                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                            <select ng-options = "employee as employee.name for employee in employees" ng-model ="selectedEmployee" class="form-control">
+                                            <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                            <span ng-show="empSpin"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                            <span ng-show="!empSpin" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                            <select ng-options = "employee as employee.name for employee in employees" name="empName" ng-model ="selectedEmployee" ng-click="chkEmp();" ng-disabled = "employees.length == 0 " class="form-control" required>
                                                 <option value="">Select Employee...</option>
                                             </select>
+                                            <div ng-show="form.$submitted || form.empName.$touched || form.empName.$dirty">
+                                                <div ng-show="form.empName.$dirty || form.empName.$invalid">
+                                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.empName.$error.required">
+                                                        Employee is required.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <span ng-if="employees.length == 0"><p class="error-msg margin0">No Employees</p></span>
                                         </div>
                                     </div>
                                 </div>
@@ -90,10 +119,22 @@
                                         <div class="dropdown">
                                             <div class="form-group">
                                                 <label class="control-label">Select ItemCode<span class="red-star">*</span></label>
-                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select ng-options = "material as material.itemCode for material in materials" ng-model="selectedItemCode" ng-change="change()" class="form-control">
+                                                <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                <span ng-show="matSpin && !materials"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                <span ng-show="!matSpin" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                <select name="itemCode" ng-options = "material as material.itemCode for material in materials track by material.id" ng-model="selectedItemCode" ng-change="change()" ng-disabled = "materials.length == 0" class="form-control">
                                                     <option value="">Select ItemCode...</option>
                                                 </select>
+                                                <!--<div ng-show="form.$submitted || form.itemCode.$touched || form.itemCode.$dirty">
+                                                    <div ng-show="form.itemCode.$dirty || form.itemCode.$invalid">
+                                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                           ng-show="form.itemCode.$error.required">
+                                                            ItemCode is required.
+                                                        </p>
+                                                    </div>
+                                                </div>-->
+                                                <span ng-if="materials.length == 0"><p class="error-msg margin0">No Material</p></span>
                                             </div>
                                         </div>
                                     </div>
@@ -101,14 +142,14 @@
                             <div class="col-md-3">
                           		<div class="form-group   is-empty">
                                     <label class="control-label">Item Name <span class="red-star">*</span></label>
-                                    <input type="text" ng-model="selectedItemName" class="form-control" ng-disabled="true">
+                                    <input type="text" ng-model="selectedItemName" class="form-control" ng-disabled="true" >
                                     <span class="material-input"></span>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group   is-empty">
                                     <label class="control-label">Store Stock <span class="red-star">*</span></label>
-                                    <input type="text" ng-model="selectedStoreStock" class="form-control" ng-disabled="true">
+                                    <input type="text" ng-model="selectedStoreStock" class="form-control" ng-disabled="true" >
                                     <span class="material-input"></span>
                                 </div>
 
@@ -116,24 +157,39 @@
                             <div class="col-md-2">
                                <div class="form-group   is-empty">
                                     <label class="control-label">Quantity <span class="red-star">*</span></label>
-                                    <input type="number" class="form-control" ng-model="selectedQuantity">
+                                    <input type="number" name="quantity" class="form-control" min =1 ng-model="selectedQuantity">
+                                       <div ng-show="form.$submitted || form.quantity.$touched || form.quantity.$dirty">
+                                           <div ng-show="form.quantity.$dirty || form.quantity.$invalid">
+                                           <!--<p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                  ng-show="form.quantity.$error.required">
+                                           Quantity is required.
+                                           </p>-->
+                                           <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                              ng-show="form.quantity.$error.min">
+                                               Minimum quantity  is 1.
+                                           </p>
+                                           </div>
+                                       </div>
                                     <span class="material-input"></span>
                                </div>
                             </div>
                             <div class="col-md-2">
 
-                                <button class="btn btn-success" ng-click="addMaterialItem()" ng-hide="showUpdateBtn" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
+                                <button type="button" class="btn btn-success" ng-click="addMaterialItem()" ng-hide="showUpdateBtn" ng-disabled="!selectedItemCode || !selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Add
                                 </button>
 
-                                <button class="btn btn-success" ng-click="updateMaterialItem()" ng-show="showUpdateBtn" ng-disabled="!selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
+                                <button type="button" class="btn btn-success" ng-click="updateMaterialItem()" ng-show="showUpdateBtn" ng-disabled="!selectedItemCode || !selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
                                     Update
+                                </button>
+                                <button type="button" class="btn btn-danger" ng-click="clearMaterialItem()"   style="padding: 12px 20px; margin-top: 16px;">
+                                    Clear
                                 </button>
 
                             </div>
@@ -156,7 +212,7 @@
                                             <td>{{material.materialName}}</td>
                                             <td>{{material.materialStoreStock}}</td>
                                             <td>{{material.quantity}}</td>
-                                            <td class="text-right" ng-click="editMaterial($index, material)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
+                                            <td class="text-right" ng-click="editMaterial($index, material)"> <a class="btn btn-simple btn-info" href="javascript:void(0);"><i class="material-icons">edit</i></a></td>
                                         </tr>
                                         <tr>
                                         	<td ng-if="!materialItems.length" colspan="7" align="center"> No Material Items Found </td>
@@ -178,13 +234,21 @@
 
                     <div class="col-md-12">
 
-                        <button type="button" ng-click="cancelIndent()"
+                        <button type="button" ng-click="conform('cancel')"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                        <button type="button" ng-click="saveIndent()"
-                                id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Add Indent</button>
+                        <!--<button type="button" ng-click="conform('save')"-->
+                                <!--id="form-button-save" ng-disabled="form.$invalid"  class="btn btn-success pull-right"><span class="btn-label">-->
+                                            <!--<i class="material-icons">check</i>-->
+                                        <!--</span>Add Indent</button>-->
+
+
+                        <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
+                                type="submit" id="form-button-save"  ng-disabled="form.$invalid || materialItems.length == 0" tabindex="16">
+                            <span class="btn-label"><i class="material-icons">check</i></span> Add Indent
+                            <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                        </button>
+
 
                         <div class="clearfix"></div>
                     </div>
@@ -201,109 +265,3 @@
 
 </div>
 
-<!-- AdvancedFilterModal -->
-<div class="modal fade AdvancedFilterModal FilterModalCon" id="AddEscalationLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form name="searchForm"   novalidate ">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title">Add Escalation Level</h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row">
-
-                        <div class="col-md-2">
-
-                            <div class="form-group no-padding">
-                                <div class="dropdown">
-                                    <div class="form-group">
-                                        <label class="control-label">Select Level  <span class="red-star">*</span></label>
-                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                        <select ng-model = "escalation.level" class="form-control">
-                                            <option value="1">Level 1</option>
-                                            <option value="2">Level 2</option>
-                                            <option value="3">Level 3</option>
-                                            <option value="4">Level 4</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-1">
-                            <div class="form-group no-padding">
-                                <label class="control-label">Hours</label>
-                                <input type="number" ng-model = "escalation.hours" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                <span class="material-input"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group no-padding">
-                                <label class="control-label">Mins</label>
-                                <input type="number" ng-model = "escalation.minutes" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                <span class="material-input"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group no-padding">
-                                <label class="control-label">Email</label>
-                                <input type="text" ng-model = "escalation.email" class="form-control ng-valid ng-dirty ng-touched"  tabindex="0" aria-invalid="false" autocomplete="off">
-                                <span class="material-input"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-2 txt-align-rgt">
-                            <button ng-click = "addSlaEscalations()" class="btn btn-success margn-top15"  tabindex="0">Add</button>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="table-responsive tablecard">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Levels</th>
-                                    <th>Hours </th>
-                                    <th>Mins </th>
-                                    <th>Emails </th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                     <tr ng-repeat = "esc in slaEscalationList">
-                                         <td>Level {{esc.level}}</td>
-                                         <td>{{esc.hours}}</td>
-                                         <td>{{esc.minutes}}</td>
-                                         <td>
-                                             <span class="tag label label-default">{{esc.email}}</span>
-                                         </td>
-                                         <td class="text-right">
-                                             <a  ng-class="{active: $state.includes('admin')}"     class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                             <a ng-click = "removeEscalation($index)" ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>
-                                         </td>
-                                     </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                </div>
-                <div>
-                <div class="modal-footer">
-                    <button ng-click = "addSlas()" ng-model = "slass" type="submit" class="btn btn-success btn-simple"  data-dismiss="modal" ng-disabled="searchForm.$invalid">Save</button>
-                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!--  End Modal -->

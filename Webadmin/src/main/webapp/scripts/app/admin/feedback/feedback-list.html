@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initLoad();search();">
 
     <!-- New changes Start -->
 
@@ -55,7 +55,7 @@
 				    Branch: {{searchCriteras.branch}}
 				</span>
                 <span class="tag label label-info" style="margin-right: 10px"
-		                  ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+		                  ng-show="searchCriteras.siteName">
 						Site: {{searchCriteras.siteName}}
 				</span>
                 <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.block">
@@ -319,14 +319,7 @@
 			                                        </div>
 			                                        <span ng-if="!questionRating.rating">NA</span>
 			                                    </td>
-			                                    <td class="text-right"><a
-													ng-class="{active: $state.includes('admin')}"
 
-													ng-click="removeService($index)"
-													onClick="$('#deleteModal').modal()"
-													data-target="#myModal"
-													class="btn btn-simple btn-danger"><i
-														class="material-icons">close</i></a></td>
 			                                </tr>
 
 
@@ -551,13 +544,13 @@
                                      <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                      <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-				                     <ui-select ng-model="client.selected" name="searchClient" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)"  ng-disabled="clientFilterDisable" required>
+				                     <ui-select ng-model="client.selected" name="searchClient" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id);"  ng-disabled="clientFilterDisable" required>
 									  <ui-select-match placeholder="Select clients..."  >{{$select.selected.name}}
 									    <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
 										   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 										   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 									  </ui-select-match>
-									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+									  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id);" null-option="allClients" loose-null>
 
 									    <span ng-bind-html="client.name | highlight: $select.search"></span>
 									  </ui-select-choices>

@@ -43,7 +43,7 @@
 
             <div class="col-md-6 col-lg-6" >
 
-                <div class="panel panel-default">
+                <div class="panel panel-default" style="min-height:263px;">
                     <div class="panel-heading">Requester Details </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -102,10 +102,10 @@
                                     <tfoot>
                                     <td colspan="3"></td>
                                     <td colspan="3" class="text-right">
-                                        <button class="btn btn-success" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('APPROVED')" type="button">
+                                        <button class="btn btn-success" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="conform('APPROVED',null,'update')"  type="button">
                                             Approve
                                         </button>
-                                        <button class="btn" type="button" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="updatePurchaseReq('REJECTED')" id="cancel-button">
+                                        <button class="btn" type="button" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="conform('REJECTED',null,'update')"  id="cancel-button">
                                             Reject
                                             <div class="ripple-container"></div></button>
                                     </td>
@@ -125,22 +125,22 @@
             <div class="col-md-12 txt-align-rgt">
                 <div class="form-group">
 
-                    <button  title="Approve Purchase Requisition" ng-if="items.approvedQty"
-                             ng-click="submitPurchaseReq(purchaseReqObj.id,'Approved')"
+                    <button type="button" title="Approve Purchase Requisition" ng-if="items.approvedQty"
+                             ng-click="conform('Approved',purchaseReqObj.id)"
                              class="btn btn-info">
                         <span class="btn-label"><i class="material-icons">done</i></span>
                         Approve
                     </button>
 
-                    <button  title="Reject Purchase Requisition" ng-if="items.approvedQty"
-                            ng-click="submitPurchaseReq(purchaseReqObj.id,'Rejected')"
+                    <button type="button" title="Reject Purchase Requisition" ng-if="items.approvedQty"
+                             ng-click="conform('Rejected',purchaseReqObj.id)"
                              class="btn btn-info">
                         <span class="btn-label"><i class="material-icons">done</i></span>
                         Reject
                     </button>
 
                     <button class="btn btn-danger" type="button"
-                            ng-click="cancelPurchase()" id="cancel-button">
+                            ng-click="conform('back')" id="cancel-button">
                         <i class="material-icons"></i> Close
                     </button>
 

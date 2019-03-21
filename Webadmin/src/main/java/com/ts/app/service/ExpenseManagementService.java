@@ -59,7 +59,7 @@ import com.ts.app.web.rest.dto.ExpenseDTO;
 @Transactional
 public class ExpenseManagementService extends AbstractService {
 
-    private final Logger log = LoggerFactory.getLogger(FeedbackService.class);
+    private final Logger log = LoggerFactory.getLogger(ExpenseManagementService.class);
 
     @Inject
     private ExpenseRepository expenseRepository;
@@ -107,7 +107,7 @@ public class ExpenseManagementService extends AbstractService {
         expense.setDescription(expenseDTO.getDescription());
 //        expense.setBalanceAmount(expenseDTO.getBalanceAmount());
         Double totalBalanceAmount  = (getData(expenseDTO.getSiteId()).getTotalCreditAmount() - getData(expenseDTO.getSiteId()).getTotalDebitAmount());
-
+        expense.setActive(Expense.ACTIVE_YES);
         if(Objects.equals(expenseDTO.getMode(), "debit")){
             expense.setExpenseCategory(expenseDTO.getExpenseCategory());
             log.debug("Balance amount ------- "+getData(expenseDTO.getSiteId()).getTotalBalanceAmount());
