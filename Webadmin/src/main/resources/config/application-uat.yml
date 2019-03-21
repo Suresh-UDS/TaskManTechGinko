@@ -25,7 +25,7 @@ spring:
         #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: tgadmin123#
+        password: Uds@2016
         #password: admin
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
