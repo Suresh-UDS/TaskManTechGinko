@@ -186,7 +186,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	
+
 
 //	@Scheduled(initialDelay = 60000, fixedRate = 1800000) // Runs every 30 mins
 	// @Scheduled(cron="30 * * * * ?") //Test to run every 30 seconds
@@ -640,7 +640,7 @@ public class SchedulerService extends AbstractService {
 		schedulerHelperService.feedbackDetailedReport();
 	}
 
-	
+
 
 	/*public void createJobsOld(SchedulerConfig dailyTask) {
 		if ("CREATE_JOB".equals(dailyTask.getType())) {
@@ -821,7 +821,7 @@ public class SchedulerService extends AbstractService {
 		{
 			if(slaConfig.getProcessType().equals("Tickets"))
 			{
-				tickets = ticketRepository.findAllActiveUnClosedTicket(slaConfig.getSite().getId());
+				tickets = ticketRepository.findAllActiveUnClosedTicket();
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
@@ -888,19 +888,19 @@ public class SchedulerService extends AbstractService {
 												}
 												ticket.setId(ticket.getId());
 												ticket.setEscalationStatus(slaEscalationConfig.getLevel());
-												ticketRepository.save(ticket);		
+												ticketRepository.save(ticket);
 											//}
 										}
 									}
 								}
 							}
 						}
-					}	
+					}
 				}
 			}
 		}
 	}
-	
+
 	@Scheduled(cron = "0 */30 * * * ?")
 	public void slaJobEscalationNotification()
 	{
@@ -916,7 +916,7 @@ public class SchedulerService extends AbstractService {
 			List<Job> jobs = new ArrayList<Job>();
 			if(slaConfig.getProcessType().equals("Jobs"))
 			{
-				jobs = jobRepository.findAllActiveInCompleteJobs(currDate, slaConfig.getSite().getId());
+				jobs = jobRepository.findAllActiveUnClosedTicket();
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
