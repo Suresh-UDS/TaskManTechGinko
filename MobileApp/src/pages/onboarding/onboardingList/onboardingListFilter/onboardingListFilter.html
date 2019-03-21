@@ -1,0 +1,45 @@
+<form #userFilterForm="ngForm">
+
+    <ion-list>
+        <ion-item>
+            <ion-label class="label-text trequired" stacked>Select Field</ion-label>
+            <ion-select name="searchField" interface="popover" [(ngModel)]="searchField" (ionChange)="userFilterKeyFn(searchField)">
+                <ion-option value="employeeName">Employee Name</ion-option>
+                <ion-option value="employeeCode">Employee Code</ion-option>
+                <ion-option value="gender">Gender</ion-option>
+                <ion-option value="maritalStatus">Marital Status</ion-option>
+                <!-- <ion-option value="aadharNumber">Aadhar Number</ion-option> -->
+            </ion-select>
+        </ion-item>
+
+    </ion-list>
+    <ion-searchbar [(ngModel)]="searchData" name="userSearchData" placeholder="Search">
+    </ion-searchbar>
+    <!-- <ion-item>
+            <ion-label>Employee Name</ion-label>
+            <ion-radio name="userFilterKey" value="name" (ionSelect)="userFilterKeyFn('name')" ngDefaultControl></ion-radio>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Location</ion-label>
+            <ion-radio name="userFilterKey" value="location" (ionSelect)="userFilterKeyFn('location')" ngDefaultControl></ion-radio>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Designation</ion-label>
+            <ion-radio name="userFilterKey" [checked]="manuallyChecked == 'designation'" value="designation"
+                (ionSelect)="userFilterKeyFn('designation')" ngDefaultControl></ion-radio>
+        </ion-item> -->
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <button ion-button outline (click)="closePopOver()">
+                Clear
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <button ion-button outline [disabled]="userFilterForm.form.invalid" (click)="submitPopOver()">
+                Submit
+            </button>
+        </div>
+    </div>
+</form>

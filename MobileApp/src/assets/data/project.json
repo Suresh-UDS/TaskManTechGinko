@@ -1,0 +1,587 @@
+[
+    {
+        "id": null,
+        "employeeName": "DEVI",
+        "employeeCode": "437805",
+        "gender": "female",
+        "dateOfBirth": "2018-11-01 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "married",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "0936101102766",
+                "isActive": null,
+                "ifsc": "CNRB0000936"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "UNSKILLED O",
+                                "activityDescription": "UNSKILLED",
+                                "activityNo": null,
+                                "activityId": "80156",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "JANAKI",
+        "employeeCode": "437808",
+        "gender": "female",
+        "dateOfBirth": "2018-11-01 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "married",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "6396777662",
+                "isActive": null,
+                "ifsc": "IDIB000K126"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "UNSKILLED O",
+                                "activityDescription": "UNSKILLED",
+                                "activityNo": null,
+                                "activityId": "80156",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "MANIMEGALAI",
+        "employeeCode": "437817",
+        "gender": "female",
+        "dateOfBirth": "2018-11-02 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "married",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "100057600740",
+                "isActive": null,
+                "ifsc": "INDB0000606"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "UNSKILLED O",
+                                "activityDescription": "UNSKILLED",
+                                "activityNo": null,
+                                "activityId": "80156",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "S KANJCHANA",
+        "employeeCode": "437833",
+        "gender": "female",
+        "dateOfBirth": "2018-11-01 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "married",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "6078902552",
+                "isActive": null,
+                "ifsc": "IDIB000M051"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "UNSKILLED O",
+                                "activityDescription": "UNSKILLED",
+                                "activityNo": null,
+                                "activityId": "80156",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "V-SELVI",
+        "employeeCode": "437843",
+        "gender": "female",
+        "dateOfBirth": "2018-11-14 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "married",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "89063434478",
+                "isActive": null,
+                "ifsc": "SBIN0000987"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "UNSKILLED O",
+                                "activityDescription": "UNSKILLED",
+                                "activityNo": null,
+                                "activityId": "80156",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "VARADHARAJULU A",
+        "employeeCode": "437844",
+        "gender": "male",
+        "dateOfBirth": "2018-11-01 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "05330100022498",
+                "isActive": null,
+                "ifsc": "BARB0AMBATT"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "SUPERVISOR O",
+                                "activityDescription": "SUPERVISOR",
+                                "activityNo": null,
+                                "activityId": "80159",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "MANIKANDAN S",
+        "employeeCode": "428791",
+        "gender": "male",
+        "dateOfBirth": "2018-09-18 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "806410110005080",
+                "isActive": null,
+                "ifsc": "BKID0008064"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "UNSKILLED O",
+                                "activityDescription": "UNSKILLED",
+                                "activityNo": null,
+                                "activityId": "80156",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "DANIEL LEONA",
+        "employeeCode": "441404",
+        "gender": "male",
+        "dateOfBirth": "2018-12-01 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "039401000066468",
+                "isActive": null,
+                "ifsc": "IOBA0000039"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "SEMISKILLED O",
+                                "activityDescription": "SEMI SKILLED",
+                                "activityNo": null,
+                                "activityId": "80157",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    },
+    {
+        "id": null,
+        "employeeName": "SATHISHKUMAR SEKAR",
+        "employeeCode": "441412",
+        "gender": "male",
+        "dateOfBirth": "2018-12-01 00:00:00.0",
+        "dateOfJoining": null,
+        "contactNumber": null,
+        "religion": null,
+        "maritalStatus": "unmarried",
+        "bloodGroup": null,
+        "aadharPhotoCopy": null,
+        "profilePicture": null,
+        "employeeSignature": null,
+        "employeeVoiceSample": null,
+        "prePrintedStatement": null,
+        "tempId": null,
+        "thumbImpressen": [],
+        "relationshipDetails": null,
+        "nomineeDetail": null,
+        "identificationMark": null,
+        "aadharNumber": null,
+        "communicationAddress": null,
+        "educationQualification": null,
+        "emergencyConatctNo": null,
+        "previousEmployee": null,
+        "epfNo": null,
+        "bankDetails": [
+            {
+                "name": null,
+                "accountNo": "500101011893643",
+                "isActive": null,
+                "ifsc": "CIUB0000418"
+            }
+        ],
+        "customer": [
+            {
+                "branchName": null,
+                "project": [
+                    {
+                        "projectId": null,
+                        "projectName": null,
+                        "projectDes": null,
+                        "wbs": [
+                            {
+                                "wbsId": null,
+                                "wbsName": null,
+                                "wbsDes": null,
+                                "position": null,
+                                "positionDescription": "SEMISKILLED O",
+                                "activityDescription": "SEMI SKILLED",
+                                "activityNo": null,
+                                "activityId": "80157",
+                                "gross": null
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "uanno": null,
+        "esino": null,
+        "addressProof": null,
+        "sync": false
+    }
+]

@@ -1,0 +1,172 @@
+<div padding>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <form [formGroup]="onboardingKYCForm" novalidate>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label trequired">Aadhar card no</label>
+                        <input class="form-control" type="number" formControlName="aadharNumber" required>
+                    </div>
+                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <label class="control-label trequired">Name as on aadhar</label>
+                        <input class="form-control" type="text" name="nameasAatharCard" [(ngModel)]="kycFormData.nameAatharCard"
+                            required>
+                    </div> -->
+                </div>
+
+
+
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
+                        <label class="trequired">Aadhar Front View</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.aadharPhotoCopy" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('front')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+
+                </div>
+
+                <div class="row form-group">
+                    <div *ngFor="let list of onboardingKYCForm.get('bankDetails').controls; let i = index;"
+                        formArrayName="bankDetails">
+                        <div [formGroupName]="i">
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label trequired">Account Number</label>
+                                <input class="form-control" type="number" maxlength="15" formControlName="accountNo">
+                            </div>
+                            <div   class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label trequired">IFSC Number</label>
+                                <!-- gopicg -->
+                                <input class="form-control" type="text" formControlName="ifsc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <label class="trequired">Bank Passbook</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.prePrintedStatement" onError="src = 'assets/imgs/placeholder.png';"
+                                (click)="presentActionSheet('passbook')" class="passbookImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">Employee Signature</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.employeeSignature" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('sign')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">Profile Picture</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.profilePicture" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('profile')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <ion-buttons end>
+                            <button (click)="launchApp()" small ion-button>Fingerprint Scanner</button>
+                        </ion-buttons>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Right</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.thumbImpressenRight" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpRight')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Left</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.thumbImpressenLeft" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpLeft')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+                 <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label>Driving License</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.drivingLicense" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('dLine')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label>Pancard</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.pancardCopy" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('panCard')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div> 
+                
+                <div class="row form-group">                    
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <label>Voter Id</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.voterId" onError="src = 'assets/imgs/placeholder.png'" 
+                            (click)="presentActionSheet('voter')"
+                                class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+
+                <!-- <div class="row form-group">
+                    <div <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        
+                    </div>
+                </div> -->
+
+                <!-- <div class="row" style="align-items: center;">
+                        <div class="col-md-4 col-sm-4 col-xs-4 padding0">
+                            <label class="headerText trequired">KYC Details</label>
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-xs-8 padding0">
+                            <ion-item>
+                                <ion-label stacked>Select KYC</ion-label>
+                                <ion-select [(ngModel)]="selectedKycData" (ionChange)="getSelectedKyc(selectedKycData)"
+                                    name="selectData">
+                                    <ion-option *ngFor="let list of kycdata" value="{{list.name}}">{{list.name}}</ion-option>
+                                </ion-select>
+                            </ion-item>
+                        </div>
+                    </div>
+
+                    <div class="form-group" *ngFor="let list of userSelectedKYC, let index = index">
+                        <h5 class="headerText">{{index + 1}}. {{list.type}}</h5>
+                        <div class="row" style="align-items: center;">
+                            <div class="col-md-5 col-sm-5 col-xs-5 padding0">
+                                <label class="trequired">Front View</label>
+                                <ion-avatar item-start class="inlineElement">
+                                    <img [src]="list.imageFront" (click)="getKYCImage(index, 'front')" class="mdImage" />
+                                </ion-avatar>
+                            </div>
+                            <div class="col-md-5 col-sm-5 col-xs-5 padding0">
+                                <label class="trequired">Back View</label>
+                                <ion-avatar item-start class="inlineElement">
+                                    <img [src]="list.imageBack" (click)="getKYCImage(index, 'back')" class="mdImage" />
+                                </ion-avatar>
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-2 padding0">
+                                <button ion-button small icon-only (click)="deleteKycDetails(index)">
+                                    <ion-icon name="remove"></ion-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div> -->
+            </form>
+        </div>
+    </div>
+</div>

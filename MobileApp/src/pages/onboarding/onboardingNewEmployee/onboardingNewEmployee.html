@@ -1,0 +1,73 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <div class="cloader small" [ngClass]="{'pie0': formLoadingProgress == 'pie0','pie20': formLoadingProgress == 'pie20', 'pie40': formLoadingProgress == 'pie40', 'pie60': formLoadingProgress == 'pie60', 'pie80': formLoadingProgress == 'pie80', 'pie100': formLoadingProgress == 'pie100'}"
+            start>
+            <span>{{wizardObj[currentIndex]['index']}} of {{wizardObj.length}}</span>
+            <div class="slice">
+                <div class="bar"></div>
+                <div class="fill"></div>
+            </div>
+        </div>
+        <ion-title>{{wizardObj[currentIndex]['title']}}</ion-title>
+        <ion-buttons end>
+            <button (click)="clearForm()" small ion-button>
+                Clear
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+    <!-- <ion-fab [hidden]="wizardObj.length == currentIndex + 1" (click)="nextWizard(currentIndex)" bottom right>
+        <button ion-fab color="primary">
+            <ion-icon name="md-arrow-dropleft"></ion-icon>
+        </button>
+    </ion-fab>
+    <ion-fab bottom left *ngIf="currentIndex > 0" (click)="PreviousWizard(currentIndex)">
+        <button ion-fab color="primary">
+            <ion-icon name="md-arrow-dropright"></ion-icon>
+        </button>
+    </ion-fab> -->
+
+
+    <ion-card id="onboardingEmp">
+        <ng-template #container></ng-template>
+    </ion-card>
+
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <div class="row">
+            <div class="col-md-6 col-md-6 col-xs-6">
+
+                <button ion-button class="pull-left" *ngIf="currentIndex > 0" icon-start (click)="PreviousWizard(currentIndex)">
+                    <ion-icon name="md-arrow-dropleft"></ion-icon>
+                    Previous
+                </button>
+
+            </div>
+            <div class="col-md-6 col-md-6 col-xs-6">
+                <button ion-button class="pull-right" icon-end [disabled]="!wizardObj[currentIndex]['formStatus']"
+                    [hidden]="wizardObj.length == currentIndex + 1" (click)="nextWizard(currentIndex)">
+                    Next
+                    <ion-icon name="md-arrow-dropright"></ion-icon>
+                </button>
+                <!-- <button ion-button class="pull-right" icon-end [hidden]="wizardObj.length == currentIndex + 1" (click)="nextWizard(currentIndex)">
+                    Next
+
+                    [disabled]="!wizardObj[currentIndex]['formStatus']" 
+                    <ion-icon name="md-arrow-dropright"></ion-icon>
+                </button> -->
+                <button (click)="formFinalSubmit()" ion-button class="pull-right" [disabled]="!wizardObj[currentIndex]['formStatus']"
+                    icon-start *ngIf="wizardObj.length == currentIndex + 1">
+                    <ion-icon name="md-document"></ion-icon>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-footer>

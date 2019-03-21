@@ -1,0 +1,43 @@
+page-onboardingLocation-new {
+    .card { 
+        margin: 1px !important;
+        display: block !important;
+    }
+    .card-md {
+        width: 100% !important;
+    }
+    .select-searchable{
+        overflow: visible !important;
+        max-width: 96% !important;
+        width: 96% !important;
+        margin-top: 9px;
+    }
+    ion-select {
+        overflow: visible !important;
+        max-width: 96% !important;
+    }
+    .label-md {
+        margin: 0;
+        text-align: left;
+        padding-left: 1px;
+    }
+    .item-md.item-block .item-inner {
+        padding-right: 2px !important;
+    }
+    .item-block {
+        margin-bottom: 25px !important;
+    }
+    .label-text {
+        font-family: sans-serif !important;
+        font-size: 12px !important;
+        color: gray !important;
+    }
+    .flexCenter {
+        align-items: center;
+        justify-content: center;
+    }
+    .TextData {
+        font-size: 14px !important;
+        color: #000000 !important;
+    }
+}

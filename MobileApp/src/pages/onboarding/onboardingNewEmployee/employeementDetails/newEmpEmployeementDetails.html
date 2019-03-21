@@ -1,0 +1,114 @@
+<div padding>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <form [formGroup]="onboardingEmployeeMentForm" novalidate>
+                <div *ngFor="let list of onboardingEmployeeMentForm.get('previousEmployee').controls; let i = index;"
+                    formArrayName="previousEmployee">
+                    <div [formGroupName]="i">
+                        <div class="row form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                                <p>Is Employed Earlier</p>
+                                <ion-toggle checked="true" (ionChange)="SetEarlierEmp()" formControlName="isEmploymentEarlier"></ion-toggle>
+                                <!-- <span class="spanText">Is Emp.Earlier</span> -->
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label" [ngClass]="{'trequired': earlierEmployer }">Employee Name</label>
+                                <input class="form-control" type="text" formControlName="name">
+                            </div>
+                        </div>
+                        <!-- <div class="row form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label" [ngClass]="{'trequired': earlierEmployer }">From</label>
+                                <input class="form-control" type="date" formControlName="fromEmployed">
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label" [ngClass]="{'trequired': earlierEmployer }">To</label>
+                                <input class="form-control" type="date" min="{{setMinDate}}" formControlName="toEmployed">
+                            </div>
+                        </div> -->
+
+                        <div class="row form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label" [ngClass]="{'trequired': earlierEmployer }">Designation</label>
+                                <input class="form-control" type="text" formControlName="designation">
+                            </div>
+                            <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                                <label class="control-label" [ngClass]="{'trequired': earlierEmployer }">Area Of Work</label>
+                                <input class="form-control" type="text" formControlName="areaOfWork">
+                            </div> -->
+                        </div>
+                        <!-- <div class="row form-group">
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                                <label class="control-label" [ngClass]="{'trequired': earlierEmployer }">Address</label>
+                                <input class="form-control" type="text" formControlName="address">
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- <div padding>
+                    <div class="pull-left">
+                        <h3 class="headerText">Add EPF</h3>
+                    </div>
+                    <div class="pull-right">
+                        <button ion-button small icon-only (click)="addMoreEpf()">
+                            <ion-icon name="add"></ion-icon>
+                        </button>
+                    </div>
+                </div> -->
+
+                <!-- <ion-card *ngFor="let list of addMorePFData;let index = index">
+                    <ion-card-header class="text-right">
+                        <button small ion-button icon-only (click)="removeEpf(list, index)">
+                            <ion-icon name="remove"></ion-icon>
+                        </button>
+                    </ion-card-header>
+                    <div class="row form-group">
+                        <label class="paragraphText trequired">Whether earlier member of the EPF scheme, 1952?</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12 centerDiv">
+                            <div class="col-md-3 col-sm-3 col-xs-3">No</div>
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <ion-toggle checked="false" [formControlName]="list.earlierEPF52"></ion-toggle>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3">Yes</div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row form-group">
+                        <label class="paragraphText trequired">Whether earlier member of the EPF scheme, 1955?</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12 centerDiv">
+                            <div class="col-md-3 col-sm-3 col-xs-3">No</div>
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <ion-toggle checked="false" [formControlName]="list.earlierEPF55"></ion-toggle>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-3">Yes</div>
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group">
+                            <label class="control-label trequired">UAN of prev.Exp</label>
+                            <input class="form-control" type="text" [formControlName]="list.uanYearOfPrevExperience">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group">
+                            <label class="control-label trequired">Prev.PF Member Id</label>
+                            <input class="form-control" type="text" [formControlName]="list.prevPFMemberId">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group">
+                            <label class="control-label trequired">Date Of Exist</label>
+                            <input class="form-control" type="date" [formControlName]="list.dateOfExist">
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group">
+                            <label class="control-label trequired">ESI No</label>
+                            <input class="form-control" type="text" [formControlName]="list.esiNo">
+                        </div>
+                    </div>
+                </ion-card> -->
+            </form>
+        </div>
+    </div>
+</div>

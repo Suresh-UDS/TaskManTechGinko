@@ -1,0 +1,72 @@
+page-onboarding-list {
+    .card { 
+        margin: 1px !important;
+        display: block !important;
+    }
+    .card-md {
+        width: 100% !important;
+    }
+    .label-md {
+        margin: 0px !important;
+    }
+    .item-md ion-icon[item-start] {
+        margin-top: 3px !important;
+        margin-bottom: 3px !important;
+    }
+    .item-block {
+        min-height: 1rem !important;
+    }
+    .label {
+        text-align: left !important;
+        padding: .3em .6em .3em !important;
+        //padding-right: 0px !important;
+    }
+    .card .card-content {
+        padding-bottom: 0px !important;
+        padding-top: 5px !important;
+    }
+    .margin0 {
+        margin: 0px !important;
+    }
+    .textColor {
+        color: orange;
+    }
+    .mdImage {
+        // width: 85px;
+        height: 100px;
+    }
+    ion-segment .segment-button {
+        color: black !important;
+        font-weight: bold !important;
+    }
+    .popover-md .popover-content {
+        padding: 0px !important;
+    }
+    .button-round-md {
+        padding: 0 0.9em !important;
+    }
+    .progress-outer {
+		width: 50px;
+		padding: 4px;
+		text-align: center;
+		background-color: #f4f4f4;
+		border: 1px solid #dcdcdc;
+		color: #fff;
+        border-radius: 20px;
+	}
+	.progress-inner {
+		white-space: nowrap;
+		border-radius: 20px;
+		background-color: #b37504;
+        padding: 2px 0px;
+    }
+    .progressContent .label {
+        display: inline-flex;;
+    }
+    .progressContent .progressText {
+        position: relative;
+        top: 7px;
+        padding-left: 6px;
+    }
+    
+}

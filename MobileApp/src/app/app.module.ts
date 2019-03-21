@@ -3,6 +3,9 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import {FabContainer, IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {HttpModule} from "@angular/http";
 import {HttpClient} from "../pages/Interceptor/HttpClient";
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -58,6 +61,7 @@ import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import{ExpenseDetails} from"../pages/expense-details/expense-details";
@@ -142,6 +146,27 @@ import{IndentIssue} from "../pages/indent-issue/indent-issue";
 import{AddMaterial} from "../pages/add-material/add-material";
 import{SelectSearchableModule} from "ionic-select-searchable";
 import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-finish";
+
+import { onboardingExistEmployee } from '../pages/onboarding/onboardingList/onboardingList';
+import { onboardingNewEmployee } from '../pages/onboarding/onboardingNewEmployee/onboardingNewEmployee';
+import { onboardingEmpStatus } from '../pages/onboarding/onboardingEmpStatus/onboardingEmpStatus';
+
+import { newEmpOnboardingDetails } from '../pages/onboarding/onboardingNewEmployee/onboardingScreen/newEmpOnboarding';
+import { newEmpPersonalDetail } from '../pages/onboarding/onboardingNewEmployee/personalDetails/newEmpPersonalDetails';
+import { newEmpKycDetails } from '../pages/onboarding/onboardingNewEmployee/kycDetails/newEmpKycDetails';
+import { newEmpFamilyAndAcademic } from '../pages/onboarding/onboardingNewEmployee/familyAcademic/newEmpFamilyAcademic';
+import { newEmpEmployeementDetails } from '../pages/onboarding/onboardingNewEmployee/employeementDetails/newEmpEmployeementDetails';
+import { newEmpContactDetails } from '../pages/onboarding/onboardingNewEmployee/contactDetails/newEmpContactDetails';
+import { onboardingLocation } from '../pages/onboarding/onboardingLocation/onboardingLocation';
+import { onboardingUserView } from '../pages/onboarding/onboardingList/onboardingUserView/onboardingUserView';
+
+import { IonicStepperModule } from 'ionic-stepper';
+
+import { OnboardingService } from '../pages/service/onboarding.service';
+import { onboardingListFilter } from '../pages/onboarding/onboardingList/onboardingListFilter/onboardingListFilter';
+
+import { onboardingUserFilterPipe } from '../pages/onboarding/onboardingList/onboardingUser.pipe';
+import { onBoardingDataService } from '../pages/onboarding/onboardingNewEmployee/onboarding.messageData.service';
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -244,7 +269,21 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
       IndentIssue,
       ExpenseDetails,
       AddExpense,
-    AddMaterial
+    AddMaterial,
+
+    onboardingExistEmployee,
+    onboardingNewEmployee,
+    onboardingEmpStatus,
+    newEmpOnboardingDetails,
+    newEmpPersonalDetail,
+    newEmpKycDetails,
+    newEmpFamilyAndAcademic,
+    newEmpEmployeementDetails,
+    newEmpContactDetails,
+    onboardingLocation,
+    onboardingUserView,
+    onboardingListFilter,
+    onboardingUserFilterPipe
 
   ],
   imports: [
@@ -262,7 +301,10 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
     }),
     IonicImageViewerModule,
       // PhotoViewer,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    ReactiveFormsModule,
+    FormsModule,
+    IonicStepperModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -361,7 +403,20 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
     AddMaterial,
 
     // WheelSelector
-    FeedbackGridFinish
+    FeedbackGridFinish,
+
+    onboardingExistEmployee,
+    onboardingNewEmployee,
+    onboardingEmpStatus,
+    newEmpOnboardingDetails,
+    newEmpPersonalDetail,
+    newEmpKycDetails,
+    newEmpFamilyAndAcademic,
+    newEmpEmployeementDetails,
+    newEmpContactDetails,
+    onboardingLocation,
+    onboardingUserView,
+    onboardingListFilter
 
 
   ],
@@ -392,6 +447,7 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
     Toast,
     FileTransfer,
     File,
+    FilePath,
       DatePicker,
       AppVersion,
       QRScanner,
@@ -407,6 +463,12 @@ import {FeedbackGridFinish} from "../pages/feedback-grid-finish/feedback-grid-fi
     ExpenseService,
       PurchaseRequisitionService,
       DatabaseProvider,
+
+    /* Onboarding Servive */ 
+    OnboardingService,
+    onBoardingDataService,
+
+
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

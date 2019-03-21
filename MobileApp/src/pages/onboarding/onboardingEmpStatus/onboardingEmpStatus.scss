@@ -1,0 +1,30 @@
+page-onboarding-status {
+    .card {
+        display: block !important;
+        margin: 0 !important;
+    }
+    .card-md {
+        width: 100% !important;
+    }
+    .item-md {
+        padding-left: 20px !important;
+    }
+    .note-md {
+        color: #7b7272 !important;
+    }
+    ion-step-header .ionic-step-header-description {
+        color: black;
+        font-size: 13px;
+    }
+    ion-step-header .ionic-step-header-label {
+        color: #ab7106;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .success {
+        background-color: green !important
+    }
+    .error {
+        background-color: gray !important;
+    }
+}

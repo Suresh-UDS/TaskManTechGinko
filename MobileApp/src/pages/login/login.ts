@@ -10,6 +10,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
 import {EmployeeService} from "../service/employeeService";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
+import { Storage } from '@ionic/storage';
 
 declare var demo;
 
@@ -51,9 +52,13 @@ export class LoginPage {
     this.now = new Date().getTime();
   }
 
-  signin()
-  {
-      console.log('form submitted');
+    clearStorage() {
+        this.storage.set('OnBoardingData', { actionRequired: [], completed: [] });
+    }
+
+    signin() {
+        console.log('login - form submitted');
+        this.clearStorage();
       if(this.username && this.password) {
         this.component.showLoader('Login');
         this.myService.login(this.username, this.password).subscribe(response => {
@@ -88,7 +93,10 @@ export class LoginPage {
                 window.localStorage.setItem('employeeFullName', response.employee.fullName);
                 window.localStorage.setItem('employeeEmpId', response.employee.empId);
                 window.localStorage.setItem('employeeUserId', response.employee.userId);
+                    window.localStorage.setItem('empUserId', response.employee.empId);
                 window.localStorage.setItem('employeeDetails', JSON.stringify(response));
+
+                    console.log(JSON.stringify(response));
 
                 var employee = response.employee;
 

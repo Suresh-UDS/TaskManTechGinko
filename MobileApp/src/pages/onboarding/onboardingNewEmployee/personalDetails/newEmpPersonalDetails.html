@@ -1,0 +1,129 @@
+<div padding>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <form [formGroup]="onboardingPersonalDetailsForm" novalidate>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <label class="control-label trequired">Employee Name</label>
+                        <input class="form-control" type="text" formControlName="employeeName">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <label class="control-label">Employee Code</label>
+                        <input class="form-control" type="text" formControlName="employeeCode" disabled>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0" *ngFor="let list of onboardingPersonalDetailsForm.get('relationshipDetails').controls; let i = index;"
+                        formArrayName="relationshipDetails">
+                        <div *ngIf="i==0" [formGroupName]="i">
+                            <label class="control-label trequired">{{list['value']['relationship']}} Name</label>
+                            <input class="form-control" type="text" formControlName="name">
+                        </div>
+                        <div *ngIf="i%2" [formGroupName]="i">
+                            <label class="control-label ">{{list['value']['relationship']}} Name</label>
+                            <input class="form-control" type="text" formControlName="name">
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <ion-item>
+                            <ion-label class="label-text trequired" stacked>Gender</ion-label>
+                            <ion-select interface="popover" formControlName="gender">
+                                <ion-option value="male">Male</ion-option>
+                                <ion-option value="female">Female</ion-option>
+                                <ion-option value="others">Others</ion-option>
+                            </ion-select>
+                        </ion-item>
+                        <!-- <label class="control-label">Gender</label>
+                        <div class="radioBtn" radio-group>
+                            <span>Male</span>
+                            <ion-radio formControlName="gender" value="Male" ngDefaultControl>Male</ion-radio>
+                            <span>Female</span>
+                            <ion-radio value="Female" formControlName="gender" ngDefaultControl>Female</ion-radio>
+                        </div> -->
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <ion-item>
+                            <ion-label class="label-text trequired" stacked>Marital Status</ion-label>
+                            <ion-select interface="popover" formControlName="maritalStatus">
+                                <ion-option value="Married">Married</ion-option>
+                                <ion-option value="Unmarried">Unmarried</ion-option>
+                                <ion-option ng-selected="" value="Divored">Divorced</ion-option>
+                            </ion-select>
+                        </ion-item>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <label class="control-label trequired">DOB</label>
+                        <input class="form-control" [max]="today" type="date" formControlName="dateOfBirth">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <label class="control-label trequired">DOJ</label>
+                        <input class="form-control" type="date" min="{{setMinDate}}" formControlName="dateOfJoining">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <ion-item>
+                            <ion-label class="label-text" stacked>Religion</ion-label>
+                            <ion-select interface="popover" formControlName="religion">
+                                <ion-option value="hindu">Hindu</ion-option>
+                                <ion-option value="muslim">Muslim</ion-option>
+                                <ion-option value="christian">Christian</ion-option>
+                                <ion-option value="sikh">Sikh</ion-option>
+                                <ion-option value="jain">Jain</ion-option>
+                                <ion-option value="buddhism">Buddhism</ion-option>
+                                <ion-option value="others">Other</ion-option>
+                            </ion-select>
+                        </ion-item>
+
+                        <!-- <label class="control-label">Religion</label>
+                        <input class="form-control" type="text" [(ngModel)]="onboardingNewEmpData['personalDetails']['religion']"
+                            formControlName="religion" required> -->
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <ion-item>
+                            <ion-label class="label-text" stacked>Blood Group</ion-label>
+                            <ion-select interface="popover" formControlName="bloodGroup">
+                                <ion-option value="a Positive">A+</ion-option>
+                                <ion-option value="b Positive">B+</ion-option>
+                                <ion-option value="a Negative">A-</ion-option>
+                                <ion-option value="b Negative">B-</ion-option>
+                                <ion-option value="ab Positive">AB+</ion-option>
+                                <ion-option value="ab Negative">AB-</ion-option>
+                                <ion-option value="o Positive">o+</ion-option>
+                                <ion-option value="o Negative">o-</ion-option>
+                            </ion-select>
+                        </ion-item>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label">Personal Identification Mark1</label>
+                        <input class="form-control" type="text" formControlName="identificationMark1">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label">Personal Identification Mark2</label>
+                        <input class="form-control" type="text" formControlName="identificationMark2">
+                    </div>
+                </div>
+                <!-- <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group label-floating">
+                        <button (click)="setValidation()" ion-button class="pull-right" icon-start>
+                            <ion-icon name="md-document"></ion-icon>
+                            Set Validation
+                        </button>
+                        <button (click)="getFormData()" ion-button class="pull-right" icon-start [disabled]="onboardingPersonalDetailsForm.invalid">
+                            <ion-icon name="md-document"></ion-icon>
+                            Form Submit
+                        </button>
+                    </div>
+                </div> -->
+            </form>
+        </div>
+    </div>
+</div>

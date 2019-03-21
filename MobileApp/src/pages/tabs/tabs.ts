@@ -115,6 +115,14 @@ export class TabsPage {
         }
     });
 
+    this.sqlite.create({
+      name: 'data.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+      this.db = db;
+      console.log("Database connection");
+      console.log(this.db)
+    })
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
@@ -144,6 +152,30 @@ export class TabsPage {
             }
         }
     );
+      this.dbService.getAllSavedImages().then(
+        (res)=> {
+          console.log("saved images", res);
+          this.savedImages = res;
+          console.log("savedimages", this.savedImages);
+          if (this.savedImages.length > 0) {
+            for (var i = 0; i < this.savedImages.length; i++) {
+              // console.log("saved images",this.savedImages[i].image);
+              let imageData = this.savedImages[i].image;
+              let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+              // let base64Image = 'data:image/jpeg;base64,' + this.savedImages[i].image;
+              this.completedImages.push(base64Image);
+              this.component.closeLoader();
+
+            }
+          }else {
+            this.component.closeLoader();
+          }
+        },(err)=>{
+          console.log("error",err);
+          this.savedImages = [];
+          this.component.closeLoader();
+        }
+      )
 
     console.log(this.network.type);
     var session = window.localStorage.getItem('session');

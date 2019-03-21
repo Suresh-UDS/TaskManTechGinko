@@ -1,0 +1,157 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>On Boarding List</ion-title>
+        <ion-buttons right *ngIf="hideFilter">
+            <button ion-button class="fnt-black" icon-only (click)="userFilter()">
+                <ion-icon name="funnel"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-segment [(ngModel)]="onBoardingAction" (ionChange)="onSegmentChange()">
+        <ion-segment-button value="actionRequired">
+            Action Required
+        </ion-segment-button>
+        <ion-segment-button value="completed">
+            To be verified
+        </ion-segment-button>
+    </ion-segment>
+</ion-header>
+
+<ion-content>
+    <!-- <button (click)="updateEmployeeDetails()" ion-button icon-start>
+        <ion-icon name="refresh"></ion-icon>
+        <div>Update</div>
+    </button> -->
+    <ion-fab bottom right (click)="addNewEmpyoee()">
+        <button ion-button color="primary">New Employee</button>
+    </ion-fab>
+    <div [ngSwitch]="onBoardingAction">
+        <div *ngSwitchCase="'actionRequired'">
+            <div *ngIf="!actionRequiredEmp['length']">
+                <ion-card>
+                    <ion-card-content>
+                        <img src="assets/imgs/warning.svg" class="mdImage">
+                        <span>
+                            <p text-center>No Data Found</p>
+                        </span>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+            <ion-card *ngFor="let list of actionRequiredEmp | userFilter:actionRequiredfilterData; let index = index">
+                <!-- <ion-item>
+                    <h2>Marty</h2>
+                </ion-item> -->
+                <ion-card-content (click)="updateEmployeeDetails(index)">
+                    <ion-row class="margin0">
+                        <ion-col col-4 class="ver-center">
+                            <ion-avatar item-start class="inlineElement">
+                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />                  
+                            </ion-avatar>
+                        </ion-col>
+                        <ion-col col-8 class="padding-left5">
+                            <ion-list>
+                                <ion-item>
+                                    <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
+                                    <h2 class="textColor">{{list['employeeName']}}</h2>
+                                </ion-item>
+                                <ion-item>
+                                    <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
+                                    {{list['employeeCode']}}
+                                </ion-item>
+                                <ion-item class="progressContent">
+                                    <div class="progress-outer">
+                                        <div class="progress-inner">
+                                            {{list['percentage']}}%
+                                        </div>
+                                    </div> <span class="progressText">Completed</span>
+                                    <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
+                                    <!-- {{list['personalDetails']['percentage']}} % -->
+                                </ion-item>
+                                <ion-item>
+                                    <button ion-button icon-start>
+                                        <ion-icon name="refresh"></ion-icon>
+                                        <div>Update</div>
+                                    </button>
+
+                                    <ion-badge *ngIf="list['isSync'] == false" item-end color="secondary">local</ion-badge>
+
+                                    <!-- <ion-note *ngIf="list.status == '30%'" item-end>
+                                        <button (click)="syncEmployeeDetails()" small round ion-button icon-start>
+                                            <ion-icon name="sync"></ion-icon>
+                                            SYNC
+                                        </button>
+                                    </ion-note> -->
+                                </ion-item>
+                            </ion-list>
+                        </ion-col>
+                        <!-- <ion-col col-3 class="padding-left0 ver-center">
+                            <div class="padding-bottom5">
+                                <button ion-button clear color="primary">
+                                    <i class="material-icons">refresh</i> Update
+                                </button>
+                            </div>
+                        </ion-col> -->
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <div *ngSwitchCase="'completed'">
+            <div *ngIf="!completedEmp['length']">
+                <ion-card>
+                    <ion-card-content>
+                        <img src="assets/imgs/warning.svg" class="mdImage">
+                        <span>
+                            <p text-center>No Data Found</p>
+                        </span>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+            <ion-card *ngFor="let list of completedEmp | userFilter:completedfilterData; let Cindex= index">
+                <!-- <ion-item>
+                    <h2>Marty</h2>
+                </ion-item> -->
+                <ion-card-content (click)="onboardingUserView(list)">
+                    <ion-row class="margin0">
+                        <ion-col col-4 class="ver-center">
+                            <ion-avatar item-start class="inlineElement">
+                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''"  onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                            </ion-avatar>
+                        </ion-col>
+                        <ion-col col-8 class="padding-left5">
+                            <ion-list>
+                                <ion-item>
+                                    <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
+                                    <h2 class="textColor">{{list['employeeName']}}</h2>
+                                </ion-item>
+                                <ion-item>
+                                    <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
+                                    {{list['employeeCode']}}
+                                </ion-item>
+                                <ion-item>
+                                    <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
+                                    {{list['percentage']}}
+                                </ion-item>
+                                <ion-item>
+                                    <button ion-button icon-start>
+                                        <ion-icon name="eye"></ion-icon>
+                                        <div>View</div>
+                                    </button>
+                                    <ion-note *ngIf="list['isSync'] == false" item-end>
+                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button
+                                            icon-start>
+                                            <ion-icon name="sync"></ion-icon>
+                                            SYNC
+                                        </button>
+                                    </ion-note>
+                                </ion-item>
+                            </ion-list>
+                        </ion-col>
+                    </ion-row>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </div>
+</ion-content>
