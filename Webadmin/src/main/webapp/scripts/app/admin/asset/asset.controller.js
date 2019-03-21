@@ -1527,13 +1527,20 @@ angular.module('timeSheetApp')
 						}else{
 							$scope.searchAssetCode = "";
 						}
-
-						$scope.searchAcquiredDate = $filter('date')($scope.localStorage.acquiredDate, 'dd/MM/yyyy');
-						$scope.searchAcquiredDateSer = $scope.localStorage.acquiredDate;
-						$scope.searchCreatedDate = $filter('date')($scope.localStorage.assetCreatedDate, 'dd/MM/yyyy');
-						$scope.searchCreatedDateSer = $scope.localStorage.assetCreatedDate;
-
-
+                        if($scope.localStorage.acquiredDate){
+                            $scope.searchAcquiredDate = $filter('date')($scope.localStorage.acquiredDate, 'dd/MM/yyyy');
+                            $scope.searchAcquiredDateSer = $scope.localStorage.acquiredDate;
+                        }else{
+                            $scope.searchAcquiredDate = null;
+                            $scope.searchAcquiredDateSer = null;
+                        }
+                        if($scope.localStorage.assetCreatedDate){
+                            $scope.searchCreatedDate = $filter('date')($scope.localStorage.assetCreatedDate, 'dd/MM/yyyy');
+                            $scope.searchCreatedDateSer = $scope.localStorage.assetCreatedDate;
+                        }else{
+                            $scope.searchCreatedDate = null;
+                            $scope.searchCreatedDateSer = null;
+                        }
 
 					}
 
@@ -3667,8 +3674,8 @@ angular.module('timeSheetApp')
 
 			}
 
-			$scope.imgNotValid=true;
-			$scope.imgSizeHigh=true;
+			$scope.imgNotValid=false;
+			$scope.imgSizeHigh=false;
 
 
 			$scope.uploadImage = function (files) {
@@ -3697,8 +3704,8 @@ angular.module('timeSheetApp')
 
 			}
 
-			$scope.fileNotValid=true;
-			$scope.fileSizeHigh=true;
+			$scope.fileNotValid=false;
+			$scope.fileSizeHigh=false;
 
 			$scope.uploadfileValidation = function (files) {
 

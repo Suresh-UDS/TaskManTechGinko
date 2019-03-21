@@ -4,9 +4,9 @@ angular.module('timeSheetApp')
     .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout, $filter,
     		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage,$interval) {
 
-    	$scope.selectedProject = {};
+    	$scope.selectedProject = null;
 
-    	$scope.selectedSite = {};
+    	$scope.selectedSite = null;
 
     	$rootScope.loginView = false;
 
@@ -53,6 +53,13 @@ angular.module('timeSheetApp')
 
         $rootScope.exportStatusObj  ={};
 
+        $scope.initCalender = function(){
+
+            demo.initFormExtendedDatetimepickers();
+        }
+
+        $scope.initCalender();
+
 			//init load
 			$scope.initLoad = function(){
 			    $scope.loadPageTop();
@@ -63,7 +70,8 @@ angular.module('timeSheetApp')
 			 }
 
             $scope.initList = function() {
-                $scope.loadPurchaseRequisition();
+                //$scope.loadPurchaseRequisition();
+                $scope.loadPageTop();
                 $scope.setPage(1);
             }
 
@@ -101,24 +109,49 @@ angular.module('timeSheetApp')
                 };
 
 
-        $scope.conform = function(text)
+        $scope.conform = function(text,val=null,type=null)
         {
+
             $rootScope.conformText = text;
+            $scope.pId = val;
+            $scope.type= type;
             $('#conformationModal').modal();
 
         }
         $rootScope.back = function (text) {
+
             if(text == 'cancel' || text == 'back'){
-                /** @reatin - retaining scope value.**/
+                /** @retain - retaining scope value.**/
                 $rootScope.retain=1;
                  $scope.cancelPurchase();
             }else if(text == 'save'){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.savePurchase()
+            }else if(text == 'APPROVED' && $scope.type){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updatePurchaseReq('APPROVED');
+            }else if(text == 'REJECTED' && $scope.type){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                $scope.updatePurchaseReq('REJECTED');
             }else if(text == 'update'){
-                /** @reatin - retaining scope value.**/
+                /** @retain - retaining scope value.**/
                 $rootScope.retain=1;
                 $scope.updatePurchaseReq();
+            }else if(text == 'Approved'){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                submitPurchaseReq($scope.pId,'Approved');
+            }else if(text == 'Rejected'){
+                /** @retain - retaining scope value.**/
+                $rootScope.retain=1;
+                submitPurchaseReq($scope.pId,'Rejected');
             }
+            $rootScope.conformText = "";
+            $scope.pId = null;
+            $scope.type= null;
         };
 
 
@@ -262,9 +295,12 @@ angular.module('timeSheetApp')
                 }
 
                 $scope.change = function() {
-                    console.log($scope.selectedItemCode);
-                    $scope.selectedItemName = $scope.selectedItemCode.name;
-                    $scope.selectedQuantity = "";
+                    if($scope.selectedItemCode){
+                        console.log($scope.selectedItemCode);
+                        $scope.selectedItemName = $scope.selectedItemCode.name;
+                        $scope.selectedStoreStock = $scope.selectedItemCode.storeStock;
+                        $scope.selectedQuantity = "";
+                    }
                 }
 
                 $scope.loadStatus = function() {
@@ -297,6 +333,8 @@ angular.module('timeSheetApp')
                 $scope.exportAllData = function(type){
                     $rootScope.exportStatusObj.exportMsg = '';
                     $scope.downloader=true;
+                    $scope.downloaded = false;
+                    $scope.searchCriteria.isReport = true;
                     $scope.searchCriteria.exportType = type;
                     $scope.searchCriteria.report = true;
 
@@ -525,10 +563,22 @@ angular.module('timeSheetApp')
                             }else{
                                 $scope.searchReferenceNumber  = null;
                             }
-                            $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
-                            $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
-                            $scope.searchApprovedDate = $filter('date')($scope.localStorage.approvedDate, 'dd/MM/yyyy');
-                            $scope.searchApprovedDateSer = new Date($scope.localStorage.approvedDate);
+                            if($scope.localStorage.requestedDate){
+                                $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
+                                $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
+                            }else{
+                                $scope.searchRequestedDate = null;
+                                $scope.searchRequestedDateSer = null;
+                            }
+                            if($scope.localStorage.approvedDate){
+                                $scope.searchApprovedDate = $filter('date')($scope.localStorage.approvedDate, 'dd/MM/yyyy');
+                                $scope.searchApprovedDateSer = new Date($scope.localStorage.approvedDate);
+                            }else{
+                                $scope.searchApprovedDate = null;
+                                $scope.searchApprovedDateSer = null;
+                            }
+
+
 
                         }
 
@@ -733,17 +783,18 @@ angular.module('timeSheetApp')
                 $scope.loadSites = function () {
                     $scope.siteSpin = true;
                 	console.log("selected project - " + JSON.stringify($scope.selectedProject));
-                	$scope.sites = {};
+                	$scope.sites = '';
                 	if($scope.selectedProject) {
                     	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                             $scope.sites = data;
                             $scope.siteSpin = false;
                         });
-                	}/*else {
-                    	SiteComponent.findAll().then(function (data) {
+                	}else {
+                         $scope.siteSpin = false;
+                    	/*SiteComponent.findAll().then(function (data) {
                             $scope.sites = data;
-                        });
-                	}*/
+                        });*/
+                	}
                 };
 
                 $scope.viewPurchaseReq = function() {
@@ -780,7 +831,7 @@ angular.module('timeSheetApp')
                         $scope.loadEmployees();
                         $scope.loadPurchases();
                         $scope.selectedEmployee = {id: $scope.purchaseReqObj.requestedById }
-                        $scope.materialItems = $scope.purchaseReqObj.items;
+                        $scope.purchaseItems = $scope.purchaseReqObj.items;
                         $scope.loadingStop();
 
                     });
@@ -844,7 +895,7 @@ angular.module('timeSheetApp')
 
             $scope.updatePurchaseItems = function(){
 
-                    $scope.updateMaterial.materialId = $scope.selectedItemCode.materialId;
+                    $scope.updateMaterial.materialId = $scope.selectedItemCode.id;
                     $scope.updateMaterial.materialName = $scope.selectedItemCode.name;
                     $scope.updateMaterial.materialUom = $scope.selectedItemCode.uom;
                     $scope.updateMaterial.quantity = $scope.selectedQuantity;
@@ -859,6 +910,7 @@ angular.module('timeSheetApp')
 
             function updateItems(index, object) {
                 $scope.isEdit = false;
+                console.log('purchase items',$scope.purchaseItems);
                 $scope.purchaseItems[index] = object;
                 $scope.selectedRow = index;
                 $scope.selectedQuantity = null;
@@ -881,10 +933,12 @@ angular.module('timeSheetApp')
             }
 
                 $scope.updatePurchaseReq = function(status) {
-                		if(status == 'APPROVED' && !$scope.isValid) {
-                			$scope.showNotifications('top','center','danger','Invalid Approved Quantity');
-                			return;
-                		}
+                     $scope.loadingStart();
+                    if(status == 'APPROVED' && !$scope.isValid) {
+                        $scope.showNotifications('top','center','danger','Invalid Approved Quantity');
+                        $scope.loadingStop();
+                        return;
+                    }
                     $scope.saveLoad = true;
                 		console.log(status);
                     if($scope.selectedProject) {
@@ -896,11 +950,16 @@ angular.module('timeSheetApp')
                     if($scope.selectedEmployee) {
                         $scope.purchaseReqObj.requestedById = $scope.selectedEmployee.id;
                     }
-                    if($scope.materialItems) {
-                        $scope.purchaseReqObj.items = $scope.materialItems;
+                    if($scope.purchaseItems) {
+                        $scope.purchaseReqObj.items = $scope.purchaseItems;
                     }
 
-                    	$scope.purchaseReqObj.requestStatus = status;
+                    if(status){
+                        $scope.purchaseReqObj.requestStatus = status;
+                    }else{
+
+                        $scope.purchaseReqObj.requestStatus = $scope.purchaseReqObj.status;
+                    }
 
                     console.log('update purchase by id >>>',$scope.purchaseReqObj);
                     PurchaseComponent.update($scope.purchaseReqObj).then(function(resp){
@@ -964,9 +1023,10 @@ angular.module('timeSheetApp')
 
                 }
                 $scope.clearPurchaseItems =function(){
-                  $scope.selectedItemName = '';
-                  $scope.selectedItemCode = '';
-                  $scope.selectedQuantity = '';
+                  $scope.selectedItemName = null;
+                  $scope.selectedItemCode = null;
+                  $scope.selectedQuantity = null;
+                  $scope.selectedStoreStock = null;
                    $scope.isEdit=false;
                 }
 
@@ -995,6 +1055,13 @@ angular.module('timeSheetApp')
                     });
                 }
                 return isDuplicate;
+            }
+
+            $scope.chkEmp = function(){
+                if(!$scope.selectedSite){
+                    alert('Please select site before select employee...!!!');
+                    return false;
+                }
             }
 
             $scope.showNotifications= function(position,alignment,color,msg){
@@ -1027,6 +1094,8 @@ angular.module('timeSheetApp')
                 $scope.searchReferenceNumber = null;
                 $scope.localStorage = null;
                 $rootScope.searchCriteriaSite = null;
+                $scope.downloader=false;
+                $scope.downloaded = true;
 
                 $scope.siteFilterDisable = true;
                 $scope.regionFilterDisable = true;
@@ -1057,10 +1126,12 @@ angular.module('timeSheetApp')
 
 
             $scope.deletePurchase = function () {
+                $('.delete-confirmation').modal('hide');
                     PurchaseComponent.remove($scope.deletePurchaseId).then(function(){
                         $scope.success = 'OK';
                         $scope.showNotifications('top','center','success','Purchase requisition has been deleted successfully!!');
-                        $scope.loadPurchaseReq();
+                        $rootScope.retain=1;
+                        $scope.searchFilter();
                     });
             }
 
@@ -1153,6 +1224,14 @@ angular.module('timeSheetApp')
               $interval.cancel(promise);
             };
 
+            $scope.downloaded = false;
+
+            $scope.clsDownload = function(){
+                $scope.downloaded = true;
+                $rootScope.exportStatusObj = {};
+                $scope.exportStatusMap = [];
+            }
+
 
             $('input#dateFilterRequestedDate').on('dp.change', function(e){
                 $scope.searchRequestedDateSer = e.date._d;
@@ -1169,20 +1248,24 @@ angular.module('timeSheetApp')
         //Search Filter Site Load Function
 
         $scope.projectFilterFunction = function (searchProject){
-            $scope.siteSpin = true;
-            ProjectComponent.findSites(searchProject.id).then(function (data) {
-                $scope.selectedSite = null;
-                $scope.sitesList = data;
-                $scope.sitesLists = [];
-                $scope.sitesLists[0] = $scope.allSites;
+            if(searchProject){
+                $scope.siteSpin = true;
+                $scope.sitesList = "";
+                ProjectComponent.findSites(searchProject.id).then(function (data) {
+                    $scope.selectedSite = null;
+                    $scope.sitesList = data;
+                    $scope.sitesLists = [];
+                    $scope.sitesLists[0] = $scope.allSites;
 
-                for(var i=0;i<$scope.sitesList.length;i++)
-                {
-                    $scope.sitesLists[i+1] = $scope.sitesList[i];
-                }
-                $scope.siteFilterDisable = false;
-                $scope.siteSpin = false;
-            });
+                    for(var i=0;i<$scope.sitesList.length;i++)
+                    {
+                        $scope.sitesLists[i+1] = $scope.sitesList[i];
+                    }
+                    $scope.siteFilterDisable = false;
+                    $scope.siteSpin = false;
+                });
+            }
+
 
         };
 
@@ -1319,8 +1402,6 @@ angular.module('timeSheetApp')
             $scope.regionFilterDisable = true;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
@@ -1331,8 +1412,6 @@ angular.module('timeSheetApp')
             $scope.sitesListOne.selected = undefined;
             $scope.branchFilterDisable = true;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
@@ -1341,16 +1420,12 @@ angular.module('timeSheetApp')
             $scope.branchsListOne.selected = undefined;
             $scope.sitesListOne.selected = undefined;
             $scope.siteFilterDisable = true;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 
         $scope.clearSite = function($event) {
             $event.stopPropagation();
             $scope.sitesListOne.selected = null;
-            $scope.empListOne.selected = undefined;
-            $scope.employeeFilterDisable = true;
 
         };
 

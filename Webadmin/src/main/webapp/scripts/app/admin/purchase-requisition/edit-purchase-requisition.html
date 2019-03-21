@@ -2,11 +2,9 @@
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
     <div  ng-init="loadPageTop();loadProjects();loadUOM();editPurchaseReq();">
 
-
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
-
+        <!--<div class="titleCon">
+            <h3>{{editInventory.title}}</h3>
+        </div>-->
 
         <!--<div class="card-header" data-background-color="red">-->
         <!--<h4 class="title">Add Site</h4>-->
@@ -14,8 +12,13 @@
         <!--</div>-->
 
         <div class="cardsCon addSiteCon">
+            <div class="row">
+                <div class="col-md-12">
+                    <label><span class="red-star">*</span> Mandatory Field</label>
+                </div>
+            </div>
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="saveInventory()">
+                  ng-submit="saveInventory()" confirm-on-exit>
 
 
                 <div class="card margin-TB-5 tablecard addFrom">
@@ -125,7 +128,7 @@
                         </div>
                         <h3 class="HeadingTxt">Item Details </h3>
                         <div class="row">
-                            <ng-form name="itemForm" novalidate>
+
                                 <div class="col-md-3">
                                     <div class="form-group no-padding">
                                         <div class="dropdown">
@@ -149,49 +152,47 @@
                                     <div class="form-group">
                                         <label class="control-label">UOM</label>
                                         <input type="text" class="form-control" name="uop" ng-pattern="/^[0-9]*$/" ng-model="selectedItemCode.uom" ng-disabled="true">
-                                        <div ng-show="itemForm.$submitted || itemForm.uop.$touched">
-                                            <div ng-show="itemForm.uop.$dirty || itemForm.uop.$invalid">
-                                                <p class="help-block" style="color: maroon"
-                                                   ng-show="itemForm.uop.$error.required">UOM is
-                                                    invalid.</p>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group   is-empty">
                                         <label class="control-label">Quantity <span class="red-star">*</span></label>
-                                        <input type="number" class="form-control" name="quantity" min="1" ng-model="selectedQuantity" required>
-                                        <div ng-show="itemForm.$submitted || itemForm.quantity.$touched">
-                                            <div ng-show="itemForm.quantity.$dirty || itemForm.quantity.$invalid">
-                                                <p class="help-block" style="color: maroon"
-                                                   ng-show="itemForm.quantity.$error.required">Quantity is
-                                                    required.</p>
+                                        <input type="number" class="form-control" name="quantity" min = 1 ng-model="selectedQuantity" required>
+                                        <div ng-show="form.$submitted || form.quantity.$touched || form.quantity.$dirty">
+                                            <div ng-show="form.quantity.$dirty || form.quantity.$invalid">
+                                                <!--<p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                       ng-show="form.quantity.$error.required">
+                                                Quantity is required.
+                                                </p>-->
+                                                <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                   ng-show="form.quantity.$error.min">
+                                                    Minimum quantity  is 1.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
 
-                                    <button class="btn btn-success" ng-click="addPurchaseItem()"  ng-show="!isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <button type="button" class="btn btn-success" ng-click="addPurchaseItem()"  ng-show="!isEdit" ng-disabled="!selectedItemCode || !selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                     <span class="btn-label">
                                         <i class="material-icons">add</i>
                                     </span>
                                         Add
                                     </button>
 
-                                    <button class="btn btn-success" ng-click="updatePurchaseItems()"  ng-show="isEdit" ng-disabled="itemForm.$invalid" style="padding: 12px 20px; margin-top: 16px;">
+                                    <button type="button" class="btn btn-success" ng-click="updatePurchaseItems()"  ng-show="isEdit" ng-disabled="!selectedItemCode || !selectedQuantity" style="padding: 12px 20px; margin-top: 16px;">
                                     <span class="btn-label">
                                         <i class="material-icons">add</i>
                                     </span>
                                         Update
                                     </button>
-                                    <button class="btn btn-danger" ng-click="clearPurchaseItems()"  ng-show="isEdit"  style="padding: 12px 20px; margin-top: 16px;">
+                                    <button type="button" class="btn btn-danger" ng-click="clearPurchaseItems()"    style="padding: 12px 20px; margin-top: 16px;">
                                         Clear
                                     </button>
 
                                 </div>
-                            </ng-form>
+
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -208,7 +209,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="purchase in materialItems" ng-class="{'highlight-text':$index == selectedRow}">
+                                        <tr ng-repeat="purchase in purchaseItems" ng-class="{'highlight-text':$index == selectedRow}">
                                             <td>{{purchase.materialItemCode}}</td>
                                             <td>{{purchase.materialName}}</td>
                                             <td>{{purchase.materialUom}}</td>
@@ -216,7 +217,7 @@
                                             <td class="text-right" ng-click="editMaterial($index, purchase)"> <a class="btn btn-simple btn-info"><i class="material-icons">edit</i></a></td>
                                         </tr>
                                         <tr>
-                                            <td ng-if="!materialItems.length" colspan="7" align="center"> No purchase items found </td>
+                                            <td ng-if="!purchaseItems.length" colspan="7" align="center"> No purchase items found </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -235,7 +236,7 @@
 
                     <div class="col-md-12">
 
-                        <button type="button" ng-click="conform('back')" 
+                        <button type="button" ng-click="conform('cancel')"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                         <!--<button type="submit"-->

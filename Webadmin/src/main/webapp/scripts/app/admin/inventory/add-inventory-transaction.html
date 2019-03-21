@@ -2,11 +2,10 @@
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
     <div  ng-init="initLoad();loadingAuto();">
 
-
-        <div class="col-md-8">
-            <!--<h2 class="title">Add Site</h2>-->
-        </div>
-
+        <label><span class="red-star">*</span> Mandatory Field</label>
+       <!-- <div class="col-md-8">
+            &lt;!&ndash;<h2 class="title">Add Site</h2>&ndash;&gt;
+        </div>-->
 
             <!--<div class="card-header" data-background-color="red">-->
                 <!--<h4 class="title">Add Site</h4>-->
@@ -15,7 +14,7 @@
 
            <div class="cardsCon addSiteCon">
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveInventoryTrans()">
+                     ng-submit="saveInventoryTrans()" confirm-on-exit>
 
                    <div class="row">
                        <div class="col-md-12">
@@ -146,7 +145,7 @@
                                                            <label class="control-label">Purchase Ref.No<span class="red-star">*</span></label>
                                                            <span class="form-control-feedback d-md-arrow-icon" ng-show="!purchaseItemsSpin"><i class="material-icons">keyboard_arrow_down</i></span>
                                                            <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="purchaseItemsSpin"><i class="ld ld-ring ld-spin" ></i></span>
-                                                           <select class="form-control" ng-model="selectedPurchaseReq"  name="PurRefNo" ng-change="loadPurchaseItems()" ng-required="selectedTransactionType == 'RECEIVED'" ng-options="purchaseItem as purchaseItem.purchaseRefGenNumber for purchaseItem in purchaseItems">
+                                                           <select class="form-control" ng-model="selectedPurchaseReq"  name="PurRefNo" ng-click="loadPurchaseItems()" ng-required="selectedTransactionType == 'RECEIVED'" ng-options="purchaseItem as purchaseItem.purchaseRefGenNumber for purchaseItem in purchaseItems">
                                                                <option value="">Select Purchase Ref.No...</option>
                                                            </select>
                                                            <span ng-if="purchaseItems.length == 0"><p class="error-msg margin0">No Purchase Ref.No</p></span>
@@ -325,7 +324,7 @@
 
                        <div class="col-md-12">
 
-                           <button type="button" ng-click="cancelInventoryTrans()"
+                           <button type="button" ng-click="conform('cancel')"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                            <button type="submit"
@@ -340,35 +339,7 @@
 
                </form>
            </div>
-
-
     </div>
-
-    <div class="">
-        <div class="row">
-            <div class="col-mod-12">
-                <div class="alert alert-success" ng-show="success">
-                    <strong>Site saved!</strong>
-                </div>
-                <div class="alert alert-danger" ng-show="errorSitesExists">
-                    <strong>Site already registered!</strong> Please choose another one.
-                </div>
-                <div class="alert alert-danger" ng-show="error">
-                    <strong>Site Not Saved!</strong> Please try again later.
-                </div>
-                <div class="alert alert-danger" ng-show="errorProject">
-                    <strong>Invalid Client</strong> Please choose another one.
-                </div>
-            </div>
-            <div class="col-md-12">
-
-
-
-            </div>
-
-        </div>
-    </div>
-
 
 </div>
 

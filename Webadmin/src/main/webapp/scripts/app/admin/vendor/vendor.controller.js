@@ -421,7 +421,9 @@ angular.module('timeSheetApp')
 			$scope.deleteVendor = function () {
 				VendorComponent.remove($scope.deleteVendorId).then(function(){
 					$scope.success = 'OK';
-					$scope.loadVendors();
+                    $rootScope.retain=1;
+                    $scope.search();
+
 				});
 			};
 

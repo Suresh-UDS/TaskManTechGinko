@@ -1,4 +1,4 @@
-<div ng-init="initList();loadProjects();loadSites();">
+<div ng-init="initList();">
 
     <div class="row">
 
@@ -21,7 +21,7 @@
 
         <div class="col-md-6 txt-align-rgt">
 
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-indent"  tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0" has-permission="Indent:Create"  ui-sref="add-indent"  tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
@@ -73,7 +73,7 @@
                 <div class="card-content">
 
                     <div class="table-responsive tablecard">
-                        <table class="table table-hover">
+                        <table class="table table-hover withSortingIcons">
                             <thead>
                                <tr>
                                    <th>Reference No
@@ -146,7 +146,7 @@
                                             </span>
                                         </span>
                                    </th>
-                                   <th>Actions</th>
+                                   <th class="disabled-sorting text-right">Actions</th>
                                </tr>
                             </thead>
                             <tbody>
@@ -160,13 +160,12 @@
                                     <td>{{materialIndent.issuedDate | date: "dd-MM-yyyy"}}</td>
                                     <td class="text-right hoverMe">
 
-                                        <a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
+                                        <a title="View More Action" has-permission="Indent:View" class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                         <div class="HoverBx">
-                                            <button  title="View"  ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a title="Edit"  ui-sref="edit-indent({id: materialIndent.id })" ng-if="materialIndent.indentStatus =='PENDING'" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-
-                                            <a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
+                                            <button  title="View"  has-permission="Indent:View" ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                            <a title="Edit"  has-permission="Indent:Edit" ui-sref="edit-indent({id: materialIndent.id })" ng-if="materialIndent.indentStatus =='PENDING'" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                            <!--<a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>-->
                                         </div>
 
 
@@ -177,7 +176,7 @@
                         </table>
                     </div>
 
-                     <div class="txt-align-center LoaderCon"  ng-hide="purchaseReqLoader">
+                     <div class="txt-align-center LoaderCon"  ng-hide="materialIndentsLoader">
 
                         <div class="pad-TB-30">
                             <div loader-css="ball-pulse"></div>
@@ -414,7 +413,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Requested Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="searchRequestedDate"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterRequestedDate" placeholder="DD/MM/YYYY"  ng-model="searchRequestedDate" autocomplete="off"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -423,7 +422,7 @@
                                                 <div class="dropdown">
                                                     <label class="label-control">Issued Date</label>
                                                     <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterIssuedDate" placeholder="DD/MM/YYYY"  ng-model="searchIssuedDate"/>
+                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="dateFilterIssuedDate" placeholder="DD/MM/YYYY"  ng-model="searchIssuedDate" autocomplete="off"/>
                                                 </div>
                                             </div>
                                         </div>
