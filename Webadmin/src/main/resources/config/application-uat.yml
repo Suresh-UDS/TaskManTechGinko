@@ -199,6 +199,7 @@ AWS:
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
    s3-locationqr-path : locationQrCodes/
+   s3-expenseDocument-path: expenseDocuments/
 
 scheduler:
    job:
