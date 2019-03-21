@@ -889,11 +889,20 @@ angular.module('timeSheetApp')
                     }else{
                         $scope.searchReferenceNo  = null;
                     }
-
-                    $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
-                    $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
-                    $scope.searchIssuedDate = $filter('date')($scope.localStorage.issuedDate, 'dd/MM/yyyy');
-                    $scope.searchIssuedDateSer = new Date($scope.localStorage.issuedDate);
+                    if($scope.localStorage.requestedDate){
+                        $scope.searchRequestedDate = $filter('date')($scope.localStorage.requestedDate, 'dd/MM/yyyy');
+                        $scope.searchRequestedDateSer = new Date($scope.localStorage.requestedDate);
+                    }else{
+                        $scope.searchRequestedDate = null;
+                        $scope.searchRequestedDateSer = null;
+                    }
+                    if($scope.localStorage.issuedDate){
+                        $scope.searchIssuedDate = $filter('date')($scope.localStorage.issuedDate, 'dd/MM/yyyy');
+                        $scope.searchIssuedDateSer = new Date($scope.localStorage.issuedDate);
+                    }else{
+                        $scope.searchIssuedDate = null;
+                        $scope.searchIssuedDateSer = null;
+                    }
 
                 }
 
