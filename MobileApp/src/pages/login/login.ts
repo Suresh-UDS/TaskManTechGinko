@@ -36,7 +36,7 @@ export class LoginPage {
   type : FormGroup;
   module:any;
   permission:any;
-  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,
+  constructor(private storage: Storage,public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,
               public navParams: NavParams,public myService:authService, public employeeService: EmployeeService,
               public events:Events,private sqlite:SQLite) {
       this.permission=[
