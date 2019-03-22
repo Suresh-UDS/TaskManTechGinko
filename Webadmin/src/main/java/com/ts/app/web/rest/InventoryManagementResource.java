@@ -1,45 +1,25 @@
 package com.ts.app.web.rest;
 
-import java.util.Calendar;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.MaterialUOMType;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.InventoryManagementService;
+import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.domain.AssetStatusHistoryDTO;
-import com.ts.app.domain.Material;
-import com.ts.app.domain.MaterialItemGroup;
-import com.ts.app.domain.MaterialUOMType;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.InventoryManagementService;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.ExportResponse;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.MaterialDTO;
-import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
-import com.ts.app.web.rest.dto.MaterialTransactionDTO;
-import com.ts.app.web.rest.dto.PurchaseReqDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * REST controller for managing the Inventory information.
@@ -237,6 +217,12 @@ public class InventoryManagementResource {
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileId + ".xlsx\"");
 		return content;
 	}
+
+	@RequestMapping(value = "/delete/transaction/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteMaterialTransaction(@PathVariable("id") long id) {
+	    inventoryService.deleteTransaction(id);
+	    return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 

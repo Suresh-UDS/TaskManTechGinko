@@ -11,9 +11,12 @@ import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.*;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
 
 public class SlaSpecification implements Specification<SlaConfig> {
 
@@ -69,7 +72,13 @@ public class SlaSpecification implements Specification<SlaConfig> {
             predicates.add(builder.between(root.get("createdDate"), DateUtil.convertToZDT(searchCriteria.getSlaCreatedDate()), DateUtil.convertToZDT(createdDateTo.getTime())));
         }
 
-        predicates.add(builder.equal(root.get("active"), "Y"));
+//        predicates.add(builder.equal(root.get("active"), "Y"));
+
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
 
         query.orderBy(builder.desc(root.get("createdDate")));
 

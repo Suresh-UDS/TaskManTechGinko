@@ -1,11 +1,6 @@
 package com.ts.app.web.rest.dto;
 
-import com.ts.app.domain.AssetStatus;
-import com.ts.app.domain.AssetType;
-import com.ts.app.domain.IndentStatus;
-import com.ts.app.domain.JobStatus;
-import com.ts.app.domain.MaterialTransactionType;
-import com.ts.app.domain.PurchaseRequestStatus;
+import com.ts.app.domain.*;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
@@ -208,9 +203,9 @@ public class SearchCriteria extends Paginator {
 
 	private Timestamp issuedDate;
 
-	private String indentRefNumber;
+	private long indentRefNumber;
 
-	private String purchaseRefNumber;
+	private long purchaseRefNumber;
 
 	private Timestamp approvedDate;
 
@@ -1126,14 +1121,6 @@ public class SearchCriteria extends Paginator {
 		this.transactionToDate = transactionToDate;
 	}
 
-	public String getIndentRefNumber() {
-		return indentRefNumber;
-	}
-
-	public void setIndentRefNumber(String indentRefNumber) {
-		this.indentRefNumber = indentRefNumber;
-	}
-
 	public Timestamp getRequestedDate() {
 		return requestedDate;
 	}
@@ -1150,13 +1137,6 @@ public class SearchCriteria extends Paginator {
 		this.issuedDate = issuedDate;
 	}
 
-	public String getPurchaseRefNumber() {
-		return purchaseRefNumber;
-	}
-
-	public void setPurchaseRefNumber(String purchaseRefNumber) {
-		this.purchaseRefNumber = purchaseRefNumber;
-	}
 
 	public Timestamp getApprovedDate() {
 		return approvedDate;
@@ -1406,5 +1386,21 @@ public class SearchCriteria extends Paginator {
 
     public void setShowInActive(boolean showInActive) {
         this.showInActive = showInActive;
+    }
+
+    public long getIndentRefNumber() {
+        return indentRefNumber;
+    }
+
+    public void setIndentRefNumber(long indentRefNumber) {
+        this.indentRefNumber = indentRefNumber;
+    }
+
+    public long getPurchaseRefNumber() {
+        return purchaseRefNumber;
+    }
+
+    public void setPurchaseRefNumber(long purchaseRefNumber) {
+        this.purchaseRefNumber = purchaseRefNumber;
     }
 }

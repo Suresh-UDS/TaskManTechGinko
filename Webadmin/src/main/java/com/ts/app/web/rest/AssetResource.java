@@ -1,19 +1,13 @@
 package com.ts.app.web.rest;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.*;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.AssetManagementService;
+import com.ts.app.service.WarrantyTypeService;
+import com.ts.app.service.util.FileUploadHelper;
+import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,47 +17,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.domain.AssetReadingRule;
-import com.ts.app.domain.AssetStatus;
-import com.ts.app.domain.AssetStatusHistory;
-import com.ts.app.domain.AssetStatusHistoryDTO;
-import com.ts.app.domain.Frequency;
-import com.ts.app.domain.FrequencyPrefix;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.AssetManagementService;
-import com.ts.app.service.WarrantyTypeService;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetDocumentDTO;
-import com.ts.app.web.rest.dto.AssetPPMScheduleEventDTO;
-import com.ts.app.web.rest.dto.AssetParameterConfigDTO;
-import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
-import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
-import com.ts.app.web.rest.dto.AssetSiteHistoryDTO;
-import com.ts.app.web.rest.dto.AssetTypeDTO;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.ExportResponse;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.TicketDTO;
-import com.ts.app.web.rest.dto.WarrantyTypeDTO;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for managing the Asset information.
@@ -197,7 +164,7 @@ public class AssetResource {
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateAsset(@Valid @RequestBody AssetDTO assetDTO, HttpServletRequest request,
-			@PathVariable("id") Long id) {
+                                         @PathVariable("id") Long id) {
 		log.debug(">>> asset id : " + id);
 		if (assetDTO.getId() > 0)
 			assetDTO.setId(id);
@@ -449,12 +416,12 @@ public class AssetResource {
 
 	@RequestMapping(path = "/assets/{assetId}/ppmschedule/calendar", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
-	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
+	public List<AssetScheduleEventDTO> getAssetPPMScheduleCalendar(@RequestBody SearchCriteria searchCriteria) {
 		log.debug(">>> Asset Resource getAssetPPMScheduleCalendar request <<<");
 		log.debug("AssetId <<< " + searchCriteria.getAssetId() + " - startDate - "
 				+ searchCriteria.getCheckInDateTimeFrom() + " - endDate - " + searchCriteria.getCheckInDateTimeTo());
 
-		List<AssetPPMScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(),
+		List<AssetScheduleEventDTO> response = assetService.getAssetPPMScheduleCalendar(searchCriteria.getAssetId(),
 				searchCriteria.getCheckInDateTimeFrom(), searchCriteria.getCheckInDateTimeTo());
 		log.debug("Get Asset PPM Schedule calendar for asset id size - " + response);
 		return response;
@@ -568,7 +535,7 @@ public class AssetResource {
 
 	@RequestMapping(value = "/assets/{assetId}/getLatestReading/{assetParamId}", method = RequestMethod.GET)
 	public AssetParameterReadingDTO getLatestReading(@PathVariable("assetId") long assetId,
-			@PathVariable("assetParamId") long assetParamId) {
+                                                     @PathVariable("assetParamId") long assetParamId) {
 		AssetParameterReadingDTO result = null;
 		result = assetService.getLatestParamReading(assetId, assetParamId);
 		return result;
@@ -836,14 +803,14 @@ public class AssetResource {
         }
 	    return result;
     }
-	
+
 	@RequestMapping(value = "/assets/jobmaterials", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<JobDTO> getAssetMaterials(@RequestBody SearchCriteria searchCriteria) { 
+	public List<JobDTO> getAssetMaterials(@RequestBody SearchCriteria searchCriteria) {
 		List<JobDTO> result = null;
 		try {
 			result = assetService.getAssetMaterials(searchCriteria);
 		} catch(Exception e) {
-			throw new TimesheetException("Error while get Asset Job Materials" +e); 
+			throw new TimesheetException("Error while get Asset Job Materials" +e);
 		}
 		return result;
 	}

@@ -36,7 +36,12 @@ public class ExpenseSpecification implements Specification<Expense> {
         if(searchCriteria.getSiteId()!=0){
             predicates.add(builder.equal(root.get("site").get("id"),  searchCriteria.getSiteId()));
         }
-
+        if(searchCriteria.getRegion() != null && searchCriteria.getRegion() != "") {
+            predicates.add(builder.equal(root.get("site").get("region"), searchCriteria.getRegion()));
+        }
+        if(searchCriteria.getBranch() != null && searchCriteria.getBranch() != "") {
+            predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
+        }
         log.debug("Expense Specification toPredicate - expense category -"+ searchCriteria.getExpenseCategory());
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(searchCriteria.getExpenseCategory())){
             predicates.add(builder.equal(root.get("expenseCategory"),  searchCriteria.getExpenseCategory()));
@@ -106,9 +111,15 @@ public class ExpenseSpecification implements Specification<Expense> {
 
         }
 
-        predicates.add(builder.equal(root.get("active"), "Y"));
+//        predicates.add(builder.equal(root.get("active"), "Y"));
 
-        query.orderBy(builder.desc(root.get("id")));
+        if(searchCriteria.isShowInActive()) {
+            predicates.add(builder.equal(root.get("active"), "N"));
+        } else {
+            predicates.add(builder.equal(root.get("active"), "Y"));
+        }
+
+        query.orderBy(builder.desc(root.get("createdDate")));
 
         List<Predicate> orPredicates = new ArrayList<>();
 

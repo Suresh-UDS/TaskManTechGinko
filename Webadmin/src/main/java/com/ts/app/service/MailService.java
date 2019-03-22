@@ -1,17 +1,12 @@
 package com.ts.app.service;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.inject.Inject;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
+import com.ts.app.config.JHipsterProperties;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.User;
+import com.ts.app.repository.SettingsRepository;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.Sendgrid;
+import com.ts.app.web.rest.dto.UserDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
@@ -27,14 +22,11 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import com.ts.app.config.JHipsterProperties;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.User;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.Sendgrid;
-import com.ts.app.web.rest.dto.SettingsDTO;
-import com.ts.app.web.rest.dto.UserDTO;
+import javax.inject.Inject;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.util.*;
 
 /**
  * Service for sending e-mails.
@@ -287,7 +279,7 @@ public class MailService {
     }
 
     @Async
-    public void sendTicketCreatedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status, String severity){
+    public void sendTicketCreatedMail(String ticketUrl, User user, String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status, String severity){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -304,7 +296,7 @@ public class MailService {
     }
 
     @Async
-    public void sendTicketUpdatedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
+    public void sendTicketUpdatedMail(String ticketUrl, User user, String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -320,7 +312,7 @@ public class MailService {
     }
 
     @Async
-    public void sendTicketClosedMail(String ticketUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status){
+    public void sendTicketClosedMail(String ticketUrl, User user, String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -462,7 +454,7 @@ public class MailService {
     }
 
     @Async
-    public void sendJobReportEmail(User user,  String baseUrl) {
+    public void sendJobReportEmail(User user, String baseUrl) {
         log.debug("Sending job report e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
@@ -474,7 +466,7 @@ public class MailService {
     }
 
     @Async
-    public void sendOverdueJobAlert(User user, String emailIds,  String siteName, long jobId , String jobName, String fileName) {
+    public void sendOverdueJobAlert(User user, String emailIds, String siteName, long jobId , String jobName, String fileName) {
         log.debug("Sending overdue job alert e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
@@ -490,7 +482,7 @@ public class MailService {
 
 
     @Async
-    public void sendCompletedJobAlert(User user,  String siteName, long jobId , String jobName,String fileName) {
+    public void sendCompletedJobAlert(User user, String siteName, long jobId , String jobName, String fileName) {
         log.debug("Sending completed job alert e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
@@ -505,7 +497,7 @@ public class MailService {
     }
 
     @Async
-    public void sendJobCompletionMail(String ticketUrl,String jobUrl,User user,String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status, long jobId, String jobTitle){
+    public void sendJobCompletionMail(String ticketUrl, String jobUrl, User user, String emailIds, String siteName, long ticketId, String ticketNumber, String createdBy, String sentTo, String closedBy, String closedByEmpCode, String ticketTitle, String ticketDescription, String status, long jobId, String jobTitle){
         Locale locale = Locale.forLanguageTag(user.getLangKey() != null ? user.getLangKey() : "en-US");
         Context context = new Context(locale);
         context.setVariable("user", user);
@@ -744,7 +736,26 @@ public class MailService {
         context.setVariable("title", title);
         context.setVariable("desc", description);
         String content = templateEngine.process("ticketEscalation", context);
-        String subject = messageSource.getMessage("email.sla.ticket.title", null, locale);
+        Object[] values = new Object[1];
+        values[0] = siteName;
+        String subject = messageSource.getMessage("email.sla.ticket.title", values, locale);
+        sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
+    }
+
+	@Async
+	public void sendJobEscalationEmail(String email, String siteName, int level, long id, String url, String title, String description) {
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        context.setVariable("siteName", siteName);
+        context.setVariable("level", level);
+        context.setVariable("url", url);
+        context.setVariable("id", id);
+        context.setVariable("title", title);
+        context.setVariable("desc", description);
+        String content = templateEngine.process("jobEscalation", context);
+        Object[] values = new Object[1];
+        values[0] = siteName;
+        String subject = messageSource.getMessage("email.sla.job.title", values, locale);
         sendEmail(email, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 

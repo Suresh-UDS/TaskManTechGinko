@@ -129,7 +129,7 @@ angular.module('timeSheetApp')
 					};
 					$scope.pageSort = 10;
 
-					$scope.categories = ["Electrical","Cleaning","Beauty","Ac","Carpentry","Plumbing"];
+					$scope.categories = ["HOUSEKEEPING","ELECTRICAL","HVAC","CARPENTRY","PESTCONTROL","PLUMBING","MAINTENANCE","CIVIL","GENERAL","PANTRYSERVICES","ADMIN"];
 
                     $scope.multipleCategories = {};
                     $scope.multipleCategories.selectedCategory = [];
@@ -511,52 +511,55 @@ angular.module('timeSheetApp')
 						if (validation) {
 							return false;
 						}
-						if($scope.sla.slaesc.length == 0){
-                         $scope.showNotifications('top','center','danger','Escalation is required!!');
-						}else{
-						  for (var i = 0; i < $scope.slaList.length; i++) {
-                            console.log("SlaList add " + JSON.stringify($scope.slaList));
-                            $scope.sla = $scope.slaList[i];
-                            console.log("Sla add "+ JSON.stringify($scope.sla));
-                            SlaComponent.createSla($scope.sla).then(function(data) {
-                                  $scope.saveSla = data;
-                                  console.log("SLA saving");
-                                  $scope.showNotifications('top','center','success','Sla has been saved successfully!!');
-                                  console.log(data);
-                                  $scope.loadingStop();
-                                  $location.path('/sla-list');
-                              });
-                          }
-						}
+
+                            if(!$scope.sla.slaesc || $scope.sla.slaesc.length == 0){
+                                $scope.showNotifications('top','center','danger','Escalation is required!!');
+                            }else{
+                                for (var i = 0; i < $scope.slaList.length; i++) {
+                                    console.log("SlaList add " + JSON.stringify($scope.slaList));
+                                    $scope.sla = $scope.slaList[i];
+                                    console.log("Sla add "+ JSON.stringify($scope.sla));
+                                    SlaComponent.createSla($scope.sla).then(function(data) {
+                                        $scope.saveSla = data;
+                                        console.log("SLA saving");
+                                        $scope.showNotifications('top','center','success','Sla has been saved successfully!!');
+                                        console.log(data);
+                                        $scope.loadingStop();
+                                        $location.path('/sla-list');
+                                    });
+                                }
+                            }
 
 					};
 
 					$scope.updateSla = function() {
                         if($scope.slaView){
-                           if($scope.sla.slaesc.length == 0){
-                               $scope.showNotifications('top','center','danger','Escalation is required!!');
-                            }else{
-                            for (var i = 0; i < $scope.slaView.length; i++) {
-                                console.log("SlaList add "+ JSON.stringify($scope.slaView));
-                                  $scope.sla.projectId =$scope.selectedProject.id;
-                                  $scope.sla.siteId= $scope.selectedSite.id;
-                                  $scope.sla.projectName =$scope.selectedProject.name;
-                                  $scope.sla.siteName= $scope.selectedSite.name;
-                                $scope.sla.processType = $scope.selectedPType;
-                                $scope.sla.severity = $scope.selectedSeverity;
-                                $scope.sla.category = $scope.multipleCategories.selectedCategory;
-                                $scope.sla = $scope.slaView[i];
-                                console.log("Sla add " + JSON.stringify($scope.sla));
-                                SlaComponent.updateSla($scope.sla).then(function(data) {
-                                      $scope.saveSla = data;
-                                      $scope.showNotifications('top','center','success','Sla has been updated successfully!!');
-                                      console.log("SLA saving");
-                                      console.log(data);
-                                      $scope.loadingStop();
-                                  });
-                            }
-                             $location.path('/sla-list');
-                           }
+                            console.log("escalations>>",$scope.sla.slaesc);
+                                if(!$scope.sla.slaesc || $scope.sla.slaesc.length == 0){
+                                    $scope.showNotifications('top','center','danger','Escalation is required!!');
+                                }else{
+                                    for (var i = 0; i < $scope.slaView.length; i++) {
+                                        console.log("SlaList add "+ JSON.stringify($scope.slaView));
+                                        $scope.sla.projectId =$scope.selectedProject.id;
+                                        $scope.sla.siteId= $scope.selectedSite.id;
+                                        $scope.sla.projectName =$scope.selectedProject.name;
+                                        $scope.sla.siteName= $scope.selectedSite.name;
+                                        $scope.sla.processType = $scope.selectedPType;
+                                        $scope.sla.severity = $scope.selectedSeverity;
+                                        $scope.sla.category = $scope.multipleCategories.selectedCategory;
+                                        $scope.sla = $scope.slaView[i];
+                                        console.log("Sla add " + JSON.stringify($scope.sla));
+                                        SlaComponent.updateSla($scope.sla).then(function(data) {
+                                            $scope.saveSla = data;
+                                            $scope.showNotifications('top','center','success','Sla has been updated successfully!!');
+                                            console.log("SLA saving");
+                                            console.log(data);
+                                            $scope.loadingStop();
+                                        });
+                                    }
+                                    $location.path('/sla-list');
+                                }
+
                         }
 
 
@@ -708,6 +711,9 @@ angular.module('timeSheetApp')
                            console.log("remove index " + $scope.removeSlaInd);
                            $scope.slaList.splice($scope.removeSlaInd, 1);
                            $scope.slaView.splice($scope.removeSlaInd, 1);
+                           if($scope.sla.slaesc){
+                               $scope.sla.slaesc.splice($scope.removeSlaInd, 1);
+                           }
                            console.log("remove sla " + $scope.slaList);
                     };
 

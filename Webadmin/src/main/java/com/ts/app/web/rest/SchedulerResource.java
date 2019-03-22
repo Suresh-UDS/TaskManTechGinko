@@ -1,11 +1,8 @@
 package com.ts.app.web.rest;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.Frequency;
+import com.ts.app.service.SchedulerHelperService;
+import com.ts.app.service.SchedulerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ts.app.domain.Frequency;
-import com.ts.app.service.SchedulerHelperService;
-import com.ts.app.service.SchedulerService;
+import javax.inject.Inject;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * REST controller for invoking scheduler operations using API endpoint.
@@ -31,17 +29,17 @@ public class SchedulerResource {
 
 	@Inject
 	private SchedulerService schedulerService;
-	
+
 	@Inject
 	private SchedulerHelperService schedulerHelperService;
 
-	
+
 	@RequestMapping(value = "/scheduler/attendance/consolidated", method = RequestMethod.GET)
 	public ResponseEntity<?> sendConsolidatedAttendanceReport() {
 		schedulerService.attendanceShiftReportSchedule();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/scheduler/attendance/detailed", method = RequestMethod.GET)
 	public ResponseEntity<?> sendDetailedAttendanceReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date attnDate, @RequestParam(value = "onDemand", required = false) boolean onDemand) {
 		if(attnDate == null) {
@@ -49,14 +47,14 @@ public class SchedulerResource {
 			currCal.set(Calendar.HOUR_OF_DAY, 0);
 			currCal.set(Calendar.MINUTE,0);
 			attnDate = currCal.getTime();
-		}		
+		}
 		schedulerService.schedulerHelperService.generateDetailedAttendanceReport(attnDate, false, true, onDemand);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/scheduler/attendance/checkout", method = RequestMethod.GET)
 	public ResponseEntity<?> autocheckoutAttendance() {
-		
+
 		schedulerService.attendanceCheckOutTask();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -87,12 +85,12 @@ public class SchedulerResource {
 				schedulerService.createYearlyTask();
 				break;
 			default:
-				
+
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
+
 	@RequestMapping(value = "/scheduler/job/daily", method = RequestMethod.GET)
 	public ResponseEntity<?> runDailyJobSchedule(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date jobDate, @RequestParam(value="siteIds", required = false) List<Long> siteIds) {
 		if(jobDate == null) {
@@ -101,6 +99,12 @@ public class SchedulerResource {
 		schedulerHelperService.createDailyTask(jobDate, siteIds);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	
+
+	@RequestMapping(value = "/scheduler/sla/ticket", method = RequestMethod.GET)
+	public ResponseEntity<?> runTicketSLA() {
+		schedulerService.slaTicketEscalationNotification();
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
 }

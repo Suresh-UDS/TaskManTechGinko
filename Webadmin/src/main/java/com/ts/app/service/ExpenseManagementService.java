@@ -3,6 +3,7 @@ package com.ts.app.service;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.PagingUtil;
 import com.ts.app.web.rest.dto.*;
@@ -18,42 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.CategoryWiseExpense;
-import com.ts.app.domain.Expense;
-import com.ts.app.domain.ExpenseCategory;
-import com.ts.app.domain.Site;
-import com.ts.app.repository.ExpenseCategoryRepository;
-import com.ts.app.repository.ExpenseRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ExpenseDTO;
 
 @Service
 @Transactional
@@ -98,7 +68,12 @@ public class ExpenseManagementService extends AbstractService {
 
 //            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
         }
+        if(expenseDTO.getProjectId()>0){
+            Project project = projectRepository.findOne(expenseDTO.getProjectId());
+            expense.setProject(project);
 
+//            previousExpenseDetails = findLatestRecordBySite(expenseDTO.getSiteId());
+        }
         expense.setMode(expenseDTO.getMode());
         expense.setCurrency(expenseDTO.getCurrency());
         expense.setPaymentType(expenseDTO.getPaymentType());
@@ -121,7 +96,7 @@ public class ExpenseManagementService extends AbstractService {
         if (Objects.equals(expenseDTO.getMode(), "credit")){
                 expense.setBalanceAmount(totalBalanceAmount + expenseDTO.getCreditAmount());
                 expense.setCreditAmount(expenseDTO.getCreditAmount());
-
+                expense.setCreditedDate(new Date());
         }
 
 
@@ -144,11 +119,19 @@ public class ExpenseManagementService extends AbstractService {
         SearchResult<ExpenseDTO> result = new SearchResult<ExpenseDTO>();
         User user = userRepository.findOne(searchCriteria.getUserId());
         Employee employee = user.getEmployee();
+        List<EmployeeProjectSite> sites = employee.getProjectSites();
 
         if (searchCriteria != null) {
-                if (user.isAdmin()) {
-                    searchCriteria.setAdmin(true);
+            List<Long> siteIds = new ArrayList<Long>();
+            if(employee != null && !user.isAdmin()) {
+                for (EmployeeProjectSite site : sites) {
+                    siteIds.add(site.getSite().getId());
+                    searchCriteria.setSiteIds(siteIds);
                 }
+            }else if(user.isAdmin()){
+                searchCriteria.setAdmin(true);
+            }
+
             Pageable pageRequest = null;
 
             if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {

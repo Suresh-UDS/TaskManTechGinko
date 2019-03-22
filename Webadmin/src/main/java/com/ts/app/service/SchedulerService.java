@@ -1,36 +1,28 @@
 package com.ts.app.service;
 
-import com.google.common.base.Splitter;
 import com.ts.app.config.Constants;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.ExportUtil;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.ReportDatabaseUtil;
-import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.SchedulerConfigDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Service class for managing Device information.
@@ -47,7 +39,8 @@ public class SchedulerService extends AbstractService {
 	private static final String WEEKLY = "Weekly";
 	private static final String MONTHLY = "Monthly";*/
 
-	@Inject ProjectRepository projectRepository;
+	@Inject
+    ProjectRepository projectRepository;
 
 	@Inject
 	private ManufacturerRepository siteRepository;
@@ -61,22 +54,29 @@ public class SchedulerService extends AbstractService {
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
-	@Inject MailService mailService;
+	@Inject
+    MailService mailService;
 
-	@Inject ExportUtil exportUtil;
+	@Inject
+    ExportUtil exportUtil;
 
 	@Inject
 	private SchedulerConfigRepository schedulerConfigRepository;
 
-	@Inject AttendanceRepository attendanceRepository;
+	@Inject
+    AttendanceRepository attendanceRepository;
 
-	@Inject EmployeeRepository employeeRepository;
+	@Inject
+    EmployeeRepository employeeRepository;
 
-	@Inject PushService pushService;
+	@Inject
+    PushService pushService;
 
-	@Inject SettingsRepository settingRepository;
+	@Inject
+    SettingsRepository settingRepository;
 
-	@Inject EmployeeShiftRepository empShiftRepo;
+	@Inject
+    EmployeeShiftRepository empShiftRepo;
 
 	@Inject Environment env;
 
@@ -821,7 +821,7 @@ public class SchedulerService extends AbstractService {
 		{
 			if(slaConfig.getProcessType().equals("Tickets"))
 			{
-				tickets = ticketRepository.findAllActiveUnClosedTicket();
+				tickets = ticketRepository.findAllActiveUnClosedTicket(slaConfig.getSite().getId());
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();
@@ -916,7 +916,7 @@ public class SchedulerService extends AbstractService {
 			List<Job> jobs = new ArrayList<Job>();
 			if(slaConfig.getProcessType().equals("Jobs"))
 			{
-				jobs = jobRepository.findAllActiveUnClosedTicket();
+				jobs = jobRepository.findAllActiveInCompleteJobs(currDate, slaConfig.getSite().getId());
 				Set<SlaEscalationConfig> slaEscalationConfigs = slaConfig.getSlaesc();
 				int hours  = slaConfig.getHours();
 				ArrayList<String> category = slaConfig.getCategory();

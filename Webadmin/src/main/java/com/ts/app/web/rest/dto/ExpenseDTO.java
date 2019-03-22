@@ -1,13 +1,12 @@
 package com.ts.app.web.rest.dto;
 
-import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.List;
-
 import com.ts.app.domain.CategoryWiseExpense;
 import com.ts.app.domain.ExpenseDocument;
 import com.ts.app.domain.PaymentType;
+
+import java.io.Serializable;
+import java.sql.Date;
+import java.util.List;
 
 public class ExpenseDTO extends BaseDTO implements Serializable {
 
@@ -16,6 +15,10 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
     private long siteId;
 
     private String siteName;
+
+    private long projectId;
+
+    private String projectName;
 
     private String description;
 
@@ -64,6 +67,22 @@ public class ExpenseDTO extends BaseDTO implements Serializable {
     private List<ExpenseDocument> expenseDocumentList;
 
     private List<CategoryWiseExpense> categoryWiseExpenses;
+
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public long getId() {
         return id;

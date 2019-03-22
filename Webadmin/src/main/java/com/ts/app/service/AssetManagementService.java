@@ -123,6 +123,9 @@ public class AssetManagementService extends AbstractService {
 	private AssetPpmScheduleRepository assetPpmScheduleRepository;
 
 	@Inject
+	private AssetAMCRepository assetAmcScheduleRepository;
+
+	@Inject
 	private ChecklistRepository checklistRepository;
 
 	@Inject
@@ -160,7 +163,7 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private AssetSiteHistoryRepository assetSiteHistoryRepository;
-	
+
 	@Inject
 	private TicketManagementService ticketMgmtservice;
 
@@ -306,7 +309,7 @@ public class AssetManagementService extends AbstractService {
 	public boolean isDuplicatePPMSchedule(AssetPpmScheduleDTO assetPpmScheduleDTO) {
 	    log.debug("Asset Title "+assetPpmScheduleDTO.getTitle());
 	    java.sql.Date startDate = DateUtil.convertToSQLDate(assetPpmScheduleDTO.getStartDate());
-		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(), 
+		List<AssetPPMSchedule> assetPPMSchedule = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(assetPpmScheduleDTO.getAssetId(),
 																assetPpmScheduleDTO.getTitle(), MaintenanceType.PPM.getValue(), startDate,
 																assetPpmScheduleDTO.getJobStartTime(), assetPpmScheduleDTO.getJobStartTime());
 		if(assetPPMSchedule != null) {
@@ -417,10 +420,10 @@ public class AssetManagementService extends AbstractService {
 				assetStatusHistoryList = new ArrayList<AssetStatusHistory>();
 				assetStatusHistoryList.add(assetStatusHistory);
 				asset.setAssetStatusHistory(assetStatusHistoryList);
-			}else { 
+			}else {
 				assetStatusHistoryList.add(assetStatusHistory);
 			}
-			
+
 		}
 
 		asset.setAssetGroup(assetDTO.getAssetGroup());
@@ -520,7 +523,7 @@ public class AssetManagementService extends AbstractService {
 			User user = userRepository.findOne(assetDTO.getUserId());
 			log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
 //			Employee employee = user.getEmployee();
-			
+
 			TicketDTO ticketDto = new TicketDTO();
 			ticketDto.setAssetId(assetEntity.getId());
 			ticketDto.setActive(Ticket.ACTIVE_YES);
@@ -533,23 +536,23 @@ public class AssetManagementService extends AbstractService {
 			ticketMgmtservice.saveTicket(ticketDto);
 
 			List<Setting> settingList = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET, site.getId());
-			
+
 			log.debug("Setting Email list -" + settingList.size());
-			
+
 			if(CollectionUtils.isNotEmpty(settingList)) {
-				
+
 				for(Setting setting : settingList) {
-					
+
 					if(setting.getSettingValue().equalsIgnoreCase("true") ) {
 
 						List<Setting> settingEntities = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_ASSET_EMAILS, site.getId());
 
 						if(CollectionUtils.isNotEmpty(settingEntities)) {
-							
-							for(Setting settingEntity : settingEntities) { 
-								
+
+							for(Setting settingEntity : settingEntities) {
+
 								List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-								
+
 								for(String email : emailLists) {
 									mailService.sendAssetBreakdownAlert(email, assetEntity.getTitle(), siteName, assetCode, user.getFirstName(), date);
 								}
@@ -651,7 +654,7 @@ public class AssetManagementService extends AbstractService {
 		}else {
 			assetAMC.setChecklist(null);
 		}
-		
+
 		if(assetAMCScheduleDTO.getEmpId() > 0) {
 			Employee employee = employeeRepository.findOne(assetAMCScheduleDTO.getEmpId());
 			assetAMCScheduleDTO.setEmployeeName(employee.getName());
@@ -770,7 +773,7 @@ public class AssetManagementService extends AbstractService {
 			site = siteRepository.findOne(siteId);
 		}
 		if(CollectionUtils.isNotEmpty(assets)) {
-			List<AssetPPMScheduleEventDTO> eventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
+			List<AssetScheduleEventDTO> eventDTOs = new ArrayList<AssetScheduleEventDTO>();
 			Calendar startCal = Calendar.getInstance();
 			startCal.set(Calendar.MONTH, 0);
 			startCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -783,9 +786,13 @@ public class AssetManagementService extends AbstractService {
 			endCal.set(Calendar.MINUTE, 59);
 			for(Asset asset : assets) {
 				if(site == null) site = asset.getSite();
-				List<AssetPPMScheduleEventDTO> assetSchedules = getAssetPPMScheduleCalendar(asset.getId(), startCal.getTime(), endCal.getTime());
-				if(CollectionUtils.isNotEmpty(assetSchedules)) {
-					eventDTOs.addAll(assetSchedules);
+				List<AssetScheduleEventDTO> assetPPMSchedules = getAssetPPMScheduleCalendar(asset.getId(), startCal.getTime(), endCal.getTime());
+				if(CollectionUtils.isNotEmpty(assetPPMSchedules)) {
+					eventDTOs.addAll(assetPPMSchedules);
+				}
+				List<AssetScheduleEventDTO> assetAMCSchedules = getAssetAMCScheduleCalendar(asset.getId(), startCal.getTime(), endCal.getTime());
+				if(CollectionUtils.isNotEmpty(assetAMCSchedules)) {
+					eventDTOs.addAll(assetAMCSchedules);
 				}
 			}
 			exportUtil.write52WeekScheduleToFile(site.getName(), eventDTOs, result);
@@ -801,13 +808,13 @@ public class AssetManagementService extends AbstractService {
 	 * @param endDate
 	 * @return
 	 */
-	public List<AssetPPMScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
-		List<AssetPPMScheduleEventDTO> assetPPMScheduleEventDTOs = null;
+	public List<AssetScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
+		List<AssetScheduleEventDTO> assetPPMScheduleEventDTOs = null;
 		String type = MaintenanceType.valueOf("PPM").getValue();
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
 		if (CollectionUtils.isNotEmpty(assetPpmSchedules)) {
-			assetPPMScheduleEventDTOs = new ArrayList<AssetPPMScheduleEventDTO>();
-			
+			assetPPMScheduleEventDTOs = new ArrayList<AssetScheduleEventDTO>();
+
 			Calendar lastDate = Calendar.getInstance();
 			if(endDate == null) {
 				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getMaximum(Calendar.DAY_OF_MONTH));
@@ -831,8 +838,8 @@ public class AssetManagementService extends AbstractService {
 				if(schStartCal.after(currCal)) {
 					currCal.setTime(schStartCal.getTime());
 				}
-				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
-					AssetPPMScheduleEventDTO assetPPMScheduleEvent = new AssetPPMScheduleEventDTO();
+				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(schEndCal) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+					AssetScheduleEventDTO assetPPMScheduleEvent = new AssetScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
 					Asset asset = ppmSchedule.getAsset();
@@ -846,12 +853,74 @@ public class AssetManagementService extends AbstractService {
 					assetPPMScheduleEvent.setStart(currCal.getTime());
 					assetPPMScheduleEvent.setAllDay(true);
 					assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
+					assetPPMScheduleEvent.setMaintenanceType(MaintenanceType.PPM.name());
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
 					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());
 				}
 			}
 		}
 		return assetPPMScheduleEventDTOs;
+	}
+
+	/**
+	 * Returns a list of asset AMC schedule events for the given asset Id and date range.
+	 *
+	 * @param assetId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<AssetScheduleEventDTO> getAssetAMCScheduleCalendar(long assetId, Date startDate, Date endDate) {
+		List<AssetScheduleEventDTO> assetScheduleEventDTOs = null;
+		List<AssetAMCSchedule> assetAMCSchedules = assetAmcScheduleRepository.findAssetAMCScheduleByAssetId(assetId);
+		if (CollectionUtils.isNotEmpty(assetAMCSchedules)) {
+			assetScheduleEventDTOs = new ArrayList<AssetScheduleEventDTO>();
+
+			Calendar lastDate = Calendar.getInstance();
+			if(endDate == null) {
+				lastDate.add(Calendar.DAY_OF_MONTH,  lastDate.getMaximum(Calendar.DAY_OF_MONTH));
+			}else {
+				lastDate.setTime(endDate);
+			}
+			lastDate.set(Calendar.HOUR_OF_DAY, 23);
+			lastDate.set(Calendar.MINUTE, 59);
+
+			for(AssetAMCSchedule amcSchedule : assetAMCSchedules) {
+				Calendar currCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+				currCal.setTime(startDate);
+				currCal.set(Calendar.HOUR_OF_DAY, 0);
+				currCal.set(Calendar.MINUTE, 0);
+				Date schStartDate = amcSchedule.getStartDate();
+				Date schEndDate = amcSchedule.getEndDate();
+				Calendar schStartCal = Calendar.getInstance();
+				schStartCal.setTime(schStartDate);
+				Calendar schEndCal = Calendar.getInstance();
+				schEndCal.setTime(schEndDate);
+				if(schStartCal.after(currCal)) {
+					currCal.setTime(schStartCal.getTime());
+				}
+				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(schEndCal) && !currCal.after(lastDate)) { //if AMC schedule starts before current date and not after the last date of the month.
+					AssetScheduleEventDTO assetAMCScheduleEvent = new AssetScheduleEventDTO();
+					assetAMCScheduleEvent.setId(amcSchedule.getId());
+					assetAMCScheduleEvent.setTitle(amcSchedule.getTitle());
+					Asset asset = amcSchedule.getAsset();
+					assetAMCScheduleEvent.setAssetId(asset.getId());
+					assetAMCScheduleEvent.setAssetTitle(asset.getTitle());
+					assetAMCScheduleEvent.setAssetCode(asset.getCode());
+					assetAMCScheduleEvent.setFrequency(amcSchedule.getFrequency());
+					assetAMCScheduleEvent.setFrequencyDuration(amcSchedule.getFrequencyDuration());
+					assetAMCScheduleEvent.setFrequencyPrefix(amcSchedule.getFrequencyPrefix());
+					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
+					assetAMCScheduleEvent.setStart(currCal.getTime());
+					assetAMCScheduleEvent.setAllDay(true);
+					assetAMCScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
+					assetAMCScheduleEvent.setMaintenanceType(MaintenanceType.AMC.name());
+					assetScheduleEventDTOs.add(assetAMCScheduleEvent);
+					addDays(currCal, amcSchedule.getFrequency(), amcSchedule.getFrequencyDuration());
+				}
+			}
+		}
+		return assetScheduleEventDTOs;
 	}
 
 	private void addDays(Calendar dateTime , String scheduleType, int duration) {
@@ -1141,7 +1210,7 @@ public class AssetManagementService extends AbstractService {
 	public ImportResult importAMCFile(MultipartFile file, long dateTime) {
 		return importService.importAssetData(file, dateTime, false, true);
 	}
- 
+
 	public ImportResult getImportAMCStatus(String fileId) {
 		ImportResult er = null;
 		// fileId += ".csv";
@@ -1184,7 +1253,7 @@ public class AssetManagementService extends AbstractService {
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
 		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
-		if(existingGroup == null) { 
+		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
 			assetGroupRepository.save(assetgroup);
 			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
@@ -1292,7 +1361,7 @@ public class AssetManagementService extends AbstractService {
 		}else {
 			assetPPMSchedule.setChecklist(null);
 		}
-		if(assetPpmScheduleDTO.getEmpId() > 0) { 
+		if(assetPpmScheduleDTO.getEmpId() > 0) {
 			Employee employee = employeeRepository.findOne(assetPpmScheduleDTO.getEmpId());
 			assetPPMSchedule.setEmployeeName(employee.getName());
 		}
@@ -1300,7 +1369,7 @@ public class AssetManagementService extends AbstractService {
 		assetPPMSchedule.setAsset(asset);
 		assetPPMSchedule.setActive(AssetPPMSchedule.ACTIVE_YES);
 
-		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle(), 
+		List<AssetPPMSchedule> assetPPMSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByTitle(asset.getId(), assetPpmScheduleDTO.getTitle(),
 										MaintenanceType.PPM.getValue(), assetPPMSchedule.getStartDate(), assetPPMSchedule.getJobStartTime(), assetPPMSchedule.getJobStartTime());
 		log.debug("Existing schedule -" + assetPPMSchedule);
 		if (CollectionUtils.isEmpty(assetPPMSchedules)) {
@@ -1576,7 +1645,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private void buildSearchResultReading(SearchCriteria searchCriteria, Page<AssetParameterReading> page,
-			List<AssetParameterReadingDTO> transactions, SearchResult<AssetParameterReadingDTO> result) {
+                                          List<AssetParameterReadingDTO> transactions, SearchResult<AssetParameterReadingDTO> result) {
 		// TODO Auto-generated method stub
 			if (page != null) {
 				result.setTotalPages(page.getTotalPages());
@@ -1992,7 +2061,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private void buildSearchResultStatus(SearchCriteria searchCriteria, Page<AssetStatusHistory> page,
-			List<AssetStatusHistoryDTO> transactions, SearchResult<AssetStatusHistoryDTO> result) {
+                                         List<AssetStatusHistoryDTO> transactions, SearchResult<AssetStatusHistoryDTO> result) {
 		// TODO Auto-generated method stub
 			if (page != null) {
 				result.setTotalPages(page.getTotalPages());
@@ -2052,7 +2121,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	private void buildResultAssetSite(SearchCriteria searchCriteria, Page<AssetSiteHistory> page,
-			List<AssetSiteHistoryDTO> transactions, SearchResult<AssetSiteHistoryDTO> result) {
+                                      List<AssetSiteHistoryDTO> transactions, SearchResult<AssetSiteHistoryDTO> result) {
 		// TODO Auto-generated method stub
 		if (page != null) {
 			result.setTotalPages(page.getTotalPages());
@@ -2134,18 +2203,18 @@ public class AssetManagementService extends AbstractService {
            }
        		allJobsList = jobRepository.findMaterialsByAssetId(searchCriteria.getSiteId(), searchCriteria.getAssetId());
        		if(CollectionUtils.isNotEmpty(allJobsList)) {
-       			for(Job allJob : allJobsList) { 
+       			for(Job allJob : allJobsList) {
            			if(allJob.getJobMaterials().size() > 0) {
            				transactions.add(mapperUtil.toModel(allJob, JobDTO.class));
            			}
            		}
        		}
-       		
+
        }
-       
+
        return transactions;
 
 	}
-	
-	  
+
+
 }

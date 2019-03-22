@@ -181,7 +181,7 @@ public class FeedbackTransactionService extends AbstractService {
 		return feedbackTransDto;
 	}
 
-	private void sendFeedbackNotification(FeedbackTransactionDTO feedbackTransDto,List<String> feedbackAlertItems) {
+	private void sendFeedbackNotification(FeedbackTransactionDTO feedbackTransDto, List<String> feedbackAlertItems) {
 		//send notifications
 		Setting feedbackAlertSetting = null;
 		Setting feedbackEmails = null;
@@ -610,7 +610,7 @@ public class FeedbackTransactionService extends AbstractService {
 	}
 
 	private List<Object[]> getquestionRatings(SearchCriteria searchCriteria, FeedbackMapping feedbackMapping,
-			ZonedDateTime fromTime, ZonedDateTime toTime, ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+                                              ZonedDateTime fromTime, ZonedDateTime toTime, ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
 		List<Object[]> questionsRating = null;
 
@@ -623,7 +623,7 @@ public class FeedbackTransactionService extends AbstractService {
 	}
 
 	private List<Object[]> getQuestionRatings(SearchCriteria searchCriteria, FeedbackMapping feedbackMapping, ZonedDateTime fromTime,
-			ZonedDateTime toTime, ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+                                              ZonedDateTime toTime, ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
 		List<Object[]> questionRatings = null;
 
@@ -637,7 +637,7 @@ public class FeedbackTransactionService extends AbstractService {
 	}
 
 	private Float getOverallRating(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
-			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+                                   ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
 		Float overallRating = 0f;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){
@@ -651,7 +651,7 @@ public class FeedbackTransactionService extends AbstractService {
 	}
 
 	private long getFeedbackCount(SearchCriteria searchCriteria, ZonedDateTime fromTime, ZonedDateTime toTime,
-			ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
+                                  ZonedDateTime weeklyFromDate, ZonedDateTime weeklyToDate) {
 		// TODO Auto-generated method stub
 		long feedbackCount=0;
 		if(StringUtils.isNotEmpty(searchCriteria.getBlock()) && StringUtils.isNotEmpty(searchCriteria.getZone())){

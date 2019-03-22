@@ -1,17 +1,8 @@
 package com.ts.app.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "material_transaction")
@@ -25,51 +16,52 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "siteId", nullable = true)
 	private Site site;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "projectId", nullable = true)
 	private Project project;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "jobId", nullable = true)
 	private Job job;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assetId", nullable = true)
 	private Asset asset;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "materialId", nullable = true)
 	private Material material;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "materialGroupId", nullable = true)
 	private MaterialItemGroup materialGroup;
-	
+
 	@OneToOne()
 	@JoinColumn(name = "materialIndentId", nullable = true)
 	private MaterialIndent materialIndent;
-	
+
 	@OneToOne()
 	@JoinColumn(name = "purchaseRequisitionId", nullable = true)
 	private PurchaseRequisition purchaseRequisition;
-	
+
 	private long quantity;
-	
+
 	private long storeStock;
-	
+
 	private String uom;
-	
+
 	private MaterialTransactionType transactionType;
-	
+
 	private Timestamp transactionDate;
-	
+
+	@Column(name = "issuedQuantity", nullable = true)
 	private long issuedQuantity;
-	
+
 	public long getId() {
 		return id;
 	}
@@ -190,8 +182,8 @@ public class MaterialTransaction extends AbstractAuditingEntity implements Seria
 		this.purchaseRequisition = purchaseRequisition;
 	}
 
-	
 
-	
-	
+
+
+
 }

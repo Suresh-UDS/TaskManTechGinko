@@ -32,12 +32,6 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and j.plannedStartTime = :selDate and j.status = :currentJobStatus and j.active= 'Y'")
     long findJobCountBySiteIdAndStatus(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("currentJobStatus") JobStatus currentJobStatus);
 
-//    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
-//    long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
-//
-//    @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
-//    long findCurrentJobCountByDateRange(@Param("selDate") Date selDate, @Param("endDate") Date endDate);
-
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
     long findTotalJobCountBySiteIdAndDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
@@ -48,7 +42,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     long findTotalJobCountByProjectRegionAndDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
     @Query("SELECT count(j.id) from Job j where j.site.project.id = :projectId and j.site.region = :region and j.site.branch = :branch and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y' ")
-    long findTotalJobCountByProjectRegionBranchAndDateRange(@Param("projectId") Long projectId, @Param("region") String region,@Param("branch") String branch, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
+    long findTotalJobCountByProjectRegionBranchAndDateRange(@Param("projectId") Long projectId, @Param("region") String region, @Param("branch") String branch, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
     @Query("SELECT count(j.id) from Job j where j.site.id = :siteId and (j.plannedStartTime between :selDate and :endDate) and j.status = :currentJobStatus and j.active= 'Y' ")
     long findJobCountBySiteIdAndStatusDateRange(@Param("siteId") Long siteId, @Param("selDate") Date selDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus);
@@ -87,10 +81,10 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     List<Job> findScheduledJobByTitleSiteAndDate(@Param("title") String title, @Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT j from Job j where j.title = :title and j.site.id = :siteId and j.plannedStartTime between :startDate and :endDate and j.plannedEndTime between :startDate and :endDate and block = :block and floor = :floor and zone = :zone and j.parentJob <> null")
-    List<Job> findChildJobByTitleSiteDateAndLocation(@Param("title") String title, @Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("block") String block, @Param("floor") String floor,@Param("zone") String zone);
+    List<Job> findChildJobByTitleSiteDateAndLocation(@Param("title") String title, @Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
 
     @Query("SELECT j from Job j where j.title = :title and j.site.id = :siteId and j.plannedStartTime between :startDate and :endDate and j.plannedEndTime between :startDate and :endDate and block = :block and floor = :floor and zone = :zone and j.parentJob = null")
-    List<Job> findParentJobByTitleSiteDateAndLocation(@Param("title") String title, @Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("block") String block, @Param("floor") String floor,@Param("zone") String zone);
+    List<Job> findParentJobByTitleSiteDateAndLocation(@Param("title") String title, @Param("siteId") Long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("block") String block, @Param("floor") String floor, @Param("zone") String zone);
 
     @Query("SELECT j from Job j where j.site.id = :siteId and j.status = :currentJobStatus and j.scheduled = :scheduled and (j.plannedStartTime between :startDate and :endDate) and (j.employee.user.id = :userId or j.employee.id in (:subEmpIds))")
     Page<Job> findByDateRange(@Param("siteId") long siteId, @Param("userId") long userId, @Param("subEmpIds") List<Long> subEmpIds, @Param("currentJobStatus") JobStatus currentJobStatus, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("scheduled") boolean scheduled, Pageable pageRequest);
@@ -133,41 +127,41 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     Page<Job> findBySiteIdsOrEmpIdsAndDateRange(@Param("userId") long userId, @Param("siteIds") List<Long> siteIds, @Param("subEmpIds") List<Long> subEmpIds, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId")
-    List<Job> findByDateRangeAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    List<Job> findByDateRangeAndEmployee(@Param("empId") Long empId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId")
-    Page<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+    Page<Job> findByStartDateAndEmployee(@Param("empId") Long empId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.location.id=:locationId")
-    Page<Job> findByStartDateAndEmployeeAndLocation(@Param("empId")Long empId,@Param("locationId") long locationId,@Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+    Page<Job> findByStartDateAndEmployeeAndLocation(@Param("empId") Long empId, @Param("locationId") long locationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
 
     @Query("SELECT j from Job j where  (j.plannedStartTime >= :startDate) and j.employee.id = :empId")
-    Page<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate,Pageable pageRequest);
+    Page<Job> findByStartDateAndEmployee(@Param("empId") Long empId, @Param("startDate") Date startDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime >= :startDate) and j.employee.id = :empId")
-    List<Job> findByStartDateAndEmployee(@Param("empId")Long empId,@Param("startDate") Date startDate);
+    List<Job> findByStartDateAndEmployee(@Param("empId") Long empId, @Param("startDate") Date startDate);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.site.id = :siteId")
-    List<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    List<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.employee.id = :empId and j.site.id = :siteId")
-    Page<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId,@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
+    Page<Job> findByStartDateSiteAndEmployee(@Param("siteId") long siteId, @Param("empId") long empId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.location.id=:locationId and j.employee.id = :empId and j.site.id = :siteId")
-    Page<Job> findByStartDateSiteAndEmployeeAndLocation(@Param("siteId") long siteId, @Param("empId") long empId, @Param("locationId") long locationId,@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
+    Page<Job> findByStartDateSiteAndEmployeeAndLocation(@Param("siteId") long siteId, @Param("empId") long empId, @Param("locationId") long locationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId")
-    Page<Job> findByStartDateAndSite(@Param("siteId") long siteId,  @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+    Page<Job> findByStartDateAndSite(@Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId")
-    List<Job> findByStartDateAndSiteReport(@Param("siteId") long siteId,  @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    List<Job> findByStartDateAndSiteReport(@Param("siteId") long siteId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId and j.location.id=:locationId")
-    Page<Job> findByStartDateAndSiteAndLocation(@Param("siteId") long siteId, @Param("locationId") long locationId,  @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+    Page<Job> findByStartDateAndSiteAndLocation(@Param("siteId") long siteId, @Param("locationId") long locationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId and j.type = :type")
-    Page<Job> findByStartDateAndSiteAndJobType(@Param("siteId") long siteId, @Param("type") String type, @Param("startDate") Date startDate, @Param("endDate") Date endDate,Pageable pageRequest);
+    Page<Job> findByStartDateAndSiteAndJobType(@Param("siteId") long siteId, @Param("type") String type, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  (j.plannedStartTime between :startDate and :endDate) and j.site.id = :siteId and j.type = :type and j.location.id=:locationId")
     Page<Job> findByStartDateAndSiteAndJobTypeAndLocation(@Param("siteId") long siteId, @Param("locationId") long locationId, @Param("type") String type, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageRequest);
@@ -207,14 +201,14 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     Page<Job> findByProjectIdAndStatusAndDateRange(@Param("projectId") Long projectId, @Param("userId") long userId, @Param("subEmpIds") List<Long> subEmpIds, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("currentJobStatus") JobStatus currentJobStatus, Pageable pageRequest);
 
     @Query("SELECT j from Job j where  j.ticket.id=:ticketId")
-    Job findByTicketId(@Param("ticketId")Long ticketId);
+    Job findByTicketId(@Param("ticketId") Long ticketId);
 
     //find jobs for asset
     @Query("SELECT j from Job j where j.asset.id = :assetId and j.plannedStartTime >= :startDate ")
     List<Job> findByAssetAndStartDate(@Param("assetId") long assetId, @Param("startDate") Date startDate);
 
-    @Query("SELECT j FROM Job j WHERE (j.status < 3) order by j.createdDate asc")
-    List<Job> findAllActiveUnClosedTicket();
+    @Query("SELECT j FROM Job j WHERE (j.status < 3) and j.plannedStartTime <= :currDate and j.site.id = :siteId and j.active = 'Y' order by j.createdDate asc")
+    List<Job> findAllActiveInCompleteJobs(@Param("currDate") Date currDate, @Param("siteId") long siteId);
 
     @Query("SELECT j FROM Job j WHERE j.maintenanceType = :ppmType")
 	List<Job> findAllPPMJobs(@Param("ppmType") String ppmType);

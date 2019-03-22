@@ -91,12 +91,13 @@
                                         </div>
                                          <div class="row" ng-init="loadClientGroup()">
                                             <div class="col-md-10 pad-r-0px">
-                                                 <label class="control-label">Client Group</label>
-                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                <select class="form-control" ng-model="selectedClientGroup" tabindex="7" ng-options="clientgroup as (clientgroup.clientgroup | uppercase) for clientgroup in clientGroups track by clientgroup.clientgroup">
-                                                    <option value="">Select Client Group ..</option>
-                                                </select>
-
+                                                <div class="form-group ">
+                                                     <label class="control-label">Client Group</label>
+                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                    <select class="form-control" ng-model="selectedClientGroup" tabindex="7" ng-options="clientgroup as (clientgroup.clientgroup | uppercase) for clientgroup in clientGroups track by clientgroup.clientgroup">
+                                                        <option value="">Select Client Group ..</option>
+                                                    </select>
+                                                </div>
                                             </div>
 
                                             <div class="col-md-2 pdng-top25">
@@ -496,15 +497,15 @@
 	                                <div ng-show="addGroupForm.assetgroupName.$dirty || addGroupForm.assetgroupName.$invalid">
 	                                    <p class="help-block" style="color:maroon"
 	                                       ng-show="addGroupForm.assetgroupName.$error.required">
-	                                       Client Group is required.
+	                                       Client Group name is required.
 	                                    </p>
 	                                    <p class="help-block" style="color:maroon"
 	                                       ng-show="addGroupForm.assetgroupName.$error.maxlength">
-	                                        Client Group cannot be longer than 250 characters.
+	                                        Client Group name cannot be longer than 250 characters.
 	                                    </p>
 	                                    <p class="help-block" style="color:maroon"
 	                                       ng-show="addGroupForm.assetgroupName.$error.pattern">
-	                                       Client Group can only contain letters, digits and space.
+	                                       Client Group name can only contain letters, digits and space.
 	                                    </p>
 	                                </div>
 	                            </div>

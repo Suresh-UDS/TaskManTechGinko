@@ -79,6 +79,9 @@ public class TicketManagementService extends AbstractService {
     @Inject
     private AssetRepository assetRepository;
 
+    @Inject
+    private PushService pushService;
+
     @Value("${AWS.s3-cloudfront-url}")
     private String cloudFrontUrl;
 
@@ -588,7 +591,7 @@ public class TicketManagementService extends AbstractService {
         return;
     }
 
-    private void sendNotifications(Employee ticketOwner, Employee assignedTo,Employee currentUserEmp,  Ticket ticket, Site site, boolean isNew) {
+    private void sendNotifications(Employee ticketOwner, Employee assignedTo, Employee currentUserEmp, Ticket ticket, Site site, boolean isNew) {
         User assignedToUser = null;
 
         site = siteRepository.getOne(ticket.getSite().getId());
@@ -644,11 +647,17 @@ public class TicketManagementService extends AbstractService {
                     assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
                 mailService.sendTicketCreatedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
                     assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus(), ticket.getSeverity());
+
+                sendTicketPushNotification(ticket, ticket.getAssignedTo());
+
             }else {
                 mailService.sendTicketUpdatedMail(ticketUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
                     assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
                 mailService.sendTicketUpdatedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
                     assignedToUser.getFirstName(), assignedTo.getName(),ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+
+                sendTicketPushNotification(ticket, ticket.getAssignedTo());
+
             }
         }else if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
             if(assignedTo != null) {
@@ -658,7 +667,32 @@ public class TicketManagementService extends AbstractService {
 
             mailService.sendTicketClosedMail(ticketUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
                 assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), ticket.getStatus());
+
+            sendTicketPushNotification(ticket, ticketOwner);
+
         }
+    }
+
+    private void sendTicketPushNotification(Ticket ticket, Employee emp) {
+    		//send push notification to the employee
+
+		if(emp != null) {
+			Map<String, Object> values = new HashMap<String, Object>();
+			values.put("ticketId", ticket.getId());
+			values.put("ticketTitle", ticket.getTitle());
+			values.put("ticketDateTime", ticket.getCreatedDate());
+			values.put("site", ticket.getSite().getName());
+			if(emp.getUser() != null) {
+				long userId = emp.getUser().getId();
+				long[] userIds = new long[1];
+				userIds[0] = userId;
+				if(ticket.getStatus().equalsIgnoreCase("Open") || ticket.getStatus().equalsIgnoreCase("Assigned")) {
+					pushService.sendNewTicketAlert(userIds, values);
+				}else if(ticket.getStatus().equalsIgnoreCase("Closed")) {
+					pushService.sendNewTicketAlert(userIds, values);
+				}
+			}
+		}
     }
 
     public ExportResult generateReport(List<TicketDTO> transactions, SearchCriteria criteria) {

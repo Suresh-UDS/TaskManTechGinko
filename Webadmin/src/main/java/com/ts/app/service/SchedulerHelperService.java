@@ -754,7 +754,7 @@ public class SchedulerHelperService extends AbstractService {
 					}
 				}
 
-				if (CollectionUtils.isNotEmpty(empShift)) { //only if a matching shift is found for the employee the employee detail needs to be added to the report
+				if (empShift != null) { //only if a matching shift is found for the employee the employee detail needs to be added to the report
 					EmployeeAttendanceReport empAttnRep = new EmployeeAttendanceReport();
 					empAttnRep.setEmpId(emp.getId());
 					empAttnRep.setEmployeeId(emp.getEmpId());
@@ -1670,23 +1670,23 @@ public class SchedulerHelperService extends AbstractService {
 
 						ExportResult exportQuotationResult = new ExportResult();
 						if (env.getProperty("scheduler.dayWiseQuotationReport.enabled").equalsIgnoreCase("true")) {
-                            List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
+							List<QuotationDTO> quotationResults = new ArrayList<QuotationDTO>();
                             sc.setReport(true);
-                            Object quotationObj = quotationService.getQuotations(sc);
-                            if (quotationObj != null) {
-                                ObjectMapper mapper = new ObjectMapper();
-                                mapper.findAndRegisterModules();
-                                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                                mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+							Object quotationObj = quotationService.getQuotations(sc);
+							if (quotationObj != null) {
+								ObjectMapper mapper = new ObjectMapper();
+								mapper.findAndRegisterModules();
+								mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+								mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
                                 mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
                                 try {
-                                    quotationResults = mapper.readValue((String) quotationObj,
-                                        new TypeReference<List<QuotationDTO>>() {
-                                        });
-                                } catch (IOException e) {
-                                    log.error("Error while converting quotation results to objects", e);
-                                }
-                            }
+									quotationResults = mapper.readValue((String) quotationObj,
+											new TypeReference<List<QuotationDTO>>() {
+											});
+								} catch (IOException e) {
+									log.error("Error while converting quotation results to objects", e);
+								}
+							}
 
 							if (CollectionUtils.isNotEmpty(quotationResults)) {
 								// if report generation needed

@@ -1,10 +1,9 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,46 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.AssetGroup;
-import com.ts.app.domain.AssetParameterReading;
-import com.ts.app.domain.AssetStatusHistoryDTO;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Material;
-import com.ts.app.domain.MaterialItemGroup;
-import com.ts.app.domain.MaterialTransaction;
-import com.ts.app.domain.MaterialUOMType;
-import com.ts.app.domain.User;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.InventoryRepository;
-import com.ts.app.repository.InventorySpecification;
-import com.ts.app.repository.InventoryTransactionRepository;
-import com.ts.app.repository.ManufacturerRepository;
-import com.ts.app.repository.MaterialItemGroupRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.PagingUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
-import com.ts.app.web.rest.dto.AssetgroupDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.MaterialDTO;
-import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
-import com.ts.app.web.rest.dto.MaterialTransactionDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
-public class InventoryManagementService extends AbstractService{
+public class InventoryManagementService extends AbstractService {
 
 	private final Logger log = LoggerFactory.getLogger(InventoryManagementService.class);
 
@@ -339,7 +305,7 @@ public class InventoryManagementService extends AbstractService{
 	}
 
 	private void buildSearchResultTransax(SearchCriteria searchCriteria, Page<MaterialTransaction> page,
-		List<MaterialTransactionDTO> transactions, SearchResult<MaterialTransactionDTO> result) {
+                                          List<MaterialTransactionDTO> transactions, SearchResult<MaterialTransactionDTO> result) {
 	// TODO Auto-generated method stub
 		if (page != null) {
 			result.setTotalPages(page.getTotalPages());
@@ -377,16 +343,9 @@ public class InventoryManagementService extends AbstractService{
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    public void deleteTransaction(long id) {
+        MaterialTransaction materialTrsn = inventTransactionRepository.findOne(id);
+        materialTrsn.setActive(MaterialTransaction.ACTIVE_NO);
+        inventTransactionRepository.save(materialTrsn);
+    }
 }
