@@ -66,6 +66,9 @@ public class JobManagementResource {
 
 	@Inject
 	private AmazonS3Service amazonService;
+	
+	@Inject
+	private ReportService reportService;
 
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -481,7 +484,14 @@ public class JobManagementResource {
     	log.debug("Get All Files from AWS S3");
     	amazonService.getAllFiles();
     }
+    
+    @RequestMapping(value = "/jobs/currentJobsCount/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public ReportResult getCurrentJobCount(@PathVariable("fromDate") Date fromDate,@PathVariable("toDate") Date toDate) {
 
+    long currentuserId = SecurityUtils.getCurrentUserId(); 
+    return reportService.getCurrentJobCount(currentuserId, fromDate, toDate);
+
+    }
 
 
 }
