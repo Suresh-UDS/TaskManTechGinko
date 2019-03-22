@@ -654,34 +654,42 @@ public class RateCardService extends AbstractService {
         log.debug("get Quotations");
         Object quotationList = "";
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
-            jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-            restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
+        	 RestTemplate restTemplate = new RestTemplate();
+             MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter();
+             jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+             restTemplate.getMessageConverters().add(jsonHttpMessageConverter);
 
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+             MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+             Map<String, String> map = new HashMap<String, String>();
+             map.put("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-            headers.setAll(map);
+             headers.setAll(map);
 
-            JSONObject request = new JSONObject();
-            TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-            df.setTimeZone(tz);
-            String createdDate = df.format(searchCriteria.getQuotationCreatedDate());
-            String toDate = df.format(searchCriteria.getToDate());
-            request.put("createdDate", createdDate);
-            request.put("toDate", toDate);
-            request.put("siteIds", siteIds);
-            log.debug("Request body " + request.toString());
-            HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
-            log.debug("Rate card service end point"+quotationSvcEndPoint);
-            ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/summary", requestEntity, String.class);
-            log.debug("Response freom push service "+ response.getStatusCode());
-            log.debug("response from push service"+response.getBody());
-//            rateCardDTOList = (List<RateCardDTO>) response.getBody();
-            quotationList = response.getBody();
+             JSONObject request = new JSONObject();
+             TimeZone tz = TimeZone.getTimeZone("UTC");
+             
+             searchCriteria.getToDate().setHours(23);
+             searchCriteria.getToDate().setMinutes(59);
+             searchCriteria.getToDate().setSeconds(59);
+             
+             DateFormat fdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+             DateFormat tdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.000'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+              
+             String createdDate = fdf.format(searchCriteria.getQuotationCreatedDate());
+             String toDate = tdf.format(searchCriteria.getToDate());
+             
+             request.put("createdDate", createdDate);
+             request.put("toDate", toDate);
+             request.put("siteIds", siteIds);
+             
+             log.debug("Request body " + request.toString());
+             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(), headers);
+             log.debug("Rate card service end point"+quotationSvcEndPoint);
+             ResponseEntity<?> response = restTemplate.postForEntity(quotationSvcEndPoint+"/quotation/summary", requestEntity, String.class);
+             log.debug("Response freom push service "+ response.getStatusCode());
+             log.debug("response from push service"+response.getBody());
+//             rateCardDTOList = (List<RateCardDTO>) response.getBody();
+             quotationList = response.getBody();
 
         }catch(Exception e) {
             log.error("Error while calling Quotations service ", e);

@@ -225,7 +225,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     @Query("SELECT j from Job j where  (j.plannedStartTime between :fromDt and :toDt) and j.site.id = :siteId and j.employee.id = :employeeId and j.status = :jobStatus")
 	Page<Job> findByEmployeeAndStatus(@Param("siteId") long siteId, @Param("employeeId") long employeeId, @Param("jobStatus") JobStatus jobStatus, @Param("fromDt") Date fromDt, @Param("toDt") Date toDt, Pageable pageRequest);
 
-    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (j.plannedStartTime between :selDate and :endDate) and j.active= 'Y'")
+    @Query("SELECT count(j.id) from Job j where j.site.id in (:siteIds) and (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")
     long findCurrentJobCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
     @Query("SELECT count(j.id) from Job j where (DATE(j.plannedStartTime) between :selDate and :endDate) and j.active= 'Y'")

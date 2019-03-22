@@ -113,7 +113,7 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     @Query("SELECT t FROM Ticket t WHERE t.assignedTo.id =:empId")
     List<Ticket> findByEmployee(@Param("empId") long empId);
 
-    @Query("SELECT count(t.id) from Ticket t where t.site.id in (:siteIds) and (t.assignedOn between :selDate and :endDate) ")
+    @Query("SELECT count(t.id) from Ticket t where t.site.id in (:siteIds) and (DATE(t.assignedOn) between :selDate and :endDate) ")
     long findCurrentTicketsCountBySiteIdsAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("selDate") Date selDate, @Param("endDate") Date endDate);
 
     @Query("SELECT count(t.id) from Ticket t where (t.assignedOn between :selDate and :endDate) ")
