@@ -65,9 +65,9 @@
                     <div class="table-responsive tablecard">
                         <table class="table table-hover">
                             <thead>
-                               <tr>
-                                   <th>Created Date
-                                       <span class="sortingIcons">
+                            <tr>
+                                <th>Created Date
+                                    <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('createdDate')" ng-class="isActiveAsc == 'createdDate' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -75,9 +75,9 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                   </th>
-                                   <th>Site
-                                       <span class="sortingIcons">
+                                </th>
+                                <th>Site
+                                    <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -85,9 +85,9 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                   </th>
-                                   <th>Category
-                                       <span class="sortingIcons">
+                                </th>
+                                <th>Category
+                                    <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('expenseCategory')" ng-class="isActiveAsc == 'expenseCategory' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -95,9 +95,9 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                   </th>
-                                   <th>Transaction type
-                                       <span class="sortingIcons">
+                                </th>
+                                <th>Transaction type
+                                    <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('mode')" ng-class="isActiveAsc == 'mode' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -105,51 +105,51 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                   </th>
-                                   <th> Debit</th>
-                                   <th> credit</th>
-                                   <th> Balance</th>
-                                   <th> Payment type</th>
-                                   <th class="text-center">Actions</th>
+                                </th>
+                                <th> Debit</th>
+                                <th> credit</th>
+                                <th> Balance</th>
+                                <th> Payment type</th>
+                                <th class="text-center">Actions</th>
 
-                               </tr>
+                            </tr>
                             </thead>
                             <tbody>
 
-                                <tr ng-repeat="expense in expenses">
+                            <tr ng-repeat="expense in expenses">
 
-                                    <td>{{expense.createdDate | date:'dd/MMM/yyyy'}}</td>
-                                    <td>{{expense.siteName}}</td>
-                                    <td>{{expense.expenseCategory}}</td>
-                                    <td>{{expense.mode}}</td>
-                                    <td>
-                                        <span style="color: red">{{expense.debitAmount}}</span>
-                                    </td>
-                                    <td>
-                                        <span style="color: green">{{expense.creditAmount}}</span>
-                                    </td>
-                                    <td>
-                                        <span ng-if="expense.balanceAmount<0" style="color: red">{{expense.balanceAmount}}</span>
-                                        <span ng-if="expense.balanceAmount>0" style="color: green">{{expense.balanceAmount}}</span>
-                                    </td>
-                                    <td>{{expense.paymentType}}</td>
-                                    <td class="text-center">
-                                        <a data-toggle="modal" title="View Expense"  data-target="#RightModal-View" ng-click="viewExpense(expense.id)"  has-permission="Expense:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                        <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like" ui-sref="view-expense({ id: expense.id })"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                        <!--<a title="Edit"  ui-sref="edit-expense({id: expense.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
+                                <td>{{expense.createdDate | date:'dd/MMM/yyyy'}}</td>
+                                <td>{{expense.siteName}}</td>
+                                <td>{{expense.expenseCategory}}</td>
+                                <td>{{expense.mode}}</td>
+                                <td>
+                                    <span style="color: red">{{expense.debitAmount}}</span>
+                                </td>
+                                <td>
+                                    <span style="color: green">{{expense.creditAmount}}</span>
+                                </td>
+                                <td>
+                                    <span ng-if="expense.balanceAmount<0" style="color: red">{{expense.balanceAmount}}</span>
+                                    <span ng-if="expense.balanceAmount>0" style="color: green">{{expense.balanceAmount}}</span>
+                                </td>
+                                <td>{{expense.paymentType}}</td>
+                                <td class="text-center">
+                                    <a data-toggle="modal" title="View Expense"  data-target="#RightModal-View" ng-click="viewExpense(expense.id)"  has-permission="Expense:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                    <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like" ui-sref="view-expense({ id: expense.id })"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                    <!--<a title="Edit"  ui-sref="edit-expense({id: expense.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
 
-                                        <!--<a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>-->
+                                    <!--<a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>-->
 
-                                        <!--<div class="HoverBx">-->
-                                            <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                            <!--<a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
+                                    <!--<div class="HoverBx">-->
+                                    <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                    <!--<a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
 
-                                            <!--<a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
-                                        <!--</div>-->
+                                    <!--<a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
+                                    <!--</div>-->
 
 
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
 
                             </tbody>
                         </table>
@@ -221,7 +221,7 @@
                         Cancel</button>
                     <button type="button"
                             class="btn btn-danger delete-multiple-confirmation-button"
-                            >
+                    >
                         Delete</button>
                 </div>
             </div>
@@ -519,27 +519,27 @@
                                             <td>Uploaded Documents</td>
                                             <td>
 
-                                            <div class="row" >
+                                                <div class="row" >
 
-                                                <div class="col-md-3 txt-align-center DocsCon" ng-repeat="uploadFile in viewExpenseDetails.expenseDocumentList" >
-                                                    <!--<div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
-                                                        <i class="material-icons">close</i>
-                                                    </div>-->
-                                                    <div class="DownloadBtn" style="right: 12%;">
-                                                        <a href="{{uploadFile.fileUrl}}" id="loop" title="download">
-                                                            <i class="material-icons">cloud_download</i>
+                                                    <div class="col-md-3 txt-align-center DocsCon" ng-repeat="uploadFile in viewExpenseDetails.expenseDocumentList" >
+                                                        <!--<div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                            <i class="material-icons">close</i>
+                                                        </div>-->
+                                                        <div class="DownloadBtn" style="right: 12%;">
+                                                            <a href="{{uploadFile.fileUrl}}" id="loop" title="download">
+                                                                <i class="material-icons">cloud_download</i>
+                                                            </a>
+                                                        </div>
+                                                        <a href="javascript:void(0);"   >
+                                                            <img ng-src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
                                                         </a>
-                                                    </div>
-                                                    <a href="javascript:void(0);"   >
-                                                        <img ng-src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
-                                                    </a>
-                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
-                                                    <div  ng-if="uploadFile.id == download">
-                                                        <a href="{{content}}" download>download</a>
-                                                    </div>
+                                                        <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
+                                                        <div  ng-if="uploadFile.id == download">
+                                                            <a href="{{content}}" download>download</a>
+                                                        </div>
 
-                                                </div>
-                                                <span  ng-if="viewExpenseDetails.expenseDocumentList.length == 0"  >
+                                                    </div>
+                                                    <span  ng-if="viewExpenseDetails.expenseDocumentList.length == 0"  >
                                                     No Documents
                                                 </span>
 

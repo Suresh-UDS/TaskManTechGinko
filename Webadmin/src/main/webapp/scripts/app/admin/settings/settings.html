@@ -1,87 +1,1026 @@
-<div>
-    <div class="row">
+<div class="content" ng-init="init();initLoad();">
+    <label><span class="red-star">*</span> Mandatory Field</label>
+  <form  name="form" role="form" novalidate confirm-on-exit>
+	<div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h2>User settings for [<b>{{settingsAccount.login}}</b>]</h2>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                         <div class="col-md-6">
+                              <div class="form-group selectcon is-empty">
+                                  <label class="control-label">Client<span class="red-star">*</span></label>
+                                  <span class="form-control-feedback d-md-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                  <select class=" form-control " ng-model="selectedProject" name="projectName" ng-change="loadSettings();loadSites();" ng-options="project as project.name for project in projects"  required>
+            	                        <option value="">Please select Client...</option>
+            	                    </select>
+            	                    <div ng-show="form.$submitted || form.projectName.$touched">
+            	                        <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.required">
+            	                                Client name is required.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.minlength">
+            	                                Client name is required to be at least 2 character.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.maxlength">
+            	                                Client name cannot be longer than 50 characters.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.projectName.$error.pattern">
+            	                                Client name can only contain letters, digits and space.
+            	                            </p>
+            	                        </div>
+            	                    </div>
+                              </div>
 
-            <div class="alert alert-success" ng-show="success">
-                <strong>Settings saved!</strong>
-            </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group selectcon is-empty">
+                                  <label class="control-label">Site<!--<span class="red-star">*</span>--></label>
+                                  <span ng-show="siteSpin && !sites"  class="form-control-feedback d-md-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                  <span ng-show="!siteSpin" class="form-control-feedback d-md-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                  <!--name="siteName"-->
+                                  <select class="form-control " ng-model="selectedSite"  ng-change="loadSettings();" ng-options="site as site.name for site in sites" >
+            	                        <option value="">Please select Site...</option>
+            	                    </select>
 
-            <div class="alert alert-danger" ng-show="errorEmailExists">
-                <strong>E-mail is already in use!</strong> Please choose another one.
-            </div>
+            	                    <!--<div ng-show="form.$submitted || form.siteName.$touched">
+            	                        <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.required">
+            	                                Site name is required.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.minlength">
+            	                                Site name is required to be at least 2 character.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.maxlength">
+            	                                Site name cannot be longer than 50 characters.
+            	                            </p>
+            	                            <p class="help-block" style="color:maroon"
+            	                               ng-show="form.siteName.$error.pattern">
+            	                                Site name can only contain letters, digits and space.
+            	                            </p>
+            	                        </div>
+            	                    </div>-->
+                              </div>
 
-            <div class="alert alert-danger" ng-show="error">
-                <strong>An error has occurred!</strong> Settings could not be saved.
-            </div>
+                          </div>
 
-            <form name="form" role="form" novalidate ng-submit="save()" show-validation>
-
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Your first name"
-                           ng-model="settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
-                    <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
-                        <p class="help-block"
-                               ng-show="form.firstName.$error.required">
-                            Your first name is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.firstName.$error.minlength">
-                            Your first name is required to be at least 1 character.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.firstName.$error.maxlength">
-                            Your first name cannot be longer than 50 characters.
-                        </p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Your last name"
-                           ng-model="settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
-                    <div ng-show="form.lastName.$dirty && form.lastName.$invalid">
-                        <p class="help-block"
-                               ng-show="form.lastName.$error.required">
-                            Your last name is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.lastName.$error.minlength">
-                            Your last name is required to be at least 1 character.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.lastName.$error.maxlength">
-                            Your last name cannot be longer than 50 characters.
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Your e-mail"
-                           ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required maxlength="100">
-                    <div ng-show="form.email.$dirty && form.email.$invalid">
-                        <p class="help-block"
-                               ng-show="form.email.$error.required">
-                            Your e-mail is required.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.email">
-                            Your e-mail is invalid.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.minlength">
-                            Your e-mail is required to be at least 5 characters.
-                        </p>
-                        <p class="help-block"
-                               ng-show="form.email.$error.maxlength">
-                            Your e-mail cannot be longer than 100 characters.
-                        </p>
-                    </div>
-                </div>
-
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
-            </form>
+            </div>
         </div>
+	</div>
+   <div>
+    <div class="row">
+
+        <div class="col-md-8 col-md-offset-2">
+
+            <div class="panel panel-default">
+                <!--<div class="panel-heading">Panel Heading</div>-->
+                <div class="panel-body">
+
+					<div class="checkbox">
+                        <label>
+                            Send ShiftWise Attendance Email  <input type="checkbox" name="terms" ng-model="settings.shiftWiseAttendanceEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Shift Wise Attendance Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="shiftWiseAttendanceEmail">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addShiftWiseAttendanceEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.shiftWiseAttendanceEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeShiftWiseAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send DayWise Attendance Email  <input type="checkbox" name="terms" ng-model="settings.dayWiseAttendanceEmailAlert">
+                        </label>
+                    </div>
+
+					<div class="row">
+
+                        <div class="col-md-9">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Attendance DayWise Report Time</label>
+                                <input  type="text" class="form-control datetimepicker" id="dayWiseAttendanceAlertTime" ng-model="selectedDayWiseAttnEmailTime" autocomplete="off" />
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-9">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">Late Attendance Grace Time (Mins)</label>
+                                <input  type="text" class="form-control" id="lateAttendanceGraceTime" ng-model="settings.lateAttendanceGraceTime" />
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Attendance Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="dayWiseAttendanceEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addDayWiseAttendanceEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.dayWiseAttendanceEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeDayWiseAttendanceEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="checkbox">
+                        <label>
+                            Send overdue Email  <input type="checkbox" name="terms" ng-model="settings.overdueEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Overdue Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="overdueEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addOverdueEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">EMail ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.overdueEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeOverdueEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            Send EOD Job Reports <input type="checkbox" name="terms" ng-model="settings.eodJobEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">EOD Job Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="eodJobEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addEodJobEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">EMail ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.eodJobEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeEodJobEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send Negative Feedback Reports <input type="checkbox" name="terms" ng-model="settings.feedbackEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Negative Feedback Email List</label>
+                                    <input type="text" class="form-control" ng-model="feedbackEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addFeedbackEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">EMail ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.feedbackEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeFeedbackEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send Daily Feedback Reports <input type="checkbox" name="terms" ng-model="settings.feedbackReportEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Daily Feedback Email List</label>
+                                    <input type="text" class="form-control" ng-model="feedbackReportEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addFeedbackReportEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.feedbackReportEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeFeedbackReportEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+	                        <div class="col-md-9">
+
+	                            <div class="form-group pdng-top15">
+	                                <label class="control-label">Feedback Report Time</label>
+	                                <input  type="text" class="form-control datetimepicker" id="feedbackReportTime" ng-model="selectedFeedbackReportTime" autocomplete="off" />
+	                            </div>
+
+	                        </div>
+
+
+	                    </div>
+                    </div>
+
+					<div class="checkbox">
+                        <label>
+                            Send Quotation Reports <input type="checkbox" name="terms" ng-model="settings.quotationEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Quotation Email List</label>
+                                    <input type="text" class="form-control" ng-model="quotationEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addQuotationEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.quotationEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeQuotationEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+
+					<div class="checkbox">
+                        <label>
+                            Send Ticket Alerts <input type="checkbox" name="terms" ng-model="settings.ticketEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Ticket Email List</label>
+                                    <input type="text" class="form-control" ng-model="ticketEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addTicketEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.ticketEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeTicketEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send Reading Alerts <input type="checkbox" name="terms" ng-model="settings.readingEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Reading Email List</label>
+                                    <input type="text" class="form-control" ng-model="readingEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addReadingEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.readingEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeReadingEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send Asset Breakdown Alerts <input type="checkbox" name="terms" ng-model="settings.assetEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Asset Email List</label>
+                                    <input type="text" class="form-control" ng-model="assetEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addAssetBreakdownEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.assetEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeAssetEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send PPM Job Alerts <input type="checkbox" name="terms" ng-model="settings.ppmEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="ppmEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addPPMEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.ppmEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removePPMEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                   <div class="checkbox">
+                        <label>
+                            Send AMC Job Alerts <input type="checkbox" name="terms" ng-model="settings.amcEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="amcEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addAMCEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.amcEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeAMCEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                   	<div class="checkbox">
+                        <label>
+                            Send Warranty Expire Alerts <input type="checkbox" name="terms" ng-model="settings.warrantyEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Email List</label>
+                                    <input type="text" class="form-control" ng-model="warrantyEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addWarrantyEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.warrantyEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeWarrantyEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="checkbox">
+                        <label>
+                            Send DayWise Report Email  <input type="checkbox" name="terms" ng-model="settings.dayWiseReportEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Client Group Email  <input type="checkbox" name="terms" ng-model="settings.clientGroupEmailAlert">
+                        </label>
+                    </div>
+
+					<div class="row">
+
+                        <div class="col-md-9">
+
+                            <div class="form-group pdng-top15">
+                                <label class="control-label">DayWise Report Alert Time</label>
+                                <input  type="text" class="form-control datetimepicker" id="dayWiseReportAlertTime" ng-model="selectedDayWiseReportEmailTime" autocomplete="off" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">DayWise Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="dayWiseReportEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addDayWiseReportEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.dayWiseReportEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeDayWiseReportEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            Send Muster Roll Alerts <input type="checkbox" name="terms" ng-model="settings.musterRollEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Muster Report Email List</label>
+                                    <input type="text" class="form-control" ng-model="musterRollEmail" autocomplete="off">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addMusterRollEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                    		<li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.musterRollEmailIds" ng-bind-html-unsafe="emailId">
+		                                    {{emailId}}
+		                                    <span class="badge badge-default badge-pill" ng-click="removeMusterEmail($index)"><i class="material-icons">remove_circle</i></span>
+		                                </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            Send Purchase Requisition Alert <input type="checkbox" name="terms" ng-model="settings.purchaseReqEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Send Purchase Requisition Email List</label>
+                                    <input type="text" class="form-control" ng-model="purchaseReqEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addPurchaseReqEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">EMail ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                        <li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.purchaseReqEmailIds" ng-bind-html-unsafe="emailId">
+                                            {{emailId}}
+                                            <span class="badge badge-default badge-pill" ng-click="removePurchaseReqEmail($index)"><i class="material-icons">remove_circle</i></span>
+                                        </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+
     </div>
 
+	<div class="row">
+
+        <div class="col-sm-offset-6 col-sm-4 txt-align-rgt">
+            <button class="btn btn-success" type="submit"
+                    id="form-button-save" ng-disabled="form.$invalid" ng-click="saveSettings()">
+                             <span class="btn-label">
+                     				<i class="material-icons">check</i>
+                 				</span> Save
+            </button>
+            <!--<button class="btn btn-info" type="submit"-->
+            <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
+            <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
+            <!--</button>-->
+            <button class="btn btn-danger" type="button"
+                    ng-click="cancelSettings()" id="cancel-button">
+                <i class="material-icons">close</i> Cancel
+            </button>
+        </div>
+
+    </div>
+
+  </form>
+
+
 </div>
+
+
