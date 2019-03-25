@@ -163,12 +163,11 @@
                                         <a title="View More Action" has-permission="Indent:View" class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>
 
                                         <div class="HoverBx">
-                                            <button  title="View"  has-permission="Indent:View" ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
-                                            <a title="Edit"  has-permission="Indent:Edit" ui-sref="edit-indent({id: materialIndent.id })" ng-if="materialIndent.indentStatus =='PENDING'" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
-                                            <!--<a title="Delete"  ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>-->
+                                            <button  title="View" has-permission="Indent:View" ui-sref="view-indent({id: materialIndent.id })" class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>
+                                            <a title="Edit" has-permission="Indent:Edit" ui-sref="edit-indent({id: materialIndent.id })" ng-if="materialIndent.indentStatus =='PENDING'" class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
+                                            <a title="Delete" has-permission="Indent:Delete" ng-class="{active: $state.includes('admin')}"  ng-click="deleteConfirm(materialIndent.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">delete</i></a>
                                         </div>
-
-
+                                        
                                     </td>
                                 </tr>
 
@@ -219,7 +218,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button"
+                    <button type="button" ng-click="deleteMaterialIndent()" data-dismiss="modal"
                             class="btn btn-danger delete-confirmation-button">Delete</button>
                 </div>
             </div>

@@ -1,11 +1,14 @@
 package com.ts.app.service;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.service.util.CommonUtil;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,61 +16,101 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.inject.Inject;
-import java.util.*;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.ChecklistItem;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.IndentStatus;
+import com.ts.app.domain.Material;
+import com.ts.app.domain.MaterialIndent;
+import com.ts.app.domain.MaterialIndentGen;
+import com.ts.app.domain.MaterialIndentItem;
+import com.ts.app.domain.MaterialItemGroup;
+import com.ts.app.domain.MaterialTransaction;
+import com.ts.app.domain.MaterialTransactionType;
+import com.ts.app.domain.PurchaseRefGen;
+import com.ts.app.domain.PurchaseRequisition;
+import com.ts.app.domain.PurchaseRequisitionItem;
+import com.ts.app.domain.Setting;
+import com.ts.app.domain.Site;
+import com.ts.app.domain.User;
+import com.ts.app.domain.PurchaseRequestStatus;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.InventoryRepository;
+import com.ts.app.repository.InventoryTransactionRepository;
+import com.ts.app.repository.MaterialIndentItemRepository;
+import com.ts.app.repository.MaterialIndentRepository;
+import com.ts.app.repository.MaterialIndentSpecification;
+import com.ts.app.repository.MaterialItemGroupRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.PurchaseRequisitionRepository;
+import com.ts.app.repository.SettingsRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.CommonUtil;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.MaterialIndentDTO;
+import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
+import com.ts.app.web.rest.dto.PurchaseReqDTO;
+import com.ts.app.web.rest.dto.PurchaseReqItemDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 @Service
 public class MaterialIndentService extends AbstractService {
 
 
 	private final Logger log = LoggerFactory.getLogger(MaterialIndentService.class);
-
+	
 	@Inject
 	private SiteRepository siteRepository;
-
+	
 	@Inject
 	private ProjectRepository projectRepository;
-
+	
 	@Inject
 	private MaterialIndentRepository materialIndentRepository;
-
+	
 	@Inject
 	private UserRepository userRepository;
-
+	
 	@Inject
 	private InventoryRepository inventoryRepository;
-
+	
 	@Inject
 	private InventoryTransactionRepository inventTransactionRepository;
-
+	
 	@Inject
 	private EmployeeRepository employeeRepository;
-
+	
 	@Inject
 	private MaterialIndentItemRepository materialIndentItmRepo;
-
+	
 	@Inject
 	private MaterialItemGroupRepository materialItemGroupRepository;
-
+	
 	@Inject
 	private SettingsRepository settingRepository;
-
+	
 	@Inject
 	private PurchaseRequisitionRepository purchaseReqRepository;
-
+	
 	@Inject
 	private MailService mailService;
-
+	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-
+	
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
 
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
-
-	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) {
+	
+	public MaterialIndentDTO createIndent(MaterialIndentDTO materialIndentDTO) { 
 		MaterialIndent indentEntity = mapperUtil.toEntity(materialIndentDTO, MaterialIndent.class);
 		indentEntity.setRequestedDate(DateUtil.convertToTimestamp(materialIndentDTO.getRequestedDate()));
 		indentEntity.setSite(siteRepository.findOne(materialIndentDTO.getSiteId()));
@@ -78,7 +121,7 @@ public class MaterialIndentService extends AbstractService {
 		indentEntity.setIndentStatus(IndentStatus.PENDING);
 		List<MaterialIndentItemDTO> indentItems = materialIndentDTO.getItems();
 		List<MaterialIndentItem> indentItemEntity = new ArrayList<MaterialIndentItem>();
-		for(MaterialIndentItemDTO indentItm : indentItems) {
+		for(MaterialIndentItemDTO indentItm : indentItems) { 
 			MaterialIndentItem materialIndentItm = mapperUtil.toEntity(indentItm, MaterialIndentItem.class);
 			materialIndentItm.setMaterialIndent(indentEntity);
 			materialIndentItm.setPendingQuantity(indentItm.getQuantity());
@@ -122,24 +165,24 @@ public class MaterialIndentService extends AbstractService {
 
 	public void updateMaterialIndents(MaterialIndentDTO materialIndentDTO) {
 		MaterialIndent materialIndent = materialIndentRepository.findOne(materialIndentDTO.getId());
-		mapToModel(materialIndent, materialIndentDTO);
-		materialIndentRepository.saveAndFlush(materialIndent);
+		mapToEntity(materialIndent, materialIndentDTO);
+		materialIndentRepository.saveAndFlush(materialIndent);		
 	}
 
-	private void mapToModel(MaterialIndent material, MaterialIndentDTO materialindentDTO) {
-		if(materialindentDTO.getSiteId() > 0) {
+	private void mapToEntity(MaterialIndent material, MaterialIndentDTO materialindentDTO) {
+		if(materialindentDTO.getSiteId() > 0) { 
 			material.setSite(siteRepository.findOne(materialindentDTO.getSiteId()));
 		}
-		if(materialindentDTO.getProjectId() > 0) {
+		if(materialindentDTO.getProjectId() > 0) { 
 			material.setProject(projectRepository.findOne(materialindentDTO.getProjectId()));
 		}
-		if(materialindentDTO.getRequestedById() > 0) {
+		if(materialindentDTO.getRequestedById() > 0) { 
 			material.setRequestedBy(employeeRepository.findOne(materialindentDTO.getRequestedById()));
 		}
 		if(materialindentDTO.getIssuedById() > 0) {
 			material.setIssuedBy(employeeRepository.findOne(materialindentDTO.getIssuedById()));
 		}
-
+		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialindentDTO.getItems();
 		Set<MaterialIndentItem> itemEntities = material.getItems();
 		Iterator<MaterialIndentItem> itemsItr = itemEntities.iterator();
@@ -166,12 +209,12 @@ public class MaterialIndentService extends AbstractService {
 				newItem.setMaterialIndent(material);
 				material.getItems().add(newItem);
 			}
-		}
+		}	
 	}
 
 	public void deleteMaterialIndent(long id) {
 		MaterialIndent materialIndent = materialIndentRepository.findOne(id);
-		materialIndent.setActive(Material.ACTIVE_NO);
+		materialIndent.setActive(MaterialIndent.ACTIVE_NO);
 		materialIndentRepository.save(materialIndent);
 	}
 
@@ -224,7 +267,8 @@ public class MaterialIndentService extends AbstractService {
 					transactions = new ArrayList<MaterialIndentDTO>();
 				}
 	        		for(MaterialIndent materialIndent : allIndentsList) {
-	        			transactions.add(mapToModel(materialIndent));
+	        		    MaterialIndentDTO materialIndentDTO = new MaterialIndentDTO();
+	        			transactions.add(mapToModel(materialIndent, materialIndentDTO));
 	        		}
 				buildSearchResult(searchCriteria, page, transactions,result);
 			}
@@ -232,8 +276,12 @@ public class MaterialIndentService extends AbstractService {
 		return result;
 	}
 
-	public MaterialIndentDTO mapToModel(MaterialIndent materialIndent) {
-	    MaterialIndentDTO materialIndentDTO = new MaterialIndentDTO();
+	public MaterialIndentDTO mapToModel(MaterialIndent materialIndent, MaterialIndentDTO materialIndentDTO) {
+//	    MaterialIndentDTO materialIndentDTO = new MaterialIndentDTO();
+        List<MaterialIndentItemDTO> materialIndentItemSet = null;
+        if(materialIndentDTO.getItems() != null) {
+            materialIndentItemSet = materialIndentDTO.getItems();
+        }
 	    materialIndentDTO.setId(materialIndent.getId());
 	    materialIndentDTO.setProjectId(materialIndent.getProject().getId());
 	    materialIndentDTO.setProjectName(materialIndent.getProject().getName());
@@ -251,6 +299,7 @@ public class MaterialIndentService extends AbstractService {
         }
         Set<MaterialIndentItem> matIndentItems = materialIndent.getItems();
         if(CollectionUtils.isNotEmpty(matIndentItems)) {
+            int i = 0;
             List<MaterialIndentItemDTO> matIndentItemDTOS = new ArrayList<>();
             for(MaterialIndentItem indentItem : matIndentItems) {
                 MaterialIndentItemDTO matIndentItemDTO = new MaterialIndentItemDTO();
@@ -266,7 +315,13 @@ public class MaterialIndentService extends AbstractService {
                 matIndentItemDTO.setIssuedQuantity(indentItem.getIssuedQuantity());
                 matIndentItemDTO.setPendingQuantity(indentItem.getPendingQuantity());
                 matIndentItemDTO.setQuantity(indentItem.getQuantity());
+                if(materialIndentItemSet != null && materialIndentItemSet.get(i).isErrorStatus()){
+                    matIndentItemDTO.setErrorMessage(materialIndentItemSet.get(i).getErrorMessage());
+                    matIndentItemDTO.setErrorStatus(materialIndentItemSet.get(i).isErrorStatus());
+                    matIndentItemDTO.setStatus(materialIndentItemSet.get(i).getStatus());
+                }
                 matIndentItemDTOS.add(matIndentItemDTO);
+                i++;
             }
             materialIndentDTO.setItems(matIndentItemDTOS);
         }
@@ -305,11 +360,11 @@ public class MaterialIndentService extends AbstractService {
 		Site site = siteRepository.findOne(materialIndentDto.getSiteId());
 		String siteName = site.getName();
 		long siteId = site.getId();
-
+		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialIndentDto.getItems();
 		Set<MaterialIndentItem> itemEntities = matIndent.getItems();
 		Iterator<MaterialIndentItem> itemsItr = itemEntities.iterator();
-
+		
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;
 			MaterialIndentItem itemEntity = itemsItr.next();
@@ -319,14 +374,14 @@ public class MaterialIndentService extends AbstractService {
 					long reducedQty = 0;
 					long addedQty = 0;
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
-					if(itemEntity.getPendingQuantity() > 0) {
+					if(itemEntity.getPendingQuantity() > 0) {   
 						Date dateofTransaction = new Date();
 						if(materialItm.getStoreStock() > itemDto.getIssuedQuantity() && itemDto.getIssuedQuantity() > 0) {
 							long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
-							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();
-							addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity();
-							itemEntity.setPendingQuantity(reducedQty);
-							itemEntity.setIssuedQuantity(addedQty);
+							reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();  
+							addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity(); 
+							itemEntity.setPendingQuantity(reducedQty);  
+							itemEntity.setIssuedQuantity(addedQty); 
 							MaterialTransaction materialTrans = new MaterialTransaction();
 							materialTrans.setProject(projectRepository.findOne(materialIndentDto.getProjectId()));
 							materialTrans.setSite(siteRepository.findOne(materialIndentDto.getSiteId()));
@@ -342,11 +397,11 @@ public class MaterialIndentService extends AbstractService {
 							materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
 							materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
 							materialTrans = inventTransactionRepository.save(materialTrans);
-							if(materialTrans.getId() > 0) {
+							if(materialTrans.getId() > 0) { 
 								matIndent.setTransaction(materialTrans);
 							}
-
-						} else {
+							
+						} else if(itemDto.getIssuedQuantity() != 0){
 							itemDto.setErrorMessage("Issued quantity not available in store stock.");
 							itemDto.setErrorStatus(true);
 							itemDto.setStatus("400");
@@ -361,9 +416,9 @@ public class MaterialIndentService extends AbstractService {
 							purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
 							purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
 							addPurchaseReqItem(purchaseRequest, materialItm);
-
+						
 							List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_PURCHASEREQ, siteId);
-
+							
 							log.debug("Setting Email list -" + settings.toString());
 
                             Setting purchaseReqSetting = null;
@@ -396,11 +451,11 @@ public class MaterialIndentService extends AbstractService {
 
 							    log.debug("Purchase request email setting is false for " + siteName);
                             }
-
-						}
-
-					}
-
+							
+						} 
+						
+					} 
+									
 					break;
 				}
 			}
@@ -408,26 +463,27 @@ public class MaterialIndentService extends AbstractService {
 			if(!itemFound){
 				itemsItr.remove();
 			}
-
+			
 		}
-
+		
 		Set<MaterialIndentItem> materialItem = matIndent.getItems();
 		boolean isPending = checkIfNoItems(materialItem);
-		if(isPending) {
+		if(isPending) { 
 			 matIndent.setIndentStatus(IndentStatus.PENDING);
 		}else {
 			matIndent.setIndentStatus(IndentStatus.ISSUED);
 		}
-
+		
 		matIndent = materialIndentRepository.save(matIndent);
-		materialIndentDto = mapperUtil.toModel(matIndent, MaterialIndentDTO.class);
-
+//		materialIndentDto = mapperUtil.toModel(matIndent, MaterialIndentDTO.class);
+        materialIndentDto = mapToModel(matIndent, materialIndentDto);
+		
 		return materialIndentDto;
 	}
 
 	private boolean checkIfNoItems(Set<MaterialIndentItem> materialItem) {
 		// TODO Auto-generated method stub
-		for(MaterialIndentItem material : materialItem) {
+		for(MaterialIndentItem material : materialItem) { 
 			if(material.getPendingQuantity() > 0) {
 				return true;
 			}
@@ -457,12 +513,12 @@ public class MaterialIndentService extends AbstractService {
 		purchaseReqRepository.save(purchaseReq);
 	}
 
-
-
-
-
-
-
-
+	
+	
+	
+	
+	
+	
+	
 
 }

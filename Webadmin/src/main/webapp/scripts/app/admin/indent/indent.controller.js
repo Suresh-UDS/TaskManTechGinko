@@ -14,7 +14,7 @@ angular.module('timeSheetApp')
 
 		$scope.selectedMaterialItems = [];
 
-		$scope.indentObject = null;
+		$scope.indentObject = {};
 
 		$scope.selectedRefNumber = null;
 
@@ -538,6 +538,20 @@ angular.module('timeSheetApp')
 			}
 			return isDuplicate;
 		}
+
+        /* delete indent */
+        $scope.deleteConfirm = function (id){
+            $scope.indentMasterId = id;
+        }
+
+        $scope.deleteMaterialIndent = function () {
+            IndentComponent.remove($scope.indentMasterId).then(function(){
+                $scope.success = 'OK';
+                $scope.showNotifications('top','center','success','Indent has been deleted successfully!!');
+                $scope.loadMaterialIndents();
+            });
+        }
+        /* end delete indent */
 
 		$scope.saveIndent = function() {
             $scope.saveLoad = true;
