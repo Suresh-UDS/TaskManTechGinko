@@ -54,7 +54,7 @@
                                        	ng-click="loadSubModule(loadStatusHistory)">StatusHistory</a></li>
 
                                        	<li class=""><a href=".sparesHistory" data-toggle="tab"
-                                       	ng-click="loadAssetSpares()">Spares</a></li>
+                                       	ng-click="loadSubModule(loadAssetSpares)">Spares</a></li>
 
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
@@ -355,7 +355,7 @@
 
                                                             <div class="QrcodeCon" ng-show="qr_img">
 
-                                                                <img src="{{qr_img}}" width="50%">
+                                                                <img ng-src="{{qr_img}}" width="50%">
 
                                                             </div>
 
@@ -770,8 +770,8 @@
                                                              </a>
                                                            </div>
 
-                                                           <a href="#"  ng-click="">
-                                                               <img src="assets/img/{{uploadFile.extension}}.png" alt="docs"/>
+                                                           <a href="javascript:void(0);" >
+                                                               <img ng-src="assets/img/{{uploadFile.extension}}.png" alt="docs"/>
                                                            </a>
                                                            <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
                                                            <div  ng-if="uploadFile.id == download">
@@ -780,11 +780,24 @@
                                                        </div>
 
                                                    </div>
-                                                    <div class="row docsRow txt-align-center" ng-if="!fileCount"  >
+                                                    <!--<div class="row docsRow txt-align-center" ng-if="!fileCount"  >
 
                                                          <h4>No Documents</h4>
 
-                                                     </div>
+                                                     </div>-->
+                                                       <div class="txt-align-center LoaderCon"  ng-show="assetsFileLoader">
+
+                                                           <div class="pad-TB-30">
+                                                               <div loader-css="ball-pulse"></div>
+                                                           </div>
+
+                                                       </div>
+
+                                                       <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noFile">
+
+                                                           <h4>No Documents</h4>
+
+                                                       </div>
 
                                                </div>
 
@@ -808,9 +821,9 @@
                                                                 <i class="material-icons">cloud_download</i>
                                                               </a>
                                                             </div>
-                                                            <a href="#" ng-click="">
+                                                            <a href="javascript:void(0);">
                                                                 <!-- <img src="D:\asset\uploads\site\{{uploadPhoto.id}}\{{uploadPhoto.file}}" alt="docs" /> -->
-                                                                <img src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" />
+                                                                <img ng-src="assets/img/{{uploadPhoto.extension}}.png" alt="photo" />
                                                             </a>
                                                             <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadPhoto.title}}</p>
                                                             <div ng-if="uploadPhoto.id == download">
@@ -820,7 +833,20 @@
 
                                                     </div>
 
-                                                    <div class="row docsRow txt-align-center" ng-if="!photoCount" >
+                                                    <!--<div class="row docsRow txt-align-center" ng-if="!photoCount" >
+
+                                                       <h4>No Images</h4>
+
+                                                   </div>-->
+                                                   <div class="txt-align-center LoaderCon"  ng-show="assetsPhotoLoader">
+
+                                                       <div class="pad-TB-30">
+                                                           <div loader-css="ball-pulse"></div>
+                                                       </div>
+
+                                                   </div>
+
+                                                   <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noPhoto">
 
                                                        <h4>No Images</h4>
 
@@ -945,7 +971,7 @@
 
                                                                       <tbody>
                                                                       <tr ng-show="assetReadings" ng-repeat="reading in assetReadings">
-                                                                          <td> <a  ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
+                                                                          <td> <a  href="javascript:void(0);" ng-click="viewAssetReading(reading.id)"><span class="label label-warning">{{reading.name}}</span></a></td>
                                                                           <td>{{reading.createdDate | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
                                                                           <td ng-show="reading.initialValue > 0">{{reading.initialValue}}&nbsp; {{reading.uom}}</td>
                                                                           <td ng-show="reading.value > 0">{{reading.value}}&nbsp; {{reading.uom}}</td>
@@ -1093,7 +1119,7 @@
                                                             </thead>
 
                                                             <tbody>
-                                                            <tr ng-repeat="spares in sparesHistories">
+                                                            <tr ng-repeat="spares in assetSparesLists">
                                                             	<td>{{spares.jobId}}</td>
                                                             	<td>{{spares.jobTitle}}</td>
                                                                 <td>{{spares.materialName}}</td>
@@ -1108,7 +1134,7 @@
                                                                 </td> -->
                                                             </tr>
                                                             <tr>
-                                                               <td colspan="7" align="center" ng-show="!sparesHistories.length">No Spares History Found</td>
+                                                               <td colspan="8" align="center" ng-show="!assetSparesLists.length">No Spares History Found</td>
                                                             </tr>
 
                                                             </tbody>
@@ -1116,11 +1142,11 @@
 
                                                     </div>
 
-                                            <!-- Pagination directive start -->
+                                             <!--Pagination directive start-->
 
-                                            <!-- <pagination-new></pagination-new> -->
+                                             <pagination-new></pagination-new>
 
-                                            <!-- Pagination directive end -->
+                                             <!--Pagination directive end-->
 
                                        </div>
 

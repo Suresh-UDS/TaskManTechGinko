@@ -7,7 +7,7 @@ angular.module('timeSheetApp')
 				ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
 				$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
 				ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter,
-				JobComponent,$interval,getLocalStorage) {
+				JobComponent,InventoryTransactionComponent,$interval,getLocalStorage) {
 
 			$rootScope.loadingStop();
 			$rootScope.loginView = false;
@@ -61,6 +61,7 @@ angular.module('timeSheetApp')
 			$scope.searchCreatedDateSer =null;
 			$scope.ppmSearchCriteria = {};
 			$scope.amcSearchCriteria = {};
+			$scope.assetSparesSearchCriteria = {};
 			$scope.redSearchCriteria = {};
 			$scope.ppmFrom = null;
 			$scope.ppmTo = null;
@@ -2287,19 +2288,13 @@ angular.module('timeSheetApp')
 				$scope.loadingStart();
 				var docId = $scope.deleteDocId;
 				AssetComponent.deleteDoc(docId).then(function(data){
-
 					//console.log('Deleted data',data);
-
 					$scope.showNotifications('top','center','success','Document has been deleted successfully!!');
-					if($scope.docType == 'file'){
-						$scope.getAllUploadedFiles();
-					}else if($scope.docType == 'photo'){
-						$scope.getAllUploadedPhotos();
-					}
-
-
-					//$scope.loadingStop();
+                    $scope.loadingStop();
+                    $scope.getAllUploadedFiles();
+					$scope.getAllUploadedPhotos();
 				}).catch(function(){
+                    $scope.showNotifications('top','center','warning','Unable to delete Document!!');
 					$scope.loadingStop();
 				});
 			}
@@ -2571,7 +2566,9 @@ angular.module('timeSheetApp')
 					$scope.loadStatusHistory();
 				}else if($scope.searchModule == "Ticket"){
 					$scope.loadTicket();
-				}else{
+                }else if($scope.searchModule == "assetSpares"){
+                    $scope.loadAssetSpares();
+                }else{
 					$scope.search();
 				}
 
@@ -2878,10 +2875,11 @@ angular.module('timeSheetApp')
 			};
 
 
-
+            $scope.assetsFileLoader=false;
+            $scope.noFile=true;
 			$scope.getAllUploadedFiles = function() {
 
-				$scope.loadingStart();
+				//$scope.loadingStart();
 
 				$scope.uploadObj.type = 'document';
 
@@ -2896,25 +2894,37 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.uploadObj.assetId = 0;
 				}
-
-
+                $scope.assetsFileLoader=true;
+                $scope.noFile=false;
+                $scope.uploadFiles = [];
 				AssetComponent.getAllUploadedFiles($scope.uploadObj).then(function(data){
-
-					$scope.uploadFiles = [];
 					$scope.uploadFiles=data;
-
-					$scope.fileCount = ($scope.uploadFiles).length;
+                    $scope.assetsFileLoader=false;
+					if($scope.uploadFiles){
+                        $scope.fileCount = ($scope.uploadFiles).length;
+                        if($scope.fileCount > 0){
+                            $scope.noFile=false;
+                        }else{
+                            $scope.noFile=true;
+                        }
+                    }else{
+                        $scope.noFile=true;
+                    }
 
 					//console.log("-- Upload files --" , $scope.uploadFiles);
-					$scope.loadingStop();
+					//$scope.loadingStop();
 				}).catch(function(response){
-					$scope.loadingStop();
+					//$scope.loadingStop();
+                    $scope.assetsFileLoader=false;
+                    $scope.noFile=true;
 				});
 			}
 
+            $scope.assetsPhotoLoader=false;
+            $scope.noPhoto=true;
 			$scope.getAllUploadedPhotos = function() {
 
-				$scope.loadingStart();
+				//$scope.loadingStart();
 
 				$scope.photoObj.type = 'image';
 
@@ -2928,17 +2938,28 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.photoObj.assetId = 0;
 				}
-
+                $scope.assetsPhotoLoader=true;
+                $scope.noPhoto=false;
+                $scope.uploadAssetPhotos = [];
 				AssetComponent.getAllUploadedPhotos($scope.photoObj).then(function(data){
-
-					$scope.uploadAssetPhotos = [];
 					$scope.uploadAssetPhotos=data;
-					$scope.photoCount = ($scope.uploadAssetPhotos).length;
-
+                    $scope.assetsPhotoLoader=false;
+                    if($scope.uploadAssetPhotos){
+                        $scope.photoCount = ($scope.uploadAssetPhotos).length;
+                        if($scope.photoCount > 0){
+                            $scope.noPhoto=false;
+                        }else{
+                            $scope.noPhoto=true;
+                        }
+                    }else{
+                        $scope.noPhoto=true;
+                    }
 					//console.log("-- Uploaded Photos --",$scope.uploadAssetPhotos);
-					$scope.loadingStop();
+					//$scope.loadingStop();
 				}).catch(function(response){
-					$scope.loadingStop();
+                    $scope.noPhoto=false;
+                    $scope.assetsPhotoLoader=false;
+					//$scope.loadingStop();
 				});
 			}
 
@@ -2982,9 +3003,11 @@ angular.module('timeSheetApp')
 							}
 							$scope.uploadAsset  ={};
 							$scope.selectedClientFile = "";
+                            $scope.showNotifications('top','center','success','File has been uploaded Successfully!!');
 
 						},function(err){
 							$scope.loadingStop();
+                            $scope.showNotifications('top','center','danger','Unable to  upload file..');
 							//console.log('Import error');
 							//console.log(err);
 						}).catch(function(response){
@@ -3039,14 +3062,16 @@ angular.module('timeSheetApp')
 
 							$scope.uploadAssetPhoto  ={};
 							$scope.selectedPhotoFile = "";
+                            $scope.showNotifications('top','center','success','Photo has been uploaded Successfully!!');
 
 						},function(err){
 							$scope.loadingStop();
+                            $scope.showNotifications('top','center','danger','Unable to  upload Photo..');
 							//console.log('Import error');
 							//console.log(err);
 						}).catch(function(response){
 							$scope.loadingStop();
-							$scope.showNotifications('top','center','danger','Unable to  upload file..');
+							$scope.showNotifications('top','center','danger','Unable to  upload Photo..');
 						});
 					} else {
 						//console.log('select a file');
@@ -3651,6 +3676,41 @@ angular.module('timeSheetApp')
 				});
 
 			}
+
+            $scope.loadAssetSpares = function() {
+                $scope.loadingStart();
+                $rootScope.loadPageTop();
+                var assetSparesPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                if(!$scope.assetSparesSearchCriteria) {
+                    var assetSparesSearchCriteria = {
+                        currPage : assetSparesPageVal
+                    };
+                    $scope.assetSparesSearchCriteria = assetSparesSearchCriteria;
+                }
+
+                $scope.assetSparesSearchCriteria.currPage = assetSparesPageVal;
+                $scope.searchModule = "assetSpares";
+                $scope.assetSparesSearchCriteria.assetId = $stateParams.id;
+                $scope.assetSparesSearchCriteria.sort = $scope.pageSort;
+                $scope.assetSparesLists = "";
+                console.log('AssetSpares search criteria',$scope.assetSparesSearchCriteria);
+                AssetComponent.getAssetMaterial($scope.assetSparesSearchCriteria).then(function(data){
+                    $scope.loadingStop();
+                    console.log(data);
+                    $scope.assetSparesLists = data.transactions;
+
+                    /*
+                     ** Call pagination  main function **
+                     */
+
+                    $scope.pager = {};
+                    $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                    $scope.totalCountPages = data.totalCount;
+                }).catch(function(){
+                    $scope.loadingStop();
+                    $scope.showNotifications('top','center','danger','Unable to loading Asset Spares. Please try again later..');
+                });
+            }
 
 			$scope.loadStatus = function() {
 				AssetComponent.getStatus().then(function(data) {

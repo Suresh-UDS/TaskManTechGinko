@@ -21,8 +21,10 @@
 
                 <div class="">
                     <div class="">
-                        <label><span class="red-star">*</span> Mandatory Field</label>
                         <div class="form-container table-container">
+                            <div>
+                                <label><span class="red-star">*</span> Mandatory Field</label>
+                            </div>
                            <!--  ng-show="!success" ng-submit="saveAsset()" -->
                             <!-- <form name="form" role="form" novalidate
                                    class="form-horizontal"> -->
@@ -1700,7 +1702,7 @@
                                                                                    <!--  <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                                         <i class="material-icons">add</i>
                                                                                     </a> -->
-                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                                                    <a  href ="javascript:void(0);" has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                 </div>
                                                                                 <!-- <div class="clear"></div>
                                                                                 <div class="collapse" id="addUnits">
@@ -2170,11 +2172,24 @@
                                                                </div>
 
                                                            </div>
-                                                           <div class="row docsRow txt-align-center" ng-if="!fileCount" >
+                                                           <!--<div class="row docsRow txt-align-center" ng-if="!fileCount" >
 
                                                                <h4>No Documents</h4>
 
-                                                           </div>
+                                                           </div>-->
+                                                            <div class="txt-align-center LoaderCon"  ng-show="assetsFileLoader">
+
+                                                                <div class="pad-TB-30">
+                                                                    <div loader-css="ball-pulse"></div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noFile">
+
+                                                                <h4>No Documents</h4>
+
+                                                            </div>
 
                                                         </div>
 
@@ -2211,11 +2226,24 @@
                                                                 </div>
 
                                                             </div>
-                                                            <div class="row docsRow txt-align-center" ng-if="!photoCount" >
+                                                            <!--<div class="row docsRow txt-align-center" ng-if="!photoCount" >
 
                                                                <h4>No Images</h4>
 
-                                                           </div>
+                                                           </div>-->
+                                                            <div class="txt-align-center LoaderCon"  ng-show="assetsPhotoLoader">
+
+                                                                <div class="pad-TB-30">
+                                                                    <div loader-css="ball-pulse"></div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noPhoto">
+
+                                                                <h4>No Images</h4>
+
+                                                            </div>
 
                                                         </div>
 
@@ -2509,7 +2537,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 pull-left">
-                    <a class="btn btn-success"  ng-click="addProvider()" data-dismiss="modal">Add</a>
+                    <a href ="javascript:void(0);" class="btn btn-success"  ng-click="addProvider()" data-dismiss="modal">Add</a>
                 </div>
                 <div class="clear"></div>
                 </div>
