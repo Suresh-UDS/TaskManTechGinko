@@ -42,7 +42,7 @@ spring:
         host: smtp.office365.com
         port: 587
         username: taskmanfms@uds.in
-        password: Ta$k@1234
+        password: Nov@2018
         properties:
             mail.transport.protocol: smtp
             mail.smtp.auth: true
@@ -139,18 +139,24 @@ email:
             title: Completed job report
 reports:
     job-report:
-        url: http://13.232.248.92:8088/#/job-reports
+        url: http://172.31.24.22:8088/#/job-reports
     attendance-report:
-        url: http://13.232.248.92:8088/#/attendance-reports
+        url: http://172.31.24.22:8088/#/attendance-reports
+    feedback-report:
+        url: http://172.31.24.22:8088/#/feedbacksList
     asset-report:
-        url: http://13.232.248.92:8088/#/asset-report
+        url: http://172.31.24.22:8088/#/asset-report
     vendor-report:
-        url: http://13.232.248.92:8088/#/vendor-report
+        url: http://172.31.24.22:8088/#/vendor-report
+    pr-report:
+        url: http://172.31.24.22:8088/#/pr-report
+    inventory-report:
+        url: http://172.31.24.22:8088/#/inventory-report
 
 url:
-    ticket-view: http://13.232.248.92:8088/#/view-ticket/
-    quotation-view: http://13.232.248.92:8088/#/view-quotation/
-    job-view: http://13.232.248.92:8088/#/view-job/
+    ticket-view: http://172.31.24.22:8088/#/view-ticket/
+    quotation-view: http://172.31.24.22:8088/#/view-quotation/
+    job-view: http://172.31.24.22:8088/#/view-job/
 
 #facedetection:
 #    api:
@@ -183,10 +189,10 @@ pushService:
 
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
-   s3-secretKey: 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
-   s3-bucketName: fms-taskman
-   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
+   s3-accessKey: AKIAJU5MBC3AQTMC5KKQ
+   s3-secretKey: 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
+   s3-bucketName: zappyweb
+   s3-cloudfront-url: http://d17qereo8sgfqj.cloudfront.net/
    s3-bucketEnv: dev/
    s3-asset-path: assets/
    s3-qrcode-path: qrcode/
