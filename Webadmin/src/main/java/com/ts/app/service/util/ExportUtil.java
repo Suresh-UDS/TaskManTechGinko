@@ -2436,13 +2436,13 @@ public class ExportUtil {
                     }else{
                         dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() : "");
                     }
-					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
+					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToZonedDateTimeString(transaction.getAssignedOn()) : "");
                     if(StringUtils.isNotBlank(transaction.getClosedByLastName())){
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
                     }else{
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName()  : "");
                     }
-					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
+					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToZonedDateTimeString(transaction.getClosedOn()) : "");
 					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getRemarks())? transaction.getRemarks():"");
 					dataRow.createCell(15).setCellValue(StringUtils.isNotBlank(transaction.getComments())? transaction.getComments():"");
 				}
