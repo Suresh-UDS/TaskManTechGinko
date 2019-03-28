@@ -21,6 +21,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.print.attribute.standard.PrinterState;
+
+import java.io.Console;
 import java.util.*;
 
 /**
@@ -809,6 +812,7 @@ public class AssetManagementService extends AbstractService {
 	 * @return
 	 */
 	public List<AssetScheduleEventDTO> getAssetPPMScheduleCalendar(long assetId, Date startDate, Date endDate) {
+
 		List<AssetScheduleEventDTO> assetPPMScheduleEventDTOs = null;
 		String type = MaintenanceType.valueOf("PPM").getValue();
 		List<AssetPPMSchedule> assetPpmSchedules = assetPpmScheduleRepository.findAssetPPMScheduleByAssetId(assetId, type);
@@ -838,7 +842,11 @@ public class AssetManagementService extends AbstractService {
 				if(schStartCal.after(currCal)) {
 					currCal.setTime(schStartCal.getTime());
 				}
+				
+				int i=0;
+				
 				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(schEndCal) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
+									
 					AssetScheduleEventDTO assetPPMScheduleEvent = new AssetScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
@@ -849,10 +857,13 @@ public class AssetManagementService extends AbstractService {
 					assetPPMScheduleEvent.setFrequency(ppmSchedule.getFrequency());
 					assetPPMScheduleEvent.setFrequencyDuration(ppmSchedule.getFrequencyDuration());
 					assetPPMScheduleEvent.setFrequencyPrefix(ppmSchedule.getFrequencyPrefix());
-					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
+//					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
 					assetPPMScheduleEvent.setStart(currCal.getTime());
 					assetPPMScheduleEvent.setAllDay(true);
-					assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
+					if(currCal.get(Calendar.WEEK_OF_YEAR)>i)
+					    assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
+					else
+						assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR)+i);	
 					assetPPMScheduleEvent.setMaintenanceType(MaintenanceType.PPM.name());
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
 					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());

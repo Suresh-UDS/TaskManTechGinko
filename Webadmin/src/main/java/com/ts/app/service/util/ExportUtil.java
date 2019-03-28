@@ -1527,7 +1527,7 @@ public class ExportUtil {
 			log.error("Error while opening the attendance template file",e1);
 		}
 
-		int rowNum = 3;
+		int rowNum = 4;
 
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 		long prevAssetIdInLoop = 0;
