@@ -348,12 +348,25 @@ angular.module('timeSheetApp')
         //sites
         $scope.siteSpin = false;
         $scope.loadSites = function () {
+            $scope.sites = [];
+            $scope.selectedSite = null;
+            $scope.selectedEmployee = null;
+            $scope.employees = [];
+            $scope.materials = [];
+            $scope.materialItems = [];
+            $scope.selectedItemName = null;
+            $scope.selectedStoreStock = null;
+            $scope.selectedQuantity = "";
 
         	console.log("selected project - " + JSON.stringify($scope.selectedProject));
         	if($scope.selectedProject) {
                 $scope.siteSpin = true;
             	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
-                    $scope.sites = data;
+                    if(data){
+                        $scope.sites = data;
+                    }else{
+                        $scope.sites = [];
+                    }
                     $scope.siteSpin = false;
                     // alert(JSON.stringify($scope.sites));
                 });
@@ -387,13 +400,23 @@ angular.module('timeSheetApp')
         //Employees
         $scope.empSpin = false;
         $scope.loadEmployees = function () {
+            $scope.selectedEmployee = null;
+            $scope.employees = [];
+            $scope.materials = [];
+            $scope.materialItems = [];
+            $scope.selectedItemName = null;
+            $scope.selectedStoreStock = null;
+            $scope.selectedQuantity = "";
             if($scope.selectedSite && $scope.selectedSite.id){
-                $scope.employees = "";
                 $scope.empSpin = true;
                var empParam = {siteId: $scope.selectedSite.id, list: true};
                EmployeeComponent.search(empParam).then(function (data) {
                    console.log(data);
-                   $scope.employees = data.transactions;
+                   if(data.transactions){
+                       $scope.employees = data.transactions;
+                   }else{
+                       $scope.employees = [];
+                   }
                    $scope.empSpin = false;
 
                });
@@ -403,6 +426,7 @@ angular.module('timeSheetApp')
         //Material
         $scope.matSpin = false;
         $scope.loadMaterials = function() {
+            $scope.materials = [];
         	$scope.searchLoadMaterials = {};
         	if($scope.selectedSite && $scope.selectedProject) {
                 $scope.matSpin = true;

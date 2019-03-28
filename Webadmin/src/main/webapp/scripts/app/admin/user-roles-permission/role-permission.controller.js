@@ -36,19 +36,19 @@ angular.module('timeSheetApp')
 
 	$scope.selectedPermissions = [];
 
-	$scope.permissions = {
-
-	};
+	$scope.permissions = {};
 
 	$scope.showNotifications= function(position,alignment,color,msg){
         demo.showNotification(position,alignment,color,msg);
     }
 
 	$scope.selectRole = function() {
+        $scope.selectedPermissions = [];
 		console.log('selected role - '+ $scope.selectedUserRole);
 		if(!$scope.selectedUserRole){
              $scope.loadModuleActions();
         }else{
+            $scope.permissions ={};
              $scope.loadPermissions();
         }
 
@@ -272,13 +272,11 @@ angular.module('timeSheetApp')
 		}
 		console.log($scope.searchCriteria);
 		$scope.rolePermissionLoadingStart();
+        $scope.permissions = "";
 		RolePermissionComponent.search($scope.searchCriteria).then(function (data) {
 			$scope.permissions = data;
-
 			console.log('permissions - ' + JSON.stringify($scope.permissions));
-
 			if($scope.moduleActions && $scope.permissions) {
-
 				var permAppModules = $scope.permissions.applicationModules;
                 if($scope.permissions.applicationModules != 0){
                     for(var i=0; i < $scope.moduleActions.length; i++) {

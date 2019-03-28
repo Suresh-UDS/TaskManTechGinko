@@ -270,6 +270,15 @@ angular.module('timeSheetApp')
         };
 
     	$scope.loadAllSites = function () {
+            $scope.projectSite=null;
+            $scope.sites = "";
+            $scope.materialItems = [];
+            $scope.selectedItems = [];
+            $scope.materialIndents = [];
+            $scope.selectedIndent = null;
+            $scope.purchaseItems = [];
+            $scope.selectedPurchaseReq = null;
+            $scope.allItemsSelected = false;
     		if($scope.project) {
     			ProjectComponent.findSites($scope.project.id).then(function (data) {
                     $scope.searchSite = null;
@@ -319,17 +328,17 @@ angular.module('timeSheetApp')
 
 
     	$scope.loadItems = function() {
-
+            console.log($scope.selectedIndent);
+            $scope.materialItems = [];
+            $scope.selectedItems = [];
+            $scope.allItemsSelected = false;
             if(!$scope.projectSite){
                 alert('Please select site before select Indent Req.No...!!!');
                 return false;
             }
-    		console.log($scope.selectedIndent);
-    		$scope.materialItems = [];
-    		$scope.selectedItems = [];
-
     		if($scope.selectedIndent) {
-                $scope.materialItems = "";
+                $scope.loadingStart();
+                $scope.materialItems = [];
     			IndentComponent.findById($scope.selectedIndent.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
@@ -348,16 +357,16 @@ angular.module('timeSheetApp')
     	}
 
     	$scope.loadPurchaseItems = function() {
+            console.log($scope.selectedPurchaseReq);
+            $scope.materialItems = [];
+            $scope.selectedItems = [];
+            $scope.allItemsSelected = false;
             if(!$scope.projectSite){
     	        alert('Please select site before select Purchase Req.No...!!!');
     	        return false;
             }
-    		console.log($scope.selectedPurchaseReq);
-    		$scope.materialItems = [];
-    		$scope.selectedItems = [];
-
     		if($scope.selectedPurchaseReq) {
-                $scope.materialItems = "";
+                $scope.materialItems = [];
     			PurchaseComponent.findById($scope.selectedPurchaseReq.id).then(function(data) {
     				console.log(data);
     				$scope.materialItems = data.items;
@@ -367,6 +376,11 @@ angular.module('timeSheetApp')
         $scope.purchaseItemsSpin = false;
     	$scope.loadPurchases = function() {
     		console.log($scope.selectedPurchaseReq);
+            $scope.purchaseItems = [];
+            $scope.selectedPurchaseReq = null;
+            $scope.materialItems = [];
+            $scope.selectedItems = [];
+            $scope.allItemsSelected = false;
     		if($scope.projectSite) {
                 $scope.purchaseItemsSpin = true;
     			console.log($scope.projectSite);
@@ -375,13 +389,22 @@ angular.module('timeSheetApp')
     			$scope.searchLoadPurchases.requestStatus = "APPROVED";
     			PurchaseComponent.search($scope.searchLoadPurchases).then(function(data) {
     				console.log(data);
-    				$scope.purchaseItems = data.transactions;
+    				if(data.transactions){
+                        $scope.purchaseItems = data.transactions;
+                    }else{
+                        $scope.purchaseItems = [];
+                    }
                     $scope.purchaseItemsSpin = false;
     			});
     		}
     	}
         $scope.materialIndentsSpin = false;
     	$scope.loadIndents = function() {
+            $scope.materialIndents = [];
+            $scope.selectedIndent = null;
+            $scope.materialItems = [];
+            $scope.selectedItems = [];
+            $scope.allItemsSelected = false;
     		if($scope.projectSite) {
                 $scope.materialIndentsSpin = true;
     			console.log($scope.projectSite);
@@ -390,7 +413,11 @@ angular.module('timeSheetApp')
     			$scope.searchIndents.indentStatus = "PENDING";
     			IndentComponent.search($scope.searchIndents).then(function(data) {
     				console.log('indent>>>',data);
-    				$scope.materialIndents = data.transactions;
+    				if(data.transactions){
+                        $scope.materialIndents = data.transactions;
+                    }else{
+                        $scope.materialIndents = [];
+                    }
                     $scope.materialIndentsSpin = false;
     			});
     		}
@@ -491,44 +518,52 @@ angular.module('timeSheetApp')
         $scope.selectAll = function () {
 
             $scope.selectedItems = [];
-
-            // Loop through all the entities and set their isChecked property
-            for (var i = 0; i < $scope.materialItems.length; i++) {
+            if($scope.materialItems.length > 0){
+                // Loop through all the entities and set their isChecked property
+                for (var i = 0; i < $scope.materialItems.length; i++) {
 //            	$scope.materialItems[i].issuedQuantity = $scope.materialItems[i].pendingQuantity;
-                $scope.selectedItems.push($scope.materialItems[i]);
+                    $scope.selectedItems.push($scope.materialItems[i]);
 
-                $scope.materialItems[i].isChecked = $scope.allItemsSelected;
+                    $scope.materialItems[i].isChecked = $scope.allItemsSelected;
+                }
+
+                if(!$scope.allItemsSelected){
+                    $scope.selectedItems = [];
+                }
+            }else{
+                $scope.allItemsSelected= false;
             }
 
-            if(!$scope.allItemsSelected){
-                $scope.selectedItems = [];
-            }
         };
 
         $scope.selectedOne = function (material) {
-
-            if($scope.selectedItems.indexOf(material) <= -1){
+            if($scope.materialItems.length > 0){
+                if($scope.selectedItems.indexOf(material) <= -1){
 //            	material.issuedQuantity = material.pendingQuantity;
-            	$scope.selectedItems.push(material);
+                    $scope.selectedItems.push(material);
 
-            }else if($scope.selectedItems.indexOf(material) > -1){
+                }else if($scope.selectedItems.indexOf(material) > -1){
 
-                var remId =$scope.selectedItems.indexOf(material);
+                    var remId =$scope.selectedItems.indexOf(material);
 
-               $scope.selectedItems.splice(remId, 1);
-            }
-            // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
-
-            for (var i = 0; i <= $scope.materialItems.length; i++) {
-            	console.log($scope.materialItems[i]);
-                if (!$scope.materialItems[i].isChecked) {
-                    $scope.allItemsSelected = false;
-                    return;
+                    $scope.selectedItems.splice(remId, 1);
                 }
+                // If any entity is not checked, then uncheck the "allItemsSelected" checkbox
+
+                    for (var i = 0; i < $scope.materialItems.length; i++) {
+                        console.log($scope.materialItems[i]);
+                        if (!$scope.materialItems[i].isChecked) {
+                            $scope.allItemsSelected = false;
+                            return;
+                        }
+                    }
+
+                    //If not the check the "allItemsSelected" checkbox
+                    $scope.allItemsSelected = true;
+
             }
 
-            //If not the check the "allItemsSelected" checkbox
-            $scope.allItemsSelected = true;
+
         };
 
         $scope.validate = function(material, issuedQty) {   // 2
@@ -558,8 +593,8 @@ angular.module('timeSheetApp')
         $scope.changeType = function() {
         	$scope.selectedIndent = null;
         	$scope.selectedPurchaseReq = null;
-        	$scope.materialItems = [];
         	$scope.selectedItems = [];
+        	$scope.allItemsSelected = false;
         }
 
 
@@ -581,6 +616,8 @@ angular.module('timeSheetApp')
             }
             else if(text == 'save')
             {
+                /** @reatin - retaining scope value.**/
+                $rootScope.retain=1;
                 $scope.saveInventoryTrans();
             }
             else if(text == 'update')
@@ -596,6 +633,7 @@ angular.module('timeSheetApp')
 
         /* Save material Transaction */
     	$scope.saveInventoryTrans = function() {
+            $scope.saveLoad = true;
     		if($scope.project){
     			$scope.inventory.projectId = $scope.project.id;
     		}
@@ -641,12 +679,14 @@ angular.module('timeSheetApp')
 
     		InventoryTransactionComponent.create($scope.inventory).then(function(response) {
     			console.log(response);
+                $scope.saveLoad = false;
                 $scope.loadingStop();
                 $scope.inventory = "";
                 $scope.showNotifications('top','center','success','Material Transaction has been created!');
                 $location.path('/inventory-transaction-list');
     		}).catch(function (response) {
                 $scope.loadingStop();
+                $scope.saveLoad = false;
                 $scope.btnDisabled= false;
                 $scope.success = null;
                 console.log('Error - '+ response.data);
@@ -666,6 +706,7 @@ angular.module('timeSheetApp')
     	$scope.viewInventoryTrans = function(id) {
     	    if(id){
                 $scope.loadingStart();
+                $scope.saveLoad = false;
                 $scope.transactionViews = "";
                 InventoryTransactionComponent.findById(id).then(function(data) {
                     console.log(data);
@@ -714,6 +755,7 @@ angular.module('timeSheetApp')
 
     	/* Update Material transaction */
     	$scope.updateInventoryTrans = function () {
+            $scope.saveLoad = true;
             $scope.error = null;
             $scope.success =null;
             $scope.loadingStart();
@@ -728,18 +770,20 @@ angular.module('timeSheetApp')
             console.log('Inventory details ='+ JSON.stringify($scope.editInventory));
 
              InventoryTransactionComponent.update($scope.editInventoryTrans).then(function () {
+                 $scope.saveLoad = false;
                 $scope.loadingStop();
                 $scope.showNotifications('top','center','success','Material Transaction updated Successfully');
                 $location.path('/inventory-transaction-list');
             }).catch(function (response) {
+                 $scope.saveLoad = false;
                 $rootScope.loadingStop();
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-                    $scope.showNotifications('top','center','danger','Material already exist!!');
+                    $scope.showNotifications('top','center','danger','Material Transaction already exist!!');
                     $scope.errorProjectExists = 'ERROR';
                 } else {
-                    $scope.showNotifications('top','center','danger','Unable to update Material');
+                    $scope.showNotifications('top','center','danger','Unable to update Material Transaction');
                     $scope.error = 'ERROR';
                 }
             });;

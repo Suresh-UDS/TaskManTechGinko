@@ -23,7 +23,7 @@ public class TicketDTO extends BaseDTO {
     private long employeeId;
 
     private String employeeName;
-    
+
     private String employeeLastName;
 
     private String employeeEmpId;
@@ -49,21 +49,21 @@ public class TicketDTO extends BaseDTO {
     private long assignedToId;
 
     private String assignedToName;
-    
+
     private String assignedToLastName;
 
-    private ZonedDateTime assignedOn;
+    private Date assignedOn;
 
     private long closedById;
 
     private String closedByName;
-    
+
     private String closedByLastName;
 
-    private ZonedDateTime closedOn;
+    private Date closedOn;
 
     private String comments;
-    
+
     private String remarks;
 
     private String category;
@@ -71,15 +71,15 @@ public class TicketDTO extends BaseDTO {
     private String image;
 
     private MultipartFile imageFile;
-    
+
     private String url;
 
     private boolean pendingAtUDS;
 
     private boolean pendingAtClient;
-    
+
     private String assetTitle;
-    
+
     private long assetId;
 
     private String branch;
@@ -232,14 +232,6 @@ public class TicketDTO extends BaseDTO {
 		this.assignedToName = assignedToName;
 	}
 
-	public ZonedDateTime getAssignedOn() {
-		return assignedOn;
-	}
-
-	public void setAssignedOn(ZonedDateTime assignedOn) {
-		this.assignedOn = assignedOn;
-	}
-
 	public long getClosedById() {
 		return closedById;
 	}
@@ -256,14 +248,6 @@ public class TicketDTO extends BaseDTO {
 		this.closedByName = closedByName;
 	}
 
-	public ZonedDateTime getClosedOn() {
-		return closedOn;
-	}
-
-	public void setClosedOn(ZonedDateTime closedOn) {
-		this.closedOn = closedOn;
-	}
-
 	public String getComments() {
 		return comments;
 	}
@@ -271,8 +255,8 @@ public class TicketDTO extends BaseDTO {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
-	
+
+
 	public String getRemarks() {
 		return remarks;
 	}
@@ -417,5 +401,21 @@ public class TicketDTO extends BaseDTO {
     @Override
     public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Date getAssignedOn() {
+        return assignedOn;
+    }
+
+    public void setAssignedOn(Date assignedOn) {
+        this.assignedOn = assignedOn;
+    }
+
+    public Date getClosedOn() {
+        return closedOn;
+    }
+
+    public void setClosedOn(Date closedOn) {
+        this.closedOn = closedOn;
     }
 }

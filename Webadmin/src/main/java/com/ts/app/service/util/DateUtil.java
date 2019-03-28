@@ -12,12 +12,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class DateUtil {
-	
+
 	private final static Logger log = LoggerFactory.getLogger(DateUtil.class);
-	
+
 	public static Date convertUTCToIST(Timestamp utcDate) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(utcDate.getTime());
@@ -39,7 +40,7 @@ public class DateUtil {
 		}
         return result;
 	}
-	
+
 	public static String formatUTCToIST(Calendar utcDate) {
         String strdate = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -49,15 +50,15 @@ public class DateUtil {
         strdate = formatter.format(utcDate.getTime());
         return strdate;
 	}
-	
+
 	public static java.sql.Date convertToSQLDate(Date utilDate) {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		cal.setTime(utilDate);
 		java.sql.Date sqlDate = new java.sql.Date(cal.getTimeInMillis());
 		return sqlDate;
 	}
-	
-	
+
+
 	public static Date convertToDateTime(String date, String time) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateTime = null;
@@ -66,11 +67,11 @@ public class DateUtil {
 		} catch (ParseException e) {
 			log.error("Error while parsing date and time - date -"+ date +", time -"+time,e);
 		}
-        
+
         return dateTime;
 
 	}
-	
+
 	public static Date convertToDateTime(String date) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateTime = null;
@@ -79,31 +80,31 @@ public class DateUtil {
 		} catch (ParseException e) {
 			log.error("Error while parsing date and time - date -"+ date ,e);
 		}
-        
+
         return dateTime;
 
 	}
-	
+
 	public static Timestamp convertToTimestamp(Date date) {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		cal.setTime(date);
         Timestamp ts = new Timestamp(cal.getTimeInMillis());
-        		
+
         return ts;
 
 	}
 
-	
+
 	public static Date convertToDateTime(Date date, Date time) {
         DateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         String strDate = dtFormat.format(date);
         String strtime = timeFormat.format(time);
-        
+
         return convertToDateTime(strDate, strtime);
 
 	}
-	
+
 	public static String formatToDateString(Date date) {
 		if(date != null) {
 	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
@@ -112,7 +113,7 @@ public class DateUtil {
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 	public static String formatToDateTimeString(Date date) {
 		if(date != null) {
 	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
@@ -121,21 +122,33 @@ public class DateUtil {
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 	public static String formatToZonedDateTimeString(ZonedDateTime zonedDateTime) {
 		if(zonedDateTime != null) {
-	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
-	        String strDate = dtFormat.format(zonedDateTime);
-	        return strDate;
+		    try{
+                DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm a");
+//                String strDate = dtFormat.format(zonedDateTime);
+                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", new Locale("en","IN"));
+
+                String inputText = "2012-11-17T00:00:00.000-05:00";
+                Date date = inputFormat.parse(zonedDateTime.toString());
+                String outputText = dtFormat.format(date);
+                return outputText;
+
+            }catch (Exception e){
+		        log.debug("Error in converting - "+e);
+		        return StringUtils.EMPTY;
+            }
+
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 	public static ZonedDateTime convertToZDT(Date date) {
 		ZonedDateTime zdt = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.of("Asia/Kolkata"));
 		return zdt;
 	}
-	
+
 	public static String formatTo24HourDateTimeString(Date date) {
 		if(date != null) {
 	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
@@ -144,7 +157,7 @@ public class DateUtil {
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 	public static Date parseToDateTime(String time) {
 		if(org.apache.commons.lang3.StringUtils.isNotEmpty(time)) {
 	        DateFormat dtFormat = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
@@ -158,14 +171,14 @@ public class DateUtil {
 		}
 		return null;
 	}
-	
+
 	public static long getDiff(Calendar startDate, Calendar endDate) {
 		long millisecs = endDate.getTimeInMillis() - startDate.getTimeInMillis();
 		long secs = millisecs / 1000;
 		long mins = (secs / 60);
 		return mins;
 	}
-	
+
 	public static void main(String arg[]) {
 		String dateValue = "Thu Jul 19 09:25:00 IST 2018";
 		Date d = parseToDateTime(dateValue);

@@ -1,9 +1,11 @@
 package com.ts.app.service;
 
-import com.ts.app.domain.*;
-import com.ts.app.repository.*;
-import com.ts.app.service.util.*;
-import com.ts.app.web.rest.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +17,46 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.AssetGroup;
+import com.ts.app.domain.AssetParameterReading;
+import com.ts.app.domain.AssetStatusHistoryDTO;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeProjectSite;
+import com.ts.app.domain.Material;
+import com.ts.app.domain.MaterialItemGroup;
+import com.ts.app.domain.MaterialTransaction;
+import com.ts.app.domain.MaterialUOMType;
+import com.ts.app.domain.User;
+import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.InventoryRepository;
+import com.ts.app.repository.InventorySpecification;
+import com.ts.app.repository.InventoryTransactionRepository;
+import com.ts.app.repository.ManufacturerRepository;
+import com.ts.app.repository.MaterialItemGroupRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SiteRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.service.util.DateUtil;
+import com.ts.app.service.util.ExportUtil;
+import com.ts.app.service.util.ImportUtil;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.service.util.PagingUtil;
+import com.ts.app.service.util.ReportUtil;
+import com.ts.app.web.rest.dto.AssetParameterReadingDTO;
+import com.ts.app.web.rest.dto.AssetgroupDTO;
+import com.ts.app.web.rest.dto.BaseDTO;
+import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ImportResult;
+import com.ts.app.web.rest.dto.MaterialDTO;
+import com.ts.app.web.rest.dto.MaterialItemGroupDTO;
+import com.ts.app.web.rest.dto.MaterialTransactionDTO;
+import com.ts.app.web.rest.dto.SearchCriteria;
+import com.ts.app.web.rest.dto.SearchResult;
 
 @Service
 @Transactional
-public class InventoryManagementService extends AbstractService {
+public class InventoryManagementService extends AbstractService{
 
 	private final Logger log = LoggerFactory.getLogger(InventoryManagementService.class);
 
@@ -78,12 +113,22 @@ public class InventoryManagementService extends AbstractService {
 			}
 		}
 
-		materialEntity.setActive(Material.ACTIVE_YES);
-		materialEntity.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
-		materialEntity = inventRepository.save(materialEntity);
-		log.debug("Save object of Inventory: {}" +materialEntity);
-		materialDTO = mapperUtil.toModel(materialEntity, MaterialDTO.class);
-		return materialDTO;
+		if(!StringUtils.isEmpty(materialDTO.getItemCode())) {
+            List<Material> itemCodeExists = inventRepository.findByItemCode(materialDTO.getItemCode());
+            if(CollectionUtils.isNotEmpty(itemCodeExists)) {
+                materialDTO.setErrorMessage("Already same item code exists");
+                materialDTO.setErrorStatus(true);
+                materialDTO.setStatus("400");
+            } else {
+                materialEntity.setActive(Material.ACTIVE_YES);
+                materialEntity.setUom(MaterialUOMType.valueOf(materialDTO.getUom()).getValue());
+                materialEntity = inventRepository.save(materialEntity);
+                log.debug("Save object of Inventory: {}" +materialEntity);
+                materialDTO = mapperUtil.toModel(materialEntity, MaterialDTO.class);
+            }
+        }
+
+        return materialDTO;
 	}
 
 	public MaterialDTO getMaterial(long id) {
@@ -305,7 +350,7 @@ public class InventoryManagementService extends AbstractService {
 	}
 
 	private void buildSearchResultTransax(SearchCriteria searchCriteria, Page<MaterialTransaction> page,
-                                          List<MaterialTransactionDTO> transactions, SearchResult<MaterialTransactionDTO> result) {
+		List<MaterialTransactionDTO> transactions, SearchResult<MaterialTransactionDTO> result) {
 	// TODO Auto-generated method stub
 		if (page != null) {
 			result.setTotalPages(page.getTotalPages());

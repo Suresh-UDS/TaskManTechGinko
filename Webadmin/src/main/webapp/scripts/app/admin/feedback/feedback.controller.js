@@ -114,56 +114,57 @@ angular.module('timeSheetApp')
 	};
 
 	$('#dateFilterFrom').on('dp.change', function(e){
-		$scope.selectedFromDateSer =new Date(e.date._d);
-		$scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-		$scope.selectedFromDateSer.setHours(0,0,0,0);
-		if($scope.selectedToDateSer){
-			$scope.selectedToDateSer.setHours(0,0,0,0);
-		}
 
+            $scope.selectedFromDateSer =new Date(e.date._d);
+            $scope.selectedFromDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedFromDateSer.setHours(0,0,0,0);
+            if($scope.selectedToDateSer){
+                $scope.selectedToDateSer.setHours(0,0,0,0);
+            }
+            if($scope.selectedFromDateSer && $scope.selectedToDateSer){
+                if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
+                    $scope.fromErrMsg = 'From date cannot be greater than To date';
 
-		if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
-			$scope.fromErrMsg = 'From date cannot be greater than To date';
+                    alert($scope.fromErrMsg);
 
-			alert($scope.fromErrMsg);
+                    $('input#dateFilterFrom').data('DateTimePicker').clear();
+                    $('input#dateFilterTo').data('DateTimePicker').clear();
+                    $scope.selectedFromDateSer = new Date();
+                    $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.selectedToDateSer = new Date();
+                    $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $('input#dateFilterFrom').val($scope.selectedFromDate);
+                    $('input#dateFilterTo').val($scope.selectedToDate);
 
-			$('input#dateFilterFrom').data('DateTimePicker').clear();
-			$('input#dateFilterTo').data('DateTimePicker').clear();
-			$scope.selectedFromDateSer = new Date();
-			$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-			$scope.selectedToDateSer = new Date();
-			$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-			$('input#dateFilterFrom').val($scope.selectedFromDate);
-			$('input#dateFilterTo').val($scope.selectedToDate);
-
-			return false;
-		}
-
+                    return false;
+                }
+            }
 	});
 	$('#dateFilterTo').on('dp.change', function(e){
-		$scope.selectedToDateSer =new Date(e.date._d);
-		$scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
-		$scope.selectedToDateSer.setHours(0,0,0,0);
-		if($scope.selectedFromDateSer){
-			$scope.selectedFromDateSer.setHours(0,0,0,0);
-		}
+            $scope.selectedToDateSer =new Date(e.date._d);
+            $scope.selectedToDate = $filter('date')(e.date._d, 'dd/MM/yyyy');
+            $scope.selectedToDateSer.setHours(0,0,0,0);
+            if($scope.selectedFromDateSer){
+                $scope.selectedFromDateSer.setHours(0,0,0,0);
+            }
+            if($scope.selectedFromDateSer && $scope.selectedToDateSer) {
+                if ($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer) {
+                    $scope.toErrMsg = 'To date cannot be lesser than From date';
 
-		if($scope.selectedFromDateSer > $scope.selectedToDateSer && $scope.selectedFromDateSer != $scope.selectedToDateSer){
-			$scope.toErrMsg = 'To date cannot be lesser than From date';
+                    alert($scope.toErrMsg);
 
-			alert($scope.toErrMsg);
+                    $('input#dateFilterFrom').data('DateTimePicker').clear();
+                    $('input#dateFilterTo').data('DateTimePicker').clear();
+                    $scope.selectedFromDateSer = new Date();
+                    $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.selectedToDateSer = new Date();
+                    $scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $('input#dateFilterFrom').val($scope.selectedFromDate);
+                    $('input#dateFilterTo').val($scope.selectedToDate);
 
-			$('input#dateFilterFrom').data('DateTimePicker').clear();
-			$('input#dateFilterTo').data('DateTimePicker').clear();
-			$scope.selectedFromDateSer = new Date();
-			$scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-			$scope.selectedToDateSer = new Date();
-			$scope.selectedToDate = $filter('date')(new Date(), 'dd/MM/yyyy');
-			$('input#dateFilterFrom').val($scope.selectedFromDate);
-			$('input#dateFilterTo').val($scope.selectedToDate);
-
-			return false;
-		}
+                    return false;
+                }
+            }
 
 	});
 

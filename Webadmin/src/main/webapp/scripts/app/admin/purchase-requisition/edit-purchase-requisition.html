@@ -18,7 +18,7 @@
                 </div>
             </div>
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="saveInventory()" confirm-on-exit>
+                  ng-submit="updatePurchaseReq()" confirm-on-exit>
 
 
                 <div class="card margin-TB-5 tablecard addFrom">
@@ -69,16 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group no-padding" >
-                                    <div class="dropdown">
-                                        <div class="form-group">
-                                            <label class="control-label">P.O Number </label>
-                               				<input type="text" name="refNumber" class="form-control" ng-model="purchaseReqObj.purchaseOrderNumber">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                         <h3 class="HeadingTxt">Requester Details</h3>
                         <div class="row">

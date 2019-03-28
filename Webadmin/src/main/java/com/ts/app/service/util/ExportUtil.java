@@ -519,6 +519,11 @@ public class ExportUtil {
 					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
 					String employeeLastName = StringUtils.isNotEmpty(attn.getEmployeeLastName())? attn.getEmployeeLastName(): "";
 					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +employeeLastName);
+					if(emp != null) {
+                        dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
+                    }else {
+                        dataRow.createCell(2).setCellValue("");
+                    }
 					dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
 					dataRow.createCell(3).setCellValue(attn.getSiteName());
 					dataRow.createCell(4).setCellValue("");
@@ -1948,7 +1953,7 @@ public class ExportUtil {
 
 	public String getExportStatus(String fileName) {
 		String status = null;
-		log.debug("statusMap -" + statusMap);
+//		log.debug("statusMap -" + statusMap);
 		if (statusMap != null) {
 			if (statusMap.containsKey(fileName)) {
 				status = statusMap.get(fileName);
@@ -2436,13 +2441,13 @@ public class ExportUtil {
                     }else{
                         dataRow.createCell(10).setCellValue(StringUtils.isNotBlank(transaction.getAssignedToName())  ? transaction.getAssignedToName() : "");
                     }
-					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToZonedDateTimeString(transaction.getAssignedOn()) : "");
+					dataRow.createCell(11).setCellValue(transaction.getAssignedOn() != null ? DateUtil.formatToDateTimeString(transaction.getAssignedOn()) : "");
                     if(StringUtils.isNotBlank(transaction.getClosedByLastName())){
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName() + " " + transaction.getClosedByLastName() : "");
                     }else{
                         dataRow.createCell(12).setCellValue(StringUtils.isNotBlank(transaction.getClosedByName()) ? transaction.getClosedByName()  : "");
                     }
-					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToZonedDateTimeString(transaction.getClosedOn()) : "");
+					dataRow.createCell(13).setCellValue(transaction.getClosedOn() != null ? DateUtil.formatToDateTimeString(transaction.getClosedOn()) : "");
 					dataRow.createCell(14).setCellValue(StringUtils.isNotBlank(transaction.getRemarks())? transaction.getRemarks():"");
 					dataRow.createCell(15).setCellValue(StringUtils.isNotBlank(transaction.getComments())? transaction.getComments():"");
 				}
