@@ -19,6 +19,9 @@ public interface InventoryRepository extends JpaRepository<Material, Long>, JpaS
 
 	@Query("SELECT m FROM Material m WHERE m.name = :materialName and m.active='Y'")
 	Material findByMaterialName(@Param("materialName") String materialName);
+
+	@Query("SELECT m FROM Material m WHERE m.itemCode = :materialItemCode and m.active='Y'")
+    List<Material> findByItemCode(@Param("materialItemCode") String materialItemCode);
 	
 
 }

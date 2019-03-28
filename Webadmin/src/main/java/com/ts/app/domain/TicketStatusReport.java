@@ -22,9 +22,9 @@ public class TicketStatusReport implements Serializable {
 
     private String status;
 
-    private ZonedDateTime assignedOn;
+    private Date assignedOn;
 
-    private ZonedDateTime closedOn;
+    private Date closedOn;
 
     private long projectId;
 
@@ -41,7 +41,7 @@ public class TicketStatusReport implements Serializable {
     public TicketStatusReport() {
     }
 
-    public TicketStatusReport(long ticketId, ZonedDateTime createdDate, long siteId, String category, String status, ZonedDateTime assignedOn, ZonedDateTime closedOn, long projectId, String region, String branch, long statusCount) {
+    public TicketStatusReport(long ticketId, ZonedDateTime createdDate, long siteId, String category, String status, Date assignedOn, Date closedOn, long projectId, String region, String branch, long statusCount) {
         this.ticketId = ticketId;
         this.createdDate = createdDate;
         if(this.createdDate != null) {
@@ -115,22 +115,6 @@ public class TicketStatusReport implements Serializable {
         this.status = status;
     }
 
-    public ZonedDateTime getAssignedOn() {
-        return assignedOn;
-    }
-
-    public void setAssignedOn(ZonedDateTime assignedOn) {
-        this.assignedOn = assignedOn;
-    }
-
-    public ZonedDateTime getClosedOn() {
-        return closedOn;
-    }
-
-    public void setClosedOn(ZonedDateTime closedOn) {
-        this.closedOn = closedOn;
-    }
-
     public String getRegion() {
         return region;
     }
@@ -161,5 +145,21 @@ public class TicketStatusReport implements Serializable {
 
     public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Date getAssignedOn() {
+        return assignedOn;
+    }
+
+    public void setAssignedOn(Date assignedOn) {
+        this.assignedOn = assignedOn;
+    }
+
+    public Date getClosedOn() {
+        return closedOn;
+    }
+
+    public void setClosedOn(Date closedOn) {
+        this.closedOn = closedOn;
     }
 }

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -48,28 +48,28 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name = "assigned_to_id", nullable = true)
     private Employee assignedTo;
 
-    private ZonedDateTime assignedOn;
+    private Date assignedOn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "closed_by_id", nullable = true)
     private Employee closedBy;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = true)
     private Asset asset;
 
-    private ZonedDateTime closedOn;
+    private Date closedOn;
 
     private String reportingTo;
 
     private String image;
 
     private String comments;
-    
+
     private String remarks;
 
     private String status;
-    
+
     private int escalationStatus;
 
     private String type;
@@ -155,7 +155,7 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
-    
+
     public String getRemarks() {
 		return remarks;
 	}
@@ -220,28 +220,12 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 		this.assignedTo = assignedTo;
 	}
 
-	public ZonedDateTime getAssignedOn() {
-		return assignedOn;
-	}
-
-	public void setAssignedOn() {
-		this.assignedOn = ZonedDateTime.now();
-	}
-
 	public Employee getClosedBy() {
 		return closedBy;
 	}
 
 	public void setClosedBy(Employee closedBy) {
 		this.closedBy = closedBy;
-	}
-
-	public ZonedDateTime getClosedOn() {
-		return closedOn;
-	}
-
-	public void setClosedOn() {
-		this.closedOn = ZonedDateTime.now();
 	}
 
 	public String getCategory() {
@@ -290,5 +274,21 @@ public class Ticket extends AbstractAuditingEntity implements Serializable {
 
     public void setPendingAtClient(boolean pendingAtClient) {
         this.pendingAtClient = pendingAtClient;
+    }
+
+    public Date getAssignedOn() {
+        return assignedOn;
+    }
+
+    public void setAssignedOn(Date assignedOn) {
+        this.assignedOn = assignedOn;
+    }
+
+    public Date getClosedOn() {
+        return closedOn;
+    }
+
+    public void setClosedOn(Date closedOn) {
+        this.closedOn = closedOn;
     }
 }

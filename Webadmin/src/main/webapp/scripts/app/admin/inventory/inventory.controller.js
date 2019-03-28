@@ -388,6 +388,7 @@ angular.module('timeSheetApp')
 
         /* Save material */
     	$scope.saveInventory = function() {
+            $scope.saveLoad = true;
     		if($scope.client){
     			$scope.inventory.projectId = $scope.client.id;
     		}
@@ -411,16 +412,22 @@ angular.module('timeSheetApp')
 
     		console.log(JSON.stringify($scope.inventory));
 
-    		InventoryComponent.create($scope.inventory).then(function(data) {
-    			console.log(data);
+    		InventoryComponent.create($scope.inventory).then(function(response) {
+    			console.log(response.data);
                 $scope.loadingStop();
                 $scope.inventory = "";
-                $scope.showNotifications('top','center','success','Material has been added Successfully!!');
-                $location.path('/inventory-list');
+                if(response.data.errorStatus && response.data.status != null) {
+                    $scope.showNotifications('top','center','danger', response.data.errorMessage);
+                } else {
+                    $scope.showNotifications('top','center','success','Material has been added Successfully!!');
+                    $location.path('/inventory-list');
+                }
+                $scope.saveLoad = false;
     		}).catch(function (response) {
                 $scope.loadingStop();
                 $scope.btnDisabled= false;
                 $scope.success = null;
+                $scope.saveLoad = false;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
                         $scope.errorAssetsExists = 'ERROR';
@@ -547,6 +554,7 @@ angular.module('timeSheetApp')
 
     	/* Update Material */
     	$scope.updateInventory = function () {
+            $scope.saveLoad = true;
             $scope.error = null;
             $scope.success =null;
             $scope.loadingStart();
@@ -576,6 +584,7 @@ angular.module('timeSheetApp')
              InventoryComponent.update($scope.editInventory).then(function (response) {
             	console.log(response);
                 $scope.loadingStop();
+                 $scope.saveLoad = false;
                 if(response.status === 400) {
                 	 $scope.showNotifications('top','center','danger','Unable to update Material');
                      $scope.error = 'ERROR';
@@ -586,6 +595,7 @@ angular.module('timeSheetApp')
 
             }).catch(function (response) {
                 $rootScope.loadingStop();
+                 $scope.saveLoad = false;
                 $scope.success = null;
                 console.log('Error - '+ response.data);
                 if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {

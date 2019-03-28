@@ -2,7 +2,7 @@
      data-unique-hash="a2ad475d60b22954085c657a73309b8f">
     <div  ng-init="initLoad();loadingAuto();">
 
-        <label><span class="red-star">*</span> Mandatory Field</label>
+
        <!-- <div class="col-md-8">
             &lt;!&ndash;<h2 class="title">Add Site</h2>&ndash;&gt;
         </div>-->
@@ -13,8 +13,11 @@
             <!--</div>-->
 
            <div class="cardsCon addSiteCon">
+               <div>
+                   <label><span class="red-star">*</span> Mandatory Field</label>
+               </div>
                <form ng-show="!success" name="form" role="form" novalidate
-                     ng-submit="saveInventoryTrans()" confirm-on-exit>
+                     ng-submit="conform('save')" confirm-on-exit>
 
                    <div class="row">
                        <div class="col-md-12">
@@ -103,7 +106,7 @@
                                                            <label class="control-label">Indent Ref.No<span class="red-star">*</span></label>
                                                            <span class="form-control-feedback d-md-arrow-icon" ng-show="!materialIndentsSpin"><i class="material-icons">keyboard_arrow_down</i></span>
                                                            <span  class="form-control-feedback d-md-arrow-icon orange-color" ng-show="materialIndentsSpin"><i class="ld ld-ring ld-spin" ></i></span>
-                                                           <select class="form-control" ng-model="selectedIndent"  name="indentRefNo" ng-click="loadItems()" ng-required="selectedTransactionType == 'ISSUED'" ng-options="materialIndent as materialIndent.indentRefNumber for materialIndent in materialIndents">
+                                                           <select class="form-control" ng-model="selectedIndent"  name="indentRefNo" ng-change="loadItems()" ng-required="selectedTransactionType == 'ISSUED'" ng-options="materialIndent as materialIndent.indentRefNumber for materialIndent in materialIndents">
                                                                <option value="">Select Indent Ref.No</option>
                                                            </select>
                                                            <span ng-if="materialIndents.length == 0"><p class="error-msg margin0">No Indent Ref.No</p></span>
@@ -261,7 +264,7 @@
 
 
                    <div class="panel panel-default">
-                       <div class="panel-heading">Inventory Details</div>
+                       <div class="panel-heading">Inventory Details<span class="red-star">*</span></div>
                        <div class="panel-body">
                            <div class="table-responsive">
 
@@ -270,7 +273,7 @@
                            <th>
 	                           <div class="checkbox form-horizontal-checkbox">
 	                                 <label>
-	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected" ng-click="selectAll()">
+	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="allItemsSelected"  ng-click="selectAll()">
 	                                 </label>
 	                           </div>
                            </th>
@@ -288,7 +291,7 @@
                            <td>
 	                           <div class="checkbox form-horizontal-checkbox">
 	                                 <label>
-	                                     <input type="checkbox" name="optionsCheckboxes" ng-model="material.isChecked" ng-change="selectedOne(material)">
+	                                     <input type="checkbox" name="optionsCheckboxes{{$index}}" ng-model="material.isChecked" ng-change="selectedOne(material)">
 	                                 </label>
 	                           </div>
                            </td>
@@ -299,10 +302,34 @@
                             <td>{{material.issuedQuantity ? material.issuedQuantity : "Nil"}}</td>
                             <td>{{material.approvedQty ? material.approvedQty : "Nil"}}</td>
                             <td width="10%" ng-hide="material.approvedQty">
-                                <input type="number" class="form-control" name="issue_qty" min="1" ng-model="material.currentQuantity" ng-blur="validate(material, material.currentQuantity)" aria-required="true" aria-invalid="true">
+                                <input type="number" class="form-control" name="issue_qty{{$index}}" min=1 ng-model="material.currentQuantity" ng-blur="validate(material, material.currentQuantity)" aria-required="true" aria-invalid="true" ng-required="!material.approvedQty">
+                                <div ng-show="form.$submitted || form.issue_qty{{$index}}.$touched || form.issue_qty{{$index}}.$dirty || form.optionsCheckboxes{{$index}}.$dirty || form.optionsCheckboxes.$dirty">
+                                    <div ng-show="form.issue_qty{{$index}}.$dirty || form.issue_qty{{$index}}.$invalid || form.optionsCheckboxes{{$index}}.$dirty || form.optionsCheckboxes.$dirty">
+                                        <!--<p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                               ng-show="form.quantity.$error.required">
+                                        Quantity is required.
+                                        </p>-->
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.issue_qty{{$index}}.$error.min">
+                                            Invalid quantity.
+                                        </p>
+                                    </div>
+                                </div>
                             </td>
                             <td width="10%" ng-show="material.approvedQty">
-                                <input type="number" class="form-control" name="approve_qty" min="1" ng-model="material.currentAprQty" ng-blur="validateReq(material, material.currentAprQty)" aria-required="true" aria-invalid="true">
+                                <input type="number" class="form-control" name="approve_qty{{$index}}" min=1 ng-model="material.currentAprQty" ng-blur="validateReq(material, material.currentAprQty)" aria-required="true" aria-invalid="true" ng-required="material.approvedQty">
+                                <div ng-show="form.$submitted || form.approve_qty{{$index}}.$touched || form.approve_qty{{$index}}.$dirty || form.optionsCheckboxes{{$index}}.$dirty || form.optionsCheckboxes.$dirty">
+                                    <div ng-show="form.approve_qty{{$index}}.$dirty || form.approve_qty{{$index}}.$invalid || form.optionsCheckboxes{{$index}}.$dirty || form.optionsCheckboxes.$dirty">
+                                        <!--<p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                               ng-show="form.quantity.$error.required">
+                                        Quantity is required.
+                                        </p>-->
+                                        <p class="help-block" style="color:maroon"
+                                           ng-show="form.approve_qty{{$index}}.$error.min">
+                                            Invalid quantity.
+                                        </p>
+                                    </div>
+                                </div>
                             </td>
                             <td ng-if="material.pendingQuantity">{{material.pendingQuantity}}</td>
                             <td ng-if="material.approvedQty">{{material.approvedQty}}</td>
@@ -324,13 +351,18 @@
 
                        <div class="col-md-12">
 
-                           <button type="button" ng-click="conform('cancel')"
+                           <button type="button" ng-click="conform('cancel')" ng-disabled="saveLoad"
                                    id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                            <button type="submit"
-                                   id="form-button-save" ng-disabled="!selectedItems.length"  class="btn btn-success pull-right"><span class="btn-label">
-                                            <i class="material-icons">check</i>
-                                        </span>Save</button>
+                                   id="form-button-save"  ng-disabled="form.$invalid || !selectedItems.length"
+                                   ng-class="{'running':saveLoad}"
+                                   class="btn btn-success ld ld-over-inverse pull-right">
+                               <span class="btn-label">
+                                <i class="material-icons">check</i>
+                               </span>Save
+                               <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                           </button>
 
                            <div class="clearfix"></div>
                        </div>

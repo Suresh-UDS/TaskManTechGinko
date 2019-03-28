@@ -8,7 +8,7 @@
             <div class="col-md-6 col-lg-6" >
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Location </div>
+                    <div class="panel-heading">Purchase Details & Location </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table">
@@ -32,6 +32,46 @@
                                     <td>{{purchaseReqObj.requestStatus}}</td>
 
                                 </tr>
+                                <tr>
+                                    <td>P.O Number</td>
+                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" >
+                                        <form ng-submit="updatePurchaseReq()" name="poForm" role="form">
+                                            <div class="row" class="no-scroll">
+                                                <div class="col-md-6">
+                                                    <div class="form-group no-padding" >
+                                                        <div class="dropdown">
+                                                            <div class="form-group">
+                                                                <input type="text" name="refNumber" class="form-control margn-top30" ng-model="purchaseReqObj.purchaseOrderNumber" required>
+                                                                <div ng-show="poForm.$submitted || poForm.refNumber.$touched">
+                                                                    <div ng-show="poForm.refNumber.$dirty || poForm.refNumber.$invalid">
+                                                                        <p class="help-block" style="color: maroon"
+                                                                           ng-show="poForm.refNumber.$error.required">P.O Number is
+                                                                            required.
+                                                                        </p>
+                                                                        <p class="help-block" style="color: maroon"
+                                                                           ng-show="poForm.refNumber.$error.required">P.O Number is
+                                                                            required.
+                                                                        </p>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="submit" class="btn btn-success btn-sm margn-top35"  ng-model="purchaseReqObj.purchaseOrderNumber" ng-disabled="poForm.$invalid" >Add P.O.No</button>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </td>
+                                    <td ng-if="purchaseReqObj.requestStatus != 'APPROVED' || purchaseReqObj.requestStatus !='PURCHASERAISED' || purchaseReqObj.requestStatus != 'REJECTED'">
+                                        -
+                                    </td>
+
+                                </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -95,7 +135,7 @@
                                         <td>{{items.quantity}}</td>
                                         <td>{{items.approvedQty ? items.approvedQty : "Nil"}}</td>
                                         <td width="10%">
-                                            <input type="number" class="form-control" ng-model="items.currentAprQty" ng-disabled="purchaseReqObj.requestStatus === 'REJECTED'" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
+                                            <input type="number" class="form-control" ng-model="items.currentAprQty" ng-disabled="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
                                         </td>
                                     </tr>
                                     </tbody>

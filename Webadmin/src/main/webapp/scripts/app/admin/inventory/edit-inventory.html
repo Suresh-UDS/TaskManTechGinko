@@ -348,9 +348,11 @@
                                     id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
                             <button type="submit" ng-disabled="form.$invalid || minError || maxError" tabindex="12"
-                                    id="form-button-save" class="btn btn-success pull-right"><span class="btn-label">
+                                    id="form-button-save" ng-class="{'running':saveLoad}" class="btn btn-success ld ld-over-inverse pull-right"><span class="btn-label">
                                         <i class="material-icons">check</i>
-                                    </span>Update inventory</button>
+                                    </span>Update inventory
+                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                            </button>
 
                             <div class="clearfix"></div>
                         </div>

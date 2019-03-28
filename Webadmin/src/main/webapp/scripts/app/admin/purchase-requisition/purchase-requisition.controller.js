@@ -259,8 +259,12 @@ angular.module('timeSheetApp')
                 //Employees
                 $scope.empSpin = false;
                 $scope.loadEmployees = function () {
-                    $scope.employees ='';
-
+                    $scope.selectedEmployee = null;
+                    $scope.employees = [];
+                    $scope.purchases  = [];
+                    $scope.purchaseItems = [];
+                    $scope.selectedItemCode = null;
+                    $scope.selectedQuantity = "";
                     if($scope.selectedSite && $scope.selectedSite.id){
                         $scope.empSpin = true;
                        var empParam = {siteId: $scope.selectedSite.id, list: true};
@@ -783,7 +787,14 @@ angular.module('timeSheetApp')
                 $scope.loadSites = function () {
                     $scope.siteSpin = true;
                 	console.log("selected project - " + JSON.stringify($scope.selectedProject));
-                	$scope.sites = '';
+                    $scope.sites = [];
+                    $scope.selectedSite = null;
+                    $scope.selectedEmployee = null;
+                    $scope.employees = [];
+                    $scope.purchases  = [];
+                    $scope.purchaseItems = [];
+                    $scope.selectedItemCode = null;
+                    $scope.selectedQuantity = "";
                 	if($scope.selectedProject) {
                     	ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
                             $scope.sites = data;

@@ -9,7 +9,7 @@
     <div ng-init="editInventoryTrans();">
             <div class="cardsCon editSiteCon">
                 <form ng-show="!success" name="form" role="form" novalidate
-                      ng-submit="updateInventory()"  >
+                      ng-submit="conform('save')"  >
 
                     <div class="row">
                         <div class="col-md-6">
@@ -117,14 +117,15 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <button type="submit" ng-click="cancelInventoryTrans()"
+                            <button type="button" ng-click="cancelInventoryTrans()"
                                     id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
-                            <button type="submit" type="submit"
-                                    id="form-button-save" class="btn btn-success pull-right"><span class="btn-label">
+                            <button type="submit"
+                                    id="form-button-save" class="btn btn-success ld ld-over-inverse pull-right" id="form-button-save" ng-class="{'running':saveLoad}"><span class="btn-label">
                                         <i class="material-icons">check</i>
-                                    </span>Update</button>
-
+                                    </span>Update
+                                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
+                            </button>
                             <div class="clearfix"></div>
                         </div>
                     </div>

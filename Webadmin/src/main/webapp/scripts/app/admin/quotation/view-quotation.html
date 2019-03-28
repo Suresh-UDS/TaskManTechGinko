@@ -493,7 +493,7 @@
 
 
 
-                                                        <button class="btn btn-success" ng-click="saveQuotation('submit')" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"
+                                                        <!--<button class="btn btn-success" ng-click="saveQuotation('submit')" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"
 															id="form-button-save" ng-disabled="form.$invalid || btnDisable">
 															<span class="btn-label"><i class="material-icons">check</i></span>
 															Send
@@ -501,7 +501,7 @@
 														<button class="btn btn-warning" ng-click="saveQuotation('edit')" ng-disabled="form.$invalid || btnDisable" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected">
 															<span class="btn-label"><i class="material-icons">save</i></span>
 															Save Draft
-														</button>
+														</button>-->
 
 														<!-- <button class="btn btn-danger" type="button"
 															ng-click="cancelQuotation()" id="cancel-button">
@@ -514,7 +514,11 @@
 											<div class="row" id="approveButton">
 												<div class="col-md-12 txt-align-rgt">
 													<div class="form-group">
-
+                                                        <button class="btn btn-success" ng-click="saveQuotation('submit')" ng-if="!quotation.isSubmitted && !quotation.isApproved && !quotation.isRejected"
+                                                                id="form-button-save" ng-disabled="form.$invalid || btnDisable">
+                                                            <span class="btn-label"><i class="material-icons">check</i></span>
+                                                            Send
+                                                        </button>
                                                         <button  title="Approve Quotation" ng-if="quotation.isSubmitted && !quotation.isApproved"
                                                                  data-toggle="modal" data-target="#approveQuotationModal"
                                                                  data-dismiss="#approveQuotationModal" ng-click="selectQuotation(quotation)"
