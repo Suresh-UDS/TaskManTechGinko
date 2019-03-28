@@ -85,6 +85,28 @@ public class RateCardService extends AbstractService {
 
 	@Inject
     private SiteService siteService;
+    
+    @Inject
+    private ProjectService projectService; 
+
+    private JSONObject getClientAddressInfo(long id){
+        JSONObject addressInfo = new JSONObject();
+        ProjectDTO projectDto = projectService.getProjectInfo(id);
+        try {
+            addressInfo.put("contactFirstName", projectDto.getContactFirstName());
+            addressInfo.put("contactLastName", projectDto.getContactLastName());
+            addressInfo.put("phone", projectDto.getPhone());
+            addressInfo.put("email", projectDto.getEmail());
+            addressInfo.put("address", projectDto.getAddress());
+            addressInfo.put("country", projectDto.getCountry());
+            addressInfo.put("state", projectDto.getState());
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+         
+        return addressInfo;
+    }
 
 	public RateCardDTO createRateCardInformation(RateCardDTO rateCardDto) {
 		// log.info("The admin Flag value is " +adminFlag);
@@ -324,6 +346,7 @@ public class RateCardService extends AbstractService {
             request.put("sentByUserName", quotationDto.getSentByUserName());
             request.put("isDrafted", quotationDto.isDrafted());
             request.put("isSubmitted", quotationDto.isSubmitted());
+            request.put("clientAddress",getClientAddressInfo(quotationDto.getProjectId()));
 
             log.debug("quotation save  end point"+quotationSvcEndPoint);
             String url = quotationSvcEndPoint+"/quotation/create";
