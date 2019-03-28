@@ -69,5 +69,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 	@Query("SELECT distinct p FROM Project p WHERE p.id in (:projectIds) and p.active = 'Y'")
 	List<Project> findProjectsByIds(@Param("projectIds") List<String> projectIds);
-
+ 
+	Project findById(long id);
 }

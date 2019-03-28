@@ -336,4 +336,9 @@ public class ProjectService extends AbstractService {
 		return mapperUtil.toModelList(clientgroup, ClientgroupDTO.class);
 	}
 
+	public ProjectDTO getProjectInfo(long id){
+		Project project = projectRepository.findById(id);
+		return mapperUtil.toModel(project,ProjectDTO.class);
+	}
+
 }
