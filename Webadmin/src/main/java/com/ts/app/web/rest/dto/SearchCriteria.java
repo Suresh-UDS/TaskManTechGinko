@@ -271,6 +271,8 @@ public class SearchCriteria extends Paginator {
 
 	private boolean showInActive;
 
+	private String schedule;
+
 	public String getModule() {
 		return module;
 	}
@@ -1402,5 +1404,13 @@ public class SearchCriteria extends Paginator {
 
     public void setPurchaseRefNumber(long purchaseRefNumber) {
         this.purchaseRefNumber = purchaseRefNumber;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 }

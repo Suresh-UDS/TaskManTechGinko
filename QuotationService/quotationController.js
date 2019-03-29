@@ -40,6 +40,7 @@ function populateQuotation(req, quotation) {
     if(req.body.clientEmailId) quotation.clientEmailId = req.body.clientEmailId;
     if(req.body.sentToEmailId) quotation.clientEmailId = req.body.clientEmailId;
     if(req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
+    if(req.body.clientAddress) quotation.clientAddress = req.body.clientAddress;
     if(req.body.isDrafted){
         quotation.isDrafted = true;
         quotation.processHistory.isDrafted = date;

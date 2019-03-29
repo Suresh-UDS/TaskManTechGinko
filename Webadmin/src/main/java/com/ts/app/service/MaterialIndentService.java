@@ -182,6 +182,9 @@ public class MaterialIndentService extends AbstractService {
 		if(materialindentDTO.getIssuedById() > 0) {
 			material.setIssuedBy(employeeRepository.findOne(materialindentDTO.getIssuedById()));
 		}
+		if(materialindentDTO.getPurpose() != null) {
+		    material.setPurpose(materialindentDTO.getPurpose());
+        }
 		
 		List<MaterialIndentItemDTO> indentItemDTOs = materialindentDTO.getItems();
 		Set<MaterialIndentItem> itemEntities = material.getItems();

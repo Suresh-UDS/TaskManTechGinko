@@ -15,7 +15,7 @@
           <label><span class="red-star">*</span> Mandatory Field</label>
         </div>
     </div>
-    <form name="form" role="form" novalidate confirm-on-exit>
+    <form name="form" role="form" ng-submit="conform('save')" novalidate confirm-on-exit>
     <div class="row">
         <div class="col-md-12">
             <div class="card margin-TB-5" >
@@ -92,8 +92,33 @@
                         <div class="col-md-4">
 
                             <div class="form-group pdng-top15">
-                                <label class="control-label">Title</label>
-                                <input type="text" class="form-control InputTxtCapsAll" ng-model="feedbackItem.name">
+                                <label class="control-label">Title<span class="red-star">*</span></label>
+                                <input type="text" name="title" class="form-control InputTxtCapsAll" ng-model="feedbackItem.name"
+                                       ng-minlength='1'
+                                       ng-maxlength='100'
+                                       ng-pattern="/^[a-zA-Z0-9 _\\\/.’'\-,&#:()]+$/"
+                                       autofocus  required autocomplete="off">
+                                <div ng-show="form.$submitted || form.title.$touched || form.title.$dirty">
+                                    <div ng-show="form.title.$dirty || form.title.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.title.$error.required">
+                                            Title is required.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                           ng-show="form.title.$error.minlength">
+                                            Title is required to be at least 1 character.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                           ng-show="form.title.$error.maxlength">
+                                            Title cannot be longer than 100 characters.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.title.$error.pattern">
+                                            Title can only contain letters, digits, few special characters and space.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -172,7 +197,7 @@
 
                         <div class="col-md-2" style="text-align: right">
 
-                            <button class="btn btn-success margn-top30" ng-click="addFeedbackItem(newFeedbackItem)">
+                            <button type="button" class="btn btn-success margn-top30" ng-click="addFeedbackItem(newFeedbackItem)">
                                 <span class="btn-label">
                                     <i class="material-icons">add</i>
                                 </span>
@@ -209,14 +234,14 @@
 
 	                       <div class="col-md-10">
 	                           <div class="form-group">
-	                               <button class="btn btn-success" type="submit" ng-click="saveFeedback()"
+	                               <button class="btn btn-success" type="submit"
 	                                       id="form-button-save">
 	                                  <span class="btn-label">
 	                        <i class="material-icons">check</i>
 	                   		 </span> <span ng-if="isEdit == 'yes'">Update</span><span ng-if="isEdit == 'no'">Save</span>
 	                               </button>
 	                               <button class="btn btn-danger" type="button"
-	                                       ng-click="cancelFeedbackQuestions()" id="cancel-button">
+                                           ng-click="conform('cancel')"  id="cancel-button">
 	                                   <i class="material-icons">close</i>Cancel
 	                               </button>
 	                           </div>
@@ -361,31 +386,6 @@
 			</div>
 		</div>
 		<!-- End of Delete confirmation dialog -->
-
-		<!-- Delete Multiple confirmation dialog -->
-		<div class="delete-multiple-confirmation modal fade">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-						<h4 class="modal-title">Delete</h4>
-					</div>
-					<div class="modal-body">
-						<p>Are you sure that you want to delete this record?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">
-							Cancel</button>
-						<button type="button"
-							class="btn btn-danger delete-multiple-confirmation-button"
-							data-target="http://localhost:81/grocery_crud/index.php/examples/customers_management/delete_multiple">
-							Delete</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End of Delete Multiple confirmation dialog -->
 
 	</div>
 </div>

@@ -33,6 +33,12 @@
 
                                 </tr>
                                 <tr>
+                                    <td>Purpose</td>
+                                    <td ng-if="purchaseReqObj.purpose">{{purchaseReqObj.purpose}}</td>
+                                    <td ng-if="!purchaseReqObj.purpose">-</td>
+
+                                </tr>
+                                <tr>
                                     <td>P.O Number</td>
                                     <td ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" >
                                         <form ng-submit="updatePurchaseReq()" name="poForm" role="form">
