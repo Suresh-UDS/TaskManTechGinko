@@ -13,7 +13,7 @@
     <div class="row" ng-init="loadUserRoles()">
         <div class="col-md-12">
             <label><span class="red-star">*</span> Mandatory Field</label>
-            <form name="rolePermissionForm" ng-submit="saveRolePermissions()" role="form" novalidate >
+            <form name="rolePermissionForm" ng-submit="conform('save')" role="form" novalidate >
                 <div class="card margin-TB-5" style="padding-bottom:15px;" >
 
                     <div class="card-content">
@@ -44,7 +44,7 @@
                                     Submit
                                 </button>
 
-                                <button type="button" class="btn btn-danger" ng-click="cancelAppModule();">
+                                <button type="button" class="btn btn-danger" ng-click="conform('back');">
                                     <i class="material-icons">close</i> Cancel
                                 </button>
 
