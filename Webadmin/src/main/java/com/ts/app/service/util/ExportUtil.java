@@ -524,7 +524,6 @@ public class ExportUtil {
                     }else {
                         dataRow.createCell(2).setCellValue("");
                     }
-					dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
 					dataRow.createCell(3).setCellValue(attn.getSiteName());
 					dataRow.createCell(4).setCellValue("");
 					dataRow.createCell(5).setCellValue(attn.getCheckInTime() != null ? String.valueOf(attn.getCheckInTime()) : "");
@@ -602,8 +601,6 @@ public class ExportUtil {
         }else {
             result.setEmpId("");
         }
-
-		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
 		result.setStatus(getExportStatus(file_Name));
 		return result;

@@ -39,8 +39,9 @@
 
                                 </tr>
                                 <tr>
-                                    <td>P.O Number</td>
-                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" >
+                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED'" >P.O Number</td>
+                                    <!--<td ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" >-->
+                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED'" >
                                         <form ng-submit="updatePurchaseReq()" name="poForm" role="form">
                                             <div class="row" class="no-scroll">
                                                 <div class="col-md-6">
@@ -72,9 +73,9 @@
 
                                         </form>
                                     </td>
-                                    <td ng-if="purchaseReqObj.requestStatus != 'APPROVED' || purchaseReqObj.requestStatus !='PURCHASERAISED' || purchaseReqObj.requestStatus != 'REJECTED'">
-                                        -
-                                    </td>
+                                    <!--<td ng-if="purchaseReqObj.requestStatus != 'APPROVED' || purchaseReqObj.requestStatus !='PURCHASERAISED' || purchaseReqObj.requestStatus != 'REJECTED'">-->
+                                        <!-- - -->
+                                    <!--</td>-->
 
                                 </tr>
 
