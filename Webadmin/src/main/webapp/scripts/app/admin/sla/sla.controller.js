@@ -694,6 +694,7 @@ angular.module('timeSheetApp')
 						$scope.deleteSlaId = sla;
 					}
 					$scope.deleteSla = function() {
+                        $('#mainDeleteModal').modal('hide');
                         if($scope.deleteSlaId){
                            SlaComponent.deleteSla($scope.deleteSlaId).then(
                             function() {
@@ -703,11 +704,16 @@ angular.module('timeSheetApp')
                         }
 					};
 
+                    $scope.cancelDeleteSla = function(){
+                        $('#mainDeleteModal').modal('hide');
+                    };
+
 					$scope.removeSlaConfirm = function(ind) {
                         $scope.removeSlaInd = ind;
                     };
 
                     $scope.removeSla = function() {
+                           $('#deleteNewModal').modal('hide');
                            console.log("remove index " + $scope.removeSlaInd);
                            $scope.slaList.splice($scope.removeSlaInd, 1);
                            $scope.slaView.splice($scope.removeSlaInd, 1);
@@ -716,17 +722,25 @@ angular.module('timeSheetApp')
                            }
                            console.log("remove sla " + $scope.slaList);
                     };
+                    $scope.cancelRemoveSla = function(){
+                     $('#deleteNewModal').modal('hide');
+                    };
 
                     $scope.removeEscalationConfirm = function(ind) {
                         $scope.removeEscalationInd = ind;
                     };
 
                     $scope.removeEscalation = function() {
+                            $('#deleteEscModal').modal('hide');
                            console.log("remove index " + $scope.removeEscalationInd);
                            // Escalation orderby level
                            $scope.slaEscalationList = $filter('orderBy')($scope.slaEscalationList, 'level');
                            $scope.slaEscalationList.splice($scope.removeEscalationInd, 1);
                            console.log("remove sla " + $scope.slaEscalationList);
+                    };
+
+                    $scope.cancelRemoveEscalation = function(){
+                        $('#deleteEscModal').modal('hide');
                     };
 
                     $scope.isActiveAsc = '';

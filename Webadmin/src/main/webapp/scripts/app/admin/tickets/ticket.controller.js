@@ -1621,7 +1621,7 @@ angular.module('timeSheetApp')
 				responsive: true,
 				language: {
 					search: "_INPUT_",
-					searchPlaceholder: "Search records",
+					searchPlaceholder: "Search records"
 				}
 
 		});
@@ -1631,16 +1631,16 @@ angular.module('timeSheetApp')
 
 		// Edit record
 		table.on('click', '.edit', function() {
-			$tr = $(this).closest('tr');
+			var tr = $(this).closest('tr');
 
-			var data = table.row($tr).data();
+			var data = table.row(tr).data();
 			alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
 		});
 
 		// Delete a record
 		table.on('click', '.remove', function(e) {
-			$tr = $(this).closest('tr');
-			table.row($tr).remove().draw();
+			var tr = $(this).closest('tr');
+			table.row(tr).remove().draw();
 			e.preventDefault();
 		});
 
