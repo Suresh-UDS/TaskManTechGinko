@@ -66,6 +66,9 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 	@Column(name = "purchaseOrderNumber")
 	private String purchaseOrderNumber;
 
+    @Column(name = "purpose", nullable = true)
+    private String purpose;
+
 	public long getId() {
 		return id;
 	}
@@ -162,7 +165,11 @@ public class PurchaseRequisition extends AbstractAuditingEntity implements Seria
 		this.purchaseRefNumber = purchaseRefNumber;
 	}
 
-	
+    public String getPurpose() {
+        return purpose;
+    }
 
-
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
 }

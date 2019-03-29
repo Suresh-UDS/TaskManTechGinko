@@ -838,8 +838,24 @@ angular.module('timeSheetApp')
                         $scope.selectedRefNumber = $scope.purchaseReqObj.indentRefNumber;
                         $scope.selectedProject = {id: $scope.purchaseReqObj.projectId };
                         $scope.selectedSite = {id: $scope.purchaseReqObj.siteId };
-                        $scope.loadSites();
-                        $scope.loadEmployees();
+                        if($scope.selectedProject) {
+                            ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+                                $scope.sites = data;
+                                $scope.siteSpin = false;
+                            });
+                        }else {
+                            $scope.siteSpin = false;
+                        }
+                        if($scope.selectedSite && $scope.selectedSite.id){
+                            $scope.empSpin = true;
+                            var empParam = {siteId: $scope.selectedSite.id, list: true};
+                            EmployeeComponent.search(empParam).then(function (data) {
+                                console.log(data);
+                                $scope.empSpin = false;
+                                $scope.employees = data.transactions;
+                                $scope.employees = $scope.employees === null ? [] : $scope.employees;
+                            });
+                        }
                         $scope.loadPurchases();
                         $scope.selectedEmployee = {id: $scope.purchaseReqObj.requestedById }
                         $scope.purchaseItems = $scope.purchaseReqObj.items;

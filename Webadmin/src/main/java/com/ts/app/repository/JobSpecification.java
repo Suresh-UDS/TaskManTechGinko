@@ -76,10 +76,15 @@ public class JobSpecification implements Specification<Job> {
             	predicates.add(builder.equal(root.get("scheduled"),  searchCriteria.isScheduled()));
             }
 
+            log.debug("JobSpecification to predicate - searchCriteria scheduled - "+searchCriteria.getSchedule());
+            if(org.apache.commons.lang.StringUtils.isNotEmpty(searchCriteria.getSchedule())){
+                predicates.add(builder.equal(root.get("schedule"),searchCriteria.getSchedule()));
+            }
+
             if(searchCriteria.getEmployeeId()!=0 && !searchCriteria.isAdmin()){
         			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
         	}
-            
+
             if(searchCriteria.getEmployeeId()!=0 && searchCriteria.isAdmin()){
     			predicates.add(builder.equal(root.get("employee").get("id"),  searchCriteria.getEmployeeId()));
             }
@@ -87,17 +92,17 @@ public class JobSpecification implements Specification<Job> {
             if(StringUtils.isNotEmpty(searchCriteria.getJobTypeName())){
         			predicates.add(builder.equal(root.get("type"),  JobType.getType(searchCriteria.getJobTypeName())));
         		}
-            /*if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) && searchCriteria.getAssetId() != 0 ) { 
+            /*if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType()) && searchCriteria.getAssetId() != 0 ) {
             	predicates.add(builder.and(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()), builder.equal(root.get("asset").get("id"), searchCriteria.getAssetId())));
             }*/
-            
+
             log.debug("JobSpecification toPredicate - searchCriteria assetId -"+ searchCriteria.getAssetId());
-            if(searchCriteria.getAssetId() != 0) { 
+            if(searchCriteria.getAssetId() != 0) {
             		predicates.add(builder.equal(root.get("asset").get("id"),  searchCriteria.getAssetId()));
             }
 
             log.debug("JobSpecification toPredicate - searchCriteria maintenanceType -"+ searchCriteria.getMaintenanceType());
-            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) { 
+            if(StringUtils.isNotEmpty(searchCriteria.getMaintenanceType())) {
             		predicates.add(builder.equal(root.get("maintenanceType"), searchCriteria.getMaintenanceType()));
             		predicates.add(builder.isNotNull(root.get("parentJob")));
             }
@@ -111,7 +116,7 @@ public class JobSpecification implements Specification<Job> {
             if(StringUtils.isNotEmpty(searchCriteria.getBranch()) && searchCriteria.getBranch() != null) {
                 predicates.add(builder.equal(root.get("site").get("branch"), searchCriteria.getBranch()));
             }
-            
+
             if(searchCriteria.getCheckInDateTimeFrom() != null){
 	            	if(root.get("plannedStartTime") != null) {
 		            	//Date plannedDate = (Date)root.get("plannedStartTime");

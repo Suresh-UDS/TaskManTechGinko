@@ -94,6 +94,13 @@
                                     <span class="material-input"></span></div>
                             </div>
 
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Purpose</label>
+                                    <input type="text" class="form-control" ng-model="editIndentObj.purpose">
+                                </div>
+                            </div>
+
                         </div>
                         <h3 class="HeadingTxt">Item Details </h3>
                         <div class="row">
@@ -209,7 +216,7 @@
 
                     <div class="col-md-12">
 
-                        <button type="button" ng-click="conform('cancel')"
+                        <button type="button" ng-click="conform('cancel')" ng-disabled="saveLoad"
                                 id="cancel-button"   class="btn btn-danger pull-right"> <i class="material-icons">close</i> Cancel</button>
 
 

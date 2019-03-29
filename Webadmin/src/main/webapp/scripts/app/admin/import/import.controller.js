@@ -38,6 +38,8 @@ angular.module('timeSheetApp')
 			$scope.assetPPMImportStatusLoad = false;
 			$scope.assetAMCImportStatus = {};
 			$scope.assetAMCImportStatusLoad = false;
+            $scope.inventoryImportStatus = {};
+            $scope.inventoryImportStatusLoad = false;
 			$scope.importStatus;
 			$scope.importEmployeeStatus;
 			$scope.pager = {};

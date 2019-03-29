@@ -18,7 +18,7 @@
                 </div>
             </div>
             <form ng-show="!success" name="form" role="form" novalidate
-                  ng-submit="updatePurchaseReq()" confirm-on-exit>
+                  ng-submit="conform('update')"  confirm-on-exit>
 
 
                 <div class="card margin-TB-5 tablecard addFrom">
@@ -112,7 +112,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label class="control-label">Purpose</label>
-                                    <input type="text" class="form-control" ng-model="purchaseReqObj.message">
+                                    <input type="text" class="form-control" ng-model="purchaseReqObj.purpose">
                                 </div>
                             </div>
 
@@ -238,7 +238,7 @@
 
 
                         <button class="btn btn-success ld ld-over-inverse pull-right" ng-class="{'running':saveLoad}"
-                                type="submit" id="form-button-save" ng-click="conform('update')" ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid" tabindex="16">
+                                type="submit" id="form-button-save"  ng-disabled="form.project.$invalid || form.site.$invalid || form.empName.$invalid || form.refNumber.$invalid" tabindex="16">
                             <span class="btn-label"><i class="material-icons">check</i></span> Update Purchase Requisition
                             <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
                         </button>

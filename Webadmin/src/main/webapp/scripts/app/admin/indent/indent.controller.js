@@ -476,9 +476,34 @@ angular.module('timeSheetApp')
                     $scope.selectedRefNumber = $scope.editIndentObj.indentRefNumber;
                     $scope.selectedProject = {id: $scope.editIndentObj.projectId };
                     $scope.selectedSite = {id: $scope.editIndentObj.siteId };
-                    $scope.loadSites();
-                    $scope.loadEmployees();
-                    $scope.selectedEmployee = {id: $scope.editIndentObj.requestedById }
+                    $scope.selectedEmployee = {id: $scope.editIndentObj.requestedById };
+                    if($scope.selectedProject) {
+                        $scope.siteSpin = true;
+                        ProjectComponent.findSites($scope.selectedProject.id).then(function (data) {
+                            if(data){
+                                $scope.sites = data;
+                            }else{
+                                $scope.sites = [];
+                            }
+                            $scope.siteSpin = false;
+                            // alert(JSON.stringify($scope.sites));
+                        });
+                    }
+                    if($scope.selectedSite && $scope.selectedSite.id){
+                        $scope.empSpin = true;
+                        var empParam = {siteId: $scope.selectedSite.id, list: true};
+                        EmployeeComponent.search(empParam).then(function (data) {
+                            console.log(data);
+                            if(data.transactions){
+                                $scope.employees = data.transactions;
+                            }else{
+                                $scope.employees = [];
+                            }
+                            $scope.empSpin = false;
+
+                        });
+                    }
+
                     $scope.materialItems = $scope.editIndentObj.items;
                     $scope.searchEditIndent = {};
                     $scope.searchEditIndent.projectId = $scope.editIndentObj.projectId;
