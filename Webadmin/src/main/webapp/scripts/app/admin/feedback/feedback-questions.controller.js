@@ -117,13 +117,24 @@ angular.module('timeSheetApp')
 
 
 	$scope.addFeedbackItem = function(newItem){
-		if(!$scope.newFeedbackItem.question || !$scope.selectedSite || !$scope.selectedProject){
+		if(!$scope.feedbackItem.name || !$scope.newFeedbackItem || !$scope.selectedSite || !$scope.selectedProject){
+		    alert("Please fill mandatory fields...!!!");
 			return false;
 		}
 		console.log("Adding feedback questions");
 		if(!newItem.scoreType){
 			newItem.scoreType = "yes:1";
 		}
+        if($scope.feedbackItems){
+            if($scope.feedbackItems.length > 0){
+                for(var i=0; i < $scope.feedbackItems.length;i++){
+                    if($scope.feedbackItems[i].question == newItem.question){
+                        alert("Question is already exist..!!");
+                        return false;
+                    }
+                }
+            }
+        }
 		if(newItem.answerType) {
 			$scope.feedbackItems.push(newItem);
 		}else {
@@ -413,6 +424,42 @@ angular.module('timeSheetApp')
 			console.log($scope.newFeedbackItem.remarksRequired);
 		}
 	}
+
+    //
+
+    $scope.conform = function(text)
+    {
+        if($scope.isEdit == 'yes' && text == 'save'){
+            $rootScope.conformText = 'update';
+        }else{
+            $rootScope.conformText = text;
+        }
+
+        $('#conformationModal').modal();
+
+    }
+    $rootScope.back = function (text) {
+        if(text == 'cancel' || text == 'back')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.cancelFeedbackQuestions();
+        }
+        else if(text == 'save')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.saveFeedback();
+        }
+        else if(text == 'update')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.saveFeedback();
+        }
+    };
+
+    //
 
 
 });

@@ -144,18 +144,23 @@ public class FeedbackService extends AbstractService {
 			User user = userRepository.findOne(searchCriteria.getUserId());
 			Employee employee = user.getEmployee();
 
-
 			//-----
             Pageable pageRequest = null;
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
-                pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
-
+                if(searchCriteria.isReport()) {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
+                }else {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                }
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                if (searchCriteria.isList()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
             }
-
 
 
 			//Pageable pageRequest = createPageRequest(searchCriteria.getCurrPage());
@@ -281,7 +286,11 @@ public class FeedbackService extends AbstractService {
                 pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
 
             }else{
-                pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                if (searchCriteria.isReport()) {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage(), true);
+                } else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
             }
 
 

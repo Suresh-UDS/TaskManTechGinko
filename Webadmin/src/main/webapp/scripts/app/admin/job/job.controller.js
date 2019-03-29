@@ -1517,6 +1517,8 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria.sortByAsc = false;
 				}
 
+				// $scope.searchCriteria.schedule = "ONCE";
+
 
 				//console.log("search criteria",$scope.searchCriteria);
 				$scope.jobs = '';

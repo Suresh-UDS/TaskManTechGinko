@@ -597,6 +597,11 @@ public class ExportUtil {
 		});
 
 		writer_Thread.start();
+		if(emp != null) {
+            result.setEmpId(emp.getEmpId());
+        }else {
+            result.setEmpId("");
+        }
 
 		result.setEmpId(emp.getEmpId());
 		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
@@ -2902,7 +2907,9 @@ public class ExportUtil {
                                             dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                             dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                         }
-                                        }else if(result.getAnswerType().equalsIgnoreCase("YesNo") && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("no:1")){
+                                        }else if((result.getAnswerType().equalsIgnoreCase("YesNo") &&
+                                                 result.getAnswer().equalsIgnoreCase("true")) &&
+                                                 (result.getScoreType().equalsIgnoreCase("no:1") || (result.getScoreType().equalsIgnoreCase("yes:-1"))) ){
 
                                             log.debug("Inside the condition"+result.getAnswer());
 

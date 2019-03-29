@@ -64,57 +64,57 @@ import com.ts.app.web.rest.dto.SearchResult;
 public class PurchaseRequisitionService extends AbstractService {
 
 	private final Logger log = LoggerFactory.getLogger(PurchaseRequisitionService.class);
-	
+
 	@Inject
 	private SiteRepository siteRepository;
-	
+
 	@Inject
 	private ProjectRepository projectRepository;
-	
+
 	@Inject
 	private MaterialIndentRepository materialIndentRepository;
-	
+
 	@Inject
 	private UserRepository userRepository;
-	
+
 	@Inject
 	private InventoryRepository inventoryRepository;
-	
+
 	@Inject
 	private InventoryTransactionRepository inventTransactionRepository;
-	
+
 	@Inject
 	private EmployeeRepository employeeRepository;
-	
+
 	@Inject
 	private PurchaseRequisitionRepository purchaseReqRepository;
-	
+
 	@Inject
 	private MaterialItemGroupRepository materialItemGroupRepository;
-	
+
 	@Inject
 	private PurchaseRefGenRepository purchaseRefRepository;
-	
+
 	@Inject
 	private SettingsRepository settingRepository;
-	
+
 	@Inject
 	private MailService mailService;
-	
+
 	@Inject
 	private ReportUtil reportUtil;
-	
+
 	@Inject
 	private ExportUtil exportUtil;
-	
+
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
-	
+
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
 
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ_EMAILS = "email.notification.purchasereq.emails";
-	
-	public PurchaseReqDTO createPurchaseRequest(PurchaseReqDTO purchaseReqDTO) { 
+
+	public PurchaseReqDTO createPurchaseRequest(PurchaseReqDTO purchaseReqDTO) {
 		PurchaseRequisition purchaseEntity = mapperUtil.toEntity(purchaseReqDTO, PurchaseRequisition.class);
 		purchaseEntity.setRequestedDate(DateUtil.convertToTimestamp(purchaseReqDTO.getRequestedDate()));
 		purchaseEntity.setSite(siteRepository.findOne(purchaseReqDTO.getSiteId()));
@@ -123,10 +123,10 @@ public class PurchaseRequisitionService extends AbstractService {
 		purchaseEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDTO.getApprovedById()));
 		purchaseEntity.setRequestStatus(PurchaseRequestStatus.PENDING);
 		purchaseEntity.setActive(PurchaseRequisition.ACTIVE_YES);
-		
+
 		List<PurchaseReqItemDTO> purchaseItems = purchaseReqDTO.getItems();
 		List<PurchaseRequisitionItem> purchaseItemEntity = new ArrayList<PurchaseRequisitionItem>();
-		for(PurchaseReqItemDTO purchaseItm : purchaseItems) { 
+		for(PurchaseReqItemDTO purchaseItm : purchaseItems) {
 			PurchaseRequisitionItem purchaseIndentItm = mapperUtil.toEntity(purchaseItm, PurchaseRequisitionItem.class);
 			purchaseIndentItm.setPurchaseRequisition(purchaseEntity);
 			purchaseIndentItm.setPendingQty(purchaseItm.getQuantity());
@@ -152,7 +152,7 @@ public class PurchaseRequisitionService extends AbstractService {
 		//	purchaseRef.setPurchaseRequisition(purchaseEntity);
 		//	purchaseRefRepository.save(purchaseRef);
 		//}
-		
+
 		log.debug("Save object of Inventory: {}" + purchaseEntity);
 		if (materialTranc != null) {
 			materialTranc.setPurchaseRequisition(purchaseEntity);
@@ -176,17 +176,17 @@ public class PurchaseRequisitionService extends AbstractService {
 	public void updatePurchaseRequest(PurchaseReqDTO purchaseReqDTO) {
 		PurchaseRequisition purchaseRequest = purchaseReqRepository.findOne(purchaseReqDTO.getId());
 		mapToModel(purchaseRequest, purchaseReqDTO);
-		purchaseReqRepository.saveAndFlush(purchaseRequest);		
+		purchaseReqRepository.saveAndFlush(purchaseRequest);
 	}
 
 	private void mapToModel(PurchaseRequisition purchaseRequest, PurchaseReqDTO purchaseReqDTO) {
-		if(purchaseReqDTO.getSiteId() > 0) { 
+		if(purchaseReqDTO.getSiteId() > 0) {
 			purchaseRequest.setSite(siteRepository.findOne(purchaseReqDTO.getSiteId()));
 		}
-		if(purchaseReqDTO.getProjectId() > 0) { 
+		if(purchaseReqDTO.getProjectId() > 0) {
 			purchaseRequest.setProject(projectRepository.findOne(purchaseReqDTO.getProjectId()));
 		}
-		if(purchaseReqDTO.getRequestedById() > 0) { 
+		if(purchaseReqDTO.getRequestedById() > 0) {
 			purchaseRequest.setRequestedBy(employeeRepository.findOne(purchaseReqDTO.getRequestedById()));
 		}
 		if(purchaseReqDTO.getApprovedById() > 0) {
@@ -195,13 +195,17 @@ public class PurchaseRequisitionService extends AbstractService {
 		}
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.APPROVED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.APPROVED);
-		}	
+		}
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.REJECTED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.REJECTED);
 		}
 		if(purchaseReqDTO.getPurchaseOrderNumber() != null) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.PURCHASERAISED);
+			purchaseRequest.setPurchaseOrderNumber(purchaseReqDTO.getPurchaseOrderNumber());
 		}
+		if(purchaseReqDTO.getPurpose() != null) {
+		    purchaseRequest.setPurpose(purchaseReqDTO.getPurpose());
+        }
 		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDTO.getItems();
 		Set<PurchaseRequisitionItem> itemEntities = purchaseRequest.getItems();
 		Iterator<PurchaseRequisitionItem> itemsItr = itemEntities.iterator();
@@ -228,7 +232,7 @@ public class PurchaseRequisitionService extends AbstractService {
 				newItem.setPurchaseRequisition(purchaseRequest);
 				purchaseRequest.getItems().add(newItem);
 			}
-		}	
+		}
 	}
 
 	public void deletePurchaseReq(long id) {
@@ -339,7 +343,10 @@ public class PurchaseRequisitionService extends AbstractService {
         }
         requestEntityDTO.setRequestStatus(requestEntity.getRequestStatus());
         requestEntityDTO.setPurchaseOrderNumber(requestEntity.getPurchaseOrderNumber());
-        requestEntityDTO.setPurchaseRefGenNumber(requestEntity.getPurchaseRefNumber().getNumber());
+        requestEntityDTO.setPurpose(requestEntity.getPurpose());
+        if(requestEntity.getPurchaseRefNumber() != null){
+            requestEntityDTO.setPurchaseRefGenNumber(requestEntity.getPurchaseRefNumber().getNumber());
+        }
         if(requestEntity.getTransaction() != null) {
             requestEntityDTO.setTransactionId(requestEntity.getTransaction().getId());
         }
@@ -371,11 +378,11 @@ public class PurchaseRequisitionService extends AbstractService {
 		PurchaseRequisition purchaseReqEntity = purchaseReqRepository.findOne(purchaseReqDto.getId());
 		purchaseReqEntity.setApprovedBy(employeeRepository.findOne(purchaseReqDto.getApprovedById()));
 		purchaseReqEntity.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
-		
+
 		List<PurchaseReqItemDTO> purchaseItemDTOs = purchaseReqDto.getItems();
 		Set<PurchaseRequisitionItem> itemEntities = purchaseReqEntity.getItems();
 		Iterator<PurchaseRequisitionItem> itemsItr = itemEntities.iterator();
-		
+
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;
 			PurchaseRequisitionItem itemEntity = itemsItr.next();
@@ -387,7 +394,7 @@ public class PurchaseRequisitionService extends AbstractService {
 					itemEntity.setApprovedQty(itemDto.getApprovedQty());
 
 					Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
-					
+
 					MaterialTransaction materialTrans = new MaterialTransaction();
 					materialTrans.setProject(projectRepository.findOne(purchaseReqDto.getProjectId()));
 					materialTrans.setSite(siteRepository.findOne(purchaseReqDto.getSiteId()));
@@ -406,10 +413,10 @@ public class PurchaseRequisitionService extends AbstractService {
 					materialTrans.setTransactionDate(DateUtil.convertToTimestamp(dateofTransaction));
 					materialTrans.setActive(MaterialTransaction.ACTIVE_YES);
 					materialTrans = inventTransactionRepository.save(materialTrans);
-					if(materialTrans.getId() > 0) { 
+					if(materialTrans.getId() > 0) {
 						purchaseReqEntity.setTransaction(materialTrans);
 					}
-				
+
 					break;
 				}
 			}
@@ -418,17 +425,17 @@ public class PurchaseRequisitionService extends AbstractService {
 				itemsItr.remove();
 			}
 		}
-		
+
 		purchaseReqEntity = purchaseReqRepository.save(purchaseReqEntity);
 		purchaseReqDto = mapperUtil.toModel(purchaseReqEntity, PurchaseReqDTO.class);
-		
+
 		return purchaseReqDto;
 	}
 
 	public ExportResult generateReport(List<PurchaseReqDTO> transactions, SearchCriteria searchCriteria) {
 		return reportUtil.generatePRReports(transactions, null, null, searchCriteria);
 	}
-	
+
 	public ExportResult getExportStatus(String fileId) {
 		ExportResult er = new ExportResult();
 
@@ -453,10 +460,10 @@ public class PurchaseRequisitionService extends AbstractService {
 		PurchaseRequestStatus[] requestStatus = PurchaseRequestStatus.values();
 		return requestStatus;
 	}
-	
-	
-	
-	
+
+
+
+
 
 
 }

@@ -310,23 +310,25 @@ angular.module('timeSheetApp')
                 $scope.assetPPM.endDate.setHours(0,0,0,0);
             }
 
+            if($scope.assetPPM.startDate && $scope.assetPPM.endDate){
+                if($scope.assetPPM.startDate > $scope.assetPPM.endDate && $scope.assetPPM.startDate != $scope.assetPPM.endDate){
+                    $scope.fromErrMsg = 'From date cannot be greater than To date';
 
-            if($scope.assetPPM.startDate > $scope.assetPPM.endDate && $scope.assetPPM.startDate != $scope.assetPPM.endDate){
-                $scope.fromErrMsg = 'From date cannot be greater than To date';
+                    alert($scope.fromErrMsg);
 
-                alert($scope.fromErrMsg);
+                    $('input#dateFilterPpmFrom').data('DateTimePicker').clear();
+                    $('input#dateFilterPpmTo').data('DateTimePicker').clear();
+                    $scope.assetPPM.startDate = new Date();
+                    $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.assetPPM.endDate = new Date();
+                    $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $('input#dateFilterPpmFrom').val($scope.ppmFrom);
+                    $('input#dateFilterPpmTo').val($scope.ppmTo);
 
-                $('input#dateFilterPpmFrom').data('DateTimePicker').clear();
-                $('input#dateFilterPpmTo').data('DateTimePicker').clear();
-                $scope.assetPPM.startDate = new Date();
-                $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $scope.assetPPM.endDate = new Date();
-                $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $('input#dateFilterPpmFrom').val($scope.ppmFrom);
-                $('input#dateFilterPpmTo').val($scope.ppmTo);
-
-                return false;
+                    return false;
+                }
             }
+
 
         });
 
@@ -341,22 +343,25 @@ angular.module('timeSheetApp')
                 $scope.assetPPM.startDate.setHours(0,0,0,0);
             }
 
-            if($scope.assetPPM.startDate > $scope.assetPPM.endDate && $scope.assetPPM.startDate != $scope.assetPPM.endDate){
-                $scope.toErrMsg = 'To date cannot be lesser than From date';
+            if($scope.assetPPM.startDate && $scope.assetPPM.endDate){
+                if($scope.assetPPM.startDate > $scope.assetPPM.endDate && $scope.assetPPM.startDate != $scope.assetPPM.endDate){
+                    $scope.toErrMsg = 'To date cannot be lesser than From date';
 
-                alert($scope.toErrMsg);
+                    alert($scope.toErrMsg);
 
-                $('input#dateFilterPpmFrom').data('DateTimePicker').clear();
-                $('input#dateFilterPpmTo').data('DateTimePicker').clear();
-                $scope.assetPPM.startDate = new Date();
-                $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $scope.assetPPM.endDate = new Date();
-                $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $('input#dateFilterPpmFrom').val($scope.ppmFrom);
-                $('input#dateFilterPpmTo').val($scope.ppmTo);
+                    $('input#dateFilterPpmFrom').data('DateTimePicker').clear();
+                    $('input#dateFilterPpmTo').data('DateTimePicker').clear();
+                    $scope.assetPPM.startDate = new Date();
+                    $scope.ppmFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.assetPPM.endDate = new Date();
+                    $scope.ppmTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $('input#dateFilterPpmFrom').val($scope.ppmFrom);
+                    $('input#dateFilterPpmTo').val($scope.ppmTo);
 
-                return false;
+                    return false;
+                }
             }
+
 
         });
 
@@ -516,6 +521,12 @@ angular.module('timeSheetApp')
 
 					$scope.assetPPM.shiftTimings = $scope.shiftTimings;
 
+                    if($scope.assetPPM.jobStartTime){
+                        var startDate= $scope.assetPPM.startDate;
+                        var startDateTime= $scope.assetPPM.jobStartTime;
+                        var startTime = startDate.setHours(startDateTime.getHours());
+                        $scope.assetPPM.jobStartTime = new Date(startTime);
+                    }
 					//console.log("To be create PPM",$scope.assetPPM);
 
 					$scope.loadingStart();
@@ -1862,24 +1873,25 @@ angular.module('timeSheetApp')
             if($scope.warToDate){
                 $scope.warToDate.setHours(0,0,0,0);
             }
+            if($scope.warFromDate1 && $scope.warToDate1){
+                if($scope.warFromDate > $scope.warToDate && $scope.warFromDate != $scope.warToDate){
+                    $scope.fromErrMsg = 'From date cannot be greater than To date';
 
+                    alert($scope.fromErrMsg);
 
-            if($scope.warFromDate > $scope.warToDate && $scope.warFromDate != $scope.warToDate){
-                $scope.fromErrMsg = 'From date cannot be greater than To date';
+                    $('input#warFromDate').data('DateTimePicker').clear();
+                    $('input#warToDate').data('DateTimePicker').clear();
+                    $scope.warFromDate = new Date();
+                    $scope.warFromDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.warToDate = new Date();
+                    $scope.warToDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $('input#warFromDate').val($scope.warFromDate1);
+                    $('input#warToDate').val($scope.warToDate1);
 
-                alert($scope.fromErrMsg);
-
-                $('input#warFromDate').data('DateTimePicker').clear();
-                $('input#warToDate').data('DateTimePicker').clear();
-                $scope.warFromDate = new Date();
-                $scope.warFromDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $scope.warToDate = new Date();
-                $scope.warToDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $('input#warFromDate').val($scope.warFromDate1);
-                $('input#warToDate').val($scope.warToDate1);
-
-                return false;
+                    return false;
+                }
             }
+
 
         });
 
@@ -1893,23 +1905,25 @@ angular.module('timeSheetApp')
             if($scope.warFromDate){
                 $scope.warFromDate.setHours(0,0,0,0);
             }
+            if($scope.warFromDate1 && $scope.warToDate1){
+                if($scope.warFromDate > $scope.warToDate && $scope.warFromDate != $scope.warToDate){
+                    $scope.toErrMsg = 'To date cannot be lesser than From date';
 
-            if($scope.warFromDate > $scope.warToDate && $scope.warFromDate != $scope.warToDate){
-                $scope.toErrMsg = 'To date cannot be lesser than From date';
+                    alert($scope.toErrMsg);
 
-                alert($scope.toErrMsg);
+                    $('input#warFromDate').data('DateTimePicker').clear();
+                    $('input#warToDate').data('DateTimePicker').clear();
+                    $scope.warFromDate = new Date();
+                    $scope.warFromDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $scope.warToDate = new Date();
+                    $scope.warToDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
+                    $('input#warFromDate').val($scope.warFromDate1);
+                    $('input#warToDate').val($scope.warToDate1);
 
-                $('input#warFromDate').data('DateTimePicker').clear();
-                $('input#warToDate').data('DateTimePicker').clear();
-                $scope.warFromDate = new Date();
-                $scope.warFromDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $scope.warToDate = new Date();
-                $scope.warToDate1 = $filter('date')(new Date(), 'dd/MM/yyyy');
-                $('input#warFromDate').val($scope.warFromDate1);
-                $('input#warToDate').val($scope.warToDate1);
-
-                return false;
+                    return false;
+                }
             }
+
 
         });
 
@@ -2247,6 +2261,7 @@ angular.module('timeSheetApp')
 							$scope.showNotifications('top','center','error','Unable to get 52 week schedule for the site');
 						}
 					}).catch(function(){
+                        $scope.showNotifications('top','center','danger','Unable to get 52 week schedule.Please try later..');
 						$scope.weekSchLoad = false;
 					});
 				}else {
@@ -3238,23 +3253,25 @@ angular.module('timeSheetApp')
                     $scope.amcSchedule.endDate.setHours(0,0,0,0);
                 }
 
+                if($scope.amcSchedule.startDate && $scope.amcSchedule.endDate){
+                    if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate && $scope.amcSchedule.startDate != $scope.amcSchedule.endDate){
+                        $scope.fromErrMsg = 'From date cannot be greater than To date';
 
-                if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate && $scope.amcSchedule.startDate != $scope.amcSchedule.endDate){
-                    $scope.fromErrMsg = 'From date cannot be greater than To date';
+                        alert($scope.fromErrMsg);
 
-                    alert($scope.fromErrMsg);
+                        $('input#dateFilterAmcFrom').data('DateTimePicker').clear();
+                        $('input#dateFilterAmcTo').data('DateTimePicker').clear();
+                        $scope.amcSchedule.startDate = new Date();
+                        $scope.amcFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                        $scope.amcSchedule.endDate = new Date();
+                        $scope.amcTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                        $('input#dateFilterAmcFrom').val($scope.amcFrom);
+                        $('input#dateFilterAmcTo').val($scope.amcTo);
 
-                    $('input#dateFilterAmcFrom').data('DateTimePicker').clear();
-                    $('input#dateFilterAmcTo').data('DateTimePicker').clear();
-                    $scope.amcSchedule.startDate = new Date();
-                    $scope.amcFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-                    $scope.amcSchedule.endDate = new Date();
-                    $scope.amcTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-                    $('input#dateFilterAmcFrom').val($scope.amcFrom);
-                    $('input#dateFilterAmcTo').val($scope.amcTo);
-
-                    return false;
+                        return false;
+                    }
                 }
+
 
             });
 
@@ -3268,23 +3285,25 @@ angular.module('timeSheetApp')
                 if($scope.amcSchedule.startDate){
                     $scope.amcSchedule.startDate.setHours(0,0,0,0);
                 }
+                if($scope.amcSchedule.startDate && $scope.amcSchedule.endDate){
+                    if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate && $scope.amcSchedule.startDate != $scope.amcSchedule.endDate){
+                        $scope.toErrMsg = 'To date cannot be lesser than From date';
 
-                if($scope.amcSchedule.startDate > $scope.amcSchedule.endDate && $scope.amcSchedule.startDate != $scope.amcSchedule.endDate){
-                    $scope.toErrMsg = 'To date cannot be lesser than From date';
+                        alert($scope.toErrMsg);
 
-                    alert($scope.toErrMsg);
+                        $('input#dateFilterAmcFrom').data('DateTimePicker').clear();
+                        $('input#dateFilterAmcTo').data('DateTimePicker').clear();
+                        $scope.amcSchedule.startDate = new Date();
+                        $scope.amcFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
+                        $scope.amcSchedule.endDate = new Date();
+                        $scope.amcTo = $filter('date')(new Date(), 'dd/MM/yyyy');
+                        $('input#dateFilterAmcFrom').val($scope.amcFrom);
+                        $('input#dateFilterAmcTo').val($scope.amcTo);
 
-                    $('input#dateFilterAmcFrom').data('DateTimePicker').clear();
-                    $('input#dateFilterAmcTo').data('DateTimePicker').clear();
-                    $scope.amcSchedule.startDate = new Date();
-                    $scope.amcFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-                    $scope.amcSchedule.endDate = new Date();
-                    $scope.amcTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-                    $('input#dateFilterAmcFrom').val($scope.amcFrom);
-                    $('input#dateFilterAmcTo').val($scope.amcTo);
-
-                    return false;
+                        return false;
+                    }
                 }
+
 
             });
 
@@ -3362,6 +3381,14 @@ angular.module('timeSheetApp')
 						$scope.shiftTimings.push($scope.selectedShift.startTime +'-' +$scope.selectedShift.endTime);
 					}
 					$scope.amcSchedule.shiftTimings = $scope.shiftTimings;
+
+                    if($scope.amcSchedule.jobStartTime){
+                        var startDate= $scope.amcSchedule.startDate;
+                        var startDateTime= $scope.amcSchedule.jobStartTime;
+                        var startTime = startDate.setHours(startDateTime.getHours());
+                        $scope.amcSchedule.jobStartTime = new Date(startTime);
+                    }
+
 					//$scope.amcSchedule.maintenanceType = 'AMC';
 
 					//console.log("To be create AMC schedule",$scope.amcSchedule);

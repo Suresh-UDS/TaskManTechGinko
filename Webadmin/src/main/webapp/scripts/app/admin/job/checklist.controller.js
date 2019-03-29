@@ -49,13 +49,17 @@ angular.module('timeSheetApp')
 		}
 	}
 
-	$scope.conform = function(text)
-	{
-		//console.log($scope.selectedProject)
-		$rootScope.conformText = text;
-		$('#conformationModal').modal();
+    $scope.conform = function(text)
+    {
+        if($scope.isEdit && text == 'save'){
+            $rootScope.conformText = 'update';
+        }else{
+            $rootScope.conformText = text;
+        }
 
-	}
+        $('#conformationModal').modal();
+
+    }
 	$rootScope.back = function (text) {
 
 		$scope.isEdit = false;

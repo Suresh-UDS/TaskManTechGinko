@@ -56,7 +56,7 @@ angular.module('timeSheetApp')
 
 	$scope.checkPermission = function(moduleId, moduleName, actionId, actionName) {
 		console.log('selected module and action - ' + moduleName + ' , - ' + actionName);
-		console.log('selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));
+		console.log('selectedPermissions>>>>> ' + JSON.stringify($scope.selectedPermissions));
 		if(angular.isArray($scope.selectedPermissions)) {
 			var permMatch = false;
 			var perms = $scope.selectedPermissions;
@@ -66,16 +66,14 @@ angular.module('timeSheetApp')
 					if(perm.name.toUpperCase() === moduleName.toUpperCase()) {
 						permMatch = true;
 						var actions = perm.moduleActions;
-
 						if(angular.isArray(actions)) {
 							var actionMatch = false;
 							for(var i = 0; i < actions.length ; i++) {
 								var action = actions[i];
-								if(action.name.indexOf(actionName) != -1) {
+								if(action.name == actionName) {
 									actionMatch = true;
 									actions.splice(i,1);
 									break;
-
 								}
 							}
 							if(!actionMatch) {
@@ -115,7 +113,7 @@ angular.module('timeSheetApp')
 			}
 
 		}
-		console.log('selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));
+		console.log('<<<<selectedPermissions - ' + JSON.stringify($scope.selectedPermissions));
 	}
 
 	$scope.addAction = function() {
@@ -134,7 +132,8 @@ angular.module('timeSheetApp')
 		$scope.permissions = {
 				"roleId" : $scope.selectedUserRole.id,
 				"applicationModules" : $scope.selectedPermissions
-		}
+		};
+		console.log('permission list',$scope.permissions);
 		RolePermissionComponent.createRolePermission($scope.permissions).then(function () {
 			$scope.success = 'OK';
 			$scope.moduleName = '';
@@ -543,6 +542,24 @@ angular.module('timeSheetApp')
 
 
 	}
+
+    $scope.conform = function(text)
+    {
+        $rootScope.conformText = text;
+        $('#conformationModal').modal();
+
+    }
+    $rootScope.back = function (text) {
+        if(text == 'cancel' || text == 'back'){
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.cancelAppModule();
+        }else if(text == 'save'){
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.saveRolePermissions();
+        }
+    };
 
 
 
