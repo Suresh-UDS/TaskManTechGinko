@@ -11,6 +11,33 @@ var htmlToPdf = require('html-to-pdf');
 var fs = require('fs');
 var _ = require('underscore');
 
+function createPdfHelper(response,quotation){
+
+    htmlToPdf.convertHTMLString(response, './templates/'+quotation._id+'.pdf',
+                    function (error, success) {
+                        if (error)
+                        {
+                            console.log('PDF Fail');
+                            console.log(error);
+                        } else
+                        {
+                            console.log('PDF Success!');
+                            console.log(success);
+                            if(quotation.isSubmitted) {
+                                console.log("sending mail");
+                                var date = new Date();
+                                quotation.isDrafted = false;
+                                quotation.processHistory.isSubmitted = date;
+                                quotation.submittedDate = date;
+                                quotation.lastModifiedDate = date;
+                                mailerService.submitQuotation(quotation.clientEmailId,quotation);
+                            }
+                            // mailerService.submitQuotationDetail('praveens@techginko.com');
+                        }
+                    }
+                );
+
+}
 
 function populateQuotation(req, quotation) {
     var date = new Date();
@@ -167,11 +194,12 @@ module.exports = {
                 quotation.processHistory.isSubmitted = date;
                 quotation.submittedDate = date;
                 quotation.lastModifiedDate = date;
-                mailerService.submitQuotation(quotation.clientEmailId,quotation)
+             //   mailerService.submitQuotation(quotation.clientEmailId,quotation)
 
                 quotation.save(function(err,quotation){
                     if(!err){
                         // mailerService.submitQuotation('karthickk@techginko.com',quotation);
+                        module.exports.createPDF(quotation);
                         notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Received')
                         res.json(200,quotation)
                     }else{
@@ -640,29 +668,27 @@ module.exports = {
                 console.log(response);
                 console.log(JSON.stringify(response))
 
-                htmlToPdf.convertHTMLString(response, './templates/'+quotation._id+'.pdf',
-                    function (error, success) {
-                        if (error)
-                        {
-                            console.log('PDF Fail');
-                            console.log(error);
-                        } else
-                        {
-                            console.log('PDF Success!');
-                            console.log(success);
-                            if(quotation.isSubmitted) {
-                                console.log("sending mail");
-                                var date = new Date();
-                                quotation.isDrafted = false;
-                                quotation.processHistory.isSubmitted = date;
-                                quotation.submittedDate = date;
-                                quotation.lastModifiedDate = date;
-                                mailerService.submitQuotation(quotation.clientEmailId,quotation);
-                            }
-                            // mailerService.submitQuotationDetail('praveens@techginko.com');
-                        }
+
+                fs.access('./templates/'+quotation._id+'.pdf',(err)=>{
+
+                    if(!err){
+
+                        fs.unlink('./templates/'+quotation._id+'.pdf',(err)=>{
+                            
+                            createPdfHelper(response,quotation);
+
+                        })
+
                     }
-                );
+                    else{
+
+                        createPdfHelper(response,quotation);
+
+                    }
+ 
+                })
+
+                
 
             }
         })
