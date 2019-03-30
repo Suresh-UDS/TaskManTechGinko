@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.ts.app.security.SecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,6 +196,8 @@ public class PurchaseRequisitionService extends AbstractService {
 		}
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.APPROVED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.APPROVED);
+			purchaseRequest.setApprovedBy(employeeRepository.findByUserId(SecurityUtils.getCurrentUserId()));
+			purchaseRequest.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
 		}
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.REJECTED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.REJECTED);
