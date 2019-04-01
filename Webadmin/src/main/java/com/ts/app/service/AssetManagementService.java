@@ -860,12 +860,18 @@ public class AssetManagementService extends AbstractService {
 //					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
 					assetPPMScheduleEvent.setStart(currCal.getTime());
 					assetPPMScheduleEvent.setAllDay(true);
-					if(currCal.get(Calendar.WEEK_OF_YEAR)>i) {
+					if(currCal.get(Calendar.WEEK_OF_YEAR)>i) {						
+						if(currCal.get(Calendar.WEEK_OF_YEAR)>53)
+							break;						
 					    assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
 					    i=currCal.get(Calendar.WEEK_OF_YEAR);
 					}
-					else
+					else {
+						if((currCal.get(Calendar.WEEK_OF_YEAR)+i)>53)
+							break;
 						assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR)+i);	
+						}
+					
 					assetPPMScheduleEvent.setMaintenanceType(MaintenanceType.PPM.name());
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
 					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());
