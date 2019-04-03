@@ -807,7 +807,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */30 * * * ?")
+	//@Scheduled(cron = "0 */30 * * * ?")
 	public void slaTicketEscalationNotification()
 	{
 		String mailStatus = "";
@@ -901,7 +901,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */30 * * * ?")
+	//@Scheduled(cron = "0 */30 * * * ?")
 	public void slaJobEscalationNotification()
 	{
 		String mailStatus = "";
@@ -994,7 +994,7 @@ public class SchedulerService extends AbstractService {
 			}
 		}
 
-	@Scheduled(cron="0 */30 * * * ?")
+	// @Scheduled(cron="0 */30 * * * ?")
 	public void sendDaywiseReport() {
 		log.info("Daywise report scheduler invoked");
 		Calendar cal = Calendar.getInstance();
