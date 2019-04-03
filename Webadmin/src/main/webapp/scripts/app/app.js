@@ -5,7 +5,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
-     'angular-star-rating-new','paginations','excelGrid','confirmMsg'
+     'angular-star-rating-new','paginations','excelGrid','confirmMsg','ngIdle'
      //,'spring-security-csrf-token-interceptor'
      ])
 
