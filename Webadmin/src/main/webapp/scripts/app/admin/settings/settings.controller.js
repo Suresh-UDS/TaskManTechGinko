@@ -2,7 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('SettingsController', function ($rootScope, $scope, $state, $timeout, $http, $stateParams,
-		$location, ProjectComponent,SiteComponent,SettingsComponent,$filter) {
+		$location, ProjectComponent,SiteComponent,SettingsComponent,$filter,Idle) {
+        Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.selectedProject =null;
@@ -748,6 +749,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.saveSettings = function() {
+        $scope.saveLoad = true;
 		$scope.showLoader();
 		if($scope.selectedProject) {
 			$scope.settings.projectId = $scope.selectedProject.id;
@@ -761,9 +763,12 @@ angular.module('timeSheetApp')
 		console.log('settings - ' + JSON.stringify($scope.settings));
 		SettingsComponent.saveSettings($scope.settings).then(function() {
 			$scope.hideLoader();
+            $scope.saveLoad = false;
 			$scope.showNotifications('top','center','success','Settings updated successfully');
-			$location.path('/app_settings');
+			//$location.path('/app_settings');
+            $scope.loadSettings();
 		}).catch(function (response) {
+            $scope.saveLoad = false;
 			$scope.showNotifications('top','center','danger','Settings updation failed. Invalid input');
 		});
 		$scope.loadPageTop();

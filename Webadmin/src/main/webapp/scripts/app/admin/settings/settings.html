@@ -1000,18 +1000,19 @@
 	<div class="row">
 
         <div class="col-sm-offset-6 col-sm-4 txt-align-rgt">
-            <button class="btn btn-success" type="submit"
+            <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}" type="submit"
                     id="form-button-save" ng-disabled="form.$invalid" ng-click="saveSettings()">
                              <span class="btn-label">
                      				<i class="material-icons">check</i>
                  				</span> Save
+                <i class="ld ld-ring ld-spin" ng-show="saveLoad"></i>
             </button>
             <!--<button class="btn btn-info" type="submit"-->
             <!--id="save-and-go-back-button" ng-disabled="form.$invalid">-->
             <!--<i class="material-icons">rotate_left</i> Save and go back to list-->
             <!--</button>-->
             <button class="btn btn-danger" type="button"
-                    ng-click="cancelSettings()" id="cancel-button">
+                    ng-click="cancelSettings()" id="cancel-button" ng-disabled="saveLoad">
                 <i class="material-icons">close</i> Cancel
             </button>
         </div>
