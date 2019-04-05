@@ -116,7 +116,7 @@ public class TicketManagementService extends AbstractService {
             if(assignedTo != null) {
                 ticket.setAssignedTo(assignedTo);
                 Calendar assignedCal = Calendar.getInstance();
-                ticket.setAssignedOn(new java.sql.Date(assignedCal.getTimeInMillis()));
+                ticket.setAssignedOn();
             }
         }else {
             ticket.setAssignedTo(null);
@@ -225,7 +225,7 @@ public class TicketManagementService extends AbstractService {
                     assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
                     ticket.setStatus("Assigned");
                     ticket.setAssignedTo(assignedTo);
-                    ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
+                    ticket.setAssignedOn();
                 }else {
                     if(ticket.getEmployee() != null) {
                         assignedTo = ticket.getEmployee();
@@ -233,7 +233,7 @@ public class TicketManagementService extends AbstractService {
                         assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
                         ticket.setStatus("Assigned");
                         ticket.setAssignedTo(assignedTo);
-                        ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
+                        ticket.setAssignedOn();
                     }
                 }
             }else {
@@ -293,7 +293,7 @@ public class TicketManagementService extends AbstractService {
 
             if(StringUtils.isNotEmpty(ticket.getStatus()) && (ticket.getStatus().equalsIgnoreCase("Closed"))) {
                 ticket.setClosedBy(user.getEmployee());
-                ticket.setClosedOn(new java.sql.Date(currCal.getTimeInMillis()));
+                ticket.setClosedOn();
             }
 
             if(StringUtils.isNotEmpty(ticketDTO.getStatus()) && (ticketDTO.getStatus().equalsIgnoreCase("Reopen"))) {

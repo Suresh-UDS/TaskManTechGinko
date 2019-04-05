@@ -1,8 +1,8 @@
 {
   "name": "attendance",
-  "integrations": {
-    "cordova": {}
-  },
+  "app_id": "",
+  "v2": true,
+  "typescript": true
   "type": "angular",
   "v2": true,
   "typescript": true

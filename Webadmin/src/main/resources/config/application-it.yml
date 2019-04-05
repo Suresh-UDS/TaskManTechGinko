@@ -20,11 +20,11 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://produdsdb-cluster.cluster-cdihr97wq71b.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
 #        url: jdbc:mysql://udstaskman.c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
         name:
-        username: TaskMan
-        password: Task@2019
+        username: UDSTaskMan
+        password: Rd32018Uds
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
