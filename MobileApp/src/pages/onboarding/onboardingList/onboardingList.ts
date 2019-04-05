@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
-import { Network } from "@ionic-native/network";
+
 import { onboardingNewEmployee } from '../onboardingNewEmployee/onboardingNewEmployee';
 import { onboardingEmpStatus } from '../onboardingEmpStatus/onboardingEmpStatus';
 import { onboardingUserView } from '../onboardingList/onboardingUserView/onboardingUserView';
@@ -12,8 +12,6 @@ import { componentService } from '../../service/componentService';
 
 import { Storage } from '@ionic/storage';
 import { onBoardingModel } from './onboarding';
-import { onBoardingDataModel } from './onboardingDataModel';
-import {AppConfig} from '../../service/app-config';
 
 @Component({
   selector: 'page-onboarding-list',
@@ -29,132 +27,81 @@ export class onboardingExistEmployee implements OnInit {
   errormsg;
   hideFilter = true;
   wbsId;
-  AppConfig = AppConfig;
 
-  constructor(private storage: Storage, private network: Network, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController,
-    public component: componentService) {
-    this.setStorage();
-    // this.storage.get('onboardingProjectSiteIds').then((Ids) => {
-    //   this.wbsId = Ids['siteId'];
-    // });
+  constructor(private storage: Storage, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public component: componentService) {
+    this.storage.get('onboardingProjectSiteIds').then((Ids) => {
+      this.wbsId = Ids['siteId'];
+    });
   }
+  ngOnInit() { }
   ionViewWillEnter() {
-    //  this.component.showLoader("Updating....");
-    this.storage.get('OnBoardingData').then((data) => {
-      if (data) {
-        this.actionRequiredEmp = data['actionRequired'];
-        this.completedEmp = data["completed"];
+    this.component.showLoader("Please wait....");
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+      // for (let list of localStoragedData['actionRequired']) {
+      //   list['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
+      //   if (list.hasOwnProperty('kycDetails')) {
+      //     list['personalDetails']['image'] = list['kycDetails']['allKYCData']['employeeProfile'];
+      //   } else {
+      //     list['personalDetails']['image'] = 'assets/imgs/placeholder.png'
+      //   }
+      // }
+      this.onboardingService.getEmployeeListByWbs(this.wbsId).subscribe(res => {
+        let objectsKeys;
+        let objectsValues;
+        for (var i = 0; i < res.length; i++) {
+          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+            // for (let list in onBoardingModel) {
+            //   for (let key in onBoardingModel[list]) {
+            //     onBoardingModel[list][key] = res[i][key];
+            //     if (list == 'employmentDetails') {
+            //       if (res[i]['previousEmployee'].length) {
+            //         onBoardingModel[list]['isEmploymentEarlier'] = res[i]['previousEmployee'][0]['name'] ? true : false;
+            //         onBoardingModel[list]['employeeName'] = res[i]['previousEmployee'][0]['name'];
+            //         onBoardingModel[list]['employeeDesignation'] = res[i]['previousEmployee'][0]['designation'];
+            //       }
+            //     }
+            //     if (list == 'kycDetails') {
+            //       //onBoardingModel['personalDetails']['image'] = res[i]['kycDetails'][0]['accountNo'];
+            //       if (res[i]['bankDetails'].length) {
+            //         onBoardingModel[list]['bAccountNumber'] = res[i]['bankDetails'][0]['accountNo'];
+            //         onBoardingModel[list]['bIfscNumber'] = res[i]['bankDetails'][0]['IFSC'];
+            //       }
+            //     }
+            //   }
+            //   console.log(onBoardingModel);
+            //   //objectsKeys = Object['values'](onBoardingModel[list]);
+            //   //onBoardingModel[list]['personalDetails']['percentage'] = (Object.keys(list).length / 5) * 100;
+            // }
+            //objectsKeys = Object['entries'](onBoardingModel[list]);
+            //console.log('entries ==== ');
+            //console.log(objectsKeys);
+            localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+            this.storage.set('OnBoardingData', localStoragedData);
+          }
+        }
+        //console.log(onBoardingModel);
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        
+        this.component.closeLoader();
+      }, err => {
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
         this.onSegmentChange();
         this.getPercentage();
-      }
-      // this.component.closeLoader();
-    })
+        this.component.closeLoader();
+        this.component.showToastMessage('Server Unreachable', 'bottom');
+      });
+    });
   }
-
-  ngOnInit() {
-    this.component.showLoader("Please wait....");
-
-    console.log('onboard home Empid ' + window.localStorage.getItem('employeeId'));
-    console.log('onboard home UserId ' + window.localStorage.getItem('employeeUserId'));
-    //  console.log('onboard home EmpName ' + window.localStorage.getItem('employeeDetails'));
-
-
-    if (this.network.type != 'none') {
-      this.onboardingService.initGetEmployeeListByWbs().subscribe(projectId => {
-        console.log('res init in page ' + projectId);
-        this.wbsId = projectId;
-
-        window.localStorage.setItem('projectId', projectId);
-
-        this.storage.get('OnBoardingData').then((localStoragedData) => {
-
-          localStoragedData["completed"] = [];
-
-          this.onboardingService.getEmployeeListByProjectId(projectId).subscribe(res => {
-            let objectsKeys;
-            let objectsValues;
-
-
-            for (var i = 0; i < res.length; i++) {
-
-              if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-
-                if(res[i]["submitted"]){
-                  localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
-                }
-                else{
-                  localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
-                }
-
-                this.storage.set('OnBoardingData', localStoragedData);
-
-              }
-
-            }
-            //console.log(onBoardingModel);
-            this.actionRequiredEmp = localStoragedData['actionRequired'];
-            this.completedEmp = localStoragedData["completed"];
-            this.getPercentage();
-            this.component.closeLoader();
-          }, err => {
-            console.log('onbList3');
-            this.actionRequiredEmp = localStoragedData['actionRequired'];
-            this.completedEmp = localStoragedData["completed"];
-            this.onSegmentChange();
-            this.getPercentage();
-            this.component.closeLoader();
-            this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
-          });
-        });
-      },
-        err => {
-          console.log('onbList2');
-          // this.actionRequiredEmp = localStoragedData['actionRequired'];
-          //  this.completedEmp = localStoragedData["completed"];
-          this.onSegmentChange();
-          this.getPercentage();
-          this.component.closeLoader();
-          this.component.showToastMessage('Server Unreachable', 'bottom');
-          console.log(err);
-        })
-    } else {
-      console.log(' No network ');
-      this.component.showToastMessage(' No network ', 'bottom');
-      this.storage.get('OnBoardingData').then((data) => {
-        if (!data) {
-          this.actionRequiredEmp = data['actionRequired'];
-          this.completedEmp = data["completed"];
-          this.onSegmentChange();
-          this.getPercentage();
-          this.component.closeLoader();
-          this.component.showToastMessage('Server Unreachable', 'bottom');
-        }
-      })
-    }
-  }
-
-
   addNewEmpyoee() {
-    let obj = {
-      projectId: this.wbsId,
-      index: this.actionRequiredEmp.length,
-      action: 'add'
-    }
-    this.storage.set('onboardingCurrentIndex', obj);
-
-    
-    
+    this.storage.set('onboardingCurrentIndex', this.actionRequiredEmp.length);
     console.log("index === " + this.actionRequiredEmp.length);
     this.navCtrl.push(onboardingNewEmployee);
   }
   updateEmployeeDetails(index) {
     console.log('index = ' + index);
-    let obj = {
-
-      index: index,
-      action: 'update'
-    }
-    this.storage.set('onboardingCurrentIndex', obj)
+    this.storage.set('onboardingCurrentIndex', index)
     //window.localStorage.setItem('onboardingCurrentIndex', index);
     this.navCtrl.push(onboardingEmpStatus);
   }
@@ -185,6 +132,8 @@ export class onboardingExistEmployee implements OnInit {
         for (let key in onBoardingModel[list]) {
           onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
         }
+
+
         objectkeys = Object.keys(onBoardingModel[list]);
         objectValues = Object['values'](onBoardingModel[list]);
         objectFormattedValues = objectValues.filter((data) => {
@@ -201,9 +150,9 @@ export class onboardingExistEmployee implements OnInit {
       console.log(Math.floor(objectPercentage / 5));
     }
   }
-  findSavedDuplication(empdt, key) {
+  findSavedDuplication(array, key) {
     let count = 0;
-    for (let list of empdt) {
+    for (let list of array) {
       if (list['employeeCode'] == key) {
         count = count + 1;
       }
@@ -229,7 +178,7 @@ export class onboardingExistEmployee implements OnInit {
   }
   syncEmployeeDetails(object, index) {
     this.component.showLoader("Loading OnBoarding");
-    this.onboardingService.saveOnboardingUser(object).subscribe((res) => {
+    this.onboardingService.saveOnboardingUser(object, index).subscribe((res) => {
       this.component.closeAll();
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         localStoragedData['completed'].splice(index, 1);
@@ -240,13 +189,4 @@ export class onboardingExistEmployee implements OnInit {
       this.component.showToastMessage('Server Unreachable', 'bottom');
     })
   }
-
-  setStorage() {
-    this.storage.get('OnBoardingData').then((data) => {
-      if (!data) {
-        this.storage.set('OnBoardingData', { actionRequired: [], completed: [] });
-      }
-    })
-  }
-
 }

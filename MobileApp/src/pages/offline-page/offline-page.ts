@@ -6,7 +6,6 @@ import {OfflineAsset} from "../offline-asset/offline-asset";
 import{AssetList} from "../asset-list/asset-list";
 import {OfflineAssetList} from "../offline-assetlist/offline-assetlist";
 import {OfflineJobs} from "../offline-jobs/offline-jobs";
-import { onboardingExistEmployee } from '../onboarding/onboardingList/onboardingList';
 
 
 /**
@@ -39,10 +38,6 @@ export class OfflinePage {
 
   offlineJob(){
     this.navCtrl.push(OfflineJobs);
-  }
-
-  offlineOnboard(){
-    this.navCtrl.push(onboardingExistEmployee)
   }
 
 }

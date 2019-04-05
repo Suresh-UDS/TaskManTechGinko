@@ -47,8 +47,11 @@ export class TicketFilter {
     site: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
-              public employeeService:EmployeeService,public datePicker:DatePicker) {
+              public employeeService:EmployeeService,public datePicker:DatePicker, public cs: componentService) {
       this.empPlace='Employee';
+      this.fromDate = new Date();
+      this.toDate = new Date();
+      this.viewButton = true;
   }
 
   ionViewDidLoad() {
@@ -59,7 +62,7 @@ export class TicketFilter {
               console.log("====project======");
               console.log(response);
               this.clientList=response;
-              this.selectedProject = this.clientList[0];
+              // this.selectedProject = this.clientList[0];
               // this.selectSite(this.selectedProject);
               console.log('select default value:');
               this.component.closeLoader();
@@ -221,10 +224,19 @@ export class TicketFilter {
             date => {
                 this.fromDate=date;
                 console.log('Got date: ', date);
+
                 if(this.fromDate && this.toDate)
                 {
-                    console.log('view button true');
-                    this.viewButton=true;
+                   if(this.fromDate<this.toDate){
+                       console.log('view button true');
+                       this.viewButton=true;
+                   }else{
+                        this.cs.showToastMessage("From date has to be greater than to date",'bottom');
+                        this.viewButton = false;
+
+                   }
+                }else{
+                    console.log("From date and to date not available");
                 }
 
             },
@@ -243,6 +255,23 @@ export class TicketFilter {
             date => {
                 this.toDate=date;
                 console.log('Got date: ', date);
+
+                if(this.fromDate){
+                    if(this.toDate){
+                        if(this.fromDate<this.toDate){
+                            console.log('view button true');
+                            this.viewButton=true;
+                        }else{
+                            console.log("from date is greater than to date");
+                            this.cs.showToastMessage("From date has to be greater than to date",'bottom');
+                            this.viewButton = false;
+
+                        }
+                    }
+
+                }else{
+                    this.cs.showToastMessage("Please select from date first!!!",'bottom');
+                }
                 if(this.fromDate && this.toDate)
                 {
                     console.log('view button true');

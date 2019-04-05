@@ -3,9 +3,6 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import {FabContainer, IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {HttpModule} from "@angular/http";
 import {HttpClient} from "../pages/Interceptor/HttpClient";
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -61,7 +58,6 @@ import {FeedbackQuestionPage} from "../pages/feedback/feedback-questions";
 import {InitFeedbackPage} from "../pages/feedback/init-feedback";
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
-import { FilePath } from '@ionic-native/file-path';
 import{TicketFilter} from "../pages/ticket/ticket-filter/ticket-filter";
 import{InventoryMaster} from "../pages/inventory-master/inventory-master";
 import{ExpenseDetails} from"../pages/expense-details/expense-details";
@@ -167,6 +163,7 @@ import { onboardingListFilter } from '../pages/onboarding/onboardingList/onboard
 
 import { onboardingUserFilterPipe } from '../pages/onboarding/onboardingList/onboardingUser.pipe';
 import { onBoardingDataService } from '../pages/onboarding/onboardingNewEmployee/onboarding.messageData.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -447,7 +444,6 @@ import { onBoardingDataService } from '../pages/onboarding/onboardingNewEmployee
     Toast,
     FileTransfer,
     File,
-    FilePath,
       DatePicker,
       AppVersion,
       QRScanner,
@@ -464,11 +460,10 @@ import { onBoardingDataService } from '../pages/onboarding/onboardingNewEmployee
       PurchaseRequisitionService,
       DatabaseProvider,
 
-    /* Onboarding Servive */ 
+      /* Onboarding Servive */ 
     OnboardingService,
     onBoardingDataService,
-
-
+    
     {provide: ErrorHandler, useClass: IonicErrorHandler},
       {provide:MY_CONFIG_TOKEN, useValue: AppConfig}
   ]

@@ -98,10 +98,10 @@
                 <ion-icon name="speedometer" class="fnt-28  clr-white" ></ion-icon>
             </button>
 
-            <ion-label class="margin0 bg-orange" color="dark">Inventory</ion-label>
+            <!--<ion-label class="margin0 bg-orange" color="dark">Inventory</ion-label>
             <button ion-fab color="primary" (click)="openTransaction()">
                 <ion-icon name="md-add" class="fnt-28  clr-white"></ion-icon>
-            </button>
+            </button>-->
 
 
             <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'jobs' ">Job</ion-label>-->
@@ -109,11 +109,11 @@
                 <!--<ion-icon name="ios-construct-outline" class="fnt-35"></ion-icon>-->
             <!--</button>-->
 
-            <ion-label class="margin0 bg-orange"  color="dark">Image</ion-label>
-            <!--<ion-label class="margin0 bg-orange"  color="dark"  *ngSwitchCase =" 'details' ">Image</ion-label>-->
+            <!--<ion-label class="margin0 bg-orange"  color="dark">Image</ion-label>
+            &lt;!&ndash;<ion-label class="margin0 bg-orange"  color="dark"  *ngSwitchCase =" 'details' ">Image</ion-label>&ndash;&gt;
             <button ion-fab color="primary" (click)="addAssetImage()">
                 <ion-icon name="camera" class="fnt-28  clr-white"></ion-icon>
-            </button>
+            </button>-->
 
             <ion-label color="dark" class="margin0 bg-orange">Ticket</ion-label>
             <!--<ion-label color="dark" class="margin0 bg-orange"  *ngSwitchCase =" 'tickets' ">Ticket</ion-label>-->
@@ -912,6 +912,7 @@
                             <th class="text-center clr-orange" >Type</th>
                             <th class="text-center clr-orange" >Consumption</th>
                             <th class="text-center clr-orange">Reading</th>
+                            <!--<th class="text-center clr-orange">Value</th>-->
                             <th class="text-center clr-orange">Uom</th>
                         </tr>
                         </thead>
@@ -920,11 +921,11 @@
                                 <td class="text-center">{{readings.createdDate| date : 'dd/ MM /yy'}}
                                 <p>{{readings.createdDate|date : 'hh:mm a'}}</p></td>
                                 <td class="text-center">{{readings.name}}</td>
-                                <td class="text-center" *ngIf="readings.consumption">{{readings.consumption}}
+                                <td class="text-center" >{{readings.consumption}}
                                     <p class="clr-orange">Initial Value:<span class="clr-black">{{readings.initialValue}}</span></p>
                                     <p class="clr-orange">Final Value:<span class="clr-black">{{readings.finalValue}}</span></p>
                                 </td>
-                                <td class="text-center" *ngIf="readings.value>0">NA</td>
+                                <!--<td class="text-center" *ngIf="readings.value>0">NA</td>-->
                                 <td text-center>{{readings.value}}</td>
                                 <td class="text-center">{{readings.uom}}</td>
                             </tr>

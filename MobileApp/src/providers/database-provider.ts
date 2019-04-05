@@ -36,7 +36,7 @@ export class DatabaseProvider {
         });
     }
 
-    addDeveloper(name, skill, years) {
+    addDeveloper(name: any, skill: any, years: any) {
         let data = [name, skill, years]
         return this.database.executeSql("INSERT INTO developer (name, skill, yearsOfExperience) VALUES (?, ?, ?)", data).then(data => {
             return data;
@@ -95,7 +95,7 @@ export class DatabaseProvider {
         })
     }
 
-    checkForData(tableName){
+    checkForData(tableName: string){
         return this.database.executeSql("SELECT count(*) FROM "+tableName).then((data)=>{
             console.log("Total records");
             console.log(data);
@@ -141,7 +141,7 @@ export class DatabaseProvider {
     }
 
     addSites(){
-        this.cs.showLoader('Syncing site data');
+        // this.cs.showLoader('Syncing site data');
         var searchCriteria = {
             findAll:true,
             currPage:1,
@@ -156,7 +156,7 @@ export class DatabaseProvider {
                     console.log("site for adding to sqlite");
                     console.log(response.transactions[i]);
                     this.insertSitesData(response.transactions[i].id, response.transactions[i].name);
-                    this.addEmployee(response.transactions[i].id);
+                    
 
                 }
                 this.cs.closeAll();
@@ -164,7 +164,7 @@ export class DatabaseProvider {
 
     }
 
-    insertSitesData(id,name) {
+    insertSitesData(id: any,name: any) {
         let data = [id,name];
         return this.database.executeSql("INSERT INTO site (id,name) VALUES (?, ?)", data).then(data => {
             return data;
@@ -192,18 +192,17 @@ export class DatabaseProvider {
         })
     }
 
-    addEmployee(siteId){
+    addEmployee(){
 
         var searchCriteria = {
             currPage:1,
             pageSort: 15,
-            siteId:siteId,
             report:true
         };
         this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(response=>{
             let employee = [];
             employee = response.transactions;
-            console.log(employee);
+            console.log(response.transactions);
             if (employee.length > 0) {
                 for (var i = 0; i < employee.length; i++) {
                         this.insertEmployeeData(employee[i].id, employee[i].name,employee[i].lastName,employee[i].siteId, null, null, employee[i].attendanceId, employee[i].checkedIn, employee[i].faceAuthorised);
@@ -212,10 +211,11 @@ export class DatabaseProvider {
         })
     }
 
-    insertEmployeeData(id, firstname, lastname, siteId, checkInImage, checkOutImage, attendanceId,checkedIn, faceAuthorised){
+    insertEmployeeData(id: any, firstname: any, lastname: any, siteId: any, checkInImage: any, checkOutImage: any, attendanceId: any,checkedIn: any, faceAuthorised: any){
 
         let data = [id, firstname, lastname, siteId, checkInImage, checkOutImage, attendanceId,checkedIn, faceAuthorised, false];
         return this.database.executeSql("INSERT INTO employee (id, firstName, lastName, siteId, checkInImage, checkoutImage, attendanceId, checkedIn, faceAuthorised, syncedToServer ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data).then(data => {
+            console.log("Employee data inserted");
             return data;
         }, err => {
             console.log('Error: ', err);
@@ -225,7 +225,7 @@ export class DatabaseProvider {
     }
 
     getEmployeeData(){
-        return this.database.executeSql("SELECT * FROM employee WHERE employee.faceAuthorised IS TRUE ",[]).then(data=>{
+        return this.database.executeSql("SELECT * FROM employee",[]).then(data=>{
             console.log("Employee data from sqlite with faceauthorised true");
             console.log(data);
             let employees = [];
@@ -243,8 +243,8 @@ export class DatabaseProvider {
         })
     }
 
-    getEmployeeDataBySiteId(siteId){
-        return this.database.executeSql("SELECT * FROM employee WHERE employee.faceAuthorised IS TRUE AND employee.siteId = siteId",[]).then(data=>{
+    getEmployeeDataBySiteId(siteId: any){
+        return this.database.executeSql("SELECT * FROM employee WHERE faceAuthorised IS TRUE AND siteId = siteId",[]).then(data=>{
             console.log("Employee data from sqlite with faceauthorised true");
             console.log(data);
             let employees = [];
@@ -265,15 +265,17 @@ export class DatabaseProvider {
 
     createJobsTable(){
         this.database.executeSql("DROP TABLE IF EXISTS jobs");
-        return this.database.executeSql("CREATE TABLE IF NOT EXISTS jobs(id int UNIQUE PRIMARY KEY , siteId int NOT NULL, siteName TEXT, title TEXT, status TEXT, description TEXT, type TEXT, employeeId int, empId TEXT, employeeName TEXT, plannedStartTime DATE, actualEndTime DATE) ",[]).then((data)=>{
+        try {
+            const data = this.database.executeSql("CREATE TABLE IF NOT EXISTS jobs(id int UNIQUE PRIMARY KEY , siteId int NOT NULL, siteName TEXT, title TEXT, status TEXT, description TEXT, type TEXT, employeeId int, empId TEXT, employeeName TEXT, plannedStartTime DATE, actualEndTime DATE) ", []);
             console.log("Table creation result");
             console.log(data);
             return data;
-        },err=>{
+        }
+        catch (err) {
             console.log("Error in executing query");
             console.log(err);
             return null;
-        })
+        }
     }
 
     addJobs(){
@@ -295,7 +297,7 @@ export class DatabaseProvider {
 
     }
 
-    insertJobsData(id,siteId, siteName, title, status, description, type, employeeId, empId, employeeName, plannedStartTime){
+    insertJobsData(id: any,siteId: any, siteName: any, title: any, status: any, description: any, type: any, employeeId: any, empId: any, employeeName: any, plannedStartTime: any){
         let data = [id,siteId, siteName, title, status, description, type, employeeId, empId, employeeName, plannedStartTime];
         return this.database.executeSql("INSERT INTO jobs (id, siteId, siteName, title, status, description, type, employeeId, empId, employeeName, plannedStartTime, actualEndTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",data).then(data=>{
             return data;
@@ -339,6 +341,45 @@ export class DatabaseProvider {
         this.database.executeSql("DROP TABLE IF EXISTS attendance");
         this.database.executeSql("DROP TABLE IF EXISTS asset");
         this.database.executeSql("DROP TABLE IF EXISTS jobs");
+    }
+
+    createAllTables(){
+        this.createSiteTable();
+        this.createEmployeeTable();
+        this.createJobsTable();
+        this.createCheckListTable();
+    }
+
+    syncAttendanceToServer(){
+        this.database.executeSql("SELECT * FROM employee WHERE syncedToServer is true").then(data => {
+            console.log("Syncing data to server..");
+            for(var i=0;i<data.length;i++){
+                console.log("Offline sync for user  - "+data[i].employeeName);
+                if(data[i].checkedIn){
+                    if(data[i].attendanceId>0){ // if attendance Id is lessthan 0 then checkout else checkin 
+                        this.attendanceService.markAttendanceCheckOut(data[i].siteId,data[i].employeeId, 0.0, 0.0, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                            response=>{
+                                console.log("Offline attendance done to server");
+                                //update synctoserver in employee database
+    
+                            }
+                        )
+                    }
+                }else{
+                    this.attendanceService.markAttendanceCheckIn(data[i].siteId, data[i].empId, 0.0, 0.0, data[i].checkInImage).subscribe(
+                        response=>{
+                            console.log("Offline attendance done to server");
+                            //update synctoserver in employee database
+
+                        }
+                    )
+                }
+            }
+            return data;
+        }, err => {
+            console.log('Error: ', err);
+            return err;
+        });
     }
 
 }

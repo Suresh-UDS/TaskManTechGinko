@@ -15,47 +15,55 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   onboardingPersonalDetailsForm: FormGroup;
   onboardingPersonalDetailsSubscription;
   storedIndex;
-  today;
-  // setMinDate: any;
-  formActionStatus: any;
+  setMinDate: any;
   pipe = new DatePipe('en-US');
-
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
   ngOnInit() {
-    this.storage.get('onboardingCurrentIndex').then(data => {
-      this.storedIndex = data['index'];
-      this.formActionStatus = data['action'];
+    this.storage.get('onboardingCurrentIndex').then(index => {
+      this.storedIndex = index;
     })
-
-    this.today = new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toJSON().split('T')[0];
-
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],
+      // fatherName: ['', [Validators.required]],
+      // motherName: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
       dateOfJoining: ['', [Validators.required]],
-      religion: [''],
+      religion: ['', [Validators.required]],
+      // caste: new FormControl('', [Validators.required]),
       bloodGroup: [''],
-      identificationMark1: ['', [Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
-      identificationMark2: ['', [ Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+      // SpeciallyAbled: new FormControl('', [Validators.required]),
+      identificationMark1: ['', [Validators.required]],
+      identificationMark2: [''],
       relationshipDetails: this.fb.array([
         this.fb.group({
-          name: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
-          relationship: 'Father', contactNumber: '',
+          name: ['', [Validators.required]],
+          relationship: 'Father',
+          contactNumber: '',
         }),
         this.fb.group({
-          name: [''],
-          relationship: 'Mother', contactNumber: '',
+          name: ['', [Validators.required]],
+          relationship: 'Mother',
+          contactNumber: '',
         })
       ])
     });
 
     this.onboardingPersonalDetailsForm.controls['dateOfBirth'].valueChanges.subscribe(value => {
-      this.setMinValidation(value);  
+
+      this.setMinValidation(value);
+      // const dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining');
+      // const minDate = new Date(value);
+      // console.log(minDate)
+      // dateOfJoining.setValidators([Validators.required, Validators.min(minDate)]);
     });
-   
+
+    // ngAfterViewInit() {
+    //   let currentIndex = window.localStorage.getItem('onboardingCurrentIndex');
+    //   this.storage.get('OnBoardingData').then((localStoragedData) => {
+    // }
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
         this.onboardingPersonalDetailsForm.reset();
@@ -63,19 +71,24 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     })
 
     this.onboardingPersonalDetailsSubscription = this.onboardingPersonalDetailsForm.statusChanges.subscribe(status => {
+      // let dateOfBirth = this.onboardingPersonalDetailsForm.get('dateOfBirth').value;
+      // let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
+      // if (dateOfBirth) {
+      //   var mindate = new Date(dateOfBirth);
+      //   var formattedMinDate = mindate.setDate(mindate.getDate() + 89);
+      //   var formattedFinalDate = new Date(formattedMinDate);
+      //   var filteredDate = this.pipe.transform(formattedFinalDate, 'yyyy-MM-dd');
+      //   this.setMinDate = filteredDate;
+      // }
+      // if (!dateOfJoining) {
+      //   this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
+      // }
+
       console.log(this.onboardingPersonalDetailsForm.value);
       if (status == 'VALID') {
         let fromStatusValues = {
           status: true,
           data: this.onboardingPersonalDetailsForm.value
-        }
-        if (this.formActionStatus == 'add') {
-          let obj = {
-            // branchName: '',
-            // project: [{}]
-            //gopi cg
-          }
-          // fromStatusValues['data'] = obj;
         }
         fromStatusValues['data']['identificationMark'] = [
           fromStatusValues['data']['identificationMark1'],
@@ -106,36 +119,40 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       // var formattedFinalDate = new Date(formattedMinDate);
       //var filteredDate = this.pipe.transform(formattedMinDate, 'yyyy-MM-dd');
       console.log('filter date = ' + formattedMinDate);
-      // this.setMinDate = formattedMinDate;
+      this.setMinDate = formattedMinDate;
     }
     let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
     if (dateOfJoining < formattedMinDate) {
       this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
-    } else {
-      this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formattedMinDate);
     }
   }
-
   ngAfterViewInit() {
-    this.storage.get('OnBoardingData').then(localStoragedData => {    
-      if (localStoragedData['actionRequired'][this.storedIndex]) {      
+    this.storage.get('OnBoardingData').then(localStoragedData => {
+      if (localStoragedData['actionRequired'][this.storedIndex]) {
+
         if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('employeeName')) {
-          console.log('PERSONAL - ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+
+          console.log(localStoragedData['actionRequired'][this.storedIndex]);
+
           this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
-          // this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
+          //   this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
           // }'DD-MM-YYYY').format('YYYY-MM-DD');
-       
-          this.onboardingPersonalDetailsForm.controls['identificationMark1']
-            .setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0]);
-          this.onboardingPersonalDetailsForm.controls['identificationMark2']
-            .setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);
+          var formatDateOfBirthDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+          var formatDateOfJoiningDate = moment(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'], 'DD-MM-YYYY').format('YYYY-MM-DD');
+
+          this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(formatDateOfBirthDate);
+          this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formatDateOfJoiningDate);
+
+          this.onboardingPersonalDetailsForm.controls['identificationMark1'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0]);
+          this.onboardingPersonalDetailsForm.controls['identificationMark2'].setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);
           this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']);
         }
       }
     });
   }
   // getFormData() {
+
   //   console.log(this.onboardingPersonalDetailsForm)
   // }
   // setValidation() {

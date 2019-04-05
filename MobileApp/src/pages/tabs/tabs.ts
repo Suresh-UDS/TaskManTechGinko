@@ -115,14 +115,6 @@ export class TabsPage {
         }
     });
 
-    this.sqlite.create({
-      name: 'data.db',
-      location: 'default'
-    }).then((db: SQLiteObject) => {
-      this.db = db;
-      console.log("Database connection");
-      console.log(this.db)
-    })
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
@@ -152,30 +144,6 @@ export class TabsPage {
             }
         }
     );
-      this.dbService.getAllSavedImages().then(
-        (res)=> {
-          console.log("saved images", res);
-          this.savedImages = res;
-          console.log("savedimages", this.savedImages);
-          if (this.savedImages.length > 0) {
-            for (var i = 0; i < this.savedImages.length; i++) {
-              // console.log("saved images",this.savedImages[i].image);
-              let imageData = this.savedImages[i].image;
-              let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
-              // let base64Image = 'data:image/jpeg;base64,' + this.savedImages[i].image;
-              this.completedImages.push(base64Image);
-              this.component.closeLoader();
-
-            }
-          }else {
-            this.component.closeLoader();
-          }
-        },(err)=>{
-          console.log("error",err);
-          this.savedImages = [];
-          this.component.closeLoader();
-        }
-      )
 
     console.log(this.network.type);
     var session = window.localStorage.getItem('session');
@@ -183,7 +151,32 @@ export class TabsPage {
           console.log("Session available");
 
           if(this.network.type != 'none'){
-            // this.setJobsSync();
+
+              // this.databaseProvider.getDatabaseState().subscribe(status=>{
+              //     console.log("Database status - "+status);
+              //     if(status){
+              //         this.databaseProvider.getSiteData().then(sites=>{
+              //             console.log("Site information from sqlite - ");
+              
+              //             console.log(sites);
+              //             if(sites && sites.length>0){
+              //               console.log("Sqlite tables found");
+              //                 this.databaseProvider.addSites();
+              //                 this.databaseProvider.addEmployee();
+              //                 this.databaseProvider.addJobs();
+              //             }else{
+              //                 console.log("No Sqlite tables found");
+              //                 this.databaseProvider.createAllTables();
+              //             }
+              //         },err=>{
+              //             console.log("Error in getting site information from sqlite");
+              //             console.log(err);
+              
+              //         });
+              
+              //     }
+              
+              // })
           }else {
             console.log("data not sync");
           }
@@ -192,27 +185,7 @@ export class TabsPage {
           // this.component.showToastMessage('Session not available, please login','bottom');
           this.navCtrl.setRoot(LoginPage);
       }
-    this.databaseProvider.getDatabaseState().subscribe(status=>{
-        console.log("Database status - "+status);
-        if(status){
-            this.databaseProvider.getSiteData().then(sites=>{
-                console.log("Site information from sqlite - ");
-                console.log(sites);
-                if(sites && sites.length>0){
-                    this.databaseProvider.addSites();
-                    this.databaseProvider.addJobs();
-                }else{
-                    this.databaseProvider.createSiteTable();
-                }
-            },err=>{
-               console.log("Error in getting site information from sqlite");
-               console.log(err);
 
-            });
-
-        }
-
-    })
 
   }
 

@@ -36,8 +36,6 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
     const data = document.getElementsByTagName('ion-step-header');
 
     this.storage.get('onboardingCurrentIndex').then(currentIndex => {
-
-      currentIndex = currentIndex['index'];
       console.log('index = ' + currentIndex);
 
       console.log(currentIndex);
@@ -62,37 +60,25 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
 
           let keyData = this.onboardingFormStatus[i]['key'];
           for (let key in onBoardingModel[keyData]) {
-            console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][key]);
             onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][key];
           }
 
           objectkeys = Object.keys(onBoardingModel[keyData]);
           objectValues = Object['values'](onBoardingModel[keyData]);
-          console.log('value_1 ' +  ' / ' + objectkeys + ' / '+ objectValues);
-
           objectFormattedValues = objectValues.filter((data) => {
             if (data && JSON.stringify(data) !== '{}') {
               return data;
             }
           });
 
-
+    
           keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100
+    
           this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
-
-
-          console.log('key_1', this.onboardingFormStatus[i]['status']);
-          this.storage.set('PageStatus',this.onboardingFormStatus);
-          
-          
-          // localStoragedData['actionRequired'][currentIndex]['pageStatus'][i] = Math.floor(keyPercentage);
-          // console.log('key2 EmpStatus ' +   localStoragedData['actionRequired'][currentIndex]['pageStatus'][i]);        
-          // this.storage.set('OnBoardingData', localStoragedData);
           // let keyPercentage = 0
           // let objectFormattedValues = [];
-          // let objectkeys1 = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
-          // let objectValues1 = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
-          // console.log('value 1 ' +  ' / ' + objectkeys1);
+          // const objectkeys = Object.keys(localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
+          // const objectValues = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
           // objectFormattedValues = objectValues.filter((data) => {
           //   if (data) {
           //     return data;

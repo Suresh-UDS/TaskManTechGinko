@@ -144,9 +144,11 @@ export class JobsPage {
                 block:this.scannedBlock,
                 floor:this.scannedFloor,
                 zone:this.scannedZone,
+                schedule:"ONCE",
                 currPage:1,
                 columnName:"plannedStartTime",
                 sortByAsc:true,
+                report:false,
                 sort:10
 
             };
@@ -156,7 +158,8 @@ export class JobsPage {
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
                 locationId:this.scannedLocationId,
-                siteId:this.scannedSiteId
+                siteId:this.scannedSiteId,
+                schedule:"ONCE"
             };
             msg='Unable to fetch today\'s jobs ';
         }
@@ -180,7 +183,7 @@ export class JobsPage {
 
     loadAllJobs(){
         this.component.showLoader('Getting All Jobs');
-        var search={};
+        var search={schedule:"ONCE",report:false};
         this.jobService.getJobs(search).subscribe(response=>{
             console.log("All jobs of current user");
             console.log(response);
@@ -286,15 +289,15 @@ export class JobsPage {
         console.log(this.page)
 
         var searchCriteria = {};
-        var msg="";
+        var msg="Loading Jobs...";
 
         if(this.scannedLocationId){
             console.log("Location Id in job search ");
             console.log(this.scannedLocationId)
             searchCriteria = {
-                checkInDateTimeFrom:new Date(),
                 locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId,
+                schedule:"ONCE",
                 currPage:this.page+1,
                 columnName:"plannedStartTime",
                 sortByAsc:true,
@@ -306,11 +309,12 @@ export class JobsPage {
             console.log("No location id present");
             console.log(this.scannedBlock);
             searchCriteria={
-                checkInDateTimeFrom:new Date(),
                 siteId:this.scannedSiteId,
                 block:this.scannedBlock,
                 floor:this.scannedFloor,
                 zone:this.scannedZone,
+                schedule:"ONCE",
+
                 currPage:this.page+1,
                 columnName:"plannedStartTime",
                 sortByAsc:true,
@@ -321,10 +325,11 @@ export class JobsPage {
         }else{
             console.log("Scanned location Id or block floor zone not available");
             searchCriteria = {
-                checkInDateTimeFrom:new Date(),
                 locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId,
                 currPage:this.page+1,
+                schedule:"ONCE",
+
                 columnName:"plannedStartTime",
                 sortByAsc:true,
                 sort:10
@@ -373,7 +378,7 @@ export class JobsPage {
         console.log(this.todaysPage);
         console.log(this.page);
         var searchCriteria = {};
-        var msg="";
+        var msg="Loading Jobs...";
 
          if(this.scannedBlock && this.scannedFloor && this.scannedZone){
 
@@ -381,6 +386,8 @@ export class JobsPage {
             console.log(this.scannedBlock);
             searchCriteria={
                 checkInDateTimeFrom:new Date(),
+                schedule:"ONCE",
+
                 siteId:this.scannedSiteId,
                 block:this.scannedBlock,
                 floor:this.scannedFloor,
@@ -396,6 +403,8 @@ export class JobsPage {
             console.log("Scanned location Id or block floor zone not available");
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
+                schedule:"ONCE",
+
                 // locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId,
                 currPage:this.todaysPage+1,

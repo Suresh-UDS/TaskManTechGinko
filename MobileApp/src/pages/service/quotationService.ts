@@ -156,6 +156,19 @@ export class QuotationService {
         })
     }
 
+    rejectQuotation(quotation): Observable<any>{
+        return this.http.post(this.config.Url+'api/rateCard/quotation/reject',quotation).map(
+            response=>{
+                console.log("Reject quotation");
+                console.log(response);
+                return response;
+            }).catch(error=>{
+                console.log("Error in Reject quotation");
+                console.log(error);
+                return Observable.throw(error.json());
+            })
+    }
+
     createPDF():Observable<any>{
         return this.http.get(this.config.Url+'api/pdf/create').map(
             response=>{

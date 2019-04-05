@@ -103,13 +103,15 @@
 
 <ion-footer >
     <ion-toolbar class="align-right" >
+        <button *ngIf="quotation.isSubmitted" class="btn btn-danger" (click)="rejectQuotation(quotation)"  >
+            Reject &nbsp; <ion-icon name="close"></ion-icon>
+        </button>
 
         <button *ngIf="quotation.isDrafted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">
-            Send Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+            Send &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
         <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="approveQuotation(quotation)">
-            Approve Quotation &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+            Approve &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
-
     </ion-toolbar>
 </ion-footer>

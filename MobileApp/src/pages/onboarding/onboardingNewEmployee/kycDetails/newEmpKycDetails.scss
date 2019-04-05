@@ -1,18 +1,15 @@
+
 page-kycDetails-new {
     .form-group.label-floating.is-focused label.control-label {
         left: auto !important;
     }
     .mdImage {
         // width: 85px;
-        // height: 100px;
-        max-width: 130px;;
-        max-height: 130px;
-        vertical-align: middle;
+        height: 100px;
     }
     .passbookImage {
-        max-width: 130px;;
-        max-height: 130px;
-        vertical-align: middle;
+        height: 115px;
+        width: 50%;
     }
     .checkbox, .radio {
         margin-bottom: 0px;

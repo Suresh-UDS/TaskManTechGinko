@@ -21,13 +21,9 @@
 
 
 <ion-content class="CreateTicketPage FormPage">
-    <ion-fab right bottom>
+    <ion-fab right bottom *ngIf="viewButton">
         <button  (click)=" dismiss()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
     </ion-fab>
-
-
-
-
                 <div class="card scroll-card">
                   <div class="card-content">
                     <ion-row>

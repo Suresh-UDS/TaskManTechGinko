@@ -26,7 +26,7 @@
         <div>Update</div>
     </button> -->
     <ion-fab bottom right (click)="addNewEmpyoee()">
-        <button ion-button color="primary">New Employee</button>
+        <button ion-fab color="primary"><i class="fa fa-plus clr-white fnt-24"></i></button>
     </ion-fab>
     <div [ngSwitch]="onBoardingAction">
         <div *ngSwitchCase="'actionRequired'">
@@ -48,7 +48,8 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />                  
+                                <img [src]="list['profilePicture']" onError="src = 'assets/imgs/placeholder.png'"
+                                    class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -75,9 +76,6 @@
                                         <ion-icon name="refresh"></ion-icon>
                                         <div>Update</div>
                                     </button>
-
-                                    <ion-badge *ngIf="list['isSync'] == false" item-end color="secondary">local</ion-badge>
-
                                     <!-- <ion-note *ngIf="list.status == '30%'" item-end>
                                         <button (click)="syncEmployeeDetails()" small round ion-button icon-start>
                                             <ion-icon name="sync"></ion-icon>
@@ -115,9 +113,10 @@
                 </ion-item> -->
                 <ion-card-content (click)="onboardingUserView(list)">
                     <ion-row class="margin0">
+
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''"  onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                                <img [src]="list['profilePicture']" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -132,7 +131,7 @@
                                 </ion-item>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['percentage']}}
+                                    {{list['gender']}}
                                 </ion-item>
                                 <ion-item>
                                     <button ion-button icon-start>
@@ -140,8 +139,7 @@
                                         <div>View</div>
                                     </button>
                                     <ion-note *ngIf="list['isSync'] == false" item-end>
-                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button
-                                            icon-start>
+                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button icon-start>
                                             <ion-icon name="sync"></ion-icon>
                                             SYNC
                                         </button>
@@ -149,8 +147,50 @@
                                 </ion-item>
                             </ion-list>
                         </ion-col>
+                        <!-- <ion-col col-3 class="padding-left0 ver-center">
+                            <div class="padding-bottom5">
+                                <button ion-button clear color="primary">
+                                    <i class="material-icons">refresh</i> Update
+                                </button>
+                            </div>
+                        </ion-col> -->
                     </ion-row>
                 </ion-card-content>
+                <!-- <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col col-6 class="text-center flex45">
+                                <ion-avatar item-start class="inlineElement">
+                                    <img src="assets/imgs/placeholder.png" class="mdImage" />
+                                </ion-avatar>
+                               
+                            </ion-col>
+                            <ion-col col-6>
+                                <ion-list>
+                                    <ion-item>
+                                        
+                                        <h2 class="textColor">John</h2>
+                                    </ion-item>
+                                    <ion-item>
+                                       
+                                        Admin
+                                    </ion-item>
+                                    <ion-item>
+                                        
+                                        #emp0003
+                                    </ion-item>
+                                    <ion-item>
+                                        <button ion-button icon-start>
+                                            <ion-icon name="eye"></ion-icon>
+                                            <div>View</div>
+                                        </button>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+             -->
             </ion-card>
         </div>
     </div>

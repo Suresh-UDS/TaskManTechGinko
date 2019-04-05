@@ -545,6 +545,23 @@ export class DashboardPage {
         this.databaseProvider.getSiteData().then(sites=>{
             console.log("Sites from SQLite");
             console.log(sites);
+            for(var i=0; i<sites.length;i++){
+                console.log("site id - "+sites[i].id);
+                this.databaseProvider.getEmployeeDataBySiteId(sites[i].id).then(employees=>{
+                    console.log("Employees for site id - ");
+                    console.log(employees);
+                })
+            }
+        })
+
+        this.databaseProvider.getJobsData().then(jobs=>{
+            console.log("Jobs from sqlite");
+            console.log(jobs);
+        })
+
+        this.databaseProvider.getEmployeeData().then(employees=>{
+            console.log("Employees from sqlite");
+            console.log(employees);
         })
     }
 

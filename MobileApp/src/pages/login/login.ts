@@ -10,7 +10,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { Toast } from '@ionic-native/toast';
 import {EmployeeService} from "../service/employeeService";
 import{SQLite,SQLiteObject} from "@ionic-native/sqlite";
-import { Storage } from '@ionic/storage';
 
 declare var demo;
 
@@ -36,7 +35,7 @@ export class LoginPage {
   type : FormGroup;
   module:any;
   permission:any;
-  constructor(private storage: Storage,public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,
+  constructor(public navCtrl: NavController,public component:componentService,private formBuilder: FormBuilder,public menuCtrl:MenuController, public toastCtrl:ToastController,private toast: Toast,
               public navParams: NavParams,public myService:authService, public employeeService: EmployeeService,
               public events:Events,private sqlite:SQLite) {
       this.permission=[
@@ -52,13 +51,9 @@ export class LoginPage {
     this.now = new Date().getTime();
   }
 
-    clearStorage() {
-        this.storage.set('OnBoardingData', { actionRequired: [], completed: [] });
-    }
-
-    signin() {
-        console.log('login - form submitted');
-        this.clearStorage();
+  signin()
+  {
+      console.log('form submitted');
       if(this.username && this.password) {
         this.component.showLoader('Login');
         this.myService.login(this.username, this.password).subscribe(response => {
@@ -93,10 +88,7 @@ export class LoginPage {
                 window.localStorage.setItem('employeeFullName', response.employee.fullName);
                 window.localStorage.setItem('employeeEmpId', response.employee.empId);
                 window.localStorage.setItem('employeeUserId', response.employee.userId);
-                    window.localStorage.setItem('empUserId', response.employee.empId);
                 window.localStorage.setItem('employeeDetails', JSON.stringify(response));
-
-                    console.log(JSON.stringify(response));
 
                 var employee = response.employee;
 
