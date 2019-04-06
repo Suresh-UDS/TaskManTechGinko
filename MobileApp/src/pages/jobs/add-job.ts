@@ -286,8 +286,7 @@ export class CreateJobPage {
         window.localStorage.setItem('site',id);
         console.log(this.empSelect);
         var search={
-            // currPage:1,
-            list:true,
+            currPage:1,
             siteId:id
         }
         this.employeeService.searchEmployees(search).subscribe(

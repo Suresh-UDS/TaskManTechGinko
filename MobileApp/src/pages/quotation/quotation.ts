@@ -61,7 +61,6 @@ export class QuotationPage {
       this.submittedQuotations=[];
       this.archivedQuotations=[];
 
-
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permissions");
           console.log(permission)
@@ -74,12 +73,6 @@ export class QuotationPage {
     popover.present({
       ev: myEvent
     });
-  }
-
-  ionViewWillEnter(){
-      console.log("View will enter ");
-      console.log(this.selectedSite);
-      console.log(this.selectedProject);
   }
 
   quotationView()
@@ -241,10 +234,8 @@ export class QuotationPage {
     this.index = i;
     this.projectActive = true;
     this.siteActive = true;
-    var ydate = new Date();
-    ydate.setDate(ydate.getDate()-1);
     console.log("siteId",siteId);
-      this.quotationService.searchQuotations({siteId:siteId, quotationCreatedDate:ydate, toDate: new Date(), currPage:1}).subscribe(
+      this.quotationService.searchQuotations({siteId:siteId}).subscribe(
           response=>{
               if(response.errorStatus){
                   demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
@@ -252,8 +243,8 @@ export class QuotationPage {
                   console.log(response);
 
                   this.quotations=[];
-                  this.quotations = response.transactions;
-                  console.log(this.quotations.transactions);
+                  this.quotations = response;
+                  console.log(this.quotations);
                   for(var i=0; i<this.quotations.length;i++){
                       if(this.quotations[i].isDrafted == true){
                           console.log("drafted");

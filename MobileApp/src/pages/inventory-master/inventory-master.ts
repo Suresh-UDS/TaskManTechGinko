@@ -71,13 +71,11 @@ export class InventoryMaster {
         let modal = this.modalController.create(InventoryFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
         modal.onDidDismiss(data=>{
             console.log("Modal dismissed");
-          if(data){
             this.open = true;
             console.log(data);
             this.filterProject=data.project;
             this.filterSite=data.site;
-              this.applyFilter(data.project,data.site);
-            }
+            this.applyFilter(data.project,data.site);
             // this.assetService.searchAssets(searchCriteria).subscribe(
             //     response=>{
             //         this.componentService.closeLoader();
@@ -123,30 +121,26 @@ export class InventoryMaster {
 
     applyFilter(project,site)
     {
-      if(project&site){
-        console.log("applyfilter")
         this.componentService.showLoader("");
         var searchCriteria = {
-          siteId:site.id,
-          projectId:project.id
+            siteId:site.id,
+            projectId:project.id
         };
 
         this.inventoryService.inventorySearch(searchCriteria).subscribe(
-          response=>{
-            this.componentService.closeAll();
-            console.log("Apply Filter Successfully");
-            console.log(response);
-            this.material=response.transactions;
+            response=>{
+                this.componentService.closeAll();
+                console.log("Apply Filter Successfully");
+                console.log(response);
+                this.material=response.transactions;
 
-          },err=>{
-            this.componentService.closeAll();
-            console.log("Error in apply filter");
-            console.log(err);
-          }
+            },err=>{
+                this.componentService.closeAll();
+                console.log("Error in apply filter");
+                console.log(err);
+            }
 
         )
-
-      }
 
         // this.searchCriteria={};
         // // this.searchCriteria = {

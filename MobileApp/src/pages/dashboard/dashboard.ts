@@ -20,7 +20,6 @@ import{SiteListPage} from "../site-list/site-list";
 import {DBService} from "../service/dbService";
 import {AttendanceService} from "../service/attendanceService";
 import {AssetService} from "../service/assetService";
-import {DatabaseProvider} from "../../providers/database-provider";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -66,7 +65,7 @@ export class DashboardPage {
     attendance:any;
 
   constructor(public renderer: Renderer,public attendanceService:AttendanceService,public assetService:AssetService,public componentService:componentService,public plt: Platform,public myService:authService,private loadingCtrl:LoadingController,public navCtrl: NavController,public component:componentService,public authService:authService,public modalCtrl: ModalController,
-              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService, private databaseProvider: DatabaseProvider) {
+              private datePickerProvider: DatePickerProvider, private siteService:SiteService, private employeeService: EmployeeService, private jobService:JobService, public events:Events, private actionSheetCtrl:ActionSheetController, private alertController:AlertController, private dbService:DBService) {
 
 
       this.rateCard=CreateQuotationPage;
@@ -88,6 +87,9 @@ export class DashboardPage {
        console.log(userType);
        this.userType = userType;
    });
+
+//    this.presentActionSheet();
+
    console.log("User Role in dashboard");
    console.log(window.localStorage.getItem('userRole'));
       this.userType=window.localStorage.getItem('userRole')
@@ -539,30 +541,6 @@ export class DashboardPage {
         })
 
         alert.present();
-    }
-
-    getSiteTable(){
-        this.databaseProvider.getSiteData().then(sites=>{
-            console.log("Sites from SQLite");
-            console.log(sites);
-            for(var i=0; i<sites.length;i++){
-                console.log("site id - "+sites[i].id);
-                this.databaseProvider.getEmployeeDataBySiteId(sites[i].id).then(employees=>{
-                    console.log("Employees for site id - ");
-                    console.log(employees);
-                })
-            }
-        })
-
-        this.databaseProvider.getJobsData().then(jobs=>{
-            console.log("Jobs from sqlite");
-            console.log(jobs);
-        })
-
-        this.databaseProvider.getEmployeeData().then(employees=>{
-            console.log("Employees from sqlite");
-            console.log(employees);
-        })
     }
 
     markOfflineAttendance(){

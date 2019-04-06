@@ -78,11 +78,6 @@ export class DBService {
     //***create table from api response***/
 
     //Asset table
-
-    createAndInitializeTables(){
-
-    }
-
     setAsset()
     {
         console.log(this.db);

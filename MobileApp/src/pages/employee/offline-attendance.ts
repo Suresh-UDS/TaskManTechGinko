@@ -194,12 +194,12 @@ export class OfflineAttendance {
                         // this.component.closeLoader()
                     });
             },err=>{
-                console.log(err);
+                console.log(err)
                 demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
 
             })
         },err=>{
-            console.log(err);
+            console.log(err)
             demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
 
         })

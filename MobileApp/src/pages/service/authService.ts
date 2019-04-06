@@ -105,7 +105,7 @@ export class authService
     getCurrentVersion(applicationType):Observable<any>{
         console.log("Application type version control");
         console.log(applicationType);
-        return this.http.get(this.config.Url+'api/web/version/'+applicationType).map(
+        return this.http.get(this.config.Url+'api/version/application').map(
             response=>{
                 console.log("application version response");
                 console.log(response);

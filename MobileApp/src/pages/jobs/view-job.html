@@ -10,7 +10,6 @@
         <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
             <ion-segment-button value="details">Details</ion-segment-button>
             <ion-segment-button value="checklist">Checklist</ion-segment-button>
-            <ion-segment-button value="materials">Materials</ion-segment-button>
         </ion-segment>
     </ion-toolbar>
 </ion-header>
@@ -143,7 +142,7 @@
         </ion-col>
     </ion-row>
 
-    <ion-row has-permission="TicketView" class="margin0" *ngIf="jobDetails.ticketId>0">
+    <ion-row has-permission="TicketsView" class="margin0" *ngIf="jobDetails.ticketId>0">
 
         <ion-col col-6>
             <ion-card class="new-card-md">
@@ -248,89 +247,13 @@
                 </ion-grid>
             </div>
         </ion-list>
-
-        <ion-list *ngSwitchCase="'materials'">
-          <div  *ngIf="(!materialItems || materialItems == 0) && spinner" text-center class="margin-top25">
-            <ion-spinner name="circles"></ion-spinner>
-          </div>
-
-          <div *ngIf="(!materialItems || materialItems.length<=0)&& !spinner" >
-            <ion-card>
-              <ion-card-content>
-                <img src="assets/imgs/warning.svg">
-                <span><p text-center>No Data Found</p></span>
-              </ion-card-content>
-            </ion-card>
-          </div>
-
-          <div  class="white-bg border-bottom1"  *ngFor="let materials of materialItems;let i = index">
-            <ion-grid class="padding-left0">
-              <ion-row  no-margin class=" margin-auto">
-                <ion-col col-6>
-                  <p text-left>Item Name:</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p text-right="">{{materials.materialName}}</p>
-                </ion-col>
-              </ion-row>
-
-              <ion-row  no-margin class=" margin-auto">
-                <ion-col col-6>
-                  <p text-left>Item Code:</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p text-right="">{{materials.materialCode}}</p>
-                </ion-col>
-              </ion-row>
-
-              <ion-row  no-margin class=" margin-auto">
-                <ion-col col-6>
-                  <p text-left>Item Group:</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p text-right="">{{materials.materialGroup}}</p>
-                </ion-col>
-              </ion-row>
-
-              <ion-row  no-margin class=" margin-auto">
-                <ion-col col-6>
-                  <p text-left>Store Stock:</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p text-right="">{{materials.materialStock}}</p>
-                </ion-col>
-              </ion-row>
-
-              <ion-row  no-margin class=" margin-auto">
-                <ion-col col-6>
-                  <p text-left>Quantity:</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p text-right="">{{materials.materialQuantity}}</p>
-                </ion-col>
-              </ion-row>
-
-              <ion-row  no-margin class=" margin-auto">
-                <ion-col col-6>
-                  <p text-left>UOM:</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p text-right="">{{materials.materialUom}}</p>
-                </ion-col>
-              </ion-row>
-
-            </ion-grid>
-          </div>
-
-
-        </ion-list>
-    </div>
+            </div>
 
 </ion-content>
 
 <!--<ion-footer *ngIf="jobDetails.status !='COMPLETED'">-->
     <!--<ion-toolbar class="align-right" *ngIf="jobDetails.status !='COMPLETED'">-->
-        <!--<button has-permission="TicketView" *ngIf="jobDetails.ticketId>0" class="btn btn-success center pull-left" (click)="gotoTicket()" >View Ticket</button>-->
+        <!--<button has-permission="TicketsView" *ngIf="jobDetails.ticketId>0" class="btn btn-success center pull-left" (click)="gotoTicket()" >View Ticket</button>-->
         <!--<button *ngIf="jobDetails.status !='COMPLETED'" class="btn btn-success center pull-right" type="submit" (click)="completeJob(jobDetails)">Complete Job</button>-->
     <!--</ion-toolbar>-->
 <!--</ion-footer>-->

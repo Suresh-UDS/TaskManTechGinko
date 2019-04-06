@@ -9,7 +9,7 @@
     <ion-card class="profileCard">
         <ion-card-content>
             <ion-avatar item-start class="profileContainer">
-                <img [src]="userData['profilePicture']" class="userProfile" />
+                <img [src]="AppConfig.s3Bucket+userData['profilePicture']" class="userProfile" />
                 <h1>{{userData['employeeName']}}</h1>
             </ion-avatar>
 
@@ -21,6 +21,10 @@
                 <ion-list-header>
                     Basic Details
                 </ion-list-header>
+                <ion-item *ngFor="let list of userData['relationshipDetails']">
+                    <p item-start class="text-left">{{list.relationship}} Name</p>
+                    <p item-end class="text-right">{{list.name}}</p>
+                </ion-item>
                 <ion-item>
                     <p item-start class="text-left">Gender</p>
                     <p item-end class="text-right">{{userData['gender']}}</p>
@@ -33,13 +37,19 @@
                     <p item-start class="text-left">Date Of Birth</p>
                     <p item-end class="text-right">{{userData['dateOfBirth']}}</p>
                 </ion-item>
+
                 <ion-item>
                     <p item-start class="text-left">Date Of Joining</p>
                     <p item-end class="text-right">{{userData['dateOfJoining']}}</p>
                 </ion-item>
-                <ion-item>
+
+                <ion-item *ngIf="userData.bloodGroup !== null && userData.bloodGroup!=''">
                     <p item-start class="text-left">Blood Group</p>
                     <p item-end class="text-right">{{userData['bloodGroup']}}</p>
+                </ion-item>
+                <ion-item *ngIf="userData.identificationMark !== null && userData.identificationMark!=''">
+                    <p item-start class="text-left">identificationMark</p>
+                    <p item-end class="text-right">{{userData['identificationMark'][0]}}</p>
                 </ion-item>
 
 
@@ -50,61 +60,98 @@
                     <p item-start class="text-left">Mobile Number</p>
                     <p item-end class="text-right">+91 <span>{{userData['contactNumber']}}</span></p>
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="userData.emergencyConatctNo !== null && userData.emergencyConatctNo!=''">
+                    <p item-start class="text-left">Emergency Contact Number</p>
+                    <p item-end class="text-right">{{userData['emergencyConatctNo'][0]}}</p>
+                </ion-item>
+
+                <ion-item *ngIf="userData.communicationAddress !== null && userData.communicationAddress!=''">
                     <p item-start class="text-left">Address</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}</p>
+                    <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}
+                        <br>{{userData['communicationAddress'][0]['city']}}<br>{{userData['communicationAddress'][0]['state']}}</p>
                 </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">City</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['city']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">State</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['state']}}</p>
+                <ion-item *ngIf="userData.permanentAddress !== null && userData.permanentAddress != ''">
+                    <p item-start class="text-left">permanentAddress</p>
+                    <p item-end class="text-right">{{userData['permanentAddress'][0]['address']}}
+                        <br>{{userData['permanentAddress'][0]['city']}}
+                        <br>{{userData['permanentAddress'][0]['state']}}</p>
                 </ion-item>
 
                 <ion-list-header>
-                    Family and Employeement
+                    Education and Employeement
                 </ion-list-header>
                 <ion-item>
-                    <p item-start class="text-left">{{userData['nomineeDetail'][0]['relationship']}} Name</p>
-                    <p item-end class="text-right">{{userData['nomineeDetail'][0]['name']}}</p>
+                    <p item-start class="text-left">Qualification</p>
+                    <p item-end class="text-right">{{userData['educationQualification'][0]['qualification']}}</p>
+                </ion-item>
+
+                <ion-item>
+                    <p item-start class="text-left">Institute</p>
+                    <p item-end class="text-right">{{userData['educationQualification'][0]['institute']}}</p>
                 </ion-item>
                 <ion-item>
-                    <p item-start class="text-left">{{userData['nomineeDetail'][1]['relationship']}} Name</p>
-                    <p item-end class="text-right">{{userData['nomineeDetail'][1]['name']}}</p>
-                </ion-item>
-                <!-- <ion-item>
-                    <p item-start class="text-left">Designation</p>
-                    <p item-end class="text-right">{{userData['designation']}}</p>
+                    <p item-start class="text-left">previousEmployee </p>
+                    <p item-end class="text-right">{{userData['previousEmployee'][0]['name']}}</p>
                 </ion-item>
                 <ion-item>
-                    <p item-start class="text-left">Area Of Work</p>
-                    <p item-end class="text-right">{{userData['employeeAreaOfWork']}}</p>
-                </ion-item> -->
-                <!-- <ion-item>
-                    <ion-avatar item-start>
-                        <ion-icon name="transgender"></ion-icon>
-                    </ion-avatar>
-                    <p>Gender</p>
-                    <h2>Male</h2>
-                    <!-- <h3>Don't Know What To Do!</h3>
-                    <p>I've had a pretty messed up day. If we just...</p>
+                    <p item-start class="text-left">designation</p>
+                    <p item-end class="text-right">{{userData['previousEmployee'][0]['designation']}}</p>
+                </ion-item>
+
+
+                <ion-list-header>
+                    Bank Details and Documents
+                </ion-list-header>
+                <ion-item>
+                    <p item-start class="text-left">Bank AccountNo</p>
+                    <p item-end class="text-right">{{userData['bankDetails'][0]['accountNo']}}</p>
                 </ion-item>
                 <ion-item>
-                    <ion-avatar item-start>
-                        <ion-icon name="heart-outline"></ion-icon>
-                    </ion-avatar>
-                    <p>Marital Status</p>
-                    <h2>Single</h2>
+                    <p item-start class="text-left">IFSC</p>
+                    <p item-end class="text-right">{{userData['bankDetails'][0]['ifsc']}}</p>
                 </ion-item>
                 <ion-item>
-                    <ion-avatar item-start>
-                        <i class="fa fa-birthday-cake"></i>
-                    </ion-avatar>
-                    <p>Date of birth</p>
-                    <h2>Single</h2>
-                </ion-item> -->
+                    <p item-start class="text-left">Aadhar Number</p>
+                    <p item-end class="text-right">{{userData['aadharNumber']}}</p>
+                </ion-item>
+                <ion-slides pager="true">
+                    <ion-slide item-start class="Address Proof">
+                        <p> AddressProof </p>
+                        <img [src]="AppConfig.s3Bucket+userData['addressProof']" class="image" />
+                    </ion-slide>
+                    <ion-slide item-start class="Aadhar">
+                        <p> Aadharcard </p>
+                        <img [src]="AppConfig.s3Bucket+userData['aadharPhotoCopy']" class="image" />
+                    </ion-slide>
+                    <ion-slide item-start class="Employee Signature">
+                        <p> Employee Signature </p>
+                        <img [src]="AppConfig.s3Bucket+userData['employeeSignature']" class="image" />
+                    </ion-slide>
+                    <ion-slide item-start class="Bank Passbook">
+                        <p> Bank Passbook</p>
+                        <img [src]="AppConfig.s3Bucket+userData['prePrintedStatement']" class="image" />
+                    </ion-slide>
+                    <ion-slide item-start class="Thumb Impression Proof">
+                        <p> Thumb Impresssion Left </p>
+                        <img [src]="AppConfig.s3Bucket+userData['thumbImpressenLeft']" class="image" />
+                    </ion-slide>
+                    <ion-slide item-start class="Thumb Impression Proof">
+                        <p> Thumb Impresssion Right </p>
+                        <img [src]="AppConfig.s3Bucket+userData['thumbImpressenRight']" class="image" />
+                    </ion-slide>
+                    <ion-slide *ngIf="userData.pancardCopy !== null && userData.pancardCopy!=''" item-start class="pan card">
+                        <p> Pancard </p>
+                        <img [src]="AppConfig.s3Bucket+userData['pancardCopy']" class="image" />
+                    </ion-slide>
+                    <ion-slide *ngIf="userData.drivingLicense !== null && userData.drivingLicense!=''" item-start class="Driving License">
+                        <p> Driving License </p>
+                        <img [src]="AppConfig.s3Bucket+userData['drivingLicense']" class="image" />
+                    </ion-slide>
+                    <ion-slide *ngIf="userData.voterId !== null && userData.voterId!=''" item-start class="voterId">
+                        <p> Voter Id </p>
+                        <img [src]="AppConfig.s3Bucket+userData['voterId']" class="image" />
+                    </ion-slide>
+                </ion-slides>
             </ion-list>
         </ion-card-content>
     </ion-card>

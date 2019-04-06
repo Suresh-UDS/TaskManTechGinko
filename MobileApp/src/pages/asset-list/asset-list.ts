@@ -205,7 +205,6 @@ export class AssetList {
                                                                 },
                                                                 error=>{
                                                                     console.log(error)
-
                                                                 })
                                                             })
                                                         }
@@ -274,41 +273,17 @@ export class AssetList {
                                                                                                         response => {
                                                                                                             console.log(response)
                                                                                                             resolve("data s")
-                                                                                                            this.componentService.closeAll();
-                                                                                                            demo.showSwal('success-message-and-ok','Success','Data Sync Successful');
-
-                                                                                                        },err=>{
-                                                                                                            this.componentService.closeAll();
-                                                                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
-
+                                                                                                            this.componentService.closeLoader();
                                                                                                         })
-                                                                                                },err=>{
-                                                                                                    this.componentService.closeAll();
-                                                                                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                                                                                 })
                                                                                             // })
                                                                                             // })
-                                                                                        },err=>{
-                                                                                            this.componentService.closeAll();
-                                                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                                                                         })
-                                                                                },err=>{
-                                                                                            this.componentService.closeAll();
-                                                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                                                                 })
-                                                                        },err=>{
-                                                            this.componentService.closeAll();
-                                                            demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
-                                                        })
-                                                                },err=>{
-                                                    this.componentService.closeAll();
-                                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
-                                                })
+                                                                        })
+                                                                })
                                                         // })
                                                 // })
-                                },err=>{
-                                    this.componentService.closeAll();
-                                    demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
                                 })
                         })
 

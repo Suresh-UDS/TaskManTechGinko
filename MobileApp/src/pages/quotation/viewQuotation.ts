@@ -43,6 +43,7 @@ export class ViewQuotationPage {
             }
         }
 
+
     }
 
     addTotal(i,qty,cost)
@@ -93,19 +94,7 @@ export class ViewQuotationPage {
         )
     }
 
-    rejectQuotation(quotation){
-        this.quotationService.rejectQuotation(quotation).subscribe(
-            response=>{
-                console.log(response);
-                this.componentService.showToastMessage('Quotation Rejected','bottom');
-                this.navCtrl.setRoot(QuotationPage);
-            },error2 => {
-                console.log("Unable to send Quotation");
-                console.log(error2);
-                this.componentService.showToastMessage('Error in sending Quotation, please try again later','bottom');
-            }
-        )
-    }
+
 
 
 

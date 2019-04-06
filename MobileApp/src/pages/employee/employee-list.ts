@@ -224,7 +224,7 @@ export class EmployeeList {
         // this.component.showLoader('Getting Location..');
         // demo.showSwal('success-message-and-ok','Success','Checking Site Proximity');
 
-            // this.component.closeAll();
+            this.component.closeAll();
             this.component.showLoader("Verifying Location...");
 
             console.log(this.lattitude);
@@ -266,7 +266,7 @@ export class EmployeeList {
         var employeeName = employee.fullName+employee.empId;
         // this.component.showLoader('Detecting Face');
         if(mode === 'enroll'){
-            // this.component.closeAll();
+            this.component.closeAll();
             this.component.showLoader('Enrolling Face Id');
             employee.enrolled_face = imageData;
             this.employeeService.enrollFace(employee).subscribe(response=>{
@@ -275,7 +275,6 @@ export class EmployeeList {
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
                     this.component.closeAll();
-                    this.getEmployees();
                     var verificationResponse = response;
                     console.log(verificationResponse);
                     // this.component.showToastMessage('Face Enrolled successfully..','bottom');

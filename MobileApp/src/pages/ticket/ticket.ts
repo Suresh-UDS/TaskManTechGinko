@@ -20,30 +20,13 @@ import{TicketFilter} from "./ticket-filter/ticket-filter";
 })
 export class Ticket {
 
-  tickets:any;
-  clientFilter:any;
-  siteFilter:any;
+    tickets:any;
+    clientFilter:any;
+    siteFilter:any;
   fromDate:any;
   toDate:any;
-  searchCriteria:any;
-  page:1;
-  totalPages:0;
-  pageSort:15;
   constructor(public navCtrl: NavController, public navParams: NavParams, private cs:componentService, private jobService:JobService, public modalCtrl:ModalController) {
       this.tickets = [];
-      this.fromDate = new Date();
-      this.toDate = new Date();
-      this.searchCriteria = {
-          siteId:0,
-          projectId:0,
-          fromDate:this.fromDate,
-          toDate : this.toDate,
-          employeeId:0,
-          currPage:1,
-          sortByAsc:true,
-          sort:10,
-          report:true
-      }
   }
 
   ionViewDidLoad() {
@@ -58,8 +41,6 @@ export class Ticket {
             console.log("Getting tickets");
             console.log(response);
             this.tickets=response.transactions;
-            this.page = response.currPage;
-            this.totalPages = response.totalPages;
 
         },error=>{
             this.cs.closeLoader();
@@ -77,90 +58,41 @@ export class Ticket {
     }
 
     presentModal() {
-        var projectDetails = null;
-        var siteDetails = null;
         let modal = this.modalCtrl.create(TicketFilter,{},{cssClass:'asset-filter',showBackdrop:true});
         modal.onDidDismiss(data=>{
             console.log("Modal Dismiss");
             console.log(data);
-            if(data.project && data.project.id>0){
-                console.log("selected project from filter modal - ");
-                console.log(data.project);
-                projectDetails = data.project;
-                this.clientFilter=data.project;
-                this.searchCriteria.projectId = projectDetails.id;
-            }else{
-                this.clientFilter = null;
-            }
-
-            if(data.site && data.site.id>0){
-                console.log("selected site from filter modal - ");
-                console.log(data.site);
-                siteDetails = data.site;
-                this.siteFilter=data.site;
-                this.searchCriteria.siteId = siteDetails.id;
-
-            }else{
-                this.siteFilter = null;
-            }
-
-            if(data.fromDate){
-                if(data.toDate) {
-                    this.fromDate = data.fromDate;
-                    this.toDate = data.toDate;
-                    this.searchCriteria.fromDate = data.fromDate;
-                    this.searchCriteria.toDate = data.toDate;
-                }
-            }
-            this.applyFilter();
+            this.clientFilter=data.project;
+            this.siteFilter=data.site;
+            this.fromDate = data.fromDate;
+            this.toDate = data.toDate;
+            this.applyFilter(data.project,data.site,data.fromDate,data.toDate);
         });
         modal.present();
     }
 
 
-    applyFilter(){
-        // this.cs.showLoader("");
+    applyFilter(project,site,fromDate,toDate){
+        this.cs.showLoader("");
+        var searchCriteria={
+            siteId:site.id,
+            projectId:project.id,
+          fromDate:fromDate,
+          toDate:toDate
+        };
 
+        console.log("filter",searchCriteria);
 
-        console.log("filter",this.searchCriteria);
-        this.tickets = [];
-        this.cs.showLoader("Loading Tickets..");
-        this.jobService.searchTickets(this.searchCriteria).subscribe(
+        this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.cs.closeAll();
                 this.cs.closeLoader();
                 console.log("Filtering Tickets");
                 console.log(response);
                 this.tickets=response.transactions;
-                this.page = response.currPage;
-                this.totalPages = response.totalPages;
             },error=>{
               this.cs.closeLoader();
                 this.cs.closeAll();
-                console.log("Error in filtering tickets");
-                console.log(error);
-            }
-        )
-
-    }
-
-    doInfiniteAllJobs(infiniteScroll){
-        console.log('Begin async operation');
-        console.log(infiniteScroll);
-        console.log(this.totalPages);
-        console.log(this.page);
-        this.searchCriteria.currPage= this.page+1;
-
-        this.jobService.searchTickets(this.searchCriteria).subscribe(
-            response=>{
-                console.log("Filtering Tickets");
-                console.log(response);
-                for(var i=0;i<response.transactions.length;i++){
-                    this.tickets.push(response.transactions[i]);
-                }
-                this.page = response.currPage;
-                this.totalPages = response.totalPages;
-            },error=>{
                 console.log("Error in filtering tickets");
                 console.log(error);
             }

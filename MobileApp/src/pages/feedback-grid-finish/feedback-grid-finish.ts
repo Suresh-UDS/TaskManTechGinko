@@ -65,7 +65,7 @@ export class FeedbackGridFinish {
       floor:this.navParams.data.fb.floor,
       zone:this.navParams.data.fb.zone,
       remarks:this.remarks,
-      overallFeedback:false
+      overallFeedback:true
     };
 
     console.log(this.feedbackTransaction);

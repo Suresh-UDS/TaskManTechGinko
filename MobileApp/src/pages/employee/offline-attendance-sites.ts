@@ -10,7 +10,6 @@ import {SiteService} from "../service/siteService";
 import {componentService} from "../service/componentService";
 import {DBService} from "../service/dbService";
 import {OfflineAttendance} from "./offline-attendance";
-import {DatabaseProvider} from "../../providers/database-provider";
 
 /**
  * Generated class for the SiteListPage page.
@@ -37,7 +36,7 @@ export class OfflineAttendanceSites {
                 private  authService: authService, public camera: Camera,
                 private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
                 private attendanceService: AttendanceService, private siteService: SiteService,
-                private dbService:DBService,private databaseProvider: DatabaseProvider) {
+                private dbService:DBService) {
 
         this.geolocation.getCurrentPosition().then((response)=>{
             console.log("Current location");
@@ -74,8 +73,7 @@ export class OfflineAttendanceSites {
     ionViewDidLoad() {
         this.component.showLoader("Load Sites")
         console.log('ionViewDidLoad offline SiteListPage');
-        // this.dbService.getSite().then(data=>{
-        this.databaseProvider.getSiteData().then(data=>{
+        this.dbService.getSite().then(data=>{
             console.log("Loading site list from sqLite");
             this.component.closeLoader()
             console.log(data);
@@ -102,6 +100,9 @@ export class OfflineAttendanceSites {
         //     this.employeeEmpId = window.localStorage.getItem('employeeEmpId');
         //     console.log(window.localStorage.getItem('responseImageDetails'));
         // })
+
+
+
     }
 
     gotoEmployeeList(site){

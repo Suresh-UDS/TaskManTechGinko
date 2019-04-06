@@ -92,16 +92,16 @@
 
 <ion-footer *ngIf="ticketDetails.status != 'Closed'" >
     <ion-toolbar class="align-right" padding-left padding-right  >
-        <button has-permission="JobCreate" class="btn btn-warning center pull-left" (click)="createJob()" *ngIf="ticketDetails.jobId ==null || ticketDetails.jobId==0">
+        <button has-permission="JobsCreate" class="btn btn-warning center pull-left" (click)="createJob()" *ngIf="ticketDetails.jobId ==null || ticketDetails.jobId==0">
             Create Job
         </button>
-        <button has-permission="JobView" class="btn btn-warning center pull-left" (click)="viewJob(ticketDetails)" *ngIf="ticketDetails.jobId >0">
+        <button has-permission="JobsView" class="btn btn-warning center pull-left" (click)="viewJob(ticketDetails)" *ngIf="ticketDetails.jobId >0">
             View Job
         </button>
-        <!--<button has-permission="TicketView" class="btn btn-success center pull-right" (click)="closeTicket()">-->
+        <!--<button has-permission="TicketsView" class="btn btn-success center pull-right" (click)="closeTicket()">-->
             <!--Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>-->
         <!--</button>-->
-        <button has-permission="TicketView" class="btn btn-success center pull-right" (click)="presentPrompt()">
+        <button has-permission="TicketsView" class="btn btn-success center pull-right" (click)="presentPrompt()">
             Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>

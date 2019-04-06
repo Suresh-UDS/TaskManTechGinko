@@ -29,7 +29,6 @@ import {AlertController} from "ionic-angular";
 import {DBService} from "../service/dbService";
 import {OfflinePage} from "../offline-page/offline-page";
 import {JobService} from "../service/jobService";
-import {DatabaseProvider} from "../../providers/database-provider";
 
 declare  var demo ;
 
@@ -79,7 +78,7 @@ export class TabsPage {
   constructor(public events:Events, private navCtrl:NavController, private component:componentService, private network:Network,
               private siteService:SiteService, private attendanceService:AttendanceService, private sqlite:SQLite,
               private authService:authService, private appVersion:AppVersion, private market:Market, private platform:Platform,
-              private alertController:AlertController, private dbService:DBService,private jobService:JobService, private databaseProvider: DatabaseProvider,
+              private alertController:AlertController, private dbService:DBService,private jobService:JobService,
               private transfer: FileTransfer, private file: File, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig) {
     this.DashboardTab=DashboardPage;
     this.QuotationTab=QuotationPage;
@@ -115,6 +114,14 @@ export class TabsPage {
         }
     });
 
+    this.sqlite.create({
+      name: 'data.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+      this.db = db;
+      console.log("Database connection");
+      console.log(this.db)
+    })
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad TabsPage');
@@ -144,6 +151,30 @@ export class TabsPage {
             }
         }
     );
+      this.dbService.getAllSavedImages().then(
+        (res)=> {
+          console.log("saved images", res);
+          this.savedImages = res;
+          console.log("savedimages", this.savedImages);
+          if (this.savedImages.length > 0) {
+            for (var i = 0; i < this.savedImages.length; i++) {
+              // console.log("saved images",this.savedImages[i].image);
+              let imageData = this.savedImages[i].image;
+              let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
+              // let base64Image = 'data:image/jpeg;base64,' + this.savedImages[i].image;
+              this.completedImages.push(base64Image);
+              this.component.closeLoader();
+
+            }
+          }else {
+            this.component.closeLoader();
+          }
+        },(err)=>{
+          console.log("error",err);
+          this.savedImages = [];
+          this.component.closeLoader();
+        }
+      )
 
     console.log(this.network.type);
     var session = window.localStorage.getItem('session');
@@ -151,41 +182,18 @@ export class TabsPage {
           console.log("Session available");
 
           if(this.network.type != 'none'){
-
-              // this.databaseProvider.getDatabaseState().subscribe(status=>{
-              //     console.log("Database status - "+status);
-              //     if(status){
-              //         this.databaseProvider.getSiteData().then(sites=>{
-              //             console.log("Site information from sqlite - ");
-              
-              //             console.log(sites);
-              //             if(sites && sites.length>0){
-              //               console.log("Sqlite tables found");
-              //                 this.databaseProvider.addSites();
-              //                 this.databaseProvider.addEmployee();
-              //                 this.databaseProvider.addJobs();
-              //             }else{
-              //                 console.log("No Sqlite tables found");
-              //                 this.databaseProvider.createAllTables();
-              //             }
-              //         },err=>{
-              //             console.log("Error in getting site information from sqlite");
-              //             console.log(err);
-              
-              //         });
-              
-              //     }
-              
-              // })
+            this.setJobsSync();
           }else {
             console.log("data not sync");
+            // this.navCtrl.setRoot()
           }
+          // this.createLocalDB();
+          // this.component.showToastMessage('Previous Login Detected, Login automatically','bottom');
       }else{
           console.log("Session not Available");
-          // this.component.showToastMessage('Session not available, please login','bottom');
+          this.component.showToastMessage('Session not available, please login','bottom');
           this.navCtrl.setRoot(LoginPage);
       }
-
 
   }
 
@@ -197,6 +205,284 @@ export class TabsPage {
           this.navCtrl.setRoot(OfflinePage);
       }
 
+  }
+
+  createLocalDB(){
+      this.siteService.searchSite().subscribe(response=>{
+          var siteList = response;
+          this.callSqlLite(siteList)
+      })
+  }
+
+    callSqlLite(siteList)
+    {
+        this.sqlite.create({
+            name: 'data.db',
+            location: 'default'
+        })
+            .then((db: SQLiteObject) => {
+
+                db.executeSql('DROP TABLE assetList',[])
+
+                db.executeSql('create table IF NOT EXISTS assetList(id INT,name VARCHAR(32))', [])
+                    .then(() => console.log('Executed SQL'))
+                    .catch(e => console.log(e));
+
+
+                for (var i = 0; i < siteList.length; i++) {
+                    var query = "INSERT INTO assetList (id,name) VALUES (?,?)";
+
+                    db.executeSql(query, [siteList[i].id, siteList[i].name])
+                        .then(() => console.log('Executed SQL'))
+                        .catch(e => console.log(e));
+                }
+
+            })
+
+    }
+
+
+  loadSiteAttendance(){
+      window.localStorage.removeItem('offlineAttendanceData');
+      for(var i of this.sites){
+          console.log(i);
+          var searchCriteria = {
+              currPage:1,
+              pageSort: 15,
+              siteId:i.siteId
+          };
+          // this.siteService.searchSiteEmployee(i.siteId).subscribe(
+          this.attendanceService.searchEmpAttendances(searchCriteria).subscribe(
+              response=>{
+                  console.log("Attendance data in tabs page");
+                  console.log(response.transactions);
+                  this.offlineAttendanceData.push(response.transactions);
+                  window.localStorage.setItem('offlineAttendanceData',JSON.stringify(this.offlineAttendanceData));
+              }
+          )
+      }
+      console.log(this.offlineAttendanceData);
+  }
+
+
+    // if(window.localStorage.getItem('attendanceCheckInData')){
+    //     console.log("unsynced checkin information available in local storage");
+    //     var offlineData = JSON.parse(window.localStorage.getItem('attendanceCheckInData'));
+    //
+    //     this.dbService.getAttendance().then(response=>{
+    //         console.log(response);
+    //         // this.componentService.closeLoader()
+    //         var data = []
+    //         data.push(response)
+    //         for(var i=0;i<data.length;i++) {
+    //             console.log("==================")
+    //             console.log(data[i])
+    //             this.attendanceService.markAttendanceCheckIn(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkInImage).subscribe(
+    //                 response => {
+    //                     console.log("Offline attendance data synced to server");
+    //                     console.log("Clearing local storage");
+    //                     window.localStorage.removeItem('attendanceCheckInData');
+    //                     if (window.localStorage.getItem('attendanceCheckOutData')) {
+    //                         console.log("unsynced checkout information available in local storage");
+    //                         var offlineData = JSON.parse(window.localStorage.getItem('attendanceCheckOutData'));
+    //                         this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkInImage, response.id).subscribe(
+    //                             response => {
+    //                                 console.log("Offline attendance data synced to server");
+    //                                 console.log("Clearing local storage");
+    //                                 window.localStorage.removeItem('attendanceCheckOutData');
+    //                             }, error2 => {
+    //                                 console.log("Error in syncing attendance to server");
+    //                             }
+    //                         )
+    //                     }
+    //                 }, error2 => {
+    //                     console.log("Error in syncing attendance to server");
+    //                 }
+    //             )
+    //         }
+    //     },err=>{
+    //         console.log(err)
+    //     })
+    //
+    //
+    //
+    //
+    //
+    //
+    // }else if(window.localStorage.getItem('attendanceCheckOutData')){
+    //     console.log("unsynced checkout information available in local storage");
+    //     var offlineData = JSON.parse(window.localStorage.getItem('attendanceCheckOutData'));
+    //     this.attendanceService.markAttendanceCheckOut(offlineData.siteId,offlineData.empId,offlineData.lat,offlineData.lng,offlineData.imageData,offlineData.id).subscribe(
+    //         response=>{
+    //             console.log("Offline attendance data synced to server");
+    //             console.log("Clearing local storage");
+    //             window.localStorage.removeItem('attendanceCheckOutData');
+    //         },error2 => {
+    //             console.log("Error in syncing attendance to server");
+    //         }
+    //     )
+    // }
+  // }
+
+
+  setJobsSync() {
+    this.component.showLoader("checking offline completed jobs...");
+    this.dbService.getCompletedJobs().then(
+      response=>{
+        this.component.showLoader("completed jobs sync...");
+        console.log("jobs sync response",response);
+        this.offlineJobs = response;
+          console.log("length", this.offlineJobs.length);
+          console.log(this.offlineJobs);
+          console.log("images", this.savedImages);
+
+        this.component.closeLoader();
+
+        for (var i = 0; i < this.offlineJobs.length; i++) {
+         /* this.offlineData = {};
+          this.offlineData.assetId = this.offlineJobs[i].assetId;
+          this.offlineData.checkInDateTimeFrom = this.offlineJobs[i].checkInDateTimeFrom;
+          this.offlineData.checkInDateTimeTo = this.offlineJobs[i].checkInDateTimeTo;
+          this.offlineData.description = this.offlineJobs[i].description;
+          this.offlineData.employeeEmpId = this.offlineJobs[i].employeeEmpId;
+          this.offlineData.employeeId = this.offlineJobs[i].employeeId;
+          this.offlineData.employeeName = this.offlineJobs[i].employeeName;
+          this.offlineData.id = this.offlineJobs[i].id;
+          this.offlineData.maintenanceType = this.offlineJobs[i].maintenanceType;
+          this.offlineData.offlineCompleteResponse = this.offlineJobs[i].offlineCompleteResponse;
+          this.offlineData.offlineUpdate = this.offlineJobs[i].offlineUpdate;
+          this.offlineData.plannedEndTime = this.offlineJobs[i].plannedEndTime;
+          this.offlineData.plannedStartTime = this.offlineJobs[i].plannedStartTime;
+          this.offlineData.siteId = this.offlineJobs[i].siteId;
+          this.offlineData.siteName = this.offlineJobs[i].siteName;
+          this.offlineData.status = this.offlineJobs[i].status;
+          this.offlineData.title = this.offlineJobs[i].title;
+          this.checklist=[];*/
+          // this.offlineData.checklist=[];
+
+         /* this.dbService.getCheckList(this.offlineJobs[i].id).then(
+            res=>{
+              console.log("getting checklist",res);
+              this.checklist = [];
+              this.checklist = res;
+              console.log(this.checklist);
+              if(this.offlineData.id == this.checklist.jobId){
+                for(var c=0; c<this.checklist.length; c++){
+                  if(this.checklist[c].completed == 'false'){
+                    this.checklist[c].id = null;
+                    this.checklist[c].completed = false;
+                  }else {
+                    this.checklist[c].id = null;
+                    this.checklist[c].completed = true;
+                  }
+                  // this.offlineData.checklist.push(this.checklist[c]);
+                }
+              }*/
+
+
+
+            console.log("offlinejob",this.offlineJobs);
+
+
+          if (this.offlineJobs[i].offlineCompleteResponse == 0) {
+
+            //completed Jobs
+            if (this.offlineJobs[i].status == "COMPLETED") {
+              this.offlinesingleJob = {};
+              console.log("completed jobs", this.offlineJobs[i]);
+              this.offlinesingleJob = this.offlineJobs[i];
+              this.completedImagesComplete = [];
+
+              for (var k = 0; k < this.savedImages.length; k++) {
+                if (this.offlinesingleJob.id == this.savedImages[k].jobId) {
+                  this.completedImagesComplete.push(this.savedImages[k].image);
+                  console.log("completedImagescomplete", this.completedImagesComplete);
+                }
+              }
+              console.log("completed images",this.completedImagesComplete);
+              this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
+              this.completeJob(this.offlinesingleJob, this.completedImagesComplete);
+              this.offlinesingleJob.offlineCompleteResponse = 1;
+              console.log("setofflinecompleteResponse", this.offlinesingleJob);
+              this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
+                (res) => {
+                  console.log("save offlinecomplete response", res);
+                }, (err) => {
+                  console.log("error offlinecomplete response", err);
+                }
+              );
+
+            }
+            //Saved jobs
+            else {
+              console.log("saved jobs", this.offlineJobs[i]);
+              this.offlinesingleJob = this.offlineJobs[i];
+              this.completedImagesSave = [];
+              for (var k = 0; k < this.savedImages.length; k++) {
+                if (this.offlinesingleJob.id == this.savedImages[k].jobId) {
+                  this.completedImagesSave.push(this.savedImages[k].image);
+                  console.log("completedImagesSave", this.completedImagesSave);
+                }
+              }
+              console.log("completedImagesSave", this.completedImagesSave);
+              this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
+              this.saveJob(this.offlinesingleJob, this.completedImagesSave);
+              this.offlinesingleJob.offlineCompleteResponse = 1;
+              console.log("setofflinecompleteResponse", this.offlinesingleJob);
+              this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
+                (res) => {
+                  console.log("save offlinecomplete response", res);
+                  this.component.closeLoader();
+                }, (err) => {
+                  console.log("error offlinecomplete response", err);
+                  this.component.closeLoader();
+                }
+              );
+              /*if(this.completedImagesSave>0){
+                console.log("completedImagesSave", this.completedImagesSave);
+                this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
+                this.saveJob(this.offlinesingleJob, this.completedImagesSave);
+                this.offlinesingleJob.offlineCompleteResponse = 1;
+                console.log("setofflinecompleteResponse", this.offlinesingleJob);
+                this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
+                  (res) => {
+                    console.log("save offlinecomplete response", res);
+                    this.component.closeLoader();
+                  }, (err) => {
+                    console.log("error offlinecomplete response", err);
+                    this.component.closeLoader();
+                  }
+                );
+              }else {
+                console.log("completedImagesSave", this.completedImagesSave);
+                this.offlinesingleJob.jobStatus = this.offlinesingleJob.status;
+                this.saveJob(this.offlinesingleJob, this.completedImagesSave);
+                this.offlinesingleJob.offlineCompleteResponse = 1;
+                console.log("setofflinecompleteResponse", this.offlinesingleJob);
+                this.dbService.setOfflineCompleteResponse(this.offlinesingleJob).then(
+                  (res) => {
+                    console.log("save offlinecomplete response", res);
+                    this.component.closeLoader();
+                  }, (err) => {
+                    console.log("error offlinecomplete response", err);
+                    this.component.closeLoader();
+                  }
+                );
+              }*/
+
+            }
+          }else{
+            console.log("job already synced");
+            this.component.showToastMessage('job already synced','bottom');
+          }
+           /* }
+          )*/
+        }
+      },(err)=>{
+        this.component.closeLoader();
+        console.log("error on getting completed jobs",err);
+      })
+    this.component.closeLoader();
   }
 
   saveJob(job,takenImages){

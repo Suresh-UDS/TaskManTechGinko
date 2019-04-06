@@ -5,7 +5,6 @@ import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 import{componentService} from "../service/componentService";
 import {SelectSearchableComponent} from "ionic-select-searchable";
 
-declare var demo;
 /**
  * Generated class for the AddMaterial page.
  *
@@ -25,7 +24,6 @@ export class AddMaterial {
     indents:any;
     material:any;
     jobMaterial:any;
-    addMaterials: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public inventoryService:InventoryService,
               public purchaseService:PurchaseRequisitionService,public component:componentService,
               public viewCtrl:ViewController) {
@@ -34,7 +32,7 @@ export class AddMaterial {
       console.log("get material");
       this.getMaterial();
       this.indents=[];
-      this.addMaterials = [];
+
 
   }
 
@@ -82,7 +80,6 @@ export class AddMaterial {
             materialUom:m.uom,
             materialQuantity:0
         };
-
         this.indents.push(details);
         console.log(this.indents);
     }
@@ -114,28 +111,8 @@ export class AddMaterial {
     {
         console.log("m save")
         console.log(m);
-        var material = m;
 
-        for(var i=0; i<m.length; i++){
-          console.log("materialqty",m[i].materialQuantity);
-
-          if(m[i].materialQuantity == 0){
-            demo.showSwal('warning-message-and-confirmation-ok',"please add material quantity in "+m[i].materialName);
-            break;
-          }
-
-          if(m[i].materialStock >= m[i].materialQuantity){
-            console.log("material",m[i]);
-            this.addMaterials.push(m[i]);
-            this.viewCtrl.dismiss({jobMaterial:this.addMaterials});
-          }else {
-            demo.showSwal('warning-message-and-confirmation-ok',"you have only "+m[i].materialStock+" material stock in "+m[i].materialName);
-            console.log("material quantity is bigger than material stock");
-            break;
-          }
-        }
-
-
+        this.viewCtrl.dismiss({jobMaterial:m});
     }
 
     portChange(event: {

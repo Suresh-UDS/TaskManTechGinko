@@ -28,7 +28,7 @@
     </ion-fab>-->
 
     <ion-fab bottom right>
-        <button has-permission="TicketCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
+        <button has-permission="TicketsCreate" (click)="createTicket()" ion-fab><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
     <div class="margin-top5">
@@ -38,13 +38,9 @@
         <span class="tag label label-info"   *ngIf="siteFilter">
            Site: {{siteFilter.name}}
         </span>
-        <span class="tag label label-info"   *ngIf="fromDate">
-           {{fromDate | date}}  - {{toDate | date}}
-        </span>
-
     </div>
 
-    <div style="margin-top: 10px" >
+    <div >
       <div *ngIf="(tickets && tickets.length <= 0) && !spinner" >
         <ion-card>
           <ion-card-content>
@@ -77,6 +73,7 @@
               </ion-note>
             </ion-item>
 
+
               <ion-item #item class="item-fnt padding-left0" >
                 <!--<div class="padding-left16">-->
 
@@ -100,7 +97,6 @@
           </ion-list>
 
          </div>
-
 
 </div>
 
