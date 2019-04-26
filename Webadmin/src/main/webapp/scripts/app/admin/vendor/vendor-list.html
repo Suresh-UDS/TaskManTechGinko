@@ -20,7 +20,7 @@
                 <div class="ripple-container"></div>
             </button>
 
-            <button class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"  title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+            <button ng-show="vendors.length" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':downloader}"  title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">file_download</i> Export Excel
                 <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
                 <div class="ripple-container"></div>
@@ -672,7 +672,7 @@
 
 	                                    <ui-select ng-model="vendorsListOne.selected"  ng-disabled="vendorFilterDisable">
 										  <ui-select-match placeholder="Select Vendor..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
-										  <ui-select-choices repeat="vendorsListOne in vendorsLists | filter: $select.search"  null-option="allVendors" loose-null>
+										  <ui-select-choices repeat="vendorsListOne in vendorsLists | filter: {name:$select.search}"  null-option="allVendors" loose-null>
 										    <span ng-bind-html="vendorsListOne.name | highlight: $select.search"></span>
 										  </ui-select-choices>
 										</ui-select>

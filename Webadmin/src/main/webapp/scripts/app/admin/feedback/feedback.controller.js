@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('FeedbackController', function ($rootScope, $scope, $state, $timeout,
 		ProjectComponent, SiteComponent, LocationComponent,FeedbackComponent,
-		$http,$stateParams,$location,$interval,$filter,PaginationComponent) {
+		$http,$stateParams,$location,$interval,$filter,PaginationComponent,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.averageRating ='0';
@@ -690,12 +691,13 @@ angular.module('timeSheetApp')
 		$scope.searchCriteras = $scope.searchCriteria;
 		$scope.feedbackReport = "";
 		$scope.feedbackListLoader = false;
-		$scope.feedbackListData = true;
+		$scope.feedbackListData = false;
 		$rootScope.loadingStart();
 		//console.log('Search Criteria : ', $scope.searchCriteria);
 		FeedbackComponent.reports($scope.searchCriteria).then(function (data) {
 			$scope.feedbackReport = data;
 			$scope.feedbackListLoader = true;
+            $scope.feedbackListData = true;
 			$rootScope.loadingStop();
 			if($scope.feedbackReport.questionRatings){
 
@@ -801,6 +803,7 @@ angular.module('timeSheetApp')
 		}).catch(function(res){
 			$rootScope.loadingStop();
 			$scope.feedbackListLoader = true;
+            $scope.feedbackListData = true;
 			//$scope.showNotifications('top','center','danger','Cannot Load Feedback');
 		});
 
@@ -845,11 +848,11 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.noData = true;
 			}
-		}).catch(function(res){
-			$scope.feedbackListDetailLoader = true;
-			$scope.noData = true;
-			//$scope.showNotifications('top','center','danger','Cannot Load Feedback');
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.feedbackListDetailLoader = true;
+            //$scope.showNotifications('top','center','danger','Unable to load feedback list..');
+        });
 
 		/* Feedback Details List End */
 
@@ -978,11 +981,11 @@ angular.module('timeSheetApp')
 			$rootScope.exportStatusObj = exportAllStatus;
 			//console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
 			$scope.start();
-		},function(err){
-			//console.log('error message for export all ')
-			//console.log(err);
-			$scope.start();
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 	};
 
 	// store the interval promise in this variable
@@ -1037,7 +1040,11 @@ angular.module('timeSheetApp')
 
 			$scope.exportMsg = ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 
 
 

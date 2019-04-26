@@ -5,7 +5,8 @@ angular.module('timeSheetApp')
 		'ImportController',
 		function($scope, $rootScope, $state, $timeout, JobComponent,
 				ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent, AssetComponent, LocationComponent, $http, $stateParams,
-				$location,$interval) {
+				$location,$interval,Idle) {
+            Idle.watch();
 			$rootScope.loadingStop();
 			$rootScope.loginView = false;
 			$scope.success = null;
@@ -124,7 +125,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.jobImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.jobImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing job data, Please check the data and try again');
+                });
 
 			}
 			$scope.jobImportMsg = function() {
@@ -210,7 +214,10 @@ angular.module('timeSheetApp')
 						}
 					}
 					$scope.empImportStatusLoad = false;
-				});
+				}).catch(function () {
+                    $scope.empImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing Employee status data, Please check the data and try again');
+                });
 			}
 
 			$scope.employeeImportMsg = function() {
@@ -292,7 +299,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.clientImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.clientImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing Client data, Please check the data and try again');
+                });
 
 			}
 			$scope.clientImportMsg = function() {
@@ -370,7 +380,10 @@ angular.module('timeSheetApp')
 						}
 					}
 					$scope.siteImportStatusLoad = false;
-				});
+				}).catch(function () {
+                    $scope.siteImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing Site data, Please check the data and try again');
+                });
 			}
 
 			/*$scope.siteImportMsg = function() {
@@ -461,7 +474,10 @@ angular.module('timeSheetApp')
 					}
 
 					$scope.locationImportStatusLoad = false;
-				});
+				}).catch(function () {
+                    $scope.locationImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing location data, Please check the data and try again');
+                });
 			}
 
 			/*$scope.locationImportMsg = function() {
@@ -546,7 +562,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.checklistImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.checklistImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing checklist data, Please check the data and try again');
+                });
 
 			}
 
@@ -1043,7 +1062,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.employeeShiftImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.employeeShiftImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing employeeShift data, Please check the data and try again');
+                });
 
 			}
 
@@ -1122,7 +1144,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.assetImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.assetImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing asset data, Please check the data and try again');
+                });
 
 			}
 
@@ -1197,7 +1222,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.assetPPMImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.assetPPMImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing asset ppm data, Please check the data and try again');
+                });
 
 			}
 
@@ -1271,7 +1299,10 @@ angular.module('timeSheetApp')
 					}
 					$scope.assetAMCImportStatusLoad = false;
 
-				});
+				}).catch(function () {
+                    $scope.assetAMCImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing asset amc data, Please check the data and try again');
+                });
 
 			}
 

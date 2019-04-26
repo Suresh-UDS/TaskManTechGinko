@@ -3,7 +3,9 @@
 angular.module('timeSheetApp')
 .controller('SiteController', function ($rootScope, $scope, $state, $timeout,$filter,
 		ProjectComponent, SiteComponent,$http,$stateParams,$location,PaginationComponent,
-		getLocalStorage) {
+		getLocalStorage,Idle) {
+
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -734,7 +736,10 @@ angular.module('timeSheetApp')
 				}else{
 					$location.path('/sites');
 				}
-			});
+			}).catch(function(){
+                $scope.showNotifications('top','center','danger','Unable to load site details..');
+                $location.path('/sites');
+            });
 		}else{
 			$location.path('/sites');
 		}
@@ -916,6 +921,7 @@ angular.module('timeSheetApp')
 		else{
 			if($scope.client.selected && $scope.client.selected.id !=0){
 				$scope.searchProject = $scope.client.selected;
+                $stateParams.project = null;
 			}else if($stateParams.project){
                 $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
                 $scope.client.selected =$scope.searchProject;
@@ -1106,7 +1112,11 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.noData = true;
 			}
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.sitesLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load site list..');
+        });
 
 	};
 
@@ -1136,6 +1146,7 @@ angular.module('timeSheetApp')
 		$scope.searchCriteria = {};
 		$scope.localStorage = null;
 		$rootScope.searchCriteriaSite = null;
+        $stateParams.project = null;
 
 		/* Root scope (search criteria) */
 		$rootScope.searchFilterCriteria.isDashboard = false;

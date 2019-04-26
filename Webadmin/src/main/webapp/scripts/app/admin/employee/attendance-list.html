@@ -104,10 +104,10 @@
                             <tr>
                                 <th style="min-width: 60px;">ID
                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('employee.empId')" ng-class="isActiveAsc == 'employee.empId' ? 'active' : ''" >
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
-                                        <span ng-click="columnDescOrder('employee.empId')" ng-class="isActiveDesc == 'employee.empId' ? 'active' : ''">
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -118,6 +118,16 @@
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
                                         <span ng-click="columnDescOrder('employee.fullName')" ng-class="isActiveDesc == 'employee.fullName' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th style="min-width: 100px;">Client
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
@@ -174,6 +184,7 @@
                             <tr ng-repeat="attendance in attendancesData">
                                 <td>{{attendance.employeeEmpId}}</td>
                                 <td>{{attendance.employeeName +" "+ attendance.employeeLastName}}</td>
+                                <td>{{attendance.projectName}}</td>
                                 <td>{{attendance.siteName}}</td>
                                 <td>
                                 {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}
@@ -559,7 +570,7 @@
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
-													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+													  <ui-select-choices repeat="client in clients | filter: {name:$select.search}"  null-option="allClients" loose-null>
 
 													    <span ng-bind-html="client.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -582,7 +593,7 @@
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
-														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
 														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 														  </ui-select-choices>
 														</ui-select>
@@ -606,7 +617,7 @@
 														   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 														   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
-													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
 													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>
@@ -629,7 +640,7 @@
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
-													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSitesVal" loose-null>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: {name:$select.search}" null-option="allSitesVal" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>

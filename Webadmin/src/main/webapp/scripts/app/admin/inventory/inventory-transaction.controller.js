@@ -2,8 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryTransactionController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent,$interval,getLocalStorage) {
-
+    			ManufacturerComponent, InventoryComponent, InventoryTransactionComponent, IndentComponent, PurchaseComponent, $filter, PaginationComponent,$interval,getLocalStorage,Idle) {
+        Idle.watch();
     	$rootScope.loginView = false;
     	$scope.inventory = {};
     	$scope.editInventoryTrans = {};
@@ -386,7 +386,7 @@ angular.module('timeSheetApp')
     			console.log($scope.projectSite);
     			$scope.searchLoadPurchases = {};
     			$scope.searchLoadPurchases.siteId = $scope.projectSite.id;
-    			$scope.searchLoadPurchases.requestStatus = "APPROVED";
+    			$scope.searchLoadPurchases.requestStatus = "PURCHASERAISED";
     			PurchaseComponent.search($scope.searchLoadPurchases).then(function(data) {
     				console.log(data);
     				if(data.transactions){
@@ -1083,6 +1083,10 @@ angular.module('timeSheetApp')
 	                  $scope.noData = true;
 	             }
 
+            }).catch(function(){
+                $scope.noData = true;
+                $scope.inventoryTranslistLoader = true;
+                $scope.showNotifications('top','center','danger','Unable to load inventory transaction list..');
             });
 
         };
@@ -1139,10 +1143,11 @@ angular.module('timeSheetApp')
                         $scope.exportStatusMap[0] = exportAllStatus;
                         console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
                         $scope.start();
-                      },function(err){
-                          console.log('error message for export all ')
-                          console.log(err);
-                  });
+                      }).catch(function(){
+                        $scope.downloader=false;
+                        $scope.stop();
+                        $scope.showNotifications('top','center','danger','Unable to export file..');
+                    });
                };
 
 
@@ -1178,6 +1183,10 @@ angular.module('timeSheetApp')
                                 }
                             }
 
+                        }).catch(function(){
+                            $scope.downloader=false;
+                            $scope.stop();
+                            $scope.showNotifications('top','center','danger','Unable to export file..');
                         });
                     });
 

@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('UserRolesController', function ($rootScope, $scope, $state, $timeout,
 		UserRoleComponent,EmployeeComponent, UserComponent, $http, $stateParams, $location,
-		JobComponent, PaginationComponent,getLocalStorage) {
+		JobComponent, PaginationComponent,getLocalStorage,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -328,7 +329,11 @@ angular.module('timeSheetApp')
 			}
 
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.userRolesLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load user role list..');
+        });
 
 	};
 

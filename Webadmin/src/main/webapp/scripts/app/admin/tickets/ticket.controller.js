@@ -4,7 +4,8 @@ angular.module('timeSheetApp')
 .controller('TicketController', function ($rootScope, $scope,
 		$state, $timeout,ProjectComponent, SiteComponent,JobComponent,
 		EmployeeComponent,TicketComponent,$http,
-		$stateParams,$location,PaginationComponent,$filter,AssetComponent,getLocalLocation,getLocalStorage,$interval) {
+		$stateParams,$location,PaginationComponent,$filter,AssetComponent,getLocalLocation,getLocalStorage,$interval,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -1078,7 +1079,11 @@ angular.module('timeSheetApp')
 			$rootScope.retain=1;
             $scope.searchFilter();
 
-		});
+		}).catch(function () {
+            $rootScope.retain=1;
+            $scope.searchFilter();
+            $scope.showNotifications('top','center','danger','Unable to reopen ticket,please try again later.');
+        });
 	}
 
 	$scope.closeModal = function () {
@@ -1251,6 +1256,8 @@ angular.module('timeSheetApp')
 
 			if($scope.client.selected && $scope.client.selected.id !=0){
 				$scope.searchProject = $scope.client.selected;
+                $stateParams.project = null;
+                $stateParams.site = null;
 			}else if($stateParams.project){
                  $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
                  $scope.client.selected =$scope.searchProject;
@@ -1270,6 +1277,7 @@ angular.module('timeSheetApp')
 			}
 			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 				$scope.searchSite = $scope.sitesListOne.selected;
+                $stateParams.site = null;
 			}else if($stateParams.site){
                    $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
                    $scope.sitesListOne.selected = $scope.searchSite;
@@ -1543,7 +1551,11 @@ angular.module('timeSheetApp')
 				$scope.noData = true;
 			}
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.ticketsLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load ticket list..');
+        });
 
 	};
 
@@ -1597,6 +1609,8 @@ angular.module('timeSheetApp')
 		$scope.localStorage = null;
 		$scope.filter = false;
 		$rootScope.searchCriteriaTicket = null;
+        $stateParams.project = null;
+        $stateParams.site = null;
 		$scope.pages = {
 				currPage: 1,
 				totalPages: 0
@@ -1666,6 +1680,12 @@ angular.module('timeSheetApp')
 
 	}
 
+    // init list load
+    $scope.initListLoad = function(){
+        $scope.loadPageTop();
+        $scope.setPage(1);
+    }
+
 	/*
 
 	 ** Pagination init function **
@@ -1707,10 +1727,11 @@ angular.module('timeSheetApp')
 			$scope.exportStatusMap[0] = exportAllStatus;
 			//console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
 			$scope.start();
-		},function(err){
-			//console.log('error message for export all ')
-			//console.log(err);
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 	};
 
 	// store the interval promise in this variable
@@ -1764,7 +1785,11 @@ angular.module('timeSheetApp')
 					}
 				}
 
-			});
+			}).catch(function(){
+                $scope.downloader=false;
+                $scope.stop();
+                $scope.showNotifications('top','center','danger','Unable to export file..');
+            });
 		});
 
 	}

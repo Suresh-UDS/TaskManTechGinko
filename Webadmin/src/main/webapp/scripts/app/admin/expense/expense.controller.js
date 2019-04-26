@@ -2,8 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('ExpenseController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent, ExpenseComponent, $http,$stateParams,$location, PaginationComponent,$filter,getLocalStorage) {
-
+    		ProjectComponent, SiteComponent, ExpenseComponent, $http,$stateParams,$location, PaginationComponent,$filter,getLocalStorage,Idle) {
+        Idle.watch();
 
         $scope.selectedCategory = null;
 
@@ -11,9 +11,11 @@ angular.module('timeSheetApp')
 
         $scope.description = "";
 
-        $scope.billable = true;
+        $scope.payment = "billable";
 
-        $scope.reimbursable = true;
+        $scope.billable = null;
+
+        $scope.reimbursable = null;
 
         $scope.selectedPaymentType = '';
 
@@ -227,6 +229,7 @@ angular.module('timeSheetApp')
                             $scope.description = $scope.expenseDetails;
                             $scope.loadingStop();
                         }).catch(function () {
+                            $scope.showNotifications('top','center','danger','Unable to load expense details...');
                             $scope.loadingStop();
                         });
                     }else{
@@ -241,6 +244,25 @@ angular.module('timeSheetApp')
                     var ele = document.getElementById(eleId);
                     ele.setAttribute('src',image);
 
+                };
+
+                $scope.toggle = function(event) {
+                    var keyboardEvent = event.type == 'keydown'
+                    var spaceOrEnterKey = keyboardEvent &&
+                        (event.which == 13 ||
+                            event.which == 32)
+                    var elem = event.target;
+                    var modelKey = angular.element(elem).attr('ng-model')
+                    if (elem.value == $scope[modelKey]
+                        && (!keyboardEvent || spaceOrEnterKey)) {
+                        $scope[modelKey] = null
+                    } else {
+                        if (spaceOrEnterKey)
+                            $scope[modelKey] = elem.value;
+                            $scope.payment = elem.value;
+                    }
+                    if (spaceOrEnterKey)
+                        event.preventDefault()
                 };
 
                 $scope.expenseData = function(){
@@ -285,22 +307,28 @@ angular.module('timeSheetApp')
                     if($scope.selectedAmount){
                         if($scope.transactionMode == 'debit'){
                             $scope.expenseDetails.debitAmount = $scope.selectedAmount;
+                                if($scope.payment=="billable"){
+                                    $scope.expenseDetails.billable = true;
+                                }else{
+                                    $scope.expenseDetails.billable = false;
+                                }
+
+                                if($scope.payment=="reimbursable"){
+                                    $scope.expenseDetails.reimbursable = true;
+                                }else{
+                                    $scope.expenseDetails.reimbursable = false;
+                                }
+
                         }else if($scope.transactionMode == 'credit'){
                             $scope.expenseDetails.creditAmount = $scope.selectedAmount;
+                            $scope.expenseDetails.billable = false;
+                            $scope.expenseDetails.reimbursable = false;
+
                         }
                     }
 
-                    if($scope.billable){
-                        $scope.expenseDetails.billable = $scope.billable;
-                    }else{
-                        $scope.expenseDetails.billable = false;
-                    }
 
-                    if($scope.reimbursable){
-                        $scope.expenseDetails.reimbursable = $scope.reimbursable;
-                    }else{
-                        $scope.expenseDetails.reimbursable = false;
-                    }
+
 
                     if($scope.description){
                         $scope.expenseDetails.description = $scope.description;
@@ -600,7 +628,11 @@ angular.module('timeSheetApp')
                         }else{
                              $scope.noData = true;
                         }
-                    });
+                    }).catch(function(){
+                            $scope.noData = true;
+                            $scope.expensesLoader = true;
+                            $scope.showNotifications('top','center','danger','Unable to load expense list..');
+                        });
 
                 };
 
@@ -873,11 +905,6 @@ angular.module('timeSheetApp')
                         $scope.selectedFile = "";
                         $scope.loadingStop();
                         $location.path('/expense-list');
-                    },function(err){
-                        $scope.loadingStop();
-                        $location.path('/expense-list');
-                        console.log('Import error');
-                        console.log(err);
                     }).catch(function(response){
                         $scope.loadingStop();
                         $location.path('/expense-list');
@@ -905,11 +932,6 @@ angular.module('timeSheetApp')
                         $scope.loadingStop();
                         $location.path('/expense-list');
 
-                    },function(err){
-                        $scope.loadingStop();
-                        $location.path('/expense-list');
-                        console.log('Import error');
-                        console.log(err);
                     }).catch(function(response){
                         $scope.loadingStop();
                         $location.path('/expense-list');

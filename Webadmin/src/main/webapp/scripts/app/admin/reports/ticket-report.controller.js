@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('TicketReportController', function ($rootScope, $scope, $state, $timeout,
 		ProjectComponent, SiteComponent, EmployeeComponent,TicketComponent,JobComponent,
-		DashboardComponent, $http,$stateParams,$location,$interval,PaginationComponent,$filter) {
+		DashboardComponent, $http,$stateParams,$location,$interval,PaginationComponent,$filter,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -772,7 +773,11 @@ angular.module('timeSheetApp')
                 $scope.noData = true;
             }
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.ticketsDataLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load ticket report list..');
+        });
 
 	};
 
@@ -963,10 +968,11 @@ angular.module('timeSheetApp')
 			$scope.exportStatusMap[0] = exportAllStatus;
 			//console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
 			$scope.start();
-		},function(err){
-			//console.log('error message for export all ')
-			//console.log(err);
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 	};
 
 	// store the interval promise in this variable
@@ -1022,7 +1028,11 @@ angular.module('timeSheetApp')
 					}
 				}
 
-			});
+			}).catch(function(){
+                $scope.downloader=false;
+                $scope.stop();
+                $scope.showNotifications('top','center','danger','Unable to export file..');
+            });
 		});
 
 	}

@@ -5,7 +5,8 @@ angular.module('timeSheetApp')
 		'ManufacturerController',
 		function($scope, $rootScope, $state, $timeout, ManufacturerComponent,AssetTypeComponent,
 				$http, $stateParams,
-				$location,PaginationComponent,getLocalStorage) {
+				$location,PaginationComponent,getLocalStorage,Idle) {
+            Idle.watch();
 			$rootScope.loadingStop();
 			$rootScope.loginView = false;
 			$scope.success = null;
@@ -173,7 +174,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.isActiveAsc = '';
-			$scope.isActiveDesc = '';
+			$scope.isActiveDesc = 'assetType';
 
 			$scope.columnAscOrder = function(field){
 				$scope.selectedColumn = field;
@@ -251,7 +252,7 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 					//console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
 				}else{
-					$scope.searchCriteria.columnName ="id";
+					$scope.searchCriteria.columnName ="assetType";
 					$scope.searchCriteria.sortByAsc = false;
 				}
 
@@ -330,7 +331,11 @@ angular.module('timeSheetApp')
 						$scope.noData = true;
 					}
 
-				});
+				}).catch(function(){
+                    $scope.noData = true;
+                    $scope.manufacturersLoader = true;
+                    $scope.showNotifications('top','center','danger','Unable to load manufacturer list..');
+                });
 
 
 			};
@@ -460,8 +465,13 @@ angular.module('timeSheetApp')
 			$scope.deleteManufacturer = function () {
 				ManufacturerComponent.remove($scope.deleteManufacturerId).then(function(){
 					$scope.success = 'OK';
-					$scope.loadManufacturers();
-				});
+                    $rootScope.retain=1;
+                    $scope.search();
+				}).catch(function(){
+                    $scope.showNotifications('top','center','danger','Unable to delete manufacturer..');
+                    $rootScope.retain=1;
+                    $scope.search();
+                });
 			};
 
 

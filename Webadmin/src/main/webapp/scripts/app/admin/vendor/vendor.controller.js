@@ -5,7 +5,8 @@ angular.module('timeSheetApp')
 		'VendorController',
 		function($scope, $rootScope, $state, $timeout, VendorComponent,AssetTypeComponent,
 				$http, $stateParams,
-				$location,PaginationComponent,$interval,getLocalStorage) {
+				$location,PaginationComponent,$interval,getLocalStorage,Idle) {
+            Idle.watch();
 			$rootScope.loadingStop();
 			$rootScope.loginView = false;
 			$scope.success = null;
@@ -149,7 +150,9 @@ angular.module('timeSheetApp')
 						}
 						$scope.title=$scope.vendor.name;
 						//console.log($scope.vendor);
-					})
+					}).catch(function(){
+                        $scope.showNotifications('top','center','danger','Unable to load vendor details..');
+                    });
 				}else{
 					$location.path('/vendor-list');
 				}
@@ -163,7 +166,7 @@ angular.module('timeSheetApp')
 			};
 
 			$scope.isActiveAsc = '';
-			$scope.isActiveDesc = 'id';
+			$scope.isActiveDesc = 'name';
 
 			$scope.columnAscOrder = function(field){
 				$scope.selectedColumn = field;
@@ -231,7 +234,7 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 					//console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
 				}else{
-					$scope.searchCriteria.columnName ="id";
+					$scope.searchCriteria.columnName ="name";
 					$scope.searchCriteria.sortByAsc = false;
 				}
 
@@ -301,7 +304,11 @@ angular.module('timeSheetApp')
 					}
 
 
-				});
+				}).catch(function(){
+                    $scope.noData = true;
+                    $scope.vendorsLoader = true;
+                    $scope.showNotifications('top','center','danger','Unable to load vendor list..');
+                });
 
 
 			};
@@ -424,7 +431,11 @@ angular.module('timeSheetApp')
                     $rootScope.retain=1;
                     $scope.search();
 
-				});
+				}).catch(function(){
+                    $scope.showNotifications('top','center','danger','Unable to delete vendor..');
+                    $rootScope.retain=1;
+                    $scope.search();
+                });
 			};
 
 
@@ -509,10 +520,11 @@ angular.module('timeSheetApp')
 					$scope.exportStatusMap[0] = exportAllStatus;
 					//console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
 					$scope.start();
-				},function(err){
-					//console.log('error message for export all ')
-					//console.log(err);
-				});
+				}).catch(function(){
+                    $scope.downloader=false;
+                    $scope.stop();
+                    $scope.showNotifications('top','center','danger','Unable to export file..');
+                });
 			};
 
 			// store the interval promise in this variable
@@ -568,7 +580,11 @@ angular.module('timeSheetApp')
 							}
 						}
 
-					});
+					}).catch(function(){
+                        $scope.downloader=false;
+                        $scope.stop();
+                        $scope.showNotifications('top','center','danger','Unable to export file..');
+                    });
 				});
 
 			}

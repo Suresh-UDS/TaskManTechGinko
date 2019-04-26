@@ -2,7 +2,8 @@
 
 angular.module('timeSheetApp')
 .controller('FeedbackQueController', function ($rootScope, $scope, $state, $timeout,
-		FeedbackComponent,ProjectComponent,SiteComponent, $http, $stateParams, $location,PaginationComponent) {
+		FeedbackComponent,ProjectComponent,SiteComponent, $http, $stateParams, $location,PaginationComponent,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -194,7 +195,10 @@ angular.module('timeSheetApp')
 				$scope.selectedSite = {id: data.siteId, name: data.siteName};
 			})
 
-		});
+		}).catch(function(){
+            $scope.loadingStop();
+            $scope.showNotifications('top','center','danger','Unable to load feedback details..');
+        });
 
 		$scope.loadPageTop();
 	};
@@ -351,10 +355,11 @@ angular.module('timeSheetApp')
 				$scope.noData = true;
 			}
 		}).catch(function(){
-			$scope.feedbackMasterListLoader = true;
-			$scope.loading = false;
-			$scope.noData = true;
-		});
+            $scope.loading = false;
+            $scope.noData = true;
+            $scope.feedbackMasterListLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load feedback list..');
+        });
 
 	};
 

@@ -2,9 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('InventoryController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, SiteComponent,$http,$stateParams,$location,
-    		ManufacturerComponent, InventoryComponent, $filter, $interval, PaginationComponent,getLocalStorage) {
-
-
+    		ManufacturerComponent, InventoryComponent, $filter, $interval, PaginationComponent,getLocalStorage,Idle) {
+        Idle.watch();
     	$rootScope.loginView = false;
     	$scope.inventory = {};
     	$scope.editInventory = {};
@@ -495,7 +494,9 @@ angular.module('timeSheetApp')
                 console.log("Pagination", $scope.pager);
                 console.log("MaterialTransactions List - ", data);
 
-        	});
+        	}).catch(function () {
+                $rootScope.loadingStop();
+            })
         }
         /* end material transactions */
 
@@ -510,7 +511,11 @@ angular.module('timeSheetApp')
                 $scope.showNotifications('top','center','success','Material has been deleted successfully!!');
                 $rootScope.retain=1;
                 $scope.search();
-        	});
+        	}).catch(function () {
+                $scope.showNotifications('top','center','danger','Unable to delete material!!');
+                $rootScope.retain=1;
+                $scope.search();
+            })
         }
         /* end delete material */
 
@@ -526,6 +531,7 @@ angular.module('timeSheetApp')
                         $scope.editInventory.itemCode = data.itemCode;
                         $scope.selectedSite = {id: data.siteId, name: data.siteName};
                         $scope.client = {id: data.projectId, name: data.projectName};
+                        $scope.loadSelectedSite($scope.selectedSite.id);
                         $scope.selectedItemGroup = {id: data.itemGroupId, itemGroup: data.itemGroup};
                         $scope.selectedManufacturer = {id: data.manufacturerId, name: data.manufacturerName};
                         $scope.editInventory.minimumStock = data.minimumStock;
@@ -542,7 +548,7 @@ angular.module('timeSheetApp')
                         $rootScope.loadingStop();
                     }
                 }).catch(function () {
-                    $scope.showNotifications('top','center','danger','Unable to load Material');
+                    $scope.showNotifications('top','center','danger','Unable to load material details');
                     $location.path('/inventory-list');
                     $rootScope.loadingStop();
                 })
@@ -551,6 +557,13 @@ angular.module('timeSheetApp')
             }
 
     	}
+
+        $scope.loadSelectedSite = function(siteId) {
+            SiteComponent.findOne(siteId).then(function (data) {
+                $scope.selectedSite = data;
+            });
+
+        };
 
     	/* Update Material */
     	$scope.updateInventory = function () {
@@ -888,6 +901,10 @@ angular.module('timeSheetApp')
 	                  $scope.noData = true;
 	             }
 
+            }).catch(function(){
+                $scope.noData = true;
+                $scope.inventorylistLoader = true;
+                $scope.showNotifications('top','center','danger','Unable to load inventory list..');
             });
 
         };
@@ -971,10 +988,11 @@ angular.module('timeSheetApp')
                         $scope.exportStatusMap[0] = exportAllStatus;
                         console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
                         $scope.start();
-                      },function(err){
-                          console.log('error message for export all ')
-                          console.log(err);
-                  });
+                      }).catch(function(){
+                        $scope.downloader=false;
+                        $scope.stop();
+                        $scope.showNotifications('top','center','danger','Unable to export file..');
+                    });
                };
 
 
@@ -1010,6 +1028,10 @@ angular.module('timeSheetApp')
                                 }
                             }
 
+                        }).catch(function(){
+                            $scope.downloader=false;
+                            $scope.stop();
+                            $scope.showNotifications('top','center','danger','Unable to export file..');
                         });
                     });
 

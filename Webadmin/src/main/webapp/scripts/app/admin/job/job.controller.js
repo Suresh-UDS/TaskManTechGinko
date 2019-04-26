@@ -6,7 +6,8 @@ angular.module('timeSheetApp')
 		function($scope, $rootScope, $state, $timeout, JobComponent,AssetComponent,
 				ProjectComponent, SiteComponent,EmployeeComponent,ChecklistComponent,
 				LocationComponent, $http, $stateParams,
-				$location,PaginationComponent,$filter, TicketComponent, $q,$interval,getLocalStorage) {
+				$location,PaginationComponent,$filter, TicketComponent, $q,$interval,getLocalStorage,Idle) {
+            Idle.watch();
 			$rootScope.loadingStop();
 			$rootScope.loginView = false;
 			$scope.success = null;
@@ -33,7 +34,7 @@ angular.module('timeSheetApp')
 			$scope.status =[{ "name" : "OPEN"},{ "name" : "ASSIGNED"},{ "name" : "INPROGRESS"},{ "name" : "COMPLETED"}];
 			$scope.isEdit = !!$stateParams.id;
 			$scope.checklists;
-			$scope.selectedChecklist;
+			$scope.selectedChecklist = null;
 			$scope.jobChecklistItems =[];
 			$scope.jobTypeName = "";
 			$scope.monthDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
@@ -371,7 +372,7 @@ angular.module('timeSheetApp')
 					ProjectComponent.findSites(depProj).then(function (data) {
 						$scope.sitesList = data;
 						$scope.sitesLists = [];
-						//$scope.sitesListOne.selected = null;
+						$scope.sitesListOne.selected = null;
 						$scope.sitesLists[0] = $scope.allSites;
 						$scope.SelectSite = {};
 						$scope.SelectSites = [];
@@ -722,7 +723,10 @@ angular.module('timeSheetApp')
 						// console.log($scope.uiEmployee)
 						$scope.employeeFilterDisable = false;
 						$scope.empSpin = false;
-					});
+					}).catch(function () {
+                        $scope.employeeFilterDisable = true;
+                        $scope.empSpin = false;
+                    });
 				}else{
 
 					JobComponent.findEmployees().then(function (data) {
@@ -740,7 +744,10 @@ angular.module('timeSheetApp')
 						}
 						$scope.employeeFilterDisable = false;
 						$scope.empSpin = false;
-					});
+					}).catch(function () {
+                        $scope.employeeFilterDisable = true;
+                        $scope.empSpin = false;
+                    });
 				}
 
 
@@ -846,12 +853,15 @@ angular.module('timeSheetApp')
 								//     }
 								// }
 							}
-						});
+						})
 					}
-				});
+				}).catch(function () {
+                    $scope.showNotifications('top','center','danger','Unable to load job details..');
+                    $location.path('/jobs');
+                });
 
 
-			};
+			}
 
 
 
@@ -923,6 +933,10 @@ angular.module('timeSheetApp')
 									item.id = checklistItem.checklistItemId;
 									item.name = checklistItem.checklistItemName;
 									item.completed = checklistItem.completed;
+									item.image_1 = checklistItem.imageUrl_1;
+									item.image_2 = checklistItem.imageUrl_2;
+									item.image_3 = checklistItem.imageUrl_3;
+									item.remarks = checklistItem.remarks;									
 									items.push(item);
 								}
 								checklist.items = items;
@@ -955,6 +969,7 @@ angular.module('timeSheetApp')
 
 
 					}).catch(function(){
+                        $scope.showNotifications('top','center','danger','Unable to load job details..');
 						$location.path('/jobs');
 					});
 				}else{
@@ -1057,7 +1072,9 @@ angular.module('timeSheetApp')
 							$scope.checkStatus  = 1;
 
 
-						})
+						}).catch(function(){
+                            $scope.showNotifications('top','center','danger','Unable to load ticket details..');
+                        });
 					}
 				}
 			};
@@ -1099,8 +1116,10 @@ angular.module('timeSheetApp')
                    $scope.job.pendingStatus='pendingAtUDS';
                    console.log('pendingAtUDS' + $scope.job.pendingAtUDS + ',PendingAtClient'+$scope.job.pendingAtClient);
 				}
-
-				if($scope.selectedChecklist) {
+				
+				console.log("Selected checklist -", JSON.stringify($scope.selectedChecklist)); 
+				
+				if($scope.selectedChecklist != null) {
 					var items = $scope.selectedChecklist.items;
 					for(var i =0; i<items.length;i++) {
 						var checklistItem = {
@@ -1109,13 +1128,19 @@ angular.module('timeSheetApp')
 								"checklistItemId" : items[i].id,
 								"checklistItemName" : items[i].name,
 								"jobId" : $scope.job.id,
-								"jobTitle" : $scope.job.title
+								"jobTitle" : $scope.job.title,
+								"image_1" : items[i].image_1,
+								"image_2" : items[i].image_2,
+								"image_3" : items[i].image_3,
+								"remarks" : items[i].remarks,
+								"completed" : items[i].completed
 						}
 						$scope.jobChecklistItems.push(checklistItem);
 					}
 				}
 
-
+				console.log("Selected jobChecklistItems -", JSON.stringify($scope.jobChecklistItems));
+				
 				$scope.job.siteId = $scope.selectedSite.id
 				if($scope.selectedLocation) {
 					$scope.job.locationId = $scope.selectedLocation.id;
@@ -1237,8 +1262,15 @@ angular.module('timeSheetApp')
 				JobComponent.remove($scope.deleteJobId).then(function(){
 
 					$scope.success = 'OK';
-					$state.reload();
-				});
+					//$state.reload();
+                    $scope.showNotifications('top','center','success','Job has been deleted successfully!!');
+                    $scope.retain = 1;
+                    $scope.search();
+				}).catch(function(){
+                    $scope.retain = 1;
+                    $scope.search();
+                    $scope.showNotifications('top','center','danger','Unable to delete job!!');
+                });
 			};
 
 			$scope.isActiveAsc = '';
@@ -1360,6 +1392,8 @@ angular.module('timeSheetApp')
 				}else{
 					if($scope.client.selected && $scope.client.selected.id !=0){
 						$scope.searchProject = $scope.client.selected;
+                        $stateParams.project = null;
+                        $stateParams.site = null;
 					}else if($stateParams.project){
                        $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
                        $scope.client.selected =$scope.searchProject;
@@ -1379,6 +1413,7 @@ angular.module('timeSheetApp')
 					}
 					if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 						$scope.searchSite = $scope.sitesListOne.selected;
+                        $stateParams.site = null;
 					}else if($stateParams.site){
                            $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
                            $scope.sitesListOne.selected = $scope.searchSite;
@@ -1517,8 +1552,6 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria.sortByAsc = false;
 				}
 
-				// $scope.searchCriteria.schedule = "ONCE";
-
 
 				//console.log("search criteria",$scope.searchCriteria);
 				$scope.jobs = '';
@@ -1610,6 +1643,11 @@ angular.module('timeSheetApp')
                             $scope.searchJobDateTo = null;
                             $scope.searchJobDateToSer = null;
                         }
+                        if($scope.localStorage.showInActive){
+                            $scope.searchCriteria.showInActive = $scope.localStorage.showInActive;
+                            $scope.showInActive = $scope.localStorage.showInActive;
+                        }
+
 
 					}
 
@@ -1661,7 +1699,11 @@ angular.module('timeSheetApp')
 					}
 
 
-				});
+				}).catch(function(){
+                    $scope.noData = true;
+                    $scope.jobsLoader = true;
+                    $scope.showNotifications('top','center','danger','Unable to load job list..');
+                });
 
 			};
 			$scope.clearField = false;
@@ -1715,6 +1757,8 @@ angular.module('timeSheetApp')
 				$scope.filter = false;
 				$scope.clearField = true;
 				$scope.loadEmployee();
+                $stateParams.project = null;
+                $stateParams.site = null;
 
 				$scope.pages = {
 						currPage: 1,
@@ -1845,10 +1889,11 @@ angular.module('timeSheetApp')
 					$rootScope.exportStatusObj = exportAllStatus;
 					//console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
 					$scope.start();
-				},function(err){
-					//console.log('error message for export all ')
-					//console.log(err);
-				});
+				}).catch(function(){
+                    $scope.downloader=false;
+                    $scope.stop();
+                    $scope.showNotifications('top','center','danger','Unable to export file..');
+                });
 			};
 
 			// store the interval promise in this variable
@@ -1899,7 +1944,11 @@ angular.module('timeSheetApp')
 						}
 					}
 
-				});
+				}).catch(function(){
+                    $scope.downloader=false;
+                    $scope.stop();
+                    $scope.showNotifications('top','center','danger','Unable to export file..');
+                });
 
 			}
 

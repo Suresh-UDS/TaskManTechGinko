@@ -7,8 +7,8 @@ angular.module('timeSheetApp')
 				ProjectComponent,LocationComponent,SiteComponent,EmployeeComponent, $http, $stateParams,
 				$location,PaginationComponent,AssetTypeComponent,ParameterConfigComponent,ParameterComponent,
 				ParameterUOMComponent,VendorComponent,ManufacturerComponent,$sce,ChecklistComponent,$filter,
-				JobComponent,InventoryTransactionComponent,$interval,getLocalStorage) {
-
+				JobComponent,InventoryTransactionComponent,$interval,getLocalStorage,Idle) {
+            Idle.watch();
 			$rootScope.loadingStop();
 			$rootScope.loginView = false;
 			$scope.success = null;
@@ -1236,7 +1236,7 @@ angular.module('timeSheetApp')
 			/* Sorting functions*/
 
 			$scope.isActiveAsc = '';
-			$scope.isActiveDesc = '';
+			$scope.isActiveDesc = 'code';
 
 			$scope.columnAscOrder = function(field){
 				$scope.selectedColumn = field;
@@ -1291,6 +1291,8 @@ angular.module('timeSheetApp')
 
 				if($scope.client.selected && $scope.client.selected.id !=0){
 					$scope.searchProject = $scope.client.selected;
+                    $stateParams.project = null;
+                    $stateParams.site = null;
 				}else if($stateParams.project){
                     $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
                     $scope.client.selected =$scope.searchProject;
@@ -1300,6 +1302,7 @@ angular.module('timeSheetApp')
 				}
 				if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 					$scope.searchSite = $scope.sitesListOne.selected;
+                    $stateParams.site = null;
 				}else if($stateParams.site){
                    $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
                    $scope.sitesListOne.selected = $scope.searchSite;
@@ -1462,7 +1465,7 @@ angular.module('timeSheetApp')
 					$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 					//console.log('>>> $scope.searchCriteria.sortByAsc <<< '+$scope.searchCriteria.sortByAsc);
 				}else{
-					$scope.searchCriteria.columnName ="id";
+					$scope.searchCriteria.columnName ="code";
 					$scope.searchCriteria.sortByAsc = false;
 				}
 
@@ -1553,6 +1556,10 @@ angular.module('timeSheetApp')
                             $scope.searchCreatedDate = null;
                             $scope.searchCreatedDateSer = null;
                         }
+                        if($scope.localStorage.showInActive){
+                            $scope.searchCriteria.showInActive = $scope.localStorage.showInActive;
+                            $scope.showInActive = $scope.localStorage.showInActive;
+                        }
 
 					}
 
@@ -1639,9 +1646,10 @@ angular.module('timeSheetApp')
 					}
 
 				}).catch(function(){
-					//$scope.showNotifications('top','center','danger','Error load asset list. Please try again later..');
-					$scope.error = 'ERROR';
-				});
+                    $scope.noData = true;
+                    $scope.assetsLoader = true;
+                    $scope.showNotifications('top','center','danger','Unable to load asset list..');
+                });
 			}
 
 			/* View asset by id */
@@ -1661,6 +1669,7 @@ angular.module('timeSheetApp')
 						//$scope.loadCalendar();
 
 					}).catch(function(response){
+                        $scope.showNotifications('top','center','danger','Unable to load asset details..');
 						$location.path('/assets');
 						$rootScope.loadingStop();
 					});
@@ -1733,6 +1742,7 @@ angular.module('timeSheetApp')
 
 				}).catch(function(){
 					$scope.loadingStop();
+                    $scope.showNotifications('top','center','danger','Unable to load asset config..');
 					//$scope.showNotifications('top','center','danger','Unable to load asset config list. Please try again later..');
 					$scope.error = 'ERROR';
 				});
@@ -2197,8 +2207,10 @@ angular.module('timeSheetApp')
 							//console.log('Error - '+ response.data);
 							if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 								$scope.errorProjectExists = 'ERROR';
+                                $scope.showNotifications('top','center','danger','Unable to update asset!!');
 							} else {
 								$scope.error = 'ERROR';
+                                $scope.showNotifications('top','center','danger','Unable to update asset!!');
 							}
 						});
 
@@ -2288,6 +2300,8 @@ angular.module('timeSheetApp')
 					$scope.retain = 1;
 					$scope.search();
 				}).catch(function () {
+                    $scope.retain = 1;
+                    $scope.search();
                     $scope.showNotifications('top','center','danger','Unable to delete asset!!');
                 });
 			}
@@ -2381,6 +2395,8 @@ angular.module('timeSheetApp')
 				$scope.searchAssetGroup = null;
 				$scope.clearField = true;
 				$scope.localStorage = null;
+                $stateParams.project = null;
+                $stateParams.site = null;
 				$scope.pages = {
 						currPage: 1,
 						totalPages: 0
@@ -2734,7 +2750,9 @@ angular.module('timeSheetApp')
                     $scope.assetConfig();
 					$scope.loadingStop();
 
-				});
+				}).catch(function () {
+                    $scope.showNotifications('top','center','danger','Unable to delete config!!');
+                });
 			}
 
 			$scope.siteChangeAssetConfig = function() {
@@ -3859,7 +3877,7 @@ angular.module('timeSheetApp')
 						}
 					},
 
-					select: function(start, end) {
+					/* select: function(start, end) {
 
 						// on select we show the Sweet Alert modal with an input
 						swal({
@@ -3902,7 +3920,7 @@ angular.module('timeSheetApp')
 							$calendar.fullCalendar('unselect');
 
 						});
-					},
+					},*/
 					editable: true,
 					eventLimit: true, // allow "more" link when too many events
 
@@ -3946,25 +3964,28 @@ angular.module('timeSheetApp')
 						swal({
 							title: 'View schedule',
 							html: '<div class="form-group">' +
-							'<input type "readonly" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'">' +
+							'<input type="text" class="form-control" placeholder="Schedule Title" id="input-title" value="'+calEvent.title+'" disabled>' +
 							'</div>'+
 							'<div class="form-group">' +
-							'<input type "readonly" class="form-control" placeholder="Schedule Description" id="input-desc" >' +
+							'<input type="text" class="form-control" placeholder="Schedule Description" id="input-desc" disabled>' +
 							'</div>'+
 							'<div class="form-group">' +
-							'<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" >' +
+							'<input type="text" class="form-control" placeholder="DD/MM/YYYY" id="input-fdate" value="'+inputFdate+'" disabled>' +
 							'</div>'+
 							'<div class="form-group">' +
-							'<input type "readonly" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'">' +
+							'<input type="text" class="form-control" placeholder="DD/MM/YYYY" id="input-tdate" value="'+inputTdate+'" disabled>' +
 							'</div>'+
 							'<div class="form-group">' +
-							'<input type "readonly" class="form-control" placeholder="Weekly" id="input-frq" value="">' +
+							'<input type="text" class="form-control" placeholder="Weekly" id="input-frq" value="" disabled>' +
 							'</div>',
 							showCancelButton: true,
 							confirmButtonClass: 'btn btn-success',
 							cancelButtonClass: 'btn btn-danger',
 							buttonsStyling: false
-						});
+						}).catch(function(err) {
+                            //console.error(err);
+                            //throw err;
+                        })
 
 						// change the border color just for fun
 						$(this).css('border-color', 'red');
@@ -4251,10 +4272,11 @@ angular.module('timeSheetApp')
 					$scope.exportStatusMap[0] = exportAllStatus;
 					//console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
 					$scope.start();
-				},function(err){
-					//console.log('error message for export all ')
-					//console.log(err);
-				});
+				}).catch(function(){
+                    $scope.downloader=false;
+                    $scope.stop();
+                    $scope.showNotifications('top','center','danger','Unable to export file..');
+                });
 			};
 
 			// store the interval promise in this variable
@@ -4309,7 +4331,11 @@ angular.module('timeSheetApp')
 							}
 						}
 
-					});
+					}).catch(function(){
+                        $scope.downloader=false;
+                        $scope.stop();
+                        $scope.showNotifications('top','center','danger','Unable to export file..');
+                    });
 				});
 
 			}

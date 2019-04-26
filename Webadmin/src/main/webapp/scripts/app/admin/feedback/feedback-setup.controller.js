@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('FeedbackSetupController', function ($rootScope, $scope, $state, $timeout,
 		FeedbackComponent,ProjectComponent,SiteComponent, LocationComponent, $http, $stateParams,
-		$location,PaginationComponent) {
+		$location,PaginationComponent,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -689,7 +690,9 @@ angular.module('timeSheetApp')
 			$scope.feedbackMapping = data;
 			//console.log('Feedback mapping retrieved - ' + JSON.stringify($scope.feedbackMapping));
 
-		});
+		}).catch(function(){
+            $scope.showNotifications('top','center','danger','Unable to load feedback setup details..');
+        });
 
 	};
 
@@ -698,16 +701,20 @@ angular.module('timeSheetApp')
 
 		FeedbackComponent.updateFeedbackMapping($scope.feedbackMapping).then(function () {
 			$scope.success = 'OK';
+            $scope.showNotifications('top','center','success','Feedback setup updated Successfully');
 			$location.path('/feedback-setup');
 		}).catch(function (response) {
 			$scope.success = null;
 			//console.log('Error - '+ response.data);
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                $scope.showNotifications('top','center','danger', 'Feedback setup already exists!.. Please choose another one');
 				$scope.errorChecklistExists = true;
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
+                $scope.showNotifications('top','center','danger', 'Feedback setup Not updated!.. Please try again later.');
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
 			} else {
+                $scope.showNotifications('top','center','danger', 'Feedback setup Not updated!.. Please try again later.');
 				$scope.error = 'ERROR';
 			}
 		});
@@ -727,6 +734,7 @@ angular.module('timeSheetApp')
 		$scope.btnDisable = true;
 		FeedbackComponent.createFeedbackMapping($scope.feedbackMapping).then(function(){
 			//console.log("success");
+            $scope.showNotifications('top','center','success','Feedback setup created Successfully');
 			$location.path('/feedback-setup');
 			//$scope.loadFeedbackItems();
 		}).catch(function (response) {
@@ -734,11 +742,14 @@ angular.module('timeSheetApp')
 			$scope.btnDisable = false;
 			//console.log(response.data);
 			if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                $scope.showNotifications('top','center','danger', 'Feedback setup already exists!.. Please choose another one');
 				$scope.errorFeedbackMappingExists = true;
 			} else if(response.status === 400 && response.data.message === 'error.validation'){
+                $scope.showNotifications('top','center','danger', 'Feedback setup Not created!.. Please try again later.');
 				$scope.validationError = true;
 				$scope.validationErrorMsg = response.data.description;
 			} else {
+                $scope.showNotifications('top','center','danger', 'Feedback setup Not created!.. Please try again later.');
 				$scope.error = 'ERROR';
 			}
 		});
@@ -1001,7 +1012,11 @@ angular.module('timeSheetApp')
 
 
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.feedbackMappingListLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load feedback setup list..');
+        });
 
 	};
 

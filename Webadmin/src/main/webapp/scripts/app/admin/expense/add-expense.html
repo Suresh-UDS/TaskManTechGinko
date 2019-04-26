@@ -229,7 +229,20 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-4 padng-top25" ng-if="transactionMode !='credit' && transactionMode !=''">
+                                <div class="radio radio-inline">
+                                    <label>
+                                        <input type="radio" name="payment" id="billable" ng-model="payment"  ng-click="toggle($event)" value="billable" checked="checked"> Billable
+                                    </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label>
+                                        <input type="radio" name="payment" id="reimbursable"  ng-model="payment" ng-click="toggle($event)" value="reimbursable"> Reimbursable
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!--<div class="col-md-2">
                                 <div class="checkbox">
                                     <label style="padding-top: 23px;">
                                         <input type="checkbox" ng-model="billable" name="billable"> Billable
@@ -244,7 +257,7 @@
                                         <input type="checkbox" ng-model="reimbursable" name="reimbursable"> Reimbursable
                                     </label>
                                 </div>
-                            </div>
+                            </div>-->
 
                         </div>
 

@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('AttendanceController', function ($rootScope, $scope, $state, $timeout,
 		ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, $http,
-		$stateParams,$location,$interval,PaginationComponent,$filter) {
+		$stateParams,$location,$interval,PaginationComponent,$filter,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -173,7 +174,9 @@ angular.module('timeSheetApp')
 				$scope.allAttendances = data;
 				// $scope.attendanceSites();
 				$scope.employeeSearch();
-			})
+			}).catch(function(){
+                $scope.showNotifications('top','center','danger','Unable to load attendance list..');
+            });
 		}
 	}
 
@@ -403,7 +406,9 @@ angular.module('timeSheetApp')
 	$scope.loadAttendance = function() {
 		AttendanceComponent.findOne($stateParams.id).then(function (data) {
 			$scope.attendance = data;
-		});
+		}).catch(function(){
+            $scope.showNotifications('top','center','danger','Unable to load attendance details..');
+        });
 
 	};
 
@@ -425,7 +430,7 @@ angular.module('timeSheetApp')
 		}
 	};
 
-	$scope.isActiveAsc = 'employee.id';
+	$scope.isActiveAsc = 'id';
 	$scope.isActiveDesc = '';
 
 	$scope.columnAscOrder = function(field){
@@ -828,7 +833,11 @@ angular.module('timeSheetApp')
 				$scope.noData = true;
 			}
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.attendancesDataLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load attendance list..');
+        });
 
 	};
 
@@ -842,7 +851,9 @@ angular.module('timeSheetApp')
 			var eleId1 = 'photoEnrolled';
 			var ele1 = document.getElementById(eleId1);
 			ele1.setAttribute('src',enrollImg);
-		});
+		}).catch(function(){
+            $scope.showNotifications('top','center','danger','Unable to load enroll img..');
+        });
 	}
 
 
@@ -1028,10 +1039,11 @@ angular.module('timeSheetApp')
 			$scope.exportStatusMap[0] = exportAllStatus;
 			console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
 			$scope.start();
-		},function(err){
-			//console.log('error message for export all ')
-			//console.log(err);
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 	};
 
 	// store the interval promise in this variable
@@ -1082,7 +1094,11 @@ angular.module('timeSheetApp')
 					}
 				}
 
-			});
+			}).catch(function(){
+                $scope.downloader=false;
+                $scope.stop();
+                $scope.showNotifications('top','center','danger','Unable to export file..');
+            });
 		});
 
 	}

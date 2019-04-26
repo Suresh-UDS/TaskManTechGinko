@@ -44,12 +44,16 @@
 
                                 <tr>
                                     <td>Billable </td>
-                                    <td>{{expenseDetails.billable}}</td>
+                                    <td><span ng-if="expenseDetails.billable">Yes</span>
+                                        <span ng-if="!expenseDetails.billable">No</span>
+                                    </td>
                                 </tr>
 
                                 <tr>
                                     <td>Reimbursable </td>
-                                    <td>{{expenseDetails.reimbursable}}</td>
+                                    <td><span ng-if="expenseDetails.reimbursable">Yes</span>
+                                        <span ng-if="!expenseDetails.reimbursable">No</span>
+                                    </td>
                                 </tr>
 
                                 <tr>

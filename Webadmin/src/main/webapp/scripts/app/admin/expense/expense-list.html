@@ -65,9 +65,9 @@
                     <div class="table-responsive tablecard">
                         <table class="table table-hover">
                             <thead>
-                            <tr>
-                                <th>Created Date
-                                    <span class="sortingIcons">
+                               <tr>
+                                   <th>Created Date
+                                       <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('createdDate')" ng-class="isActiveAsc == 'createdDate' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -75,9 +75,9 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                </th>
-                                <th>Site
-                                    <span class="sortingIcons">
+                                   </th>
+                                   <th>Site
+                                       <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -85,9 +85,9 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                </th>
-                                <th>Category
-                                    <span class="sortingIcons">
+                                   </th>
+                                   <th>Category
+                                       <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('expenseCategory')" ng-class="isActiveAsc == 'expenseCategory' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -95,9 +95,9 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                </th>
-                                <th>Transaction type
-                                    <span class="sortingIcons">
+                                   </th>
+                                   <th>Transaction type
+                                       <span class="sortingIcons">
                                             <span ng-click="columnAscOrder('mode')" ng-class="isActiveAsc == 'mode' ? 'active' : ''" >
                                                 <i  class="fa fa-caret-up"></i>
                                             </span>
@@ -105,51 +105,51 @@
                                                  <i  ng-class="class" class="fa fa-caret-down"></i>
                                             </span>
                                         </span>
-                                </th>
-                                <th> Debit</th>
-                                <th> credit</th>
-                                <th> Balance</th>
-                                <th> Payment type</th>
-                                <th class="text-center">Actions</th>
+                                   </th>
+                                   <th> Debit</th>
+                                   <th> credit</th>
+                                   <th> Balance</th>
+                                   <th> Payment type</th>
+                                   <th class="text-center">Actions</th>
 
-                            </tr>
+                               </tr>
                             </thead>
                             <tbody>
 
-                            <tr ng-repeat="expense in expenses">
+                                <tr ng-repeat="expense in expenses">
 
-                                <td>{{expense.createdDate | date:'dd/MMM/yyyy'}}</td>
-                                <td>{{expense.siteName}}</td>
-                                <td>{{expense.expenseCategory}}</td>
-                                <td>{{expense.mode}}</td>
-                                <td>
-                                    <span style="color: red">{{expense.debitAmount}}</span>
-                                </td>
-                                <td>
-                                    <span style="color: green">{{expense.creditAmount}}</span>
-                                </td>
-                                <td>
-                                    <span ng-if="expense.balanceAmount<0" style="color: red">{{expense.balanceAmount}}</span>
-                                    <span ng-if="expense.balanceAmount>0" style="color: green">{{expense.balanceAmount}}</span>
-                                </td>
-                                <td>{{expense.paymentType}}</td>
-                                <td class="text-center">
-                                    <a data-toggle="modal" title="View Expense"  data-target="#RightModal-View" ng-click="viewExpense(expense.id)"  has-permission="Expense:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
-                                    <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like" ui-sref="view-expense({ id: expense.id })"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                    <!--<a title="Edit"  ui-sref="edit-expense({id: expense.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
+                                    <td>{{expense.createdDate | date:'dd/MMM/yyyy'}}</td>
+                                    <td>{{expense.siteName}}</td>
+                                    <td>{{expense.expenseCategory}}</td>
+                                    <td>{{expense.mode}}</td>
+                                    <td>
+                                        <span style="color: red">{{expense.debitAmount}}</span>
+                                    </td>
+                                    <td>
+                                        <span style="color: green">{{expense.creditAmount}}</span>
+                                    </td>
+                                    <td>
+                                        <span ng-if="expense.balanceAmount<0" style="color: red">{{expense.balanceAmount}}</span>
+                                        <span ng-if="expense.balanceAmount>0" style="color: green">{{expense.balanceAmount}}</span>
+                                    </td>
+                                    <td>{{expense.paymentType}}</td>
+                                    <td class="text-center">
+                                        <a data-toggle="modal" title="View Expense"  data-target="#RightModal-View" ng-click="viewExpense(expense.id)"  has-permission="Expense:View"   class="btn btn-simple btn-info"><i class="material-icons">visibility</i></a>
+                                        <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like" ui-sref="view-expense({ id: expense.id })"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                        <!--<a title="Edit"  ui-sref="edit-expense({id: expense.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
 
-                                    <!--<a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>-->
+                                        <!--<a title="View More Action"  class="btn btn-simple btn-info btn-icon like Viewmore"><i class="material-icons">more_vert</i></a>-->
 
-                                    <!--<div class="HoverBx">-->
-                                    <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
-                                    <!--<a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
+                                        <!--<div class="HoverBx">-->
+                                            <!--<button  title="View"  class="btn btn-simple btn-info btn-icon like"><i style="font-size: 20px" class="material-icons">remove_red_eye</i></button>-->
+                                            <!--<a ui-sref="edit-expense"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>-->
 
-                                    <!--<a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
-                                    <!--</div>-->
+                                            <!--<a ng-class="{active: $state.includes('admin')}"    onClick="$('#deleteModal').modal()" data-target="#myModal"  class="btn btn-simple btn-danger"><i class="material-icons">close</i></a>-->
+                                        <!--</div>-->
 
 
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
 
                             </tbody>
                         </table>
@@ -221,7 +221,7 @@
                         Cancel</button>
                     <button type="button"
                             class="btn btn-danger delete-multiple-confirmation-button"
-                    >
+                            >
                         Delete</button>
                 </div>
             </div>
@@ -274,7 +274,7 @@
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+                                                        <ui-select-choices repeat="client in clients | filter: {name:$select.search}"  null-option="allClients" loose-null>
 
                                                             <span ng-bind-html="client.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
@@ -297,7 +297,7 @@
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+                                                        <ui-select-choices repeat="regionsListOne in regionsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
                                                             <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -321,7 +321,7 @@
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+                                                        <ui-select-choices repeat="branchsListOne in branchsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
                                                             <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -344,7 +344,7 @@
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
+                                                        <ui-select-choices repeat="sitesListOne in sitesLists | filter: {name:$select.search}" null-option="allSites" loose-null>
                                                             <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -461,7 +461,7 @@
                                         <tr>
 
                                             <td>Payment Mode </td>
-                                            <td>{{viewExpenseDetails.mode}}
+                                            <td>
                                                 <span ng-if="viewExpenseDetails.mode">{{viewExpenseDetails.mode}}</span>
                                                 <span ng-if="!viewExpenseDetails.mode">-</span>
                                             </td>
@@ -494,16 +494,16 @@
                                         <tr>
                                             <td>Billable </td>
                                             <td>
-                                                <span ng-if="viewExpenseDetails.billable">{{viewExpenseDetails.billable}}</span>
-                                                <span ng-if="!viewExpenseDetails.billable">-</span>
+                                                <span ng-if="viewExpenseDetails.billable">Yes</span>
+                                                <span ng-if="!viewExpenseDetails.billable">No</span>
                                             </td>
 
                                         </tr>
                                         <tr>
                                             <td>Reimbursable </td>
                                             <td>
-                                                <span ng-if="viewExpenseDetails.reimbursable">{{viewExpenseDetails.reimbursable}}</span>
-                                                <span ng-if="!viewExpenseDetails.reimbursable">-</span>
+                                                <span ng-if="viewExpenseDetails.reimbursable">Yes</span>
+                                                <span ng-if="!viewExpenseDetails.reimbursable">No</span>
                                             </td>
 
                                         </tr>
@@ -519,27 +519,27 @@
                                             <td>Uploaded Documents</td>
                                             <td>
 
-                                                <div class="row" >
+                                            <div class="row" >
 
-                                                    <div class="col-md-3 txt-align-center DocsCon" ng-repeat="uploadFile in viewExpenseDetails.expenseDocumentList" >
-                                                        <!--<div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
-                                                            <i class="material-icons">close</i>
-                                                        </div>-->
-                                                        <div class="DownloadBtn" style="right: 12%;">
-                                                            <a href="{{uploadFile.fileUrl}}" id="loop" title="download">
-                                                                <i class="material-icons">cloud_download</i>
-                                                            </a>
-                                                        </div>
-                                                        <a href="javascript:void(0);"   >
-                                                            <img ng-src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
+                                                <div class="col-md-3 txt-align-center DocsCon" ng-repeat="uploadFile in viewExpenseDetails.expenseDocumentList" >
+                                                    <!--<div class="DeleteBtn" ng-click="deleteConfirmDoc(uploadFile.id)"  onClick="$('#deleteModal').modal()" data-target="#myModal">
+                                                        <i class="material-icons">close</i>
+                                                    </div>-->
+                                                    <div class="DownloadBtn" style="right: 12%;">
+                                                        <a href="{{uploadFile.fileUrl}}" id="loop" title="download">
+                                                            <i class="material-icons">cloud_download</i>
                                                         </a>
-                                                        <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
-                                                        <div  ng-if="uploadFile.id == download">
-                                                            <a href="{{content}}" download>download</a>
-                                                        </div>
-
                                                     </div>
-                                                    <span  ng-if="viewExpenseDetails.expenseDocumentList.length == 0"  >
+                                                    <a href="javascript:void(0);"   >
+                                                        <img ng-src="assets/img/{{ uploadFile.fileUrl.substring(uploadFile.fileUrl.lastIndexOf('.')+1,uploadFile.fileUrl.length )}}.png" alt="docs"/>
+                                                    </a>
+                                                    <p style="padding-top: 10px;font-weight: 400;font-size: 15px">{{uploadFile.title}}</p>
+                                                    <div  ng-if="uploadFile.id == download">
+                                                        <a href="{{content}}" download>download</a>
+                                                    </div>
+
+                                                </div>
+                                                <span  ng-if="viewExpenseDetails.expenseDocumentList.length == 0"  >
                                                     No Documents
                                                 </span>
 

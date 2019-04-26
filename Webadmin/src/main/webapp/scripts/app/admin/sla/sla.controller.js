@@ -449,6 +449,10 @@ angular.module('timeSheetApp')
                             } else {
                                 $scope.noData = true;
                             }
+                        }).catch(function(){
+                            $scope.noData = true;
+                            $scope.slaLoader = true;
+                            $scope.showNotifications('top','center','danger','Unable to load sla list..');
                         });
 
 					};
@@ -526,6 +530,10 @@ angular.module('timeSheetApp')
                                         console.log(data);
                                         $scope.loadingStop();
                                         $location.path('/sla-list');
+                                    }).catch(function () {
+                                        $scope.showNotifications('top','center','danger','Unable to creating Sla. Please try again later..');
+                                        $scope.loadingStop();
+                                        $location.path('/sla-list');
                                     });
                                 }
                             }
@@ -555,6 +563,11 @@ angular.module('timeSheetApp')
                                             console.log("SLA saving");
                                             console.log(data);
                                             $scope.loadingStop();
+                                            $location.path('/sla-list');
+                                        }).catch(function () {
+                                            $scope.showNotifications('top','center','danger','Unable to updating Sla. Please try again later..');
+                                            $scope.loadingStop();
+                                            $location.path('/sla-list');
                                         });
                                     }
                                     $location.path('/sla-list');
@@ -965,7 +978,7 @@ angular.module('timeSheetApp')
                 $scope.branchSelectedProject = {};
                 $scope.selectedRegionOne = {};
                 $scope.regions = null;
-                $scope.loadRegions(projectId.id);
+                $scope.loadRegions(projectId);
                 $scope.regionSelectedProject = projectId;
                 $scope.branchSelectedProject = projectId;
 
@@ -974,7 +987,7 @@ angular.module('timeSheetApp')
                 $scope.branchsListOne.selected = null;
                 $scope.branchFilterDisable = true;
                 $scope.selectedBranch = {};
-                SiteComponent.getRegionByProject(projectId.id).then(function (response) {
+                SiteComponent.getRegionByProject(projectId).then(function (response) {
                     // //console.log(response);
                     $scope.regionList = response;
                     $scope.regionsLists = [];

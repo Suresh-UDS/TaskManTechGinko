@@ -6,7 +6,8 @@ angular
 				'QuotationController',
 				function($scope, $rootScope, $state, $timeout, $http, $document, $window,
 						$stateParams, $location, RateCardComponent,TicketComponent, JobComponent,
-						 ProjectComponent, SiteComponent,PaginationComponent,$filter,getLocalStorage) {
+						 ProjectComponent, SiteComponent,PaginationComponent,$filter,getLocalStorage,Idle) {
+                    Idle.watch();
 
                     $rootScope.loadingStop();
 
@@ -249,7 +250,9 @@ angular
                                         $scope.selectedSite = data;
                                     })
                                 }*/
-                            })
+                            }).catch(function(){
+                                $scope.showNotifications('top','center','danger','Unable to load ticket details..');
+                            });
                         }
 
 
@@ -1458,7 +1461,11 @@ angular
 			                }else{
 			                     $scope.noData = true;
 			                }
-		            });
+		            }).catch(function(){
+                        $scope.noData = true;
+                        $scope.quotationsLoader = true;
+                        $scope.showNotifications('top','center','danger','Unable to load quotation list..');
+                    });
 
 		        };
 
@@ -1510,7 +1517,9 @@ angular
 						                $scope.ticketStatus = 'Closed';
 						                $state.reload();
 						        		}
-					            })
+					            }).catch(function(){
+                                    $scope.showNotifications('top','center','danger','Unable to updating ticket list..');
+                               });
 					        }
 
 

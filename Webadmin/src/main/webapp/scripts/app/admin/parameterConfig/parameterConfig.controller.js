@@ -6,7 +6,8 @@ angular.module('timeSheetApp')
 				function($scope, $rootScope, $state, $timeout, ParameterConfigComponent,ParameterComponent,
                  ParameterUOMComponent, AssetTypeComponent,AssetComponent,
 						$http, $stateParams,
-						$location,PaginationComponent) {
+						$location,PaginationComponent,Idle) {
+		Idle.watch();
         $rootScope.loadingStop();
         $rootScope.loginView = false;
         $scope.success = null;
@@ -122,6 +123,7 @@ angular.module('timeSheetApp')
 
                 }).catch(function(){
                    $scope.loadingStop();
+                   $scope.showNotifications('top','center','danger','Unable to Add Asset Type');
                 });
             }else{
               //console.log("Asset Type not entered");
@@ -153,6 +155,7 @@ angular.module('timeSheetApp')
 
 	            }).catch(function(){
                     $scope.loadingStop();
+                    $scope.showNotifications('top','center','danger','Unable to Add Asset Param');
                 });
 	        }else{
 	          //console.log("Parameter not entered");
@@ -180,6 +183,7 @@ angular.module('timeSheetApp')
 
 	            }).catch(function(){
                     $scope.loadingStop();
+                    $scope.showNotifications('top','center','danger','Unable to Add Parameter UOM');
                 });
 	        }else{
 	          //console.log("Parameter UOM not entered");
@@ -262,6 +266,10 @@ angular.module('timeSheetApp')
                 }
 
 
+            }).catch(function(){
+                $scope.noData = true;
+                $scope.parameterConfigsLoader = true;
+                $scope.showNotifications('top','center','danger','Unable to load parameter configuration list..');
             });
 
 

@@ -1,38 +1,14 @@
 package com.ts.app.service.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
 import com.ts.app.domain.*;
+import com.ts.app.domain.util.StringUtil;
 import com.ts.app.repository.EmployeeRepository;
+import com.ts.app.repository.ProjectRepository;
+import com.ts.app.repository.SettingsRepository;
 import com.ts.app.repository.SiteRepository;
+import com.ts.app.service.MailService;
+import com.ts.app.service.SettingsService;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.csv.CSVFormat;
@@ -41,13 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -59,30 +29,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetScheduleEventDTO;
-import com.ts.app.domain.util.StringUtil;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.service.MailService;
-import com.ts.app.service.SettingsService;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.AssetScheduleEventDTO;
-import com.ts.app.web.rest.dto.AttendanceDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.FeedbackTransactionDTO;
-import com.ts.app.web.rest.dto.FeedbackTransactionResultDTO;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.MaterialDTO;
-import com.ts.app.web.rest.dto.MaterialTransactionDTO;
-import com.ts.app.web.rest.dto.PurchaseReqDTO;
-import com.ts.app.web.rest.dto.QuotationDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.TicketDTO;
-import com.ts.app.web.rest.dto.VendorDTO;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.io.*;
+import java.nio.file.FileSystem;
+import java.nio.file.*;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Transactional
@@ -167,8 +123,11 @@ public class ExportUtil {
     @Inject
     private SiteRepository siteRepository;
 
+    @Inject
+    private ProjectRepository projectRepository;
+
 	public ExportResult writeConsolidatedJobReportToFile(String projName, List<ReportResult> content,
-			final String empId, ExportResult result) {
+                                                         final String empId, ExportResult result) {
 		boolean isAppend = false;
 		// boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
@@ -429,7 +388,7 @@ public class ExportUtil {
 	}
 
 	public ExportResult writeAttendanceExcelReportToFile(String projName, List<AttendanceDTO> transactions,
-			User user, Employee emp, ExportResult result) {
+                                                         User user, Employee emp, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend = " + isAppend);
 		if (result == null) {
@@ -519,15 +478,25 @@ public class ExportUtil {
 					dataRow.createCell(0).setCellValue(attn.getEmployeeEmpId());
 					String employeeLastName = StringUtils.isNotEmpty(attn.getEmployeeLastName())? attn.getEmployeeLastName(): "";
 					dataRow.createCell(1).setCellValue(attn.getEmployeeName() +" " +employeeLastName);
-					if(emp != null) {
+                    if(emp != null) {
                         dataRow.createCell(2).setCellValue(emp.isReliever()? "YES":"NO");
                     }else {
                         dataRow.createCell(2).setCellValue("");
                     }
 					dataRow.createCell(3).setCellValue(attn.getSiteName());
-					dataRow.createCell(4).setCellValue("");
-					dataRow.createCell(5).setCellValue(attn.getCheckInTime() != null ? String.valueOf(attn.getCheckInTime()) : "");
-					dataRow.createCell(6).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(attn.getCheckOutTime()) : "");
+					if(attn.getSiteId() > 0) {
+						Site site = siteRepository.findOne(attn.getSiteId());
+						if(site != null) {
+							Project client = projectRepository.findOne(site.getProject().getId());
+							dataRow.createCell(4).setCellValue(client.getName());
+						}else {
+							dataRow.createCell(4).setCellValue("");
+						}
+					}
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+					dataRow.createCell(5).setCellValue(attn.getCheckInTime() != null ? String.valueOf(dateFormat.format(attn.getCheckInTime())) : "");
+					dataRow.createCell(6).setCellValue(attn.getCheckOutTime() != null ? String.valueOf(dateFormat.format(attn.getCheckOutTime())) : "");
 
 					long difference = 0;
 					long differenceInHours = 0;
@@ -596,7 +565,7 @@ public class ExportUtil {
 		});
 
 		writer_Thread.start();
-		if(emp != null) {
+        if(emp != null) {
             result.setEmpId(emp.getEmpId());
         }else {
             result.setEmpId("");
@@ -608,7 +577,7 @@ public class ExportUtil {
 	}
 
 	public ExportResult writeAttendanceReportToFile(String projName, List<EmployeeAttendanceReport> content, List<Map<String,String>> consolidatedData, Map<String, String> summary,
-			Map<String, Map<String, Integer>> shiftWiseSummary, final String empId, ExportResult result) {
+                                                    Map<String, Map<String, Integer>> shiftWiseSummary, final String empId, ExportResult result) {
 		boolean isAppend = (result != null);
 		log.debug("result = " + result + ", isAppend=" + isAppend);
 		if (result == null) {
@@ -1018,7 +987,7 @@ public class ExportUtil {
 
 		/* Designation wise sorting */
 		 List<Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>> list = new ArrayList<Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>>(entrySet);
-		    Collections.sort( list, new Comparator<Map.Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>>()
+		    Collections.sort( list, new Comparator<Entry<EmployeeAttendanceReport, Map<Integer,EmployeeDayAttendance>>>()
 		    {
 				@Override
 				public int compare(Entry<EmployeeAttendanceReport, Map<Integer, EmployeeDayAttendance>> o1,
@@ -1154,7 +1123,7 @@ public class ExportUtil {
 
 		musterSheet.addMergedRegion(new CellRangeAddress(1, 5, totalRow, totalDesigRow));
 
- 		for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
+ 		for(Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
  		    CellStyle shiftStyle = xssfWorkbook.createCellStyle();
  		    shiftStyle.setBorderTop(CellStyle.BORDER_MEDIUM);
  		    shiftStyle.setBorderBottom(CellStyle.BORDER_MEDIUM);
@@ -1305,7 +1274,7 @@ public class ExportUtil {
 
 			Cell totalCountRow = dataRow.createCell(sumTotCount);
 
-			for(Map.Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
+			for(Entry<Map<String, String>, String> ent : shiftSlots.entrySet()) {
 				String value = ent.getValue();
 				int shiftCnt = 0;
 				int offCnt = 0;
@@ -1529,7 +1498,7 @@ public class ExportUtil {
 			log.error("Error while opening the attendance template file",e1);
 		}
 
-		int rowNum = 4;
+		int rowNum = 3;
 
 		XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
 		long prevAssetIdInLoop = 0;
@@ -1955,7 +1924,7 @@ public class ExportUtil {
 
 	public String getExportStatus(String fileName) {
 		String status = null;
-//		log.debug("statusMap -" + statusMap);
+		log.debug("statusMap -" + statusMap);
 		if (statusMap != null) {
 			if (statusMap.containsKey(fileName)) {
 				status = statusMap.get(fileName);
@@ -2352,7 +2321,7 @@ public class ExportUtil {
 		return result;
 	}
 
-	public ExportResult writeTicketExcelReportToFile(String projName, List<TicketDTO> content, User user, Employee emp,  ExportResult result) {
+	public ExportResult writeTicketExcelReportToFile(String projName, List<TicketDTO> content, User user, Employee emp, ExportResult result) {
 		if(log.isDebugEnabled()) {
 			log.debug("Exporting ticket report to excel");
 		}
@@ -2899,14 +2868,16 @@ public class ExportUtil {
                                             dataRow.createCell(9).setCellValue(transaction.getZone());
                                             dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                             dataRow.createCell(10).setCellValue(result.getQuestion());
-                                            dataRow.createCell(11).setCellValue(result.getAnswer());
+                                            if(result.getAnswer().equalsIgnoreCase("false")){
+                                                dataRow.createCell(11).setCellValue("NO");
+                                            }else{
+                                                dataRow.createCell(11).setCellValue("YES");
+                                            }
                                             dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
                                             dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                             dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                         }
-                                        }else if((result.getAnswerType().equalsIgnoreCase("YesNo") &&
-                                                 result.getAnswer().equalsIgnoreCase("true")) &&
-                                                 (result.getScoreType().equalsIgnoreCase("no:1") || (result.getScoreType().equalsIgnoreCase("yes:-1"))) ){
+                                        }else if(result.getAnswerType().equalsIgnoreCase("YesNo") && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("no:1")){
 
                                             log.debug("Inside the condition"+result.getAnswer());
 
@@ -2925,8 +2896,11 @@ public class ExportUtil {
                                                 dataRow.createCell(8).setCellValue(transaction.getFloor());
                                                 dataRow.createCell(9).setCellValue(transaction.getZone());
                                                 dataRow.createCell(10).setCellValue(result.getQuestion());
-                                                dataRow.createCell(11).setCellValue(result.getAnswer());
-                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                                if(result.getAnswer().equalsIgnoreCase("false")){
+                                                    dataRow.createCell(11).setCellValue("NO");
+                                                }else{
+                                                    dataRow.createCell(11).setCellValue("YES");
+                                                }                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
                                                 dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                                 dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                             }

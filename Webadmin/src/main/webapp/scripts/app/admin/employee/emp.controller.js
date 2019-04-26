@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('EmployeeController', function ($rootScope,$window, $scope, $state,
 		$timeout, ProjectComponent, SiteComponent, EmployeeComponent,LocationComponent,
-		UserRoleComponent, $http,$stateParams,$location,PaginationComponent,$filter,$interval,getLocalStorage) {
+		UserRoleComponent, $http,$stateParams,$location,PaginationComponent,$filter,$interval,getLocalStorage,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -472,12 +473,7 @@ angular.module('timeSheetApp')
 				projSite.employeeName = $scope.employee.name
 			}
 
-			function isProject(project) {
-				return project.projectId === projSite.projectId;
-			}
-			function isSite(site) {
-				return site.siteId === projSite.siteId;
-			}
+
 
 			console.log('project>>>>', $scope.projectSiteList.find(isProject));
 			console.log('site>>>>', $scope.projectSiteList.find(isSite));
@@ -487,7 +483,7 @@ angular.module('timeSheetApp')
 
 			if(($scope.dupProject && $scope.dupSite)){
 				//$scope.showNotifications('top','center','warning','Client and Site already exist!!!');
-                alert('Client and Site already exist!!!');
+                alert('Client and Site are already exist!!!');
 				return;
 			}
 
@@ -517,6 +513,7 @@ angular.module('timeSheetApp')
 			return;
 		}
 	};
+
 
 	$scope.initAdd = function(){
 		$scope.empLocation = true;
@@ -565,14 +562,8 @@ angular.module('timeSheetApp')
 			//console.log('selected floor -' + $scope.selectedFloor);
 			//console.log('selected zone -' + $scope.selectedZone);
 
-            // Client info validations
-			function isProj(Proj) {
-                return Proj.projectId === $scope.selectedProject.id;
-            }
-            function isSite(Site) {
-                return Site.siteId === $scope.selectedSite.id;
-            }
-			$scope.checkProj = $scope.projectSiteList.find(isProj);
+
+			$scope.checkProj = $scope.projectSiteList.find(isProject);
 			$scope.checkSite = $scope.projectSiteList.find(isSite);
 
 			if(!$scope.checkProj && !$scope.checkSite){
@@ -592,22 +583,12 @@ angular.module('timeSheetApp')
 				loc.employeeName = $scope.employee.name
 			}
 
-			function isBlock(block) {
-				return block.block === loc.block;
-			}
-			function isFloor(floor) {
-				return floor.floor === loc.floor;
-			}
-			function isZone(zone) {
-				return zone.zone === loc.zone;
-			}
-
 			$scope.dupBlock = $scope.locationList.find(isBlock);
 			$scope.dupFloor = $scope.locationList.find(isFloor);
 			$scope.dupZone = $scope.locationList.find(isZone);
 
 			if(($scope.dupBlock && $scope.dupFloor && $scope.dupZone)){
-             //$scope.showNotifications('top','center','warning','Location already exist..!!');
+             //$scope.showNotifications('top','center','warning','Location is already exist..!!');
                 alert('Location already exist..!!');
              return;
 			}
@@ -1238,7 +1219,7 @@ angular.module('timeSheetApp')
 				$scope.employee = data;
                 var empIds = [$scope.employee.projectSites[0].employeeId];
                 var siteIds = [$scope.employee.projectSites[0].siteId];
-                EmployeeComponent.markLftEmp({empIds,siteIds}).then(function (data) {
+                EmployeeComponent.markLftEmp({empIds:empIds,siteIds:siteIds}).then(function (data) {
                     console.log('Left employee list',data);
                     $scope.markLeftEmployeeArray = data;
                 });
@@ -1871,8 +1852,9 @@ angular.module('timeSheetApp')
             /* Root scope (search criteria) end*/
 		} else{
 			if($scope.client.selected && $scope.client.selected.id !=0){
-
 				$scope.searchProject = $scope.client.selected;
+                $stateParams.project = null;
+                $stateParams.site = null;
 			}else if($stateParams.project){
                  $scope.searchProject = {id:$stateParams.project.id,name:$stateParams.project.name};
                  $scope.client.selected =$scope.searchProject;
@@ -1882,6 +1864,7 @@ angular.module('timeSheetApp')
 			}
 			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
 				$scope.searchSite = $scope.sitesListOne.selected;
+                $stateParams.site = null;
 			}else if($stateParams.site){
                 $scope.searchSite = {id:$stateParams.site.id,name:$stateParams.site.name};
                 $scope.sitesListOne.selected = $scope.searchSite;
@@ -2039,6 +2022,10 @@ angular.module('timeSheetApp')
 					$scope.searchSite = null;
 					$scope.sitesListOne.selected = $scope.searchSite;
 				}
+                if($scope.localStorage.showInActive){
+                    $scope.searchCriteria.showInActive = $scope.localStorage.showInActive;
+                    $scope.showInActive = $scope.localStorage.showInActive;
+                }
 
 			}
 
@@ -2084,7 +2071,11 @@ angular.module('timeSheetApp')
 				$scope.noData = true;
 			}
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.employeesLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load employee list..');
+        });
 
 	};
 
@@ -2140,7 +2131,9 @@ angular.module('timeSheetApp')
 				SiteComponent.findShifts($scope.searchCriteria.siteId, $filter('date')($scope.searchCriteria.fromDate, 'yyyy-MM-dd')).then(function(data){
 					$scope.shifts = data;
 					console.log(JSON.stringify($scope.shifts));
-				});
+				}).catch(function(){
+                    $scope.showNotifications('top','center','danger','Unable to load employee shift list..');
+                });
 
 			}
 
@@ -2184,7 +2177,9 @@ angular.module('timeSheetApp')
 			}else {
 				$scope.showNotifications('top','center','danger','Failed to remove employee shift details');
 			}
-		})
+		}).catch(function(){
+            $scope.showNotifications('top','center','danger','Unable to remove employee shift details..');
+        });
 		$(".modal").hide();
 	}
 
@@ -2332,7 +2327,11 @@ angular.module('timeSheetApp')
 			}
 			$scope.loadSites();
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.employeesLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load employee shift list..');
+        });
 		if($scope.searchCriteria.siteId && $scope.searchCriteria.fromDate){
 
 			SiteComponent.findShifts($scope.searchCriteria.siteId,  $filter('date')($scope.searchCriteria.fromDate, 'yyyy-MM-dd')).then(function(data){
@@ -2405,7 +2404,9 @@ angular.module('timeSheetApp')
 					$scope.getEmployeeDetails(id);
 
 
-				});
+				}).catch(function(){
+                    $scope.showNotifications('top','center','danger','Unable to checkin attendance..');
+                });
 				/*}*/
 			}
 
@@ -2484,7 +2485,9 @@ angular.module('timeSheetApp')
 					$scope.getEmployeeDetails(id);
 
 
-				})
+				}).catch(function(){
+                    $scope.showNotifications('top','center','danger','Unable to checkout attendance..');
+                });
 				/* }*/
 			} else {
 
@@ -2520,7 +2523,9 @@ angular.module('timeSheetApp')
 
 				})
 			}
-		})
+		}).catch(function(){
+            $scope.showNotifications('top','center','danger','Unable to get checkout details..');
+        });
 	};
 
 	$scope.clearFilter = function() {
@@ -2557,6 +2562,8 @@ angular.module('timeSheetApp')
 		$scope.clearField = true;
 		$rootScope.searchCriteriaEmployees = null;
 		$scope.empStatus = null;
+        $stateParams.project = null;
+        $stateParams.site = null;
 		$scope.pages = {
 				currPage: 1,
 				totalPages: 0
@@ -2630,6 +2637,12 @@ angular.module('timeSheetApp')
 		$scope.initAddEdit();
 	}
 
+    //init list load
+    $scope.initListLoad = function(){
+        $scope.loadPageTop();
+        $scope.setPage(1);
+    }
+
 	/*
 
 	 ** Pagination init function **
@@ -2680,14 +2693,11 @@ angular.module('timeSheetApp')
 			$rootScope.exportStatusObj = exportAllStatus;
 			$scope.start();
 
-		},function(err){
-
-
-			//console.log('error message for export all ')
-			//console.log(err);
-
-
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 	};
 
 	// store the interval promise in this variable
@@ -2737,7 +2747,11 @@ angular.module('timeSheetApp')
 				}
 			}
 
-		});
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
 
 	}
 
@@ -2963,6 +2977,23 @@ angular.module('timeSheetApp')
              $scope.haveTickets = false;
          });
      }
+
+    // Client info and location duplicate checking function
+    function isProject(project) {
+        return project.projectId === $scope.selectedProject.id;
+    }
+    function isSite(site) {
+        return site.siteId === $scope.selectedSite.id;
+    }
+    function isBlock(block) {
+        return block.block === $scope.selectedBlock;
+    }
+    function isFloor(floor) {
+        return floor.floor === $scope.selectedFloor;
+    }
+    function isZone(zone) {
+        return zone.zone === $scope.selectedZone;
+    }
 
 
 });

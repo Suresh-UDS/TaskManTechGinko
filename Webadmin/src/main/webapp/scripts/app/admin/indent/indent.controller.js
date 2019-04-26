@@ -2,7 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('IndentController', function ($rootScope, $scope, $state, $timeout,
-    		ProjectComponent, SiteComponent, EmployeeComponent, InventoryComponent, IndentComponent, $http, $stateParams, $location, PaginationComponent,getLocalStorage,$filter) {
+    		ProjectComponent, SiteComponent, EmployeeComponent, InventoryComponent, IndentComponent, $http, $stateParams, $location, PaginationComponent,getLocalStorage,$filter,Idle) {
+        Idle.watch();
 
 		$scope.selectedProject = null;
 
@@ -476,6 +477,7 @@ angular.module('timeSheetApp')
                     $scope.selectedRefNumber = $scope.editIndentObj.indentRefNumber;
                     $scope.selectedProject = {id: $scope.editIndentObj.projectId };
                     $scope.selectedSite = {id: $scope.editIndentObj.siteId };
+                    $scope.loadSelectedSite($scope.selectedSite.id);
                     $scope.selectedEmployee = {id: $scope.editIndentObj.requestedById };
                     if($scope.selectedProject) {
                         $scope.siteSpin = true;
@@ -526,6 +528,13 @@ angular.module('timeSheetApp')
             }
 		}
 
+        $scope.loadSelectedSite = function(siteId) {
+            SiteComponent.findOne(siteId).then(function (data) {
+                $scope.selectedSite = data;
+            });
+
+        };
+
 		$scope.change = function() {
             if($scope.selectedItemCode){
                 console.log($scope.selectedItemCode);
@@ -568,6 +577,8 @@ angular.module('timeSheetApp')
 
 
 		}
+
+
 
 		$scope.clearMaterialItem = function(){
             $scope.selectedItemCode = null;
@@ -1009,6 +1020,10 @@ angular.module('timeSheetApp')
                 }else{
                      $scope.noData = true;
                 }
+            }).catch(function(){
+                $scope.noData = true;
+                $scope.materialIndentsLoader = true;
+                $scope.showNotifications('top','center','danger','Unable to load inventory list..');
             });
 
         };

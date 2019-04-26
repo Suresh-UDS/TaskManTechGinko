@@ -121,7 +121,7 @@ public class InventoryTransactionService extends AbstractService {
 						long addedQty = 0;
 						Material materialItm = inventoryRepository.findOne(itemDto.getMaterialId());
 						if(itemEntity.getPendingQuantity() > 0) {
-							if(materialItm.getStoreStock() > itemDto.getIssuedQuantity() && itemDto.getIssuedQuantity() > 0) {
+							if(materialItm.getStoreStock() >= itemDto.getIssuedQuantity() && itemDto.getIssuedQuantity() > 0) {
 								long consumptionStock = materialItm.getStoreStock() - itemDto.getIssuedQuantity();
 								reducedQty = itemEntity.getPendingQuantity() - itemDto.getIssuedQuantity();
 								addedQty = itemEntity.getIssuedQuantity() + itemDto.getIssuedQuantity();
@@ -152,13 +152,16 @@ public class InventoryTransactionService extends AbstractService {
 								itemDto.setStatus("400");
 							}
 
-							if(materialItm.getStoreStock() < materialItm.getMinimumStock()) {   // send purchase request when stock is minimum level
+							if(materialItm.getStoreStock() <= materialItm.getMinimumStock()) {   // send purchase request when stock is minimum level
 								PurchaseRequisition purchaseRequest = new PurchaseRequisition();
+
 								User user = userRepository.findOne(materialTransDTO.getUserId());
 								Employee employee = user.getEmployee();
 								purchaseRequest.setRequestedBy(employeeRepository.findOne(employee.getId()));
 								purchaseRequest.setRequestedDate(DateUtil.convertToTimestamp(new Date()));
 								purchaseRequest.setRequestStatus(PurchaseRequestStatus.PENDING);
+								purchaseRequest.setSite(siteRepository.findOne(materialTransDTO.getSiteId()));
+								purchaseRequest.setProject(projectRepository.findOne(materialTransDTO.getProjectId()));
 								purchaseRequest.setActive(PurchaseRequisition.ACTIVE_YES);
 
 								List<PurchaseRequisitionItem> purchaseItem = new ArrayList<PurchaseRequisitionItem>();
@@ -172,9 +175,13 @@ public class InventoryTransactionService extends AbstractService {
 								purchaseReqItemEntity.setPendingQty(materialItm.getMaximumStock());
 								purchaseItem.add(purchaseReqItemEntity);
 
+								PurchaseRefGen purchaseRef = new PurchaseRefGen();  // Generate Purchase reference number
+
 								Set<PurchaseRequisitionItem> materialItem = new HashSet<PurchaseRequisitionItem>();
 								materialItem.addAll(purchaseItem);
 								purchaseRequest.setItems(materialItem);
+								purchaseRef.setPurchaseRequisition(purchaseRequest);
+								purchaseRequest.setPurchaseRefNumber(purchaseRef);
 								purchaseReqRepository.save(purchaseRequest);
 
 								Site site = siteRepository.findOne(materialTransDTO.getSiteId());

@@ -1,4 +1,4 @@
-<div ng-init="initLoad()">
+<div ng-init="initListLoad()">
 
 
     <div class="row" ng-init="loadProjects();loadSites();loadEmployees();loadTicketStatuses()">
@@ -225,8 +225,8 @@
 
                                         <a  ng-if="(ticket.status != 'Closed')" ng-class="{active: $state.includes('admin')}" has-permission="Ticket:Edit" title="Edit" ui-sref="edit-ticket({ id: ticket.id })"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 
-                                        <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0)" has-permission="Job:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
-                                        <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && !ticket.quotationId)" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
+                                        <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && ticket.assignedToId > 0)" has-permission="Job:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-job({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">create job</a>
+                                        <a ng-if="(ticket.status != 'Closed' && ticket.jobId == 0 && !ticket.quotationId && ticket.assignedToId > 0)" has-permission="Quotation:Create" ng-class="{active: $state.includes('admin')}" ui-sref="add-quotation({ticketId : ticket.id})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">Add Quotation</a>
 
                                         <a ng-if="(ticket.jobId > 0)" ng-class="{active: $state.includes('admin')}" has-permission="Job:View" ui-sref="view-job({id : ticket.jobId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View job</a>
                                         <a ng-if="(ticket.quotationId)" ng-class="{active: $state.includes('admin')}" has-permission="Quotation:View" ui-sref="view-quotation({id : ticket.quotationId})"  ng-click=""  onClick="" data-target="#myModal"  class="btn btn-simple btn-info">View Quotation</a>
@@ -744,7 +744,7 @@
 													    class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													    <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
-													  <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+													  <ui-select-choices repeat="client in clients | filter: {name:$select.search}"  null-option="allClients" loose-null>
 
 													    <span ng-bind-html="client.name | highlight: $select.search"></span>
 													  </ui-select-choices>
@@ -767,7 +767,7 @@
 															   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 															   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 														  </ui-select-match>
-														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+														  <ui-select-choices repeat="regionsListOne in regionsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
 														    <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
 														  </ui-select-choices>
 														</ui-select>
@@ -791,7 +791,7 @@
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
-													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+													  <ui-select-choices repeat="branchsListOne in branchsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
 													    <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>
@@ -814,7 +814,7 @@
 													   class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
 													   <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
 													  </ui-select-match>
-													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" ng-click="loadDepEmployees()" null-option="allSites" loose-null>
+													  <ui-select-choices repeat="sitesListOne in sitesLists | filter: {name:$select.search}"  null-option="allSites" loose-null>
 													    <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>
@@ -873,7 +873,7 @@
 
                                                     <ui-select ng-model="empListOne.selected"  ng-disabled="empLists.length == 1 || empLists == null || employeeFilterDisable">
 													  <ui-select-match placeholder="Select Employee..." allow-clear="true">{{$select.selected.name}}</ui-select-match>
-													  <ui-select-choices repeat="empListOne in empLists | filter: $select.search" null-option="allEmp" loose-null>
+													  <ui-select-choices repeat="empListOne in empLists | filter: {name:$select.search}" null-option="allEmp" loose-null>
 													    <span ng-bind-html="empListOne.name | highlight: $select.search"></span>
 													  </ui-select-choices>
 													</ui-select>

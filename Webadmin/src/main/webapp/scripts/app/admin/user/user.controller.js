@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('UserController', function ($rootScope, $scope, $state, $timeout,
 		UserGroupComponent,EmployeeComponent, UserComponent, UserRoleComponent,
-		$http, $stateParams, $location, JobComponent, PaginationComponent ,getLocalStorage) {
+		$http, $stateParams, $location, JobComponent, PaginationComponent ,getLocalStorage,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -253,7 +254,10 @@ angular.module('timeSheetApp')
 
 				$scope.loadingStop();
 				//console.log("selected employee",$scope.selectedEmployee);
-			});
+			}).catch(function(){
+                $scope.loadingStop();
+                $scope.showNotifications('top','center','danger','Unable to load user details..');
+            });
 
 		}else{
 			$location.path('/users');
@@ -473,6 +477,10 @@ angular.module('timeSheetApp')
 				}else{
 					$scope.userEmail = "";
 				}
+                if($scope.localStorage.showInActive){
+                    $scope.searchCriteria.showInActive = $scope.localStorage.showInActive;
+                    $scope.showInActive = $scope.localStorage.showInActive;
+                }
 
 			}
 
@@ -525,7 +533,11 @@ angular.module('timeSheetApp')
 			}
 
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.usersLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load user list..');
+        });
 
 	};
 

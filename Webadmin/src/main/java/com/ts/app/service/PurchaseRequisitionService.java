@@ -1,15 +1,10 @@
 package com.ts.app.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,47 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Employee;
-import com.ts.app.domain.EmployeeProjectSite;
-import com.ts.app.domain.Material;
-import com.ts.app.domain.MaterialIndent;
-import com.ts.app.domain.MaterialIndentItem;
-import com.ts.app.domain.MaterialTransaction;
-import com.ts.app.domain.MaterialTransactionType;
-import com.ts.app.domain.PurchaseRefGen;
-import com.ts.app.domain.PurchaseRequisition;
-import com.ts.app.domain.PurchaseRequisitionItem;
-import com.ts.app.domain.Setting;
-import com.ts.app.domain.Site;
-import com.ts.app.domain.User;
-import com.ts.app.domain.PurchaseRequestStatus;
-import com.ts.app.repository.EmployeeRepository;
-import com.ts.app.repository.InventoryRepository;
-import com.ts.app.repository.InventoryTransactionRepository;
-import com.ts.app.repository.MaterialIndentRepository;
-import com.ts.app.repository.MaterialItemGroupRepository;
-import com.ts.app.repository.ProjectRepository;
-import com.ts.app.repository.PurchaseRefGenRepository;
-import com.ts.app.repository.PurchaseRequestSpecification;
-import com.ts.app.repository.PurchaseRequisitionRepository;
-import com.ts.app.repository.SettingsRepository;
-import com.ts.app.repository.SiteRepository;
-import com.ts.app.repository.UserRepository;
-import com.ts.app.service.util.CommonUtil;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.PagingUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.MaterialIndentDTO;
-import com.ts.app.web.rest.dto.MaterialIndentItemDTO;
-import com.ts.app.web.rest.dto.PurchaseReqDTO;
-import com.ts.app.web.rest.dto.PurchaseReqItemDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
+import javax.inject.Inject;
+import java.util.*;
 
 @Service
 public class PurchaseRequisitionService extends AbstractService {
@@ -196,9 +152,9 @@ public class PurchaseRequisitionService extends AbstractService {
 		}
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.APPROVED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.APPROVED);
-			purchaseRequest.setApprovedBy(employeeRepository.findByUserId(SecurityUtils.getCurrentUserId()));
-			purchaseRequest.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
-		}
+            purchaseRequest.setApprovedBy(employeeRepository.findByUserId(SecurityUtils.getCurrentUserId()));
+            purchaseRequest.setApprovedDate(DateUtil.convertToTimestamp(new Date()));
+        }
 		if(purchaseReqDTO.getRequestStatus().equals(PurchaseRequestStatus.REJECTED)) {
 			purchaseRequest.setRequestStatus(PurchaseRequestStatus.REJECTED);
 		}

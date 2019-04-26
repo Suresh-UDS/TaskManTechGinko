@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('UserGroupController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, UserGroupComponent,$http,$stateParams,$location) {
+    .controller('UserGroupController', function ($rootScope, $scope, $state, $timeout, ProjectComponent, UserGroupComponent,$http,$stateParams,$location,Idle) {
+        Idle.watch();
         $rootScope.loginView = false;
         $scope.success = null;
         $scope.error = null;
@@ -135,6 +136,10 @@ angular.module('timeSheetApp')
                 $scope.pages.endInd = data.totalCount > 10  ? (data.currPage) * 10 : data.totalCount ;
                 $scope.pages.totalCnt = data.totalCount;
             	$scope.hide = true;
+            }).catch(function(){
+                $scope.noData = true;
+                $scope.userGroupsLoader = true;
+                $scope.showNotifications('top','center','danger','Unable to load user groups list..');
             });
         	$rootScope.searchCriteriaUserGroup = $scope.searchCriteria;
         	if($scope.pages.currPage == 1) {

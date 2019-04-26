@@ -15,7 +15,7 @@
 
 
             <!--has-permission="Sla:Create"-->
-            <button class="btn btn-success add-btn margn-tb0"  ui-sref="add-sla"  ng-class="{active: $state.includes('admin')}" tabindex="0">
+            <button class="btn btn-success add-btn margn-tb0" has-permission="SLA:Add" ui-sref="add-sla"  ng-class="{active: $state.includes('admin')}" tabindex="0">
                 <i class="material-icons">add</i> Add
                 <div class="ripple-container"></div>
             </button>
@@ -143,14 +143,14 @@
 											<a data-toggle="modal"  data-target="#RightModal-View" title="View" has-authority="ROLE_ADMIN"
 												ng-class="{active: $state.includes('admin')}"
                                                  ng-click="getSlaDetails(slalist.id, 'view')"
-                                                 has-permission="Sla:View"
+                                                 has-permission="SLA:View"
 												class="btn btn-simple btn-info btn-icon like">
                                                 <!--ui-sref="view-sla({ id: slalist.id })"-->
 												<i style="font-size: 20px" class="material-icons">remove_red_eye</i>
 											</a>
 											<a ng-model="selectedSla" title="Edit" has-authority="ROLE_ADMIN"
 												ng-class="{active: $state.includes('admin')}"
-                                                has-permission="Sla:Edit"
+                                                has-permission="SLA:Edit"
 												ui-sref="edit-sla({ id: slalist.id })"
 												class="btn btn-simple btn-info"><i
 												class="material-icons">edit</i>
@@ -158,7 +158,7 @@
                                             <a
 												ng-class="{active: $state.includes('admin')}" title="Delete"
 												ng-click="deleteConfirm(slalist.id)"
-                                                has-permission="Sla:Delete" has-authority="ROLE_ADMIN"
+                                                has-permission="SLA:Delete" has-authority="ROLE_ADMIN"
 												onClick="$('#mainDeleteModal').modal()" data-target="#myModal"
 												class="btn btn-simple btn-danger"><i
 												class="material-icons">delete</i>
@@ -317,13 +317,13 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="client.selected"  ng-disabled="clientFilterDisable">
+                                                    <ui-select ng-model="client.selected" on-select="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)"  ng-disabled="clientFilterDisable">
                                                         <ui-select-match placeholder="Select clients..." >{{$select.selected.name}}
                                                             <a   ng-click="clearProject($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="client in clients | filter: $select.search" ng-click="loadDepSitesList(client.selected);loadRegionsList(client.selected.id)" null-option="allClients" loose-null>
+                                                        <ui-select-choices repeat="client in clients | filter: {name:$select.search}"  null-option="allClients" loose-null>
 
                                                             <span ng-bind-html="client.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
@@ -340,13 +340,13 @@
                                                     <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="regionsListOne.selected"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+                                                    <ui-select ng-model="regionsListOne.selected" on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" ng-disabled="regionFilterDisable || regionsLists.length == 1">
                                                         <ui-select-match placeholder="Select region...">{{$select.selected.name}}
                                                             <a   ng-click="clearRegion($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="regionsListOne in regionsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,'');loadBranchList(client.selected.id)" null-option="allRegions" loose-null>
+                                                        <ui-select-choices repeat="regionsListOne in regionsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
                                                             <span ng-bind-html="regionsListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -364,13 +364,13 @@
                                                     <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="branchsListOne.selected"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+                                                    <ui-select ng-model="branchsListOne.selected"  on-select="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" ng-disabled="branchFilterDisable || branchsLists.length == 1">
                                                         <ui-select-match placeholder="Select branch...">{{$select.selected.name}}
                                                             <a   ng-click="clearBranch($event)" ng-show="$select.selected.name" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="branchsListOne in branchsLists | filter: $select.search" ng-click="getSitesBYRegionOrBranch(client.selected.id,regionsListOne.selected.name,branchsListOne.selected.name)" null-option="allRegions" loose-null>
+                                                        <ui-select-choices repeat="branchsListOne in branchsLists | filter: {name:$select.search}"  null-option="allRegions" loose-null>
                                                             <span ng-bind-html="branchsListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>
@@ -393,7 +393,7 @@
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
                                                                 <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
                                                         </ui-select-match>
-                                                        <ui-select-choices repeat="sitesListOne in sitesLists | filter: $select.search" null-option="allSites" loose-null>
+                                                        <ui-select-choices repeat="sitesListOne in sitesLists | filter: {name:$select.search}" null-option="allSites" loose-null>
                                                             <span ng-bind-html="sitesListOne.name | highlight: $select.search"></span>
                                                         </ui-select-choices>
                                                     </ui-select>

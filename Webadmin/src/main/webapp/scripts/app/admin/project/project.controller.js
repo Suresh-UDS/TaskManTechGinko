@@ -2,7 +2,9 @@
 
 angular.module('timeSheetApp')
 .controller('ProjectController', function ($scope, $rootScope, $state, $timeout,
-		ProjectComponent,$http,$stateParams,$location,PaginationComponent,getLocalStorage) {
+		ProjectComponent,$http,$stateParams,$location,PaginationComponent,getLocalStorage,Idle) {
+
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -172,7 +174,10 @@ angular.module('timeSheetApp')
 				if(!$scope.project){
 					$location.path('/projects');
 				}
-			});
+			}).catch(function () {
+                $scope.showNotifications('top','center','danger','Unable to load client details..');
+                $location.path('/projects');
+            });
 		}else{
 			$location.path('/projects');
 		}
@@ -448,7 +453,11 @@ angular.module('timeSheetApp')
 				$scope.noData = true;
 			}
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.projectsLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load client list..');
+        });
 
 	};
 

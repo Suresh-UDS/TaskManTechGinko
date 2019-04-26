@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('ModuleActionsController', function ($rootScope, $scope, $state, $timeout,
 		ModuleActionComponent,EmployeeComponent, $http,
-		$stateParams, $location, JobComponent,PaginationComponent) {
+		$stateParams, $location, JobComponent,PaginationComponent,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -281,7 +282,11 @@ angular.module('timeSheetApp')
 				$scope.pageSort = 10;
 			}
 
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.moduleActionsLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load module actions list..');
+        });
 
 	};
 

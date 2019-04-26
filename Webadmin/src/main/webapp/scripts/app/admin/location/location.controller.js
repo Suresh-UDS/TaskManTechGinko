@@ -3,7 +3,8 @@
 angular.module('timeSheetApp')
 .controller('LocationController', function ($rootScope, $scope, $state, $timeout,
 		LocationComponent,ProjectComponent, SiteComponent, $http, $stateParams,
-		$location,PaginationComponent,getLocalStorage ) {
+		$location,PaginationComponent,getLocalStorage,Idle) {
+    Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
 	$scope.success = null;
@@ -1224,7 +1225,11 @@ angular.module('timeSheetApp')
 			}else{
 				$scope.noData = true;
 			}
-		});
+		}).catch(function(){
+            $scope.noData = true;
+            $scope.locationsLoader = true;
+            $scope.showNotifications('top','center','danger','Unable to load location list..');
+        });
 
 	};
 
@@ -1385,7 +1390,10 @@ angular.module('timeSheetApp')
 				}
 				// $scope.generateQR(response.siteId,response.id);
 				$scope.generateQR(response);
-			});
+			}).catch(function(){
+                $scope.showNotifications('top','center','danger','Unable to load Location QR Code..');
+                $location.path('/locations');
+            });
 		}else{
 			$location.path('/locations');
 		}
@@ -1630,6 +1638,10 @@ angular.module('timeSheetApp')
 	 * Ui select allow-clear modified function end
 	 *
 	 * */
+
+    $scope.showNotifications= function(position,alignment,color,msg){
+        demo.showNotification(position,alignment,color,msg);
+    }
 
 });
 

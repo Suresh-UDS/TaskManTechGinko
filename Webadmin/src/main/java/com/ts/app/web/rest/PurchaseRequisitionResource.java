@@ -75,7 +75,7 @@ public class PurchaseRequisitionResource {
 	public ResponseEntity<?> updatePurchaseReq(@Valid @RequestBody PurchaseReqDTO purchaseReqDTO, HttpServletRequest request) {
 		log.debug("Update object: {}" + purchaseReqDTO);
 		try {
-//			purchaseReqDTO.setApprovedById(SecurityUtils.getCurrentUserId());
+
 			purchaseReqService.updatePurchaseRequest(purchaseReqDTO);
 		} catch(Exception e) {
 			throw new TimesheetException("Error while updating purchase Request" +e);

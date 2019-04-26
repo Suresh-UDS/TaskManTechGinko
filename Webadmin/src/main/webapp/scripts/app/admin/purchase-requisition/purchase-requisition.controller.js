@@ -2,7 +2,8 @@
 
 angular.module('timeSheetApp')
     .controller('PurchaseRequisitionController', function ($rootScope, $scope, $state, $timeout, $filter,
-    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage,$interval) {
+    		ProjectComponent, SiteComponent,EmployeeComponent,InventoryComponent, PurchaseComponent, $http,$stateParams,$location, PaginationComponent, getLocalStorage,$interval,Idle) {
+        Idle.watch();
 
     	$scope.selectedProject = null;
 
@@ -100,7 +101,7 @@ angular.module('timeSheetApp')
 
                 }, 2000);
                    // alert('hi');
-                }
+                };
                 $scope.loadingStop = function(){
 
                     console.log("Calling loader");
@@ -628,7 +629,11 @@ angular.module('timeSheetApp')
                     }else{
                          $scope.noData = true;
                     }
-                });
+                }).catch(function(){
+                        $scope.noData = true;
+                        $scope.purchaseReqLoader = true;
+                        $scope.showNotifications('top','center','danger','Unable to load purchase requisition list..');
+                    });
 
                 };
 
@@ -819,6 +824,9 @@ angular.module('timeSheetApp')
                         if(!$scope.purchaseReqObj){
                            $location.path('/purchase-requisition-list');
                         }
+                    }).catch(function () {
+                        $scope.showNotifications('top','center','danger','Unable to load purchase requisition details');
+                        $scope.loadingStop();
                     });
                 }else{
                     $location.path('/purchase-requisition-list');
@@ -857,10 +865,13 @@ angular.module('timeSheetApp')
                             });
                         }
                         $scope.loadPurchases();
-                        $scope.selectedEmployee = {id: $scope.purchaseReqObj.requestedById }
+                        $scope.selectedEmployee = {id: $scope.purchaseReqObj.requestedById };
                         $scope.purchaseItems = $scope.purchaseReqObj.items;
                         $scope.loadingStop();
 
+                    }).catch(function () {
+                        $scope.showNotifications('top','center','danger','Unable to load purchase requisition details');
+                        $scope.loadingStop();
                     });
                     }else{
                         $location.path('/purchase-requisition-list');
