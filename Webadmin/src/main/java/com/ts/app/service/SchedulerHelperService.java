@@ -943,7 +943,7 @@ public class SchedulerHelperService extends AbstractService {
                                         empAttnRep.setDesignation(emp.getDesignation());
                                         empAttnRep.setStatus(EmployeeAttendanceReport.ABSENT_STATUS);
                                         empAttnRep.setSiteName(site.getName());
-                                        if (empShift != null) {
+                                        if (CollectionUtils.isNotEmpty(empShift)) {
                                             Timestamp startTime = empShift.get(0).getStartTime();
                                             Calendar startCal = Calendar.getInstance();
                                             startCal.setTimeInMillis(startTime.getTime());
