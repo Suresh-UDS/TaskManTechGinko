@@ -1,12 +1,15 @@
 'use strict';
 
 angular.module('timeSheetApp')
-    .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth,$remember,$forget,$parse) {
+    .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth,$remember,$forget,$parse,$uibModal, Idle, Keepalive) {
         $rootScope.loginView = true;
+        $rootScope.isSingIn = false;
         if($rootScope.loginView == true){
             $(".content").addClass("remove-mr");
             $(".main-panel").addClass("remove-hght");
         }
+
+        Idle.unwatch();
 
         $scope.user = {};
         $scope.errors = {};
@@ -25,7 +28,7 @@ angular.module('timeSheetApp')
         //$timeout(function (){angular.element('[ng-model="username"]').focus();});
 
         $scope.login = function (event) {
-
+            $rootScope.isSingIn = true;
             event.preventDefault();
 
             Auth.login({
@@ -35,7 +38,7 @@ angular.module('timeSheetApp')
                 rememberMe: $scope.rememberMe
 
             }).then(function () {
-
+                $rootScope.sessionOut =false;
                 $scope.authenticationError = false;
                 if ($rootScope.previousStateName === 'register') {
                     $rootScope.isLoggedIn = true;
@@ -54,12 +57,14 @@ angular.module('timeSheetApp')
                 }
                 $rootScope.confirmBoxHide = false;
                 $rootScope.resLoader=true;
-                $rootScope.inits();
-
+                $rootScope.isSingIn = false;
+                $('.sidebar-mini').removeClass('modal-open');
             }).catch(function () {
-
+                $rootScope.isSingIn = false;
+                $rootScope.sessionOut =false;
                 $scope.authenticationError = true;
                 $rootScope.resLoader=false;
+                Idle.unwatch();
             });
 
             $rootScope.resLoader=true;

@@ -1,6 +1,7 @@
 package com.ts.app.service.util;
 
 import com.ts.app.domain.*;
+import com.ts.app.domain.util.LogImportType;
 import com.ts.app.repository.*;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.*;
@@ -10,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.format.CellFormatType;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -115,6 +115,9 @@ public class ImportUtil {
 
 	@Inject
     private AssetRepository assetRepository;
+
+	@Inject
+	private ImportLogRepository importLogRepository;
 
 	public ImportResult importJobData(MultipartFile file, long dateTime)  {
         String fileName = dateTime + ".xlsx";
@@ -841,7 +844,7 @@ public class ImportUtil {
 					cellNo = 0;
 					log.debug("cell type =" + currentRow.getCell(0).getNumericCellValue()+"\t"+currentRow.getCell(9).getNumericCellValue());
 					SiteDTO siteDTO = new SiteDTO();
-					siteDTO.setProjectId((int)(currentRow.getCell(0).getNumericCellValue()));
+					siteDTO.setProjectId((int)currentRow.getCell(0).getNumericCellValue());
 					cellNo = 1;
 					siteDTO.setName(currentRow.getCell(1).getStringCellValue());
 					cellNo = 7;
@@ -1160,28 +1163,37 @@ public class ImportUtil {
 					cellNo = 18;
 					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
 					cellNo = 19;
-                    assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-//					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
-//					if(assetCode != null) {
-//					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
-//					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
-//					    if(isDuplicate) {
-//                            continue;
-//                        } else {
-//                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-//                        }
-//                    }
+					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
+					if(assetCode != null) {
+					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
+					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
+					    if(isDuplicate) {
+                            continue;
+                        } else {
+                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
+                        }
+                    }
 					cellNo = 20;
 					assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
 					assetManagementService.saveAsset(assetDTO);
 				} catch (IllegalStateException | NumberFormatException formatEx) {
 					throw formatEx;
 				} catch (Exception e) {
-					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					Row errorRow = datatypeSheet.getRow(r+1);
+					String name = getCellValue((errorRow.getCell(0)));
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1) + " in " + name;
 					log.error(msg, e);
 					response.append(e.getMessage());
 					response.append("--" + msg);
 					response.append("--" + "Please correct the data format and retry again");
+
+					ImportLogs importLog = new ImportLogs();
+					importLog.setActive(ImportLogs.ACTIVE_YES);
+					importLog.setErrorMessage(msg);
+					importLog.setItemType(LogImportType.ASSET.getValue());
+					importLog.setFileName(fileKey);
+					importLogRepository.save(importLog);
+
 					if(importResult == null) {
 						importResult = new ImportResult();
 					}
@@ -1196,6 +1208,12 @@ public class ImportUtil {
 		} catch (IOException e) {
 			String msg = "Error while reading the asset data file for import";
 			log.error(msg, e);
+			ImportLogs importLog = new ImportLogs();
+			importLog.setActive(ImportLogs.ACTIVE_YES);
+			importLog.setErrorMessage(msg);
+			importLog.setItemType(LogImportType.ASSET.getValue());
+			importLog.setFileName(fileKey);
+			importLogRepository.save(importLog);
 			if(importResult == null) {
 				importResult = new ImportResult();
 			}
@@ -1209,6 +1227,12 @@ public class ImportUtil {
 			response.append(formatEx.getMessage());
 			response.append("--" + msg);
 			response.append("--" + "Please correct the data format and retry again");
+			ImportLogs importLog = new ImportLogs();
+			importLog.setActive(ImportLogs.ACTIVE_YES);
+			importLog.setErrorMessage(msg);
+			importLog.setItemType(LogImportType.ASSET.getValue());
+			importLog.setFileName(fileKey);
+			importLogRepository.save(importLog);
 			if(importResult == null) {
 				importResult = new ImportResult();
 			}
@@ -1898,7 +1922,8 @@ public class ImportUtil {
 		return value;
 	}
 
-	private boolean isDuplicateCode(String assetCode, long siteId) {
+	private boolean isDuplicateCode(String code, long siteId) {
+	    String assetCode = siteId+"_"+code;
         List<Asset> asset = assetRepository.findAssetCodeBySite(siteId, assetCode);
         if(asset.size() > 0) {
             return true;

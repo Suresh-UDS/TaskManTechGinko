@@ -298,6 +298,13 @@ angular.module('timeSheetApp')
 				// }
 			});*/
 
+            $('#dateFilterPpmFrom').datetimepicker().on('dp.show', function (e) {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
+
+            $scope.assetPPM.startDate  = null;
+            $scope.assetPPM.endDate = null;
+
 			$('input#dateFilterPpmFrom').on('dp.change', function(e){
 
             $scope.assetPPM.jobStartTime = '';
@@ -364,7 +371,6 @@ angular.module('timeSheetApp')
 
 
         });
-
 
 			$('input#ppmJobStartTime').on('dp.change', function(e){
 				$scope.assetPPM.jobStartTime = new Date(e.date._d);
@@ -1791,9 +1797,9 @@ angular.module('timeSheetApp')
 			});
 
 
-			$('#warFromDate').datetimepicker().on('dp.show', function () {
-            return $(this).data('DateTimePicker').maxDate(new Date());
-        });
+			$('#warFromDate').datetimepicker().on('dp.show', function (e) {
+            return $(this).data('DateTimePicker').maxDate(e.date);
+            });
 
 			/*$('input#warFromDate').on('dp.change', function(e){
 
@@ -2207,10 +2213,10 @@ angular.module('timeSheetApp')
 							//console.log('Error - '+ response.data);
 							if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 								$scope.errorProjectExists = 'ERROR';
-                                $scope.showNotifications('top','center','danger','Unable to update asset!!');
+                                $scope.showNotifications('top','center','danger','Asset has been updated Successfully!!');
 							} else {
 								$scope.error = 'ERROR';
-                                $scope.showNotifications('top','center','danger','Unable to update asset!!');
+                                $scope.showNotifications('top','center','danger','Asset has been updated Successfully!!');
 							}
 						});
 
@@ -2300,8 +2306,6 @@ angular.module('timeSheetApp')
 					$scope.retain = 1;
 					$scope.search();
 				}).catch(function () {
-                    $scope.retain = 1;
-                    $scope.search();
                     $scope.showNotifications('top','center','danger','Unable to delete asset!!');
                 });
 			}
@@ -2750,9 +2754,7 @@ angular.module('timeSheetApp')
                     $scope.assetConfig();
 					$scope.loadingStop();
 
-				}).catch(function () {
-                    $scope.showNotifications('top','center','danger','Unable to delete config!!');
-                });
+				});
 			}
 
 			$scope.siteChangeAssetConfig = function() {
@@ -3258,7 +3260,8 @@ angular.module('timeSheetApp')
 				//
 				// }
 			});*/
-
+            $scope.amcSchedule.startDate = null;
+            $scope.amcSchedule.endDate = null;
 			$('input#dateFilterAmcFrom').on('dp.change', function(e){
 
                 $scope.amcSchedule.jobStartTime = '';
@@ -3293,6 +3296,10 @@ angular.module('timeSheetApp')
 
             });
 
+            $('#dateFilterAmcFrom').datetimepicker().on('dp.show', function (e) {
+                return $(this).data('DateTimePicker').minDate(e.date);
+            });
+
             $('input#dateFilterAmcTo').on('dp.change', function(e){
 
                 $scope.toErrMsg = '';
@@ -3323,8 +3330,7 @@ angular.module('timeSheetApp')
                 }
 
 
-            });
-
+            })
 			$('input#amcJobStartTime').on('dp.change', function(e){
 				$scope.amcSchedule.jobStartTime = new Date(e.date._d);
 				$scope.amcJobStartTimeTmp = $filter('date')(e.date._d, 'dd/MM/yyyy hh:mm a');
@@ -4272,11 +4278,10 @@ angular.module('timeSheetApp')
 					$scope.exportStatusMap[0] = exportAllStatus;
 					//console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
 					$scope.start();
-				}).catch(function(){
-                    $scope.downloader=false;
-                    $scope.stop();
-                    $scope.showNotifications('top','center','danger','Unable to export file..');
-                });
+				},function(err){
+					//console.log('error message for export all ')
+					//console.log(err);
+				});
 			};
 
 			// store the interval promise in this variable
@@ -4331,11 +4336,7 @@ angular.module('timeSheetApp')
 							}
 						}
 
-					}).catch(function(){
-                        $scope.downloader=false;
-                        $scope.stop();
-                        $scope.showNotifications('top','center','danger','Unable to export file..');
-                    });
+					});
 				});
 
 			}

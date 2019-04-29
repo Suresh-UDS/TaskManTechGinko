@@ -2386,15 +2386,20 @@ public class SchedulerHelperService extends AbstractService {
 			endTime.set(Calendar.MINUTE, eMin);
 			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
-		} else {
+            job.setPlannedEndTime(endTime.getTime());
+        } else {
 			endTime.set(Calendar.HOUR_OF_DAY, eHr);
+			endTime.add(Calendar.HOUR_OF_DAY, parentJob.getPlannedHours());
 			endTime.set(Calendar.MINUTE, eMin);
 			endTime.set(Calendar.SECOND, 0);
 			endTime.getTime(); // to recalculate
+            Calendar endTimeCal = Calendar.getInstance();
+            endTimeCal.setTime(startTime.getTime());
+            endTimeCal.add(Calendar.HOUR_OF_DAY, parentJob.getPlannedHours());
+            job.setPlannedEndTime(endTimeCal.getTime());
 		}
 
 		job.setPlannedStartTime(startTime.getTime());
-		job.setPlannedEndTime(endTime.getTime());
 		job.setPlannedHours(Integer.parseInt(plannedHours));
 		job.setScheduled(true);
 		job.setJobType(parentJob.getType());

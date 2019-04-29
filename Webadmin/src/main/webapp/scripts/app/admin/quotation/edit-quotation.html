@@ -41,7 +41,8 @@
 														id='quotationTitle' ng-model="quotation.title"
 														class='form-control InputTxtCapsAll' name='quotationTitle' type='text'
 														value="" ng-minlength='1' ng-maxlength='100'
-														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" autofocus required />
+														 autofocus required />
+                                                    <!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/"-->
 													<div
 														ng-show="form.$submitted || form.quotationTitle.$touched">
 														<div
@@ -71,7 +72,8 @@
 														id='quotationDescription' ng-model="quotation.description"
 														class='form-control' name='quotationDescription'
 														type='text' value="" ng-maxlength=2500
-														ng-pattern="/^[A-Za-z0-9\s&-/]*$/" />
+														 />
+                                                    <!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/"-->
 													<div
 														ng-show="form.$submitted || form.quotationDescription.$touched">
 														<div

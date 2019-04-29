@@ -4,16 +4,19 @@
 
     <div class="row mar0px">
         <div class="col-lg-3 col-md-3 col-sm-12 loginPage"  >
-            <a href="#" class="simple-text logo-mini black LogoCon">
+            <a href="#/dashboard" class="simple-text logo-mini black LogoCon" title="Taskman">
                 <img src="assets/img/logo/logo.png" class="LoginLogo" alt="UDS Logo">
             </a>
-            <!--<a href="#" class="simple-text logo-normal black">-->
+            <!--<a href="#/dashboard" class="simple-text logo-normal black" title="Taskman">-->
             <!--<img src="assets/img/logo/logo.jpg" alt="UDS Logo">-->
             <!--</a>-->
 
         </div>
         <div class="alert alert-danger col-lg-6 col-md-6 col-sm-8 col-xs-10 margn-top20 ErrorCon txt-align-center" ng-show="authenticationError">
-            <strong>Failed to sign in!</strong> Please check your credentials and try again.
+            <strong>Failed to sign in !</strong> Please check your credentials and try again.
+        </div>
+        <div class="alert alert-danger col-lg-6 col-md-6 col-sm-8 col-xs-10 margn-top20 ErrorCon txt-align-center" ng-show="sessionOut">
+            <strong>You've Timed Out !</strong> Please login again...
         </div>
     </div>
 
@@ -103,7 +106,7 @@
                         </div>
                     </div>
                     <div class="footer text-center">
-                        <button type="submit" class="btn btn-success btn-wd btn-lg">Sign in</button>
+                        <button type="submit" class="btn btn-success btn-wd btn-lg" ng-disabled="isSingIn">Sign in</button>
                     </div>
                 </div>
             </form>

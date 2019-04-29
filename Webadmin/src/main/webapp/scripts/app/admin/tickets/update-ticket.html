@@ -35,8 +35,9 @@
                                                <label class="control-label">Title<span class="red-star">*</span> </label>
 
                                                <input type="text" class="form-control InputTxtCapsAll"   name='title'
-                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=100 ng-pattern="/^[A-Za-z0-9\s]*$/"
+                                                      ng-model="tickets.title" ng-minlength=1 ng-maxlength=100
                                                       autofocus  required autocomplete="off" tabindex="1" />
+                                               <!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/"-->
                                                <div ng-show="form.$submitted || form.title.$touched">
                                                    <div ng-show="form.title.$dirty || form.title.$invalid">
                                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -53,7 +54,7 @@
                                                        </p>
                                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                           ng-show="form.title.$error.pattern">
-                                                           Title can only contain letters, digits and space.
+                                                           Title can only contain letters, digits, few special characters and space.
                                                        </p>
                                                    </div>
                                                </div>
@@ -66,8 +67,8 @@
                                                <label class="control-label">Description<span class="red-star">*</span> </label>
                                                <input id='description' ng-model="tickets.description" class='form-control InputTxtCaps'
                                                       name='description' type='text' value="" ng-maxlength=2500
-                                                      ng-pattern="/^[A-Za-z0-9\s&-/]*$/"
                                                        autofocus required tabindex="4" />
+                                               <!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/"-->
                                                <div ng-show="form.$submitted || form.description.$touched || form.description.$dirty">
                                                    <div ng-show="form.description.$dirty || form.description.$invalid">
                                                        <p class="help-block" style="width:100%;z-index:930;background:#fff;color:maroon"
@@ -229,16 +230,6 @@
                                                 <p class="help-block" style="color:maroon"
                                                    ng-show="form.employee.$error.required">
                                                     Employee is required
-                                            </div>
-                                        </div>
-
-                                        <div ng-show="form.$submitted || form.employee.$touched">
-                                            <div
-                                                ng-show="form.employee.$dirty || form.employee.$invalid">
-
-                                                <p class="help-block" style="color:maroon"
-                                                   ng-show="form.employee.$error.required">
-                                                    Required
                                             </div>
                                         </div>
                                     </div>

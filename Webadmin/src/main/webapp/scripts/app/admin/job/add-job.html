@@ -38,8 +38,9 @@
                                                            type='text' value=""
                                                            ng-minlength='1'
                                                            ng-maxlength='100'
-                                                           ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus  tabindex="1"
+                                                           autofocus  tabindex="1"
                                                            required/>
+                                                    <!-- ng-pattern="/^[A-Za-z0-9\s&-/]*$/"-->
 
                                                     <div ng-show="form.$submitted || form.jobName.$touched || form.jobName.$dirty">
                                                         <div ng-show="form.jobName.$dirty || form.jobName.$invalid">
@@ -57,7 +58,7 @@
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.jobName.$error.pattern">
-                                                                job title can only contain letters, digits and space.
+                                                                job title can only contain letters, digits, few special characters and space.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -72,9 +73,10 @@
                                                 class='form-control InputTxtCaps'
                                                 name='jobDesc'
                                                 ng-maxlength='2500'
-                                                ng-pattern="/^[a-zA-Z0-9 _\\\/.’'\-,#:]+$/" tabindex="3"
+                                                 tabindex="3"
                                                 required
                                             ></textarea>
+                                                    <!--ng-pattern="/^[A-Za-z0-9\s&-/]*$/"-->
 
                                                     <div ng-show="form.$submitted || form.jobDesc.$touched || form.jobDesc.$dirty">
                                                         <div ng-show="form.jobDesc.$dirty || form.jobDesc.$invalid">
