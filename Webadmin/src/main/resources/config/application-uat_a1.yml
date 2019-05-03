@@ -183,11 +183,11 @@ pushService:
 
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJU5MBC3AQTMC5KKQ
-   s3-secretKey: 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
-   s3-bucketName: zappyweb
-   s3-cloudfront-url: http://d17qereo8sgfqj.cloudfront.net/
-   s3-bucketEnv: uat/
+   s3-accessKey: AKIAJZXGWPKSXT7E73DQ
+   s3-secretKey: 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
+   s3-bucketName: taskman
+   s3-cloudfront-url: http://d1l2i6capbtjhi.cloudfront.net/
+   s3-bucketEnv: prod/
    s3-asset-path: assets/
    s3-qrcode-path: qrcode/
    s3-attendance-path: attendance/
@@ -199,7 +199,8 @@ AWS:
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
    s3-locationqr-path : locationQrCodes/
-
+   s3-expenseDocument-path: expenseDocuments/
+   
 scheduler:
    job:
       creationPolicy: monthly
@@ -230,15 +231,15 @@ scheduler:
    attendanceConsolidatedReport:
       enabled: true
    feedbackreport:
-      enabled: true 
+      enabled: true
    attendanceMusterRollReport:
-      enabled: true 
+      enabled: true
    dayWiseJobReport:
-      enabled: true 
+      enabled: true
    dayWiseTicketReport:
       enabled: true
    dayWiseQuotationReport:
-      enabled: true 
+      enabled: true
 
 default.user.password: uds12345
 
@@ -248,7 +249,7 @@ google:
           callback:
               host: 52.66.23.150
               port: 8080
-              
+
 influxdb:
     url: http://localhost:8086
     username: root
@@ -256,7 +257,7 @@ influxdb:
     dbname: dashboard
     retention-policy: one_year_policy
     gzip: true
-                  
+
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

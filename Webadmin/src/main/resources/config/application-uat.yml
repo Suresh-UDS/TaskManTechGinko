@@ -189,11 +189,11 @@ pushService:
 
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
-   s3-secretKey: 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
-   s3-bucketName: fms-taskman
-   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
-   s3-bucketEnv: dev/
+   s3-accessKey: AKIAJZXGWPKSXT7E73DQ
+   s3-secretKey: 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
+   s3-bucketName: taskman
+   s3-cloudfront-url: http://d1l2i6capbtjhi.cloudfront.net/
+   s3-bucketEnv: prod/
    s3-asset-path: assets/
    s3-qrcode-path: qrcode/
    s3-attendance-path: attendance/

@@ -21,11 +21,10 @@ spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://localhost:3306/taskman?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://produdsdb-cluster.cluster-cdihr97wq71b.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
         name:
-        username: TaskMan
-        password: Task@2019
+        username: root
+        password: tgadmin123#
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -69,54 +68,54 @@ server:
 
 upload:
     file:
-         path: D:/documents/opt/uploads
+         path: /opt/uploads
 export:
     file:
-         path: D:/documents/opt/exports
+         path: /opt/exports
 qrcode:
     file:
-         path: D:/documents/opt/qrcode
+         path: /opt/qrcode
 
 locationQRCode:
     file:
-        path: D:/documents/opt/location/qrcode
+        path: /opt/location/qrcode
 attendance:
     shiftStartLeadTime: 60
     shiftEndLeadTime: 60
     shiftStartGraceTime: 60
     shiftEndGraceTime: 60
     file:
-        path:  D:/documents/opt/attendance
+        path:  /opt/attendance
     template:
-        path: D:/documents/opt/template/Attendance_Report_Format.xlsx
+        path: /opt/template/Attendance_Report_Format.xlsx
     musterroll:
         report:
             template:
-                path: D:/documents/opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
+                path: /opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
     generalShift:
         startTime: 09:00
         endTime: 17:00
 quotation:
     file:
-        path:  D:/documents/opt/quotation
+        path:  /opt/quotation
 ticket:
     file:
-        path:  D:/documents/opt/ticket
+        path:  /opt/ticket
 import:
     file:
         path:
-            new: D:/documents/opt/imports/new
-            completed: D:/documents/opt/imports/completed
+            new: /opt/imports/new
+            completed: /opt/imports/completed
 
 extensionImg: jpeg,jpg,png
 extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
 
 asset:
    file:
-       path: D:/documents/opt/asset/uploads/site
+       path: /opt/asset/uploads/site
    weekly:
        template:
-           path: D:/documents/opt/template/Asset_52Week_Report_Format.xlsx
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
 multipart:
    maxFileSize: 15MB
    maxRequestSize: 15MB
@@ -148,24 +147,24 @@ email:
             title: Completed job report
 reports:
     job-report:
-        url: http://54.169.54.254:8088/#/job-reports
+        url: http://52.221.57.9:8088/#/job-reports
     attendance-report:
-        url: http://54.169.54.254:8088/#/attendance-reports
+        url: http://52.221.57.9:8088/#/attendance-reports
     feedback-report:
-        url: http://54.169.54.254:8088/#/feedbacksList
+        url: http://52.221.57.9:8088/#/feedbacksList
     asset-report:
-        url: http://54.169.54.254:8088/#/asset-report
+        url: http://52.221.57.9:8088/#/asset-report
     vendor-report:
-        url: http://54.169.54.254:8088/#/vendor-report
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/vendor-report
     pr-report:
-        url: http://54.169.54.254:8088/#/pr-report
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/pr-report
     inventory-report:
-        url: http://54.169.54.254:8088/#/inventory-report
+        url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8088/#/inventory-report
 
 url:
-    ticket-view: http://54.169.54.254:8088/#/view-ticket/
-    quotation-view: http://54.169.54.254:8088/#/view-quotation/
-    job-view: http://54.169.54.254:8088/#/view-job/
+    ticket-view: http://52.221.57.9:8088/#/view-ticket/
+    quotation-view: http://52.221.57.9:8088/#/view-quotation/
+    job-view: http://52.221.57.9:8088/#/view-job/
 
 #facedetection:
 #    api:
@@ -199,11 +198,11 @@ pushService:
 
 AWS:
    s3-url: https://s3.ap-south-1.amazonaws.com
-   s3-accessKey: AKIAJJQEB7US7QOAV2LQ
-   s3-secretKey: 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
-   s3-bucketName: fms-taskman
-   s3-cloudfront-url: http://d1wn8hrsdttztl.cloudfront.net/
-   s3-bucketEnv: dev/
+   s3-accessKey: AKIAJZXGWPKSXT7E73DQ
+   s3-secretKey: 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
+   s3-bucketName: taskman
+   s3-cloudfront-url: http://d1l2i6capbtjhi.cloudfront.net/
+   s3-bucketEnv: prod/
    s3-asset-path: assets/
    s3-qrcode-path: qrcode/
    s3-attendance-path: attendance/
@@ -273,7 +272,7 @@ google:
               port: 8080
 
 influxdb:
-   url: http://18.136.79.137:8086
+   url: http://3.0.29.145:8086
    username: superadmin
    password: "*BehindWheel7"
    dbname: dashboard
