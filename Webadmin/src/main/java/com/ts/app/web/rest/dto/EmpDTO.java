@@ -45,8 +45,16 @@ public class EmpDTO {
 	private String uanno;
 	private String esino;
 	private String addressProof;
-		
-		
+	private boolean isApproved ;
+	
+	
+	public boolean isApproved() {
+		return isApproved;
+	}
+
+	public void setApproved(boolean isApproved) {
+		this.isApproved = isApproved;
+	}
 
 	public boolean isSubmitted() {
 		return submitted;

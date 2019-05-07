@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -332,6 +334,32 @@ public class EmployeeServiceResouce {
 		return employeeUpdate(file,id,"pancardCopy");
 
 	}
+	
+	
+	@RequestMapping(value = "/approve", method = RequestMethod.POST)
+	public EmpDTO approve(@RequestParam("id") String id) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+		MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+		map.add("id", id);
+
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+		ResponseEntity<EmpDTO> response =null;
+
+		if (id!=null) {
+			response = restTemplete.exchange(URL_EMPSERVICE+"api/approve", HttpMethod.POST, request,
+					new ParameterizedTypeReference<EmpDTO>() {
+					}
+			);
+		}
+		return response.getBody();
+
+	}
+	
+	
 	
 	@RequestMapping(value = "/voterId", method = RequestMethod.POST)
 	public EmpDTO voterId(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
