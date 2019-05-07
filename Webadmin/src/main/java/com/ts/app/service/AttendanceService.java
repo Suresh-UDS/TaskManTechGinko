@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -174,6 +175,8 @@ public class AttendanceService extends AbstractService {
         //List<Shift> shifts = site.getShifts();
         if(log.isDebugEnabled()) {
             log.debug("shift timings - " + shifts);
+            log.debug("shift timings - " + attnDto.getEmployeeEmpId());
+            log.debug("shift timings  and employee id - " + employeeRepository.findByEmpId(attnDto.getEmployeeEmpId()));
         }
         Employee emp = employeeRepository.findByEmpId(attnDto.getEmployeeEmpId());
 
@@ -245,7 +248,7 @@ public class AttendanceService extends AbstractService {
                 log.debug("Shift timing "+ emp.getId());
                 log.debug("Shift timing "+startCal.getTime());
                 log.debug("Shift timing "+endCal.getTime());
-                List<EmployeeShift> empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+                EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
 
                 Calendar checkInCal = Calendar.getInstance();
                 checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
@@ -394,7 +397,7 @@ public class AttendanceService extends AbstractService {
         endCal.set(Calendar.SECOND, 0);
         sc.setCheckInDateTimeFrom(startCal.getTime());
         sc.setCheckInDateTimeTo(endCal.getTime());
-        log.debug("seach criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
+        log.debug("search criteria"+" - " +sc.getEmployeeEmpId()+" - " +sc.getSiteId()+" - " +sc.getCheckInDateTimeFrom()+" - " +sc.getCheckInDateTimeTo());
         SearchResult<AttendanceDTO> result = findBySearchCrieria(sc);
         //if(result == null || CollectionUtils.isEmpty(result.getTransactions())) {
         boolean isCheckInAllowed = true;
@@ -418,21 +421,30 @@ public class AttendanceService extends AbstractService {
             attn.setOffline(attnDto.isOffline());
             attn.setRemarks(attnDto.getRemarks());
             if(attn.isOffline()){
+                log.debug("Check in time for offline attendance");
+                log.debug("check in time - "+attnDto.getCheckInTime());
                 attn.setCheckInTime(DateUtil.convertToTimestamp(attnDto.getCheckInTime()));
             }
-            log.debug("attendance employee details"+attn.getEmployee().getId());
             Calendar now = Calendar.getInstance();
             //now.set(Calendar.HOUR_OF_DAY, 22); //added for testing night shift
             attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
 //			attn.setDate(attn.getCheckInTime());
             if(StringUtils.isEmpty(attn.getCheckInImage())){
                 log.debug("check in image not available");
+            }else if(attn.isOffline()){
+                log.debug("check in image available and offline true");
+                long dateTime = new Date().getTime();
+                log.debug("Employee Id - "+attnDto.getEmployeeEmpId());
+                attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto, dateTime);
+                attnDto.setUrl(attnDto.getUrl());
+                attn.setCheckInImage(attnDto.getCheckInImage());
+
             }else{
                 log.debug("check in image available");
                 long dateTime = new Date().getTime();
                 attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto, dateTime);
                 String faceRecognitionResponse[] = faceRecognitionService.detectImage(attnDto.getUrl());
-                if(faceRecognitionResponse.length>0) {
+                if(faceRecognitionResponse !=null & faceRecognitionResponse.length>0) {
                     if (faceRecognitionResponse[0] == "success") {
                         log.debug("Face Id -1 - "+emp.getFaceId());
                         log.debug("Face Id -2 - "+faceRecognitionResponse[1]);
