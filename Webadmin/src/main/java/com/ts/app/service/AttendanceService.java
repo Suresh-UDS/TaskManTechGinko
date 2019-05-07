@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -168,7 +167,7 @@ public class AttendanceService extends AbstractService {
         return attnDto;
     }
 
-    private void findShiftTiming(boolean isCheckIn, AttendanceDTO attnDto,Attendance dbAttn) {
+    private void findShiftTiming(boolean isCheckIn, AttendanceDTO attnDto, Attendance dbAttn) {
         long siteId = attnDto.getSiteId();
         Site site = siteRepository.findOne(siteId);
         List<Shift> shifts = siteRepository.findShiftsBySite(siteId);
@@ -1026,7 +1025,7 @@ public class AttendanceService extends AbstractService {
         return "Upload attendance checkOutImage successfully";
     }
 
-    public AttendanceDTO addRemarks(long id,String remarks){
+    public AttendanceDTO addRemarks(long id, String remarks){
         Attendance attendance = attendanceRepository.findOne(id);
         attendance.setRemarks(remarks);
         attendance = attendanceRepository.saveAndFlush(attendance);
