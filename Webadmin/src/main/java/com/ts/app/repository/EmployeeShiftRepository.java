@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 public interface EmployeeShiftRepository extends JpaRepository<EmployeeShift, Long> {
 
@@ -16,7 +17,7 @@ public interface EmployeeShiftRepository extends JpaRepository<EmployeeShift, Lo
 	public long findEmployeeCountBySiteAndShift(@Param("siteId") long siteId, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 	@Query("SELECT es FROM EmployeeShift es where es.site.id = :siteId and es.employee.id = :empId  and es.startTime = :startTime and es.endTime = :endTime")
-	public EmployeeShift findEmployeeShiftBySiteAndShift(@Param("siteId") long siteId, @Param("empId") long empId, @Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime);
+	public List<EmployeeShift> findEmployeeShiftBySiteAndShift(@Param("siteId") long siteId, @Param("empId") long empId, @Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime);
 
 	@Query("SELECT es FROM EmployeeShift es where es.site.id = :siteId and es.startTime between :startTime and :endTime")
 	public Page<EmployeeShift> findEmployeeShiftBySiteAndDate(@Param("siteId") long siteId, @Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime, Pageable pageRequest);

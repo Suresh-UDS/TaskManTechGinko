@@ -247,7 +247,7 @@ public class AttendanceService extends AbstractService {
                 log.debug("Shift timing "+ emp.getId());
                 log.debug("Shift timing "+startCal.getTime());
                 log.debug("Shift timing "+endCal.getTime());
-                EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+                List<EmployeeShift> empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
 
                 Calendar checkInCal = Calendar.getInstance();
                 checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
