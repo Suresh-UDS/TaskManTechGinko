@@ -19,7 +19,8 @@ angular.module('timeSheetApp')
                 },
                 resolve: {
 
-                }
+                },
+                permission:'Job:Create'
             })
         .state('edit-job', {
             parent: 'manage',
@@ -38,7 +39,8 @@ angular.module('timeSheetApp')
             resolve: {
 
 
-            }
+            },
+            permission:'Job:Edit'
         }).state('view-job', {
             parent: 'manage',
             url: '/view-job/:id',
@@ -56,7 +58,8 @@ angular.module('timeSheetApp')
             resolve: {
 
 
-            }
+            },
+            permission:'Job:View'
         })
         .state('jobs', {
                 parent: 'manage',
@@ -78,6 +81,7 @@ angular.module('timeSheetApp')
                   params:{
                    project:null,
                    site:null
-                  }
+                  },
+                 permission:'Job:List'
             });
     });
