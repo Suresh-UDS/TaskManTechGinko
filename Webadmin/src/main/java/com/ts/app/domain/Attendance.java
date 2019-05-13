@@ -47,6 +47,8 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
 	private String remarks;
 
+	private boolean isInvalid;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.REFRESH})
 	@JoinColumn(name = "siteId", nullable = false)
 	private Site site;
@@ -230,5 +232,13 @@ public class Attendance extends AbstractAuditingEntity implements Serializable{
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public boolean isInvalid() {
+        return isInvalid;
+    }
+
+    public void setInvalid(boolean invalid) {
+        isInvalid = invalid;
     }
 }

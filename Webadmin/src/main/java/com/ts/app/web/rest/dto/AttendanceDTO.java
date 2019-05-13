@@ -38,14 +38,16 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	private long employeeId;
 
 	private String employeeFullName;
-	
+
 	private String employeeName;
-	
+
 	private String employeeLastName;
 
 	private long siteId;
 
 	private String siteName;
+
+	private String projectName;
 
 	private String employeeEmpId;
 
@@ -62,22 +64,24 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	private String shiftEndTime;
 
 	private boolean notCheckedOut;
-	
+
 	private String url;
-	
+
 	private boolean offline;
 
 	private long continuedAttendanceId;
 
 	private boolean late;
-	
+
 	private String checkInImgUrl;
-	
+
 	private String checkOutImgUrl;
-	
+
 	private String enrollImgUrl;
 
 	private String remarks;
+
+	private boolean isInvalid;
 
 	public Long getId() {
 		return id;
@@ -240,7 +244,7 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-    
+
     public boolean isOffline() {
         return offline;
     }
@@ -329,4 +333,20 @@ public class AttendanceDTO extends BaseDTO implements Serializable{
 	public void setEmployeeLastName(String employeeLastName) {
 		this.employeeLastName = employeeLastName;
 	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+    public boolean isInvalid() {
+        return isInvalid;
+    }
+
+    public void setInvalid(boolean invalid) {
+        isInvalid = invalid;
+    }
 }
