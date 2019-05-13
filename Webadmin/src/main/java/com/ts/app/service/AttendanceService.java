@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -127,6 +128,9 @@ public class AttendanceService extends AbstractService {
                             dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                             dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
 
+                        }else if(attn.isOffline()){
+                            log.debug("Verification failed identical and offline: "+isIdentical);
+                            attnDto.setInvalid(true);
                         }else{
                             log.debug("Verification failed identical: "+isIdentical);
 
@@ -134,6 +138,9 @@ public class AttendanceService extends AbstractService {
                             attnDto.setErrorMessage("Face not Verified");
                             return attnDto;
                         }
+                    }else if(attn.isOffline()){
+                        log.debug("Verification failed offline: ");
+                        attnDto.setInvalid(true);
                     }else{
                         log.debug("Verification failed ");
                         attnDto.setErrorStatus(true);
@@ -141,11 +148,17 @@ public class AttendanceService extends AbstractService {
                         return attnDto;
                     }
 
+                }else if(attn.isOffline()){
+                    log.debug("Face not Detected and offline: ");
+                    attnDto.setInvalid(true);
                 }else{
                     attnDto.setErrorMessage("Face Not Detected");
                     attnDto.setErrorStatus(true);
                     return attnDto;
                 }
+            }else if(attn.isOffline()){
+                log.debug("Verification failed face not detected and offline: ");
+                attnDto.setInvalid(true);
             }else{
                 attnDto.setErrorMessage("Face Not Detected");
                 attnDto.setErrorStatus(true);
@@ -167,7 +180,7 @@ public class AttendanceService extends AbstractService {
         return attnDto;
     }
 
-    private void findShiftTiming(boolean isCheckIn, AttendanceDTO attnDto, Attendance dbAttn) {
+    private void findShiftTiming(boolean isCheckIn, AttendanceDTO attnDto,Attendance dbAttn) {
         long siteId = attnDto.getSiteId();
         Site site = siteRepository.findOne(siteId);
         List<Shift> shifts = siteRepository.findShiftsBySite(siteId);
@@ -247,7 +260,7 @@ public class AttendanceService extends AbstractService {
                 log.debug("Shift timing "+ emp.getId());
                 log.debug("Shift timing "+startCal.getTime());
                 log.debug("Shift timing "+endCal.getTime());
-                List<EmployeeShift> empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
+                EmployeeShift empShift = empShiftRepo.findEmployeeShiftBySiteAndShift(site.getId(), emp.getId() , DateUtil.convertToTimestamp(startCal.getTime()), DateUtil.convertToTimestamp(endCal.getTime()));
 
                 Calendar checkInCal = Calendar.getInstance();
                 checkInCal.setTimeInMillis(dbAttn.getCheckInTime().getTime());
@@ -444,7 +457,7 @@ public class AttendanceService extends AbstractService {
                 attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto, dateTime);
                 String faceRecognitionResponse[] = faceRecognitionService.detectImage(attnDto.getUrl());
                 if(faceRecognitionResponse !=null & faceRecognitionResponse.length>0) {
-                    if (faceRecognitionResponse[0] == "success") {
+                    if (Objects.equals(faceRecognitionResponse[0], "success")) {
                         log.debug("Face Id -1 - "+emp.getFaceId());
                         log.debug("Face Id -2 - "+faceRecognitionResponse[1]);
                         String[] faceVerificationResponse = faceRecognitionService.verifyImage(emp.getFaceId(),faceRecognitionResponse[1]);
@@ -459,6 +472,9 @@ public class AttendanceService extends AbstractService {
                             if(isIdentical){
                                 attnDto.setUrl(attnDto.getUrl());
                                 attn.setCheckInImage(attnDto.getCheckInImage());
+                            }else if(attn.isOffline()){
+                                log.debug("Verification failed identical and offline: "+isIdentical);
+                                attnDto.setInvalid(true);
                             }else{
                                 attnDto.setErrorStatus(true);
                                 attnDto.setErrorMessage("Face not Verified");
@@ -466,6 +482,9 @@ public class AttendanceService extends AbstractService {
                             }
 
 
+                        }else if(attn.isOffline()){
+                            log.debug("Verification failed  and offline: ");
+                            attnDto.setInvalid(true);
                         }else{
                             attnDto.setErrorStatus(true);
                             attnDto.setErrorMessage("Face not Verified");
@@ -1025,7 +1044,7 @@ public class AttendanceService extends AbstractService {
         return "Upload attendance checkOutImage successfully";
     }
 
-    public AttendanceDTO addRemarks(long id, String remarks){
+    public AttendanceDTO addRemarks(long id,String remarks){
         Attendance attendance = attendanceRepository.findOne(id);
         attendance.setRemarks(remarks);
         attendance = attendanceRepository.saveAndFlush(attendance);
