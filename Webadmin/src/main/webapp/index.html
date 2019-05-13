@@ -171,7 +171,7 @@
 
     <!-- Idle -->
     <script src="bower_components/ng-idle/angular-idle.js"></script>
-    
+
     <!-- end idle -->
 
     <!--  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>-->
@@ -537,7 +537,22 @@
     <script src="bower_components/jszip/dist/jszip.min.js"></script>
     <script src="bower_components/devextreme/js/dx.all.js"></script>
 
+    <script src="scripts/components/admin/permissions.service.js"></script>
+
+
     <!-- Excel view & download js  end -->
+
+
+    <script type="text/ng-template" id="warning-dialog.html">
+        <div class="modal-header">
+            <h3>You're Idle. Do Something!</h3>
+        </div>
+        <div class="modal-body" idle-countdown="countdown" ng-init="countdown=5">
+            <p>You'll be logged out in <span class="label label-warning">{{countdown}}</span> <span ng-pluralize="" count="countdown" when="{'one': 'second', 'other': 'seconds' }"></span>.</p>
+            <uib-progressbar max="5" value="countdown" animate="true" class="progress-striped active" type="warning"></uib-progressbar>
+        </div>
+
+    </script>
 
 <!--confirmation-->
 <div id="conformationModal" class="delete-confirmation modal fade">
