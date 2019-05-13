@@ -1,22 +1,12 @@
 package com.ts.app.service;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.inject.Inject;
-
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.*;
+import com.ts.app.web.rest.dto.*;
+import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
@@ -34,40 +24,12 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
-import com.ts.app.service.util.AmazonS3Utils;
-import com.ts.app.service.util.DateUtil;
-import com.ts.app.service.util.ExportUtil;
-import com.ts.app.service.util.FileUploadHelper;
-import com.ts.app.service.util.ImportUtil;
-import com.ts.app.service.util.MapperUtil;
-import com.ts.app.service.util.PagingUtil;
-import com.ts.app.service.util.ReportUtil;
-import com.ts.app.web.rest.dto.AssetAMCScheduleDTO;
-import com.ts.app.web.rest.dto.AssetPpmScheduleDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.CheckInOutDTO;
-import com.ts.app.web.rest.dto.CheckInOutImageDTO;
-import com.ts.app.web.rest.dto.EmployeeDTO;
-import com.ts.app.web.rest.dto.ExportResult;
-import com.ts.app.web.rest.dto.ImportResult;
-import com.ts.app.web.rest.dto.JobChecklistDTO;
-import com.ts.app.web.rest.dto.JobDTO;
-import com.ts.app.web.rest.dto.JobMaterialDTO;
-import com.ts.app.web.rest.dto.LocationDTO;
-import com.ts.app.web.rest.dto.NotificationLogDTO;
-import com.ts.app.web.rest.dto.PriceDTO;
-import com.ts.app.web.rest.dto.ReportResult;
-import com.ts.app.web.rest.dto.SchedulerConfigDTO;
-import com.ts.app.web.rest.dto.SearchCriteria;
-import com.ts.app.web.rest.dto.SearchResult;
-import com.ts.app.web.rest.dto.TicketDTO;
-import com.ts.app.web.rest.errors.TimesheetException;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing Device information.
@@ -232,7 +194,7 @@ public class JobManagementService extends AbstractService {
 			//------
             Pageable pageRequest = null;
             if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
-                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Direction.ASC : Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
                 if(searchCriteria.isReport()) {
                 		pageRequest = createPageSort(searchCriteria.getCurrPage(), Integer.MAX_VALUE, sort);
@@ -1260,15 +1222,29 @@ public class JobManagementService extends AbstractService {
 		Location location = null;
 		if(jobDTO.getLocationId() > 0) {
 			location = getLocation(jobDTO.getLocationId());
-		}
+		}else if(job.getLocation().getId()>0){
+		    location = getLocation(job.getLocation().getId());
+        }
 		Asset asset = null;
 		if(jobDTO.getAssetId() > 0) {
 			asset = assetRepository.findOne(jobDTO.getAssetId());
-		}
+		}else if(job.getAsset().getId()>0){
+		    asset = assetRepository.findOne(job.getAsset().getId());
+        }
 		Ticket ticket = null;
 		if(jobDTO.getTicketId() > 0) {
 			ticket = getTicket(jobDTO.getTicketId());
-		}
+		}else if(job.getTicket().getId()>0){
+		    ticket = getTicket(job.getTicket().getId());
+        }
+
+        if(jobDTO.getActive() !=null){
+		    job.setActive(jobDTO.getActive());
+        }else if(job.getActive() !=null){
+            job.setActive(job.getActive());
+        }else{
+            job.setActive("Y");
+        }
 		//update ticket status
 		if(ticket != null) {
 			ticket.setStatus(TicketStatus.INPROGRESS.toValue());
@@ -1299,7 +1275,6 @@ public class JobManagementService extends AbstractService {
         if(ticket!=null){
 		    job.setTicket(ticket);
         }
-		job.setActive(jobDTO.getActive());
 
 		job.setSite(site);
 		job.setEmployee(employee);
@@ -1567,7 +1542,7 @@ public class JobManagementService extends AbstractService {
 				subEmpIds.add(employee.getId());
 			}
 		}
-		Sort sort = new Sort(Sort.Direction.ASC , "name");
+		Sort sort = new Sort(Direction.ASC , "name");
 		Pageable pageRequest = createPageSort(1, sort);
 		Page<Employee> result = null;
 		if(user.isAdmin()) {
@@ -1750,7 +1725,7 @@ public class JobManagementService extends AbstractService {
 		Calendar now = Calendar.getInstance();
 		Calendar plannedStartTime = Calendar.getInstance();
 		plannedStartTime.setTime(job.getPlannedStartTime());
-		if(plannedStartTime.before(now)) { //Future jobs cannot be completed.
+		if(plannedStartTime.before(now)) { //Future jobs cannot be completed but can be saved
 	        mapToEntity(jobDTO, job);
 	        job = jobRepository.save(job);
 			User currUser = userRepository.findOne(userId);
@@ -1772,7 +1747,7 @@ public class JobManagementService extends AbstractService {
 		}else {
 			jobDTO = mapperUtil.toModel(job, JobDTO.class);
 			jobDTO.setErrorStatus(true);
-			jobDTO.setErrorMessage("Cannot complete a future job");
+			jobDTO.setErrorMessage("Cannot Update a future job");
 		}
         return jobDTO;
     }
@@ -1805,6 +1780,8 @@ public class JobManagementService extends AbstractService {
         JobChecklist checklist1 = jobChecklistRepository.save(checklist);
         return checklist1;
     }
+
+
 
 //    @Transactional
 //    public JobChecklistDTO uploadCheckListImage(JobChecklistDTO jobChecklistDTO) {
@@ -2055,7 +2032,7 @@ public class JobManagementService extends AbstractService {
         return allJobsList;
     }
 
-    public void assignJobsForDifferentEmployee(EmployeeDTO employee, EmployeeDTO reliever,Date fromDate){
+    public void assignJobsForDifferentEmployee(EmployeeDTO employee, EmployeeDTO reliever, Date fromDate){
         Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
         checkInDateFrom.setTime(fromDate);
 

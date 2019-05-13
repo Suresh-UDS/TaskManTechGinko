@@ -122,16 +122,6 @@
                                         </span>
                                     </span>
                                 </th>
-                                <th style="min-width: 100px;">Client
-                                    <span class="sortingIcons">
-                                        <span ng-click="columnAscOrder('project.name')" ng-class="isActiveAsc == 'project.name' ? 'active' : ''" >
-                                            <i  class="fa fa-caret-up"></i>
-                                        </span>
-                                        <span ng-click="columnDescOrder('project.name')" ng-class="isActiveDesc == 'project.name' ? 'active' : ''">
-                                             <i  ng-class="class" class="fa fa-caret-down"></i>
-                                        </span>
-                                    </span>
-                                </th>
                                 <th style="min-width: 100px;">Site
                                     <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
@@ -170,6 +160,9 @@
                                     <span ng-click="columnDescOrder('shift')" class=""><i class="fa fa-caret-down"></i></span>
 
                                 </a>--></th>
+                                <th>
+                                    Status
+                                </th>
                                 <th>Location<!--<a href="#">
 
                                     <span ng-click="columnAscOrder('project.name')"  class=""><i class="fa fa-caret-up"></i></span>
@@ -177,14 +170,14 @@
 
                                 </a>--></th>
 
-                                <!--<th>Remarks</th>-->
+                                <th>Remarks</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="attendance in attendancesData">
+
                                 <td>{{attendance.employeeEmpId}}</td>
                                 <td>{{attendance.employeeName +" "+ attendance.employeeLastName}}</td>
-                                <td>{{attendance.projectName}}</td>
                                 <td>{{attendance.siteName}}</td>
                                 <td>
                                 {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}
@@ -211,14 +204,28 @@
                                     <img ng-src="assets/img/user.png" width="30px" height="30px"/>
                                 </td>
 
-                                <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}</td>
+                                <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}
+                                </td>
+
+                                <td ng-if="!attendance.invalid" align="center">
+                                    <i style="color: green; font-size: larger" class="far fa-check-square"></i>
+                                </td>
+
+                                <td ng-if="attendance.invalid" align="center">
+                                    <i ng-if="attendance.invalid" style="color: red; font-size: larger" class="fas fa-exclamation-triangle"></i>
+                                </td>
+
                                 <td align="center">
                                     <a id="maps" href="javascript:void(0);" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >
-                                        <img ng-src="assets/img/map-icon-2-1.jpg" width="30px" height="30px" />
+                                        <!--<img ng-src="assets/img/map-icon-2-1.jpg" width="20px" height="20px" />-->
+                                        <i style="font-size: larger; color: darkblue" class="fas fa-map-marker-alt"></i>
                                     </a>
 
+
+                                </td>
+                                <td>
                                     <a class="" href="javascript:void(0);" ng-click="addRemarksId(attendance.id,attendance.remarks)" id="remarks"  onClick="$('#remarksModal').modal()" data-target="#remarksModal" data-dismiss="#remarksModal" >
-                                        <i class="fa fa-edit"></i>
+                                        <i class="fa fa-edit" style="font-size: larger; color: black"></i>
                                     </a>
                                 </td>
                             </tr>

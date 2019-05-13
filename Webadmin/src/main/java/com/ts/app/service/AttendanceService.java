@@ -102,6 +102,7 @@ public class AttendanceService extends AbstractService {
         if(StringUtils.isEmpty(attn.getCheckOutImage())){
             log.debug("check in image not available");
             dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
+            dbAttn.setInvalid(false);
         }else{
             log.debug("check in image available");
             long dateTime = new Date().getTime();
@@ -123,13 +124,22 @@ public class AttendanceService extends AbstractService {
 
                         if(isIdentical){
                             log.debug("Verification success identical: "+isIdentical);
+                            dbAttn.setInvalid(false);
                             attnDto.setUrl(attnDto.getUrl());
                             dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
-                            dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
+                            if(attn.isOffline()){
+                                dbAttn.setCheckOutTime(DateUtil.convertToTimestamp(attnDto.getCheckOutTime()));
+
+                            }else{
+                                dbAttn.setCheckOutTime(new java.sql.Timestamp(now.getTimeInMillis()));
+
+                            }
 
                         }else if(attn.isOffline()){
+                            attnDto.setUrl(attnDto.getUrl());
+                            dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                             log.debug("Verification failed identical and offline: "+isIdentical);
-                            attnDto.setInvalid(true);
+                            dbAttn.setInvalid(true);
                         }else{
                             log.debug("Verification failed identical: "+isIdentical);
 
@@ -138,8 +148,10 @@ public class AttendanceService extends AbstractService {
                             return attnDto;
                         }
                     }else if(attn.isOffline()){
+                        attnDto.setUrl(attnDto.getUrl());
+                        dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                         log.debug("Verification failed offline: ");
-                        attnDto.setInvalid(true);
+                        dbAttn.setInvalid(true);
                     }else{
                         log.debug("Verification failed ");
                         attnDto.setErrorStatus(true);
@@ -148,16 +160,20 @@ public class AttendanceService extends AbstractService {
                     }
 
                 }else if(attn.isOffline()){
+                    attnDto.setUrl(attnDto.getUrl());
+                    dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                     log.debug("Face not Detected and offline: ");
-                    attnDto.setInvalid(true);
+                    dbAttn.setInvalid(true);
                 }else{
                     attnDto.setErrorMessage("Face Not Detected");
                     attnDto.setErrorStatus(true);
                     return attnDto;
                 }
             }else if(attn.isOffline()){
+                attnDto.setUrl(attnDto.getUrl());
+                dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                 log.debug("Verification failed face not detected and offline: ");
-                attnDto.setInvalid(true);
+                dbAttn.setInvalid(true);
             }else{
                 attnDto.setErrorMessage("Face Not Detected");
                 attnDto.setErrorStatus(true);
@@ -442,14 +458,7 @@ public class AttendanceService extends AbstractService {
 //			attn.setDate(attn.getCheckInTime());
             if(StringUtils.isEmpty(attn.getCheckInImage())){
                 log.debug("check in image not available");
-            }else if(attn.isOffline()){
-                log.debug("check in image available and offline true");
-                long dateTime = new Date().getTime();
-                log.debug("Employee Id - "+attnDto.getEmployeeEmpId());
-                attnDto = s3ServiceUtils.uploadCheckInImage(attn.getCheckInImage(), attnDto, dateTime);
-                attnDto.setUrl(attnDto.getUrl());
-                attn.setCheckInImage(attnDto.getCheckInImage());
-
+                attn.setInvalid(false);
             }else{
                 log.debug("check in image available");
                 long dateTime = new Date().getTime();
@@ -471,9 +480,12 @@ public class AttendanceService extends AbstractService {
                             if(isIdentical){
                                 attnDto.setUrl(attnDto.getUrl());
                                 attn.setCheckInImage(attnDto.getCheckInImage());
+                                attn.setInvalid(false);
                             }else if(attn.isOffline()){
+                                attnDto.setUrl(attnDto.getUrl());
+                                attn.setCheckInImage(attnDto.getCheckInImage());
                                 log.debug("Verification failed identical and offline: "+isIdentical);
-                                attnDto.setInvalid(true);
+                                attn.setInvalid(true);
                             }else{
                                 attnDto.setErrorStatus(true);
                                 attnDto.setErrorMessage("Face not Verified");
@@ -482,19 +494,31 @@ public class AttendanceService extends AbstractService {
 
 
                         }else if(attn.isOffline()){
+                            attnDto.setUrl(attnDto.getUrl());
+                            attn.setCheckInImage(attnDto.getCheckInImage());
                             log.debug("Verification failed  and offline: ");
-                            attnDto.setInvalid(true);
+                            attn.setInvalid(true);
                         }else{
                             attnDto.setErrorStatus(true);
                             attnDto.setErrorMessage("Face not Verified");
                             return attnDto;
                         }
 
+                    }else if(attn.isOffline()){
+                        attnDto.setUrl(attnDto.getUrl());
+                        attn.setCheckInImage(attnDto.getCheckInImage());
+                        log.debug("Face not detected offline");
+                        attn.setInvalid(true);
                     }else{
                         attnDto.setErrorMessage("Face Not Detected");
                         attnDto.setErrorStatus(true);
                         return attnDto;
                     }
+                }else if(attn.isOffline()){
+                    attnDto.setUrl(attnDto.getUrl());
+                    attn.setCheckInImage(attnDto.getCheckInImage());
+                    log.debug("Face not detected offline set 2");
+                    attn.setInvalid(true);
                 }else{
                     attnDto.setErrorMessage("Face Not Detected");
                     attnDto.setErrorStatus(true);
