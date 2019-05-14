@@ -1230,6 +1230,12 @@ public class JobManagementService extends AbstractService {
 		Ticket ticket = null;
 		if(jobDTO.getTicketId() > 0) {
 			ticket = getTicket(jobDTO.getTicketId());
+		}
+
+        if(jobDTO.getActive() !=null){
+		    job.setActive(jobDTO.getActive());
+        }else{
+            job.setActive("Y");
         }
 		//update ticket status
 		if(ticket != null) {
