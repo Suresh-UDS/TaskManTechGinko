@@ -1222,25 +1222,25 @@ public class JobManagementService extends AbstractService {
 		Location location = null;
 		if(jobDTO.getLocationId() > 0) {
 			location = getLocation(jobDTO.getLocationId());
-		}else if(job.getLocation().getId()>0){
+		}else if(job !=null && job.getLocation()!=null && job.getLocation().getId() !=null && job.getLocation.getId>0){
 		    location = getLocation(job.getLocation().getId());
         }
 		Asset asset = null;
 		if(jobDTO.getAssetId() > 0) {
 			asset = assetRepository.findOne(jobDTO.getAssetId());
-		}else if(job.getAsset().getId()>0){
+		}else if(job!=null && job.getAsset().getId()>0){
 		    asset = assetRepository.findOne(job.getAsset().getId());
         }
 		Ticket ticket = null;
 		if(jobDTO.getTicketId() > 0) {
 			ticket = getTicket(jobDTO.getTicketId());
-		}else if(job.getTicket().getId()>0){
+		}else if(job !=null && job.getTicket().getId()>0){
 		    ticket = getTicket(job.getTicket().getId());
         }
 
         if(jobDTO.getActive() !=null){
 		    job.setActive(jobDTO.getActive());
-        }else if(job.getActive() !=null){
+        }else if(job!=null && job.getActive() !=null){
             job.setActive(job.getActive());
         }else{
             job.setActive("Y");
