@@ -1222,7 +1222,7 @@ public class JobManagementService extends AbstractService {
 		Location location = null;
 		if(jobDTO.getLocationId() > 0) {
 			location = getLocation(jobDTO.getLocationId());
-		}else if(job !=null && job.getLocation()!=null && job.getLocation().getId() !=null && job.getLocation.getId>0){
+		}else if(job !=null && job.getLocation()!=null && job.getLocation().getId() !=null && job.getLocation().getId()>0){
 		    location = getLocation(job.getLocation().getId());
         }
 		Asset asset = null;
