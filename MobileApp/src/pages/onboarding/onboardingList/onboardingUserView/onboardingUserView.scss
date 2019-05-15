@@ -30,6 +30,12 @@ page-onboardinguser-View {
         border-radius: 50%;
         border: 8px solid #d6d6d6;
     }
+    .image {
+        width: 100%;
+        max-height: 205px;
+        z-index: 0;
+        border: 1px solid;
+    }
     .toolbar-background-md {
         background: #ffc55b !important; 
     }

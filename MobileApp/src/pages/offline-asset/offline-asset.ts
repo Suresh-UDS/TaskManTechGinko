@@ -18,6 +18,7 @@ import {FileTransferObject, FileUploadOptions, FileTransfer} from "@ionic-native
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import{OfflineGetassetreadings} from "../offline-getassetreadings/offline-getassetreadings";
 import {OfflineCompleteJob} from "../offline-complete-job/offline-complete-job";
+import {DatabaseProvider} from "../../providers/database-provider";
 
 /**
  * Generated class for the OfflineAsset page.
@@ -53,7 +54,7 @@ export class OfflineAsset {
     constructor(public dbService: DBService, public camera: Camera, @Inject(MY_CONFIG_TOKEN) private config: ApplicationConfig,
                 private transfer: FileTransfer, private modalCtrl: ModalController, private datePicker: DatePicker,
                 private componentService: componentService, public navCtrl: NavController, public navParams: NavParams,
-                public jobService: JobService, public assetService: AssetService) {
+                public jobService: JobService, public assetService: AssetService, public dbProvider: DatabaseProvider) {
         this.assetDetails = this.navParams.data.assetDetails;
         this.categories = 'details';
         this.spinner = true;
@@ -86,7 +87,9 @@ export class OfflineAsset {
     segmentChange(categories, fab: FabContainer) {
         this.fromDate = "";
         this.toDate = "";
-        fab.close();
+        if(fab){
+            fab.close();
+        }
         this.jobSearchCriteria = {
             assetId: this.assetDetails.id
         };
@@ -104,11 +107,11 @@ export class OfflineAsset {
       this.assetDetails.PPMJobs = null;
         this.spinner = true;
         //offline
-        this.dbService.getPPMJobs(this.assetDetails.id,"ppm").then(
+        this.dbProvider.getAssetPPMJobsData(this.assetDetails.id).then(
             (res) => {
                 this.spinner=false;
-                this.componentService.closeLoader()
-                console.log(res)
+                this.componentService.closeLoader();
+                console.log(res);
                 this.assetDetails.PPMJobs = res;
             },
             (err) => {
@@ -127,11 +130,11 @@ export class OfflineAsset {
       this.assetDetails.AMCJobs = null;
         this.spinner = true;
         //offline
-        this.dbService.getAMCJobs(this.assetDetails.id,"amc").then(
+        this.dbProvider.getAssetAMCJobsData(this.assetDetails.id).then(
             (res) => {
                 this.spinner=false;
-                this.componentService.closeLoader()
-                console.log(res)
+                this.componentService.closeLoader();
+                console.log(res);
                 this.assetDetails.AMCJobs= res;
             },
             (err) => {
@@ -189,7 +192,7 @@ export class OfflineAsset {
     getAssetPPMSchedule() {
         this.spinner = true;
         // offline
-        this.dbService.getPPM(this.assetDetails.id).then(
+        this.dbProvider.getAssetPPM(this.assetDetails.id).then(
             (res) => {
                 this.spinner = false;
                 console.log(res);
@@ -206,7 +209,7 @@ export class OfflineAsset {
         this.spinner = true;
 
         //offline
-        this.dbService.getAMC(this.assetDetails.id).then(
+        this.dbProvider.getAssetAMC(this.assetDetails.id).then(
             (res) => {
                 this.spinner = false;
                 this.componentService.closeLoader();
@@ -225,7 +228,7 @@ export class OfflineAsset {
         this.spinner=true;
 
         //offline
-        this.dbService.getConfig(this.assetDetails.assettype,this.assetDetails.id).then(
+        this.dbProvider.getAssetConfigData(this.assetDetails.assettype,this.assetDetails.id).then(
             (res)=>{
                 this.spinner = false;
                 console.log(res);
@@ -257,7 +260,7 @@ export class OfflineAsset {
     getReading(readingSearchCriteria){
         this.assetDetails.reading=null;
         this.spinner=true;
-            this.dbService.getViewReading(readingSearchCriteria).then(
+            this.dbProvider.getAssetReadings(readingSearchCriteria.assetId).then(
             response=>
             {
                 console.log("View Reading Response");

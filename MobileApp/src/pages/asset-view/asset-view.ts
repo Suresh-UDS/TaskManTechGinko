@@ -47,7 +47,7 @@ export class AssetView {
     PPMJobs:any;
     AMCJobs:any;
 
-
+    assetBreakDown:any;
     fromDate:any;
     toDate:any;
     viewButton:any;
@@ -74,6 +74,7 @@ export class AssetView {
     this.assetMaterial = [];
     this.jobMaterials = [];
     this.jobMaterialsList = [];
+    this.assetBreakDown = false;
   }
     showCalendar()
     {
@@ -83,6 +84,10 @@ export class AssetView {
     }
 
   ionViewDidLoad() {
+
+    if(this.assetDetails && this.assetDetails.status == "BREAKDOWN"){
+       this.assetBreakDown = true;
+    }
     console.log('ionViewDidLoad AssetView');
     console.log(this.assetDetails);
     // this.componentService.showLoader("");
@@ -871,7 +876,7 @@ export class AssetView {
     }
 
 
-    markBreakDown(asset) {
+    markBreakDown(asset, fab:FabContainer) {
         const confirm = this.alertCtrl.create({
             title:"<h5>Is The Asset Broke Down?</h5>" ,
             buttons: [
@@ -894,6 +899,8 @@ export class AssetView {
                                     console.log(response);
                                     // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
                                     this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                                    this.assetBreakDown = true;
+                                    fab.close();
                                 }
 
                             }

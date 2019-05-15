@@ -21,6 +21,7 @@ import {DBService} from "../service/dbService";
 import {AttendanceService} from "../service/attendanceService";
 import {AssetService} from "../service/assetService";
 import {DatabaseProvider} from "../../providers/database-provider";
+import {SyncProgress} from "../Offline-Online-Landing/sync-progress";
 declare var demo;
 @Component({
   selector: 'page-dashboard',
@@ -88,6 +89,9 @@ export class DashboardPage {
        console.log(userType);
        this.userType = userType;
    });
+
+//    this.presentActionSheet();
+
    console.log("User Role in dashboard");
    console.log(window.localStorage.getItem('userRole'));
       this.userType=window.localStorage.getItem('userRole')
@@ -106,11 +110,11 @@ export class DashboardPage {
   {
 
       if (this.plt.is('android')) {
-          this.platform="android"
+          this.platform="android";
           console.log("=====Platform=====:"+this.platform);
       }
       else if (this.plt.is('ios')) {
-          this.platform="ios"
+          this.platform="ios";
           console.log("=====Platform=====:"+this.platform);
       }
 
@@ -118,7 +122,7 @@ export class DashboardPage {
       
     this.searchCriteria={
         checkInDateTimeFrom:new Date()
-    }
+    };
       this.searchJobs(this.searchCriteria);
 
 
@@ -552,17 +556,23 @@ export class DashboardPage {
                     console.log(employees);
                 })
             }
-        })
+        });
 
         this.databaseProvider.getJobsData().then(jobs=>{
             console.log("Jobs from sqlite");
             console.log(jobs);
+            for(var j=0; j<jobs.length;j++){
+                console.log("Job id - "+jobs[j].id);
+                this.databaseProvider.getChecklistItemsForJob(jobs[j].id).then(checklistItems=>{
+                    console.log("Checklist items from sqlite");
+                    console.log(checklistItems);
+                })
+            }
         })
+    }
 
-        this.databaseProvider.getEmployeeData().then(employees=>{
-            console.log("Employees from sqlite");
-            console.log(employees);
-        })
+    startDataSync(){
+        this.navCtrl.push(SyncProgress);
     }
 
     markOfflineAttendance(){
@@ -585,7 +595,7 @@ export class DashboardPage {
                                 })
                         }
                         else {
-                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId).subscribe(
+                            this.attendanceService.markAttendanceCheckOut(data[i].siteId, data[i].employeeEmpId, data[i].latitudeIn, data[i].longitudeIn, data[i].checkOutImage, data[i].attendanceId,null,true).subscribe(
                                 response => {
                                     resolve("ssss")
                                     console.log("Offline attendance data synced to server");
@@ -611,7 +621,7 @@ export class DashboardPage {
     {
         return new Promise((resolve,reject)=>{
             setTimeout(()=>{
-                this.attendanceService.markAttendanceCheckOut(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkOutImage,id).subscribe(
+                this.attendanceService.markAttendanceCheckOut(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkOutImage,id,null,true).subscribe(
                     response => {
                         console.log("Offline attendance data synced to server");
                         resolve("s")
@@ -631,7 +641,7 @@ export class DashboardPage {
     {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                this.attendanceService.markAttendanceCheckIn(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkInImage).subscribe(
+                this.attendanceService.markAttendanceCheckIn(data.siteId, data.employeeEmpId, data.latitudeIn, data.longitudeIn, data.checkInImage,null,true).subscribe(
                     response => {
                         console.log("Offline attendance data synced to server");
                         console.log(response)

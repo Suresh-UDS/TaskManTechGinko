@@ -148,7 +148,6 @@ export class JobsPage {
                 currPage:1,
                 columnName:"plannedStartTime",
                 sortByAsc:true,
-                report:false,
                 sort:10
 
             };
@@ -183,7 +182,7 @@ export class JobsPage {
 
     loadAllJobs(){
         this.component.showLoader('Getting All Jobs');
-        var search={schedule:"ONCE",report:false};
+        var search={schedule:"ONCE"};
         this.jobService.getJobs(search).subscribe(response=>{
             console.log("All jobs of current user");
             console.log(response);
@@ -289,7 +288,7 @@ export class JobsPage {
         console.log(this.page)
 
         var searchCriteria = {};
-        var msg="Loading Jobs...";
+        var msg="";
 
         if(this.scannedLocationId){
             console.log("Location Id in job search ");
@@ -378,7 +377,7 @@ export class JobsPage {
         console.log(this.todaysPage);
         console.log(this.page);
         var searchCriteria = {};
-        var msg="Loading Jobs...";
+        var msg="";
 
          if(this.scannedBlock && this.scannedFloor && this.scannedZone){
 
@@ -404,7 +403,6 @@ export class JobsPage {
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
                 schedule:"ONCE",
-
                 // locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId,
                 currPage:this.todaysPage+1,
@@ -452,10 +450,14 @@ export class JobsPage {
         const modal = this.modalCtrl.create(JobFilter);
         modal.present();
         modal.onDidDismiss(searchCriteria=>{
+            console.log("Search criteria jobs");
+            console.log(searchCriteria);
             if(searchCriteria){
+                this.component.showLoader("Searching Jobs");
                 this.jobService.getJobs(searchCriteria).subscribe(response=>{
                         console.log("All jobs of current user");
                         console.log(response);
+                        this.categories = 'jobs';
                         this.allJobs = response.transactions;
                         this.page = response.currPage;
                         this.totalPages = response.totalPages;
@@ -464,7 +466,7 @@ export class JobsPage {
                     err=>{
                         this.component.closeLoader();
                         this.component.showToastMessage('Unable to fetch Jobs','bottom');
-                })
+                    })
             }
         })
     }

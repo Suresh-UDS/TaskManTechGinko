@@ -15,6 +15,8 @@ export class newEmpFamilyAndAcademic implements OnInit {
   nomineeList: any = [];
   onboardingFamilyAcademicData;
   storedIndex;
+  remainTotal = 100;
+  nomineeTotalPercentage;
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
@@ -23,43 +25,72 @@ export class newEmpFamilyAndAcademic implements OnInit {
       educationQualification: this.fb.array([this.setEducation()]),
       nomineeDetail: this.fb.array([])
     });
-    this.storage.get('onboardingCurrentIndex').then(index => {
-      this.storedIndex = index;
+
+    let getEpfCount;
+    this.storage.get('onboardingCurrentIndex').then(data => {
+      this.storedIndex = data['index'];
       this.storage.get('OnBoardingData').then(localStoragedData => {
+        console.log('empfamily data ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         if (localStoragedData['actionRequired'][this.storedIndex]) {
-          if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')) {
-            let getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
+          if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')
+            && localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'] != null) {
+            getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
+            console.log('empfamily ' + getEpfCount);
             if (getEpfCount > 0) {
               for (let i = 0; i < getEpfCount; i++) {
                 this.addNominees();
               }
               this.updateFormData();
-
             } else {
-              this.addNominees();
+              getEpfCount = undefined;
             }
           } else {
+            console.log('empfamily else');
             this.addNominees();
           }
+        } else {
+          console.log('empfamily store');
         }
-
       });
-    })
+      // if (getEpfCount === undefined) {
+      //   this.addNominees();
+      //   console.log('empfamily else222 ' + getEpfCount);
+      // }
+    });
+
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
         this.onboardingFamilyAcademicForm.reset();
       }
-    })
+    });
 
     this.onboardingFamilyAcademicSubscription = this.onboardingFamilyAcademicForm.statusChanges.subscribe(status => {
       console.log(status);
       console.log(this.onboardingFamilyAcademicForm.value)
-      if (status == 'VALID') {
+
+      let totPercent = 0;
+      console.log('nominee_length ' + this.nomineeForms.length);
+      for (let i = 0; i < this.nomineeForms.length; i++) {
+        console.log('nominee_length_per= ' + JSON.stringify(this.nomineeForms.controls[i]['controls']['nominePercentage'].value));
+        if (this.nomineeForms.controls[i]['controls']['nominePercentage'].value !== null) {
+          totPercent = totPercent + this.nomineeForms.controls[i]['controls']['nominePercentage'].value;;
+          console.log('nominee_length_perrr ' + JSON.stringify(totPercent));
+        }
+        if (totPercent > 100) {
+          console.log('nominee_length_per_100 ' + JSON.stringify(totPercent));
+        } else {
+          this.remainTotal = 100 - totPercent;
+          //gopicg
+        }
+      }
+
+      if (totPercent == 100 && status == 'VALID') {
         let formStatusValues = {
           status: true,
           data: this.onboardingFamilyAcademicForm.value
         }
         //formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
+
         this.messageService.formDataMessage(formStatusValues);
       } else {
         let formStatusValues = {
@@ -70,96 +101,41 @@ export class newEmpFamilyAndAcademic implements OnInit {
       }
     });
   }
+
+
   get nomineeForms() {
     return this.onboardingFamilyAcademicForm.get('nomineeDetail') as FormArray
   }
   setEducation(): FormGroup {
     return this.fb.group({
       qualification: ['', [Validators.required]],
-      institute: ['', [Validators.required]]
+      institute: ['']
     });
   }
   addNominees() {
-    //alert('====');
-    //alert(this.onboardingFamilyAcademicForm.value);
     const nominee = this.fb.group({
       name: ['', [Validators.required]],
       relationship: ['', [Validators.required]],
       contactNumber: [''],
-      nominePercentage: ['', [Validators.required, Validators.max(100)]]
+      nominePercentage: ['', [Validators.required, Validators.max(this.remainTotal)]]
     })
     this.nomineeForms.push(nominee);
-    // let length = this.nomineeList.length + 1;
-    // if (length <= 3) {
-    //   let obj = {
-    //     name: 'nomineeName' + length,
-    //     relationShip: 'nomineeRelationShip' + length,
-    //     percentage: 'nomineePercentage' + length,
-    //     contactNumber: 'nomineeContactNumber' + length
-    //   }
-    //   //this.addDynamicForm(obj);
-    //   // alert(obj.name);
-    //   this.onboardingFamilyAcademicForm.addControl(obj.name, new FormControl('', [Validators.required]));
-    //   this.onboardingFamilyAcademicForm.addControl(obj.relationShip, new FormControl('', [Validators.required]));
-    //   this.onboardingFamilyAcademicForm.addControl(obj.percentage, new FormControl('', [Validators.required, Validators.max(100)]));
-    //   this.onboardingFamilyAcademicForm.addControl(obj.contactNumber, new FormControl(''));
-
-    //   this.nomineeList.push(obj);
-    // this.nomineeList.push(obj);
-    //this.setValidation(obj);
-
-    //}
   }
+
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('educationQualification')) {
-        console.log('datta ===');
-        console.log(localStoragedData);
+        console.log('fam_datta === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
-        // for (let list in localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']) {
-        //   this.onboardingFamilyAcademicForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'][list]);
-        // }
       }
     });
   }
-  //addDynamicForm(objectValues) {
-  // let currentScope = this;
-  // for (let list in objectValues) {
-  //   //alert(objectValues[list]);
-  //   //alert('=======');
-  //   //alert(currentScope.onboardingFamilyAcademicForm.value);
-  //   //currentScope.onboardingFamilyAcademicForm.addControl(objectValues[list], new FormControl('', [Validators.required]));
-  // }
-  // this.nomineeList.push(objectValues);
-  //this.index = this.index + 1;
-  //}
+
   removeNominees(index) {
+    console.log('empfam2- ' + index + ' - ' + this.nomineeForms.at(index));
     this.nomineeForms.removeAt(index);
   }
-  // ngAfterViewInit() {
 
-  // }
-  // setValidation(obj) {
-  //   let formControls = {};
-  //   formControls[obj['name']] = new FormControl('', [Validators.required]);
-  //   formControls[obj['relationShip']] = new FormControl('', [Validators.required]);
-  //   formControls[obj['percentage']] = new FormControl('', [Validators.required]);
-  //   const arrayControl = <FormArray>this.onboardingFamilyAcademicForm.controls['formArray'];
-  //   let newGroup = this.formBuilder.group(formControls);
-  //   arrayControl.push(newGroup);
-
-  //this.onboardingFamilyAcademicForm.addControl(obj['name'], new FormControl('', [Validators.required]));
-  //this.onboardingFamilyAcademicForm.controls[obj['name']].setValidators([Validators.required]);
-  //this.onboardingFamilyAcademicForm.get(obj['name']).updateValueAndValidity();
-
-  //this.onboardingFamilyAcademicForm.addControl(obj['relationShip'], new FormControl('', [Validators.required]));
-  // this.onboardingFamilyAcademicForm.controls[obj['relationShip']].setValidators([Validators.required]);
-  //this.onboardingFamilyAcademicForm.get(obj['relationShip']).updateValueAndValidity();
-
-  //this.onboardingFamilyAcademicForm.addControl(obj['percentage'], new FormControl('', [Validators.required]));
-  // this.onboardingFamilyAcademicForm.controls[obj['percentage']].setValidators([Validators.required]);
-  //this.onboardingFamilyAcademicForm.get(obj['percentage']).updateValueAndValidity();
-  //}
 
   ngOnDestroy() {
     this.onboardingFamilyAcademicSubscription.unsubscribe();

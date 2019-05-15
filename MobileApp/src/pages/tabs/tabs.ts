@@ -142,6 +142,10 @@ export class TabsPage {
                 // this.market.open(this.appPackageName);
                 // this.platform.exitApp();
             }
+        },err=>{
+          console.log("Error in getting version from server");
+          console.log(err);
+          this.navCtrl.setRoot(LoginPage);
         }
     );
 
@@ -157,25 +161,24 @@ export class TabsPage {
               //     if(status){
               //         this.databaseProvider.getSiteData().then(sites=>{
               //             console.log("Site information from sqlite - ");
-              
+              //
               //             console.log(sites);
               //             if(sites && sites.length>0){
-              //               console.log("Sqlite tables found");
               //                 this.databaseProvider.addSites();
-              //                 this.databaseProvider.addEmployee();
+              //                 // this.databaseProvider.addEmployee();
               //                 this.databaseProvider.addJobs();
+              //                 this.databaseProvider.addAssetData();
               //             }else{
-              //                 console.log("No Sqlite tables found");
               //                 this.databaseProvider.createAllTables();
               //             }
               //         },err=>{
               //             console.log("Error in getting site information from sqlite");
               //             console.log(err);
-              
+              //
               //         });
-              
+              //
               //     }
-              
+              //
               // })
           }else {
             console.log("data not sync");

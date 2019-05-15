@@ -130,7 +130,7 @@
                                 <ion-scroll scrollX="true">
                                   <span *ngFor="let emp of employee;let i of index">
                                     <button class="scroll-item" *ngIf="emp.designation != 'Client'" ion-button round  (click)="activeEmployee(emp,i)" [color]="employeeActive && i==empIndex ? 'primary' : 'light'">
-                                      <p class="siteName" >{{emp.fullName}} <br> <strong>{{emp.designation}}</strong></p>
+                                        <p class="siteName">{{emp.fullName}} <br> <strong>{{emp.designation}}</strong></p>
                                     </button>
                                   </span>
 

@@ -211,7 +211,7 @@ export class EmployeeSiteListPage {
                             console.log(this.longitude);
                             this.closeLoader();
                             this.showLoader('Marking Attendance');
-                            this.attendanceService.markAttendanceCheckIn(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData).subscribe(response => {
+                            this.attendanceService.markAttendanceCheckIn(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData,null,false).subscribe(response => {
                               console.log(response);
                               this.closeLoader();
                               if (response && response.status === 200) {
@@ -250,7 +250,7 @@ export class EmployeeSiteListPage {
                             this.closeLoader();
                             this.showLoader('Marking Attendance');
 
-                            this.attendanceService .markAttendanceCheckOut(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData, this.attendanceId).subscribe(response => {
+                            this.attendanceService .markAttendanceCheckOut(siteId, this.employeeEmpId, this.lattitude, this.longitude, imageData, this.attendanceId,null,false).subscribe(response => {
                               console.log(response);
                               this.closeLoader();
                               if (response && response.status === 200) {

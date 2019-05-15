@@ -185,7 +185,7 @@ export class CreateTicket {
           {
             this.empSelect=false;
             this.empPlace="Employee";
-            this.employee= response.transactions;
+            this.employee=response.transactions;
             console.log("employeeresponse",this.employee);
           }
           else
@@ -285,88 +285,88 @@ export class CreateTicket {
                   },{
                       text:'Confirm',
                       handler:()=> {
-                          console.log("creating ticket..", this.emp);
-                          this.eMsg = "";
-                          this.siteId = this.siteIdd;
-                          console.log(this.siteId);
-                          this.userId = this.site.userId;
-                          console.log("category" + this.category);
-                          this.newTicket = {
-                              "title": this.title,
-                              "siteId": this.siteId,
-                              "description": this.description,
-                              "comments": this.comments,
-                              "employeeId": this.emp.id,
-                              "userId": this.userId,
-                              "severity": this.severity,
-                              "category": this.category,
+            console.log("creating ticket..",this.emp);
+              this.eMsg="";
+            this.siteId = this.siteIdd;
+            console.log( this.siteId);
+              this.userId=this.site.userId;
+              console.log("category" + this.category);
+              this.newTicket={
+                  "title":this.title,
+                  "siteId":this.siteId,
+                  "description":this.description,
+                  "comments":this.comments,
+                  "employeeId":this.emp.id,
+                  "userId":this.userId,
+                  "severity":this.severity,
+                  "category":this.category,
 
-                          };
-                          console.log("new ticket", this.newTicket);
+              };
+              console.log("new ticket",this.newTicket);
 
                           if (this.assetDetails) {
-                              this.newTicket.assetId = this.assetDetails.id;
+                  this.newTicket.assetId = this.assetDetails.id;
 
-                          }
+              }
 
-                          this.jobService.createTicket(this.newTicket).subscribe(
-                              response => {
-                                  if (response.errorStatus) {
-                                      demo.showSwal('warning-message-and-confirmation-ok', response.errorMessage)
-                                  } else {
-                                      console.log(response);
+              this.jobService.createTicket(this.newTicket).subscribe(
+                  response=> {
+                      if(response.errorStatus){
+                          demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
+                      }else{
+                          console.log(response);
                                       this.cs.closeAll();
                                       demo.showSwal('success-message-and-ok','Ticket','Ticket Created Sucessfully..');
 
-                                      //Ticket image upload on successfully creating ticket.
-                                      if (this.takenImages.length > 0) {
-                                          for (var i = 0; i < this.takenImages.length; i++) {
-                                              let token_header = window.localStorage.getItem('session');
-                                              let options: FileUploadOptions = {
-                                                  fileKey: 'ticketFile',
+                          //Ticket image upload on successfully creating ticket.
+                          if(this.takenImages.length>0){
+                              for(var i=0;i<this.takenImages.length;i++){
+                                  let token_header=window.localStorage.getItem('session');
+                                  let options: FileUploadOptions = {
+                                      fileKey: 'ticketFile',
                                                   fileName: response.employeeEmpId + '_ticketImage_' + response.id + '.jpg',
-                                                  headers: {
-                                                      'X-Auth-Token': token_header
-                                                  },
-                                                  params: {
-                                                      ticketId: response.id
-                                                  }
-                                              };
+                                      headers:{
+                                          'X-Auth-Token':token_header
+                                      },
+                                      params:{
+                                          ticketId:response.id
+                                      }
+                                  };
 
-                                              this.fileTransfer.upload(this.takenImages[i], this.config.Url + 'api/ticket/image/upload', options)
-                                                  .then((data) => {
-                                                      console.log(data);
-                                                      console.log("image upload");
-                                                      this.cs.closeLoader();
+                                  this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/ticket/image/upload', options)
+                                      .then((data) => {
+                                          console.log(data);
+                                          console.log("image upload");
+                                          this.cs.closeLoader();
 
-                                                  }, (err) => {
-                                                      console.log(err);
-                                                      console.log("image upload fail");
+                                      }, (err) => {
+                                          console.log(err);
+                                          console.log("image upload fail");
                                                       this.cs.closeAll();
                                                       // demo.showSwal('warning-message-and-confirmation-ok','Unable to create Ticket, please try again later');
 
-                                                  })
-                                          }
+                                      })
+                              }
 
 
                                       }else {
                                           this.cs.closeAll();
-                                      }
+                          }
 
-                                      this.navCtrl.setRoot(Ticket);
-                                  }
-                              },
-
-                              error => {
-                                  console.log(error);
-                                  if (error.type == 3) {
-                                      this.msg = 'Server Unreachable'
-                                  }
-
-                                  this.cs.showToastMessage(this.msg, 'bottom');
-                              }
-                          )
+                          this.navCtrl.setRoot(Ticket);
                       }
+                      },
+
+                  error=>{
+                      console.log(error);
+                                  if (error.type == 3) {
+                          this.msg='Server Unreachable'
+                      }
+
+                      this.cs.showToastMessage(this.msg,'bottom');
+                  }
+              )
+          }
                   }]
               })
 

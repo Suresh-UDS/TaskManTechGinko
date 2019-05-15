@@ -22,6 +22,7 @@ import set = Reflect.set;
 import {ScanQR} from "../jobs/scanQR";
 import{OfflineAsset} from "../offline-asset/offline-asset";
 import {ScanQRAsset} from "../asset-list/scanQR-asset";
+import {DatabaseProvider} from "../../providers/database-provider";
 
 /**
  * Generated class for the OfflineAssetlist page.
@@ -54,7 +55,7 @@ OfflineAssetList {
               public modalCtrl:ModalController,private diagnostic: Diagnostic,private sqlite: SQLite,
               public componentService:componentService, public navCtrl: NavController, public navParams: NavParams,
               public modalController:ModalController, public qrScanner:QRScanner, public assetService:AssetService,
-              public dbService:DBService,private network:Network) {
+              public dbService:DBService,private network:Network, private dbProvider: DatabaseProvider) {
       this.assetList = [];
       this.test = [];
       this.searchCriteria = {};
@@ -62,27 +63,20 @@ OfflineAssetList {
 
     ionViewWillEnter()
     {
-        this.componentService.showLoader("Asset List")
-        console.log("Check Network Connection");
-        if(this.network.type!='none'){
+        this.componentService.showLoader("Asset List");
 
-        }else{
+        //     //offline
+        this.dbProvider.getAssetData().then(
+            (res)=>{
+                this.componentService.closeLoader();
+                console.log(res);
+                this.assetList = res;
+            },
+            (err)=>{
+                this.assetList = [];
+                this.componentService.closeLoader()
+        })
 
-            //     //offline
-            setTimeout(() => {
-                this.dbService.getAsset().then(
-                    (res)=>{
-                        this.componentService.closeLoader();
-                        console.log(res);
-                        this.assetList = res;
-                    },
-                    (err)=>{
-                        this.assetList = [];
-                        this.componentService.closeLoader()
-                    })
-            },3000);
-
-        }
 
     }
 
@@ -102,21 +96,27 @@ OfflineAssetList {
         {
             // this.componentService.closeLoader();
             var text = this.navParams.get('text');
-
-
-            this.dbService.getAssetByCode(text).then(
+            console.log("Asset scanned");
+            console.log(text);
+            this.dbProvider.getAssetDataByCode(text).then(
                 response=>{
-                    this.componentService.showToastMessage('Asset found, navigating..','bottom')
-                    console.log("Search by asset code response");
                     console.log(response);
-                    window.document.querySelector('ion-app').classList.add('transparentBody')
-                    this.navCtrl.push(OfflineAsset,{assetDetails:response[0]}); //offline
+                    if(response ){
+                        this.componentService.showToastMessage('Asset found, navigating..','bottom');
+                        console.log("Search by asset code response");
+                        console.log(response);
+                        window.document.querySelector('ion-app').classList.add('transparentBody');
+                        this.navCtrl.push(OfflineAsset,{assetDetails:response}); //offline
+                    }else{
+                        this.componentService.showToastMessage('Asset not found','bottom');
+                    }
+
 
                 },
                 err=>{
                     console.log("Error in getting asset by code");
                     console.log(err);
-                    this.componentService.showToastMessage('Asset not found, please try again','bottom')
+                    this.componentService.showToastMessage('Asset not found, please try again','bottom');
                 }
             )
 

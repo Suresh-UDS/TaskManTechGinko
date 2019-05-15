@@ -40,7 +40,7 @@ export class AssetList {
 
     assetList:any;
     searchCriteria:any;
-    page:1;
+    page:any;
     totalPages:0;
     open:any;
     qr:any;
@@ -66,9 +66,7 @@ export class AssetList {
     this.assetList = [];
     this.test = [];
     this.searchCriteria = {};
-    // this.qr = this.navParams.get('qr')
-
-
+    this.page = 1;
   }
 
   ionViewWillEnter()
@@ -77,70 +75,45 @@ export class AssetList {
       if(this.navParams.get('text'))
       {
 
-
       }else{
 
           console.log("Check Network Connection");
           // this.componentService.showLoader("Loading Assets");
 
           var searchCriteria ={
-              currPage:this.page+1
+              currPage:this.page
           };
 
           this.getAsset(searchCriteria)
 
-              //     //offline
-              // setTimeout(() => {
-              //     this.dbService.getAsset().then(
-              //         (res)=>{
-              //             this.componentService.closeLoader();
-              //             console.log(res);
-              //             this.assetList = res;
-              //         },
-              //         (err)=>{
-              //             this.assetList = [];
-              //             this.componentService.closeLoader()
-              //         })
-              // },3000);
-
       }
-
 
   }
 
   ionViewDidLoad() {
 
       console.log('ionViewDidLoad AssetList');
-      // this.componentService.showLoader("Loading Assets");
-         this.open = true;
-      // After Set Pagination
-      // var searchCriteria={}
-      // this.getAsset(searchCriteria)
+      this.open = true;
       if(this.navParams.get('text'))
       {
-          // this.componentService.closeLoader();
           var text = this.navParams.get('text');
-
           var searchCriteria ={
-              currPage:this.page+1
+              currPage:this.page
           };
-
-          this.getAsset(searchCriteria)
-
+          this.getAsset(searchCriteria);
           this.assetService.getAssetByCode(text).subscribe(
               response=>{
                   if(response.errorStatus){
                       demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                   }else{
-                      this.componentService.showToastMessage('Asset found, navigating..','bottom')
+                      this.componentService.showToastMessage('Asset found, navigating..','bottom');
                       console.log("Search by asset code response");
                       console.log(response);
-                      window.document.querySelector('ion-app').classList.add('transparentBody')
+                      window.document.querySelector('ion-app').classList.add('transparentBody');
                       // this.navCtrl.setRoot(AssetList,{assetDetails:response,qr:true});
                       this.navCtrl.push(AssetView,{assetDetails:response}); //online
                       // this.navCtrl.push(AssetView,{assetDetails:response[0]}); //offline
                   }
-
               },
               err=>{
                   console.log("Error in getting asset by code");
@@ -148,16 +121,11 @@ export class AssetList {
                   this.componentService.showToastMessage('Asset not found, please try again','bottom')
               }
           )
-
-
-
       }
 
   }
 
-
-    saveReadingToServer(readings)
-    {
+  saveReadingToServer(readings){
         return new Promise((resolve,reject)=>{
             for(var i=0;i<readings.length;i++)
             {
@@ -180,7 +148,6 @@ export class AssetList {
 
         })
     }
-
 
     setDataSync()
     {
@@ -205,7 +172,6 @@ export class AssetList {
                                                                 },
                                                                 error=>{
                                                                     console.log(error)
-
                                                                 })
                                                             })
                                                         }
@@ -299,11 +265,11 @@ export class AssetList {
                                                                         },err=>{
                                                             this.componentService.closeAll();
                                                             demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
-                                                        })
+                                                                        })
                                                                 },err=>{
                                                     this.componentService.closeAll();
                                                     demo.showSwal('warning-message-and-confirmation-ok','Error in syncing Data');
-                                                })
+                                                                })
                                                         // })
                                                 // })
                                 },err=>{
@@ -316,8 +282,6 @@ export class AssetList {
             },3000)
         })
     }
-
-
 
 
   getAsset(searchCriteria)
@@ -338,44 +302,6 @@ export class AssetList {
           }
       )
   }
-
-  // openFilters(){
-  //     this.open = false;
-  //     console.log("Opening filter modal");
-  //     let modal = this.modalController.create(AssetFilter,{},{cssClass : 'asset-filter',showBackdrop : true});
-  //     modal.onDidDismiss(data=>{
-  //         console.log("Modal dismissed");
-  //         this.open = true;
-  //         console.log(data);
-  //         var searchCriteria = {
-  //             siteId:data.siteId,
-  //             projectId:data.projectId,
-  //         };
-  //         this.assetService.searchAssets(searchCriteria).subscribe(
-  //             response=>{
-  //                 this.componentService.closeAll();
-  //                 console.log("Asset Search Filter Response");
-  //                 console.log(response);
-  //                 // if(response.errorStatus){
-  //                 //       this.componentService.closeAll();
-  //                 //     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
-  //                 // }else{
-  //                 //     this.componentService.closeLoader();
-  //                 //     console.log("Asset search filters response");
-  //                 //     console.log(response);
-  //                 // }
-  //             },err=>{
-  //                 this.componentService.closeLoader();
-  //                 console.log("Error in filtering assets");
-  //                 console.log(err);
-  //             }
-  //         )
-  //         // this.getAsset(searchCriteria);
-  //
-  //     });
-  //     modal.present();
-  //
-  // }
 
     openFilters() {
         let modal = this.modalCtrl.create(AssetFilter,{},{cssClass:'asset-filter',showBackdrop:true});
@@ -417,7 +343,7 @@ export class AssetList {
     }
 
   scanQRCode(){
-      window.document.querySelector('ion-app').classList.add('transparentBody')
+      window.document.querySelector('ion-app').classList.add('transparentBody');
       this.qrScanner.prepare().then((status:QRScannerStatus)=>{
           console.log("Opening Scanner");
           this.qrScanner.show();
@@ -425,7 +351,7 @@ export class AssetList {
               console.log('Scanned Something',text);
               this.qrScanner.hide();
               scanSub.unsubscribe();
-              window.document.querySelector('ion-app').classList.add('transparentBody')
+              window.document.querySelector('ion-app').classList.add('transparentBody');
               this.navCtrl.push(AssetView);
           });
           if(status.authorized){
@@ -443,14 +369,6 @@ export class AssetList {
 
   scanQR(){
       this.navCtrl.push(ScanQRAsset);
-
-
-      // let modal = this.modalCtrl.create(ScanQR);
-      // modal.present();
-      //
-      // modal.onDidDismiss(data => {
-      //     this.viewAsset(data)
-      // });
   }
 
   searchAssets(){
@@ -513,10 +431,5 @@ export class AssetList {
 
 
     }
-
-
-
-
-
 
 }

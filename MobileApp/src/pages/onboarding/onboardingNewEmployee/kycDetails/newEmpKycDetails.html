@@ -5,7 +5,7 @@
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                         <label class="control-label trequired">Aadhar card no</label>
-                        <input class="form-control" type="text" formControlName="aadharNumber" required>
+                        <input class="form-control" type="number" formControlName="aadharNumber" required>
                     </div>
                     <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">Name as on aadhar</label>
@@ -14,51 +14,30 @@
                     </div> -->
                 </div>
 
-                <!-- <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">DOA as on card</label>
-                        <input class="form-control" type="date" name="doaasAadharCard" [(ngModel)]="kycFormData.doaAatharCard"
-                            required>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">City as on Aadhar Card</label>
-                        <input class="form-control" type="text" name="cityasAatharCard" [(ngModel)]="kycFormData.cityAatharCard"
-                            required>
-                    </div>
-                </div> -->
+
 
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
-                        <label class="trequired">Aathar Front View</label>
+                        <label class="trequired">Aadhar Front View</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.aadharPhotoCopy" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('front')" class="mdImage" />
+                            <img [src]="userAllKYCData.aadharPhotoCopy" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('front')" class="mdImage" />
                         </ion-avatar>
                     </div>
-                    <!-- <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
-                        <label class="trequired">Aathar Back View</label>
-                        <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.aatharBack" (click)="getImageData('back')" class="mdImage" />
-                        </ion-avatar>
-                    </div> -->
+
                 </div>
 
                 <div class="row form-group">
-                    <!-- <div padding class="col-md-12 col-sm-12 col-xs-12 padding0">
-                        <div class="col-md-3 col-sm-3 col-xs-3 padding0">
-                            <ion-toggle checked="false" name="checkingBankAccount" (ionChange)="getPassBook(hasBankAccount)"
-                                [(ngModel)]="hasBankAccount"></ion-toggle>
-                        </div>
-                        <span class="spanText">Has Bank Details</span>
-                    </div> -->
                     <div *ngFor="let list of onboardingKYCForm.get('bankDetails').controls; let i = index;"
                         formArrayName="bankDetails">
                         <div [formGroupName]="i">
                             <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                                 <label class="control-label trequired">Account Number</label>
-                                <input class="form-control" type="text" formControlName="accountNo">
+                                <input class="form-control" type="number" maxlength="15" formControlName="accountNo">
                             </div>
-                            <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                            <div   class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                                 <label class="control-label trequired">IFSC Number</label>
+                                <!-- gopicg -->
                                 <input class="form-control" type="text" formControlName="ifsc">
                             </div>
                         </div>
@@ -66,7 +45,8 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.prePrintedStatement" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('passbook')" class="passbookImage" />
+                            <img [src]="userAllKYCData.prePrintedStatement" onError="src = 'assets/imgs/placeholder.png';"
+                                (click)="presentActionSheet('passbook')" class="passbookImage" />
                         </ion-avatar>
                     </div>
                 </div>
@@ -76,17 +56,80 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <label class="trequired">Employee Signature</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.employeeSignature" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('sign')" class="mdImage" />
+                            <img [src]="userAllKYCData.employeeSignature" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('sign')" class="mdImage" />
                         </ion-avatar>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <label class="trequired">Profile Picture</label>
                         <ion-avatar item-start class="inlineElement">
-                            <img [src]="userAllKYCData.profilePicture" onError="src = 'assets/imgs/placeholder.png'" (click)="getImageData('profile')" class="mdImage" />
+                            <img [src]="userAllKYCData.profilePicture" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('profile')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <ion-buttons end>
+                            <button (click)="launchApp()" small ion-button>Fingerprint Scanner</button>
+                        </ion-buttons>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Right</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.thumbImpressenRight" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpRight')" class="mdImage" />
                         </ion-avatar>
                     </div>
 
-                    <!-- <div class="row" style="align-items: center;">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label class="trequired">FingerPrint Left</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.thumbImpressenLeft" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('fpLeft')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+                 <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label>Driving License</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.drivingLicense" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('dLine')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        <label>Pancard</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.pancardCopy" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('panCard')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div> 
+                
+                <div class="row form-group">                    
+                    <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+                        <label>Voter Id</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.voterId" onError="src = 'assets/imgs/placeholder.png'" 
+                            (click)="presentActionSheet('voter')"
+                                class="mdImage" />
+                        </ion-avatar>
+                    </div>
+                </div>
+
+
+                <!-- <div class="row form-group">
+                    <div <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+                        
+                    </div>
+                </div> -->
+
+                <!-- <div class="row" style="align-items: center;">
                         <div class="col-md-4 col-sm-4 col-xs-4 padding0">
                             <label class="headerText trequired">KYC Details</label>
                         </div>
@@ -123,7 +166,6 @@
                             </div>
                         </div>
                     </div> -->
-                </div>
             </form>
         </div>
     </div>

@@ -6,6 +6,9 @@ import{SiteService} from "../../service/siteService";
 import{JobService} from "../../service/jobService";
 import{EmployeeService} from "../../service/employeeService";
 import { DatePicker } from '@ionic-native/date-picker';
+
+declare var demo;
+
 /**
  * Generated class for the AssetFilter page.
  *
@@ -232,10 +235,16 @@ export class JobFilter{
             date => {
                 this.fromDate=date;
                 console.log('Got date: ', date);
+                console.log(this.fromDate);
                 if(this.fromDate && this.toDate)
                 {
-                    console.log('view button true');
-                    this.viewButton=true;
+                    if(this.fromDate<this.toDate){
+                        console.log('view button true');
+                        this.viewButton=true;
+                    }else{
+                        this.viewButton = false;
+                        demo.showSwal('warning-message-and-confirmation-ok','From date cannot be greater than To date');
+                    }
                 }
 
             },
@@ -256,8 +265,13 @@ export class JobFilter{
                 console.log('Got date: ', date);
                 if(this.fromDate && this.toDate)
                 {
-                    console.log('view button true');
-                    this.viewButton=true;
+                    if(this.fromDate<this.toDate){
+                        console.log('view button true');
+                        this.viewButton=true;
+                    }else{
+                        this.viewButton = false;
+                        demo.showSwal('warning-message-and-confirmation-ok','From date cannot be greater than To date');
+                    }
                 }
 
             },
@@ -296,9 +310,13 @@ export class JobFilter{
             this.searchCriteria.siteId = this.selectedSite.id;
         }
         if(this.emp && this.emp.id>0){
-            this.searchCriteria.employeeId = this.selectedProject.id;
+            this.searchCriteria.employeeId = this.emp.id;
         }
 
+        console.log("SEarch criteria");
+        console.log(this.searchCriteria);
+        this.searchCriteria.checkInDateTimeFrom = this.fromDate;
+        this.searchCriteria.checkInDateTimeTo = this.toDate;
         this.viewCtrl.dismiss(this.searchCriteria);
     }
 

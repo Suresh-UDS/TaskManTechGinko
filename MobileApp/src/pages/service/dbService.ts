@@ -78,11 +78,6 @@ export class DBService {
     //***create table from api response***/
 
     //Asset table
-
-    createAndInitializeTables(){
-
-    }
-
     setAsset()
     {
         console.log(this.db);
@@ -2356,7 +2351,7 @@ export class DBService {
         console.log(id);
         param = data;
         console.log(param);
-        var tablename = 'checklist'
+        var tablename = 'checklist';
         var createQuery =  "create table if not exists checklist(checklistItemName TEXT,checklistName TEXT,image_1 TEXT,jobId INT,completed TEXT,remarks TEXT)";
         var insertQuery = "insert into checklist(checklistItemName,checklistName,image_1,jobId,completed,remarks) values(?,?,?,?,?,?)";
         var updateQuery = "update checklist set checklistItemName=?,checklistName=?,image_1=?,completed=?,remarks=? where jobId='"+jobId+"' AND id='"+id+"'";

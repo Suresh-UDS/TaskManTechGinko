@@ -1,0 +1,54 @@
+<ion-content class="bg-white">
+
+    <div class="LogoTop">
+        <img src="assets/imgs/logo.png">
+    </div>
+
+    <div class="SplashLoader" *ngIf="offline">
+        <!--<img src="assets/imgs/loader.svg" alt="" />-->
+        <p>Network Disconnected, Please connect via 4G or wifi</p>
+        <img src="assets/imgs/no-signal.png" alt="" />
+    </div>
+
+    <div class="SplashLoader" *ngIf="startSync">
+        <!--<img src="assets/imgs/loader.svg" alt="" />-->
+        <p>Syncing Please wait, do not close app or disconnect internet....</p>
+
+        <p>{{syncMessage}}</p>
+        <img src="assets/imgs/sync-loader.svg" alt="" />
+
+    </div>
+
+    <div class="SplashLoader" *ngFor="let msg of errorMessages">
+        <!--<img src="assets/imgs/loader.svg" alt="" />-->
+        <p></p>
+
+        <p>{{msg.msg}}</p>
+        <img src="assets/imgs/warning.svg" alt="" />
+
+    </div>
+
+    <div class="SplashLoader" *ngIf="syncComplete">
+        <!--<img src="assets/imgs/loader.svg" alt="" />-->
+        <p>Sync Completed</p>
+        <img src="assets/imgs/completed.svg" alt="" />
+
+    </div>
+
+
+    <div text-center padding >
+        <ion-row class="margin padding">
+            <ion-col col-12 >
+                <button *ngIf="online && !startSync" class="btn btn-warning padding" (click)="syncJobData()">Start Syncing</button>
+                <button *ngIf="jobsError" class="btn btn-warning padding" (click)="syncAttendanceData()">Continue Syncing Attendance</button>
+                <button *ngIf="attendanceError" class="btn btn-warning padding" (click)="syncAssetData()">Continue Syncing Asset</button>
+                <button *ngIf="assetError" class="btn btn-warning padding" (click)="createTablesAndSyncData()">Continue Syncing Data</button>
+                <button *ngIf="syncComplete || error" class="btn btn-warning padding" (click)="goOnline()">Dashboard</button>
+            </ion-col>
+
+        </ion-row>
+    </div>
+
+
+</ion-content>
+

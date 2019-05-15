@@ -10,14 +10,14 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{assetDetails.title}}</ion-title>
-    <ion-buttons right [ngSwitch]="true" >
+    <ion-buttons *ngIf="assetList && assetList.config && assetList.config.length>0" right [ngSwitch]="true" >
       <!--<div  *ngIf="assetDetails.ppms" >-->
         <!--<button ion-button icon-only class="padding-right10"  *ngSwitchCase=" categories === 'ppm' " (click)="showCalendar()">-->
           <!--<ion-icon ios="ios-calendar" md="md-calendar" class="green fnt-25 padding-right10" ></ion-icon>-->
         <!--</button>-->
       <!--</div>-->
 
-        <button ion-fab mini color="primary" class="margin0" *ngSwitchCase=" categories === 'readings'" (click)="getReadings()">
+        <button ion-fab mini color="primary"  class="margin0" *ngSwitchCase=" categories === 'readings'" (click)="getReadings()">
             <ion-icon name="speedometer" class="fnt-35"></ion-icon>
         </button>
 

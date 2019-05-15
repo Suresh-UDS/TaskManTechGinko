@@ -11,6 +11,7 @@ import {Camera, CameraOptions} from "@ionic-native/camera";
 import{AssetService} from "../service/assetService";
 import {CalenderPage} from "../calender-page/calender-page";
 import{SQLite,SQLiteObject } from "@ionic-native/sqlite";
+import {DatabaseProvider} from "../../providers/database-provider";
 
 
 /**
@@ -35,7 +36,7 @@ export class OfflineGetassetreadings {
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService: componentService, public popoverCtrl: PopoverController, public camera: Camera,
                 public assetService: AssetService, public viewCtrl: ViewController, private sqlite: SQLite,
-                private dbService: DBService) {
+                private dbService: DBService, private dbProvider: DatabaseProvider) {
         this.assetDetails = this.navParams.get('assetDetails');
         console.log(this.navParams.get('assetDetails'));
         this.dateTime = new Date();
@@ -46,7 +47,6 @@ export class OfflineGetassetreadings {
 
 
     ionViewWillEnter() {
-        this.componentService.showLoader("Readings")
         this.getAssetConfigsReading();
     }
 
@@ -68,18 +68,19 @@ export class OfflineGetassetreadings {
 
 
     getAssetConfigsReading() {
+        this.componentService.showLoader("Readings");
         console.log("Get Asset reading page");
         console.log(this.assetDetails);
         console.log(this.assetDetails.config);
-        this.dbService.getConfig(this.assetDetails.assettype, this.assetDetails.id).then(
+        this.dbProvider.getAssetConfigData(this.assetDetails.assettype, this.assetDetails.id).then(
             response => {
                 console.log("Asset config details");
+                this.componentService.closeLoader();
                 console.log(response);
                 this.assetConfig = response;
                 for (let config of this.assetConfig) {
                     this.dbService.getPreviousReading(config.assetId, config.id).then(
                         response => {
-                            this.componentService.closeLoader()
                             console.log("Get Asset Previous readings");
                             console.log(response[0]);
                             if (response[0].consumptionMonitoringRequired) {
@@ -96,29 +97,12 @@ export class OfflineGetassetreadings {
                                 }
                             }
 
-                            // if(response.initialValue<0){
-                            //
-                            //     if(response.value>0){
-                            //         config.previousValue=response.value;
-                            //     }
-                            // }
-                            // else if(response.finalValue<=0)
-                            // {
-                            //     config.previousValue=response.initialValue;
-                            //     config.reading=response.initialValue;
-                            //     console.log(this.assetConfig);
-                            //     config.previousReadingId=response.id;
-                            // }else{
-                            //     config.previousValue=response.finalValue;
-                            //     config.reading=response.initialValue;
-                            //     console.log(this.assetConfig);
-                            //
-                            // }
+
                         }
                     )
                 }
             }, err => {
-                this.componentService.closeLoader()
+                this.componentService.closeLoader();
                 console.log("Error in getting asset config");
                 console.log(err);
             }

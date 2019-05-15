@@ -99,7 +99,7 @@
                                 </ion-row>
                             </div>
                             <div text-center class="white-bg margin-top20">
-                                <button type="submit" class="btn btn-warning margin-auto" (click)="saveReading(config)">Submit Reading</button>
+                                <button type="submit" class="btn btn-warning margin-auto" *ngIf="enableButton" (click)="saveReading(config)">Submit Reading</button>
                                 <!--<button type="submit" class="btn btn-warning margin-auto" (click)="assetSaveReadingLocal(config)">Submit Reading</button>-->
                             </div>
                         </div>
@@ -157,7 +157,7 @@
                             </div>
                             <div text-center class="white-bg margin-top20">
                                 <!--<button type="submit" class="btn btn-warning margin-auto" (click)="assetSaveReadingLocal(config)">Submit Reading</button>-->
-                                <button type="submit" class="btn btn-warning margin-auto" (click)="saveReading(config)">Submit Reading</button>
+                                <button type="submit" class="btn btn-warning margin-auto" *ngIf="enableButton" (click)="saveReading(config)">Submit Reading</button>
                             </div>
                         </div>
                     </div>

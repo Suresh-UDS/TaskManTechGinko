@@ -20,9 +20,9 @@ import{TicketFilter} from "./ticket-filter/ticket-filter";
 })
 export class Ticket {
 
-  tickets:any;
-  clientFilter:any;
-  siteFilter:any;
+    tickets:any;
+    clientFilter:any;
+    siteFilter:any;
   fromDate:any;
   toDate:any;
   searchCriteria:any;

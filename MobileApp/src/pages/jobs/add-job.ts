@@ -223,53 +223,63 @@ export class CreateJobPage {
                 console.log("============title");
                 this.eMsg="title";
                 this.field="title";
+                this.component.showToastMessage("Please enter title...", "bottom");
             }
             else if(!this.description)
             {
                 console.log("============desc");
                 this.eMsg="description";
                 this.field="description";
+                this.component.showToastMessage("Please enter description...","bottom");
             }
             else if(!this.siteName)
             {
                 console.log("============site");
                 this.eMsg="siteName";
                 this.field="siteName";
+                this.component.showToastMessage("Site name cannot be empty", "bottom");
             }
             else if(!this.employ && this.empPlace=="Employee")
             {
                 console.log("============employ");
                 this.eMsg="employ";
                 this.field="employ";
+                this.component.showToastMessage("Please select an Employee... ","bottom");
             }
             else if(!this.startDate)
             {
                 console.log("============sdate");
                 this.eMsg="startDate";
                 this.field="startDate";
+                this.component.showToastMessage("Please select Start Date","bottom");
             }
             else if(!this.startTime)
             {
                 console.log("============stime");
                 this.eMsg="startTime";
                 this.field="startTime";
+                this.component.showToastMessage("Please select Start Time ", "bottom");
+
             }
             else if(!this.endDate)
             {
                 console.log("============edate");
                 this.eMsg="endDate";
                 this.field="endDate";
+                this.component.showToastMessage("Please select End Date","bottom");
             }
             else if(!this.endTime)
             {
                 console.log("============etime");
                 this.eMsg="endTime";
                 this.field="endTime";
+                this.component.showToastMessage("Please select End Time", "bottom");
             }
             else if(!this.title && !this.description && !this.siteName && !this.employ && !this.startDate && !this.startTime && !this.endDate && !this.endTime)
             {
                 console.log("============all");
                 this.eMsg="all";
+                this.component.showToastMessage("Please enter the mandatory details","bottom");
             }
 
         }

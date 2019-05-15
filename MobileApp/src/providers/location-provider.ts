@@ -19,7 +19,7 @@ export class LocationProvider {
 
     getLocation(): Observable <any>{
         let config = {
-            desiredAccuracy: 0,
+            desiredAccuracy: 20,
             stationaryRadius: 20,
             distanceFilter: 10,
             debug: true,

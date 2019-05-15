@@ -43,6 +43,7 @@ export class ViewQuotationPage {
             }
         }
 
+
     }
 
     addTotal(i,qty,cost)

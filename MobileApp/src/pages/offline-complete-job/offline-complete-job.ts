@@ -20,6 +20,7 @@ import {DBService} from "../service/dbService";
 import {OfflineAsset} from "../offline-asset/offline-asset";
 import {OfflineAssetList} from "../offline-assetlist/offline-assetlist";
 import {OfflinePage} from "../offline-page/offline-page";
+import {DatabaseProvider} from "../../providers/database-provider";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 declare  var demo;
@@ -57,6 +58,7 @@ export class OfflineCompleteJob {
   fileTransfer: FileTransferObject = this.transfer.create();
 
   checkListItems:any;
+    checkListItemsBefore:any;
   checkListOffline: any;
   showIcon:any;
   index:any;
@@ -71,11 +73,12 @@ export class OfflineCompleteJob {
   constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
               private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
               private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer,
-              private file: File,private modalCtrl:ModalController,imageViewerCtrl: ImageViewerController,private dbService: DBService) {
+              private file: File,private modalCtrl:ModalController,imageViewerCtrl: ImageViewerController,private dbService: DBService, private dbProvider:DatabaseProvider) {
     this._imageViewerCtrl = imageViewerCtrl;
     this.spinner=true;
     this.categories = 'details';
     this.checkListItems=[];
+    this.checkListItemsBefore=[];
     this.checkListOffline = [];
     this.takenImages=[];
     this.taken64Images = [];
@@ -112,53 +115,48 @@ export class OfflineCompleteJob {
   ionViewDidLoad() {
     this.component.showLoader('Loading Job Details');
 
-    setTimeout(()=>{
-      console.log("job id ",this.jobDetails.id);
-      this.dbService.getSavedImages(this.jobDetails.id).then(
-        (res)=> {
-          console.log("saved images", res);
-          this.savedImages = res;
-          console.log("savedimages", this.savedImages);
-          if (this.savedImages.length > 0) {
-            for (var i = 0; i < this.savedImages.length; i++) {
-            // console.log("saved images",this.savedImages[i].image);
-              let imageData = this.savedImages[i].image;
-              let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
-              // let base64Image = 'data:image/jpeg;base64,' + this.savedImages[i].image;
-            this.completedImages.push(base64Image);
-            this.component.closeLoader();
-
-          }
-        }else {
-            this.component.closeLoader();
-          }
-        },(err)=>{
-          console.log("error",err)
-          this.savedImages = [];
-          this.component.closeLoader();
-        }
-      )
-      console.log(this.jobDetails.id +"saved checklist")
-      this.dbService.getCheckList(this.jobDetails.id).then(
-        (res)=>{
-          console.log("saved checklist");
-          console.log(res);
-          this.checkListItems=res;
-          for(var i =0;i<this.checkListItems.length; i++){
-            if(this.checkListItems[i].completed=="false"){
-              this.checkListItems[i].completeOffline = false;
-            }else {
-              this.checkListItems[i].completeOffline = true;
+    this.dbProvider.getJobImages(this.jobDetails.id).then(jobImages=>{
+        console.log("Saved Images from SQLite");
+        this.savedImages= jobImages;
+        if(this.savedImages && this.savedImages.length>0){
+            for(let i=0;i<this.savedImages.length;i++){
+                let imageData = this.savedImages[i].image;
+                let base64Image = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+                this.completedImages.push(base64Image);
+                this.component.closeAll();
             }
-          }
-        },(err)=>{
-          console.log("Error in Saved checklist");
-          console.log(err);
+        }else{
+            this.component.closeAll();
         }
+    },err=>{
+        console.log("Error in getting saved Images");
+        console.log(err);
+        this.savedImages = [];
+        this.component.closeAll();
+    });
+
+      this.dbProvider.getChecklistItemsForJob(this.jobDetails.id).then(
+          (res)=>{
+              console.log("saved checklist");
+              console.log(res);
+              this.checkListItemsBefore=res;
+              for(var i =0;i<this.checkListItemsBefore.length; i++){
+                  if(this.checkListItemsBefore[i].completed=="false"){
+                      this.checkListItemsBefore[i].completeOffline = false;
+                      this.checkListItemsBefore[i].completed = false;
+                  }else {
+                      this.checkListItemsBefore[i].completeOffline = true;
+                      this.checkListItemsBefore[i].completed = true;
+                  }
+                  if(i+1 == this.checkListItemsBefore.length){
+                      this.checkListItems = this.checkListItemsBefore;
+                  }
+              }
+          },(err)=>{
+              console.log("Error in Saved checklist");
+              console.log(err);
+          }
       )
-    },3000);
-
-
 
   }
   viewImage(index,img)
@@ -197,14 +195,83 @@ export class OfflineCompleteJob {
     })
   }
 
-  saveJob(job){
+  saveJob(job,takenImages){
     this.component.showLoader('Saving Job');
     console.log("saving jobs",job);
-    setTimeout(()=>{
-      this.dbService.setSaveJobs(job, this.taken64Images).then(
-        (res)=>{
-          console.log("image saved in local db",res);
-          this.jobs=[];
+    console.log(takenImages);
+      if(takenImages && takenImages.length>0){
+          for(let i=0;i<takenImages.length;i++){
+              console.log(takenImages[i]);
+              this.dbProvider.insertJobImage(job.id,takenImages[i]).then(response=>{
+                  console.log("Job image sucessfully inserted");
+                  this.dbProvider.updateJobsData(job).then(jobResponse=>{
+                      console.log("Job successfully updated");
+                      this.component.closeAll();
+                  },err=>{
+                      console.log("Error in updating job");
+                      console.log(err);
+                      this.component.closeAll();
+                  })
+              },err=>{
+                  console.log("Error in inserting image");
+                  console.log(err);
+                  this.component.closeAll();
+              })
+          }
+      }else{
+          console.log("No images found");
+          this.component.closeLoader();
+          demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
+      }
+  }
+
+  completeJob(job, takenImages){
+    this.component.showLoader('Completing Job');
+
+      if(takenImages && takenImages.length>0){
+          for(let i=0;i<takenImages.length;i++){
+              console.log(takenImages[i]);
+              this.dbProvider.insertJobImage(job.id,takenImages[i]).then(response=>{
+                  console.log("Job image sucessfully inserted");
+                  this.jobData.id = job.id;
+                  this.jobData.assetId = job.assetId;
+                  this.jobData.title = job.title;
+                  this.jobData.employeeName = job.employeeName;
+                  this.jobData.siteName = job.siteName;
+                  this.jobData.plannedEndTime = job.plannedEndTime;
+                  this.jobData.plannedStartTime = job.plannedStartTime;
+                  this.jobData.description = job.description;
+                  this.jobData.status = "COMPLETED";
+                  this.jobData.maintenanceType = job.maintenanceType;
+                  this.jobData.checkInDateTimeFrom = job.checkInDateTimeFrom;
+                  this.jobData.checkInDateTimeTo = new Date();
+                  this.jobData.offlineUpdate = 1;
+
+                  this.jobs.push(this.jobData);
+
+                  console.log("Job data");
+                  console.log(this.jobData);
+                  this.dbProvider.updateJobsData(this.jobData).then(jobResponse=>{
+                      console.log("Job successfully updated");
+                      this.component.closeAll();
+                      demo.showSwal('success-message-and-ok','Success','Job Completed Successfully');
+                      this.navCtrl.pop();
+                  },err=>{
+                      console.log("Error in updating job");
+                      console.log(err);
+                      this.component.closeAll();
+                  })
+              },err=>{
+                  console.log("Error in inserting image");
+                  console.log(err);
+                  this.component.closeAll();
+                  demo.showSwal('warning-message-and-confirmation-ok','Error in Completing Job- '+err);
+
+              })
+          }
+      }else{
+          console.log("No images found");
+          this.component.closeLoader();
           this.jobData.id = job.id;
           this.jobData.assetId = job.assetId;
           this.jobData.title = job.title;
@@ -213,138 +280,65 @@ export class OfflineCompleteJob {
           this.jobData.plannedEndTime = job.plannedEndTime;
           this.jobData.plannedStartTime = job.plannedStartTime;
           this.jobData.description = job.description;
-          this.jobData.status = job.status;
+          this.jobData.status = "COMPLETED";
           this.jobData.maintenanceType = job.maintenanceType;
           this.jobData.checkInDateTimeFrom = job.checkInDateTimeFrom;
-          this.jobData.checkInDateTimeTo = job.checkInDateTimeTo;
+          this.jobData.checkInDateTimeTo = new Date();
           this.jobData.offlineUpdate = 1;
 
           this.jobs.push(this.jobData);
-          console.log("jobs",this.jobs);
 
-          this.dbService.setCompletJobs(this.jobData).then(
-            (res)=>{
-              console.log("save job",res);
-              this.component.closeLoader();
-              this.navCtrl.setRoot(OfflinePage);
-            },(err)=>{
-              console.log("error job",err);
-              this.component.closeLoader();
+          console.log("Job data");
+          console.log(this.jobData);
+          this.dbProvider.updateJobsData(this.jobData).then(jobResponse=>{
+              console.log("Job successfully updated");
+              this.component.closeAll();
+              demo.showSwal('success-message-and-ok','Success','Job Completed Successfully');
+          },err=>{
+              console.log("Error in updating job");
+              console.log(err);
+              this.component.closeAll();
+              demo.showSwal('warning-message-and-confirmation-ok','Error in Completing Job- '+err);
 
-            }
-          );
-          this.component.closeLoader();
-          this.navCtrl.pop();
-        },(err)=>{
-          console.log("error in saving image",err);
-          this.component.closeLoader();
-        }
-      )
-    },3000);
-
-  }
-
-  completeJob(job, takenImages){
-    this.component.showLoader('Completing Job');
-
-    setTimeout(()=>{
-      this.dbService.setSaveJobs(job, this.taken64Images).then(
-        (res)=>{
-          console.log("image saved in local db",res);
-            this.jobs=[];
-            this.jobData.id = job.id;
-            this.jobData.assetId = job.assetId;
-            this.jobData.title = job.title;
-            this.jobData.employeeName = job.employeeName;
-            this.jobData.siteName = job.siteName;
-            this.jobData.plannedEndTime = job.plannedEndTime;
-            this.jobData.plannedStartTime = job.plannedStartTime;
-            this.jobData.description = job.description;
-            this.jobData.status = "COMPLETED";
-            this.jobData.maintenanceType = job.maintenanceType;
-            this.jobData.checkInDateTimeFrom = job.checkInDateTimeFrom;
-            this.jobData.checkInDateTimeTo = new Date();
-            this.jobData.offlineUpdate = 1;
-
-            this.jobs.push(this.jobData);
-            console.log("jobs",this.jobs);
-
-          this.dbService.setCompletJobs(this.jobData).then(
-            (res)=>{
-              console.log("complete job",res);
-              this.component.closeLoader();
-              this.navCtrl.pop();
-            },(err)=>{
-              console.log("error job",err);
-              this.component.closeLoader();
-
-            }
-          );
-
-        },(err)=>{
-          console.log("error in saving image",err);
-          this.component.closeLoader();
-        }
-      )
-    },3000);
-
-  }
-
-  saveJobCheckList(job,jobDetails){
-    console.log("checkList",job);
-    this.checkListOffline = job;
-    this.component.showLoader("Saving check list in offline...");
-    for(var i=0; i<this.checkListOffline.length; i++){
-      if(this.checkListOffline[i].completeOffline == true){
-        this.checkListOffline[i].completed="true";
-        console.log(this.checkListOffline);
-      }else {
-        this.checkListOffline[i].completed ="false";
-        console.log(this.checkListOffline);
+          })
       }
-      console.log("ccc",this.checkListOffline[i]);
 
-      this.dbService.setCompletChecklist(this.checkListOffline[i]).then(
-        (res)=>{
-          this.component.showLoader("completing checklist..");
-          console.log("complete checklist",res);
-          this.jobData.id = jobDetails.id;
-          this.jobData.assetId = jobDetails.assetId;
-          this.jobData.title = jobDetails.title;
-          this.jobData.employeeName = jobDetails.employeeName;
-          this.jobData.siteName = jobDetails.siteName;
-          this.jobData.plannedEndTime = jobDetails.plannedEndTime;
-          this.jobData.plannedStartTime = jobDetails.plannedStartTime;
-          this.jobData.description = jobDetails.description;
-          this.jobData.status = jobDetails.status;
-          this.jobData.maintenanceType = jobDetails.maintenanceType;
-          this.jobData.checkInDateTimeFrom = jobDetails.checkInDateTimeFrom;
-          this.jobData.checkInDateTimeTo = jobDetails.checkInDateTimeTo;
-          this.jobData.offlineUpdate = 1;
-          this.component.closeLoader();
-          this.navCtrl.pop();
-          console.log("jobData checklist",this.jobData);
-          this.dbService.setCompletJobs(this.jobData).then(
-            (res)=>{
-              console.log("complete job",res);
-              this.component.closeLoader();
-              this.navCtrl.pop();
-            },(err)=>{
-              console.log("error job",err);
-              this.component.closeLoader();
-              this.navCtrl.pop();
+  }
+
+  saveJobCheckList(checklistItems,jobDetails){
+    console.log("checkListitems");
+    console.log(checklistItems);
+    if(checklistItems && checklistItems.length>0){
+        for(let i=0;i<checklistItems.length;i++){
+            console.log(checklistItems[i]);
+            this.dbProvider.updateChecklistData(checklistItems[i]).then(response=>{
+                console.log("checklist items successfully updated");
+                console.log(checklistItems[i].itemName);
+                this.dbProvider.updateJobsData(jobDetails).then(response=>{
+                    console.log("Job successfully updated");
+                    // demo.showSwal('success-message-and-ok','Success','Checklist Updated Successfully');
+                    this.navCtrl.pop();
+                },err=>{
+                    console.log("Error in updating job");
+                    console.log(err);
+                    // demo.showSwal('warning-message-and-confirmation-ok',"Error in updating job");
+                });
+            },err=>{
+                console.log("Error in updating checklist items to SQLite");
+                console.log(err);
+                // demo.showSwal('warning-message-and-confirmation-ok',"Error in updating job checklist");
+
+            });
+
+            if(i+1 == checklistItems.length){
+                this.component.closeAll();
             }
-          );
-
-        },(err)=>{
-          console.log("error job",err);
-          this.component.closeLoader();
-
         }
-      );
+    }else{
+        console.log("Checklist items not found");
     }
-    this.component.closeLoader();
-    console.log("totalchecklist",this.checkListOffline);
+
+
 
   }
 

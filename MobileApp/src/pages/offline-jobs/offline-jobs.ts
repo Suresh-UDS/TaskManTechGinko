@@ -4,6 +4,7 @@ import {componentService} from "../service/componentService";
 import {DBService} from "../service/dbService";
 import {ViewJobPage} from "../jobs/view-job";
 import {OfflineCompleteJob} from "../offline-complete-job/offline-complete-job";
+import {DatabaseProvider} from "../../providers/database-provider";
 
 @Component({
   selector: 'page-offline-jobs',
@@ -15,7 +16,7 @@ export class OfflineJobs {
   private count: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private componentService: componentService,
-              public dbService: DBService) {
+              public dbService: DBService, public dbProvider: DatabaseProvider) {
   }
 
   ionViewDidLoad() {
@@ -24,7 +25,7 @@ export class OfflineJobs {
       this.jobDetails= null;
       this.spinner = true;
       //offline
-      this.dbService.getJobs().then(
+      this.dbProvider.getJobsData().then(
         (res) => {
           this.spinner=false;
           console.log("job details");

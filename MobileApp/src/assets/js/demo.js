@@ -728,29 +728,7 @@ demo = {
                 }
             })
 
-        }else if(type == 'createConfirmation'){
-
-            swal({
-                title: title,
-                text: 'Please confirm to create '+txt,
-                // type: 'success',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                confirmButtonClass: "btn btn-success",
-                cancelButtonClass: "btn btn-danger",
-                buttonsStyling: false
-            }).then(function() {
-                swal({
-                    title: 'Success!',
-                    text: 'Your '+txt+' has been Created.',
-                    type: 'success',
-                    confirmButtonClass: "btn btn-success",
-                    buttonsStyling: false
-                }).catch(swal.noop)
-            })
-
-        }else if (type == 'custom-html') {
+        } else if (type == 'custom-html') {
             swal({
                 title: 'HTML example',
                 buttonsStyling: false,

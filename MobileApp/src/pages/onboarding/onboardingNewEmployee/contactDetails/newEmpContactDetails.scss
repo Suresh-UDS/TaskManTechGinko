@@ -8,8 +8,9 @@ page-contactDetails-new {
         color: orange !important;
     }
     .mdImage {
-        height: 130px;
-        width: 70%;
+        max-width: 130px;;
+        max-height: 130px;
+        vertical-align: middle;
     }
     .headerText {
         font-weight: bold !important;

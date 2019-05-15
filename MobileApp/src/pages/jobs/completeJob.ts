@@ -210,7 +210,8 @@ export class CompleteJobPage {
                 }else{
                     console.log("Save Job response");
                     // this.component.closeLoader();
-                    this.component.showToastMessage('Job Saved Successfully','bottom');
+                    // this.component.showToastMessage('Job Saved Successfully','bottom');
+                    demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
                     console.log(response);
                     console.log(job.checkInOutId);
                     if(this.takenImages.length>0){
@@ -303,7 +304,10 @@ export class CompleteJobPage {
                 console.log("Error in saving response");
                 console.log(err);
                 this.component.closeLoader();
-                this.component.showToastMessage('Error in saving job, please try again...','bottom');
+                // this.component.showToastMessage('Error in saving job, please try again...','bottom');
+                demo.showSwal('warning-message-and-confirmation-ok',err.errorMessage);
+
+
             }
         )
     }
@@ -350,7 +354,9 @@ export class CompleteJobPage {
                             console.log("complete job response");
                             console.log(response);
                             console.log(job);
-                            this.component.showToastMessage('Job Completed Successfully','bottom');
+                            // this.component.showToastMessage('Job Completed Successfully','bottom');
+                            demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
+
                             // this.component.showLoader('Uploading Images');
                             //TODO
                             //File Upload after successful checkout

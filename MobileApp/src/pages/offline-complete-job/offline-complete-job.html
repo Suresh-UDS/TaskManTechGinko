@@ -104,55 +104,20 @@
           <ion-row  no-margin class=" margin-auto">
             <ion-col col-2>
               <ion-item no-padding="">
-                <ion-checkbox (change)="resetRemarks(i,list.completeOffline)" [(ngModel)]="list.completeOffline"></ion-checkbox>
+                <ion-checkbox (change)="resetRemarks(i,list.completed)" [(ngModel)]="list.completed"></ion-checkbox>
               </ion-item>
             </ion-col>
             <ion-col col-7>
-              <p text-left>{{list.checklistItemName}}</p>
+                <p text-left>{{list.itemName}} </p>
             </ion-col>
-            <!--<ion-col col-3 class="ver-center" >
-              <div *ngIf="list.image_1 != null" float-right="">
-                <button class="ion-button" round  class="camera-btn1" (click)="show(showIcon,i)"><ion-icon name="images"></ion-icon></button>
-              </div>
-              <div *ngIf="list.image_3 == null" class="margin-left15" float-right="">
-                <button class="ion-button" round (click)="viewCameraCheckList(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
-              </div>
-            </ion-col>-->
           </ion-row>
           <ion-row  no-margin class=" margin-auto" *ngIf="list.remarks">
             <ion-col col-12>
               <p text-right="">{{list.remarks}}</p>
             </ion-col>
           </ion-row>
-          <!--<ion-row class="no-margin margin-auto">
-            <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
-              <img [src]="list.imageUrl_1" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_1)">
-            </ion-col>
-            <ng-template #image1>
-              <ion-col col-4  class="margin-top25" *ngIf="list.image_1">
-                <img [src]="list.image_1" class="job-img margin-bottom25" (click)="viewImg(list.image_1)">
-              </ion-col>
-            </ng-template>
 
-            <ion-col col-4  class="margin-top25" *ngIf="list.imageUrl_2 ; else image2">
-              <img [src]="list.imageUrl_2" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_2)">
-            </ion-col>
-            <ng-template #image2>
-              <ion-col col-4  class="margin-top25" *ngIf="list.image_2">
-                <img [src]="list.image_2" class="job-img margin-bottom25" (click)="viewImg(list.image_2)">
-              </ion-col>
-            </ng-template>
-
-            <ion-col col-4  class="margin-top25"  *ngIf="list.imageUrl_3 ; else image3">
-              <img [src]="list.imageUrl_3" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_3)">
-            </ion-col>
-            <ng-template #image3>
-              <ion-col col-4  class="margin-top25" *ngIf="list.image_3">
-                <img [src]="list.image_3" class="job-img margin-bottom25" (click)="viewImg(list.image_3)">
-              </ion-col>
-            </ng-template>
-          </ion-row>-->
-          <ion-row *ngIf="!list.completeOffline">
+          <ion-row *ngIf="!list.completed">
             <ion-item class="text-item width80 margin-auto" no-padding="" text-center="">
               <ion-textarea placeholder="Enter Remarks here.." class="text-border padding5"  [(ngModel)]="list.remarks"></ion-textarea>
             </ion-item>
@@ -167,7 +132,7 @@
 <ion-footer>
 
   <ion-toolbar class="align-right" padding-left padding-right *ngIf="categories==='details'">
-    <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails)">
+    <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails,takenImages)">
       Save
     </button>
     <button class="btn btn-success center pull-right" (click)="completeJob(jobDetails,takenImages)">

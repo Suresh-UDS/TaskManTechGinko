@@ -18,12 +18,12 @@
     <ion-list>
         <ion-item *ngFor="let employee of employeeList;let i of index" class="bottom-border" >
 
-        <p><span class="EmpNameTxt" style="float:left"  >{{employee.fullName}}</span>
+        <p><span class="EmpNameTxt" style="float:left"  >{{employee.firstName}} - {{employee.lastName}}</span>
         <span style="float: right">
             <!--<button ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>-->
             <span >
-                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="employee.checkedIn == 'false' && employee.notCheckedOut == 'false'" >Check - In</button>
-                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn == 'true' && employee.notCheckedOut == 'true'">Check - Out</button>
+                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="employee.checkedIn == 'false' || (employee.notCheckedOut == 'true' && employee.attendanceId>0)" >Check - In</button>
+                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn == 'true' && employee.notCheckedOut == 'false'">Check - Out</button>
             </span>
         </span></p>
         <p>

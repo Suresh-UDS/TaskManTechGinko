@@ -13,6 +13,8 @@ import {componentService} from "../service/componentService";
 import {AttendanceViewPage} from "../attendance-view/attendance-view";
 import {TabsPage} from "../tabs/tabs";
 import {DBService} from "../service/dbService";
+import {DatabaseProvider} from "../../providers/database-provider";
+
 declare  var demo ;
 
 /**
@@ -43,7 +45,7 @@ export class OfflineAttendance {
     siteId:any;
     constructor(public navCtrl: NavController,private dbService:DBService,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
                 private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,
-                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService) {
+                private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService, private dbProvider: DatabaseProvider) {
 
         this.lattitude = 0;
         this.longitude = 0;
@@ -102,12 +104,12 @@ export class OfflineAttendance {
             this.longitude = 0;
         });
 
-
-
-        this.dbService.getSiteEmployee(this.siteId).then((response)=>{
+        this.dbProvider.getEmployeeDataBySiteId(this.siteId).then((response)=>{
                 console.log(response);
                 this.component.closeLoader();
                 this.employeeList = response;
+
+
             },
             (error)=>{
                 console.log(error);
@@ -164,7 +166,7 @@ export class OfflineAttendance {
 
 
     saveAttendanceInLocal(employee,imageData){
-        this.component.showLoader("save attendance")
+        this.component.showLoader("save attendance");
         var attendanceData = {
             siteId:employee.siteId,
             employeeEmpId:employee.empId,
@@ -173,36 +175,43 @@ export class OfflineAttendance {
             checkInImage:imageData,
             checkInTime:new Date(),
             offline:true,
-            id:employee.employeeId,
+            id:employee.id,
             offlineCheckin:true
+
+
         };
 
-        this.dbService.setAttendance(attendanceData).then(response=>{
-            console.log(response);
-            this.dbService.updateEmployee(employee.employeeId,true,true).then(response=>{
+        if(employee.attendanceId && employee.attendanceId>0){
+            console.log("Attendance Id present");
+            this.component.closeLoader();
+        }else{
+            this.dbProvider.insertAttendanceCheckInData(employee.id, employee.empId, this.siteId, imageData, new Date(), null, true).then(response=>{
                 console.log(response);
-                this.dbService.getSiteEmployee(this.siteId).then((response)=>{
-                        console.log(response);
-                        // this.component.closeLoader()
-                        this.employeeList = response;
-                        this.component.closeLoader();
-                        demo.showSwal('success-message-and-ok','Success','Attendance Successfully marked offline, \nPlease sync to server...');
-                    },
-                    (error)=>{
-                        console.log(error);
-                        demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+error);
-                        // this.component.closeLoader()
-                    });
+                this.dbProvider.updateEmployeeData(true,false,employee.id, false).then(response=>{
+                    console.log(response);
+                    this.dbProvider.getEmployeeDataBySiteId(this.siteId).then((response)=>{
+                            console.log(response);
+                            // this.component.closeLoader()
+                            this.employeeList = response;
+                            this.component.closeLoader();
+                            demo.showSwal('success-message-and-ok','Success','Attendance Successfully marked offline, \nPlease sync to server...');
+                        },
+                        (error)=>{
+                            console.log(error);
+                            demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+error);
+                            // this.component.closeLoader()
+                        });
+                },err=>{
+                    console.log(err);
+                    demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
+                })
             },err=>{
                 console.log(err);
                 demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
 
             })
-        },err=>{
-            console.log(err);
-            demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
-
-        })
+        }
 
         // window.localStorage.setItem('attendanceCheckInData',JSON.stringify(attendanceData));
         // this.navCtrl.setRoot(TabsPage);
@@ -211,7 +220,7 @@ export class OfflineAttendance {
     }
 
     saveAttendanceOutLocal(employee,imageData,attendanceId){
-        this.component.showLoader("save attendance")
+        this.component.showLoader("save attendance");
         var attendanceData = {
             siteId:employee.siteId,
             employeeEmpId:employee.empId,
@@ -225,14 +234,16 @@ export class OfflineAttendance {
             offlineCheckOut:true
         };
 
-        this.dbService.setAttendance(attendanceData).then(response=>{
+
+        this.dbProvider.insertAttendanceCheckOutData(employee.id,employee.empId,this.siteId, imageData,new Date(),employee.attendanceId,true).then(response=>{
+            console.log("attendance updated");
             console.log(response);
-                this.component.closeLoader()
-            this.dbService.updateEmployee(employee.employeeId,true,false).then(response=>{
+                this.component.closeLoader();
+            this.dbProvider.updateEmployeeData(true,true,employee.id, false).then(response=>{
+                console.log("Employee updated");
                 console.log(response);
-                this.dbService.getSiteEmployee(this.siteId).then((response)=>{
+                this.dbProvider.getEmployeeDataBySiteId(this.siteId).then((response)=>{
                         console.log(response);
-                        // this.component.closeLoader()
                         this.employeeList = response;
                         this.component.closeLoader();
                         demo.showSwal('success-message-and-ok','Success','Attendance Successfully marked offline, \nPlease sync to server...');
@@ -245,20 +256,15 @@ export class OfflineAttendance {
 
                     });
             },err=>{
-                console.log(err)
+                console.log(err);
                 demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
 
             })
         },err=>{
-            console.log(err)
+            console.log(err);
             demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
 
         })
-
-        // window.localStorage.setItem('attendanceCheckOutData',JSON.stringify(attendanceData));
-        // this.navCtrl.setRoot(TabsPage);
-        // this.component.showToastMessage('Your attendnace has been marked localy')
-        // demo.showSwal('feedback-success','Attendance marked locally, please connect to network to sync it to server!');
 
     }
 

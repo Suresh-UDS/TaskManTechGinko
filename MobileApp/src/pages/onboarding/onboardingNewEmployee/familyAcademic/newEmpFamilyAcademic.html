@@ -6,11 +6,24 @@
                     formArrayName="educationQualification">
                     <div class="row form-group padding0" [formGroupName]="i">
                         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="control-label trequired">Highest Education Qualification</label>
-                            <input class="form-control" type="text" formControlName="qualification">
+                            <!-- <label class="control-label trequired">Highest Education Qualification</label> -->
+                            <!-- <input class="form-control" type="text" formControlName="qualification"> -->
+                            <ion-item>
+                                <ion-label class="label-text trequired" stacked>Highest Education Qualification
+                                </ion-label>
+                                <ion-select interface="popover" formControlName="qualification">
+                                    <ion-option value="Below 5th">Below 5th</ion-option>
+                                    <ion-option value="5th to 8th">5th to 8th</ion-option>
+                                    <ion-option value="9th to 10th">9th to 10th</ion-option>
+                                    <ion-option value="11th to 12th">11th to 12th</ion-option>
+                                    <ion-option value="diploma">Diploma</ion-option>
+                                    <ion-option value="Under Graduate">Under Graduate</ion-option>
+                                    <ion-option value="Post Graduate">Post Graduate</ion-option>
+                                </ion-select>
+                            </ion-item>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                            <label class="control-label trequired">Board / Institute</label>
+                            <label class="control-label">Board / Institute</label>
                             <input class="form-control" type="text" formControlName="institute">
                         </div>
                     </div>
@@ -18,20 +31,21 @@
                 <div class="row from-group">
                     <div class="col-md-12 col-xs-12 col-sm-12">
                         <div class="pull-right" *ngIf="nomineeForms.length !== 3">
-                            <button ion-button icon-only (click)="addNominees()">
-                                <ion-icon name="add"></ion-icon>
+                            <button ion-button class="nominee"  (click)="addNominees()">
+                                Add Nominee
                             </button>
                         </div>
                     </div>
+                    
                 </div>
                 <div formArrayName="nomineeDetail">
                     <div class="boxShadowContent padding5" *ngFor="let list of nomineeForms.controls; let i=index"
                         [formGroupName]="i">
                         <div class="row form-group" *ngIf="i !== 0 ">
-                            <div class="col-md-12 col-xs-12 col-sm-12 padding0">
+                            <div class="col-md-12 col-xs-12 col-sm-12">
                                 <div class="pull-right">
-                                    <button ion-button icon-only (click)="removeNominees(index)">
-                                        <ion-icon name="remove"></ion-icon>
+                                    <button class="nominee" ion-button (click)="removeNominees(i)">
+                                        Remove Nominee
                                     </button>
                                 </div>
                             </div>
@@ -58,7 +72,7 @@
                         <div class="row form-group">
                             <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                                 <label class="control-label">Contact Number</label>
-                                <input class="form-control" type="text" formControlName="contactNumber">
+                                <input class="form-control" type="number" formControlName="contactNumber">
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                                 <label class="control-label trequired">Percentage</label>

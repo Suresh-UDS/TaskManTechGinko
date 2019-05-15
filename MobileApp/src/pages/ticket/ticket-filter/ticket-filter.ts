@@ -228,8 +228,8 @@ export class TicketFilter {
                 if(this.fromDate && this.toDate)
                 {
                    if(this.fromDate<this.toDate){
-                       console.log('view button true');
-                       this.viewButton=true;
+                    console.log('view button true');
+                    this.viewButton=true;
                    }else{
                         this.cs.showToastMessage("From date has to be greater than to date",'bottom');
                         this.viewButton = false;

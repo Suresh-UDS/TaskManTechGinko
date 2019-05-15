@@ -308,7 +308,7 @@ export class EmployeeList {
 
     markAttendance(employee,lat,lng,imageData){
         this.component.showLoader("Marking Attendance...");
-        this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,lat,lng,imageData).subscribe(response=>{
+        this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,lat,lng,imageData,null,false).subscribe(response=>{
             this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
@@ -330,7 +330,7 @@ export class EmployeeList {
 
     markAttendanceCheckOut(employee,lat,lng,imageData){
         this.component.showLoader("Marking Attendance...");
-        this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,lat,lng,imageData,employee.attendanceId).subscribe(response=>{
+        this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,lat,lng,imageData,employee.attendanceId,null,false).subscribe(response=>{
             this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){

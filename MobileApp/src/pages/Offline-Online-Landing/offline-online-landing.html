@@ -1,0 +1,32 @@
+<ion-content class="bg-white">
+
+  <div class="LogoTop">
+     <img src="assets/imgs/logo.png">
+  </div>
+
+  <div class="SplashLoader" *ngIf="offline">
+     <!--<img src="assets/imgs/loader.svg" alt="" />-->
+      <p>Network Disconnected</p>
+     <img src="assets/imgs/no-signal.svg" alt="" />
+  </div>
+
+    <div class="SplashLoader" *ngIf="online">
+        <!--<img src="assets/imgs/loader.svg" alt="" />-->
+        <p>Network Connection Restored...</p>
+        <img src="assets/imgs/wifi.svg" alt="" />
+    </div>
+<div text-center padding >
+    <ion-row class="margin padding">
+        <ion-col col-12 *ngIf="online">
+            <button class="btn btn-warning padding" (click)="goOnline()">Go Online</button>
+        </ion-col>
+
+        <ion-col col-12 *ngIf="offline">
+            <button class="btn btn-warning width85" (click)="goOffline()">Go Offline</button>
+        </ion-col>
+    </ion-row>
+</div>
+
+
+</ion-content>
+

@@ -61,7 +61,6 @@ export class QuotationPage {
       this.submittedQuotations=[];
       this.archivedQuotations=[];
 
-
       this.events.subscribe('permissions:set',(permission)=>{
           console.log("Event permissions");
           console.log(permission)

@@ -27,8 +27,8 @@ export class AttendanceService
         })
     }
 
-    markAttendanceCheckIn(siteId,empId,lat,long,imageData):Observable<any>{
-        return this.http.post(this.config.Url+'api/attendance',{siteId:siteId,employeeEmpId:empId,latitudeIn:lat,longitudeIn:long,checkInImage:imageData}).map(
+    markAttendanceCheckIn(siteId,empId,lat,long,imageData,checkInTime,offline):Observable<any>{
+        return this.http.post(this.config.Url+'api/attendance',{siteId:siteId,employeeEmpId:empId,latitudeIn:lat,longitudeIn:long,checkInImage:imageData,checkInTime:checkInTime,offline:offline}).map(
             (response)=>{
                 console.log("Check in");
                 console.log(response);
@@ -40,8 +40,8 @@ export class AttendanceService
         })
     }
 
-    markAttendanceCheckOut(siteId,empId,lat,long,imageData,attendanceId):Observable<any>{
-        return this.http.post(this.config.Url+'api/attendance/save',{siteId:siteId,employeeEmpId:empId,latitudeOut:lat,longitudeOut:long,checkOutImage:imageData,id:attendanceId}).map(
+    markAttendanceCheckOut(siteId,empId,lat,long,imageData,attendanceId,checkOutTime,offline):Observable<any>{
+        return this.http.post(this.config.Url+'api/attendance/save',{siteId:siteId,employeeEmpId:empId,latitudeOut:lat,longitudeOut:long,checkOutImage:imageData,id:attendanceId,checkOutTime:checkOutTime,offline:offline}).map(
             (response)=>{
                 console.log("Check out");
                 console.log(response);

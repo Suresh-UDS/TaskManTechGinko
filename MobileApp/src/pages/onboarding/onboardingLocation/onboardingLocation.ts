@@ -30,6 +30,9 @@ export class onboardingLocation implements OnInit {
             selectClient: new FormControl('', [Validators.required]),
             selectSite: new FormControl('', [Validators.required])
         });
+        
+        console.log('onboard home Empid '+ window.localStorage.getItem('employeeId'))
+        console.log('onboard home EmpName '+ window.localStorage.getItem('employeeFullName'))
     }
 
     getProjects() {
@@ -41,14 +44,11 @@ export class onboardingLocation implements OnInit {
             this.component.closeLoader();
         }, error => {
             this.component.closeLoader();
-
             this.msg = 'Server Unreachable'
-
             this.component.showToastMessage(this.msg, 'bottom');
         });
     }
     //get userform() { return this.selectClientSiteForm.controls; }
-
     getClientSites(object) {
         console.log(object);
         this.component.showLoader("Please wait....");
