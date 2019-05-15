@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,8 +43,11 @@ public class EmployeeServiceResouce {
 	@Autowired
 	EmployeeService employeeService;
 
-	private final String URL_ORACLE = "http://172.31.26.197:8087/";
-	private final String URL_EMPSERVICE = "http://172.31.26.197:8089/";
+    @Value("${onBoarding-empServe}")
+    private String URL_EMPSERVICE;
+
+    @Value("${onBoarding-empRetrieve}")
+    private String URL_ORACLE;
 
 	@RequestMapping(value = "/getBranchList", method = RequestMethod.GET)
 	public List<PersonalAreaDTO> getBranchList() {
@@ -129,7 +133,7 @@ public class EmployeeServiceResouce {
 				});
 		return response.getBody();
 	}
-	
+
 	@RequestMapping(value = "/getWbsDetailsByEmpIds/{empIds}", method = RequestMethod.GET)
 	public List<WbsByEmpDTO> getWbsDetailsByEmpIds(@PathVariable("empIds") String empIds) {
 
@@ -144,7 +148,7 @@ public class EmployeeServiceResouce {
 				});
 		return response.getBody();
 	}
-	
+
 
 	@RequestMapping(value = "/getEmployeeListByWbs/{wbs}", method = RequestMethod.GET)
 	public List<EmpDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
@@ -160,11 +164,11 @@ public class EmployeeServiceResouce {
 				});
 		return response.getBody();
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	@RequestMapping(value = "/getEmployeeListByProjectId/{projectId}", method = RequestMethod.GET)
 	public List<EmpDTO> getEmployeeListByProjectId(@PathVariable("projectId") String projectId) {
 
@@ -179,9 +183,9 @@ public class EmployeeServiceResouce {
 				});
 		return response.getBody();
 	}
-	
-	
-	
+
+
+
 
 	@RequestMapping(value = "/employees", method = RequestMethod.GET)
 	public List<EmpDTO> getAllEmp() {
@@ -260,7 +264,7 @@ public class EmployeeServiceResouce {
 	}
 
 	@RequestMapping(value = "/aadharPhotoCopy", method = RequestMethod.POST)
-	public EmpDTO aadharPhotoCopy(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {		
+	public EmpDTO aadharPhotoCopy(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"aadharPhotoCopy");
 
@@ -272,7 +276,7 @@ public class EmployeeServiceResouce {
 
 		return employeeUpdate(file,id,"addressProof");
 	}
-	
+
 	@RequestMapping(value = "/profilePicture", method = RequestMethod.POST)
 	public EmpDTO profilePicture(@RequestParam("file") MultipartFile file, @RequestParam("id") String id
 			) {
@@ -281,14 +285,14 @@ public class EmployeeServiceResouce {
 
 	}
 
-	
+
 	@RequestMapping(value = "/employeeSignature", method = RequestMethod.POST)
 	public EmpDTO employeeSignature(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"employeeSignature");
 
 	}
-	
+
 	@RequestMapping(value = "/employeeVoiceSample", method = RequestMethod.POST)
 	public EmpDTO employeeVoiceSample(@RequestParam("file") MultipartFile file, @RequestParam("id") String id
 			) {
@@ -296,7 +300,7 @@ public class EmployeeServiceResouce {
 		return employeeUpdate(file,id,"employeeVoiceSample");
 
 	}
-	
+
 	@RequestMapping(value = "/prePrintedStatement", method = RequestMethod.POST)
 	public EmpDTO prePrintedStatement(@RequestParam("file") MultipartFile file, @RequestParam("id") String id
 			) {
@@ -304,44 +308,44 @@ public class EmployeeServiceResouce {
 		return employeeUpdate(file,id,"prePrintedStatement");
 
 	}
-	
+
 	@RequestMapping(value = "/thumbImpressenRight", method = RequestMethod.POST)
 	public EmpDTO impressenLeft(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"thumbImpressenRight");
 	}
-	
-	
+
+
 	@RequestMapping(value = "/thumbImpressenLeft", method = RequestMethod.POST)
 	public EmpDTO impressenRight(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"thumbImpressenLeft");
 
 	}
-	
+
 	@RequestMapping(value = "/drivingLicense", method = RequestMethod.POST)
 	public EmpDTO drivingLicense(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"drivingLicense");
 
 	}
-	
+
 	@RequestMapping(value = "/pancardCopy", method = RequestMethod.POST)
 	public EmpDTO pancardCopy(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"pancardCopy");
 
 	}
-	
+
 	@RequestMapping(value = "/voterId", method = RequestMethod.POST)
 	public EmpDTO voterId(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
 
 		return employeeUpdate(file,id,"voterId");
 
 	}
-	
 
-	
+
+
 	private EmpDTO getEmployee(String id) {
 		ResponseEntity<EmpDTO> response = restTemplete.exchange(URL_EMPSERVICE+"api/employees/" + id,
 				HttpMethod.GET, null, new ParameterizedTypeReference<EmpDTO>() {
@@ -350,101 +354,101 @@ public class EmployeeServiceResouce {
 
 	}
 
-	
-	
-	private  EmpDTO employeeUpdate(MultipartFile file,String id,String image) {		
-		
-		synchronized (EmployeeServiceResouce.class) {		
-		EmpDTO empDTO = getEmployee(id);		
+
+
+	private  EmpDTO employeeUpdate(MultipartFile file,String id,String image) {
+
+		synchronized (EmployeeServiceResouce.class) {
+		EmpDTO empDTO = getEmployee(id);
 		String fileName=null;
-		ExpenseDocumentDTO empDocDTO =null;		
+		ExpenseDocumentDTO empDocDTO =null;
 		switch(image) {
-		
+
 		case  "thumbImpressenLeft":
 			 fileName = empDTO.getAadharNumber() + "_thumbImpressenLeft";
-			 empDocDTO = employeeService.uploadFile(file, fileName);		
-			empDTO.setThumbImpressenLeft(empDocDTO.getFile());	
-			
+			 empDocDTO = employeeService.uploadFile(file, fileName);
+			empDTO.setThumbImpressenLeft(empDocDTO.getFile());
+
 		break;
-		
+
 		case  "thumbImpressenRight":
 			 fileName = empDTO.getAadharNumber() + "_thumbImpressenRight";
-			 empDocDTO = employeeService.uploadFile(file, fileName);		
+			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setThumbImpressenRight(empDocDTO.getFile());
-			
+
 		break;
-		
+
 		case  "prePrintedStatement":
 			 fileName = empDTO.getAadharNumber() + "_prePrintedStatement";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setPrePrintedStatement(empDocDTO.getFile());
-			
+
 		break;
-		
+
 		case "employeeVoiceSample":
 			 fileName = empDTO.getAadharNumber() + "_employeeVoiceSample";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setEmployeeVoiceSample(empDocDTO.getFile());
-			
+
 		break;
-		
-		
+
+
 		case  "employeeSignature":
 			 fileName = empDTO.getAadharNumber() + "_employeeSignature";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setEmployeeSignature(empDocDTO.getFile());
-			
+
 		break;
-		
+
 		case  "profilePicture":
 			 fileName = empDTO.getAadharNumber() + "_profilePicture";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setProfilePicture(empDocDTO.getFile());
-			
+
 		break;
-		
+
 		case  "addressProof":
 			 fileName = empDTO.getAadharNumber() + "_addressProof";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setAddressProof(empDocDTO.getFile());
-			
+
 		break;
-		
+
 		case  "aadharPhotoCopy":
 			 fileName = empDTO.getAadharNumber() + "_aadharPhotoCopy";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setAadharPhotoCopy(empDocDTO.getFile());
-			
-		break;	
-		
+
+		break;
+
 		case  "drivingLicense":
 			 fileName = empDTO.getAadharNumber() + "_drivingLicense";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setDrivingLicense(empDocDTO.getFile());
-			
-		break;	
-		
+
+		break;
+
 		case  "pancardCopy":
 			 fileName = empDTO.getAadharNumber() + "_pancardCopy";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setPancardCopy(empDocDTO.getFile());
-			
-		break;	
-		
+
+		break;
+
 		case  "voterId":
 			 fileName = empDTO.getAadharNumber() + "_voterId";
 			 empDocDTO = employeeService.uploadFile(file, fileName);
 			empDTO.setVoterId(empDocDTO.getFile());
-			
-		break;	
-		
-		}		
-		
+
+		break;
+
+		}
+
 		return employeeUpdate(empDTO);
 		}
-		
+
 	}
-	
+
 	private EmpDTO employeeUpdate(EmpDTO empDTO) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

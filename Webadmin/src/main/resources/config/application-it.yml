@@ -259,6 +259,10 @@ google:
           callback:
               host: taskmanadmin.uds.in
               port: 8080
+
+onBoarding:
+    empServe: http://172.31.26.197:8089/
+    empRetrieve: http://172.31.26.197:8087/
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

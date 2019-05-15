@@ -264,6 +264,9 @@ influxdb:
     retention-policy: one_year_policy
     gzip: true
 
+onBoarding:
+    empServe: http://172.31.17.47:8089/
+    empRetrieve: http://172.31.17.47:8087/
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
