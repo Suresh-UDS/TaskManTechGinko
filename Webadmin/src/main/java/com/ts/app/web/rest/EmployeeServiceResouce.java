@@ -43,10 +43,10 @@ public class EmployeeServiceResouce {
 	@Autowired
 	EmployeeService employeeService;
 
-    @Value("${onBoarding-empServe}")
+    @Value("${onBoarding.empServe}")
     private String URL_EMPSERVICE;
 
-    @Value("${onBoarding-empRetrieve}")
+    @Value("${onBoarding.empRetrieve}")
     private String URL_ORACLE;
 
 	@RequestMapping(value = "/getBranchList", method = RequestMethod.GET)
