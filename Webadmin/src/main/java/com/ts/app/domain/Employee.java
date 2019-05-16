@@ -60,10 +60,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private String designation;
 
 
-    @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EmployeeProjectSite> projectSites;
 
-    @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EmployeeLocation> locations;
 
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
