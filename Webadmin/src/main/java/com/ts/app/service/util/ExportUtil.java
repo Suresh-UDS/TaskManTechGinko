@@ -2868,11 +2868,13 @@ public class ExportUtil {
                                             dataRow.createCell(9).setCellValue(transaction.getZone());
                                             dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                             dataRow.createCell(10).setCellValue(result.getQuestion());
-                                            if(result.getAnswer().equalsIgnoreCase("false")){
-                                                dataRow.createCell(11).setCellValue("NO");
-                                            }else{
-                                                dataRow.createCell(11).setCellValue("YES");
-                                            }
+                                            dataRow.createCell(11).setCellValue(result.getAnswer());
+
+//                                            if(result.getAnswer().equalsIgnoreCase("false")){
+//                                                dataRow.createCell(11).setCellValue("NO");
+//                                            }else{
+//                                                dataRow.createCell(11).setCellValue("YES");
+//                                            }
                                             dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
                                             dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                             dataRow.createCell(15).setCellValue(transaction.getRemarks());
@@ -2896,11 +2898,13 @@ public class ExportUtil {
                                                 dataRow.createCell(8).setCellValue(transaction.getFloor());
                                                 dataRow.createCell(9).setCellValue(transaction.getZone());
                                                 dataRow.createCell(10).setCellValue(result.getQuestion());
-                                                if(result.getAnswer().equalsIgnoreCase("false")){
-                                                    dataRow.createCell(11).setCellValue("NO");
-                                                }else{
-                                                    dataRow.createCell(11).setCellValue("YES");
-                                                }                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                                dataRow.createCell(11).setCellValue(result.getAnswer());
+
+//                                                if(result.getAnswer().equalsIgnoreCase("false")){
+//                                                    dataRow.createCell(11).setCellValue("NO");
+//                                                }else{
+//                                                    dataRow.createCell(11).setCellValue("YES");
+//                                                }                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
                                                 dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
                                                 dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                             }
