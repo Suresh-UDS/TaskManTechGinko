@@ -2909,7 +2909,37 @@ public class ExportUtil {
                                                 dataRow.createCell(15).setCellValue(transaction.getRemarks());
                                             }
 
-                                        }else if((result.getAnswerType().equalsIgnoreCase("Rating") && Float.parseFloat(result.getAnswer())<5)) {
+                                        }else if(result.getAnswerType().equalsIgnoreCase("YesNo") && result.getAnswer().equalsIgnoreCase("true") && result.getScoreType().equalsIgnoreCase("yes:-1")){
+
+                                        log.debug("Inside the condition"+result.getAnswer());
+
+                                        cnt++;
+
+                                        if(cnt < size) {
+                                            dataRow = xssfSheet.createRow(rowNum++);
+                                            dataRow.createCell(0).setCellValue(transaction.getId());
+                                            dataRow.createCell(1).setCellValue(DateUtil.formatToDateTimeString(feedbackDate.getTime()));
+                                            dataRow.createCell(2).setCellValue(transaction.getReviewerName());
+                                            dataRow.createCell(3).setCellValue(transaction.getReviewerCode());
+                                            dataRow.createCell(4).setCellValue(transaction.getProjectName());
+                                            dataRow.createCell(5).setCellValue(transaction.getSiteName());
+                                            dataRow.createCell(6).setCellValue(StringUtils.isNotEmpty(transaction.getFeedbackName()) ? transaction.getFeedbackName() : transaction.getZone() + " Feedback");
+                                            dataRow.createCell(7).setCellValue(transaction.getBlock());
+                                            dataRow.createCell(8).setCellValue(transaction.getFloor());
+                                            dataRow.createCell(9).setCellValue(transaction.getZone());
+                                            dataRow.createCell(10).setCellValue(result.getQuestion());
+                                            dataRow.createCell(11).setCellValue(result.getAnswer());
+
+//                                                if(result.getAnswer().equalsIgnoreCase("false")){
+//                                                    dataRow.createCell(11).setCellValue("NO");
+//                                                }else{
+//                                                    dataRow.createCell(11).setCellValue("YES");
+//                                                }                                                dataRow.createCell(13).setCellValue(StringUtils.isNotEmpty(result.getRemarks()) ? result.getRemarks() : "");
+                                            dataRow.createCell(14).setCellValue(NumberUtil.formatOneDecimal(transaction.getRating()));
+                                            dataRow.createCell(15).setCellValue(transaction.getRemarks());
+                                        }
+
+                                    }else if((result.getAnswerType().equalsIgnoreCase("Rating") && Float.parseFloat(result.getAnswer())<5)) {
 
                                             log.debug("Inside the condition"+result.getAnswer());
 
