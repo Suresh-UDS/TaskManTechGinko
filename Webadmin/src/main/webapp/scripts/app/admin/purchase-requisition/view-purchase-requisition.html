@@ -39,9 +39,8 @@
 
                                 </tr>
                                 <tr>
-                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED'" >P.O Number</td>
-                                    <!--<td ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" >-->
-                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED'" >
+                                    <td>P.O Number</td>
+                                    <td ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" >
                                         <form ng-submit="updatePurchaseReq()" name="poForm" role="form">
                                             <div class="row" class="no-scroll">
                                                 <div class="col-md-6">
@@ -73,9 +72,9 @@
 
                                         </form>
                                     </td>
-                                    <!--<td ng-if="purchaseReqObj.requestStatus != 'APPROVED' || purchaseReqObj.requestStatus !='PURCHASERAISED' || purchaseReqObj.requestStatus != 'REJECTED'">-->
-                                        <!-- - -->
-                                    <!--</td>-->
+                                    <td ng-if="purchaseReqObj.requestStatus != 'APPROVED' || purchaseReqObj.requestStatus !='PURCHASERAISED' || purchaseReqObj.requestStatus != 'REJECTED'">
+                                        -
+                                    </td>
 
                                 </tr>
 
@@ -90,7 +89,7 @@
 
             <div class="col-md-6 col-lg-6" >
 
-                <div class="panel panel-default" style="min-height:263px;">
+                <div class="panel panel-default" style="min-height:349px;">
                     <div class="panel-heading">Requester Details </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -131,7 +130,7 @@
                                         <th>Uom</th>
                                         <th>Required Qty</th>
                                         <th>Qty Approved</th>
-                                        <th width="10%">Approved Qty</th>
+                                        <th width="10%" ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'">Approved Qty</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -140,8 +139,8 @@
                                         <td>{{items.materialName}}</td>
                                         <td>{{items.materialUom}}</td>
                                         <td>{{items.quantity}}</td>
-                                        <td>{{items.approvedQty ? items.approvedQty : "Nil"}}</td>
-                                        <td width="10%">
+                                        <td ><span ng-if="items.approvedQty">{{items.approvedQty}}</span><span ng-if="!items.approvedQty">Nil</span></td>
+                                        <td width="10%" ng-init="items.currentAprQty = items.approvedQty" ng-if="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'">
                                             <input type="number" class="form-control" ng-model="items.currentAprQty" ng-disabled="purchaseReqObj.requestStatus == 'APPROVED' || purchaseReqObj.requestStatus =='PURCHASERAISED' || purchaseReqObj.requestStatus == 'REJECTED'" name="currentAprQty"  ng-blur="validateNumber(items, items.currentAprQty)">
                                         </td>
                                     </tr>
@@ -152,7 +151,7 @@
                                         <button class="btn btn-success" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="conform('APPROVED',null,'update')"  type="button">
                                             Approve
                                         </button>
-                                        <button class="btn" type="button" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="conform('REJECTED',null,'update')"  id="cancel-button">
+                                        <button class="btn btn-danger" type="button" ng-show="purchaseReqObj.requestStatus === 'PENDING'" ng-click="conform('REJECTED',null,'update')"  >
                                             Reject
                                             <div class="ripple-container"></div></button>
                                     </td>
@@ -174,21 +173,21 @@
 
                     <button type="button" title="Approve Purchase Requisition" ng-if="items.approvedQty"
                              ng-click="conform('Approved',purchaseReqObj.id)"
-                             class="btn btn-info">
+                             class="btn btn-success">
                         <span class="btn-label"><i class="material-icons">done</i></span>
                         Approve
                     </button>
 
                     <button type="button" title="Reject Purchase Requisition" ng-if="items.approvedQty"
                              ng-click="conform('Rejected',purchaseReqObj.id)"
-                             class="btn btn-info">
+                             class="btn btn-danger">
                         <span class="btn-label"><i class="material-icons">done</i></span>
                         Reject
                     </button>
 
-                    <button class="btn btn-danger" type="button"
+                    <button class="btn btn-default" type="button"
                             ng-click="conform('back')" id="cancel-button">
-                        <i class="material-icons"></i> Close
+                        <i class="material-icons"></i> Back
                     </button>
 
                 </div>
