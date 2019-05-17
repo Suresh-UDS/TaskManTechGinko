@@ -124,7 +124,11 @@ public class AttendanceService extends AbstractService {
 
                         if(isIdentical){
                             log.debug("Verification success identical: "+isIdentical);
-                            dbAttn.setInvalid(false);
+                            if(dbAttn.isInvalid()){
+
+                            }else{
+                                dbAttn.setInvalid(false);
+                            }
                             attnDto.setUrl(attnDto.getUrl());
                             dbAttn.setCheckOutImage(attnDto.getCheckOutImage());
                             if(attn.isOffline()){
