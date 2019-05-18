@@ -11,31 +11,29 @@ var htmlToPdf = require('html-to-pdf');
 var fs = require('fs');
 var _ = require('underscore');
 
-function createPdfHelper(response,quotation){
+function createPdfHelper(response, quotation) {
 
-    htmlToPdf.convertHTMLString(response, './templates/'+quotation._id+'.pdf',
-                    function (error, success) {
-                        if (error)
-                        {
-                            console.log('PDF Fail');
-                            console.log(error);
-                        } else
-                        {
-                            console.log('PDF Success!');
-                            console.log(success);
-                            if(quotation.isSubmitted) {
-                                console.log("sending mail");
-                                var date = new Date();
-                                quotation.isDrafted = false;
-                                quotation.processHistory.isSubmitted = date;
-                                quotation.submittedDate = date;
-                                quotation.lastModifiedDate = date;
-                                mailerService.submitQuotation(quotation.clientEmailId,quotation);
-                            }
-                            // mailerService.submitQuotationDetail('praveens@techginko.com');
-                        }
-                    }
-                );
+    htmlToPdf.convertHTMLString(response, './templates/' + quotation._id + '.pdf',
+        function(error, success) {
+            if (error) {
+                console.log('PDF Fail');
+                console.log(error);
+            } else {
+                console.log('PDF Success!');
+                console.log(success);
+                if (quotation.isSubmitted) {
+                    console.log("sending mail");
+                    var date = new Date();
+                    quotation.isDrafted = false;
+                    quotation.processHistory.isSubmitted = date;
+                    quotation.submittedDate = date;
+                    quotation.lastModifiedDate = date;
+                    mailerService.submitQuotation(quotation.clientEmailId, quotation);
+                }
+                // mailerService.submitQuotationDetail('praveens@techginko.com');
+            }
+        }
+    );
 
 }
 
@@ -43,7 +41,7 @@ function populateQuotation(req, quotation) {
     var date = new Date();
     if (req.body._id) quotation._id = req.body._id;
     if (req.body.title) quotation.title = req.body.title;
-    if (req.body.description) quotation.description = req.body.title;
+    if (req.body.description) quotation.description = req.body.description;
     if (req.body.rateCardDetails) quotation.rateCardDetails = req.body.rateCardDetails;
     if (req.body.sentByUserId) quotation.sentByUserId = req.body.sentByUserId;
     if (req.body.sentByUserName) quotation.sentByUserName = req.body.sentByUserName;
@@ -194,15 +192,15 @@ module.exports = {
                 quotation.processHistory.isSubmitted = date;
                 quotation.submittedDate = date;
                 quotation.lastModifiedDate = date;
-             //   mailerService.submitQuotation(quotation.clientEmailId,quotation)
+                //   mailerService.submitQuotation(quotation.clientEmailId,quotation)
 
                 quotation.save(function(err, quotation) {
                     if (!err) {
                         // mailerService.submitQuotation('karthickk@techginko.com',quotation);
                         module.exports.createPDF(quotation);
-                        notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a','Quotation Received')
-                        res.json(200,quotation)
-                    }else{
+                        notificationService.sendNotification('e678b6d8-9747-4528-864d-911a24cd786a', 'Quotation Received')
+                        res.json(200, quotation)
+                    } else {
                         console.log("Error in saving quotation");
                         console.log(err)
                         res.json(500, err);
@@ -667,28 +665,27 @@ module.exports = {
                 console.log("Html template success");
                 console.log(response);
                 console.log(JSON.stringify(response))
- 
-                fs.access('./templates/'+quotation._id+'.pdf',(err)=>{
 
-                    if(!err){
+                fs.access('./templates/' + quotation._id + '.pdf', (err) => {
 
-                        fs.unlink('./templates/'+quotation._id+'.pdf',(err)=>{
-                            
-                            createPdfHelper(response,quotation);
+                    if (!err) {
+
+                        fs.unlink('./templates/' + quotation._id + '.pdf', (err) => {
+
+                            createPdfHelper(response, quotation);
 
                         })
 
 
-                    }
-                    else{
+                    } else {
 
-                        createPdfHelper(response,quotation);
+                        createPdfHelper(response, quotation);
 
                     }
- 
+
                 })
 
-                
+
 
             }
         })
