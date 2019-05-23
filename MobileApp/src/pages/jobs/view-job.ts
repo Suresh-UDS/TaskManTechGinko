@@ -89,6 +89,9 @@ export class ViewJobPage {
                         // }
 
                     }
+                    if(response.jobMaterials && response.jobMaterials.length>0){
+                        this.materialItems = response.jobMaterials;
+                    }
                 }
 
             }

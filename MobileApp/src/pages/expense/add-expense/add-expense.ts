@@ -11,6 +11,7 @@ import {SelectSearchableComponent} from 'ionic-select-searchable';
 import {FileTransfer, FileTransferObject, FileUploadOptions} from '@ionic-native/file-transfer';
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../../service/app-config";
 import { File } from '@ionic-native/file';
+import { ExpensePage } from '../expense';
 
 declare  var demo ;
 
@@ -178,6 +179,7 @@ export class AddExpense {
 
   saveExpense() {
 
+    this.component.showLoader("Saving Expense");
     console.log("Selected site");
     console.log(this.selectedSite);
 
@@ -251,15 +253,14 @@ export class AddExpense {
             response=>{
               console.log("save Expense Details");
               console.log(response);
-
+              this.component.closeAll();
                 if(response.errorStatus){
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
-
                 }else {
-
                     //Upload Images
-
-                    for (let i in this.takenImages) {
+                    if(this.takenImages.length>0){
+                      this.component.showLoader('Uploading Images');
+                      for (let i in this.takenImages) {
 
                         console.log("image loop");
                         console.log(i);
@@ -288,18 +289,23 @@ export class AddExpense {
                                 console.log(data);
                                 console.log("image upload");
                                 this.component.closeLoader();
-                                this.component.showToastMessage("Image Uploaded Successfully ", 'bottom');
-                                this.navCtrl.pop();
+                                demo.showSwal('success-message-and-ok','Success','Expense Added Successfully and Uploaded Images ');
+                                this.navCtrl.setRoot(ExpensePage);
                             }, (err) => {
                                 console.log(err);
                                 console.log("image upload fail");
                                 this.component.closeLoader();
                             })
 
+                     }
+                    }else{
+                      this.component.closeAll();
+                      demo.showSwal('success-message-and-ok','Success','Expense Added Successfully');
+                      this.navCtrl.setRoot(ExpensePage);
                     }
+                    
                 }
 
-              this.component.showToastMessage("Expense Details saved successfully ",'bottom');
             },err=>{
               console.log("Error in save expense");
               console.log(err);
@@ -315,15 +321,16 @@ export class AddExpense {
           response=>{
             console.log("save Expense Details");
             console.log(response);
+            this.component.closeAll();
             if(response.errorStatus){
                 demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
 
             }else{
 
                 //Upload Images
-
-                for(let i in this.takenImages) {
-
+                if(this.takenImages && this.takenImages>0){
+                  this.component.showLoader("Uploading Images");
+                  for(let i in this.takenImages) {
                     console.log("image loop");
                     console.log(i);
                     console.log(this.takenImages[i]);
@@ -348,8 +355,8 @@ export class AddExpense {
                             console.log(data);
                             console.log("image upload");
                             this.component.closeLoader();
-                            this.component.showToastMessage("Image Uploaded Successfully ",'bottom');
-                            this.navCtrl.pop();
+                            demo.showSwal('success-message-and-ok','Success','Amount Credited Successfully and Uploaded Images ');
+                            this.navCtrl.setRoot(ExpensePage);
                         }, (err) => {
                             console.log(err);
                             console.log("image upload fail");
@@ -358,7 +365,11 @@ export class AddExpense {
 
                 }
 
-                this.component.showToastMessage("Transaction saved successfully ",'bottom');
+                }else{
+                  this.component.closeAll();
+                  demo.showSwal('success-message-and-ok','Success','Amount Credited Successfully');
+                  this.navCtrl.setRoot(ExpensePage);
+                }
             }
           },err=>{
             console.log("Error in save expense");

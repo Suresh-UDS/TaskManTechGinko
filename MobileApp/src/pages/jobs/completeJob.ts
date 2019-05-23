@@ -138,6 +138,10 @@ export class CompleteJobPage {
                         }
 
                     }
+
+                    if(response.jobMaterials && response.jobMaterials.length>0){
+                        this.material = response.jobMaterials;
+                    }
                 }
 
             },error=>{
@@ -201,7 +205,7 @@ export class CompleteJobPage {
         this.component.showLoader('Saving Job');
         console.log(job);
       console.log(material);
-      job.jobMaterials=material;
+      delete job.jobMaterials;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 if(response.errorStatus){
@@ -222,7 +226,6 @@ export class CompleteJobPage {
                         this.checkOutDetails.siteId = job.siteId;
                         this.checkOutDetails.jobId = job.id;
                         this.checkOutDetails.id=job.checkInOutId;
-                      this.checkOutDetails.jobMaterials=material;
 
                       this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                             response=>{
@@ -328,7 +331,8 @@ export class CompleteJobPage {
         });
       console.log("material in complete job");
       console.log(material);
-      job.jobMaterials=material;
+    //   job.jobMaterials=material;
+        delete job.jobMaterials;
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log(job);
@@ -341,7 +345,6 @@ export class CompleteJobPage {
                 this.checkOutDetails.latitudeOut = this.latitude;
                 this.checkOutDetails.longitude = this.longitude;
                 this.checkOutDetails.id=job.checkInOutId;
-              this.checkOutDetails.jobMaterials=material;
 
               console.log(this.checkOutDetails);
                 this.jobService.updateJobImages(this.checkOutDetails).subscribe(
@@ -355,7 +358,7 @@ export class CompleteJobPage {
                             console.log(response);
                             console.log(job);
                             // this.component.showToastMessage('Job Completed Successfully','bottom');
-                            demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
+                            demo.showSwal('success-message-and-ok','Success','Job Completed Successfully');
 
                             // this.component.showLoader('Uploading Images');
                             //TODO
@@ -474,32 +477,7 @@ export class CompleteJobPage {
 
         this.camera.getPicture(options).then((imageData) => {
 
-            // console.log('imageData -' +imageData);
             imageData = 'data:image/jpeg;base64,' + imageData;
-            // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
-
-            // if(this.checkListItems[i].image_1 !=null){
-            //     console.log("image_1"+this.checkListItems[i].image_1);
-            //     if(this.checkListItems[i].image_2 !=null){
-            //         console.log("image_2"+this.checkListItems[i].image_2);
-            //
-            //         if(this.checkListItems[i].image_3 !=null){
-            //             console.log("image_3"+this.checkListItems[i].image_3);
-            //
-            //             this.cs.showToastMessage('Cannot add more than 3 images','bottom');
-            //         }else{
-            //             console.log("No third image");
-            //             this.checkListItems[i].image_3 = imageData;
-            //         }
-            //     }else{
-            //         console.log("No second image");
-            //         this.checkListItems[i].image_2 = imageData;
-            //     }
-            // }else{
-            //     console.log("No first image");
-            //     this.checkListItems[i].image_1 = imageData;
-            // }
-
             this.checkListItems[i].image_1 = imageData;
 
 
@@ -521,8 +499,6 @@ export class CompleteJobPage {
         this.index = i;
     }
 
-    // openImage(imageToView){ const viewer =  this._imageViewerCtrl .create(imageToView)
-    //     viewer.present(); }
 
     viewImg(img)
     {
@@ -544,7 +520,14 @@ export class CompleteJobPage {
       console.log("data");
       console.log(data);
       console.log("Job Material in complete job page");
-      this.material=data.jobMaterial;
+      this.jobService.getJobDetails(this.jobDetails.id).subscribe(response=>{
+        if(response && response.errorStatus){
+
+        }else{
+            console.log(response.jobMaterials);
+            this.material = response.jobMaterials;
+        }       
+      })
       console.log(data.jobMaterial);
     });
     profileModal.present();

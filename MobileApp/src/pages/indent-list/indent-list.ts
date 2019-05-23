@@ -18,21 +18,25 @@ import{Indent} from "../indent/indent";
 export class IndentList {
 
   isLoading : boolean;
-    page:1;
-    pageSort:15;
+    page:any;
+    pageSort:any;
     indentMaterial:any;
     spinner:any;
-
     fakeList : Array<any> = new Array(12);
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private purchaseService:PurchaseRequisitionService) {
+      
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad IndentList');
+    this.page = 1;
+    this.pageSort = 15;
    var searchCriteria={
        currPage:this.page,
        pageSort:this.pageSort,
+       columnName:"indentRefNumber",
+       sortByAsc:true
    };
       this.searchMaterial(searchCriteria);
 
@@ -48,6 +52,8 @@ export class IndentList {
     {
         this.spinner=true;
         this.isLoading = true;
+        console.log("Search criteria indent search");
+        console.log(searchCriteria);
         this.purchaseService.searchMaterialIndents(searchCriteria).subscribe(
             response=>{
                 this.spinner=false;

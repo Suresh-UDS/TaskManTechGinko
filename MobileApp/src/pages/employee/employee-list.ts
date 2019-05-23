@@ -15,7 +15,8 @@ import {Diagnostic} from "@ionic-native/diagnostic";
 import {LocationAccuracy} from "@ionic-native/location-accuracy";
 import {LocationProvider} from "../../providers/location-provider";
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
-
+import {File} from '@ionic-native/file';
+import { SiteListPage } from '../site-list/site-list';
 declare  var demo ;
 
 
@@ -52,7 +53,7 @@ export class EmployeeList {
     constructor(public navCtrl: NavController,public component:componentService, public navParams: NavParams, private  authService: authService, public camera: Camera,
                 private loadingCtrl:LoadingController, private geolocation:Geolocation, private toastCtrl:ToastController,private locationAccuracy:LocationAccuracy,
                 private geoFence:Geofence, private employeeService: EmployeeService, private jobService: JobService, private siteService:SiteService, private attendanceService:AttendanceService,
-                private diagonistic:Diagnostic, public locationProvider: LocationProvider,public backgroundGeolocation: BackgroundGeolocation) {
+                private diagonistic:Diagnostic, public locationProvider: LocationProvider,public backgroundGeolocation: BackgroundGeolocation, public file: File) {
 
         this.lattitude = 0;
         this.longitude = 0;
@@ -82,11 +83,13 @@ export class EmployeeList {
             stationaryRadius: 20,
             distanceFilter: 10,
             debug: false,
-            // interval: 2000
+            interval: 2000,
+            stopOnTerminate:true
         };
 
         this.backgroundGeolocation.configure(config).subscribe((response) => {
-
+            console.log("Location provider response");
+            console.log(response);
             this.lattitude = response.latitude;
             this.longitude = response.longitude;
             this.locationProvider.stopTracking();
@@ -110,6 +113,7 @@ export class EmployeeList {
         };
         this.lattitude=parseFloat(window.localStorage.getItem('lat'));
         this.longitude=parseFloat(window.localStorage.getItem('lng'));
+        this.getLocation();
         if(this.lattitude>0){
         }else{
             this.getLocation();
@@ -198,9 +202,6 @@ export class EmployeeList {
             // this.navCtrl.push(AttendanceViewPage,imageData)
         }, (err) => {
             console.log("Location error");
-            this.lattitude = 0;
-            this.longitude = 0;
-
             var msg= "Please try again...";
             this.component.showToastMessage(msg,'bottom');
         })
@@ -235,7 +236,6 @@ export class EmployeeList {
                 if(this.lattitude && this.lattitude>0){
                     this.attendanceService.checkSiteProximity(siteId,this.lattitude,this.longitude).subscribe(
                         response=> {
-                            this.component.closeAll();
                             this.verifyFaceAndMarkAttendance(employee,mode,this.lattitude,this.longitude,attendanceMode,imageData);
                             // demo.showSwal('success-message-and-ok','Success','Face Enrolled Successfully');
 
@@ -275,7 +275,9 @@ export class EmployeeList {
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
                     this.component.closeAll();
-                    this.getEmployees();
+                    // this.getEmployees();
+                    this.stop();
+                    this.navCtrl.setRoot(SiteListPage);
                     var verificationResponse = response;
                     console.log(verificationResponse);
                     // this.component.showToastMessage('Face Enrolled successfully..','bottom');
@@ -292,9 +294,8 @@ export class EmployeeList {
             })
 
         }else{
-            this.component.closeAll();
             if(attendanceMode == 'checkIn'){
-
+                this.component.showLoader("Marking Attendance... before");
                 this.markAttendance(employee,lat,lng,imageData);
 
             }else{
@@ -309,15 +310,17 @@ export class EmployeeList {
     markAttendance(employee,lat,lng,imageData){
         this.component.showLoader("Marking Attendance...");
         this.attendanceService.markAttendanceCheckIn(this.site.id,employee.empId,lat,lng,imageData,null,false).subscribe(response=>{
-            this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
+            this.component.closeAll();
                 var msg='Face Verified and Attendance marked Successfully';
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
-                this.getEmployees();
+            this.component.closeAll();
+                // this.getEmployees();
+                this.stop();
+                this.navCtrl.setRoot(SiteListPage);
                 demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
-
             }
         },error=>{
             this.component.closeAll();
@@ -331,13 +334,15 @@ export class EmployeeList {
     markAttendanceCheckOut(employee,lat,lng,imageData){
         this.component.showLoader("Marking Attendance...");
         this.attendanceService.markAttendanceCheckOut(this.site.id,employee.empId,lat,lng,imageData,employee.attendanceId,null,false).subscribe(response=>{
-            this.component.closeAll();
             this.getEmployees();
             if(response.errorStatus){
+                this.component.closeAll();
                 var msg='Face Verified and Attendance marked Successfully';
                 demo.showSwal('warning-message-and-confirmation-ok','Error in Marking Attendance',response.errorMessage);
             }else{
-                this.getEmployees();
+                this.component.closeAll();
+                // this.getEmployees();
+                this.navCtrl.setRoot(SiteListPage);
                 demo.showSwal('success-message-and-ok','Success','Face Verified and Attendance marked Successfully');
 
             }

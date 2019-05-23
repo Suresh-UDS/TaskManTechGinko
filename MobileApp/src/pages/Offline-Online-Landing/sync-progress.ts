@@ -38,7 +38,7 @@ export class SyncProgress {
     attendanceCount:any;
     errorMessages:any;
     error:any;
-    jobsError:any;
+    jobsError:boolean;
     attendanceError:any;
     assetError:any;
     fileTransfer: FileTransferObject = this.transfer.create();
@@ -151,52 +151,152 @@ export class SyncProgress {
                                                     console.log("Job images found");
                                                     console.log(jobImages);
                                                     console.log(jobs[i]);
-                                                    this.jobService.saveJob(jobDetails).subscribe(response=>{
-                                                        if(response.errorStatus){
-                                                            demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                                                    this.jobService.saveJob(jobDetails).subscribe(saveJobResponse=>{
+                                                        if(saveJobResponse.errorStatus){
+                                                            console.log("error in saving job");
+                                                            console.log(saveJobResponse);
                                                         }else{
-                                                            console.log("Save job response");
-                                                            console.log(response);
-                                                            if(jobDetails.status == "COMPLETED" ){
-                                                                this.checkOutDetails.completeJob = true;
-                                                                this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-                                                                this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-                                                                this.checkOutDetails.projectId =jobDetails.siteProjectId;
-                                                                this.checkOutDetails.siteId = jobDetails.siteId;
-                                                                this.checkOutDetails.jobId = jobDetails.id;
-                                                                this.checkOutDetails.id=jobDetails.checkInOutId;
-                                                                this.jobService.updateJobImages(this.checkOutDetails).subscribe(response=>{
-                                                                    if(jobImages && jobImages.length>0){
-                                                                        
-                                                                    }
-                                                                })
-                                                            }
+                                                            console.log("Job Saved Successfully");
+                                                            console.log(saveJobResponse);
                                                             
+                                                            if(jobDetails.status =="COMPLETED"){
+                                                                this.checkOutDetails.completeJob=true;
+                                                            }
+                                                            this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                                                            this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                                                            this.checkOutDetails.projectId = jobDetails.siteProjectId;
+                                                            this.checkOutDetails.siteId = jobDetails.siteId;
+                                                            this.checkOutDetails.jobId = jobDetails.id;
+                                                            this.checkOutDetails.id = jobDetails.checkInOutId;
+                                                            console.log("checkinout details - ");
+                                                            console.log(this.checkOutDetails);
+                                                            this.jobService.updateJobImages(this.checkOutDetails).subscribe(saveJobImagesResponse=>{
+                                                                console.log("Save job images response");
+                                                                console.log(saveJobImagesResponse);
+                                                                if(jobImages && jobImages.length>0){
 
+                                                                    for(let k=0; k<jobImages.length;k++){
+                                                                        var employeeId = Number;
+                                                                        employeeId = this.checkOutDetails.employeeId;
+                                                                        let token_header = window.localStorage.getItem('session');
+                                                                        let options:FileUploadOptions = {
+                                                                            fileKey: 'photoOutFile',
+                                                                            fileName: this.checkOutDetails.employeeId+'_photoOutFile_'+saveJobImagesResponse.transactionId,
+                                                                            headers:{
+                                                                                'X-Auth-Token': token_header
+                                                                            },
+                                                                            params:{
+                                                                                employeeEmpId:this.checkOutDetails.employeeEmpId,
+                                                                                employeeId: this.checkOutDetails.employeeId,
+                                                                                projectId: this.checkOutDetails.projectId,
+                                                                                siteId: this.checkOutDetails.siteId,
+                                                                                checkInOutId: saveJobImagesResponse.transactionId,
+                                                                                jobId: this.checkOutDetails.jobId,
+                                                                                action: 'OUT'
+                                                                            }
+                                                                            
+                                                                        };
+
+                                                                        this.fileTransfer.upload(jobImages[k].image, this.config.Url+'api/employee/image/upload', options)
+                                                                            .then((data) => {
+                                                                                console.log(data);
+                                                                                console.log("image upload");
+                                                                                if(i+1==jobs.length){
+                                                                                    console.log("Jobs sync completed");
+                                                                                    console.log("Start Asset Attendances sync..");
+                                                                                    this.syncAttendanceData();
+                                                                                }
+                                                                                
+                                                                            }, (err) => {
+                                                                                console.log(err);
+                                                                                console.log("image upload fail");
+                                                                                if(i+1==jobs.length){
+                                                                                    console.log("Jobs sync completed");
+                                                                                    console.log("Start Asset Attendances sync..");
+                                                                                    this.syncAttendanceData();
+                                                                                }
+                                                                                
+                                                                            })
+                                                                    }
+
+                                                                }else{
+                                                                    console.log("Job save success no images found");
+                                                                    if(i+1==jobs.length){
+                                                                        console.log("Jobs sync completed");
+                                                                        console.log("Start Asset Attendances sync..");
+                                                                        this.syncAttendanceData();
+                                                                    }
+                                                                }
+                                                                
+                                                             })
+
+                                                        }
+                                                    },err=>{
+                                                        console.log("Error in saving job");
+                                                         this.jobsError = true;          
+                                                         this.startSync = false;
+                                                         var msg = "Error in saving job "+err;
+                                                        this.errorMessages.push({msg:msg});
+                                                        if(i+1==jobs.length){
+                                                            console.log("Jobs sync completed");
+                                                            console.log("Start Asset Attendances sync..");
+                                                            // this.syncAttendanceData();
                                                         }
                                                     })
 
-
-                                                    if(i+1==jobs.length){
-                                                        console.log("Jobs sync completed");
-                                                        console.log("Start Asset Attendances sync..");
-                                                        this.syncAttendanceData();
-                                                    }
-
-
-                                                },err=>{
-                                                    console.log("Error in getting job images");
-                                                    if(jobDetails.status !="COMPLETED"){
-                                                        this.dbProvider.saveJob(jobDetails,null);
+                                            },err=>{
+                                                console.log("Error in getting job images");
+                                                console.log(jobs[i]);
+                                                this.jobService.saveJob(jobDetails).subscribe(saveJobResponse=>{
+                                                    if(saveJobResponse.errorStatus){
+                                                        console.log("error in saving job");
+                                                        console.log(saveJobResponse);
+                                                        if(i+1==jobs.length){
+                                                            console.log("Jobs sync completed");
+                                                            console.log("Start Asset Attendances sync..");
+                                                            this.syncAttendanceData();
+                                                        }
                                                     }else{
-                                                        this.dbProvider.completeJob(jobDetails,null);
+                                                        console.log("Job Saved Successfully");
+                                                        console.log(saveJobResponse);
+                                                        
+                                                        if(jobDetails.status =="COMPLETED"){
+                                                            this.checkOutDetails.completeJob=true;
+                                                        }
+                                                        this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                                                        this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                                                        this.checkOutDetails.projectId = jobDetails.siteProjectId;
+                                                        this.checkOutDetails.siteId = jobDetails.siteId;
+                                                        this.checkOutDetails.jobId = jobDetails.id;
+                                                        this.checkOutDetails.id = jobDetails.checkInOutId;
+                                                        console.log("checkinout details - ");
+                                                        console.log(this.checkOutDetails);
+                                                        this.jobService.updateJobImages(this.checkOutDetails).subscribe(saveJobImagesResponse=>{
+                                                            console.log("Save job images response");
+                                                            console.log(saveJobImagesResponse);
+                                                            if(i+1==jobs.length){
+                                                                console.log("Jobs sync completed");
+                                                                console.log("Start Asset Attendances sync..");
+                                                                this.syncAttendanceData();
+                                                            }
+                                                        },err=>{
+                                                            if(i+1==jobs.length){
+                                                                console.log("Jobs sync completed");
+                                                                console.log("Start Asset Attendances sync..");
+                                                                this.syncAttendanceData();
+                                                            }
+                                                        })
                                                     }
+                                                },err=>{
+                                                    console.log("Error in saving job")
                                                     if(i+1==jobs.length){
                                                         console.log("Jobs sync completed");
                                                         console.log("Start Asset Attendances sync..");
-                                                        this.syncAttendanceData();
+                                                        // this.syncAttendanceData();
                                                     }
                                                 });
+                                                
+                                            });
                                             }
 
                                         }
@@ -206,38 +306,153 @@ export class SyncProgress {
                                             console.log("Job images found");
                                             console.log(jobImages);
                                             console.log(jobs[i]);
-                                            if(jobDetails.status !="COMPLETED"){
-                                                this.dbProvider.saveJob(jobDetails,jobImages);
-                                            }else{
-                                                this.dbProvider.completeJob(jobDetails,jobImages);
-                                            }
+                                            this.jobService.saveJob(jobDetails).subscribe(saveJobResponse=>{
+                                                if(saveJobResponse.errorStatus){
+                                                    console.log("error in saving job");
+                                                    console.log(saveJobResponse);
+                                                }else{
+                                                    console.log("Job Saved Successfully");
+                                                    console.log(saveJobResponse);
+                                                    
+                                                    if(jobDetails.status =="COMPLETED"){
+                                                        this.checkOutDetails.completeJob=true;
+                                                    }
+                                                    this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                                                    this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                                                    this.checkOutDetails.projectId = jobDetails.siteProjectId;
+                                                    this.checkOutDetails.siteId = jobDetails.siteId;
+                                                    this.checkOutDetails.jobId = jobDetails.id;
+                                                    this.checkOutDetails.id = jobDetails.checkInOutId;
+                                                    console.log("checkinout details - ");
+                                                    console.log(this.checkOutDetails);
+                                                    this.jobService.updateJobImages(this.checkOutDetails).subscribe(saveJobImagesResponse=>{
+                                                        console.log("Save job images response");
+                                                        console.log(saveJobImagesResponse);
+                                                        if(jobImages && jobImages.length>0){
+
+                                                            for(let k=0; k<jobImages.length;k++){
+                                                                var employeeId = Number;
+                                                                employeeId = this.checkOutDetails.employeeId;
+                                                                let token_header = window.localStorage.getItem('session');
+                                                                let options:FileUploadOptions = {
+                                                                    fileKey: 'photoOutFile',
+                                                                    fileName: this.checkOutDetails.employeeId+'_photoOutFile_'+saveJobImagesResponse.transactionId,
+                                                                    headers:{
+                                                                        'X-Auth-Token': token_header
+                                                                    },
+                                                                    params:{
+                                                                        employeeEmpId:this.checkOutDetails.employeeEmpId,
+                                                                        employeeId: this.checkOutDetails.employeeId,
+                                                                        projectId: this.checkOutDetails.projectId,
+                                                                        siteId: this.checkOutDetails.siteId,
+                                                                        checkInOutId: saveJobImagesResponse.transactionId,
+                                                                        jobId: this.checkOutDetails.jobId,
+                                                                        action: 'OUT'
+                                                                    }
+                                                                    
+                                                                };
+
+                                                                this.fileTransfer.upload(jobImages[k].image, this.config.Url+'api/employee/image/upload', options)
+                                                                    .then((data) => {
+                                                                        console.log(data);
+                                                                        console.log("image upload");
+                                                                        if(i+1==jobs.length){
+                                                                            console.log("Jobs sync completed");
+                                                                            console.log("Start Asset Attendances sync..");
+                                                                            this.syncAttendanceData();
+                                                                        }
+                                                                        
+                                                                    }, (err) => {
+                                                                        console.log(err);
+                                                                        console.log("image upload fail");
+                                                                        if(i+1==jobs.length){
+                                                                            console.log("Jobs sync completed");
+                                                                            console.log("Start Asset Attendances sync..");
+                                                                            this.syncAttendanceData();
+                                                                        }
+                                                                        
+                                                                    })
+                                                            }
+
+                                                        }else{
+                                                            console.log("Job save success no images found");
+                                                            if(i+1==jobs.length){
+                                                                console.log("Jobs sync completed");
+                                                                console.log("Start Asset Attendances sync..");
+                                                                this.syncAttendanceData();
+                                                            }
+                                                        }
+                                                        
+                                                     })
+
+                                                }
+                                            },err=>{
+                                                console.log("Error in saving job");
+                                                    this.jobsError = true; 
+                                                    this.startSync = false; 
+                                                    var msg = "Error in saving job "+err;
+                                                this.errorMessages.push({msg:msg});
+                                                if(i+1==jobs.length){
+                                                    console.log("Jobs sync completed");
+                                                    console.log("Start Asset Attendances sync..");
+                                                    // this.syncAttendanceData();
+                                                }
+                                            })
+                                            
 
 
-                                            if(i+1==jobs.length){
-                                                console.log("Jobs sync completed");
-                                                console.log("Start Asset Attendances sync..");
-                                                this.syncAttendanceData();
-                                            }
-
-
-                                        },err=>{
-                                            console.log("Error in getting job images");
-                                            if(jobDetails.status !="COMPLETED"){
-                                                this.dbProvider.saveJob(jobDetails,null);
-                                            }else{
-                                                this.dbProvider.completeJob(jobDetails,null);
-                                            }
-                                            if(i+1==jobs.length){
-                                                console.log("Jobs sync completed");
-                                                console.log("Start Asset Attendances sync..");
-                                                this.syncAttendanceData();
-                                            }
+                                            },err=>{
+                                                console.log("Error in getting job images");
+                                                console.log(jobs[i]);
+                                                this.jobService.saveJob(jobDetails).subscribe(saveJobResponse=>{
+                                                    if(saveJobResponse.errorStatus){
+                                                        console.log("error in saving job");
+                                                        console.log(saveJobResponse);
+                                                    }else{
+                                                        console.log("Job Saved Successfully");
+                                                        console.log(saveJobResponse);
+                                                        
+                                                        if(jobDetails.status =="COMPLETED"){
+                                                            this.checkOutDetails.completeJob=true;
+                                                        }
+                                                        this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                                                        this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                                                        this.checkOutDetails.projectId = jobDetails.siteProjectId;
+                                                        this.checkOutDetails.siteId = jobDetails.siteId;
+                                                        this.checkOutDetails.jobId = jobDetails.id;
+                                                        this.checkOutDetails.id = jobDetails.checkInOutId;
+                                                        console.log("checkinout details - ");
+                                                        console.log(this.checkOutDetails);
+                                                        this.jobService.updateJobImages(this.checkOutDetails).subscribe(saveJobImagesResponse=>{
+                                                            console.log("Save job images response");
+                                                            console.log(saveJobImagesResponse);
+                                                            if(i+1==jobs.length){
+                                                                console.log("Jobs sync completed");
+                                                                console.log("Start Asset Attendances sync..");
+                                                                this.syncAttendanceData();
+                                                            }
+                                                        },err=>{
+                                                            if(i+1==jobs.length){
+                                                                console.log("Jobs sync completed");
+                                                                console.log("Start Asset Attendances sync..");
+                                                                this.syncAttendanceData();
+                                                            }
+                                                        })
+                                                    }
+                                                },err=>{
+                                                    console.log("Error in saving job");
+                                                    this.jobsError = true;
+                                                    this.startSync = false;
+                                                    var msg = "Error in saving job "+err;
+                                                    this.errorMessages.push({msg:msg});
+                                                    if(i+1==jobs.length){
+                                                        console.log("Jobs sync completed");
+                                                        console.log("Start Asset Attendances sync..");
+                                                        // this.syncAttendanceData();
+                                                    }
+                                                });
+                                                
                                         });
-                                        if(i+1==jobs.length){
-                                            console.log("Jobs sync completed");
-                                            console.log("Start Asset Attendances sync..");
-                                            this.syncAttendanceData();
-                                        }
 
                                     }
                                 }else{
@@ -246,50 +461,145 @@ export class SyncProgress {
                                         console.log("Job images found");
                                         console.log(jobImages);
                                         console.log(jobs[i]);
-                                        if(jobDetails.status !="COMPLETED"){
-                                            this.dbProvider.saveJob(jobDetails,jobImages);
-                                        }else{
-                                            this.dbProvider.completeJob(jobDetails,jobImages);
-                                        }
+                                        this.jobService.saveJob(jobDetails).subscribe(saveJobResponse=>{
+                                            if(saveJobResponse.errorStatus){
+                                                console.log("error in saving job");
+                                                console.log(saveJobResponse);
+                                            }else{
+                                                console.log("Job Saved Successfully");
+                                                console.log(saveJobResponse);
+                                                
+                                                if(jobDetails.status =="COMPLETED"){
+                                                    this.checkOutDetails.completeJob=true;
+                                                }
+                                                this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                                                this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                                                this.checkOutDetails.projectId = jobDetails.siteProjectId;
+                                                this.checkOutDetails.siteId = jobDetails.siteId;
+                                                this.checkOutDetails.jobId = jobDetails.id;
+                                                this.checkOutDetails.id = jobDetails.checkInOutId;
+                                                console.log("checkinout details - ");
+                                                console.log(this.checkOutDetails);
+                                                this.jobService.updateJobImages(this.checkOutDetails).subscribe(saveJobImagesResponse=>{
+                                                    console.log("Save job images response");
+                                                    console.log(saveJobImagesResponse);
+                                                    if(jobImages && jobImages.length>0){
 
+                                                        for(let k=0; k<jobImages.length;k++){
+                                                            var employeeId = Number;
+                                                            employeeId = this.checkOutDetails.employeeId;
+                                                            let token_header = window.localStorage.getItem('session');
+                                                            let options:FileUploadOptions = {
+                                                                fileKey: 'photoOutFile',
+                                                                fileName: this.checkOutDetails.employeeId+'_photoOutFile_'+saveJobImagesResponse.transactionId,
+                                                                headers:{
+                                                                    'X-Auth-Token': token_header
+                                                                },
+                                                                params:{
+                                                                    employeeEmpId:this.checkOutDetails.employeeEmpId,
+                                                                    employeeId: this.checkOutDetails.employeeId,
+                                                                    projectId: this.checkOutDetails.projectId,
+                                                                    siteId: this.checkOutDetails.siteId,
+                                                                    checkInOutId: saveJobImagesResponse.transactionId,
+                                                                    jobId: this.checkOutDetails.jobId,
+                                                                    action: 'OUT'
+                                                                }
+                                                                
+                                                            };
 
-                                        if(i+1==jobs.length){
-                                            console.log("Jobs sync completed");
-                                            console.log("Start Asset Attendances sync..");
-                                            this.syncAttendanceData();
-                                        }
+                                                            this.fileTransfer.upload(jobImages[k].image, this.config.Url+'api/employee/image/upload', options)
+                                                                .then((data) => {
+                                                                    console.log(data);
+                                                                    console.log("image upload");
+                                                                    if(i+1==jobs.length){
+                                                                        console.log("Jobs sync completed");
+                                                                        console.log("Start Asset Attendances sync..");
+                                                                        this.syncAttendanceData();
+                                                                    }
+                                                                    
+                                                                }, (err) => {
+                                                                    console.log(err);
+                                                                    console.log("image upload fail");
+                                                                    if(i+1==jobs.length){
+                                                                        console.log("Jobs sync completed");
+                                                                        console.log("Start Asset Attendances sync..");
+                                                                        this.syncAttendanceData();
+                                                                    }
+                                                                    
+                                                                })
+                                                        }
+
+                                                    }else{
+                                                        console.log("Job save success no images found");
+                                                        if(i+1==jobs.length){
+                                                            console.log("Jobs sync completed");
+                                                            console.log("Start Asset Attendances sync..");
+                                                            this.syncAttendanceData();
+                                                        }
+                                                    }
+                                                    
+                                                 })
+
+                                            }
+                                        })
+                                        
 
 
                                     },err=>{
                                         console.log("Error in getting job images");
-                                        if(jobDetails.status !="COMPLETED"){
-                                            this.dbProvider.saveJob(jobDetails,null);
-                                        }else{
-                                            this.dbProvider.completeJob(jobDetails,null);
-                                        }
-                                        if(i+1==jobs.length){
-                                            console.log("Jobs sync completed");
-                                            console.log("Start Asset Attendances sync..");
-                                            this.syncAttendanceData();
-                                        }
+                                        console.log(jobs[i]);
+                                        this.jobService.saveJob(jobDetails).subscribe(saveJobResponse=>{
+                                            if(saveJobResponse.errorStatus){
+                                                console.log("error in saving job");
+                                                console.log(saveJobResponse);
+                                            }else{
+                                                console.log("Job Saved Successfully");
+                                                console.log(saveJobResponse);
+                                                
+                                                if(jobDetails.status =="COMPLETED"){
+                                                    this.checkOutDetails.completeJob=true;
+                                                }
+                                                this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                                                this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                                                this.checkOutDetails.projectId = jobDetails.siteProjectId;
+                                                this.checkOutDetails.siteId = jobDetails.siteId;
+                                                this.checkOutDetails.jobId = jobDetails.id;
+                                                this.checkOutDetails.id = jobDetails.checkInOutId;
+                                                console.log("checkinout details - ");
+                                                console.log(this.checkOutDetails);
+                                                this.jobService.updateJobImages(this.checkOutDetails).subscribe(saveJobImagesResponse=>{
+                                                    console.log("Save job images response");
+                                                    console.log(saveJobImagesResponse);
+                                                    if(i+1==jobs.length){
+                                                        console.log("Jobs sync completed");
+                                                        console.log("Start Asset Attendances sync..");
+                                                        this.syncAttendanceData();
+                                                    }
+                                                },err=>{
+                                                    if(i+1==jobs.length){
+                                                        console.log("Jobs sync completed");
+                                                        console.log("Start Asset Attendances sync..");
+                                                        this.syncAttendanceData();
+                                                    }
+                                                })
+                                            }
+                                        });
+                                        
                                     });
-                                    if(i+1==jobs.length){
-                                        console.log("Jobs sync completed");
-                                        console.log("Start Asset Attendances sync..");
-                                        this.syncAttendanceData();
-                                    }
 
-                                }
-                            });
+                                    }
+                                });
 
 
                         });
                     }else{
                         console.log("No job updates found in local");
-                    //     // this.syncMessage = "No job updates found in local";
-                    //     // console.log("Start Attendance sync...");
-                    //     // this.syncAttendanceData();
-                    //
+                        this.syncMessage = "No Jobs data found";
+                        console.log("No jobs data found..");
+                        console.log("Start Attendance sync...");
+                        setTimeout(()=>{
+                            this.syncAttendanceData();
+                        },2000);
                         if(i+1==jobs.length){
                             console.log("Jobs sync completed");
                             console.log("Start Asset Attendances sync..");
@@ -302,10 +612,14 @@ export class SyncProgress {
                 this.syncMessage = "No Jobs data found";
                 console.log("No jobs data found..");
                 console.log("Start Attendance sync...");
-                this.syncAttendanceData();
+                setTimeout(()=>{
+                    this.syncAttendanceData();
+                },2000);
 
             }
         },err=>{
+            // this.jobsError = true;
+            // this.errorMessages.push("Error in getting jobs from local");
             console.log("Error in getting jobs data");
             console.log("Start attendance sync...");
             this.syncAttendanceData();
@@ -317,6 +631,8 @@ export class SyncProgress {
 
 
   syncAttendanceData(){
+      this.jobsError = false;
+    //   this.error
       this.dbProvider.getAttendanceCheckInData().then(attendances=>{
           if(attendances && attendances.length>0){
               for(let i =0; i<attendances.length;i++){
@@ -994,145 +1310,39 @@ export class SyncProgress {
         });
     }
 
-    saveJob(jobDetails,jobImages){
-        this.cs.showLoader("Saving Job");
-        return this.jobService.saveJob(jobDetails).subscribe(
+  saveJob(job,takenImages){
+        this.cs.showLoader('Saving Job');
+        console.log(job);
+        let checkOutDetails: any;
+        return this.jobService.saveJob(job).subscribe(
             response=>{
-                    if(response.errorStatus){
-                        this.cs.closeAll();
-                        demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
-                        return response;
-                    }else{
-                        this.cs.closeAll();
-                        console.log("Save Job response");
-                        console.log(response);
-                        console.log(jobDetails.checkInOutId);
-                        if(jobImages && jobImages.length>0){
-                            this.cs.closeAll();
-                            this.cs.showLoader('Uploading Images');
-                            console.log("checkout details");
-                            console.log(this.checkOutDetails);
-                            this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-                            this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-                            this.checkOutDetails.projectId =jobDetails.siteProjectId;
-                            this.checkOutDetails.siteId = jobDetails.siteId;
-                            this.checkOutDetails.jobId = jobDetails.id;
-                            this.checkOutDetails.id=jobDetails.checkInOutId;
-                            console.log("checkoutDetails",this.checkOutDetails);
-                            this.jobService.updateJobImages(this.checkOutDetails).subscribe(
-                                response=>{
-                                    console.log("complete job response");
-                                    console.log(response);
-                                    //TODO
-                                    for(let k=0;k<jobImages.length;k++) {
-                                        var employeeId=Number;
-                                        employeeId=this.checkOutDetails.employeeId;
-                                        let token_header=window.localStorage.getItem('session');
-                                        let options: FileUploadOptions = {
-                                            fileKey: 'photoOutFile',
-                                            fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
-                                            headers:{
-                                                'X-Auth-Token':token_header
-                                            },
-                                            params:{
-                                                employeeEmpId: this.checkOutDetails.employeeEmpId,
-                                                employeeId: this.checkOutDetails.employeeId,
-                                                projectId:this.checkOutDetails.projectId,
-                                                siteId:this.checkOutDetails.siteId,
-                                                checkInOutId:response.transactionId,
-                                                jobId:this.checkOutDetails.jobId,
-                                                action:"OUT"
-                                            }
-                                        };
-
-                                        this.fileTransfer.upload(jobImages[k].image, this.config.Url+'api/employee/image/upload', options)
-                                            .then((data) => {
-                                                this.cs.closeAll();
-                                                console.log(data);
-                                                console.log("image upload");
-                                                return {
-                                                    status: true,
-                                                    msg:"Image upload successful"
-                                                }
-
-                                            }, (err) => {
-                                                this.cs.closeAll();
-                                                console.log(err);
-                                                console.log("image upload fail");
-                                                return {
-                                                    status:false,
-                                                    msg:"Error in uploading job image"
-                                                }
-
-                                            })
-
-                                    }
-
-                                },err=>{
-                                    console.log("Error in completing or saving job");
-                                    this.cs.closeAll();
-                                    return {
-                                        status:false,
-                                        msg:"Error in completing or saving job"
-                                    }
-
-                               })
-                        }else{
-                            this.cs.closeAll();
-                            return {
-                                status:true,
-                                msg:"Job Completion success, no Images found"
-                            };
-                        }
-                    }
-            },err=>{
-                console.log("Error in saving response");
-                console.log(err);
-                this.cs.closeAll();
-                this.cs.showToastMessage('Error in saving job, please try again...','bottom');
-                return {
-                    status:false,
-                    msg:"Error in completing or saving job"
-                }
-
-            })
-
-    }
-
-
-    completeJob(job, takenImages){
-        this.cs.showLoader('Completing Job');
-        console.log("getJobs",job);
-        console.log("getImages",takenImages);
-        let checkOutDetails:any;
-        this.jobService.getJobDetails(job.id).subscribe(jobDetails=>{
-            console.log("Job details from server");
-            console.log(jobDetails);
-            jobDetails.status = job.status;
-            jobDetails.checklistItems = job.checklistItems;
-            this.jobService.saveJob(jobDetails).subscribe(
-                response=>{
-                    console.log("get jobs",job);
-                    this.checkOutDetails.completeJob=true;
-                    this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
-                    this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
-                    this.checkOutDetails.projectId =job.siteProjectId;
-                    this.checkOutDetails.siteId = job.siteId;
-                    this.checkOutDetails.jobId = job.id;
-                    // this.checkOutDetails.latitudeOut = this.latitude;
-                    // this.checkOutDetails.longitude = this.longitude;
-                    this.checkOutDetails.id=job.checkInOutId;
-                    this.jobService.updateJobImages(this.checkOutDetails).subscribe(
-                        response=>{
-                            if(response.errorStatus){
-                                this.cs.closeAll();
-                                // demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
-                            }else{
-                                this.cs.closeAll();
+                if(response.errorStatus){
+                    this.cs.closeAll();
+                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                    return response;
+                }else{
+                    console.log("Save Job response");
+                    // this.component.closeLoader();
+                    this.cs.showToastMessage('Job Saved Successfully','bottom');
+                    console.log(response);
+                    console.log(job.checkInOutId);
+                    console.log("takenimages length",takenImages.length);
+                    if(takenImages.length>0){
+                        this.cs.showLoader('Uploading Images');
+                        checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                        checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                        checkOutDetails.projectId =job.siteProjectId;
+                        checkOutDetails.siteId = job.siteId;
+                        checkOutDetails.jobId = job.id;
+                        checkOutDetails.id=job.checkInOutId;
+                        console.log("checkoutDetails",checkOutDetails);
+                        this.jobService.updateJobImages(checkOutDetails).subscribe(
+                            response=>{
+                                // this.component.closeLoader();
                                 console.log("complete job response");
                                 console.log(response);
                                 console.log(job);
-                                this.cs.showToastMessage('Job Completed Successfully','bottom');
+                                // this.component.showToastMessage('Job Completed Successfully','bottom');
                                 // this.component.showLoader('Uploading Images');
                                 //TODO
                                 //File Upload after successful checkout
@@ -1142,62 +1352,160 @@ export class SyncProgress {
                                     console.log(i);
                                     console.log(takenImages[i]);
                                     console.log(takenImages[i].file);
-                                    console.log(this.checkOutDetails.employeeId);
-                                    console.log(this.checkOutDetails.employeeEmpId);
-                                    console.log(this.checkOutDetails.projectId);
-                                    console.log(this.checkOutDetails.siteId);
-                                    console.log(this.checkOutDetails.jobId);
+                                    // console.log(this.jobDetails.id);
+                                    // console.log(this.jobDetails.id+i);
+                                    console.log(checkOutDetails.employeeId);
+                                    console.log(checkOutDetails.employeeEmpId);
+                                    console.log(checkOutDetails.projectId);
+                                    console.log(checkOutDetails.siteId);
+                                    console.log(checkOutDetails.jobId);
                                     var employeeId=Number;
                                     console.log(typeof employeeId);
-                                    employeeId=this.checkOutDetails.employeeId;
+                                    employeeId=checkOutDetails.employeeId;
+                                    console.log(typeof employeeId);
+                                    console.log(employeeId);
                                     let token_header=window.localStorage.getItem('session');
                                     let options: FileUploadOptions = {
                                         fileKey: 'photoOutFile',
-                                        fileName:this.checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
+                                        fileName:checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
                                         headers:{
                                             'X-Auth-Token':token_header
                                         },
                                         params:{
-                                            employeeEmpId: this.checkOutDetails.employeeEmpId,
-                                            employeeId: this.checkOutDetails.employeeId,
-                                            projectId:this.checkOutDetails.projectId,
-                                            siteId:this.checkOutDetails.siteId,
+                                            employeeEmpId: checkOutDetails.employeeEmpId,
+                                            employeeId: checkOutDetails.employeeId,
+                                            projectId:checkOutDetails.projectId,
+                                            siteId:checkOutDetails.siteId,
                                             checkInOutId:response.transactionId,
-                                            jobId:this.checkOutDetails.jobId,
+                                            jobId:checkOutDetails.jobId,
                                             action:"OUT"
                                         }
                                     };
 
                                     this.fileTransfer.upload(takenImages[i], this.config.Url+'api/employee/image/upload', options)
                                         .then((data) => {
+                                            this.cs.closeAll();
                                             console.log(data);
                                             console.log("image upload");
-                                            this.cs.closeLoader();
                                         }, (err) => {
+                                            this.cs.closeAll();
                                             console.log(err);
                                             console.log("image upload fail");
-                                            this.cs.closeLoader();
                                         })
 
                                 }
 
+                            },err=>{
+                                this.cs.closeLoader();
+                                // this.navCtrl.pop();
                             }
-                        },
-                        err=>{
-                            this.cs.closeLoader();
-                            demo.showSwal('warning-message-and-confirmation-ok','Error in Uploading images');
+                        )
+                    }else{
+                        this.cs.closeAll();
+                    }
+                }
+            }
+            ,err=>{
+                console.log("Error in saving response");
+                console.log(err);
+                this.cs.closeLoader();
+                this.cs.showToastMessage('Error in saving job, please try again...','bottom');
+            }
+        )
+    }
+
+  completeJob(job, takenImages){
+        this.cs.showLoader('Completing Job');
+        console.log("getJobs",job);
+        console.log("getImages",takenImages);
+        let checkOutDetails:any;
+        this.jobService.saveJob(job).subscribe(
+            response=>{
+                console.log("get jobs",job);
+                checkOutDetails.completeJob=true;
+                checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
+                checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
+                checkOutDetails.projectId =job.siteProjectId;
+                checkOutDetails.siteId = job.siteId;
+                checkOutDetails.jobId = job.id;
+                // this.checkOutDetails.latitudeOut = this.latitude;
+                // this.checkOutDetails.longitude = this.longitude;
+                checkOutDetails.id=job.checkInOutId;
+                this.jobService.updateJobImages(checkOutDetails).subscribe(
+                    response=>{
+                        if(response.errorStatus){
+                            this.cs.closeAll();
+                            // demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                        }else{
+                            this.cs.closeAll();
+                            console.log("complete job response");
+                            console.log(response);
+                            console.log(job);
+                            this.cs.showToastMessage('Job Completed Successfully','bottom');
+                            // this.component.showLoader('Uploading Images');
+                            //TODO
+                            //File Upload after successful checkout
+                            for(let i in takenImages) {
+
+                                console.log("image loop");
+                                console.log(i);
+                                console.log(takenImages[i]);
+                                console.log(takenImages[i].file);
+                                // console.log(this.jobDetails.id);
+                                // console.log(this.jobDetails.id+i);
+                                console.log(checkOutDetails.employeeId);
+                                console.log(checkOutDetails.employeeEmpId);
+                                console.log(checkOutDetails.projectId);
+                                console.log(checkOutDetails.siteId);
+                                console.log(checkOutDetails.jobId);
+                                var employeeId=Number;
+                                console.log(typeof employeeId);
+                                employeeId=checkOutDetails.employeeId;
+                                let token_header=window.localStorage.getItem('session');
+                                let options: FileUploadOptions = {
+                                    fileKey: 'photoOutFile',
+                                    fileName:checkOutDetails.employeeId+'_photoOutFile_'+response.transactionId,
+                                    headers:{
+                                        'X-Auth-Token':token_header
+                                    },
+                                    params:{
+                                        employeeEmpId: checkOutDetails.employeeEmpId,
+                                        employeeId: checkOutDetails.employeeId,
+                                        projectId:checkOutDetails.projectId,
+                                        siteId:checkOutDetails.siteId,
+                                        checkInOutId:response.transactionId,
+                                        jobId:checkOutDetails.jobId,
+                                        action:"OUT"
+                                    }
+                                };
+
+                                this.fileTransfer.upload(takenImages[i], this.config.Url+'api/employee/image/upload', options)
+                                    .then((data) => {
+                                        console.log(data);
+                                        console.log("image upload");
+                                        this.cs.closeLoader();
+                                    }, (err) => {
+                                        console.log(err);
+                                        console.log("image upload fail");
+                                        this.cs.closeLoader();
+                                    })
+
+                            }
 
                         }
-                    )
-                },error2 => {
-                    this.cs.closeLoader();
-                    console.log(error2);
-                    demo.showSwal('warning-message-and-confirmation-ok','Error in Completing Job',error2.errorMessage);
-                }
-            )
+                    },
+                    err=>{
+                        this.cs.closeLoader();
+                        demo.showSwal('warning-message-and-confirmation-ok','Error in Uploading images');
 
-        });
-
+                    }
+                )
+            },error2 => {
+                this.cs.closeLoader();
+                console.log(error2);
+                demo.showSwal('warning-message-and-confirmation-ok','Error in Completing Job',error2.errorMessage);
+            }
+        )
         this.cs.closeLoader();
 
     }

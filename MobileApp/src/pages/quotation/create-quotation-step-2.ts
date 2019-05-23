@@ -280,7 +280,7 @@ export class CreateQuotationPage2 {
                     this.quotationDetails.isSubmitted=false;
                 }
 
-                this.saveQuotationDetails(this.quotationDetails)
+                this.saveQuotationDetails(this.quotationDetails);
             }else{
                 console.log("Save Quotation without site id");
 
@@ -412,7 +412,12 @@ export class CreateQuotationPage2 {
 
                         }
                     }
-                    this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
+
+                    if(response.drafted){
+                        this.componentService.showToastMessage('Quotation Successfully Drafted','bottom');
+                    }else if(response.submitted){
+                        this.componentService.showToastMessage('Quotation Submitted Sucessfully','bottom');
+                    }
                     this.navCtrl.setRoot(QuotationPage);
 
                 }

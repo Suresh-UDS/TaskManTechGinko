@@ -18,28 +18,28 @@
 
 <ion-content padding>
 
-  <ion-row class="margin0 white-bg padding10">
-    <ion-col col-6 class="label-on-left">Ticket ID</ion-col>
-    <ion-col col-6>
-      <p text-right>{{ticketDetails.id}}</p>
-    </ion-col>
-    <ion-col col-6 class="label-on-left">Ticket Title</ion-col>
-    <ion-col col-6>
-      <p text-right>{{ticketDetails.title}}</p>
-    </ion-col>
-    <ion-col col-6 class="label-on-left">Description</ion-col>
-    <ion-col col-6>
-      <p text-right>{{ticketDetails.description}}</p>
-    </ion-col>
-    <ion-col col-6 class="label-on-left">Status</ion-col>
-    <ion-col col-6>
-      <p text-right>{{ticketDetails.status}}</p>
-    </ion-col>
-      <ion-col col-6 class="label-on-left">Severity</ion-col>
-    <ion-col col-6>
-      <p text-right>{{ticketDetails.severity}}</p>
-    </ion-col>
-  </ion-row>
+    <ion-row class="margin0 white-bg padding10">
+        <ion-col col-6 class="label-on-left">Ticket ID</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.id}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Ticket Title</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.title}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Description</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.description}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Status</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.status}}</p>
+        </ion-col>
+        <ion-col col-6 class="label-on-left">Severity</ion-col>
+        <ion-col col-6>
+            <p text-right>{{ticketDetails.severity}}</p>
+        </ion-col>
+    </ion-row>
 
     <br>
 
@@ -50,7 +50,7 @@
         </ion-col>
         <ion-col col-6 class="label-on-left">Assigned To</ion-col>
         <ion-col col-6>
-            <p text-right>{{ticketDetails.employeeName}}</p>
+            <p text-right>{{ticketDetails.assignedToName}}</p>
         </ion-col>
         <ion-col col-6 class="label-on-left">Assigned By</ion-col>
         <ion-col col-6>
@@ -64,7 +64,7 @@
 
     <br>
 
-    <ion-row class="margin0 white-bg padding10"  *ngIf="ticketDetails.status == 'Closed'">
+    <ion-row class="margin0 white-bg padding10" *ngIf="ticketDetails.status == 'Closed'">
         <ion-col col-6 class="label-on-left">Completed By</ion-col>
         <ion-col col-6>
             <p text-right>{{ticketDetails.lastModifiedBy}}</p>
@@ -80,7 +80,7 @@
     <ion-row class="margin0 white-bg padding10" *ngIf="ticketDetails.image !=null">
         <ion-col col-12>
             <ion-row>
-                <ion-col col-3 >
+                <ion-col col-3>
                     <img [src]="ticketImage" class="job-img margin-bottom25">
                 </ion-col>
             </ion-row>
@@ -90,8 +90,8 @@
 </ion-content>
 
 
-<ion-footer *ngIf="ticketDetails.status != 'Closed'" >
-    <ion-toolbar class="align-right" padding-left padding-right  >
+<ion-footer *ngIf="ticketDetails.status != 'Closed'">
+    <ion-toolbar class="align-right" padding-left padding-right>
         <button has-permission="JobCreate" class="btn btn-warning center pull-left" (click)="createJob()" *ngIf="ticketDetails.jobId ==null || ticketDetails.jobId==0">
             Create Job
         </button>
@@ -99,7 +99,7 @@
             View Job
         </button>
         <!--<button has-permission="TicketView" class="btn btn-success center pull-right" (click)="closeTicket()">-->
-            <!--Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>-->
+        <!--Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>-->
         <!--</button>-->
         <button has-permission="TicketView" class="btn btn-success center pull-right" (click)="presentPrompt()">
             Close Ticket <ion-icon name="ios-arrow-forward-outline"></ion-icon>

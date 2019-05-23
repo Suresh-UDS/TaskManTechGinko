@@ -4,6 +4,7 @@ import{InventoryService} from "../service/inventoryService";
 import{PurchaseRequisitionService} from "../service/PurchaseRequisitionService";
 import{componentService} from "../service/componentService";
 import {SelectSearchableComponent} from "ionic-select-searchable";
+import { JobService } from '../service/jobService';
 
 declare var demo;
 /**
@@ -27,7 +28,7 @@ export class AddMaterial {
     jobMaterial:any;
     addMaterials: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public inventoryService:InventoryService,
-              public purchaseService:PurchaseRequisitionService,public component:componentService,
+              public purchaseService:PurchaseRequisitionService,public component:componentService, public jobService: JobService,
               public viewCtrl:ViewController) {
       this.job=this.navParams.get('job');
       console.log(this.navParams.get('job'));
@@ -72,7 +73,7 @@ export class AddMaterial {
 
     addIndent(m) {
       console.log("m");
-        console.log(m.itemcode);
+        console.log(m);
         var details = {
             materialName:m.name,
             materialId:m.id,
@@ -83,7 +84,23 @@ export class AddMaterial {
             materialQuantity:0
         };
 
-        this.indents.push(details);
+        if(this.indents.length>0){
+
+          for(var i=0;i<this.indents.length;i++){
+            if(m.itemCode == this.indents[i].itemCode){
+              console.log("Item already found");
+              console.log(this.indents[i].itemCode);
+            }else{
+              this.indents.push(details);
+            }
+          }
+
+        }else{
+          this.indents.push(details);
+        }
+
+        
+
         console.log(this.indents);
     }
 
@@ -115,7 +132,7 @@ export class AddMaterial {
         console.log("m save")
         console.log(m);
         var material = m;
-
+        this.component.showLoader("Saving Materials");
         for(var i=0; i<m.length; i++){
           console.log("materialqty",m[i].materialQuantity);
 
@@ -127,8 +144,26 @@ export class AddMaterial {
           if(m[i].materialStock >= m[i].materialQuantity){
             console.log("material",m[i]);
             this.addMaterials.push(m[i]);
-            this.viewCtrl.dismiss({jobMaterial:this.addMaterials});
+            // this.viewCtrl.dismiss({jobMaterial:this.addMaterials});
+            this.job.jobMaterials = this.addMaterials;
+            this.jobService.saveJob(this.job).subscribe(response=>{
+              if(response.errorStatus){
+                demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                this.component.closeLoader();
+              }else{
+                demo.showSwal('success-message-and-ok','Success','Job Materials Successfully');
+                this.component.closeAll();
+                this.viewCtrl.dismiss({jobMaterial: this.addMaterials});
+              }
+            },err=>{
+              this.component.closeAll();
+              console.log("Error in saving job");
+              console.log(err);
+              var msg= "Error in saving materials" + err.errorMessage;
+              demo.showSwal('warning-message-and-confirmation-ok',msg);
+            })
           }else {
+            this.component.closeAll();
             demo.showSwal('warning-message-and-confirmation-ok',"you have only "+m[i].materialStock+" material stock in "+m[i].materialName);
             console.log("material quantity is bigger than material stock");
             break;

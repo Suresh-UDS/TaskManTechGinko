@@ -50,8 +50,6 @@ export class ExpensePage {
         console.log("project");
         console.log(response);
         this.clientList = response;
-        // this.selectedProject = this.clientList[0];
-        // this.selectSite(this.selectedProject);
         console.log('select default value:');
       },
       error => {
@@ -72,9 +70,7 @@ export class ExpensePage {
     // this.expenseList(searchCriteria);
   }
 
-
-
-    viewExpenseDetails(site){
+  viewExpenseDetails(site){
     console.log('ionViewDidLoad ExpenseDetails method:');
     console.log(site);
     this.navCtrl.push(ExpenseDetails,{site:site});
@@ -92,7 +88,6 @@ export class ExpensePage {
         console.log("sitelist");
         console.log(response);
         this.siteList = response;
-
         for(let site of this.siteList){
           console.log(site.name);
           this.expenseService.getOverallData(site.id).subscribe(

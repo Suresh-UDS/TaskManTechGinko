@@ -21,10 +21,9 @@
 
     <div class="SplashLoader" *ngFor="let msg of errorMessages">
         <!--<img src="assets/imgs/loader.svg" alt="" />-->
-        <p></p>
-
-        <p>{{msg.msg}}</p>
         <img src="assets/imgs/warning.svg" alt="" />
+        <p>{{msg.msg}}</p>
+
 
     </div>
 
@@ -36,9 +35,9 @@
     </div>
 
 
-    <div text-center padding >
+    <div text-center padding>
         <ion-row class="margin padding">
-            <ion-col col-12 >
+            <ion-col col-12>
                 <button *ngIf="online && !startSync" class="btn btn-warning padding" (click)="syncJobData()">Start Syncing</button>
                 <button *ngIf="jobsError" class="btn btn-warning padding" (click)="syncAttendanceData()">Continue Syncing Attendance</button>
                 <button *ngIf="attendanceError" class="btn btn-warning padding" (click)="syncAssetData()">Continue Syncing Asset</button>
@@ -51,4 +50,3 @@
 
 
 </ion-content>
-

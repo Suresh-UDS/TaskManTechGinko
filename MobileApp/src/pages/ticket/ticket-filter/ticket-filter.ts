@@ -5,6 +5,7 @@ import{componentService} from "../../service/componentService";
 import{EmployeeService} from "../../service/employeeService";
 import { DatePicker } from '@ionic-native/date-picker';
 
+declare var demo;
 
 /**
  * Generated class for the TicketFilter page.
@@ -45,6 +46,7 @@ export class TicketFilter {
     index: any;
     siteActive: any;
     site: any;
+    searchCriteria:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
               public employeeService:EmployeeService,public datePicker:DatePicker, public cs: componentService) {
@@ -52,6 +54,15 @@ export class TicketFilter {
       this.fromDate = new Date();
       this.toDate = new Date();
       this.viewButton = true;
+
+      this.searchCriteria = {
+        projectId:null,
+        siteId:null,
+        employeeId:null,
+        checkInDateTimeFrom:new Date(),
+        checkInDateTimeTo: new Date(),
+
+    }
   }
 
   ionViewDidLoad() {
@@ -219,24 +230,21 @@ export class TicketFilter {
             date: new Date(),
             mode: 'date',
             androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK,
-            allowFutureDates:false,
+            allowFutureDates:false
         }).then(
             date => {
                 this.fromDate=date;
                 console.log('Got date: ', date);
-
+                console.log(this.fromDate);
                 if(this.fromDate && this.toDate)
                 {
-                   if(this.fromDate<this.toDate){
-                    console.log('view button true');
-                    this.viewButton=true;
-                   }else{
-                        this.cs.showToastMessage("From date has to be greater than to date",'bottom');
+                    if(this.fromDate<this.toDate){
+                        console.log('view button true');
+                        this.viewButton=true;
+                    }else{
                         this.viewButton = false;
-
-                   }
-                }else{
-                    console.log("From date and to date not available");
+                        demo.showSwal('warning-message-and-confirmation-ok','From date cannot be greater than To date');
+                    }
                 }
 
             },
@@ -250,32 +258,20 @@ export class TicketFilter {
             date: new Date(),
             mode: 'date',
             androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK,
-            allowFutureDates:false,
+            allowFutureDates:false
         }).then(
             date => {
                 this.toDate=date;
                 console.log('Got date: ', date);
-
-                if(this.fromDate){
-                    if(this.toDate){
-                        if(this.fromDate<this.toDate){
-                            console.log('view button true');
-                            this.viewButton=true;
-                        }else{
-                            console.log("from date is greater than to date");
-                            this.cs.showToastMessage("From date has to be greater than to date",'bottom');
-                            this.viewButton = false;
-
-                        }
-                    }
-
-                }else{
-                    this.cs.showToastMessage("Please select from date first!!!",'bottom');
-                }
                 if(this.fromDate && this.toDate)
                 {
-                    console.log('view button true');
-                    this.viewButton=true;
+                    if(this.fromDate<this.toDate){
+                        console.log('view button true');
+                        this.viewButton=true;
+                    }else{
+                        this.viewButton = false;
+                        demo.showSwal('warning-message-and-confirmation-ok','From date cannot be greater than To date');
+                    }
                 }
 
             },
@@ -296,7 +292,27 @@ export class TicketFilter {
     }
 
   dismiss(){
-    this.viewCtrl.dismiss({project:this.selectedProject,site:this.selectedSite,fromDate:this.fromDate,toDate:this.toDate});
+    console.log("searchCriteria" );
+        console.log(this.selectedSite);
+        console.log(this.selectedProject);
+        console.log(this.emp);
+        console.log(this.fromDate);
+        console.log(this.toDate);
+        if(this.selectedProject && this.selectedProject.id>0){
+            this.searchCriteria.projectId = this.selectedProject.id;
+        }
+        if(this.selectedSite && this.selectedSite.id>0){
+            this.searchCriteria.siteId = this.selectedSite.id;
+        }
+        if(this.emp && this.emp.id>0){
+            this.searchCriteria.employeeId = this.emp.id;
+        }
+
+        console.log("SEarch criteria");
+        console.log(this.searchCriteria);
+        this.searchCriteria.checkInDateTimeFrom = this.fromDate;
+        this.searchCriteria.checkInDateTimeTo = this.toDate;
+        this.viewCtrl.dismiss(this.searchCriteria);
   }
 
 

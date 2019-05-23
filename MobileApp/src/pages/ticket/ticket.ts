@@ -80,52 +80,25 @@ export class Ticket {
         var projectDetails = null;
         var siteDetails = null;
         let modal = this.modalCtrl.create(TicketFilter,{},{cssClass:'asset-filter',showBackdrop:true});
-        modal.onDidDismiss(data=>{
-            console.log("Modal Dismiss");
-            console.log(data);
-            if(data.project && data.project.id>0){
-                console.log("selected project from filter modal - ");
-                console.log(data.project);
-                projectDetails = data.project;
-                this.clientFilter=data.project;
-                this.searchCriteria.projectId = projectDetails.id;
-            }else{
-                this.clientFilter = null;
+        modal.onDidDismiss(searchCriteria=>{
+            console.log("Search criteria jobs");
+            console.log(searchCriteria);
+            if(searchCriteria){
+                this.cs.showLoader("Searching Jobs");
+                this.applyFilter(searchCriteria);
             }
-
-            if(data.site && data.site.id>0){
-                console.log("selected site from filter modal - ");
-                console.log(data.site);
-                siteDetails = data.site;
-                this.siteFilter=data.site;
-                this.searchCriteria.siteId = siteDetails.id;
-
-            }else{
-                this.siteFilter = null;
-            }
-
-            if(data.fromDate){
-                if(data.toDate) {
-                    this.fromDate = data.fromDate;
-                    this.toDate = data.toDate;
-                    this.searchCriteria.fromDate = data.fromDate;
-                    this.searchCriteria.toDate = data.toDate;
-                }
-            }
-            this.applyFilter();
+            
         });
         modal.present();
     }
 
 
-    applyFilter(){
-        // this.cs.showLoader("");
-
-
-        console.log("filter",this.searchCriteria);
+    applyFilter(searchCriteria){
+        this.cs.showLoader("Applying Filter");
+        console.log("filter",searchCriteria);
         this.tickets = [];
         this.cs.showLoader("Loading Tickets..");
-        this.jobService.searchTickets(this.searchCriteria).subscribe(
+        this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.cs.closeAll();
                 this.cs.closeLoader();

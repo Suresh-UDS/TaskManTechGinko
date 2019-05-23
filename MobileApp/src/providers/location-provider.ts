@@ -61,7 +61,7 @@ export class LocationProvider {
             stationaryRadius: 20,
             distanceFilter: 10,
             debug: false,
-            // interval: 2000
+            interval: 2000,
             stopOnTerminate:true
         };
 
