@@ -651,7 +651,21 @@ demo = {
                 confirmButtonText: 'Ok',
                 buttonsStyling: false
             }).catch(swal.noop)
-        }else if (type == 'feedback-success') {
+        }else if(type === 'attendance-wait-time'){
+
+            swal({
+                title:title,
+                html: 'I will close in <strong></strong> seconds.',
+                timer: 10000,
+
+                closeOnEsc:false,
+                showConfirmButton: false,
+                closeOnClickOutside:false,
+                buttons:false,
+                allowOutsideClick:false
+            }).catch(swal.noop);
+
+        }else if (type === 'feedback-success') {
               swal({
                   title: title,
                   text: txt,
@@ -661,7 +675,7 @@ demo = {
                   timer:3000
               }).catch(swal.noop)
 
-         } else if (type == 'warning-message-and-confirmation')
+         } else if (type === 'warning-message-and-confirmation')
          {
             swal({
                 title: title,
@@ -684,7 +698,7 @@ demo = {
 
             }).catch(swal.noop)
         }
-        else if (type == 'warning-message-and-confirmation-ok')
+        else if (type === 'warning-message-and-confirmation-ok')
         {
             swal({
                 title: title,
@@ -696,7 +710,7 @@ demo = {
                 buttonsStyling: false
             }).catch(swal.noop)
         }
-        else if (type == 'warning-message-and-cancel') {
+        else if (type === 'warning-message-and-cancel') {
             swal({
                 title: 'Are you sure?',
                 text: 'You will not be able to recover this imaginary file!',
@@ -728,7 +742,7 @@ demo = {
                 }
             })
 
-        } else if (type == 'custom-html') {
+        } else if (type === 'custom-html') {
             swal({
                 title: 'HTML example',
                 buttonsStyling: false,
