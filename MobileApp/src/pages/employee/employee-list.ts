@@ -17,6 +17,7 @@ import {LocationProvider} from "../../providers/location-provider";
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import {File} from '@ionic-native/file';
 import { SiteListPage } from '../site-list/site-list';
+import Swal from 'sweetalert2';
 declare  var demo ;
 
 
@@ -59,7 +60,6 @@ export class EmployeeList {
         this.longitude = 0;
 
         this.site = this.navParams.get('site');
-
     }
 
     viewList(i)
@@ -83,7 +83,7 @@ export class EmployeeList {
             stationaryRadius: 20,
             distanceFilter: 10,
             debug: false,
-            interval: 2000,
+            // interval: 2000,
             stopOnTerminate:true
         };
 
@@ -137,7 +137,32 @@ export class EmployeeList {
                     if (canRequest) {
                         // the accuracy option will be ignored by iOS
                         this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                            () => console.log('Request successful'),
+                            () => {
+                                console.log('Request successful');
+                                this.navCtrl.pop();
+                                // demo.showSwal('attendance-wait-time','GPS Turned on ','Please wait');
+                                let timerInterval;
+                                Swal.fire({
+                                    title:'GPS Turned on',
+                                    html:'Retry in <strong></strong> seconds.',
+                                    timer: 10000,
+                                    background:null,
+                                    backdrop:true,
+                                    allowOutsideClick:false,
+                                    showConfirmButton:false,
+                                    onOpen: () => {
+                                        // Swal.showLoading();
+                                        timerInterval = setInterval(() => {
+                                            Swal.getContent().querySelector('strong').textContent = String(Math.ceil(Swal.getTimerLeft()/1000))
+
+                                        }, 100)
+                                    },
+                                    onClose: () => {
+                                        clearInterval(timerInterval)
+                                    }
+                                })
+
+                            },
                             error => {console.log('Error requesting location permissions', error);
                                 demo.showSwal('warning-message-and-confirmation-ok','GPS Not available','Please turn GPS on');
                                 this.navCtrl.pop();

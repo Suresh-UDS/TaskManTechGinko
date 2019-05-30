@@ -154,6 +154,7 @@ export class CreateTicket {
 
   getEmployee(site,i)
   {
+      this.employee = [];
     if(site)
     {
       console.log('ionViewDidLoad Add jobs employee');
@@ -230,7 +231,7 @@ export class CreateTicket {
           console.log("response",response);
           this.empSpinner=false;
           this.showEmployees=true;
-          if(response.transactions!==0)
+          if(response.transactions !=null && response.transactions!==0)
           {
             this.empSelect=false;
             this.empPlace="Employee";
@@ -270,7 +271,7 @@ export class CreateTicket {
     console.log( this.s);
   }
   createTicket(){
-          if(this.title && this.description  && this.emp )
+          if(this.title && this.description && this.siteIdd && this.emp && this.severity && this.category)
           {
               let alert =this.alertController.create({
                   title:'Create Ticket',
@@ -285,6 +286,7 @@ export class CreateTicket {
                   },{
                       text:'Confirm',
                       handler:()=> {
+                          this.cs.showLoader("Creating Ticket");
             console.log("creating ticket..",this.emp);
               this.eMsg="";
             this.siteId = this.siteIdd;
@@ -311,6 +313,7 @@ export class CreateTicket {
 
               this.jobService.createTicket(this.newTicket).subscribe(
                   response=> {
+                      this.cs.closeAll();
                       if(response.errorStatus){
                           demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage)
                       }else{
@@ -358,6 +361,7 @@ export class CreateTicket {
                       },
 
                   error=>{
+                      this.cs.closeAll();
                       console.log(error);
                                   if (error.type == 3) {
                           this.msg='Server Unreachable'
@@ -368,43 +372,59 @@ export class CreateTicket {
               )
           }
                   }]
-              })
+              });
 
               alert.present()
           }
           else
           {
-              console.log("============else");
-
               if(!this.title)
               {
                   console.log("============title");
                   this.eMsg="title";
                   this.field="title";
+                  this.cs.showToastMessage("Please enter Title","center");
               }
               else if(!this.description)
               {
                   console.log("============desc");
                   this.eMsg="description";
                   this.field="description";
+                  this.cs.showToastMessage("Please enter Description","center");
+
+              }else if(!this.category){
+                  console.log("============Category");
+                  this.eMsg="category";
+                  this.field="category";
+                  this.cs.showToastMessage("Please Select Category","center");
               }
-              else if(!this.siteName)
+              else if(!this.siteIdd || this.siteIdd<0)
               {
                   console.log("============site");
                   this.eMsg="siteName";
                   this.field="siteName";
+                  this.cs.showToastMessage("Please Select Site","center");
+
               }
               else if(!this.emp && this.empPlace=="No Employee")
               {
                   console.log("============employ");
                   this.eMsg="employ";
                   this.field="employ";
+                  this.cs.showToastMessage("Please Select Employee","center");
+
+              }else if(!this.severity){
+                  console.log("============severity");
+                  this.eMsg="severity";
+                  this.field="severity";
+                  this.cs.showToastMessage("Please Select Severity","center");
               }
 
               else if(!this.title && !this.description && !this.siteName && !this.employ )
               {
                   console.log("============all");
                   this.eMsg="all";
+                  this.cs.showToastMessage("Please enter ticket details","center");
               }
 
           }

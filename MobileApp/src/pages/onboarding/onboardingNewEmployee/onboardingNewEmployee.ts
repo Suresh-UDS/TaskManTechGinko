@@ -341,9 +341,10 @@ export class onboardingNewEmployee {
 
               })
             }, (error) => {
-              alert(JSON.stringify(error));
+              // alert(JSON.stringify(error));
               this.componentService.closeAll();
               this.componentService.showToastMessage('Server Unreachable', 'bottom');
+              this.navCtrl.setRoot(onboardingExistEmployee);
             })
           // } else {
           //   localStoragedData['completed'][tempIndex]['isSync'] = false;

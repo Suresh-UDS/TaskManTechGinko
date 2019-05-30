@@ -105,6 +105,9 @@ export class onboardingExistEmployee implements OnInit {
             this.component.closeLoader();
             this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
           });
+        },err=>{
+          this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+          this.component.closeAll();
         });
       },
         err => {
@@ -128,7 +131,12 @@ export class onboardingExistEmployee implements OnInit {
           this.getPercentage();
           this.component.closeLoader();
           this.component.showToastMessage('Server Unreachable', 'bottom');
+        }else{
+          this.component.closeAll();
         }
+      },err=>{
+        this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+        this.component.closeAll();
       })
     }
   }
