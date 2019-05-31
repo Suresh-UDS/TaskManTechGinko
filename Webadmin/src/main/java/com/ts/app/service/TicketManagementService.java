@@ -221,14 +221,14 @@ public class TicketManagementService extends AbstractService {
             Employee ticketOwner = employeeRepository.findOne(ticket.getEmployee().getId());
             Employee assignedTo = null;
             if(ticketDTO.getEmployeeId()!=0) {
-                if (ticket.getEmployee() != null && (ticket.getEmployee().getId() != ticketDTO.getEmployeeId())) {
+                if (ticket.getAssignedTo() != null && (ticket.getAssignedTo().getId() != ticketDTO.getEmployeeId())) {
                     assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
                     ticket.setStatus("Assigned");
                     ticket.setAssignedTo(assignedTo);
                     ticket.setAssignedOn(new java.sql.Date(currCal.getTimeInMillis()));
                 }else {
-                    if(ticket.getEmployee() != null) {
-                        assignedTo = ticket.getEmployee();
+                    if(ticket.getAssignedTo() != null) {
+                        assignedTo = ticket.getAssignedTo();
                     }else {
                         assignedTo = employeeRepository.findOne(ticketDTO.getEmployeeId());
                         ticket.setStatus("Assigned");

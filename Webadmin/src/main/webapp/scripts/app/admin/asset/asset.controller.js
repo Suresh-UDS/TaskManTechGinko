@@ -61,6 +61,7 @@ angular.module('timeSheetApp')
 			$scope.searchCreatedDateSer =null;
 			$scope.ppmSearchCriteria = {};
 			$scope.amcSearchCriteria = {};
+			$scope.dlpSearchCriteria = {};
 			$scope.assetSparesSearchCriteria = {};
 			$scope.redSearchCriteria = {};
 			$scope.ppmFrom = null;
@@ -3684,6 +3685,43 @@ angular.module('timeSheetApp')
 					$scope.showNotifications('top','center','danger','Unable to loading AMC jobs. Please try again later..');
 				});
 			}
+
+            $scope.loadDLPJobs = function() {
+                $scope.loadingStart();
+                $rootScope.loadPageTop();
+                var dlpCurrPageVal = ($scope.pages ? $scope.pages.currPage : 1);
+                if(!$scope.dlpSearchCriteria) {
+                    var dlpSearchCriteria = {
+                        currPage : dlpCurrPageVal
+                    };
+                    $scope.dlpSearchCriteria = dlpSearchCriteria;
+                }
+
+                $scope.dlpSearchCriteria.currPage = amcCurrPageVal;
+
+                $scope.dlpSearchCriteria.maintenanceType = "DLP";
+                $scope.searchModule = "DLP";
+                $scope.dlpSearchCriteria.assetId = $stateParams.id;
+                $scope.dlpSearchCriteria.sort = $scope.pageSort;
+                $scope.dlpJobLists = "";
+                //console.log('AMC search criteria',$scope.amcSearchCriteria);
+                JobComponent.search($scope.dlpSearchCriteria).then(function(data){
+                    $scope.loadingStop();
+                    //console.log(data);
+                    $scope.dlpJobLists = data.transactions;
+
+                    /*
+                     ** Call pagination  main function **
+                     */
+
+                    $scope.pager = {};
+                    $scope.pager = PaginationComponent.GetPager(data.totalCount, $scope.pages.currPage);
+                    $scope.totalCountPages = data.totalCount;
+                }).catch(function(){
+                    $scope.loadingStop();
+                    $scope.showNotifications('top','center','danger','Unable to loading AMC jobs. Please try again later..');
+                });
+            }
 
 			$scope.loadPPMJobs = function() {
 				$scope.loadingStart();
