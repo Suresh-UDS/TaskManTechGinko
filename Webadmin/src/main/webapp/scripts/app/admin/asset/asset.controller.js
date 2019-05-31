@@ -3697,7 +3697,7 @@ angular.module('timeSheetApp')
                     $scope.dlpSearchCriteria = dlpSearchCriteria;
                 }
 
-                $scope.dlpSearchCriteria.currPage = amcCurrPageVal;
+                $scope.dlpSearchCriteria.currPage = dlpCurrPageVal;
 
                 $scope.dlpSearchCriteria.maintenanceType = "DLP";
                 $scope.searchModule = "DLP";
