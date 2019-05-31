@@ -451,14 +451,15 @@ public class AttendanceService extends AbstractService {
             attn.setLongitudeIn(attnDto.getLongitudeIn());
             attn.setOffline(attnDto.isOffline());
             attn.setRemarks(attnDto.getRemarks());
+            Calendar now = Calendar.getInstance();
             if(attn.isOffline()){
                 log.debug("Check in time for offline attendance");
                 log.debug("check in time - "+attnDto.getCheckInTime());
                 attn.setCheckInTime(DateUtil.convertToTimestamp(attnDto.getCheckInTime()));
+            }else{
+                attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
             }
-            Calendar now = Calendar.getInstance();
             //now.set(Calendar.HOUR_OF_DAY, 22); //added for testing night shift
-            attn.setCheckInTime(new java.sql.Timestamp(now.getTimeInMillis()));
 //			attn.setDate(attn.getCheckInTime());
             if(StringUtils.isEmpty(attn.getCheckInImage())){
                 log.debug("check in image not available");

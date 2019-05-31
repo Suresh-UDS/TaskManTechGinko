@@ -40,6 +40,8 @@
                                        ng-click="loadSubModule(loadPPMJobs);">PPM Jobs</a></li>
                                        <li class=""><a href=".amc-tasks" data-toggle="tab"
                                        ng-click="loadSubModule(loadAMCJobs);">Vendor Mng Jobs</a></li>
+                                       <li class=""><a href=".dlp-tasks" data-toggle="tab"
+                                       ng-click="loadSubModule(loadDLPJobs);">DLP Jobs</a></li>
                                        <li class=""  has-permission="Ticket:List">
                                            <a href=".Tickets" data-toggle="tab"
                                            ng-click="loadSubModule(loadTicket)" > Tickets</a>
@@ -535,6 +537,55 @@
                                             <pagination-new></pagination-new>
 
                                             <!-- Pagination directive end -->
+
+                                       </div>
+                                       <div class="tab-pane in amc-tasks" id="dlp-tasks">
+
+                                           <div class="table-responsive tablecard">
+                                               <table class="table table-hover tdWidthAuto">
+
+                                                   <thead>
+                                                   <tr>
+                                                       <th>Title</th>
+                                                       <th>Schedule Type</th>
+                                                       <!-- <th>Schedule Start Date</th>
+                                                       <th>Schedule End Date</th> -->
+                                                       <th>Job ID</th>
+                                                       <th>Start Date Time</th>
+                                                       <th>End Date Time</th>
+                                                       <th>Completed Date Time</th>
+                                                       <th>Assigned</th>
+                                                       <th>Status</th>
+                                                   </tr>
+
+                                                   </thead>
+
+                                                   <tbody>
+                                                   <tr ng-repeat="dlpList in dlpJobLists">
+                                                       <td>{{dlpList.title}}</td>
+                                                       <td>{{dlpList.description}}</td>
+                                                       <!--  <td>{{amcList.plannedStartTime | date:'dd-MMM-yyyy'}}</td>
+                                                        <td>{{amcList.scheduleEndDate | date:'dd-MMM-yyyy'}}</td> -->
+                                                       <td><a class="job-txt" ui-sref="view-job({ id: dlpList.id })">{{dlpList.id}}</a></td>
+                                                       <td>{{dlpList.plannedStartTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td>{{dlpList.plannedEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</td>
+                                                       <td><span ng-if="dlpList.actualEndTime">{{dlpList.actualEndTime | date:'dd-MMM-yyyy @ hh:mm a'}}</span ng-if="!dlpList.actualEndTime">-<span></span></td>
+                                                       <td>{{dlpList.employeeName}}</td>
+                                                       <td>{{dlpList.jobStatus}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td colspan="7" align="center" ng-show="!dlpJobLists.length">No DLP Jobs Found</td>
+                                                   </tr>
+                                                   </tbody>
+                                               </table>
+
+                                           </div>
+
+                                           <!-- Pagination directive start -->
+
+                                           <pagination-new></pagination-new>
+
+                                           <!-- Pagination directive end -->
 
                                        </div>
                                        <div class="tab-pane in ppm-schedule" id="ppm-schedule" >
