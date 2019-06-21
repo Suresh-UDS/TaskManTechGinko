@@ -131,6 +131,12 @@ angular.module('timeSheetApp')
 
             },
 
+            loadAssetParent : function(siteId) {
+                return $http.get('api/assetParentHierarichy/'+siteId).then(function (response) {
+                    return response.data;
+                });
+
+            },
 
             findByAssetConfig : function(data) {
             	return $http.post('api/assets/config', data).then(function (response) {

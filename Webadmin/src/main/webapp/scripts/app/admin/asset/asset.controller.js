@@ -792,6 +792,17 @@ angular.module('timeSheetApp')
 				});
 			}
 
+			$scope.loadAssetParent = function(){
+				
+				AssetComponent.loadAssetParent($scope.selectedSites).then(function(data){
+					
+					$scope.assetParentList = data;
+					$scope.loadingStop();
+ 
+				});
+
+			}
+			
 			$scope.loadSelectedProject = function(projectId) {
 				ProjectComponent.findOne(projectId).then(function (data) {
 					$scope.selectedProject = data;

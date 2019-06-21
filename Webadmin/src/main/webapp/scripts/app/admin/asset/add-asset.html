@@ -301,6 +301,31 @@
                                                                             </div>
 
                                                                         </div>
+
+                                                                        <div class="form-group selectcon is-empty" ng-init="loadAssetParent()">
+
+                                                                            <div class="row">
+                                                                                <div class="col-md-10 pad-r-0px">
+                                                                                     <label class="control-label">Asset Parent</label>
+                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                    <select class="form-control" ng-model="selectedAssetParent" ng-options="assetParentName as assetParent.assetParentName | uppercase for assetParent in assetParentList" tabindex="6">
+                                                                                        <option value="">No Parent ..</option>
+                                                                                    </select>
+
+                                                                                </div>
+
+                                                                                
+                                                                            </div>
+
+                                                                       <!-- <div class="collapse" id="addGroup">
+                                                                            <div class="">
+                                                                                <input class="input-desc" id='assetgroupName' ng-model="assetGroup.assetgroup"
+                                                                                       name='assetgroupName' type='text' value=""/>
+                                                                                <a class="btn btn-success"  ng-click="addAssetGroup()">Add</a>
+
+                                                                            </div>
+                                                                       </div> -->
+                                                                    </div>
                                                                     </div>
                                                                 </div>
 
