@@ -134,7 +134,7 @@ export class TabsPage {
                 console.log(this.appVersionNumber);
                 if(this.appVersionNumber && this.appVersionNumber != currentVersion.applicationVersion ){
                     console.log("Application needs to be updated");
-                    this.navCtrl.push(UpdateApp);
+                    this.navCtrl.setRoot(UpdateApp);
 
                 }else{
                     console.log("Application up to date");

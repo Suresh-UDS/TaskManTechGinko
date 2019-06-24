@@ -23,7 +23,10 @@
             <!--<button ion-button  (click)="viewCamera(employee,'enroll')"  >Enroll</button>-->
             <span >
                 <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkIn')" *ngIf="employee.checkedIn == 'false' || (employee.notCheckedOut == 'true' && employee.attendanceId>0)" >Check - In</button>
-                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.checkedIn == 'true' && employee.notCheckedOut == 'false'">Check - Out</button>
+            </span>
+            <span *ngIf="employee.checkedIn == 'true'">
+                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.notCheckedOut == 'false'">Check - Out</button>
+                <button ion-button color="orange" (click)="viewCamera(employee,'verify','checkOut')" *ngIf="employee.notCheckedOut == 'true' && employee.attendanceId<0">Check - Out</button>
             </span>
         </span></p>
         <p>

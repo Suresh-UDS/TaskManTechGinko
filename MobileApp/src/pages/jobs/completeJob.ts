@@ -102,8 +102,6 @@ export class CompleteJobPage {
         )
         */
 
-
-
     }
 
     ionViewDidLoad() {
@@ -213,12 +211,10 @@ export class CompleteJobPage {
                     demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                 }else{
                     console.log("Save Job response");
-                    // this.component.closeLoader();
-                    // this.component.showToastMessage('Job Saved Successfully','bottom');
-                    demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
                     console.log(response);
                     console.log(job.checkInOutId);
                     if(this.takenImages.length>0){
+                        this.component.closeAll();
                         this.component.showLoader('Uploading Images');
                         this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
                         this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
@@ -226,8 +222,7 @@ export class CompleteJobPage {
                         this.checkOutDetails.siteId = job.siteId;
                         this.checkOutDetails.jobId = job.id;
                         this.checkOutDetails.id=job.checkInOutId;
-
-                      this.jobService.updateJobImages(this.checkOutDetails).subscribe(
+                        this.jobService.updateJobImages(this.checkOutDetails).subscribe(
                             response=>{
                                 // this.component.closeLoader();
                                 console.log("complete job response");
@@ -237,7 +232,7 @@ export class CompleteJobPage {
                                 // this.component.showLoader('Uploading Images');
                                 //TODO
                                 //File Upload after successful checkout
-                                for(let i in this.takenImages) {
+                                for(let i=0;i<this.takenImages.length;i++) {
 
                                     console.log("image loop");
                                     console.log(i);
@@ -280,14 +275,23 @@ export class CompleteJobPage {
 
                                     this.fileTransfer.upload(this.takenImages[i], this.config.Url+'api/employee/image/upload', options)
                                         .then((data) => {
-                                            this.component.closeAll();
                                             console.log(data);
                                             console.log("image upload");
-                                            this.navCtrl.pop();
+                                            console.log(i+1);
+                                            console.log(this.takenImages.length);
+                                            if(this.takenImages.length == i+1){
+                                                this.component.closeAll();
+                                                demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
+                                                this.navCtrl.pop();
+                                            }
                                         }, (err) => {
-                                            this.component.closeAll();
                                             console.log(err);
                                             console.log("image upload fail");
+                                            if(this.takenImages.length == i+1){
+                                                this.component.closeAll();
+                                                demo.showSwal('warning-message-and-confirmation-ok','Error','Error in Uploading Images');
+                                                this.navCtrl.pop();
+                                            }
                                         })
 
                                 }
@@ -295,10 +299,12 @@ export class CompleteJobPage {
                             },err=>{
                                 this.component.closeLoader();
                                 // this.navCtrl.pop();
-                            }
-                        )
+                              demo.showSwal('warning-message-and-confirmation-ok','Error in saving Job');
+
+                          })
                     }else{
                         this.component.closeAll();
+                        demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
                         this.navCtrl.pop();
                     }
                 }
@@ -336,6 +342,8 @@ export class CompleteJobPage {
         this.jobService.saveJob(job).subscribe(
             response=>{
                 console.log(job);
+                this.component.closeAll();
+                this.component.showLoader('Uploading Images');
                 this.checkOutDetails.completeJob=true;
                 this.checkOutDetails.employeeId = window.localStorage.getItem('employeeId');
                 this.checkOutDetails.employeeEmpId = window.localStorage.getItem('employeeEmpId');
@@ -353,17 +361,14 @@ export class CompleteJobPage {
                             this.component.closeAll();
                             demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
                         }else{
-                            this.component.closeAll();
                             console.log("complete job response");
                             console.log(response);
                             console.log(job);
                             // this.component.showToastMessage('Job Completed Successfully','bottom');
-                            demo.showSwal('success-message-and-ok','Success','Job Completed Successfully');
-
                             // this.component.showLoader('Uploading Images');
                             //TODO
                             //File Upload after successful checkout
-                            for(let i in takenImages) {
+                            for(let i=0;i<this.takenImages.length;i++) {
 
                                 console.log("image loop");
                                 console.log(i);
@@ -408,11 +413,19 @@ export class CompleteJobPage {
                                     .then((data) => {
                                         console.log(data);
                                         console.log("image upload");
-                                        this.component.closeLoader();
+                                        if(this.takenImages.length == i+1){
+                                            this.component.closeAll();
+                                            demo.showSwal('success-message-and-ok','Success','Job Saved Successfully');
+                                            this.navCtrl.pop();
+                                        }
                                     }, (err) => {
                                         console.log(err);
                                         console.log("image upload fail");
-                                        this.component.closeLoader();
+                                        if(this.takenImages.length == i+1){
+                                            this.component.closeAll();
+                                            demo.showSwal('warning-message-and-confirmation-ok','Error','Error in Uploading Images');
+                                            this.navCtrl.pop();
+                                        }
                                     })
 
                             }

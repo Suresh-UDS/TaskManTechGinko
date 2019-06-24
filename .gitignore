@@ -241,3 +241,6 @@ Webadmin/node_modules
 Webadmin/node_modules_1
 Webadmin/src/main/webapp/bower_components
 Webadmin/src/main/webapp/bower_components_1
+/Webadmin/src/main/webapp/scripts/app/admin/asset/add-asset.html
+/Webadmin/.vscode/launch.json
+/Webadmin/.vscode/settings.json

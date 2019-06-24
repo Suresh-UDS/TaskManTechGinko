@@ -99,6 +99,20 @@
             </table>
         </div>
     </div>
+
+    <ion-row class="margin0 white-bg padding10" *ngIf="images.length>0">
+        <ion-col col-3 *ngFor="let image of images">
+            <img src="{{image}}" wdith="80px" height="80px" (click)="viewImage(image)" alt="">
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="margin0 white-bg padding10" *ngIf="images.length<=0">
+        <ion-col col-3 *ngFor="let image of images">
+            <p>No Images found</p>
+        </ion-col>
+    </ion-row>
+
+
 </ion-content>
 
 <ion-footer >

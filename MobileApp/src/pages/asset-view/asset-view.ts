@@ -46,6 +46,7 @@ export class AssetView {
 
     PPMJobs:any;
     AMCJobs:any;
+    DLPJobs:any;
 
     assetBreakDown:any;
     fromDate:any;
@@ -71,6 +72,7 @@ export class AssetView {
     this.spinner=true;
     this.PPMJobs=[];
     this.AMCJobs=[];
+    this.DLPJobs=[];
     this.assetMaterial = [];
     this.jobMaterials = [];
     this.jobMaterialsList = [];
@@ -355,6 +357,72 @@ export class AssetView {
             })
     }
 
+    getDLPJobs(searchCriteria)
+    {
+        // var searchPPM={
+        //     assetId:searchCriteria.assetId,
+        //     maintenanceType:'PPM'
+        // }
+        var searchDLP = {};
+
+        if(this.fromDate){
+            searchDLP={
+                currPage: 1,
+                assetId:this.assetDetails.id,
+                checkInDateTimeFrom:this.fromDate,
+                checkInDateTimeTo:this.toDate,
+                maintenanceType:'DLP',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }else{
+            searchDLP={
+                currPage: 1,
+                assetId:this.assetDetails.id,
+                maintenanceType:'DLP',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }
+        // var search={
+        //     assetId:searchCriteria.assetId,
+        // }
+        this.spinner = true;
+        //offline
+        // this.dbService.getJobs(this.assetDetails.id).then(
+        //     (res)=>{
+        //         this.componentService.closeLoader()
+        //         console.log(res)
+        //         this.assetDetails.jobs = res;
+        //     },
+        //     (err)=>{
+        //
+        //     }
+        // )
+
+
+        //Online
+        this.jobService.getJobs(searchDLP).subscribe(
+            response=>{
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log("Getting Jobs response");
+                console.log(response);
+                this.DLPJobs = response.transactions;
+                this.page = response.currPage;
+                this.totalPages = response.totalPages;
+                console.log(this.assetDetails.jobs)
+            },
+            error=>{
+                this.spinner = false;
+                this.componentService.closeAll();
+                console.log(error);
+                console.log("Getting Jobs errors")
+            })
+    }
+
     // ppmscroll
 
     jobPpmScroll(infiniteScroll) {
@@ -479,6 +547,66 @@ export class AssetView {
         }
     }
 
+    jobDlpScroll(infiniteScroll) {
+        console.log('Begin async operation');
+        console.log(infiniteScroll);
+        console.log(this.totalPages);
+        console.log(this.page);
+        var searchDLP = {};
+
+        if(this.fromDate){
+            searchDLP={
+                currPage: this.page + 1,
+                assetId:this.assetDetails.id,
+                checkInDateTimeFrom:this.fromDate,
+                checkInDateTimeTo:this.toDate,
+                maintenanceType:'DLP',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }else{
+            searchDLP={
+                currPage: this.page + 1,
+                assetId:this.assetDetails.id,
+                maintenanceType:'DLP',
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
+            }
+        }
+
+        if (this.page > this.totalPages) {
+            console.log("End of all pages");
+            infiniteScroll.complete();
+            this.componentService.showToastMessage('Todays jobs Loaded', 'bottom');
+
+        } else {
+            console.log("Getting pages");
+            console.log(this.totalPages);
+            console.log(this.page);
+            setTimeout(() => {
+                this.jobService.getJobs(searchDLP).subscribe(
+                    response => {
+                        console.log('ionViewDidLoad jobs list:');
+                        console.log(response);
+                        console.log(response.transactions);
+                        for (var i = 0; i < response.transactions.length; i++) {
+                            this.DLPJobs.push(response.transactions[i]);
+                        }
+                        this.page = response.currPage;
+                        this.totalPages = response.totalPages;
+                        this.componentService.closeAll();
+                    },
+                    error => {
+                        console.log('ionViewDidLoad Jobs Page:' + error);
+                    }
+                )
+                infiniteScroll.complete();
+            }, 1000);
+        }
+    }
+
     readingScroll(infiniteScroll)
     {
         console.log('Reading Page async operation');
@@ -565,6 +693,10 @@ export class AssetView {
     createJob()
     {
         this.navCtrl.push(CreateJobPage,{assetDetails : this.assetDetails});
+    }
+
+    viewTicket(ticket){
+        this.navCtrl.push(ViewTicket,{ticket:ticket});
     }
 
 

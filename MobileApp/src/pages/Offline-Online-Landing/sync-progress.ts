@@ -79,7 +79,7 @@ export class SyncProgress {
                   this.attendanceCount = attendances.length;
               }
           })
-      })
+      });
 
       this.checkOutDetails={
           employeeId:'',
@@ -597,9 +597,9 @@ export class SyncProgress {
                         this.syncMessage = "No Jobs data found";
                         console.log("No jobs data found..");
                         console.log("Start Attendance sync...");
-                        setTimeout(()=>{
-                            this.syncAttendanceData();
-                        },2000);
+                        // setTimeout(()=>{
+                        //     this.syncAttendanceData();
+                        // },2000);
                         if(i+1==jobs.length){
                             console.log("Jobs sync completed");
                             console.log("Start Asset Attendances sync..");
@@ -638,6 +638,8 @@ export class SyncProgress {
               for(let i =0; i<attendances.length;i++){
                   var count = i+1;
                   console.log("Attendance details to server");
+                  console.log(i);
+                  console.log(attendances.length);
                   console.log(attendances[i]);
                   this.syncMessage = "Pushing attendance "+count+" of "+attendances.length+" to server";
                   if(attendances[i].checkInTime!=null){
@@ -720,7 +722,7 @@ export class SyncProgress {
 
                     }else{
                         console.log("Attendance id not available, so cannot checkout, so skipping attendance sync");
-                        // this.syncAssetData();
+                        this.syncAssetData();
                     }
                 }
             }else{

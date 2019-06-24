@@ -183,11 +183,37 @@ export class OfflineAttendance {
 
         if(employee.attendanceId && employee.attendanceId>0){
             console.log("Attendance Id present");
-            this.component.closeLoader();
+            this.dbProvider.insertAttendanceCheckInData(employee.id, employee.empId, this.siteId, imageData, new Date(), null, true).then(response=>{
+                console.log(response);
+                this.dbProvider.updateEmployeeData(true,false,employee.id, 0,false).then(response=>{
+                    console.log(response);
+                    this.dbProvider.getEmployeeDataBySiteId(this.siteId).then((response)=>{
+                            console.log(response);
+                            // this.component.closeLoader()
+                            this.employeeList = response;
+                            this.component.closeLoader();
+                            demo.showSwal('success-message-and-ok','Success','Attendance Successfully marked offline, \nPlease sync to server...');
+                        },
+                        (error)=>{
+                            console.log(error);
+                            demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+error);
+                            // this.component.closeLoader()
+                        });
+                },err=>{
+                    console.log(err);
+                    demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
+                })
+            },err=>{
+                console.log(err);
+                demo.showSwal('warning-message-and-confirmation-ok','Error in marking attendance - '+err);
+
+            })
+
         }else{
             this.dbProvider.insertAttendanceCheckInData(employee.id, employee.empId, this.siteId, imageData, new Date(), null, true).then(response=>{
                 console.log(response);
-                this.dbProvider.updateEmployeeData(true,false,employee.id, false).then(response=>{
+                this.dbProvider.updateEmployeeData(true,false,employee.id, employee.attendanceId,false).then(response=>{
                     console.log(response);
                     this.dbProvider.getEmployeeDataBySiteId(this.siteId).then((response)=>{
                             console.log(response);
@@ -239,7 +265,7 @@ export class OfflineAttendance {
             console.log("attendance updated");
             console.log(response);
                 this.component.closeLoader();
-            this.dbProvider.updateEmployeeData(true,true,employee.id, false).then(response=>{
+            this.dbProvider.updateEmployeeData(true,true,employee.id, employee.attendanceId,false).then(response=>{
                 console.log("Employee updated");
                 console.log(response);
                 this.dbProvider.getEmployeeDataBySiteId(this.siteId).then((response)=>{

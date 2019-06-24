@@ -912,9 +912,9 @@ export class DatabaseProvider {
 
     }
 
-    updateEmployeeData( checkedIn, notCheckedOut, employeeId,syncedToServer){
-        var query = "UPDATE employee SET checkedIn=?, notCheckedOut=?, syncedToServer=? where id=?";
-        return this.database.executeSql(query,[checkedIn, notCheckedOut, syncedToServer, employeeId]).then(data => {
+    updateEmployeeData( checkedIn, notCheckedOut, employeeId,attendanceId,syncedToServer){
+        var query = "UPDATE employee SET checkedIn=?, notCheckedOut=?, syncedToServer=?, attendanceId=? where id=?";
+        return this.database.executeSql(query,[checkedIn, notCheckedOut, syncedToServer, attendanceId,employeeId]).then(data => {
             console.log("Employee data updated");
             return data;
         }, err => {
@@ -966,6 +966,17 @@ export class DatabaseProvider {
             return data;
         },err=>{
             console.log("Error in updating attendance data");
+            console.log(err);
+            return err;
+        })
+    }
+
+    deleteAttendanceCheckInData(employeeId,siteId){
+        return this.database.executeSql("DELETE * FROM checkIn WHERE employeeId=?, siteId=?",[employeeId,siteId]).then(data=>{
+            console.log("Attendance Checkin data deleted");
+            return data;
+        },err=>{
+            console.log("Error in deleting record");
             console.log(err);
             return err;
         })

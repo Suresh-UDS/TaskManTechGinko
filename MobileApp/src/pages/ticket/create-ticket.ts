@@ -155,6 +155,7 @@ export class CreateTicket {
   getEmployee(site,i)
   {
       this.employee = [];
+      this.emp = null;
     if(site)
     {
       console.log('ionViewDidLoad Add jobs employee');
@@ -406,7 +407,7 @@ export class CreateTicket {
                   this.cs.showToastMessage("Please Select Site","center");
 
               }
-              else if(!this.emp && this.empPlace=="No Employee")
+              else if(!this.emp)
               {
                   console.log("============employ");
                   this.eMsg="employ";

@@ -235,6 +235,7 @@ export class MyApp {
         let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
             console.log('network was disconnected :-(');
             this.nav.push(OfflineOnlineLanding);
+            console.log("Current page name");
         });
 
         // stop disconnect watch

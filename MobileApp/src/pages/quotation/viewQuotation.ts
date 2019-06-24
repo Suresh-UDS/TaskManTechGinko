@@ -6,6 +6,7 @@ import {authService} from "../service/authService";
 import {componentService} from "../service/componentService";
 import {QuotationPage} from "./quotation";
 import {QuotationService} from "../service/quotationService";
+import {AttendancePopoverPage} from "../attendance/attendance-popover";
 
 @Component({
     selector: 'page-view-quotation',
@@ -17,12 +18,23 @@ export class ViewQuotationPage {
     index:any;
     grandTotal=0;
     rates:any;
+    cloudFrontUrl:any;
+    images:any;
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
                 private navParams: NavParams, private componentService:componentService, private quotationService: QuotationService) {
         this.quotation = this.navParams.get('quotationDetails');
         console.log(this.quotation);
         this.rates =[];
+        this.images = [];
+        this.cloudFrontUrl = "http://d1l2i6capbtjhi.cloudfront.net/prod/quotations/";
+
+        if(this.quotation.images && this.quotation.images.length>0){
+            for(var j=0; j<this.quotation.images.length;j++){
+                console.log(this.quotation.images[j]);
+                this.images.push(this.cloudFrontUrl+this.quotation.images[j]);
+            }
+        }
 
         if(this.quotation.grandTotal){
             console.log("Grand total available");
@@ -92,6 +104,13 @@ export class ViewQuotationPage {
                 this.componentService.showToastMessage('Error in sending Quotation, please try again later','bottom');
             }
         )
+    }
+
+    viewImage(img)
+    {
+        let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img',showBackdrop:false});
+        popover.present({
+        });
     }
 
     rejectQuotation(quotation){

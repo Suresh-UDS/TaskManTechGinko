@@ -114,10 +114,8 @@
                             <p text-left>{{list.checklistItemName}}</p>
                         </ion-col>
                         <ion-col col-3 class="ver-center">
-                            <div *ngIf="list.image_1 != null" float-right="">
-                                <button class="ion-button" round class="camera-btn1" (click)="show(showIcon,i)"><ion-icon name="images"></ion-icon></button>
-                            </div>
-                            <div *ngIf="list.image_3 == null" class="margin-left15" float-right="">
+
+                            <div *ngIf="list.image_2 == null" class="margin-left15" float-right="">
                                 <button class="ion-button" round (click)="viewCameraCheckList(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
                             </div>
                         </ion-col>
