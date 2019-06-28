@@ -28,7 +28,14 @@ public class AssetType extends AbstractAuditingEntity {
 	@Size(min = 1, max = 250)
 	@Column(length = 250, nullable = false)
 	private String name;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="site_id")
+	private Site site;
 
+	@Column(name="is_relationship_based")
+	private boolean isRelationShipBased;
+	
 	public Long getId() {
 		return id;
 	}
@@ -44,7 +51,21 @@ public class AssetType extends AbstractAuditingEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
+	}
+
+	public boolean isRelationShipBased() {
+		return isRelationShipBased;
+	}
+
+	public void setRelationShipBased(boolean isRelationShipBased) {
+		this.isRelationShipBased = isRelationShipBased;
+	}
 
 }
