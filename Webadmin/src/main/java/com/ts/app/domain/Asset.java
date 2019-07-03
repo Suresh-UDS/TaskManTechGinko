@@ -111,6 +111,10 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	private boolean udsAsset;
 	
 	private String warrantyType;
+	
+	@ManyToOne(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@JoinColumn(name="parent_asset_id")
+	private Asset parentAsset;
 
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
@@ -334,6 +338,16 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 			this.assetSiteHistoryList = assetSiteHistory;
 		}
 	}
+	public Asset getParentAsset() {
+		return parentAsset;
+	}
+	public void setParentAsset(Asset parentAsset) {
+		this.parentAsset = parentAsset;
+	}
+	
+	
+	
+	
     
 }
 

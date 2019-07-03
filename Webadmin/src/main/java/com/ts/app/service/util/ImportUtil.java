@@ -33,6 +33,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -1098,11 +1099,90 @@ public class ImportUtil {
 
 	}
 
+	private List<AssetDTO> getNonInsertedCount(List<AssetDTO> assetDTOs) {
+		 
+		List<AssetDTO> nonInsertedRows = assetDTOs.stream().filter(asset -> !asset.isInserted()).collect(Collectors.toList());
+		
+		return nonInsertedRows;
+		
+	}
+	
+	private  List<AssetDTO> invalidAssetRows;
+	
+	private int lastNonInsertedCount;
+	
+	private void saveImportedDetails(List<AssetDTO> assetDTOs,int nonInsertedCount) throws Exception {
+		
+		
+			
+		if(lastNonInsertedCount != nonInsertedCount) {
+		
+			lastNonInsertedCount = nonInsertedCount;
+			 
+			try {
+		
+				for(AssetDTO asset : assetDTOs) {
+				
+					if(!asset.isInserted() && !StringUtils.isEmpty(asset.getCode())) {
+					
+						if(StringUtils.isEmpty(asset.getParentAssetCode())) {
+							
+							assetManagementService.saveAsset(asset);
+							asset.setInserted(true);
+							
+						}
+						else {
+							
+							List<Asset> parentAssets = assetRepository.findAssetCodeBySite(asset.getSiteId(),String.valueOf(asset.getSiteId()) + "_"+ asset.getParentAssetCode());
+							
+							if(parentAssets.size() > 0) {
+								
+								asset.setParentAsset(parentAssets.get(0));
+								asset.setParentAssetId(parentAssets.get(0).getId());
+								assetManagementService.saveAsset(asset);
+								asset.setInserted(true);
+								
+							} 
+							   
+						}
+						 
+					}
+					
+				}
+				
+			}
+			catch (Exception e) {
+				//String msg = "Error while reading the asset data file for import";
+				//log.error(msg, e);
+				
+				throw new Exception(e);
+			} 
+			
+			List<AssetDTO> filteredRows = getNonInsertedCount(assetDTOs);
+			
+			if(filteredRows.size()>0) {
+				
+				saveImportedDetails(filteredRows,filteredRows.size());
+				
+			}
+			
+		}
+		else {
+			
+			invalidAssetRows = getNonInsertedCount(assetDTOs);
+			
+		}
+	}
+	
 	private String importAssetFromFile(String fileKey, String path) throws Exception {
+		
 		int r = 0;
 		int cellNo = 0;
 		StringBuffer response = new StringBuffer();
 		ImportResult importResult = statusMap.get(fileKey);
+		
+		currentCell = 0;
+		
 		try {
 
 			FileInputStream excelFile = new FileInputStream(new File(path));
@@ -1113,75 +1193,64 @@ public class ImportUtil {
 			r = 1;
 
 			log.debug("Last Row number -" + lastRow);
+			
+			List<AssetDTO> assetDTOs = new ArrayList<>();
+			 
 			for (; r <= lastRow; r++) {
-				log.debug("Current Row number -" + r);
+				 
 				try {
+					
+					// Reading Part
+					
+
 					Row currentRow = datatypeSheet.getRow(r);
+
+					if(currentRow.getCell(0) == null) {
+						break;
+					}
+ 					
 					AssetDTO assetDTO = new AssetDTO();
-					cellNo = 0;
-					assetDTO.setTitle(getCellValue(currentRow.getCell(0)));
-					cellNo = 1;
-					assetDTO.setDescription(getCellValue(currentRow.getCell(1)));
-					cellNo = 2;
-					assetDTO.setAssetType(getCellValue(currentRow.getCell(2)));
-					cellNo = 3;
-					assetDTO.setAssetGroup(getCellValue(currentRow.getCell(3)));
-					cellNo = 4;
-					assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(4))));
-					cellNo = 5;
-					assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(5))));
-					cellNo = 6;
-					assetDTO.setBlock(getCellValue(currentRow.getCell(6)));
-					cellNo = 7;
-					assetDTO.setFloor(getCellValue(currentRow.getCell(7)));
-					cellNo = 8;
-					assetDTO.setZone(getCellValue(currentRow.getCell(8)));
-					cellNo = 9;
-					assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(9))));
-					cellNo = 10;
-					assetDTO.setModelNumber(getCellValue(currentRow.getCell(10)));
-					cellNo = 11;
-					assetDTO.setSerialNumber(getCellValue(currentRow.getCell(11)));
-					cellNo = 12;
-					Date acquiredDate = currentRow.getCell(12) != null ? currentRow.getCell(12).getDateCellValue() : null;
+					assetDTO.setRowNumber(r+1);
+					
+					assetDTO.setCode(getCellValue(currentRow.getCell(0)));
+					assetDTO.setInserted(false);
+					
+					assetDTO.setTitle(getCellValue(currentRow.getCell(1))); 
+					assetDTO.setDescription(getCellValue(currentRow.getCell(2))); 
+					assetDTO.setAssetType(getCellValue(currentRow.getCell(3)));
+					assetDTO.setParentAssetCode(getCellValue(currentRow.getCell(4)));
+					assetDTO.setAssetGroup(getCellValue(currentRow.getCell(5)));
+					assetDTO.setProjectId(Long.valueOf(getCellValue(currentRow.getCell(6))));
+					assetDTO.setSiteId(Long.valueOf(getCellValue(currentRow.getCell(7))));
+					assetDTO.setBlock(getCellValue(currentRow.getCell(8)));
+					assetDTO.setFloor(getCellValue(currentRow.getCell(9)));
+					assetDTO.setZone(getCellValue(currentRow.getCell(10)));
+					assetDTO.setManufacturerId(Long.valueOf(getCellValue(currentRow.getCell(11))));
+					assetDTO.setModelNumber(getCellValue(currentRow.getCell(12)));
+					assetDTO.setSerialNumber(getCellValue(currentRow.getCell(13)));
+					Date acquiredDate = currentRow.getCell(14) != null ? currentRow.getCell(14).getDateCellValue() : null;
 					if(acquiredDate != null) {
 						assetDTO.setAcquiredDate(acquiredDate);
 					}
-					cellNo = 13;
-					assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(13))));
-					cellNo = 14;
-					assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(14))));
-					cellNo = 15;
-					assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(15))));
-					cellNo = 16;
-					assetDTO.setWarrantyType(getCellValue(currentRow.getCell(16)));
-					cellNo = 17;
-					Date warrantyDate = currentRow.getCell(17) != null ? currentRow.getCell(17).getDateCellValue() : null;
+					assetDTO.setPurchasePrice(Double.valueOf(getCellValue(currentRow.getCell(15))));
+					assetDTO.setCurrentPrice(Double.valueOf(getCellValue(currentRow.getCell(16))));
+					assetDTO.setEstimatedDisposePrice(Double.valueOf(getCellValue(currentRow.getCell(17))));
+					assetDTO.setWarrantyType(getCellValue(currentRow.getCell(18)));
+					Date warrantyDate = currentRow.getCell(19) != null ? currentRow.getCell(19).getDateCellValue() : null;
 					if(warrantyDate != null) {
 						assetDTO.setWarrantyExpiryDate(warrantyDate);
 					}
-					cellNo = 18;
-					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(18))));
-					cellNo = 19;
-					String assetCode = currentRow.getCell(19) != null ? currentRow.getCell(19).getStringCellValue() : null;
-					if(assetCode != null) {
-					    long siteId = Long.valueOf(getCellValue(currentRow.getCell(5)));
-					    boolean isDuplicate = this.isDuplicateCode(assetCode, siteId);
-					    if(isDuplicate) {
-                            continue;
-                        } else {
-                            assetDTO.setCode(getCellValue(currentRow.getCell(19)));
-                        }
-                    }
-					cellNo = 20;
-					assetDTO.setStatus(getCellValue(currentRow.getCell(20)));
-					assetManagementService.saveAsset(assetDTO);
+					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(20))));
+					assetDTO.setStatus(getCellValue(currentRow.getCell(21)));		
+					
+					assetDTOs.add(assetDTO);
+			 
 				} catch (IllegalStateException | NumberFormatException formatEx) {
 					throw formatEx;
 				} catch (Exception e) {
 					Row errorRow = datatypeSheet.getRow(r+1);
 					String name = getCellValue((errorRow.getCell(0)));
-					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1) + " in " + name;
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (currentCell) + " in " + name;
 					log.error(msg, e);
 					response.append(e.getMessage());
 					response.append("--" + msg);
@@ -1202,8 +1271,18 @@ public class ImportUtil {
 					statusMap.put(fileKey, importResult);
 					throw new Exception(response.toString());
 				}
-
+ 
 			}
+			
+			
+			// save data 
+			
+			lastNonInsertedCount = 0;
+			
+			saveImportedDetails(assetDTOs,assetDTOs.size());
+			
+			
+			
 
 		} catch (IOException e) {
 			String msg = "Error while reading the asset data file for import";
@@ -1242,7 +1321,15 @@ public class ImportUtil {
 			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
+			
 			response.append(SUCCESS_MESSAGE);
+			
+			if(invalidAssetRows !=null && invalidAssetRows.size()>0) {
+				 
+				response.append("Following Rows are invalid");
+				response.append(invalidAssetRows.stream().map(n -> String.valueOf(n.getRowNumber())).collect(Collectors.joining(",")));
+				
+			}
 		}
 		return response.toString();
 	}
@@ -1898,6 +1985,7 @@ public class ImportUtil {
         return result;
     }
 
+    private int currentCell;
 
     private String getCellValue(Cell cell) {
 		String value = null;
@@ -1919,9 +2007,10 @@ public class ImportUtil {
 	        	value = cell.getStringCellValue();
 	            break;
 		}
+		currentCell ++;
 		return value;
 	}
-
+ 
 	private boolean isDuplicateCode(String code, long siteId) {
 	    String assetCode = siteId+"_"+code;
         List<Asset> asset = assetRepository.findAssetCodeBySite(siteId, assetCode);

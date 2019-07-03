@@ -33,7 +33,7 @@ public class AssetType extends AbstractAuditingEntity {
 	@JoinColumn(name="site_id")
 	private Site site;
 
-	@Column(name="is_relationship_based")
+	@Column(name="is_relationship_based", columnDefinition = " default 0")
 	private boolean isRelationShipBased;
 	
 	public Long getId() {

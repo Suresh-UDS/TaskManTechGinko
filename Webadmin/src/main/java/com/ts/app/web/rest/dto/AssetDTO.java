@@ -2,12 +2,15 @@ package com.ts.app.web.rest.dto;
 
 import java.util.Date;
 
+import com.ts.app.domain.Asset;
+
 /**
  * Created by karthick on 7/1/2017.
  */
 public class AssetDTO extends BaseDTO {
 
     private long id;
+    private int rowNumber; 
     private String title;
     private String code;
     private String description;
@@ -52,6 +55,10 @@ public class AssetDTO extends BaseDTO {
     private String assetPpmTitle;
     private String warrantyType;
     private String url;
+    private String parentAssetCode;
+    private long parentAssetId;
+    private Asset parentAsset;
+    private boolean inserted;
 
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
@@ -347,6 +354,36 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getParentAssetCode() {
+		return parentAssetCode;
+	}
+	public void setParentAssetCode(String parentAssetCode) {
+		this.parentAssetCode = parentAssetCode;
+	}
+	public boolean isInserted() {
+		return inserted;
+	}
+	public void setInserted(boolean inserted) {
+		this.inserted = inserted;
+	}
+	public long getParentAssetId() {
+		return parentAssetId;
+	}
+	public void setParentAssetId(long parentAssetId) {
+		this.parentAssetId = parentAssetId;
+	}
+	public Asset getParentAsset() {
+		return parentAsset;
+	}
+	public void setParentAsset(Asset parentAsset) {
+		this.parentAsset = parentAsset;
+	}
+	public int getRowNumber() {
+		return rowNumber;
+	}
+	public void setRowNumber(int rowNumber) {
+		this.rowNumber = rowNumber;
 	}
 	
 	
