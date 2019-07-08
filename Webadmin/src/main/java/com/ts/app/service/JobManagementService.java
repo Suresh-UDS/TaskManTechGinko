@@ -1208,11 +1208,12 @@ public class JobManagementService extends AbstractService {
 
 	private void mapToEntity(JobDTO jobDTO, Job job) {
 		Employee employee = null;
-		if(job.getEmployee() == null) {
+		//if(job.getEmployee() == null) {
 			employee = getEmployee(jobDTO.getEmployeeId());
-		}else {
-			employee = job.getEmployee();
-		}
+		//}else {
+//			employee = job.getEmployee();
+			
+		//}
 		Site site = null;
 		if(job.getSite() == null) {
 			site = getSite(jobDTO.getSiteId());
