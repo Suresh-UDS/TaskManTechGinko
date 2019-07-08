@@ -164,7 +164,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
   createBankDetails(): FormGroup {
     return this.fb.group({
-      accountNo: ['', [Validators.required, Validators.maxLength(20)]],
+      accountNo: ['', [Validators.required, Validators.minLength(5),Validators.maxLength(20)]],
       ifsc: ['', [Validators.required, ValidateUrl, Validators.minLength(11), Validators.maxLength(11)]]
     });
   }

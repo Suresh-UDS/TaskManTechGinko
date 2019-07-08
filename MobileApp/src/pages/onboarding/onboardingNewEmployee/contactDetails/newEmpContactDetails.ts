@@ -55,7 +55,10 @@ export class newEmpContactDetails implements OnInit {
     { name: 'Andaman and Nicobhar', key: 'andaman and nicobhar' },
     { name: 'Dadra and Nagar Haveli', key: 'dasra and nagarhaveli' },
     { name: 'Daman and Diu', key: 'daman and diu' },
-    { name: 'Lakshadweep', key: 'lakshadweep' }
+    { name: 'Lakshadweep', key: 'lakshadweep' },
+    { name: 'Uttarakhand', key: 'uttarakhand' },
+    { name: 'Uttar Pradesh', key: 'uttar pradesh' },
+    { name: 'West Bengal', key: 'west bengal' },
   ]
   constructor(private fb: FormBuilder, private actionSheetCtrl: ActionSheetController, private file: File,
     private storage: Storage, private filePath: FilePath, private camera: Camera, private messageService: onBoardingDataService) { }
