@@ -93,6 +93,7 @@ angular.module('timeSheetApp')
 			$rootScope.exportStatusObj  ={};
 			$scope.searchModule ="";
 			$scope.assetQrSite =null;
+            $scope.isReleationShipEnabled = false;
 			$('#dPlayNone').hide();
 
 
@@ -770,6 +771,16 @@ angular.module('timeSheetApp')
 				});
 			}
 
+			$scope.relationShipBased = function(assetType){
+			    console.log("Asset type changes");
+			    console.log(assetType);
+                if(assetType.relationShipBased){
+                    $scope.isReleationShipEnabled = true;
+                }else{
+                    $scope.isReleationShipEnabled = false;
+                }
+            }
+
 			$scope.loadAssetGroup = function () {
 				$scope.searchAssetGroup = null;
 				$scope.clearField = false;
@@ -793,16 +804,16 @@ angular.module('timeSheetApp')
 			}
 
 			$scope.loadAssetParent = function(){
-				
+
 				AssetComponent.loadAssetParent($scope.selectedSites).then(function(data){
-					
+
 					$scope.assetParentList = data;
 					$scope.loadingStop();
- 
+
 				});
 
 			}
-			
+
 			$scope.loadSelectedProject = function(projectId) {
 				ProjectComponent.findOne(projectId).then(function (data) {
 					$scope.selectedProject = data;
@@ -3814,10 +3825,47 @@ angular.module('timeSheetApp')
 
 			$scope.loadStatus = function() {
 				AssetComponent.getStatus().then(function(data) {
-					//console.log('Asset status list-- ',data);
-					$scope.statuses = data;
+					console.log('Asset status list-- '  );
+					console.log(data);
+					$scope.statuses = [];
+					for(var i=0;i<data.length;i++){
+                        var status = {};
+                        status.status = data[i];
+					    status.isCurrentStatus = false;
+					    status.allowCurrentStatus = true;
+					    console.log(status);
+					    $scope.statuses.push(status);
+                    }
 				});
-			}
+			};
+
+			$scope.setCritical = function(status,i){
+			    console.log("Status");
+			    console.log(status);
+			    console.log(i);
+			    $scope.statuses[i].isSeverity = false;
+
+            };
+
+			$scope.setCurrentStatus = function(status,i){
+			    console.log("Current Status");
+			    console.log(status);
+			    console.log(i);
+			    if($scope.statuses[i].isCurrentStatus){
+                    for(var j=0;j<$scope.statuses.length;j++){
+                        if(j===i){
+                            $scope.statuses[j].allowCurrentStatus = true;
+                        }else{
+                            $scope.statuses[j].allowCurrentStatus = false;
+                        }
+                    }
+                }else{
+                    for(var k=0;k<$scope.statuses.length;k++){
+                        $scope.statuses[k].allowCurrentStatus = true;
+                    }
+                }
+
+            };
 
 
 			$scope.loadAllRules = function() {
