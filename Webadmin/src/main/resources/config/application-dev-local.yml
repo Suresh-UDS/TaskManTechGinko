@@ -20,15 +20,11 @@ spring:
             enabled: true # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        #url: jdbc:mysql://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://produdsdb-cluster.cluster-cdihr97wq71b.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
-#        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
-        #url: jdbc:mysql://udstaskmanclus.cluster-c6curboj4o20.ap-south-1.rds.amazonaws.com:3306/PRODTASKMAN?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://172.31.24.22:3306/Taskman?useUnicode=true&characterEncoding=utf8
+
         name:
-        username: TaskMan
-        password: Task@2019
+        username: root
+        password: Uds@2016
         #username: UDSTaskMan
         #password: Rd32018Uds
     jpa:
@@ -146,21 +142,26 @@ email:
     compleed:
         report:
             title: Completed job report
-
 reports:
     job-report:
-        url: http://localhost:8088/#/job-reports
+        url: http://172.31.24.22:8088/#/job-reports
     attendance-report:
-        url: http://localhost:8088/#/attendance-reports
+        url: http://172.31.24.22:8088/#/attendance-reports
+    feedback-report:
+        url: http://172.31.24.22:8088/#/feedbacksList
     asset-report:
-        url: http://localhost:8088/#/asset-report
+        url: http://172.31.24.22:8088/#/asset-report
     vendor-report:
-        url: http://localhost:8088/#/vendor-report
+        url: http://172.31.24.22:8088/#/vendor-report
+    pr-report:
+        url: http://172.31.24.22:8088/#/pr-report
+    inventory-report:
+        url: http://172.31.24.22:8088/#/inventory-report
 
 url:
-    ticket-view: http://localhost:8088/#/view-ticket/
-    quotation-view: http://localhost:8088/#/view-quotation/
-    job-view: http://localhost:8088/#/view-job/
+    ticket-view: http://172.31.24.22:8088/#/view-ticket/
+    quotation-view: http://172.31.24.22:8088/#/view-quotation/
+    job-view: http://172.31.24.22:8088/#/view-job/
 
 #facedetection:
 #    api:
@@ -174,19 +175,19 @@ facedetection:
     api:
         url: https://centralindia.api.cognitive.microsoft.com/face/v1.0/
         apiKey: 61fc8cb300e0431286708ae4c74f2860
-        groupId: employee-test
+        groupId: employee-uat
         personId: f77b54d1-2458-4887-badf-54bc06351ce3
 
 locationService:
-   url: http://localhost:8000/api/site/location
+#   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-#   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
+   url: http://localhost:8000/api/site/location
+   proximityUrl: http://localhost:8000/api/site/nearby
 
 quotationService:
 #   url: http://locahost:8000/api/site/location
 #   url: http://ec2-52-77-216-21.ap-southeast-1.compute.amazonaws.com:8000/api/site/location
-#   url: http://ec2-54-169-225-123.ap-southeast-1.compute.amazonaws.com:8001/api
-    url: http://ec2-54-255-148-73.ap-southeast-1.compute.amazonaws.com:8001/api
+   url: http://localhost:8001/api
 
 pushService:
    url: http://localhost:9000/
@@ -215,43 +216,41 @@ scheduler:
    job:
       creationPolicy: monthly
    dailyJob:
-      enabled: false
+      enabled: true
       creation: monthly
    weeklyJob:
-      enabled: false
+      enabled: true
    monthlyJob:
-      enabled: false
+      enabled: true
    quarterlyJob:
-      enabled: false
+      enabled: true
    yearlyJob:
-      enabled: false
+      enabled: true
       creation: daily
    fortnightlyJob:
-      enabled: false
+      enabled: true
       creation: daily
    halfyearlyJob:
-      enabled: false
+      enabled: true
       creation: yearly
    overdueJob:
       enabled: false
    eodJobReport:
-      enabled: false
+      enabled: true
    attendanceDetailReport:
-      enabled: false
+      enabled: true
    attendanceConsolidatedReport:
-      enabled: false
+      enabled: true
    feedbackreport:
-      enabled: false
+      enabled: true
    attendanceMusterRollReport:
-      enabled: false
+      enabled: true
    dayWiseJobReport:
-      enabled: false
+      enabled: true
    dayWiseTicketReport:
-      enabled: false
+      enabled: true
    dayWiseQuotationReport:
-      enabled: false
-   dayWiseAttendanceReport:
-      enabled: false
+      enabled: true
 
 default.user.password: uds12345
 
@@ -259,17 +258,20 @@ google:
    drive:
       api:
           callback:
-              host: localhost
+              host: 13.232.248.92
               port: 8080
 
 influxdb:
-   url: http://127.0.0.1:8086
-   username: root
-   password: root
-   dbname: dashboard
-   retention-policy: one_year_policy
-   gzip: true
+    url: http://3.0.29.145:8086
+    username: superadmin
+    password: "*BehindWheel7"
+    dbname: dashboard
+    retention-policy: one_year_policy
+    gzip: true
 
+onBoarding:
+    empServe: http://172.31.17.47:8089/
+    empRetrieve: http://172.31.17.47:8087/
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
