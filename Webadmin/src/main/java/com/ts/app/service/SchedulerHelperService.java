@@ -2336,7 +2336,11 @@ public class SchedulerHelperService extends AbstractService {
 	}
 
 	private JobDTO createJob(Job parentJob, Map<String, String> dataMap, Date jobDate, Date plannedEndTime, Date sHrs, Date eHrs, List<JobDTO> jobs) {
+		
 		JobDTO job = new JobDTO();
+		
+		try {
+		
 		job.setTitle(dataMap.get("title"));
 		job.setDescription(dataMap.get("description"));
 		job.setSiteId(Long.parseLong(dataMap.get("siteId")));
@@ -2473,6 +2477,12 @@ public class SchedulerHelperService extends AbstractService {
 				}
 				createJob(parentJob, dataMap, jobDate, plannedEndTime, endTime.getTime(), tmpCal.getTime(), jobs);
 			}
+		}
+		}
+		catch(Exception x){
+			
+			log.debug("exception job : "+x);
+			
 		}
 		return job;
 	}

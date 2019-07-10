@@ -364,6 +364,30 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetDto;
 	}
+	
+	private void arrangeAssetHierarichy(List<Asset> assetList) {
+		
+		if(assetList != null) {
+		
+			for(int i=0;i<assetList.size();i++) {
+				
+				arrangeAssetHierarichy(assetList.get(i).getAssets());
+				
+			}
+			
+		}
+		
+	}
+	
+	public List<AssetDTO> getSiteAssetHierarchy(long siteId,String assetType){
+		
+		List<Asset> assetList= assetRepository.findBySiteIdAndassetTypeAndActiveAndParentAsset(siteId, assetType, "Y", null);
+		
+		arrangeAssetHierarichy(assetList);
+		
+		return mapperUtil.toModelList(assetList, AssetDTO.class);
+		
+	}
 
 	public Asset getAsset(long id) {
 		Asset asset = assetRepository.findOne(id);
@@ -1041,6 +1065,14 @@ public class AssetManagementService extends AbstractService {
 			assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
 		}
 		return assetDTO;
+	}
+	
+	public List<AssetDTO> getAssetHierarichy(SearchCriteria searchCriteria){
+		
+		List<AssetDTO> assetList = null;
+		
+		return assetList;
+		
 	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {

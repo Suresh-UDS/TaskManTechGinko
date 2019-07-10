@@ -137,6 +137,11 @@ public class AssetResource {
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
 	}
+	
+	@RequestMapping(path = "/site/{id}/{typeId}/assetHierarchy", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AssetDTO> getSiteAssetHierarchy(@PathVariable("id") Long siteId,@PathVariable("typeName") String typeName) {
+		return assetService.getSiteAssetHierarchy(siteId,typeName);
+	}
 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public AssetDTO getAsset(@PathVariable("id") Long id) {
@@ -650,6 +655,21 @@ public class AssetResource {
 
 	@RequestMapping(value = "/assets/export", method = RequestMethod.POST)
 	public ExportResponse exportAsset(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<AssetDTO> result = assetService.findBySearchCrieria(searchCriteria);
+			List<AssetDTO> results = result.getTransactions();
+			resp.addResult(assetService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+	
+	@RequestMapping(value = "/assets/meterReading/export", method = RequestMethod.POST)
+	public ExportResponse exportAssetMeterReading(@RequestBody SearchCriteria searchCriteria) {
 		// log.debug("JOB EXPORT STARTS HERE **********");
 		ExportResponse resp = new ExportResponse();
 		if (searchCriteria != null) {

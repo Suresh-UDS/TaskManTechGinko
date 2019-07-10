@@ -1,8 +1,10 @@
 package com.ts.app.web.rest.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ts.app.domain.Asset;
+ 
 
 /**
  * Created by karthick on 7/1/2017.
@@ -59,6 +61,7 @@ public class AssetDTO extends BaseDTO {
     private long parentAssetId;
     private Asset parentAsset;
     private boolean inserted;
+    private List<AssetDTO> assets;
 
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
@@ -384,6 +387,12 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setRowNumber(int rowNumber) {
 		this.rowNumber = rowNumber;
+	}
+	public List<AssetDTO> getAssets() {
+		return assets;
+	}
+	public void setAssets(List<AssetDTO> assets) {
+		this.assets = assets;
 	}
 	
 	
