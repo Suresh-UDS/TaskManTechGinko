@@ -5,6 +5,18 @@
             <h3>{{assetVal.title | uppercase}} - {{assetVal.id}}</h3>
         </div>
 		<div class="row">
+            <!-- <div class="col-mod-12">
+                <div class="alert alert-success" ng-show="success">
+                    <strong>Asset saved!</strong>
+                </div>
+
+                <div class="alert alert-danger" ng-show="error">
+                    <strong>Asset Not Saved!</strong> Please try again later.
+                </div>
+                <div class="alert alert-danger" ng-show="errorAssetExists">
+                    <strong>Asset already registered!</strong> Please choose another one.
+                </div>
+            </div> -->
 			<div class="col-md-12">
                 <div class="">
                     <div class="">
@@ -17,6 +29,14 @@
                                     <!-- Wizard container -->
                                     <div class="wizard-container">
                                         <div class="card wizard-card active" data-color="orange" id="wizardProfile">
+                                             <!-- ng-show="!success" -->
+                                             <!-- ng-submit="saveAsset()" -->
+                                             <!-- <form name="form" role="form" novalidate
+                                                class="form-horizontal" > -->
+                                             <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+                                             <!--<div class="wizard-header">-->
+                                               <!---->
+                                             <!--</div>-->
                                                 <div class="wizard-navigation" >
                                                     <div  ng-class="!assetVal.id ? 'OverlayBx' : ''" ></div>
                                                     <ul class="arrow-steps" >
@@ -141,7 +161,7 @@
 
                                                                         <div class="row">
 
-                                                                            <div class="col-md-3">
+                                                                            <div class="col-md-4">
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Name <span class="red-star">*</span></label>
                                                                                 <input id='assetTitle'
@@ -185,15 +205,10 @@
                                                                                             <div class="form-group">
                                                                                                 <label class="control-label">Type <span class="red-star">*</span></label>
                                                                                                 <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-        	                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name | uppercase for assetype in assetTypes" name="assetTypeName" ng-change="relationShipBased(selectedAssetType)"
+        	                                                                                    <select class="form-control" ng-model="selectedAssetType" ng-options="assetype as assetype.name | uppercase for assetype in assetTypes" name="assetTypeName"
                                                                                                 required tabindex="3">
         	                                                                                        <option value="">Select Asset Type ..</option>
         	                                                                                    </select>
-                                                                                                    <div ng-show="isReleationShipEnabled" >
-                                                                                                        <p class="help-block" style="color:darkblue">
-                                                                                                            This Type is Relationship Based.
-                                                                                                        </p>
-                                                                                                    </div>
 
                                                                                                  <div ng-show="form.$submitted || form.assetTypeName.$touched || form.assetTypeName.$dirty">
                                                                                                     <div ng-show="form.assetTypeName.$dirty || form.assetTypeName.$invalid">
@@ -205,58 +220,54 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                        </div>
-                                                                                   <div class="col-md-2 pdng-top25">
+                                                                                   <div class="col-md-1 pdng-top25">
+                                                                                            <!-- <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addAssetType" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                <i class="material-icons">add</i>
+                                                                                            </a> -->
                                                                                             <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addAssetType').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                         </div>
                                                                                     </div>
-                                                                                  </div>
 
-                                                                            </div>
-                                                                            <div class="col-md-3">
+                                                                                    <!-- <div class="collapse" id="addAssetType">
+                                                                                        <div class="">
+                                                                                            <input class="input-desc" id="addAssetTypeInput" ng-model="assetType.name"   name="AssetType" type="text" value=""/>
+                                                                                      <a class="btn btn-success"  ng-click="addAssetType()">Add</a>
+                                                                                        </div>
+                                                                                    </div> -->
 
-                                                                                <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
+                                                                                </div>
+
+                                                                                  <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
 
                                                                                     <div class="row">
-                                                                                        <div class="col-md-10 pad-r-0px">
-                                                                                            <label class="control-label">Group</label>
-                                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <div class="col-md-4 pad-r-0px">
+                                                                                             <label class="control-label">Group</label>
+                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
                                                                                             <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" tabindex="6">
                                                                                                 <option value="">Select Asset Group ..</option>
                                                                                             </select>
 
                                                                                         </div>
 
-                                                                                        <div class="col-md-2 pdng-top25">
-
+                                                                                        <div class="col-md-1 pdng-top25">
+                                                                                           <!--  <a href="javascript:void(0)"  data-toggle="collapse" data-parent="#accordian" data-target="#addGroup" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
+                                                                                                <i class="material-icons">add</i>
+                                                                                            </a> -->
                                                                                             <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addGroup').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
                                                                                         </div>
                                                                                     </div>
 
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-3" ng-if="isReleationShipEnabled">
-
-                                                                                <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
-
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-12 pad-r-0px">
-                                                                                            <label class="control-label">Parent</label>
-                                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" tabindex="6">
-                                                                                                <option value="">Select Asset Parent ..</option>
-                                                                                            </select>
+                                                                                   <!-- <div class="collapse" id="addGroup">
+                                                                                        <div class="">
+                                                                                            <input class="input-desc" id='assetgroupName' ng-model="assetGroup.assetgroup"
+                                                                                                   name='assetgroupName' type='text' value=""/>
+                                                                                            <a class="btn btn-success"  ng-click="addAssetGroup()">Add</a>
 
                                                                                         </div>
-
-
-                                                                                    </div>
-
+                                                                                   </div> -->
                                                                                 </div>
                                                                             </div>
-
                                                                         </div>
-
-
 
 
 
@@ -265,11 +276,9 @@
                                                                     </div>
                                                                 </div>
 
-                                                            <div class="col-md-12">
-                                                            <div class="panel panel-default">
-                                                                <div class="panel-heading">Asset Status</div>
-                                                                <div class="panel-body">
-                                                                    <div class="row" ng-init="loadStatus();">
+
+                                                            <div class="row" ng-init="loadStatus();">
+                                                                <div class="col-md-12">
                                                                     <div class="form-group" >
                                                                         <!-- <label class="control-label">Status<span class="red-star">*</span></label> -->
                                                                         <!--<span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
@@ -324,8 +333,6 @@
                                                                         </div>
                                                                     </div>
 
-                                                                </div>
-                                                            </div>
                                                                 </div>
                                                             </div>
 
