@@ -3,7 +3,12 @@ package com.ts.app.web.rest.dto;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.service.util.MapperUtil;
  
 
 /**
@@ -59,10 +64,17 @@ public class AssetDTO extends BaseDTO {
     private String url;
     private String parentAssetCode;
     private long parentAssetId;
+    
+    @JsonIgnore
     private Asset parentAsset;
+    
     private boolean inserted;
-    private List<AssetDTO> assets;
+    private List<Asset> assets;
+    private List<AssetDTO> childAssets;
 
+    @Inject
+	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+    
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
 	}
@@ -389,12 +401,16 @@ public class AssetDTO extends BaseDTO {
 		this.rowNumber = rowNumber;
 	}
 	public List<AssetDTO> getAssets() {
-		return assets;
+		return childAssets;
 	}
-	public void setAssets(List<AssetDTO> assets) {
-		this.assets = assets;
+	public void setAssets(List<Asset> assets) {
+		this.childAssets = mapperUtil.toModelList(assets, AssetDTO.class);;
+	}
+	public List<AssetDTO> getChildAssets() {
+		return childAssets;
+	}
+	public void setChildAssets(List<AssetDTO> childAssets) {
+		this.childAssets = childAssets;
 	}
 	
-	
-    
 }

@@ -2,6 +2,8 @@ package com.ts.app.domain;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -113,6 +115,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	
 	private String warrantyType;
 	
+	@JsonIgnore
 	@ManyToOne(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name="parent_asset_id")
 	private Asset parentAsset;

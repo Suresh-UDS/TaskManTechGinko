@@ -138,9 +138,14 @@ public class AssetResource {
 		return assetService.getSiteAssets(siteId);
 	}
 	
-	@RequestMapping(path = "/site/{id}/{typeId}/assetHierarchy", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AssetDTO> getSiteAssetHierarchy(@PathVariable("id") Long siteId,@PathVariable("typeName") String typeName) {
-		return assetService.getSiteAssetHierarchy(siteId,typeName);
+	@RequestMapping(path = "/assetHierarchy/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<Asset>> getSiteAssetHierarchy(@PathVariable("siteId") Long siteId,@PathVariable("typeId") long typeId) {
+		
+		try {
+			return new ResponseEntity<Iterable<Asset>>(assetService.getSiteAssetHierarchy(siteId,typeId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Iterable<Asset>>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

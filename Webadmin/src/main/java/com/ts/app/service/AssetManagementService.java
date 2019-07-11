@@ -371,6 +371,8 @@ public class AssetManagementService extends AbstractService {
 		
 			for(int i=0;i<assetList.size();i++) {
 				
+				//if(assetList.get(i).getParentAsset()!=null) assetList.get(i).setParentAsset(null);
+				
 				arrangeAssetHierarichy(assetList.get(i).getAssets());
 				
 			}
@@ -379,13 +381,21 @@ public class AssetManagementService extends AbstractService {
 		
 	}
 	
-	public List<AssetDTO> getSiteAssetHierarchy(long siteId,String assetType){
+	public List<Asset> getSiteAssetHierarchy(long siteId,long typeId){
 		
-		List<Asset> assetList= assetRepository.findBySiteIdAndassetTypeAndActiveAndParentAsset(siteId, assetType, "Y", null);
+		AssetType assetType = assetTypeRepository.findById(typeId);
+		
+		if(assetType == null) {
+			
+			return null;
+			
+		}
+		
+		List<Asset> assetList= assetRepository.findBySiteIdAndAssetTypeAndActiveAndParentAsset(siteId, assetType.getName(), "Y", null);
 		
 		arrangeAssetHierarichy(assetList);
 		
-		return mapperUtil.toModelList(assetList, AssetDTO.class);
+		return assetList;
 		
 	}
 

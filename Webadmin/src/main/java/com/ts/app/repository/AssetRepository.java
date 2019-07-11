@@ -50,9 +50,9 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     
     List<Asset> findBySiteId(long siteId);
     
-    List<Asset> findBySiteIdAndassetTypeAndActiveAndParentAsset(long siteId,String assetType,String active,Asset parentAsset);
+    List<Asset> findBySiteIdAndAssetTypeAndActiveAndParentAsset(long siteId,String assetType,String active,Asset parentAsset);
     
-    List<Asset> findBySiteIdAndassetTypeAndActive(long siteId,String assetType,String active);
+    List<Asset> findBySiteIdAndAssetTypeAndActive(long siteId,String assetType,String active);
     
     @Query("SELECT a from Asset a where a.site.id = :siteId and a.active = 'Y'  order by a.title")
     Page<Asset> findBySiteId(@Param("siteId") long siteId, Pageable pageRequest);
