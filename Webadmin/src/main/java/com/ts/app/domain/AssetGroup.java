@@ -38,6 +38,10 @@ public class AssetGroup extends AbstractAuditingEntity implements Serializable {
     @OneToMany( mappedBy = "parentGroup",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<AssetGroup> assetGroup;
 
+    @Size(min = 1, max = 250)
+	@Column(length = 250)
+	private String assetGroupCode;
+    
 	public Long getId() {
 		return id;
 	}
@@ -87,5 +91,14 @@ public class AssetGroup extends AbstractAuditingEntity implements Serializable {
 	public void setParentGroup(AssetGroup parentGroup) {
 		this.parentGroup = parentGroup;
 	}
+
+	public String getAssetGroupCode() {
+		return assetGroupCode;
+	}
+
+	public void setAssetGroupCode(String assetGroupCode) {
+		this.assetGroupCode = assetGroupCode;
+	}
+	
 	
 }
