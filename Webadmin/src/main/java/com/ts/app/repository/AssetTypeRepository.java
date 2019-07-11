@@ -1,5 +1,6 @@
 package com.ts.app.repository;
 
+import com.ts.app.domain.Asset;
 import com.ts.app.domain.AssetType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +23,7 @@ public interface AssetTypeRepository extends JpaRepository<AssetType, Long> {
 
 	@Query("SELECT at FROM AssetType at WHERE at.name= :name")
 	AssetType findByName(@Param("name") String name);
+	
+	AssetType findById(Long id);
 
 }

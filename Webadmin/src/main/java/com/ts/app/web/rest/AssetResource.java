@@ -137,6 +137,16 @@ public class AssetResource {
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
 	}
+	
+	@RequestMapping(path = "/assetHierarchy/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<Asset>> getSiteAssetHierarchy(@PathVariable("siteId") Long siteId,@PathVariable("typeId") long typeId) {
+		
+		try {
+			return new ResponseEntity<Iterable<Asset>>(assetService.getSiteAssetHierarchy(siteId,typeId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Iterable<Asset>>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public AssetDTO getAsset(@PathVariable("id") Long id) {
@@ -650,6 +660,21 @@ public class AssetResource {
 
 	@RequestMapping(value = "/assets/export", method = RequestMethod.POST)
 	public ExportResponse exportAsset(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<AssetDTO> result = assetService.findBySearchCrieria(searchCriteria);
+			List<AssetDTO> results = result.getTransactions();
+			resp.addResult(assetService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+	
+	@RequestMapping(value = "/assets/meterReading/export", method = RequestMethod.POST)
+	public ExportResponse exportAssetMeterReading(@RequestBody SearchCriteria searchCriteria) {
 		// log.debug("JOB EXPORT STARTS HERE **********");
 		ExportResponse resp = new ExportResponse();
 		if (searchCriteria != null) {
