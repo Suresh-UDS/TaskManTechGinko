@@ -138,7 +138,7 @@ public class AssetResource {
 		return assetService.getSiteAssets(siteId);
 	}
 	
-	@RequestMapping(path = "/assetHierarchy/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/asset/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Iterable<Asset>> getSiteAssetHierarchy(@PathVariable("siteId") Long siteId,@PathVariable("typeId") long typeId) {
 		
 		try {
@@ -148,6 +148,16 @@ public class AssetResource {
 		}
 	}
 
+	@RequestMapping(path = "/assetSiteGroupHierarichy/{siteId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<AssetGroup>> getSiteGroupAssetHierarchy(@PathVariable("siteId") Long siteId) {
+		
+		try {
+			return new ResponseEntity<Iterable<AssetGroup>>(assetService.getSiteAssetGroupHierarchy(siteId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Iterable<AssetGroup>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+ 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public AssetDTO getAsset(@PathVariable("id") Long id) {
 		log.debug(">>> get asset details! by asset id from resource <<<" + id);

@@ -381,6 +381,31 @@ public class AssetManagementService extends AbstractService {
 		
 	}
 	
+	private void arrangeAssetGroupHierarichy(List<AssetGroup> assetGroupList) {
+		
+		if(assetGroupList != null) {
+		
+			for(int i=0;i<assetGroupList.size();i++) {
+				
+				arrangeAssetGroupHierarichy(assetGroupList.get(i).getAssetGroup());
+				
+			}
+			
+		}
+		
+	}
+
+
+	public List<AssetGroup> getSiteAssetGroupHierarchy(long siteId){
+		
+		List<AssetGroup> assetGroupList = assetGroupRepository.findBySiteIdAndActiveAndParentGroup(siteId,"Y",null); 
+		
+		arrangeAssetGroupHierarichy(assetGroupList);
+		
+		return assetGroupList;
+		
+	}
+	
 	public List<Asset> getSiteAssetHierarchy(long siteId,long typeId){
 		
 		AssetType assetType = assetTypeRepository.findById(typeId);

@@ -1241,7 +1241,9 @@ public class ImportUtil {
 						assetDTO.setWarrantyExpiryDate(warrantyDate);
 					}
 					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(20))));
-					assetDTO.setStatus(getCellValue(currentRow.getCell(21)));		
+					assetDTO.setStatus(getCellValue(currentRow.getCell(21)));	
+					assetDTO.setCriticalStatusList(getCellValue(currentRow.getCell(22)));
+					
 					
 					assetDTOs.add(assetDTO);
 			 

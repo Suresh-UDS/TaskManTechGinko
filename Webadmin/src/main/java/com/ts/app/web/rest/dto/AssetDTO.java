@@ -64,8 +64,8 @@ public class AssetDTO extends BaseDTO {
     private String url;
     private String parentAssetCode;
     private long parentAssetId;
+    private String criticalStatusList;
     
-    @JsonIgnore
     private Asset parentAsset;
     
     private boolean inserted;
@@ -411,6 +411,12 @@ public class AssetDTO extends BaseDTO {
 	}
 	public void setChildAssets(List<AssetDTO> childAssets) {
 		this.childAssets = childAssets;
+	}
+	public String getCriticalStatusList() {
+		return criticalStatusList;
+	}
+	public void setCriticalStatusList(String criticalStatusList) {
+		this.criticalStatusList = criticalStatusList;
 	}
 	
 }
