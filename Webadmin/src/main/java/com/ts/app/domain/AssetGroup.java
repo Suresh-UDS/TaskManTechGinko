@@ -27,6 +27,10 @@ public class AssetGroup extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name="parent_group_id")    
     private AssetGroup parentGeroup;
 
+    @Size(min = 1, max = 250)
+	@Column(length = 250)
+	private String assetGroupCode;
+    
 	public Long getId() {
 		return id;
 	}
@@ -58,6 +62,16 @@ public class AssetGroup extends AbstractAuditingEntity implements Serializable {
 	public void setParentGeroup(AssetGroup parentGeroup) {
 		this.parentGeroup = parentGeroup;
 	}
+
+	public String getAssetGroupCode() {
+		return assetGroupCode;
+	}
+
+	public void setAssetGroupCode(String assetGroupCode) {
+		this.assetGroupCode = assetGroupCode;
+	}
+	
+	
     
 	
 }

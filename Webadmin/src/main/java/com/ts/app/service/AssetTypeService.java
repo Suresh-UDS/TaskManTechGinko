@@ -49,8 +49,10 @@ public class AssetTypeService extends AbstractService {
 		// log.info("The admin Flag value is " +adminFlag);
 		AssetType assetType = mapperUtil.toEntity(assetTypeDto, AssetType.class);
 		AssetType existingType = assetTypeRepository.findByName(assetTypeDto.getName());
-		if(existingType == null) { 
+		if(existingType == null)  { 
 			assetType.setActive(AssetType.ACTIVE_YES);
+			assetType.setAssetTypeCode(assetType.getAssetTypeCode());
+			assetType.setRelationShipBased(assetType.isRelationShipBased());
 			assetType = assetTypeRepository.save(assetType);
 			log.debug("Created Information for AssetType: {}", assetType);
 			assetTypeDto = mapperUtil.toModel(assetType, AssetTypeDTO.class);
