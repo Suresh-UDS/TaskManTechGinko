@@ -456,7 +456,7 @@ angular.module('timeSheetApp')
             },
 
             getAssetHierarchy : function (criteria) {
-                return $http.get('api/asset/'+criteria.siteId+'/'+criteria.assetTypeId).then(function(response){
+                return $http.get('api/siteAssetHierarchy/'+criteria.siteId+'/'+criteria.assetTypeId).then(function(response){
                    return response.data;
                 });
             },
