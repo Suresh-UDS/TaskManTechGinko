@@ -138,7 +138,7 @@ public class AssetResource {
 		return assetService.getSiteAssets(siteId);
 	}
 	
-	@RequestMapping(path = "/asset/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path = "/siteAssetHierarchy/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Iterable<Asset>> getSiteAssetHierarchy(@PathVariable("siteId") Long siteId,@PathVariable("typeId") long typeId) {
 		
 		try {
