@@ -119,19 +119,19 @@
 
                             <div class="col-md-4 col-lg-4 col-sm-1" has-permission="Site:List">
                                     
-                                <div id="Fuel"></div>
+                                <div id="Fuel" onClick="$('#deleteModal').modal()" data-target="#myModal"></div>
 
                             </div>
 
-                            <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Site:List">
+                            <div class="col-md-4 col-lg-4 col-sm-2" has-permission="Site:List">
                                     
-                                <div id="Water"></div>
+                                <div id="Water" onClick="$('#deleteModal').modal()" data-target="#myModal"></div>
     
                             </div>
 
-                            <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Site:List">
+                            <div class="col-md-4 col-lg-4 col-sm-2" has-permission="Site:List">
                                     
-                                <div id="Energy"></div>
+                                <div id="Energy" onClick="$('#deleteModal').modal()" data-target="#myModal"></div>
         
                             </div>
 
@@ -1102,3 +1102,35 @@
 
           </div>-->
 
+<div class="row">
+
+    <div id="deleteModal" data-backdrop="false" class="modal fade"
+         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="delete-dialog" style="width:85%">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div id="sample1"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="sample2"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="sample3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="delete-footer">
+                    <form name="deleteForm" ng-submit="" role="form" novalidate>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
