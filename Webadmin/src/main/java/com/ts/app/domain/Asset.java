@@ -50,6 +50,9 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)    
     private List<AssetStatusHistory> assetStatusHistoryList;
     
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)    
+    private List<AssetTicketConfig> assetTicketConfigList;
+    
     @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)   
     private List<AssetSiteHistory> assetSiteHistoryList;
 
@@ -334,6 +337,13 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setAssetStatusHistory(List<AssetStatusHistory> assetStatusHistory) {
 		this.assetStatusHistoryList = assetStatusHistory;
 	}
+	
+	public List<AssetTicketConfig> getAssetTicketConfigList() {
+		return assetTicketConfigList;
+	}
+	public void setAssetTicketConfigList(List<AssetTicketConfig> assetTicketConfigList) {
+		this.assetTicketConfigList = assetTicketConfigList;
+	}
 	public List<AssetSiteHistory> getAssetSiteHistory() {
 		return assetSiteHistoryList;
 	}
@@ -351,6 +361,7 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setParentAsset(Asset parentAsset) {
 		this.parentAsset = parentAsset;
 	}
+ 
 	public List<Asset> getAssets() {
 		return assets;
 	}
@@ -358,6 +369,6 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 		this.assets = assets;
 	}
 	
-    
+     
 }
 

@@ -2244,7 +2244,7 @@
                             Asset Type Code
                         </div>
                         <div class="col-md-8">
-                            <input class="" id="assetTypeCode" ng-model="assetType.code"   name="AssetType" type="text" value="" ng-required="true" ng-maxlength='250'
+                            <input class="" id="assetTypeCode" ng-model="assetType.assetTypeCode"   name="AssetType" type="text" value="" ng-required="true" ng-maxlength='250'
                             ng-pattern="/^[A-Za-z0-9\s]*$/"
                             />
                                 <div ng-show="addAssetTypeForm.$submitted || addAssetTypeForm.assetTypeCode.$touched || addAssetTypeForm.assetTypeCode.$dirty">
@@ -2302,7 +2302,7 @@
                             <div class="col-md-6" style="text-align: right">
                                  <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="terms">
+                                        <input type="checkbox" name="terms" ng-model="assetType.relationShipBased" >
                                     </label>
                                 </div>
 
@@ -2367,7 +2367,7 @@
                         Parent Group
                     </div>
                     <div class="col-md-8">
-                        <select class="form-control" id="assetGroupParent" ng-model="assetGroupParent" ng-options="assetParentName as assetParent.assetParentName | uppercase for assetParent in assetParentList" tabindex="6">
+                        <select class="form-control" id="assetGroupParent" ng-model="assetGroup.parentGeroup" ng-options="assetParentName as assetParent.assetParentName | uppercase for assetParent in assetParentList" tabindex="6">
                             <option value="">No Parent ..</option>
                         </select>
                         <div ng-show="addGroupForm.$submitted || addGroupForm.assetGroupParent.$touched || addGroupForm.assetGroupParent.$dirty">

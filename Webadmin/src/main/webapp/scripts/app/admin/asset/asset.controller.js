@@ -2635,12 +2635,14 @@ angular.module('timeSheetApp')
 			/* Add asset type */
 
 			$scope.addAssetType = function () {
-				//console.log($scope.assetType);
+//				alert("Code===>"+$scope.assetType.assetTypeCode);
+//				alert("Relationship===>"+$scope.assetType.relationShipBased);
+				console.log("Asset Type===>" + $scope.assetType);
 				$scope.loadingStart();
 				if($scope.assetType){
 					//console.log("Asset Type entered");
 					AssetTypeComponent.create($scope.assetType).then(function (response) {
-						//console.log(response);
+						console.log($scope.assetType.isRelationShipBased);
 						if(response.data.status && response.data.status === "400") {
 
 							$scope.showNotifications('top','center','danger','Asset type already exists.');
@@ -2670,6 +2672,7 @@ angular.module('timeSheetApp')
 				//console.log($scope.assetGroup);
 				if($scope.assetGroup){
 				    $scope.loadingStart();
+				    alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
 						//console.log(response);
