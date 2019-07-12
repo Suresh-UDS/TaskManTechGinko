@@ -1354,10 +1354,13 @@ public class AssetManagementService extends AbstractService {
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
 		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
+		AssetGroup parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
+		
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
 			assetgroup.setAssetGroupCode(assetGroupDTO.getAssetGroupCode());
-			assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
+			assetgroup.setParentGroup(parent);
+			//assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
 			assetGroupRepository.save(assetgroup);
 			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
 		}else {
