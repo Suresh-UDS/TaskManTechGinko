@@ -35,6 +35,9 @@ public class AssetTicketConfig extends AbstractAuditingEntity{
 	
 	@Column(name="severity")
 	private boolean severity;
+	
+	@Column(name="status")
+	private String status;
 
 	public Long getId() {
 		return id;
@@ -67,4 +70,13 @@ public class AssetTicketConfig extends AbstractAuditingEntity{
 	public void setSeverity(boolean severity) {
 		this.severity = severity;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	 
 }

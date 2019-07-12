@@ -64,13 +64,13 @@ public class AssetDTO extends BaseDTO {
     private String url;
     private String parentAssetCode;
     private long parentAssetId;
-    private String criticalStatusList;
     
     private Asset parentAsset;
     
     private boolean inserted;
     private List<Asset> assets;
     private List<AssetDTO> childAssets;
+    private List<AssetTicketConfigDTO> criticalStatusList;
 
     @Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -412,10 +412,10 @@ public class AssetDTO extends BaseDTO {
 	public void setChildAssets(List<AssetDTO> childAssets) {
 		this.childAssets = childAssets;
 	}
-	public String getCriticalStatusList() {
+	public List<AssetTicketConfigDTO> getCriticalStatusList() {
 		return criticalStatusList;
 	}
-	public void setCriticalStatusList(String criticalStatusList) {
+	public void setCriticalStatusList(List<AssetTicketConfigDTO> criticalStatusList) {
 		this.criticalStatusList = criticalStatusList;
 	}
 	

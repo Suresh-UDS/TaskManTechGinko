@@ -12,7 +12,9 @@ public class AssetTicketConfigDTO extends BaseDTO{
 
 	private boolean severity;
 	
-	private String assetId;
+	private String status;
+	
+	private Asset asset;
 
 	public Long getId() {
 		return id;
@@ -38,12 +40,24 @@ public class AssetTicketConfigDTO extends BaseDTO{
 		this.severity = severity;
 	}
 
-	public String getAssetId() {
-		return assetId;
+	
+
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setAssetId(String assetId) {
-		this.assetId = assetId;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}	
+	
+	
 
 }

@@ -277,7 +277,16 @@ public class AssetManagementService extends AbstractService {
 			assetSiteHistoryList.add(assetSiteHistory);
 			asset.setAssetSiteHistory(assetSiteHistoryList);
 		}
-
+		
+		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
+			
+			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
+			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
+			asset.getAssetTicketConfigList().add(ticketConfig);
+			
+		}
+		
+		
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -1342,7 +1351,7 @@ public class AssetManagementService extends AbstractService {
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
 			assetgroup.setAssetGroupCode(assetGroupDTO.getAssetGroupCode());
-			assetgroup.setParentGeroup(assetGroupDTO.getParentGeroup());
+			assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
 			assetGroupRepository.save(assetgroup);
 			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
 		}else {
