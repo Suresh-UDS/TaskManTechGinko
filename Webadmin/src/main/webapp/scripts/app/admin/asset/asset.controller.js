@@ -160,6 +160,8 @@ angular.module('timeSheetApp')
 			$scope.assetGroupsListOne = {};
 			$scope.assetGroupsLists = [];
 
+			$scope.selectedParentGroup = {};
+
 			//console.log("state params",$stateParams);
 
 			var that =  $scope;
@@ -2669,10 +2671,10 @@ angular.module('timeSheetApp')
 
 			$scope.addAssetGroup = function () {
 
-				//console.log($scope.assetGroup);
+				console.log($scope.selectedParentGroup);
 				if($scope.assetGroup){
 				    $scope.loadingStart();
-				    alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
+				    //alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
 						//console.log(response);
@@ -4705,63 +4707,61 @@ angular.module('timeSheetApp')
 			 *
 			 * */
         $scope.assetFinalLists = [];
+        $scope.assetParentList = [];
 
 		$scope.getAssetHierarchy = function() {
 		    var obj = {
 		        "siteId": $scope.selectedSites.id,
                 "assetTypeId" : $scope.selectedAssetType.id
             };
-
 		    AssetComponent.getAssetHierarchy(obj).then(function(data){
                 console.log("AssetHierarchy is" +JSON.stringify(data));
-
                 if(data.length > 0) {
-                    //var i=0;
-                    //for(var i in data) {
-                        initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor"
-                    //}
+                    initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor
                     console.log($scope.assetFinalLists);
-
                 }
             });
         }
 
-            //var parentNames = [];                     // 0:"LG Invertor"
-            // function mapAssetTree(data, name) {
-            // console.log("AssetParent " +data.title+ " and " +name);
-            // parentNames.push(name);   // 0
-            // if(data.assets.length > 0) {
-            //     console.log(data.assets);
-            //     for(var j in data.assets) {
-            //         if(data.assets[j] != null) {
-            //             var childAssets = data.assets[j];
-            //             var childAssetTitle = childAssets.title;
-            //             console.log(childAssetTitle);
-            //             parentNames.push(childAssetTitle);
-            //             if(childAssets.assets && childAssets.assets.length > 0) {
-            //                 mapAssetTree(childAssets.assets, childAssets.assets[j].title);
-            //             }
-            //         }
-            //     }
-            //
-            //     console.log(parentNames);
-            // }
-
-            function initMapAssetTree(prefix, assetList){
-
-                for( var i in assetList ){
-
-                    $scope.assetFinalLists.push({id: assetList[i].id, title: (prefix + assetList[i].title) });
-
-                    if(assetList[i].assets && assetList[i].assets.length > 0) {
-                        initMapAssetTree("|__"+prefix,assetList[i].assets);
-                    }
+        $scope.getAssetGrpHierarchy = function() {
+		    var obj = {
+		        "siteId": $scope.selectedSites.id
+            }
+            AssetComponent.getAssetGrpHierarchy(obj).then(function(data) {
+                console.log("Asset Group Hierarchy" +JSON.stringify(data));
+                if(data.length > 0) {
+                    initMapAssetGrpTree("", data)
                 }
+            });
+        }
 
+        function initMapAssetTree(prefix, assetList){
+
+            for( var i in assetList ){
+
+                $scope.assetFinalLists.push({id: assetList[i].id, title: (prefix + assetList[i].title) });
+
+                if(assetList[i].assets && assetList[i].assets.length > 0) {
+                    initMapAssetTree("|__"+prefix,assetList[i].assets);
+                }
             }
 
-        //}
+        }
+
+        function initMapAssetGrpTree(prefix, assetGrpList){
+
+            for( var i in assetGrpList ){
+
+                $scope.assetParentList.push({id: assetGrpList[i].id, group: (prefix + assetGrpList[i].assetgroup) });
+
+                if(assetGrpList[i].assetGroup && assetGrpList[i].assetGroup.length > 0) {
+                    initMapAssetGrpTree("|__"+prefix,assetGrpList[i].assetGroup);
+                }
+            }
+
+        }
 
 
 
-});
+
+        });

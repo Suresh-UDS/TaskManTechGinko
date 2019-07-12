@@ -1342,7 +1342,7 @@ public class AssetManagementService extends AbstractService {
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
 			assetgroup.setAssetGroupCode(assetGroupDTO.getAssetGroupCode());
-			assetgroup.setParentGeroup(assetGroupDTO.getParentGeroup());
+			assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
 			assetGroupRepository.save(assetgroup);
 			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
 		}else {

@@ -89,7 +89,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required tabindex="2">
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetGrpHierarchy();" name="AssetSite"  required tabindex="2">
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -2367,8 +2367,8 @@
                         Parent Group
                     </div>
                     <div class="col-md-8">
-                        <select class="form-control" id="assetGroupParent" ng-model="assetGroup.parentGeroup" ng-options="assetParentName as assetParent.assetParentName | uppercase for assetParent in assetParentList" tabindex="6">
-                            <option value="">No Parent ..</option>
+                        <select class="form-control" id="assetGroupParent" ng-model="selectedParentGroup" ng-options="assetParent as (assetParent.group | uppercase) for assetParent in assetParentList" tabindex="6">
+                            <option value="">No Parent..</option>
                         </select>
                         <div ng-show="addGroupForm.$submitted || addGroupForm.assetGroupParent.$touched || addGroupForm.assetGroupParent.$dirty">
                             <div ng-show="addGroupForm.assetGroupParent.$dirty || addGroupForm.assetGroupParent.$invalid">

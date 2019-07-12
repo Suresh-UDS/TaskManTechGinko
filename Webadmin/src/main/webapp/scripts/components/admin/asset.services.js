@@ -456,12 +456,16 @@ angular.module('timeSheetApp')
             },
 
             getAssetHierarchy : function (criteria) {
-                return $http.get('api/assetHierarchy/'+criteria.siteId+'/'+criteria.assetTypeId).then(function(response){
+                return $http.get('api/asset/'+criteria.siteId+'/'+criteria.assetTypeId).then(function(response){
+                   return response.data;
+                });
+            },
+
+            getAssetGrpHierarchy : function (criteria) {
+                return $http.get('api/assetSiteGroupHierarichy/'+criteria.siteId).then(function (response) {
                    return response.data;
                 });
             }
-            
-           
 
 
         };
