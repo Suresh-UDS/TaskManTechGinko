@@ -93,6 +93,59 @@
 
         <!-- Filters end -->
 
+        <!-- Accordion Gauge Container start -->
+
+        <div class="panel-group" id="accordion" role="tablist"
+             aria-multiselectable="true">
+
+            <!-- Main panel start -->
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                       data-target="#collapseGauge" aria-expanded="true"
+                       aria-controls="collapseOne" class="collapsed">
+                        <h4 class="panel-title">
+                            KPI <i class="material-icons">keyboard_arrow_down</i>
+                        </h4>
+                    </a>
+                </div>
+
+                <div id="collapseGauge"
+                     class="panel-collapse collapse collapseOne in" role="tabpanel"
+                     aria-labelledby="headingOne" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <div class="row">
+
+                            <div class="col-md-4 col-lg-4 col-sm-1" has-permission="Site:List">
+                                    
+                                <div id="Fuel"></div>
+
+                            </div>
+
+                            <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Site:List">
+                                    
+                                <div id="Water"></div>
+    
+                            </div>
+
+                            <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Site:List">
+                                    
+                                <div id="Energy"></div>
+        
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Accordion end -->
+
         <!-- Accordion start -->
 
         <div class="panel-group" id="accordion" role="tablist"
@@ -222,6 +275,8 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- Main panel end -->
             <div ng-show="searchFilterCriteria.projectId || searchFilterCriteria.siteId">
                 <!-- Job panel start -->
@@ -631,6 +686,7 @@
                 </div>
                 <!-- Quotation panel end -->
             </div>
+            
         </div>
 
         <!-- Accordion end -->
