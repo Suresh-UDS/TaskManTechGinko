@@ -45,16 +45,6 @@ public class AssetTicketConfigService extends AbstractService{
 		return assetTicketConfigDTO;
 	}
 	
-    //Update asset ticket config
-	public void updateAssetTicketConfig(AssetTicketConfigDTO assetTicketConfig) {
-		AssetTicketConfig assetTicketUpdate = assetTicketConfigRepository.findOne(assetTicketConfig.getId());
-		Asset asset = assetRepository.findById(assetTicketConfig.getAssetId());
-		assetTicketUpdate.setAsset(asset);
-		assetTicketUpdate.setTicket(assetTicketUpdate.isTicket());
-		assetTicketUpdate.setSeverity(assetTicketUpdate.isSeverity());
-		assetTicketConfigRepository.saveAndFlush(assetTicketUpdate);
-	}
-	
 	//Find all 
 	public List<AssetTicketConfigDTO> findAll() {
 		List<AssetTicketConfig> entities = assetTicketConfigRepository.findAll();
