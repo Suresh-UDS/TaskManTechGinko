@@ -1193,7 +1193,7 @@ angular.module('timeSheetApp')
 							$scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
 							$scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
 							$scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
-							$scope.selectedAssetType ={name:$scope.assetList.assetType};
+							$scope.selectedAssetType ={id: $scope.assetList.assetTypeId, name:$scope.assetList.assetType};
 							$scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
 							$scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
 							$scope.selectedBlock = $scope.assetList.block;
@@ -1221,6 +1221,14 @@ angular.module('timeSheetApp')
 									$scope.zones = data;
 									//console.log('zones list',$scope.zones);
 								});
+
+								AssetComponent.getAssetGrpHierarchy($scope.assetList).then(function (data) {
+                                    if(data.length > 0) {
+                                        initMapAssetGrpTree("", data);
+                                    }
+                                })
+
+                                $scope.getAssetHierarchy();
 							}
 
 							$scope.loadSiteShifts();
@@ -2208,9 +2216,7 @@ angular.module('timeSheetApp')
 				}
 				if($scope.warToDate){
 					$scope.assetEdit.warrantyToDate = $scope.warToDate;
-
 				}
-
 
 				//console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
