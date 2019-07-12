@@ -69,11 +69,7 @@ public class AssetTicketConfigResource {
 	@Timed
 	public ResponseEntity<?> updateAssetTicketConfig(@Valid @RequestBody AssetTicketConfigDTO assetTicketConfig,HttpServletRequest request){
 	
-		try {
-			assetTicketConfigService.updateAssetTicketConfig(assetTicketConfig);
-		}catch (Exception ex) {
-			throw new TimesheetException(ex);
-		}
+		 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

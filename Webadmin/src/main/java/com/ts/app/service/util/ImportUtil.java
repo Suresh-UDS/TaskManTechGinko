@@ -1241,8 +1241,32 @@ public class ImportUtil {
 						assetDTO.setWarrantyExpiryDate(warrantyDate);
 					}
 					assetDTO.setVendorId(Long.valueOf(getCellValue(currentRow.getCell(20))));
-					assetDTO.setStatus(getCellValue(currentRow.getCell(21)));	
-					assetDTO.setCriticalStatusList(getCellValue(currentRow.getCell(22))); 
+					assetDTO.setStatus(getCellValue(currentRow.getCell(21)));
+					
+					String criticalStatusObj = getCellValue(currentRow.getCell(22));
+					
+					if(criticalStatusObj !=null ) {
+						
+						String[] criticalStatusList = criticalStatusObj.split(",");
+						
+						List<AssetTicketConfigDTO> statusList = new ArrayList<AssetTicketConfigDTO>();
+						
+						for(String criticalStatus : criticalStatusList) {
+							
+							AssetTicketConfigDTO status = new AssetTicketConfigDTO();
+							
+							status.setStatus(criticalStatus);
+							status.setSeverity(true);
+							status.setTicket(true);
+							
+							statusList.add(status);
+							
+							
+						}
+						
+						assetDTO.setCriticalStatusList(statusList);
+						
+					}
 					
 					
 					assetDTOs.add(assetDTO);

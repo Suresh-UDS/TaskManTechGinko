@@ -241,20 +241,21 @@ public class AssetManagementService extends AbstractService {
 				assetType = new AssetType();
 				assetType.setName(asset.getAssetType());
 				assetType.setActive("Y");
+				assetType.setSite(asset.getSite());
 				assetTypeRepository.save(assetType);
 			}
 		}
 
 		//create asset group if does not exist
-		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
-			AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
-			if(assetGroup == null) {
-				assetGroup = new AssetGroup();
-				assetGroup.setAssetgroup(asset.getAssetGroup());
-				assetGroup.setActive("Y");
-				assetGroupRepository.save(assetGroup);
-			}
-		}
+//		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
+//			AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
+//			if(assetGroup == null) {
+//				assetGroup = new AssetGroup();
+//				assetGroup.setAssetgroup(asset.getAssetGroup());
+//				assetGroup.setActive("Y");
+//				assetGroupRepository.save(assetGroup);
+//			}
+//		}
 
 		//create asset warranty type if does not exist
 		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
@@ -277,7 +278,16 @@ public class AssetManagementService extends AbstractService {
 			assetSiteHistoryList.add(assetSiteHistory);
 			asset.setAssetSiteHistory(assetSiteHistoryList);
 		}
-
+		
+		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
+			
+			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
+			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
+			asset.getAssetTicketConfigList().add(ticketConfig);
+			
+		}
+		
+		
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
