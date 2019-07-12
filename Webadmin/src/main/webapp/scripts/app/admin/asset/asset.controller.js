@@ -2007,6 +2007,9 @@ angular.module('timeSheetApp')
 					if($scope.selectedServiceWarranty && $scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
 					if($scope.selectedVendor && $scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
 					if($scope.selectedSites && $scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
+					alert($scope.selectedAssetGroup.id);
+					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){$scope.assetGen.parentAsset = $scope.selectedAssetGroup.id}
+					
 					//if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
 					if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
