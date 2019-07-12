@@ -453,6 +453,12 @@ angular.module('timeSheetApp')
             	return $http.post('api/assets/jobmaterials', search).then(function(response) {
             		return response.data;
             	});
+            },
+
+            getAssetHierarchy : function (criteria) {
+                return $http.get('api/assetHierarchy/'+criteria.siteId+'/'+criteria.assetTypeId).then(function(response){
+                   return response.data;
+                });
             }
             
            

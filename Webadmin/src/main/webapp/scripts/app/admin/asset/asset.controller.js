@@ -96,8 +96,6 @@ angular.module('timeSheetApp')
             $scope.isReleationShipEnabled = false;
 			$('#dPlayNone').hide();
 
-
-
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			$scope.searchAcquiredDate = "";
 			$scope.searchCreatedDate = "";
@@ -4703,7 +4701,64 @@ angular.module('timeSheetApp')
 			 * Ui select allow-clear modified function end
 			 *
 			 * */
+        $scope.assetFinalLists = [];
+
+		$scope.getAssetHierarchy = function() {
+		    var obj = {
+		        "siteId": $scope.selectedSites.id,
+                "assetTypeId" : $scope.selectedAssetType.id
+            };
+
+		    AssetComponent.getAssetHierarchy(obj).then(function(data){
+                console.log("AssetHierarchy is" +JSON.stringify(data));
+
+                if(data.length > 0) {
+                    //var i=0;
+                    //for(var i in data) {
+                        initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor"
+                    //}
+                    console.log($scope.assetFinalLists);
+
+                }
+            });
+        }
+
+            //var parentNames = [];                     // 0:"LG Invertor"
+            // function mapAssetTree(data, name) {
+            // console.log("AssetParent " +data.title+ " and " +name);
+            // parentNames.push(name);   // 0
+            // if(data.assets.length > 0) {
+            //     console.log(data.assets);
+            //     for(var j in data.assets) {
+            //         if(data.assets[j] != null) {
+            //             var childAssets = data.assets[j];
+            //             var childAssetTitle = childAssets.title;
+            //             console.log(childAssetTitle);
+            //             parentNames.push(childAssetTitle);
+            //             if(childAssets.assets && childAssets.assets.length > 0) {
+            //                 mapAssetTree(childAssets.assets, childAssets.assets[j].title);
+            //             }
+            //         }
+            //     }
+            //
+            //     console.log(parentNames);
+            // }
+
+            function initMapAssetTree(prefix, assetList){
+
+                for( var i in assetList ){
+
+                    $scope.assetFinalLists.push({id: assetList[i].id, title: (prefix + assetList[i].title) });
+
+                    if(assetList[i].assets && assetList[i].assets.length > 0) {
+                        initMapAssetTree("|__"+prefix,assetList[i].assets);
+                    }
+                }
+
+            }
+
+        //}
 
 
 
-		});
+});
