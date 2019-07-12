@@ -279,14 +279,17 @@ public class AssetManagementService extends AbstractService {
 			asset.setAssetSiteHistory(assetSiteHistoryList);
 		}
 		
+		List<AssetTicketConfig> ticketConfigList = new ArrayList<AssetTicketConfig> ();
+		
 		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
 			
 			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
 			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
-			asset.getAssetTicketConfigList().add(ticketConfig);
+			ticketConfigList.add(ticketConfig);
 			
 		}
 		
+		asset.setAssetTicketConfigList(ticketConfigList);
 		
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
@@ -306,7 +309,9 @@ public class AssetManagementService extends AbstractService {
 			}
 			assetParamConfigRepository.save(assetParamConfigs);
 		}
-		return mapperUtil.toModel(asset, AssetDTO.class);
+		
+		assetDTO.setId(asset.getId());
+		return assetDTO;
 
 	}
 

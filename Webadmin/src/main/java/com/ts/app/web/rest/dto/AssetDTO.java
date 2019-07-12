@@ -404,7 +404,7 @@ public class AssetDTO extends BaseDTO {
 		return childAssets;
 	}
 	public void setAssets(List<Asset> assets) {
-		this.childAssets = mapperUtil.toModelList(assets, AssetDTO.class);;
+		this.assets = assets;
 	}
 	public List<AssetDTO> getChildAssets() {
 		return childAssets;
