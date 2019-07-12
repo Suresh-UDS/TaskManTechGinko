@@ -1697,7 +1697,7 @@ angular.module('timeSheetApp')
                 });
 
 
-            },1000);
+            },10);
 
            
 
@@ -1719,7 +1719,7 @@ angular.module('timeSheetApp')
                     },
 
                     title: {
-                        text: 'Fuel Consumtion'
+                        text: 'Reading Consumtion'
                     },
 
                     pane: {
@@ -1776,7 +1776,7 @@ angular.module('timeSheetApp')
                             rotation: 'auto'
                         },
                         title: {
-                            text: 'Fuel'
+                            text: 'Reading'
                         },
                         plotBands: [{
                             from: 0,
@@ -1804,7 +1804,7 @@ angular.module('timeSheetApp')
                 });
 
 
-            },1000);
+            },10);
 
 
 
@@ -1826,7 +1826,7 @@ angular.module('timeSheetApp')
                     },
 
                     title: {
-                        text: 'Fuel Consumtion'
+                        text: 'Energy Consumtion'
                     },
 
                     pane: {
@@ -1883,7 +1883,7 @@ angular.module('timeSheetApp')
                             rotation: 'auto'
                         },
                         title: {
-                            text: 'Fuel'
+                            text: 'Energy'
                         },
                         plotBands: [{
                             from: 0,
@@ -1911,7 +1911,7 @@ angular.module('timeSheetApp')
                 });
 
 
-            },1000);
+            },10);
 
 
 
