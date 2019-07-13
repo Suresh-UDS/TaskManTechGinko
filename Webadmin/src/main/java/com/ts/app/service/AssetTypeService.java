@@ -49,7 +49,7 @@ public class AssetTypeService extends AbstractService {
 		// log.info("The admin Flag value is " +adminFlag);
 		AssetType assetType = mapperUtil.toEntity(assetTypeDto, AssetType.class);
 		AssetType existingType = assetTypeRepository.findByName(assetTypeDto.getName());
-		if(existingType == null)  { 
+		if(existingType == null)  {
 			assetType.setActive(AssetType.ACTIVE_YES);
 			assetType.setAssetTypeCode(assetType.getAssetTypeCode());
 			assetType.setRelationShipBased(assetType.isRelationShipBased());
@@ -62,7 +62,7 @@ public class AssetTypeService extends AbstractService {
 			assetTypeDto.setErrorStatus(true);
 		}
 		return assetTypeDto;
-       
+
 	}
 
 	public void updateAssetType(AssetTypeDTO assetType) {
@@ -95,6 +95,11 @@ public class AssetTypeService extends AbstractService {
 		List<AssetType> entities = assetTypeRepository.findAll();
 		return mapperUtil.toModelList(entities, AssetTypeDTO.class);
 	}
+
+    public List<AssetTypeDTO> findBySiteId(Long siteId) {
+        List<AssetType> entities = assetTypeRepository.findBySiteId(siteId);
+        return mapperUtil.toModelList(entities, AssetTypeDTO.class);
+    }
 
 	public AssetTypeDTO findOne(Long id) {
 		AssetType entity = assetTypeRepository.findOne(id);
