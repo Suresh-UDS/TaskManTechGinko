@@ -471,7 +471,10 @@ public class AssetManagementService extends AbstractService {
 		log.debug(">>> asset Type " + asset.getAssetType());
 		log.debug(">>> Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-
+		if(assetDTO.getAssetType() != null) {
+		    AssetType assetType = assetTypeRepository.findByName(assetDTO.getAssetType());
+		    assetDTO.setAssetTypeId(assetType.getId());
+        }
 		return assetDTO;
 	}
 
@@ -597,6 +600,8 @@ public class AssetManagementService extends AbstractService {
 			asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
+
+		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAsset().getId()));
 
 		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
 
