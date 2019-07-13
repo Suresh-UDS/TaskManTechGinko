@@ -4719,17 +4719,20 @@ angular.module('timeSheetApp')
 			 * */
         $scope.assetFinalLists = [];
         $scope.assetParentList = [];
-
+        $scope.selectedAssetParent = {};
 		$scope.getAssetHierarchy = function() {
 		    var obj = {
 		        "siteId": $scope.selectedSites.id,
-                "assetTypeId" : $scope.selectedAssetType.id
+                "assetTypeId" : $scope.selectedAssetType ? $scope.selectedAssetType.id : 0
             };
 		    AssetComponent.getAssetHierarchy(obj).then(function(data){
                 console.log("AssetHierarchy is" +JSON.stringify(data));
                 if(data.length > 0) {
                     initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor
                     console.log($scope.assetFinalLists);
+                }else{
+                    $scope.assetFinalLists = [];
+                    $scope.selectedAssetParent = null;
                 }
             });
         }
@@ -4742,6 +4745,8 @@ angular.module('timeSheetApp')
                 console.log("Asset Group Hierarchy" +JSON.stringify(data));
                 if(data.length > 0) {
                     initMapAssetGrpTree("", data)
+                }else{
+                    $scope.assetParentList = [];
                 }
             });
         }

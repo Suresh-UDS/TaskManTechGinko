@@ -89,7 +89,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetGrpHierarchy();" name="AssetSite"  required tabindex="2">
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetHierarchy();getAssetGrpHierarchy();" name="AssetSite"  required tabindex="2">
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -242,7 +242,7 @@
                                                                                         <div class="col-md-12 pad-r-0px">
                                                                                             <label class="control-label">Parent</label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.title | uppercase for assetgroup in assetFinalLists" tabindex="6">
+                                                                                            <select class="form-control" ng-model="selectedAssetParent" ng-options="assetgroup as assetgroup.title | uppercase for assetgroup in assetFinalLists" tabindex="6">
                                                                                                 <option value="">Select Asset Parent ..</option>
                                                                                             </select>
 

@@ -270,7 +270,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites track by site.id" ng-change="siteChange();" name="AssetSite" required tabindex="2">
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites track by site.id" ng-change="siteChange();getAssetHierarchy();getAssetGrpHierarchy();" name="AssetSite" required tabindex="2">
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
