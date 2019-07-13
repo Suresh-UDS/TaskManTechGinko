@@ -138,6 +138,12 @@ angular.module('timeSheetApp')
                 return $http.get('api/getAvgTicket/monthly').then(function (response) {
                    return response.data;
                 });
+            },
+
+            getReadingsFromDate : function () {
+                return $http.get('api/assets/reading/chart').then(function (response) {
+                    return response.data;
+                })
             }
         }
     })

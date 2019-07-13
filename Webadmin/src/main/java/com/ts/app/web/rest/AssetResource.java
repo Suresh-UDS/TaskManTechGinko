@@ -850,6 +850,11 @@ public class AssetResource {
 		return result;
 	}
 
+	@RequestMapping(value = "/assets/reading/chart", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AssetReadingChart> getAssetReadingChartData() {
+	    return assetService.getReadingsValue();
+    }
+
 
 
 }
