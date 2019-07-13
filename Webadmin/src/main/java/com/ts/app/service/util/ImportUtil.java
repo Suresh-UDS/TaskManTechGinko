@@ -1348,7 +1348,7 @@ public class ImportUtil {
 		}
 		if(response.length() == 0) {
 			
-			response.append(SUCCESS_MESSAGE);
+			response.append(FAILED);
 			
 			if(invalidAssetRows !=null && invalidAssetRows.size()>0) {
 				 
