@@ -235,16 +235,16 @@ public class AssetManagementService extends AbstractService {
 		}
 
 		//create asset type if does not exist
-		if(!StringUtils.isEmpty(asset.getAssetType())) {
-			AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
-			if(assetType == null) {
-				assetType = new AssetType();
-				assetType.setName(asset.getAssetType());
-				assetType.setActive("Y");
-				assetType.setSite(asset.getSite());
-				assetTypeRepository.save(assetType);
-			}
-		}
+//		if(!StringUtils.isEmpty(asset.getAssetType())) {
+//			AssetType assetType = assetTypeRepository.findByName(asset.getAssetType());
+//			if(assetType == null) {
+//				assetType = new AssetType();
+//				assetType.setName(asset.getAssetType());
+//				assetType.setActive("Y");
+//				assetType.setSite(asset.getSite());
+//				assetTypeRepository.save(assetType);
+//			}
+//		}
 
 		//create asset group if does not exist
 //		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
@@ -649,8 +649,31 @@ public class AssetManagementService extends AbstractService {
 		Asset asset = assetRepository.findOne(assetDTO.getId());
 		mapToEntityAssets(assetDTO, asset);
 		asset = assetRepository.save(asset);
+		
+		if(asset.getAssetTicketConfigList()!=null) {
+			
+			for(AssetTicketConfig tConfig : asset.getAssetTicketConfigList()) {
+				
+				asset.getAssetTicketConfigList().remove(tConfig);
+				
+			}
+			
+		}
+		
+		List<AssetTicketConfig> ticketConfigList = new ArrayList<AssetTicketConfig> ();
+		
+		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
+			
+			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
+			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
+			ticketConfigList.add(ticketConfig);
+			
+		}
+		
+		asset.setAssetTicketConfigList(ticketConfigList);
 
 		return mapperUtil.toModel(asset, AssetDTO.class);
+		
 	}
 
 	public void deleteAsset(Long id) {
