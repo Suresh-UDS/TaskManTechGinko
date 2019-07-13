@@ -30,6 +30,10 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT a from Asset a where a.code = :code")
     Asset findByCode(@Param("code") String code);
     
+    @Query("SELECT a from Asset a where a.id = :id")
+    Asset findById(@Param("id") String id);
+    
+    
     @Query("SELECT a from Asset a where a.title = :title")
     Asset findByTitle(@Param("title") String title);
 
@@ -49,6 +53,10 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     Page<Asset> findByAssetTitle(@Param("name") String name, Pageable pageRequest);
     
     List<Asset> findBySiteId(long siteId);
+    
+    List<Asset> findBySiteIdAndAssetTypeAndActiveAndParentAsset(long siteId,String assetType,String active,Asset parentAsset);
+    
+    List<Asset> findBySiteIdAndAssetTypeAndActive(long siteId,String assetType,String active);
     
     @Query("SELECT a from Asset a where a.site.id = :siteId and a.active = 'Y'  order by a.title")
     Page<Asset> findBySiteId(@Param("siteId") long siteId, Pageable pageRequest);
@@ -145,6 +153,9 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id = :assetParamId and r.active = 'Y' order by r.createdDate DESC")
 	List<AssetParameterReading> findAssetReadingById(@Param("assetId") long assetId, @Param("assetParamId") long assetParamId);
 
+    @Query("SELECT SUM(r.initialValue),AVG(SUM(r.initialValue)),SUM(r.finalValue),AVG(SUM(r.finalValue)),AVG(SUM(r.finalValue) - SUM(r.initialValue)) FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.createdDate between :fromDate and :toDate and r.active = 'Y' order by r.createdDate DESC")
+	List<Object[]> findAssetReadingSummaryById(@Param("assetId") long assetId,  @Param("fromDate") ZonedDateTime fromDate, @Param("toDate") ZonedDateTime toDate);
+    
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.createdDate between :fromDate and :toDate order by r.createdDate desc")
     Page<AssetParameterReading> findAssetReadingByDate(@Param("assetId") long assetId, @Param("fromDate") ZonedDateTime fromDate, @Param("toDate") ZonedDateTime toDate, Pageable pageRequest);
 

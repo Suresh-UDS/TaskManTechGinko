@@ -163,7 +163,7 @@ export class AddMaterial {
               demo.showSwal('warning-message-and-confirmation-ok',msg);
             })
           }else {
-            this.component.closeAll();
+            this.component.closeLoader();
             demo.showSwal('warning-message-and-confirmation-ok',"you have only "+m[i].materialStock+" material stock in "+m[i].materialName);
             console.log("material quantity is bigger than material stock");
             break;

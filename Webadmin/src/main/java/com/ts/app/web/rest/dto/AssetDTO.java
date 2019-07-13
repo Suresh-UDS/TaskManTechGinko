@@ -1,8 +1,15 @@
 package com.ts.app.web.rest.dto;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.inject.Inject;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Asset;
+import com.ts.app.service.util.MapperUtil;
+ 
 
 /**
  * Created by karthick on 7/1/2017.
@@ -57,9 +64,17 @@ public class AssetDTO extends BaseDTO {
     private String url;
     private String parentAssetCode;
     private long parentAssetId;
+    
     private Asset parentAsset;
+    
     private boolean inserted;
+    private List<Asset> assets;
+    private List<AssetDTO> childAssets;
+    private List<AssetTicketConfigDTO> criticalStatusList;
 
+    @Inject
+	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+    
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
 	}
@@ -385,7 +400,23 @@ public class AssetDTO extends BaseDTO {
 	public void setRowNumber(int rowNumber) {
 		this.rowNumber = rowNumber;
 	}
+	public List<AssetDTO> getAssets() {
+		return childAssets;
+	}
+	public void setAssets(List<Asset> assets) {
+		this.assets = assets;
+	}
+	public List<AssetDTO> getChildAssets() {
+		return childAssets;
+	}
+	public void setChildAssets(List<AssetDTO> childAssets) {
+		this.childAssets = childAssets;
+	}
+	public List<AssetTicketConfigDTO> getCriticalStatusList() {
+		return criticalStatusList;
+	}
+	public void setCriticalStatusList(List<AssetTicketConfigDTO> criticalStatusList) {
+		this.criticalStatusList = criticalStatusList;
+	}
 	
-	
-    
 }

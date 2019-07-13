@@ -186,6 +186,25 @@
 
 
                                                                             </div>
+
+
+                                                                            <div class="form-group selectcon">
+
+                                                                                <div class="row">
+                                                                                    <div class="col-md-10 pad-r-0px">
+                                                                                        <label class="control-label">Parent</label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.title | uppercase for assetgroup in assetFinalLists" tabindex="6">
+                                                                                            <option value="">Select Asset Parent ..</option>
+                                                                                        </select>
+
+                                                                                    </div>
+
+
+                                                                                </div>
+
+                                                                            </div>
+
                                                                         </div>
                                                                     </div>
 
@@ -2419,7 +2438,61 @@
 
                 <form name="addGroupForm">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
+                            Asset Group Code
+                        </div>
+                        <div class="col-md-8">
+                            <input class="" id="assetGroupCode" ng-model="assetGroup.assetGroupCode"   name="assetGroupCode" type="text" value="" ng-required="true" ng-maxlength='250'
+                                   ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetGroupCode.$touched || addGroupForm.assetGroupCode.$dirty">
+                                <div ng-show="addGroupForm.assetGroupCode.$dirty || addGroupForm.assetGroupCode.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupCode.$error.required">
+                                        Asset Group code is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupCode.$error.maxlength">
+                                        Asset Group Code cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupCode.$error.pattern">
+                                        Asset Group Code can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:5px">
+                        <div class="col-md-4">
+                            Parent Group
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-control" id="assetGroupParent" ng-model="selectedParentGroup" ng-options="assetParent as (assetParent.group | uppercase) for assetParent in assetParentList" tabindex="6">
+                                <option value="">No Parent..</option>
+                            </select>
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetGroupParent.$touched || addGroupForm.assetGroupParent.$dirty">
+                                <div ng-show="addGroupForm.assetGroupParent.$dirty || addGroupForm.assetGroupParent.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupParent.$error.required">
+                                        Select Asset Group Parent.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupParent.$error.maxlength">
+                                        Select Asset Group Parent.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupParent.$error.pattern">
+                                        Select Asset Group Parent.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:5px">
+                        <div class="col-md-4">
+                            Asset Group Name
+                        </div>
+                        <div class="col-md-8">
                             <input class="" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
                             ng-pattern="/^[A-Za-z0-9\s]*$/" />
                             <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched || addGroupForm.assetgroupName.$dirty">

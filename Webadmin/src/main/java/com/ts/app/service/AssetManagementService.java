@@ -241,20 +241,21 @@ public class AssetManagementService extends AbstractService {
 				assetType = new AssetType();
 				assetType.setName(asset.getAssetType());
 				assetType.setActive("Y");
+				assetType.setSite(asset.getSite());
 				assetTypeRepository.save(assetType);
 			}
 		}
 
 		//create asset group if does not exist
-		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
-			AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
-			if(assetGroup == null) {
-				assetGroup = new AssetGroup();
-				assetGroup.setAssetgroup(asset.getAssetGroup());
-				assetGroup.setActive("Y");
-				assetGroupRepository.save(assetGroup);
-			}
-		}
+//		if(!StringUtils.isEmpty(asset.getAssetGroup())) {
+//			AssetGroup assetGroup = assetGroupRepository.findByName(asset.getAssetGroup());
+//			if(assetGroup == null) {
+//				assetGroup = new AssetGroup();
+//				assetGroup.setAssetgroup(asset.getAssetGroup());
+//				assetGroup.setActive("Y");
+//				assetGroupRepository.save(assetGroup);
+//			}
+//		}
 
 		//create asset warranty type if does not exist
 		if(!StringUtils.isEmpty(asset.getWarrantyType())) {
@@ -277,7 +278,19 @@ public class AssetManagementService extends AbstractService {
 			assetSiteHistoryList.add(assetSiteHistory);
 			asset.setAssetSiteHistory(assetSiteHistoryList);
 		}
-
+		
+		List<AssetTicketConfig> ticketConfigList = new ArrayList<AssetTicketConfig> ();
+		
+		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
+			
+			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
+			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
+			ticketConfigList.add(ticketConfig);
+			
+		}
+		
+		asset.setAssetTicketConfigList(ticketConfigList);
+		
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -296,7 +309,9 @@ public class AssetManagementService extends AbstractService {
 			}
 			assetParamConfigRepository.save(assetParamConfigs);
 		}
-		return mapperUtil.toModel(asset, AssetDTO.class);
+		
+		assetDTO.setId(asset.getId());
+		return assetDTO;
 
 	}
 
@@ -364,6 +379,65 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetDto;
 	}
+	
+	private void arrangeAssetHierarichy(List<Asset> assetList) {
+		
+		if(assetList != null) {
+		
+			for(int i=0;i<assetList.size();i++) {
+				
+				//if(assetList.get(i).getParentAsset()!=null) assetList.get(i).setParentAsset(null);
+				
+				arrangeAssetHierarichy(assetList.get(i).getAssets());
+				
+			}
+			
+		}
+		
+	}
+	
+	private void arrangeAssetGroupHierarichy(List<AssetGroup> assetGroupList) {
+		
+		if(assetGroupList != null) {
+		
+			for(int i=0;i<assetGroupList.size();i++) {
+				
+				arrangeAssetGroupHierarichy(assetGroupList.get(i).getAssetGroup());
+				
+			}
+			
+		}
+		
+	}
+
+
+	public List<AssetGroup> getSiteAssetGroupHierarchy(long siteId){
+		
+		List<AssetGroup> assetGroupList = assetGroupRepository.findBySiteIdAndActiveAndParentGroup(siteId,"Y",null); 
+		
+		arrangeAssetGroupHierarichy(assetGroupList);
+		
+		return assetGroupList;
+		
+	}
+	
+	public List<Asset> getSiteAssetHierarchy(long siteId,long typeId){
+		
+		AssetType assetType = assetTypeRepository.findById(typeId);
+		
+		if(assetType == null) {
+			
+			return null;
+			
+		}
+		
+		List<Asset> assetList= assetRepository.findBySiteIdAndAssetTypeAndActiveAndParentAsset(siteId, assetType.getName(), "Y", null);
+		
+		arrangeAssetHierarichy(assetList);
+		
+		return assetList;
+		
+	}
 
 	public Asset getAsset(long id) {
 		Asset asset = assetRepository.findOne(id);
@@ -386,7 +460,10 @@ public class AssetManagementService extends AbstractService {
 		log.debug(">>> asset Type " + asset.getAssetType());
 		log.debug(">>> Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-
+		if(assetDTO.getAssetType() != null) {
+		    AssetType assetType = assetTypeRepository.findByName(assetDTO.getAssetType());
+		    assetDTO.setAssetTypeId(assetType.getId());
+        }
 		return assetDTO;
 	}
 
@@ -512,6 +589,8 @@ public class AssetManagementService extends AbstractService {
 			asset.setStartTime(DateUtil.convertToSQLDate(assetDTO.getStartTime()));
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
+
+		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAsset().getId()));
 
 		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
 
@@ -1042,6 +1121,14 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetDTO;
 	}
+	
+	public List<AssetDTO> getAssetHierarichy(SearchCriteria searchCriteria){
+		
+		List<AssetDTO> assetList = null;
+		
+		return assetList;
+		
+	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
 
@@ -1272,8 +1359,13 @@ public class AssetManagementService extends AbstractService {
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
 		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
+		AssetGroup parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
+		
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
+			assetgroup.setAssetGroupCode(assetGroupDTO.getAssetGroupCode());
+			assetgroup.setParentGroup(parent);
+			//assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
 			assetGroupRepository.save(assetgroup);
 			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
 		}else {

@@ -16,6 +16,8 @@ public class AssetTypeDTO extends BaseDTO {
 	private String name;
 
     private boolean isRelationShipBased;
+    
+    private String assetTypeCode;
 
     public Long getId() {
 		return id;
@@ -41,4 +43,14 @@ public class AssetTypeDTO extends BaseDTO {
     public void setRelationShipBased(boolean relationShipBased) {
         isRelationShipBased = relationShipBased;
     }
+
+	public String getAssetTypeCode() {
+		return assetTypeCode;
+	}
+
+	public void setAssetTypeCode(String assetTypeCode) {
+		this.assetTypeCode = assetTypeCode;
+	}
+    
+    
 }

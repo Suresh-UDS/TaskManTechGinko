@@ -96,8 +96,6 @@ angular.module('timeSheetApp')
             $scope.isReleationShipEnabled = false;
 			$('#dPlayNone').hide();
 
-
-
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			$scope.searchAcquiredDate = "";
 			$scope.searchCreatedDate = "";
@@ -161,6 +159,8 @@ angular.module('timeSheetApp')
 			$scope.allAssetGroup = {assetgroup: '-- ALL ASSET GROUP --'};
 			$scope.assetGroupsListOne = {};
 			$scope.assetGroupsLists = [];
+
+			$scope.selectedParentGroup = {};
 
 			//console.log("state params",$stateParams);
 
@@ -1213,7 +1213,7 @@ angular.module('timeSheetApp')
 							$scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
 							$scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
 							$scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
-							$scope.selectedAssetType ={name:$scope.assetList.assetType};
+							$scope.selectedAssetType ={id: $scope.assetList.assetTypeId, name:$scope.assetList.assetType};
 							$scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
 							$scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
 							$scope.selectedBlock = $scope.assetList.block;
@@ -1241,6 +1241,14 @@ angular.module('timeSheetApp')
 									$scope.zones = data;
 									//console.log('zones list',$scope.zones);
 								});
+
+								AssetComponent.getAssetGrpHierarchy($scope.assetList).then(function (data) {
+                                    if(data.length > 0) {
+                                        initMapAssetGrpTree("", data);
+                                    }
+                                })
+
+                                $scope.getAssetHierarchy();
 							}
 
 							$scope.loadSiteShifts();
@@ -2027,6 +2035,9 @@ angular.module('timeSheetApp')
 					if($scope.selectedServiceWarranty && $scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
 					if($scope.selectedVendor && $scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
 					if($scope.selectedSites && $scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
+					alert($scope.selectedAssetGroup.id);
+					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){$scope.assetGen.parentAsset = $scope.selectedAssetGroup.id}
+					
 					//if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
 					if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
@@ -2228,9 +2239,7 @@ angular.module('timeSheetApp')
 				}
 				if($scope.warToDate){
 					$scope.assetEdit.warrantyToDate = $scope.warToDate;
-
 				}
-
 
 				//console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
@@ -2657,12 +2666,14 @@ angular.module('timeSheetApp')
 			/* Add asset type */
 
 			$scope.addAssetType = function () {
-				//console.log($scope.assetType);
+//				alert("Code===>"+$scope.assetType.assetTypeCode);
+//				alert("Relationship===>"+$scope.assetType.relationShipBased);
+				console.log("Asset Type===>" + $scope.assetType);
 				$scope.loadingStart();
 				if($scope.assetType){
 					//console.log("Asset Type entered");
 					AssetTypeComponent.create($scope.assetType).then(function (response) {
-						//console.log(response);
+						console.log($scope.assetType.isRelationShipBased);
 						if(response.data.status && response.data.status === "400") {
 
 							$scope.showNotifications('top','center','danger','Asset type already exists.');
@@ -2689,9 +2700,12 @@ angular.module('timeSheetApp')
 
 			$scope.addAssetGroup = function () {
 
-				//console.log($scope.assetGroup);
+				console.log($scope.selectedParentGroup);
 				if($scope.assetGroup){
 				    $scope.loadingStart();
+				    //alert($scope.selectedParentGroup.id)
+				    $scope.assetGroup.parentGeroup = $scope.selectedParentGroup;
+				    //alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
 						//console.log(response);
@@ -4723,7 +4737,62 @@ angular.module('timeSheetApp')
 			 * Ui select allow-clear modified function end
 			 *
 			 * */
+        $scope.assetFinalLists = [];
+        $scope.assetParentList = [];
+
+		$scope.getAssetHierarchy = function() {
+		    var obj = {
+		        "siteId": $scope.selectedSites.id,
+                "assetTypeId" : $scope.selectedAssetType.id
+            };
+		    AssetComponent.getAssetHierarchy(obj).then(function(data){
+                console.log("AssetHierarchy is" +JSON.stringify(data));
+                if(data.length > 0) {
+                    initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor
+                    console.log($scope.assetFinalLists);
+                }
+            });
+        }
+
+        $scope.getAssetGrpHierarchy = function() {
+		    var obj = {
+		        "siteId": $scope.selectedSites.id
+            }
+            AssetComponent.getAssetGrpHierarchy(obj).then(function(data) {
+                console.log("Asset Group Hierarchy" +JSON.stringify(data));
+                if(data.length > 0) {
+                    initMapAssetGrpTree("", data)
+                }
+            });
+        }
+
+        function initMapAssetTree(prefix, assetList){
+
+            for( var i in assetList ){
+
+                $scope.assetFinalLists.push({id: assetList[i].id, title: (prefix + assetList[i].title) });
+
+                if(assetList[i].assets && assetList[i].assets.length > 0) {
+                    initMapAssetTree("|__"+prefix,assetList[i].assets);
+                }
+            }
+
+        }
+
+        function initMapAssetGrpTree(prefix, assetGrpList){
+
+            for( var i in assetGrpList ){
+
+                $scope.assetParentList.push({id: assetGrpList[i].id, group: (prefix + assetGrpList[i].assetgroup) });
+
+                if(assetGrpList[i].assetGroup && assetGrpList[i].assetGroup.length > 0) {
+                    initMapAssetGrpTree("|__"+prefix,assetGrpList[i].assetGroup);
+                }
+            }
+
+        }
 
 
 
-		});
+
+        });

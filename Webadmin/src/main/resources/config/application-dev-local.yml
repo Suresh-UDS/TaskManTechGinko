@@ -12,21 +12,23 @@
 
 spring:
     profiles:
-        active: dev-local
+        active: uat
     devtools:
         restart:
             enabled: true
         livereload:
-            enabled: true # we use Grunt + BrowserSync for livereload
+            enabled: false # we use Grunt + BrowserSync for livereload
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://172.31.24.22:3306/Taskman?useUnicode=true&characterEncoding=utf8
 
+        #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: Uds@2016
-        #username: UDSTaskMan
-        #password: Rd32018Uds
+        password: root
+        #password: admin
+
     jpa:
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         database: MYSQL
@@ -62,57 +64,52 @@ liquibase:
 
 server:
     port: 8088
-    compression: on
-    compressableMimeType: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css,image/jpeg
-
+    tomcat:
+         max-connections: 100
+         max-threads:  400
 upload:
     file:
-         path: D:/documents/opt/uploads
+         path: /opt/uploads
 export:
     file:
-         path: D:/documents/opt/uploads
+         path: /opt/exports
 qrcode:
     file:
-         path: D:/documents/opt/qrcode
+         path: /opt/qrcode
+
 locationQRCode:
     file:
-        path: D:/documents/opt/location/qrcode
+        path: /opt/location/qrcode
 attendance:
     shiftStartLeadTime: 1
     shiftEndLeadTime: 1
     shiftStartGraceTime: 1
     shiftEndGraceTime: 1
     file:
-        path:  D:/documents/opt/attendance
+        path:  /opt/attendance
     template:
-        path: D:/documents/opt/template/Attendance_Report_Format.xlsx
-    musterroll:
-        report:
-            template:
-                path: D:/documents/opt/template/ATTENDENCE_MUSTER_ROLL_FORMAT.xlsx
-    generalShift:
-        startTime: 09:00
-        endTime: 17:00
+        path: /opt/template/Attendance_Report_Format.xlsx
 quotation:
     file:
         path:  /opt/quotation
 ticket:
     file:
-        path:  D:/documents/opt/ticket
-extensionImg: jpeg,jpg,png
-extensionFile: pdf,xlsx,xls,docs,doc,csv,txt
-
+        path:  /opt/ticket
 import:
     file:
         path:
-            new: D:/documents/opt/imports/new
-            completed: /opt/imports/completed
+            new: E:\import\new\asset
+            completed: E:\import\completed
+
+extensionImg: jpeg,jpg,png
+extensionFile: pdf,xlsx,xls,docx,doc,csv,txt
+
 asset:
    file:
-       path: D:\asset\uploads\site
+       path: /opt/asset/uploads/site
    weekly:
        template:
-           path: D:/documents/opt/template/Asset_52Week_Report_Format.xlsx
+           path: /opt/template/Asset_52Week_Report_Format.xlsx
 multipart:
    maxFileSize: 15MB
    maxRequestSize: 15MB
@@ -297,4 +294,4 @@ jhipster:
     datasource:
         cachePrepStmts: true
         prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
+        prepStmtCacheSqlLimit: 2048            

@@ -35,6 +35,7 @@ public final class SecurityUtils {
         return userName;
     }
 
+    
     /**
      * Check if a user is authenticated.
      *

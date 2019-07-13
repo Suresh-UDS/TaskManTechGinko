@@ -51,6 +51,8 @@ public class AssetTypeResource {
 	@Timed
 	public ResponseEntity<?> saveAssetType(@Valid @RequestBody AssetTypeDTO assetTypeDTO, HttpServletRequest request) {
 		log.info("Inside the saveAssetType -" + assetTypeDTO.getName() );
+//		System.out.println("Code===>"+assetTypeDTO.getAssetTypeCode());
+//		System.out.println("Relationship==>"+assetTypeDTO.isRelationShipBased());
 		try  {
 			assetTypeDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetTypeDTO = assetTypeService.createAssetTypeInformation(assetTypeDTO);
