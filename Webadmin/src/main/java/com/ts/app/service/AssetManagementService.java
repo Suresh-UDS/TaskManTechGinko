@@ -203,16 +203,7 @@ public class AssetManagementService extends AbstractService {
 
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
-		if(asset.getParentAsset()!=null) {
-			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAsset().getId());
-//			log.info("Parent===>"+parentAsse.getParentAsset().getId());
-//			System.out.println("Parent===>"+parentAsse.getParentAsset().getId());
-			if(!StringUtils.isEmpty(parentAsse)) {
-	//		asset.setParentAsset(assetDTO.getParentAsset());
-			asset.setParentAsset(parentAsse);
-			}
-		}
-        //asset.setParentAsset(assetDTO.getParentAsset());
+
 		//create status history
 		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
@@ -290,14 +281,12 @@ public class AssetManagementService extends AbstractService {
 		
 		List<AssetTicketConfig> ticketConfigList = new ArrayList<AssetTicketConfig> ();
 		
-		if(assetDTO.getCriticalStatusList()!=null) {
 		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
 			
 			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
 			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
 			ticketConfigList.add(ticketConfig);
 			
-		}
 		}
 		
 		asset.setAssetTicketConfigList(ticketConfigList);
@@ -471,10 +460,7 @@ public class AssetManagementService extends AbstractService {
 		log.debug(">>> asset Type " + asset.getAssetType());
 		log.debug(">>> Asset Group " + asset.getAssetGroup());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
-		if(assetDTO.getAssetType() != null) {
-		    AssetType assetType = assetTypeRepository.findByName(assetDTO.getAssetType());
-		    assetDTO.setAssetTypeId(assetType.getId());
-        }
+
 		return assetDTO;
 	}
 
@@ -601,8 +587,6 @@ public class AssetManagementService extends AbstractService {
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
 
-		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAsset().getId()));
-
 		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
 
 			Date date = new Date();
@@ -693,7 +677,7 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public void deleteAsset(Long id) {
-		log.debug(">>> Inside Asset Delete Service");
+		log.debug(">>> Inside Asset Delete Service");	
 		Asset asset = assetRepository.findOne(id);
 		asset.setActive(Asset.ACTIVE_NO);
 		assetRepository.save(asset);
@@ -1393,13 +1377,10 @@ public class AssetManagementService extends AbstractService {
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
 		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
-		AssetGroup parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
-		
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
 			assetgroup.setAssetGroupCode(assetGroupDTO.getAssetGroupCode());
-			assetgroup.setParentGroup(parent);
-			//assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
+			assetgroup.setParentGroup(assetGroupDTO.getParentGeroup());
 			assetGroupRepository.save(assetgroup);
 			assetGroupDTO = mapperUtil.toModel(assetgroup, AssetgroupDTO.class);
 		}else {
