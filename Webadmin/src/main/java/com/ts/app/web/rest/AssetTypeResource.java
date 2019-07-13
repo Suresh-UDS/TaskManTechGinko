@@ -51,8 +51,8 @@ public class AssetTypeResource {
 	@Timed
 	public ResponseEntity<?> saveAssetType(@Valid @RequestBody AssetTypeDTO assetTypeDTO, HttpServletRequest request) {
 		log.info("Inside the saveAssetType -" + assetTypeDTO.getName() );
-		System.out.println("Code===>"+assetTypeDTO.getAssetTypeCode());
-		System.out.println("Relationship==>"+assetTypeDTO.isRelationShipBased());
+//		System.out.println("Code===>"+assetTypeDTO.getAssetTypeCode());
+//		System.out.println("Relationship==>"+assetTypeDTO.isRelationShipBased());
 		try  {
 			assetTypeDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetTypeDTO = assetTypeService.createAssetTypeInformation(assetTypeDTO);
@@ -88,6 +88,12 @@ public class AssetTypeResource {
 		log.info("--Invoked AssetTypeResource.findAll --");
 		return assetTypeService.findAll();
 	}
+
+    @RequestMapping(value = "/assetType/siteId/{siteId}", method = RequestMethod.GET)
+    public List<AssetTypeDTO> findBySiteId(@PathVariable Long siteId) {
+        log.info("--Invoked AssetTypeResource.findBy siteId --");
+        return assetTypeService.findBySiteId(siteId);
+    }
 
 	@RequestMapping(value = "/assetType/{id}", method = RequestMethod.GET)
 	public AssetTypeDTO get(@PathVariable Long id) {

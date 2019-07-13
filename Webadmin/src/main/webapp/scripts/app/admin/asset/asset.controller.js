@@ -161,6 +161,8 @@ angular.module('timeSheetApp')
 			$scope.assetGroupsLists = [];
 
 			$scope.selectedParentGroup = {};
+			
+			$scope.choosenAssetParent = {};
 
 			//console.log("state params",$stateParams);
 
@@ -755,21 +757,41 @@ angular.module('timeSheetApp')
 				$scope.searchAssetType = null;
 				$scope.clearField = false;
 				$scope.uiType.splice(0,$scope.uiType.length);
-				AssetTypeComponent.findAll().then(function (data) {
-					////console.log("Loading all AssetType -- " , data)
-					//$scope.selectedAssetType = null;
-					$scope.searchAssetType = null;
-					$scope.assetTypes = data;
+                var siteId = $scope.selectedSites ? $scope.selectedSites.id : 0;
+                if(siteId>0){
+                    AssetTypeComponent.findBySiteId(siteId).then(function (data) {
+                        console.log("Loading AssetType By siteId-- " , data);
+                        //$scope.selectedAssetType = null;
+                        $scope.searchAssetType = null;
+                        $scope.assetTypes = data;
+                        //Filter
+                        for(var i=0;i<$scope.assetTypes.length;i++)
+                        {
+                            $scope.uiType[i] = $scope.assetTypes[i].name;
+                        }
+                        $scope.typeFilterDisable = false;
+                        //
+                    });
 
-					//Filter
-					for(var i=0;i<$scope.assetTypes.length;i++)
-					{
-						$scope.uiType[i] = $scope.assetTypes[i].name;
-					}
-					$scope.typeFilterDisable = false;
-					//
-				});
-			}
+                }else{
+                    AssetTypeComponent.findAll().then(function (data) {
+                        ////console.log("Loading all AssetType -- " , data)
+                        //$scope.selectedAssetType = null;
+                        $scope.searchAssetType = null;
+                        $scope.assetTypes = data;
+
+                        //Filter
+                        for(var i=0;i<$scope.assetTypes.length;i++)
+                        {
+                            $scope.uiType[i] = $scope.assetTypes[i].name;
+                        }
+                        $scope.typeFilterDisable = false;
+                        //
+                    });
+                }
+
+
+			};
 
 			$scope.relationShipBased = function(assetType){
 			    console.log("Asset type changes");
@@ -789,6 +811,7 @@ angular.module('timeSheetApp')
 					////console.log("Loading all Asset Group -- " , data)
 					$scope.searchAssetGroup = null;
 					$scope.assetGroups = data;
+					console.log(data);
 					$scope.loadingStop();
 
 					//Filter
@@ -805,6 +828,7 @@ angular.module('timeSheetApp')
 
 			$scope.loadAssetParent = function(){
 
+				
 				AssetComponent.loadAssetParent($scope.selectedSites).then(function(data){
 
 					$scope.assetParentList = data;
@@ -1193,7 +1217,7 @@ angular.module('timeSheetApp')
 							$scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
 							$scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
 							$scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
-							$scope.selectedAssetType ={name:$scope.assetList.assetType};
+							$scope.selectedAssetType ={id: $scope.assetList.assetTypeId, name:$scope.assetList.assetType};
 							$scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
 							$scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
 							$scope.selectedBlock = $scope.assetList.block;
@@ -1221,6 +1245,14 @@ angular.module('timeSheetApp')
 									$scope.zones = data;
 									//console.log('zones list',$scope.zones);
 								});
+
+								AssetComponent.getAssetGrpHierarchy($scope.assetList).then(function (data) {
+                                    if(data.length > 0) {
+                                        initMapAssetGrpTree("", data);
+                                    }
+                                })
+
+                                $scope.getAssetHierarchy();
 							}
 
 							$scope.loadSiteShifts();
@@ -2007,6 +2039,10 @@ angular.module('timeSheetApp')
 					if($scope.selectedServiceWarranty && $scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
 					if($scope.selectedVendor && $scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
 					if($scope.selectedSites && $scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
+					alert($scope.choosenAssetParent);
+					console.log($scope.choosenAssetParent);
+					if($scope.choosenAssetParent && $scope.choosenAssetParent.id){$scope.assetGen.parentAsset = $scope.choosenAssetParent;}
+					
 					//if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
 					if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
@@ -2208,9 +2244,7 @@ angular.module('timeSheetApp')
 				}
 				if($scope.warToDate){
 					$scope.assetEdit.warrantyToDate = $scope.warToDate;
-
 				}
-
 
 				//console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
@@ -2674,6 +2708,8 @@ angular.module('timeSheetApp')
 				console.log($scope.selectedParentGroup);
 				if($scope.assetGroup){
 				    $scope.loadingStart();
+				    //alert($scope.selectedParentGroup.id)
+				    $scope.assetGroup.parentGeroup = $scope.selectedParentGroup;
 				    //alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
@@ -4708,22 +4744,29 @@ angular.module('timeSheetApp')
 			 * */
         $scope.assetFinalLists = [];
         $scope.assetParentList = [];
-
+        $scope.selectedAssetParent = {};
 		$scope.getAssetHierarchy = function() {
 		    var obj = {
 		        "siteId": $scope.selectedSites.id,
-                "assetTypeId" : $scope.selectedAssetType.id
+                "assetTypeId" : $scope.selectedAssetType ? $scope.selectedAssetType.id : 0
             };
 		    AssetComponent.getAssetHierarchy(obj).then(function(data){
                 console.log("AssetHierarchy is" +JSON.stringify(data));
                 if(data.length > 0) {
                     initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor
                     console.log($scope.assetFinalLists);
+                }else{
+                    $scope.assetFinalLists = [];
+                    $scope.selectedAssetParent = null;
+                    console.log(JSON.stringify($scope.assetFinalLists));
                 }
             });
         }
 
         $scope.getAssetGrpHierarchy = function() {
+        	
+        	$scope.choosenAssetParent = {};
+			 
 		    var obj = {
 		        "siteId": $scope.selectedSites.id
             }
@@ -4731,6 +4774,8 @@ angular.module('timeSheetApp')
                 console.log("Asset Group Hierarchy" +JSON.stringify(data));
                 if(data.length > 0) {
                     initMapAssetGrpTree("", data)
+                }else{
+                    $scope.assetParentList = [];
                 }
             });
         }
@@ -4739,7 +4784,7 @@ angular.module('timeSheetApp')
 
             for( var i in assetList ){
 
-                $scope.assetFinalLists.push({id: assetList[i].id, title: (prefix + assetList[i].title) });
+                $scope.assetFinalLists.push({"id": assetList[i].id, "title": (prefix + assetList[i].title) });
 
                 if(assetList[i].assets && assetList[i].assets.length > 0) {
                     initMapAssetTree("|__"+prefix,assetList[i].assets);
