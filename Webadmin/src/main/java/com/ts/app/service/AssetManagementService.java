@@ -203,7 +203,16 @@ public class AssetManagementService extends AbstractService {
 
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
-
+		if(asset.getParentAsset()!=null) {
+			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAsset().getId());
+//			log.info("Parent===>"+parentAsse.getParentAsset().getId());
+//			System.out.println("Parent===>"+parentAsse.getParentAsset().getId());
+			if(!StringUtils.isEmpty(parentAsse)) {
+	//		asset.setParentAsset(assetDTO.getParentAsset());
+			asset.setParentAsset(parentAsse);
+			}
+		}
+        //asset.setParentAsset(assetDTO.getParentAsset());
 		//create status history
 		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
@@ -281,12 +290,14 @@ public class AssetManagementService extends AbstractService {
 		
 		List<AssetTicketConfig> ticketConfigList = new ArrayList<AssetTicketConfig> ();
 		
+		if(assetDTO.getCriticalStatusList()!=null) {
 		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
 			
 			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
 			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
 			ticketConfigList.add(ticketConfig);
 			
+		}
 		}
 		
 		asset.setAssetTicketConfigList(ticketConfigList);
