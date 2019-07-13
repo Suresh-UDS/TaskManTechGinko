@@ -100,6 +100,7 @@ angular.module('timeSheetApp')
 			$scope.searchAcquiredDate = "";
 			$scope.searchCreatedDate = "";
 
+			$scope.ticketConfigStatuses = [];
 			$scope.asset = {};
 
 			$scope.assetEdit = {};
@@ -1723,6 +1724,28 @@ angular.module('timeSheetApp')
 							$location.path('/assets');
 						}
 						$rootScope.loadingStop();
+
+						AssetComponent.getStatus().then(function(data){
+						    console.log("Asset status list");
+						    console.log(data);
+
+                            AssetComponent.findTicketConfigByAssetId(assetId).then(function(ticketConfig){
+                                console.log("Asset ticket config details");
+                                console.log(ticketConfig);
+                                var ticketConfig = ticketConfig;
+
+                                for(var i=0;i<data.length;i++){
+                                    var status = {};
+                                    status.status = data[i];
+                                    console.log(status);
+                                    $scope.ticketConfigStatuses.push(status);
+                                }
+                            });
+
+
+                        });
+
+
 						//$scope.loadCalendar();
 
 					}).catch(function(response){
@@ -2037,7 +2060,7 @@ angular.module('timeSheetApp')
 					if($scope.selectedSites && $scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
 					alert($scope.selectedAssetGroup.id);
 					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){$scope.assetGen.parentAsset = $scope.selectedAssetGroup.id}
-					
+
 					//if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
 					if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
