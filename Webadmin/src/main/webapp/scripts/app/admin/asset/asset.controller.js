@@ -161,6 +161,8 @@ angular.module('timeSheetApp')
 			$scope.assetGroupsLists = [];
 
 			$scope.selectedParentGroup = {};
+			
+			$scope.choosenAssetParent = {};
 
 			//console.log("state params",$stateParams);
 
@@ -789,6 +791,7 @@ angular.module('timeSheetApp')
 					////console.log("Loading all Asset Group -- " , data)
 					$scope.searchAssetGroup = null;
 					$scope.assetGroups = data;
+					console.log(data);
 					$scope.loadingStop();
 
 					//Filter
@@ -805,6 +808,7 @@ angular.module('timeSheetApp')
 
 			$scope.loadAssetParent = function(){
 
+				
 				AssetComponent.loadAssetParent($scope.selectedSites).then(function(data){
 
 					$scope.assetParentList = data;
@@ -2007,8 +2011,9 @@ angular.module('timeSheetApp')
 					if($scope.selectedServiceWarranty && $scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
 					if($scope.selectedVendor && $scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
 					if($scope.selectedSites && $scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
-					alert($scope.selectedAssetGroup.id);
-					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){$scope.assetGen.parentAsset = $scope.selectedAssetGroup.id}
+					//alert($scope.choosenAssetParent);
+					console.log($scope.choosenAssetParent);
+					if($scope.choosenAssetParent && $scope.choosenAssetParent.id){$scope.assetGen.parentAsset = $scope.choosenAssetParent }
 					
 					//if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
 					if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
@@ -4723,12 +4728,15 @@ angular.module('timeSheetApp')
                 console.log("AssetHierarchy is" +JSON.stringify(data));
                 if(data.length > 0) {
                     initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor
-                    console.log($scope.assetFinalLists);
+                    console.log(JSON.stringify($scope.assetFinalLists));
                 }
             });
         }
 
         $scope.getAssetGrpHierarchy = function() {
+        	
+        	$scope.choosenAssetParent = {};
+			 
 		    var obj = {
 		        "siteId": $scope.selectedSites.id
             }
@@ -4744,7 +4752,7 @@ angular.module('timeSheetApp')
 
             for( var i in assetList ){
 
-                $scope.assetFinalLists.push({id: assetList[i].id, title: (prefix + assetList[i].title) });
+                $scope.assetFinalLists.push({"id": assetList[i].id, "title": (prefix + assetList[i].title) });
 
                 if(assetList[i].assets && assetList[i].assets.length > 0) {
                     initMapAssetTree("|__"+prefix,assetList[i].assets);

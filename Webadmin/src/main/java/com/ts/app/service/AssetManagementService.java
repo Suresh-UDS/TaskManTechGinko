@@ -203,7 +203,11 @@ public class AssetManagementService extends AbstractService {
 
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
-
+		Asset parentAsse = assetRepository.findOne(assetDTO.getParentAsset().getId());
+//		log.info("Parent===>"+parentAsse);
+//		System.out.println("Parent===>"+parentAsse);
+		asset.setParentAsset(parentAsse);
+        asset.setParentAsset(assetDTO.getParentAsset());
 		//create status history
 		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
