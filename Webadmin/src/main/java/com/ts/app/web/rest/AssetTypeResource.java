@@ -87,6 +87,12 @@ public class AssetTypeResource {
 		return assetTypeService.findAll();
 	}
 
+    @RequestMapping(value = "/assetType/siteId/{siteId}", method = RequestMethod.GET)
+    public List<AssetTypeDTO> findBySiteId(@PathVariable Long siteId) {
+        log.info("--Invoked AssetTypeResource.findBy siteId --");
+        return assetTypeService.findBySiteId(siteId);
+    }
+
 	@RequestMapping(value = "/assetType/{id}", method = RequestMethod.GET)
 	public AssetTypeDTO get(@PathVariable Long id) {
 		return assetTypeService.findOne(id);

@@ -100,8 +100,6 @@ angular.module('timeSheetApp')
 
             },
 
-
-
             loadAssetType : function() {
             	return $http.get('api/assets/type').then(function (response) {
             		return response.data;
@@ -409,46 +407,46 @@ angular.module('timeSheetApp')
             },
 
             multipleQr: function(MultipleIds) {
-              
+
                 return $http.get('api/list/qrcodes/['+MultipleIds +']').then(function (response) {
                     return response.data;
                 });
             },
 
              printAllQr: function(search) {
-              
+
                 return $http.post('api/list/qrcodes/findAll', search).then(function (response) {
                     return response.data;
                 });
             },
 
-            
-            
-            getStatusHistory : function(search) { 
-            	return $http.post('api/assets/statusHistory', search).then(function(response) { 
+
+
+            getStatusHistory : function(search) {
+            	return $http.post('api/assets/statusHistory', search).then(function(response) {
             		return response.data;
             	});
             },
-            
-            getSiteHistory : function(search) { 
-            	return $http.post('api/assets/siteHistory', search).then(function(response) { 
+
+            getSiteHistory : function(search) {
+            	return $http.post('api/assets/siteHistory', search).then(function(response) {
             		return response.data;
             	});
             },
-            
-            getTicketHistory : function(search) { 
-            	return $http.post('api/assets/tickets', search).then(function(response) { 
+
+            getTicketHistory : function(search) {
+            	return $http.post('api/assets/tickets', search).then(function(response) {
             		return response.data;
             	});
             },
-            
+
             getAssetMaterial : function(search) {
             	return $http.post('api/assets/jobmaterials', search).then(function(response) {
             		return response.data;
             	});
             }
-            
-           
+
+
 
 
         };

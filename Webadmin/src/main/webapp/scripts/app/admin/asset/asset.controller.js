@@ -755,21 +755,41 @@ angular.module('timeSheetApp')
 				$scope.searchAssetType = null;
 				$scope.clearField = false;
 				$scope.uiType.splice(0,$scope.uiType.length);
-				AssetTypeComponent.findAll().then(function (data) {
-					////console.log("Loading all AssetType -- " , data)
-					//$scope.selectedAssetType = null;
-					$scope.searchAssetType = null;
-					$scope.assetTypes = data;
+                var siteId = $scope.selectedSites ? $scope.selectedSites.id : 0;
+                if(siteId>0){
+                    AssetTypeComponent.findBySiteId(siteId).then(function (data) {
+                        console.log("Loading AssetType By siteId-- " , data);
+                        //$scope.selectedAssetType = null;
+                        $scope.searchAssetType = null;
+                        $scope.assetTypes = data;
+                        //Filter
+                        for(var i=0;i<$scope.assetTypes.length;i++)
+                        {
+                            $scope.uiType[i] = $scope.assetTypes[i].name;
+                        }
+                        $scope.typeFilterDisable = false;
+                        //
+                    });
 
-					//Filter
-					for(var i=0;i<$scope.assetTypes.length;i++)
-					{
-						$scope.uiType[i] = $scope.assetTypes[i].name;
-					}
-					$scope.typeFilterDisable = false;
-					//
-				});
-			}
+                }else{
+                    AssetTypeComponent.findAll().then(function (data) {
+                        ////console.log("Loading all AssetType -- " , data)
+                        //$scope.selectedAssetType = null;
+                        $scope.searchAssetType = null;
+                        $scope.assetTypes = data;
+
+                        //Filter
+                        for(var i=0;i<$scope.assetTypes.length;i++)
+                        {
+                            $scope.uiType[i] = $scope.assetTypes[i].name;
+                        }
+                        $scope.typeFilterDisable = false;
+                        //
+                    });
+                }
+
+
+			};
 
 			$scope.relationShipBased = function(assetType){
 			    console.log("Asset type changes");

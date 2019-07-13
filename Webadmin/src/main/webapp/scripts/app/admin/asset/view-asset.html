@@ -6,20 +6,17 @@
     </div>
 		<div class="row">
         	<div class="col-md-12">
-
-
 				<div class="form-container table-container">
 					<form ng-show="!success" name="form" role="form" novalidate
 						  class="form-horizontal">
-
                        <div class="TabsCon viewAssetTabs">
-
                            <div class="panel panel-default TabsContainer assetsTabs">
                                <!--<div class="panel-heading">Panel Heading</div>-->
                                <div class="panel-body">
 
 
                                    <ul class="nav nav-pills nav-pills-warning">
+
                                        <li class="active">
                                            <a href=".General" data-toggle="tab" > General</a>
                                        </li>
@@ -61,272 +58,361 @@
                                    </ul>
                                    <div class="tab-content TabsContent ViewTables" style="">
 
+                                       <!--<div class="tab-pane fade in active AssetDashboard" id="AssetDashboard">-->
+
                                        <div class="tab-pane fade in active General" id="General">
-                                           <div class="row ViewContentPageCon">
+                                           <!--<div class="row ViewContentPageCon">-->
 
-                                               <div class="col-md-6">
+                                               <!--<div class="col-md-6">-->
 
-                                                   <div class="panel panel-default">
-                                                       <div class="panel-heading">Asset Details</div>
-                                                       <div class="panel-body">
-                                                           <div class="table-responsive">
-                                                               <table class="table">
-                                                                   <tbody>
-                                                                   <tr>
-                                                                       <td>Name</td>
-                                                                       <td>{{assetDetail.title | uppercase}}</td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Asset Type</td>
-                                                                       <td>{{assetDetail.assetType}}</td>
+                                               <!--<div class="panel panel-default">-->
+                                               <!--<div class="panel-heading">Asset Details</div>-->
+                                               <!--<div class="panel-body">-->
+                                               <!--<div class="table-responsive">-->
+                                               <!--<table class="table">-->
+                                               <!--<tbody>-->
+                                               <!--<tr>-->
+                                               <!--<td>Name</td>-->
+                                               <!--<td>{{assetDetail.title | uppercase}}</td>-->
+                                               <!--</tr>-->
+                                               <!--<tr>-->
+                                               <!--<td>Asset Type</td>-->
+                                               <!--<td>{{assetDetail.assetType}}</td>-->
 
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Asset Group</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.assetGroup">{{assetDetail.assetGroup}}</span>
-                                                                           <span ng-if="!assetDetail.assetGroup">-</span>
-                                                                       </td>
+                                               <!--</tr>-->
+                                               <!--<tr>-->
+                                               <!--<td>Asset Group</td>-->
+                                               <!--<td>-->
+                                               <!--<span ng-if="assetDetail.assetGroup">{{assetDetail.assetGroup}}</span>-->
+                                               <!--<span ng-if="!assetDetail.assetGroup">-</span>-->
+                                               <!--</td>-->
 
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Status </td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.status">{{assetDetail.status}}</span>
-                                                                           <span ng-if="!assetDetail.status">-</span>
-                                                                       </td>
+                                               <!--</tr>-->
+                                               <!--<tr>-->
+                                               <!--<td>Status </td>-->
+                                               <!--<td>-->
+                                               <!--<span ng-if="assetDetail.status">{{assetDetail.status}}</span>-->
+                                               <!--<span ng-if="!assetDetail.status">-</span>-->
+                                               <!--</td>-->
 
-                                                                   </tr>
+                                               <!--</tr>-->
 
 
 
-                                                                   </tbody>
-                                                               </table>
+                                               <!--</tbody>-->
+                                               <!--</table>-->
+                                               <!--</div>-->
+                                               <!--</div>-->
+                                               <!--</div>-->
+
+
+                                               <!--</div>-->
+                                               <!--<div class="col-md-6">-->
+
+                                               <!--<div class="panel panel-default">-->
+                                               <!--<div class="panel-heading">Asset Location</div>-->
+                                               <!--<div class="panel-body">-->
+                                               <!--<div class="table-responsive">-->
+                                               <!--<table class="table">-->
+                                               <!--<tbody>-->
+                                               <!--&lt;!&ndash; <tr>-->
+                                               <!--<td>Client </td>-->
+                                               <!--<td>{{assetDetail.projectName}}</td>-->
+                                               <!--</tr> &ndash;&gt;-->
+                                               <!--<tr>-->
+                                               <!--<td>Site</td>-->
+                                               <!--<td>-->
+                                               <!--<span ng-if="assetDetail.siteName">{{assetDetail.siteName}}</span>-->
+                                               <!--<span ng-if="!assetDetail.siteName">-</span>-->
+                                               <!--</td>-->
+
+                                               <!--</tr>-->
+                                               <!--<tr>-->
+                                               <!--<td>Block</td>-->
+                                               <!--<td>-->
+                                               <!--<span ng-if="assetDetail.block">{{assetDetail.block}}</span>-->
+                                               <!--<span ng-if="!assetDetail.block">-</span>-->
+                                               <!--</td>-->
+
+                                               <!--</tr>-->
+                                               <!--<tr>-->
+
+                                               <!--<td>Floor  </td>-->
+                                               <!--<td>-->
+                                               <!--<span ng-if="assetDetail.floor">{{assetDetail.floor}}</span>-->
+                                               <!--<span ng-if="!assetDetail.floor">-</span>-->
+                                               <!--</td>-->
+
+                                               <!--</tr>-->
+                                               <!--<tr>-->
+
+                                               <!--<td>Zone  </td>-->
+                                               <!--<td>-->
+                                               <!--<span ng-if="assetDetail.zone">{{assetDetail.zone}}</span>-->
+                                               <!--<span ng-if="!assetDetail.zone">-</span>-->
+                                               <!--</td>-->
+
+                                               <!--</tr>-->
+
+
+
+
+                                               <!--</tbody>-->
+                                               <!--</table>-->
+                                               <!--</div>-->
+
+                                               <!--</div>-->
+                                               <!--</div>-->
+
+
+                                               <!--</div>-->
+
+
+                                           <!--</div>-->
+
+                                           <div class="content">
+                                               <div class="container-fluid">
+                                                   <div class="row">
+                                                       <div class="col-md-12">
+                                                           <div class="card">
+                                                               <div class="card-header card-header-icon" data-background-color="green">
+                                                                   <i class="material-icons">&#xE894;</i>
+                                                               </div>
+                                                               <div class="card-content">
+                                                                   <h4 class="card-title">Asset Details</h4>
+                                                                   <div class="row">
+                                                                       <div class="col-md-7">
+                                                                           <div class="table-responsive table-sales">
+                                                                               <table class="table">
+                                                                                   <tbody>
+                                                                                   <tr>
+                                                                                       <td>Name</td>
+                                                                                       <td>{{assetDetail.title | uppercase}}</td>
+                                                                                   </tr>
+                                                                                   <tr>
+                                                                                       <td>Asset Type</td>
+                                                                                       <td>{{assetDetail.assetType}}</td>
+
+                                                                                   </tr>
+                                                                                   <tr>
+                                                                                       <td>Asset Group</td>
+                                                                                       <td>
+                                                                                           <span ng-if="assetDetail.assetGroup">{{assetDetail.assetGroup}}</span>
+                                                                                           <span ng-if="!assetDetail.assetGroup">-</span>
+                                                                                       </td>
+
+                                                                                   </tr>
+                                                                                   <tr>
+                                                                                       <td>Status </td>
+                                                                                       <td>
+                                                                                           <span ng-if="assetDetail.status">{{assetDetail.status}}</span>
+                                                                                           <span ng-if="!assetDetail.status">-</span>
+                                                                                       </td>
+
+                                                                                   </tr>
+
+                                                                                   <tr>
+                                                                                       <td>Location </td>
+                                                                                       <td>
+                                                                                           <span ng-if="assetDetail.block">{{assetDetail.block}}</span>
+                                                                                           <span ng-if="!assetDetail.block"> NIL </span>
+                                                                                           <span ng-if="assetDetail.block"> - </span>
+                                                                                           <span ng-if="assetDetail.floor">{{assetDetail.floor}}</span>
+                                                                                           <span ng-if="!assetDetail.floor"> NIL </span>
+                                                                                           <span ng-if="assetDetail.floor"> - </span>
+                                                                                           <span ng-if="assetDetail.zone">{{assetDetail.zone}}</span>
+                                                                                           <span ng-if="!assetDetail.zone"> NIL </span>
+                                                                                       </td>
+                                                                                   </tr>
+
+                                                                                   <tr>
+                                                                                       <td>
+                                                                                           Ticket
+                                                                                       </td>
+
+                                                                                       <td ng-repeat="status in statuses track by status.status">
+                                                                                            <span >{{status.status}}</span>
+                                                                                       </td>
+                                                                                   </tr>
+                                                                                   </tbody>
+                                                                               </table>
+                                                                           </div>
+                                                                       </div>
+                                                                       <div class="col-md-4 col-md-offset-1">
+                                                                           <div class="asset-img-container" style="text-align: center">
+                                                                               <img class="asset-img" style="width: 300px !important; height:300px !important;" src="../../../../assets/img/chiller-plant.jpg">
+                                                                           </div>
+                                                                       </div>
+                                                                   </div>
+
+                                                               </div>
                                                            </div>
                                                        </div>
                                                    </div>
 
 
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            <div class="panel panel-default">
+                                                        <div class="panel-heading">Manufacturer Details </div>
+                                                        <div class="panel-body" style="min-height: 350px;">
+
+                                                        <div class="table-responsive">
+                                                        <table class="table">
+                                                        <tbody>
+                                                        <tr>
+                                                        <td>Manufacturer </td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.manufacturerName">{{assetDetail.manufacturerName}}</span>
+                                                        <span ng-if="!assetDetail.manufacturerName">-</span>
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Model Number</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.modelNumber">{{assetDetail.modelNumber}}</span>
+                                                        <span ng-if="!assetDetail.modelNumber">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Serial Number</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.serialNumber">{{assetDetail.serialNumber}}</span>
+                                                        <span ng-if="!assetDetail.serialNumber">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Acquired Date</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.acquiredDate">{{assetDetail.acquiredDate | date :  'dd-MM-yyyy'}}</span>
+                                                        <span ng-if="!assetDetail.acquiredDate">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Purchase price</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.purchasePrice">{{assetDetail.purchasePrice}}</span>
+                                                        <span ng-if="!assetDetail.purchasePrice">-</span>
+                                                        </td>
+
+                                                        </tr>
+
+                                                        <tr>
+                                                        <td>Current Price</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.currentPrice">{{assetDetail.currentPrice}}</span>
+                                                        <span ng-if="!assetDetail.currentPrice">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Estimated dispose price</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.estimatedDisposePrice">{{assetDetail.estimatedDisposePrice}}</span>
+                                                        <span ng-if="!assetDetail.estimatedDisposePrice">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <!-- <tr>
+                                                        <td>
+                                                        Service Provider</td>
+                                                        <td></td>
+
+                                                        </tr> -->
+
+
+
+                                                        </tbody>
+                                                        </table>
+                                                        </div>
+
+                                                        </div>
+                                                        </div>
+
+                                                        </div>
+                                                        <div class="col-md-6">
+
+                                                            <div class="panel panel-default">
+                                                        <div class="panel-heading">Vendor Details </div>
+                                                        <div class="panel-body" style="min-height: 350px;">
+
+                                                        <div class="table-responsive">
+                                                        <table class="table">
+                                                        <tbody>
+
+                                                        <tr>
+                                                        <td>Name</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.amcVendorName">{{assetDetail.amcVendorName}}</span>
+                                                        <span ng-if="!assetDetail.amcVendorName">-</span>
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Warranty Type</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.warrantyType">{{assetDetail.warrantyType}}</span>
+                                                        <span ng-if="!assetDetail.warrantyType">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <td>From Date</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.warrantyFromDate">{{assetDetail.warrantyFromDate | date :  'dd-MM-yyyy'}}</span>
+                                                        <span ng-if="!assetDetail.warrantyFromDate">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                        <td>To Date</td>
+                                                        <td>
+                                                        <span ng-if="assetDetail.warrantyToDate">{{assetDetail.warrantyToDate | date :  'dd-MM-yyyy'}}</span>
+                                                        <span ng-if="!assetDetail.warrantyToDate">-</span>
+                                                        </td>
+
+                                                        </tr>
+                                                        <!-- <tr>
+                                                        <td>Warranty date</td>
+                                                        <td>{{assetDetail.warrentyExpiryDate}} </td>
+
+                                                        </tr> -->
+                                                        <!-- <tr>
+                                                        <td>Phone Number</td>
+                                                        <td>
+
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Email</td>
+                                                        <td>
+
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td>Address</td>
+                                                        <td>
+                                                        Thooraipakkam
+                                                        </td>
+                                                        </tr> -->
+
+                                                        </tbody>
+                                                        </table>
+                                                        </div>
+
+                                                        </div>
+                                                        </div>
+
+
+                                                        </div>
+                                                    </div>
                                                </div>
-                                               <div class="col-md-6">
-
-                                                   <div class="panel panel-default">
-                                                       <div class="panel-heading">Asset Location</div>
-                                                       <div class="panel-body">
-                                                           <div class="table-responsive">
-                                                               <table class="table">
-                                                                   <tbody>
-                                                                   <!-- <tr>
-                                                                       <td>Client </td>
-                                                                       <td>{{assetDetail.projectName}}</td>
-                                                                   </tr> -->
-                                                                   <tr>
-                                                                       <td>Site</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.siteName">{{assetDetail.siteName}}</span>
-                                                                           <span ng-if="!assetDetail.siteName">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Block</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.block">{{assetDetail.block}}</span>
-                                                                           <span ng-if="!assetDetail.block">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-
-                                                                       <td>Floor  </td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.floor">{{assetDetail.floor}}</span>
-                                                                           <span ng-if="!assetDetail.floor">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-
-                                                                       <td>Zone  </td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.zone">{{assetDetail.zone}}</span>
-                                                                           <span ng-if="!assetDetail.zone">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-
-
-
-
-                                                                   </tbody>
-                                                               </table>
-                                                           </div>
-
-                                                       </div>
-                                                   </div>
-
-
-                                               </div>
-                                               <div class="col-md-6">
-
-                                                   <div class="panel panel-default">
-                                                       <div class="panel-heading">Manufacturer Details </div>
-                                                       <div class="panel-body" style="min-height: 350px;">
-
-                                                           <div class="table-responsive">
-                                                               <table class="table">
-                                                                   <tbody>
-                                                                   <tr>
-                                                                       <td>Manufacturer </td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.manufacturerName">{{assetDetail.manufacturerName}}</span>
-                                                                           <span ng-if="!assetDetail.manufacturerName">-</span>
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Model Number</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.modelNumber">{{assetDetail.modelNumber}}</span>
-                                                                           <span ng-if="!assetDetail.modelNumber">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Serial Number</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.serialNumber">{{assetDetail.serialNumber}}</span>
-                                                                           <span ng-if="!assetDetail.serialNumber">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Acquired Date</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.acquiredDate">{{assetDetail.acquiredDate | date :  'dd-MM-yyyy'}}</span>
-                                                                           <span ng-if="!assetDetail.acquiredDate">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Purchase price</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.purchasePrice">{{assetDetail.purchasePrice}}</span>
-                                                                           <span ng-if="!assetDetail.purchasePrice">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-
-                                                                   <tr>
-                                                                       <td>Current Price</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.currentPrice">{{assetDetail.currentPrice}}</span>
-                                                                           <span ng-if="!assetDetail.currentPrice">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Estimated dispose price</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.estimatedDisposePrice">{{assetDetail.estimatedDisposePrice}}</span>
-                                                                           <span ng-if="!assetDetail.estimatedDisposePrice">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <!-- <tr>
-                                                                       <td>
-                                                                           Service Provider</td>
-                                                                       <td></td>
-
-                                                                   </tr> -->
-
-
-
-                                                                   </tbody>
-                                                               </table>
-                                                           </div>
-
-                                                       </div>
-                                                   </div>
-
-
-                                               </div>
-                                               <div class="col-md-6">
-
-                                                   <div class="panel panel-default">
-                                                       <div class="panel-heading">Vendor Details </div>
-                                                       <div class="panel-body" style="min-height: 350px;">
-
-                                                           <div class="table-responsive">
-                                                               <table class="table">
-                                                                   <tbody>
-
-                                                                   <tr>
-                                                                       <td>Name</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.amcVendorName">{{assetDetail.amcVendorName}}</span>
-                                                                           <span ng-if="!assetDetail.amcVendorName">-</span>
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Warranty Type</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.warrantyType">{{assetDetail.warrantyType}}</span>
-                                                                           <span ng-if="!assetDetail.warrantyType">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>From Date</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.warrantyFromDate">{{assetDetail.warrantyFromDate | date :  'dd-MM-yyyy'}}</span>
-                                                                           <span ng-if="!assetDetail.warrantyFromDate">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>To Date</td>
-                                                                       <td>
-                                                                           <span ng-if="assetDetail.warrantyToDate">{{assetDetail.warrantyToDate | date :  'dd-MM-yyyy'}}</span>
-                                                                           <span ng-if="!assetDetail.warrantyToDate">-</span>
-                                                                       </td>
-
-                                                                   </tr>
-                                                                   <!-- <tr>
-                                                                       <td>Warranty date</td>
-                                                                       <td>{{assetDetail.warrentyExpiryDate}} </td>
-
-                                                                   </tr> -->
-                                                                   <!-- <tr>
-                                                                       <td>Phone Number</td>
-                                                                       <td>
-
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Email</td>
-                                                                       <td>
-
-                                                                       </td>
-                                                                   </tr>
-                                                                   <tr>
-                                                                       <td>Address</td>
-                                                                       <td>
-                                                                          Thooraipakkam
-                                                                       </td>
-                                                                   </tr> -->
-
-                                                                   </tbody>
-                                                               </table>
-                                                           </div>
-
-                                                       </div>
-                                                   </div>
-
-
-                                               </div>
-
                                            </div>
                                        </div>
+
                                        <div class="tab-pane fade qr-code" id="qr-code">
 
                                            <div class="panel panel-default" style="">

@@ -89,7 +89,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();" name="AssetSite"  required tabindex="2">
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase)  for site in sites " ng-change="loadBlocks();loadEmployees();loadAssetType()" name="AssetSite"  required tabindex="2">
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -2238,6 +2238,15 @@
             <div class="modal-body">
 
                 <form name="addAssetTypeForm">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            Site
+                        </div>
+                        <div class="col-md-8">
+
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-4">

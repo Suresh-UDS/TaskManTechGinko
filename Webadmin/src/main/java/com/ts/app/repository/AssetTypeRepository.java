@@ -23,4 +23,7 @@ public interface AssetTypeRepository extends JpaRepository<AssetType, Long> {
 	@Query("SELECT at FROM AssetType at WHERE at.name= :name")
 	AssetType findByName(@Param("name") String name);
 
+    @Query("SELECT at FROM AssetType at WHERE at.active='Y' and at.site.id=:siteId order by at.name")
+    List<AssetType> findBySiteId(@Param("siteId") Long siteId);
+
 }
