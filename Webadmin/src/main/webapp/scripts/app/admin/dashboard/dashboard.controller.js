@@ -1,6 +1,53 @@
 'use strict';
 
 angular.module('timeSheetApp')
+    .directive('hcChartReading', function () {
+        return {
+            restrict: 'E',
+            template: '<div></div>',
+            scope: {
+                title: '@',
+                data: '='
+            },
+            link: function (scope, element) {
+
+                console.log(scope.data);
+
+                // $scope.sampleData = data[0];
+                scope.readings = scope.data.readings;
+                scope.pushingItems = [];
+                for(var i=0; i < scope.readings.length; i++) {
+                    var indexItm = [];
+                    indexItm[0] = scope.readings[i].date;
+                    indexItm[1] = scope.readings[i].value;
+                    scope.pushingItems.push(indexItm);
+                }
+                console.log("Asset Reading chart directives -" +JSON.stringify(scope.pushingItems));
+
+                Highcharts.chart(element[0], {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: scope.title
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                            }
+                        }
+                    },
+                    series: [{
+                        data: scope.pushingItems
+                    }]
+                });
+            }
+        };
+    })
     .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,
         DashboardComponent,JobComponent,EmployeeComponent, $state,$http,$stateParams,$location,TicketComponent,
         SiteComponent,AttendanceComponent,getLocalDbStorage) {
@@ -83,25 +130,12 @@ angular.module('timeSheetApp')
             $scope.fuelGauge3();
             DashboardComponent.getReadingsFromDate().then(function(data) {
                console.log(JSON.stringify(data));
-               if(data.length > 0) {
-                    $scope.sampleData = data[0];
-                    $scope.readings = $scope.sampleData.readings;
-                    $scope.pushingItems = [];
-                    for(var i=0; i < $scope.readings.length; i++) {
-                        var indexItm = [];
-                        indexItm[0] = $scope.readings[i].date;
-                        indexItm[1] = $scope.readings[i].value;
-                        $scope.pushingItems.push(indexItm);
-                    }
-                    console.log(JSON.stringify($scope.pushingItems));
-                    $scope.sampleBar1($scope.sampleData);
-                    $scope.sampleBar2();
-                    $scope.sampleBar3();
-               }
+               $scope.chartSamples = data;
             });
 
 
         };
+
 
         // Load Charts function
         $scope.loadCharts = function(){
@@ -1930,214 +1964,6 @@ angular.module('timeSheetApp')
 
 
 
-        }
-
-
-        $scope.sampleBar1 = function(refData) {
-            $timeout(function () {
-                // Create the chart
-                Highcharts.chart('sample1', {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    subtitle: {
-                        text: refData.assetName+" : ("+ refData.assetCode + ")"
-                    },
-                    xAxis: {
-                        type: 'category',
-                        labels: {
-                            rotation: -45,
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Fuel readings'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        pointFormat: 'Readings in '+ refData.assetName +': <b>{point.y:.1f} values</b>'
-                    },
-                    series: [{
-                        name: refData.assetName,
-                        data: $scope.pushingItems,
-                        dataLabels: {
-                            enabled: true,
-                            rotation: -90,
-                            color: '#FFFFFF',
-                            align: 'right',
-                            format: '{point.y:.1f}', // one decimal
-                            y: 10, // 10 pixels down from the top
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    }]
-                });
-            },2000);
-        }
-
-        $scope.sampleBar2 = function() {
-            $timeout(function () {
-                // Create the chart
-                Highcharts.chart('sample2', {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    subtitle: {
-                        text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
-                    },
-                    xAxis: {
-                        type: 'category',
-                        labels: {
-                            rotation: -45,
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Water Readings'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        pointFormat: 'Population in 2017: <b>{point.y:.1f} millions</b>'
-                    },
-                    series: [{
-                        name: 'Population',
-                        data: [
-                            ['2019-07-13', 24.2],
-                            ['Beijing', 20.8],
-                            ['Karachi', 14.9],
-                            ['Shenzhen', 13.7],
-                            ['Guangzhou', 13.1],
-                            ['Istanbul', 12.7],
-                            ['Mumbai', 12.4],
-                            ['Moscow', 12.2],
-                            ['São Paulo', 12.0],
-                            ['Delhi', 11.7],
-                            ['Kinshasa', 11.5],
-                            ['Tianjin', 11.2],
-                            ['Lahore', 11.1],
-                            ['Jakarta', 10.6],
-                            ['Dongguan', 10.6],
-                            ['Lagos', 10.6],
-                            ['Bengaluru', 10.3],
-                            ['Seoul', 9.8],
-                            ['Foshan', 9.3],
-                            ['Tokyo', 9.3]
-                        ],
-                        dataLabels: {
-                            enabled: true,
-                            rotation: -90,
-                            color: '#FFFFFF',
-                            align: 'right',
-                            format: '{point.y:.1f}', // one decimal
-                            y: 10, // 10 pixels down from the top
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    }]
-                });
-            },2000);
-        }
-
-        $scope.sampleBar3 = function() {
-            $timeout(function () {
-                // Create the chart
-                Highcharts.chart('sample3', {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    subtitle: {
-                        text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
-                    },
-                    xAxis: {
-                        type: 'category',
-                        labels: {
-                            rotation: -45,
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Energy Readings'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        pointFormat: 'Population in 2017: <b>{point.y:.1f} millions</b>'
-                    },
-                    series: [{
-                        name: 'Population',
-                        data: [
-                            ['2019-07-13', 24.2],
-                            ['Beijing', 20.8],
-                            ['Karachi', 14.9],
-                            ['Shenzhen', 13.7],
-                            ['Guangzhou', 13.1],
-                            ['Istanbul', 12.7],
-                            ['Mumbai', 12.4],
-                            ['Moscow', 12.2],
-                            ['São Paulo', 12.0],
-                            ['Delhi', 11.7],
-                            ['Kinshasa', 11.5],
-                            ['Tianjin', 11.2],
-                            ['Lahore', 11.1],
-                            ['Jakarta', 10.6],
-                            ['Dongguan', 10.6],
-                            ['Lagos', 10.6],
-                            ['Bengaluru', 10.3],
-                            ['Seoul', 9.8],
-                            ['Foshan', 9.3],
-                            ['Tokyo', 9.3]
-                        ],
-                        dataLabels: {
-                            enabled: true,
-                            rotation: -90,
-                            color: '#FFFFFF',
-                            align: 'right',
-                            format: '{point.y:.1f}', // one decimal
-                            y: 10, // 10 pixels down from the top
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    }]
-                });
-            },2000);
         }
 
         $rootScope.ticketGraph = function () {

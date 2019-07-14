@@ -2361,15 +2361,34 @@ public class AssetManagementService extends AbstractService {
         String readingDate4 = pattern.format(cal4.getTime());
 
 	    List<AssetReadingChart> assetReadingCharts = new ArrayList<>();
-	    List<Readings> readings = Arrays.asList(
-	        new Readings(readingDate1, 24),
+
+        List<Readings> readings1 = Arrays.asList(
+            new Readings(readingDate1, 10),
+            new Readings(readingDate2, 35),
+            new Readings(readingDate3, 24),
+            new Readings(readingDate4,33));
+        AssetReadingChart assetReadingChart1 = new AssetReadingChart(
+            "TestAsset1", "Test890", readings1
+        );
+        List<Readings> readings2 = Arrays.asList(
+            new Readings(readingDate1, 14),
+            new Readings(readingDate2, 65),
+            new Readings(readingDate3, 38),
+            new Readings(readingDate4,50));
+        AssetReadingChart assetReadingChart2 = new AssetReadingChart(
+            "TestAsset2", "Test456", readings2
+        );
+        List<Readings> readings3 = Arrays.asList(
+            new Readings(readingDate1, 24),
             new Readings(readingDate2, 35),
             new Readings(readingDate3, 48),
             new Readings(readingDate4,55));
-	    AssetReadingChart assetReadingChart = new AssetReadingChart(
-            "TestAsset", "TestAssetCode", readings
+        AssetReadingChart assetReadingChart3 = new AssetReadingChart(
+            "TestAsset3", "Test123", readings3
         );
-	    assetReadingCharts.add(assetReadingChart);
+	    assetReadingCharts.add(assetReadingChart1);
+	    assetReadingCharts.add(assetReadingChart2);
+	    assetReadingCharts.add(assetReadingChart3);
 	    return assetReadingCharts;
     }
 }
