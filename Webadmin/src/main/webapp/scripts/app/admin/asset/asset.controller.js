@@ -2097,8 +2097,8 @@ angular.module('timeSheetApp')
 				}else{
 
 					if($scope.selectedAssetType && $scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
-					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.assetgroup;}
-					if($scope.selectedAssetStatus){ $scope.assetGen.status = $scope.selectedAssetStatus;}
+					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.plainName;}
+					// if($scope.selectedAssetStatus){ $scope.assetGen.status = $scope.selectedAssetStatus;}
 					if($scope.selectedManufacturer && $scope.selectedManufacturer.id){$scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;}
 					if($scope.selectedServiceProvider && $scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
 					if($scope.selectedServiceWarranty && $scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
@@ -2136,8 +2136,8 @@ angular.module('timeSheetApp')
 						$scope.saveLoad = false;
 						$scope.btnDisabled= false;
 						$scope.success = null;
-						//console.log('Error - '+ response.data);
-						//console.log('status - '+ response.status + ' , message - ' + response.data.message);
+						console.log('Error - '+ response.data);
+						console.log('status - '+ response.status + ' , message - ' + response.data.message);
 						if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 							$scope.errorAssetsExists = 'ERROR';
 							$scope.showNotifications('top','center','danger','Asset Already Exists');
@@ -4888,7 +4888,7 @@ angular.module('timeSheetApp')
 
             for( var i in assetGrpList ){
 
-                $scope.assetParentList.push({id: assetGrpList[i].id, group: (prefix + assetGrpList[i].assetgroup) });
+                $scope.assetParentList.push({id: assetGrpList[i].id, group: (prefix + assetGrpList[i].assetgroup),plainName: assetGrpList[i].assetgroup });
 
                 if(assetGrpList[i].assetGroup && assetGrpList[i].assetGroup.length > 0) {
                     initMapAssetGrpTree("|__"+prefix,assetGrpList[i].assetGroup);
