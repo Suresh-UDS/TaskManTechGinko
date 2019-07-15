@@ -214,13 +214,14 @@
                                                                             </div>
                                                                             <div class="col-md-3">
 
-                                                                                <div class="form-group selectcon is-empty" ng-init="loadAssetGroup()">
+                                                                                <div class="form-group selectcon is-empty">  <!-- ng-init="loadAssetGroup()" -->
 
                                                                                     <div class="row">
                                                                                         <div class="col-md-10 pad-r-0px">
                                                                                             <label class="control-label">Group</label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" tabindex="6">
+                                                                                            <!-- <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.assetgroup | uppercase for assetgroup in assetGroups" tabindex="6"> -->
+                                                                                            <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetParent as (assetParent.group | uppercase) for assetParent in assetParentList" tabindex="6">
                                                                                                 <option value="">Select Asset Group ..</option>
                                                                                             </select>
 
@@ -242,9 +243,9 @@
                                                                                         <div class="col-md-12 pad-r-0px">
                                                                                             <label class="control-label">Parent</label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="selectedAssetParent" ng-options="assetgroup as assetgroup.title | uppercase for assetgroup in assetFinalLists" tabindex="6">
-                                                                                                <option value="">Select Asset Parent ..</option>
 
+                                                                                            <select class="form-control" ng-model="choosenAssetParent" ng-options="assetPar as assetPar.title | uppercase for assetPar in assetFinalLists" tabindex="6">
+                                                                                                <option value="0">Select Asset Group ..</option>
                                                                                             </select>
                                                                                         </div>
 
