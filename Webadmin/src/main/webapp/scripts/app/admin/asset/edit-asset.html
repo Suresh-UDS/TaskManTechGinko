@@ -208,26 +208,7 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="row">
-                                                                        <div class="col-md-12">
-                                                                            <div class="form-group" ng-init="loadStatus();">
-                                                                                <label class="control-label">Status<span class="red-star">*</span></label>
-                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedAssetStatus" name="AssetStatus" ng-options="(status | uppercase) for status in statuses track by status" required tabindex="8">
-                                                                                    <option value="">Select Status ..</option>
-                                                                                </select>
-                                                                                <div ng-show="form.$submitted || form.AssetStatus.$touched || form.AssetStatus.$dirty">
-                                                                                     <div ng-show="form.AssetStatus.$dirty || form.AssetStatus.$invalid">
-                                                                                     <p class="help-block" style="color: maroon"
-                                                                                        ng-show="form.AssetStatus.$error.required">Status is
-                                                                                         required.</p>
 
-                                                                                     </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
 
                                                                 </div>
                                                             </div>
@@ -325,6 +306,56 @@
 
                                                         </div>
 
+
+                                                            <div class="col-md-12">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading">Asset Status</div>
+                                                                    <div class="panel-body">
+                                                                        <div class="row" ng-init="loadStatus();">
+                                                                            <div class="form-group" >
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table">
+                                                                                        <thead class="text-primary">
+                                                                                        <th>Status</th>
+                                                                                        <th>Ticket</th>
+                                                                                        <th>Severity</th>
+                                                                                        <th>Current Status</th>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                        <tr ng-repeat="status in statuses track by status.status">
+                                                                                            <td>{{status.status}}</td>
+                                                                                            <td>
+                                                                                                <div class="togglebutton">
+                                                                                                    <label>
+                                                                                                        <input type="checkbox" ng-change="setCritical(status,$index)" ng-model="status.isCritical">
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div class="togglebutton">
+                                                                                                    <label>
+                                                                                                        <input type="checkbox" ng-disabled="!status.isCritical" ng-change="setSeverity()" ng-model="status.isSeverity">
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div class="togglebutton">
+                                                                                                    <label>
+                                                                                                        <input type="checkbox" ng-disabled="!status.allowCurrentStatus" ng-change="setCurrentStatus(status,$index)" ng-model="status.isCurrentStatus">
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
                                                         <div class="col-md-12">
 

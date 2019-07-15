@@ -34,20 +34,20 @@ import antlr.StringUtils;
 @RequestMapping("/api")
 @CrossOrigin
 public class AssetTicketConfigResource {
-	
+
 	private final Logger log = LoggerFactory.getLogger(AssetTicketConfig.class);
-	
+
 	@Inject
 	private ImportUtil importUtil;
-	
+
 	@Inject
 	private AssetTicketConfigService assetTicketConfigService;
-	
+
 	@Inject
 	public AssetTicketConfigResource(AssetTicketConfigService assetTicketConfigService) {
 		this.assetTicketConfigService = assetTicketConfigService;
 	}
-	
+
 	//Save asset ticket config
 	@RequestMapping(value = "/assetTicketSave", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
@@ -55,35 +55,42 @@ public class AssetTicketConfigResource {
 		try {
 			assetTicketConfigDTO.setUserId(SecurityUtils.getCurrentUserId());
 			assetTicketConfigDTO = assetTicketConfigService.createTicketConfigInfo(assetTicketConfigDTO);
-			
+
 		}catch (Exception ex){
 			throw new TimesheetException(ex,assetTicketConfigDTO);
 		}
 		return new ResponseEntity<>(assetTicketConfigDTO,HttpStatus.CREATED);
-		
+
 	}
-	
-	
+
+
 	//Update asset ticket config
 	@RequestMapping(value = "/assetTicketUpdate", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
 	@Timed
 	public ResponseEntity<?> updateAssetTicketConfig(@Valid @RequestBody AssetTicketConfigDTO assetTicketConfig,HttpServletRequest request){
-	
-		 
+
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	//Find all
 	@RequestMapping(value = "/assetTicketFindAll", method = RequestMethod.GET)
 	public List<AssetTicketConfigDTO> findAll(HttpServletRequest request) {
 		return assetTicketConfigService.findAll();
 	}
-	
+
 	//FindOne
 	@RequestMapping(value = "/assetTicketFindOne/{id}", method = RequestMethod.GET)
 	public AssetTicketConfigDTO get(@PathVariable Long id) {
 		return assetTicketConfigService.findOne(id);
 	}
-	
-    
+
+//	FindOneBySiteId
+    @RequestMapping(value = "/assetTicketFindOne/assetId/{assetId}", method = RequestMethod.GET)
+    public List<AssetTicketConfigDTO> getBySiteId(@PathVariable Long assetId) {
+
+        return assetTicketConfigService.findOneByAssetId(assetId);
+    }
+
+
 }
