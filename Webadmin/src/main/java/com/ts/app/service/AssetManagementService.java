@@ -334,8 +334,10 @@ public class AssetManagementService extends AbstractService {
 			assetParamConfigRepository.save(assetParamConfigs);
 		}
 
-		assetDTO.setId(asset.getId());
-		return assetDTO;
+//		assetDTO.setId(asset.getId());
+//		return assetDTO;
+		
+		return mapperUtil.toModel(asset, AssetDTO.class);
 
 	}
 
