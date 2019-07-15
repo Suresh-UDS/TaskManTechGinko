@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.print.attribute.standard.PrinterState;
 
 import java.io.Console;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**

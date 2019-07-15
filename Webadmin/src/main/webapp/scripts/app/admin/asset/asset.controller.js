@@ -4833,7 +4833,7 @@ angular.module('timeSheetApp')
 			 * */
         $scope.assetFinalLists = [];
         $scope.assetParentList = [];
-        $scope.selectedAssetParent = {};
+       // $scope.selectedAssetParent = {};
 		$scope.getAssetHierarchy = function() {
 		    var obj = {
 		        "siteId": $scope.selectedSites.id,
@@ -4846,7 +4846,7 @@ angular.module('timeSheetApp')
                     console.log($scope.assetFinalLists);
                 }else{
                     $scope.assetFinalLists = [];
-                    $scope.selectedAssetParent = null;
+                    //$scope.selectedAssetParent = null;
                     console.log(JSON.stringify($scope.assetFinalLists));
                 }
             });

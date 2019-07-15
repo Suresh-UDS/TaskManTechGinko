@@ -1112,15 +1112,17 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div id="sample1"></div>
+                            <div class="col-md-4" ng-repeat="chartSample in chartSamples">
+                                <!--<hc-chart-sample options="chartOptions">Placeholder for generic chart</hc-chart-sample>-->
+
+                                <hc-chart-reading title={{chartSample.assetName}} data="chartSample">Placeholder for pie chart</hc-chart-reading>
                             </div>
-                            <div class="col-md-4">
-                                <div id="sample2"></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div id="sample3"></div>
-                            </div>
+                            <!--<div class="col-md-4">-->
+                                <!--<div id="sample2"></div>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-4">-->
+                                <!--<div id="sample3"></div>-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
