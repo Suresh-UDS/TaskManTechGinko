@@ -854,6 +854,8 @@ angular.module('timeSheetApp')
 					$scope.selectedBlock = null;
 					$scope.selectedFloor = null;
 					$scope.selectedZone = null;
+					$scope.selectedAssetType = null;
+					$scope.isReleationShipEnabled = false;
 					$scope.blocks = data;
 					//console.log("Loading all blocks -- " ,  $scope.blocks);
 				});
