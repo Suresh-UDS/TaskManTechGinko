@@ -21,6 +21,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.print.attribute.standard.PrinterState;
 
 import java.io.Console;
@@ -170,6 +173,9 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private TicketManagementService ticketMgmtservice;
+	
+    @PersistenceContext
+	private EntityManager manager;
 
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 
@@ -2343,56 +2349,87 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
-
-    public List<AssetReadingChart> getReadingsValue() {
-        double min = 10;
-        double max = 100;
-        Calendar cal1 = Calendar.getInstance();
-        Calendar cal2 = Calendar.getInstance();
-        Calendar cal3 = Calendar.getInstance();
-        Calendar cal4 = Calendar.getInstance();
-
-        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-dd");
-        //Date after adding the days to the current date
-        cal1.add(Calendar.DAY_OF_MONTH, 1);
-        cal2.add(Calendar.DAY_OF_MONTH, 2);
-        cal3.add(Calendar.DAY_OF_MONTH, 3);
-        cal4.add(Calendar.DAY_OF_MONTH, 4);
-
-        String readingDate1 = pattern.format(cal1.getTime());
-        String readingDate2 = pattern.format(cal2.getTime());
-        String readingDate3 = pattern.format(cal3.getTime());
-        String readingDate4 = pattern.format(cal4.getTime());
-
-	    List<AssetReadingChart> assetReadingCharts = new ArrayList<>();
-
-        List<Readings> readings1 = Arrays.asList(
-            new Readings(readingDate1, 10),
-            new Readings(readingDate2, 35),
-            new Readings(readingDate3, 24),
-            new Readings(readingDate4,33));
-        AssetReadingChart assetReadingChart1 = new AssetReadingChart(
-            "TestAsset1", "Test890", readings1
-        );
-        List<Readings> readings2 = Arrays.asList(
-            new Readings(readingDate1, 14),
-            new Readings(readingDate2, 65),
-            new Readings(readingDate3, 38),
-            new Readings(readingDate4,50));
-        AssetReadingChart assetReadingChart2 = new AssetReadingChart(
-            "TestAsset2", "Test456", readings2
-        );
-        List<Readings> readings3 = Arrays.asList(
-            new Readings(readingDate1, 24),
-            new Readings(readingDate2, 35),
-            new Readings(readingDate3, 48),
-            new Readings(readingDate4,55));
-        AssetReadingChart assetReadingChart3 = new AssetReadingChart(
-            "TestAsset3", "Test123", readings3
-        );
-	    assetReadingCharts.add(assetReadingChart1);
-	    assetReadingCharts.add(assetReadingChart2);
-	    assetReadingCharts.add(assetReadingChart3);
-	    return assetReadingCharts;
-    }
+	public void assetDetailedReadingReport(List<AssetReadingReport> reportList,List<Asset> assets,SearchCriteria searchCriteria) {
+		
+		if(assets!=null) {
+			
+			for(Asset asset:assets) {
+				
+				String fromDate = DateUtil.formatToDateString(searchCriteria.getFromDate(), "yyyy-MM-dd");
+				String toDate = DateUtil.formatToDateString(searchCriteria.getToDate(), "yyyy-MM-dd");
+//				
+//				List<Object[]> readings = assetRepository.findReadings(fromDate, toDate);
+				
+				Query readingsQuery = manager.createNativeQuery("SELECT SUM(initial_value), SUM(final_value), SUM(consumption), DATE(created_date) FROM asset_parameter_reading WHERE created_date between :fromDate and :toDate and asset_id = :assetId group by DATE(created_date)");
+				readingsQuery.setParameter("fromDate", fromDate);
+				readingsQuery.setParameter("toDate", toDate);
+				readingsQuery.setParameter("assetId", searchCriteria.getAssetId());
+				
+				List<Object[]> readings = readingsQuery.getResultList();
+				
+				
+				AssetReadingReport assetInfo = new AssetReadingReport();
+				
+				assetInfo.setAssetCode(asset.getCode());
+				assetInfo.setAssetName(asset.getTitle());
+				
+				if(readings!=null) {
+					
+					List<Readings> resultReadings = new ArrayList<Readings>(); 
+					
+					for(Object[] columns : readings) {
+					
+						Readings reading = new Readings();
+						
+						reading.setClosingValue((Long)columns[0]);
+						reading.setOpeningValue((Long)columns[1]);
+						reading.setValue((Long)columns[2]);
+						reading.setDate((String)columns[3]);
+						
+						resultReadings.add(reading);
+					
+					}
+					
+					assetInfo.setReadings(resultReadings);
+					
+				}
+				
+				reportList.add(assetInfo);
+				
+				assetDetailedReadingReport(reportList,asset.getAssets(),searchCriteria);
+				
+			}
+			
+		}
+		
+	} 
+	
+	public List<AssetReadingReport> initAssetDetailedReadingReport(SearchCriteria searchCriteria){
+		
+		List<AssetReadingReport> report = new ArrayList<AssetReadingReport>();
+		
+		if(searchCriteria.getAssetTypeName()!=null) {
+		
+			AssetType assetType = assetTypeRepository.findByName(searchCriteria.getAssetTypeName());
+			
+			if(assetType!=null) {
+			
+				List<Asset> assets = getSiteAssetHierarchy(searchCriteria.getSiteId(),assetType.getId());
+				
+				if(assets!=null) {
+					
+					assetDetailedReadingReport(report,assets,searchCriteria);
+					
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		return report;
+		
+	}
+ 
 }

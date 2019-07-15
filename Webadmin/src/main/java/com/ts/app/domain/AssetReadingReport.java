@@ -2,12 +2,14 @@ package com.ts.app.domain;
 
 import java.util.List;
 
-public class AssetReadingChart {
+public class AssetReadingReport {
     private String assetName;
     private String assetCode;
     private List<Readings> readings;
 
-    public AssetReadingChart(String assetName, String assetCode, List<Readings> readings) {
+    public AssetReadingReport() {}
+    
+    public AssetReadingReport(String assetName, String assetCode, List<Readings> readings) {
         this.assetName = assetName;
         this.assetCode = assetCode;
         this.readings = readings;

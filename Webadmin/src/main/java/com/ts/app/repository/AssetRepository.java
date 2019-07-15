@@ -167,4 +167,6 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
 
     @Query("SELECT a FROM Asset a WHERE a.site.id = :siteId and a.code = :assetCode and a.active = 'Y'")
     List<Asset> findAssetCodeBySite(@Param("siteId") long siteId, @Param("assetCode") String assetCode);
+    
+    
 }

@@ -5,6 +5,7 @@ import com.ts.app.domain.*;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.service.WarrantyTypeService;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.web.rest.dto.*;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -850,9 +851,15 @@ public class AssetResource {
 		return result;
 	}
 
-	@RequestMapping(value = "/assets/reading/chart", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AssetReadingChart> getAssetReadingChartData() {
-	    return assetService.getReadingsValue();
+	@RequestMapping(value = "/asset/reading", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AssetReadingReport> getAssetReadingChartData(@RequestBody SearchCriteria searchCriteria) {
+		
+		
+		// setting last 7 days
+		searchCriteria.setFromDate( DateUtil.addDaysInDate(searchCriteria.getFromDate(), -6) );
+		
+	    return assetService.initAssetDetailedReadingReport(searchCriteria);
+	    
     }
 
 

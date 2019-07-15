@@ -128,7 +128,14 @@ angular.module('timeSheetApp')
             $scope.fuelGauge1();
             $scope.fuelGauge2();
             $scope.fuelGauge3();
-            DashboardComponent.getReadingsFromDate().then(function(data) {
+
+            var searchCriteria = {};
+            searchCriteria.fromDate = new Date;
+            searchCriteria.toDate = new Date;
+            searchCriteria.siteId = 224;
+            searchCriteria.assetTypeName = "ENERGY METER";
+
+            DashboardComponent.getReadingsFromDate(searchCriteria).then(function(data) {
                console.log(JSON.stringify(data));
                $scope.chartSamples = data;
             });

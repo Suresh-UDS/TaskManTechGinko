@@ -140,8 +140,9 @@ angular.module('timeSheetApp')
                 });
             },
 
-            getReadingsFromDate : function () {
-                return $http.get('api/assets/reading/chart').then(function (response) {
+            getReadingsFromDate : function (searchCriteria) {
+               
+                return $http.post('api/asset/reading',searchCriteria).then(function (response) {
                     return response.data;
                 })
             }

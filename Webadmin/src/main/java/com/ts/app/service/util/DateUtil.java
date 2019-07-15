@@ -24,6 +24,18 @@ public class DateUtil {
 		cal.setTimeInMillis(utcDate.getTime());
 		return convertUTCToIST(cal);
 	}
+	
+	public static Date addDaysInDate(Date date,int days) {
+		
+		Calendar calender = Calendar.getInstance();
+		
+		calender.setTime(date);
+		
+		calender.add(Calendar.DATE,days);
+		
+		return calender.getTime();
+		
+	}
 
 	public static Date convertUTCToIST(Calendar utcDate) {
         String strdate = null;
@@ -105,6 +117,15 @@ public class DateUtil {
 
 	}
 
+	public static String formatToDateString(Date date,String format) {
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat(format);
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
+	}
+	
 	public static String formatToDateString(Date date) {
 		if(date != null) {
 	        DateFormat dtFormat = new SimpleDateFormat("dd-MMM-yyyy");
