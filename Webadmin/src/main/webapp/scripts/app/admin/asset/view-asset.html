@@ -1,5 +1,5 @@
 <div class="crud-form"
-	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset();">
+	data-unique-hash="a2ad475d60b22954085c657a73309b8f" ng-init="viewAsset(); getAllUploadedPhotos();">
 	<div class="">
     <div class="titleCon">
         <h3>{{assetDetail.title | uppercase}}</h3>
@@ -225,22 +225,27 @@
                                                                                        </td>
                                                                                    </tr>
 
-                                                                                   <tr>
-                                                                                       <td>
-                                                                                           Ticket
-                                                                                       </td>
-
-                                                                                       <td ng-repeat="status in statuses track by status.status">
-                                                                                            <span >{{status.status}}</span>
+                                                                                   <tr >
+                                                                                       <td>Ticket Critical Status</td>
+                                                                                       <td >
+                                                                                           <span ng-repeat="status in assetDetail.criticalStatusList track by status.status">{{status.status}} <br></span>
                                                                                        </td>
                                                                                    </tr>
+
+
                                                                                    </tbody>
                                                                                </table>
                                                                            </div>
                                                                        </div>
-                                                                       <div class="col-md-4 col-md-offset-1">
+                                                                       <div class="col-md-4 col-md-offset-1" ng-if="photoCount">
                                                                            <div class="asset-img-container" style="text-align: center">
-                                                                               <img class="asset-img" style="width: 300px !important; height:300px !important;" src="../../../../assets/img/chiller-plant.jpg">
+                                                                               <img class="asset-img" style="width: 300px !important; height:300px !important;" ng-src={{displayImage.url}} alt="Display image">
+                                                                           </div>
+                                                                       </div>
+
+                                                                       <div class="col-md-4 col-md-offset-1" ng-if="photoCount<=0">
+                                                                           <div class="asset-img-container" style="text-align: center">
+                                                                               <img class="asset-img" style="width: 300px !important; height:300px !important;" src="../../../../assets/img/asset-placeholder.png">
                                                                            </div>
                                                                        </div>
                                                                    </div>
@@ -249,6 +254,8 @@
                                                            </div>
                                                        </div>
                                                    </div>
+
+
 
 
                                                     <div class="row">

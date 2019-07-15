@@ -45,6 +45,9 @@ public class AssetManagementService extends AbstractService {
 	private AssetRepository assetRepository;
 
 	@Inject
+    private AssetTicketConfigRepository assetTicketConfigRepository;
+
+	@Inject
 	private AssetAMCRepository assetAMCRepository;
 
 	@Inject
@@ -170,6 +173,9 @@ public class AssetManagementService extends AbstractService {
 	@Inject
 	private TicketManagementService ticketMgmtservice;
 
+	@Inject
+    private AssetTicketConfigService assetTicketConfigService;
+
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
@@ -287,21 +293,21 @@ public class AssetManagementService extends AbstractService {
 			assetSiteHistoryList.add(assetSiteHistory);
 			asset.setAssetSiteHistory(assetSiteHistoryList);
 		}
-		
+
 		List<AssetTicketConfig> ticketConfigList = new ArrayList<AssetTicketConfig> ();
-		
+
 		if(assetDTO.getCriticalStatusList()!=null) {
 		for(int i=0; i < assetDTO.getCriticalStatusList().size(); i++) {
-			
+
 			assetDTO.getCriticalStatusList().get(i).setAsset(asset);
 			AssetTicketConfig ticketConfig = mapperUtil.toEntity(assetDTO.getCriticalStatusList().get(i), AssetTicketConfig.class);
 			ticketConfigList.add(ticketConfig);
-			
+
 		}
 		}
-		
+
 		asset.setAssetTicketConfigList(ticketConfigList);
-		
+
 		List<ParameterConfig> parameterConfigs = parameterConfigRepository.findAllByAssetType(assetDTO.getAssetType());
 		if(CollectionUtils.isNotEmpty(parameterConfigs)) {
 			List<AssetParameterConfig> assetParamConfigs = new ArrayList<AssetParameterConfig>();
@@ -320,7 +326,7 @@ public class AssetManagementService extends AbstractService {
 			}
 			assetParamConfigRepository.save(assetParamConfigs);
 		}
-		
+
 		assetDTO.setId(asset.getId());
 		return assetDTO;
 
@@ -390,64 +396,64 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetDto;
 	}
-	
+
 	private void arrangeAssetHierarichy(List<Asset> assetList) {
-		
+
 		if(assetList != null) {
-		
+
 			for(int i=0;i<assetList.size();i++) {
-				
+
 				//if(assetList.get(i).getParentAsset()!=null) assetList.get(i).setParentAsset(null);
-				
+
 				arrangeAssetHierarichy(assetList.get(i).getAssets());
-				
+
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	private void arrangeAssetGroupHierarichy(List<AssetGroup> assetGroupList) {
-		
+
 		if(assetGroupList != null) {
-		
+
 			for(int i=0;i<assetGroupList.size();i++) {
-				
+
 				arrangeAssetGroupHierarichy(assetGroupList.get(i).getAssetGroup());
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 
 	public List<AssetGroup> getSiteAssetGroupHierarchy(long siteId){
-		
-		List<AssetGroup> assetGroupList = assetGroupRepository.findBySiteIdAndActiveAndParentGroup(siteId,"Y",null); 
-		
+
+		List<AssetGroup> assetGroupList = assetGroupRepository.findBySiteIdAndActiveAndParentGroup(siteId,"Y",null);
+
 		arrangeAssetGroupHierarichy(assetGroupList);
-		
+
 		return assetGroupList;
-		
+
 	}
-	
+
 	public List<Asset> getSiteAssetHierarchy(long siteId,long typeId){
-		
+
 		AssetType assetType = assetTypeRepository.findById(typeId);
-		
+
 		if(assetType == null) {
-			
+
 			return null;
-			
+
 		}
-		
+
 		List<Asset> assetList= assetRepository.findBySiteIdAndAssetTypeAndActiveAndParentAsset(siteId, assetType.getName(), "Y", null);
-		
+
 		arrangeAssetHierarichy(assetList);
-		
+
 		return assetList;
-		
+
 	}
 
 	public Asset getAsset(long id) {
@@ -470,13 +476,36 @@ public class AssetManagementService extends AbstractService {
 		log.debug(">>> Get asset Id after fectching ... "+asset.getId());
 		log.debug(">>> asset Type " + asset.getAssetType());
 		log.debug(">>> Asset Group " + asset.getAssetGroup());
+		log.debug(">>> Asset Critical list " + asset.getAssetTicketConfigList().size());
+		List<AssetTicketConfig> assetTicketConfigList = asset.getAssetTicketConfigList();
+//		List<AssetTicketConfigDTO> assetTicketConfigDTOList = mapperUtil.toModelList(assetTicketConfigList, AssetTicketConfigDTO.class);
+		List<AssetTicketConfigDTO> assetTicketConfigDTOList = assetTicketConfigMaptoModel(asset.getAssetTicketConfigList());
 		AssetDTO assetDTO = mapperUtil.toModel(asset, AssetDTO.class);
+		log.debug("Asset critical list "+assetTicketConfigList.size());
+		log.debug("Asset critical list "+assetTicketConfigDTOList.size());
 		if(assetDTO.getAssetType() != null) {
 		    AssetType assetType = assetTypeRepository.findByName(assetDTO.getAssetType());
 		    assetDTO.setAssetTypeId(assetType.getId());
         }
+
+        assetDTO.setCriticalStatusList(assetTicketConfigDTOList);
+
 		return assetDTO;
 	}
+
+	public List<AssetTicketConfigDTO> assetTicketConfigMaptoModel(List<AssetTicketConfig> assetTicketConfigList){
+	    List<AssetTicketConfigDTO> assetTicketConfigDTOList = new ArrayList<>();
+        for(AssetTicketConfig assetTicketConfig : assetTicketConfigList) {
+            AssetTicketConfigDTO assetTicketConfigDTO = new AssetTicketConfigDTO();
+            assetTicketConfigDTO.setId(assetTicketConfig.getId());
+            assetTicketConfigDTO.setSeverity(assetTicketConfig.isSeverity());
+            assetTicketConfigDTO.setTicket(assetTicketConfig.isTicket());
+            assetTicketConfigDTO.setStatus(assetTicketConfig.getStatus());
+            assetTicketConfigDTOList.add(assetTicketConfigDTO);
+        }
+
+        return  assetTicketConfigDTOList;
+    }
 
 	public AssetDTO getAssetByCode(String code) {
 		Asset asset = assetRepository.findByCode(code);
@@ -932,11 +961,11 @@ public class AssetManagementService extends AbstractService {
 				if(schStartCal.after(currCal)) {
 					currCal.setTime(schStartCal.getTime());
 				}
-				
+
 				int i=0;
-				
+
 				while(((currCal.after(schStartCal) || schStartCal.equals(currCal)) || !schStartCal.after(lastDate)) && !currCal.after(schEndCal) && !currCal.after(lastDate)) { //if ppm schedule starts before current date and not after the last date of the month.
-									
+
 					AssetScheduleEventDTO assetPPMScheduleEvent = new AssetScheduleEventDTO();
 					assetPPMScheduleEvent.setId(ppmSchedule.getId());
 					assetPPMScheduleEvent.setTitle(ppmSchedule.getTitle());
@@ -950,18 +979,18 @@ public class AssetManagementService extends AbstractService {
 //					currCal.add(Calendar.MILLISECOND, TimeZone.getTimeZone("Asia/Kolkata").getRawOffset());
 					assetPPMScheduleEvent.setStart(currCal.getTime());
 					assetPPMScheduleEvent.setAllDay(true);
-					if(currCal.get(Calendar.WEEK_OF_YEAR)>i) {						
+					if(currCal.get(Calendar.WEEK_OF_YEAR)>i) {
 						if(currCal.get(Calendar.WEEK_OF_YEAR)>53)
-							break;						
+							break;
 					    assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR));
 					    i=currCal.get(Calendar.WEEK_OF_YEAR);
 					}
 					else {
 						if((currCal.get(Calendar.WEEK_OF_YEAR)+i)>53)
 							break;
-						assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR)+i);	
+						assetPPMScheduleEvent.setWeek(currCal.get(Calendar.WEEK_OF_YEAR)+i);
 						}
-					
+
 					assetPPMScheduleEvent.setMaintenanceType(MaintenanceType.PPM.name());
 					assetPPMScheduleEventDTOs.add(assetPPMScheduleEvent);
 					addDays(currCal, ppmSchedule.getFrequency(), ppmSchedule.getFrequencyDuration());
@@ -1132,13 +1161,13 @@ public class AssetManagementService extends AbstractService {
 		}
 		return assetDTO;
 	}
-	
+
 	public List<AssetDTO> getAssetHierarichy(SearchCriteria searchCriteria){
-		
+
 		List<AssetDTO> assetList = null;
-		
+
 		return assetList;
-		
+
 	}
 
 	public SearchResult<AssetDTO> findBySearchCrieria(SearchCriteria searchCriteria) {
@@ -1371,7 +1400,7 @@ public class AssetManagementService extends AbstractService {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
 		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
 		AssetGroup parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
-		
+
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);
 			assetgroup.setAssetGroupCode(assetGroupDTO.getAssetGroupCode());
