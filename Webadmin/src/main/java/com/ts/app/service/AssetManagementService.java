@@ -2368,5 +2368,38 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
+    public List<AssetReadingChart> getReadingsValue() {
+        double min = 10;
+        double max = 100;
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        Calendar cal3 = Calendar.getInstance();
+        Calendar cal4 = Calendar.getInstance();
+
+        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-dd");
+        //Date after adding the days to the current date
+        cal1.add(Calendar.DAY_OF_MONTH, 1);
+        cal2.add(Calendar.DAY_OF_MONTH, 2);
+        cal3.add(Calendar.DAY_OF_MONTH, 3);
+        cal4.add(Calendar.DAY_OF_MONTH, 4);
+
+        String readingDate1 = pattern.format(cal1.getTime());
+        String readingDate2 = pattern.format(cal2.getTime());
+        String readingDate3 = pattern.format(cal3.getTime());
+        String readingDate4 = pattern.format(cal4.getTime());
+
+        List<AssetReadingChart> assetReadingCharts = new ArrayList<>();
+        List<Readings> readings = Arrays.asList(
+            new Readings(readingDate1, 24),
+            new Readings(readingDate2, 35),
+            new Readings(readingDate3, 48),
+            new Readings(readingDate4,55));
+        AssetReadingChart assetReadingChart = new AssetReadingChart(
+            "TestAsset", "TestAssetCode", readings
+        );
+        assetReadingCharts.add(assetReadingChart);
+        return assetReadingCharts;
+    }
+
 
 }
