@@ -6,6 +6,7 @@ public class AssetReadingReport {
     private String assetName;
     private String assetCode;
     private List<Readings> readings;
+    private boolean parent;
 
     public AssetReadingReport() {}
     
@@ -38,4 +39,13 @@ public class AssetReadingReport {
     public void setReadings(List<Readings> readings) {
         this.readings = readings;
     }
+
+	public boolean isParent() {
+		return parent;
+	}
+
+	public void setParent(boolean parent) {
+		this.parent = parent;
+	}
+
 }

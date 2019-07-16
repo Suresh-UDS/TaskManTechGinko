@@ -117,23 +117,9 @@
 
                         <div class="row">
 
-                            <div class="col-md-4 col-lg-4 col-sm-1" has-permission="Site:List">
-                                    
-                                <div id="Fuel" onClick="$('#deleteModal').modal()" data-target="#myModal"></div>
-
-                            </div>
-
-                            <div class="col-md-4 col-lg-4 col-sm-2" has-permission="Site:List">
-                                    
-                                <div id="Water" onClick="$('#deleteModal').modal()" data-target="#myModal"></div>
-    
-                            </div>
-
-                            <div class="col-md-4 col-lg-4 col-sm-2" has-permission="Site:List">
-                                    
-                                <div id="Energy" onClick="$('#deleteModal').modal()" data-target="#myModal"></div>
-        
-                            </div>
+                                
+                                <guages-list class="col-md-4 col-lg-4 col-sm-4" has-permision="Site:List" ng-repeat="guageResult in guageResults" meterValue="guageResult.meterValue" title="{{guageResult.title}}" data="guageResult" data-method="setCurrentReading" ></guage-list>
+                                
 
                         </div>
 
@@ -1112,10 +1098,11 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-4" ng-repeat="chartSample in chartSamples">
+
+                            <div class="col-md-4" ng-repeat="currentReading in currentReadings">
                                 <!--<hc-chart-sample options="chartOptions">Placeholder for generic chart</hc-chart-sample>-->
 
-                                <hc-chart-reading title={{chartSample.assetName}} data="chartSample">Placeholder for pie chart</hc-chart-reading>
+                                <hc-chart-reading title={{currentReading.assetName}} data="currentReading" >Placeholder for pie chart</hc-chart-reading>
                             </div>
                             <!--<div class="col-md-4">-->
                                 <!--<div id="sample2"></div>-->
