@@ -1,9 +1,7 @@
 package com.ts.app.repository;
 
 import com.ts.app.domain.Ticket;
-import com.ts.app.domain.TicketStatus;
 
-import org.junit.runners.Parameterized.Parameters;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
