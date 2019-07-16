@@ -2,43 +2,73 @@ package com.ts.app.domain;
 
 public class TicketReportCounts {
 
-    private int totalCounts;
+    private long totalCounts;
 
-    private int assignedCounts;
+    private long assignedCounts;
 
-    private int openCounts;
+    private long inProgressCounts;
 
-    private int closedCounts;
+    private long openCounts;
 
-    public int getTotalCounts() {
+    private long closedCounts;
+
+    private String status;
+
+    private long count;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getTotalCounts() {
         return totalCounts;
     }
 
-    public void setTotalCounts(int totalCounts) {
+    public void setTotalCounts(long totalCounts) {
         this.totalCounts = totalCounts;
     }
 
-    public int getAssignedCounts() {
+    public long getAssignedCounts() {
         return assignedCounts;
     }
 
-    public void setAssignedCounts(int assignedCounts) {
+    public void setAssignedCounts(long assignedCounts) {
         this.assignedCounts = assignedCounts;
     }
 
-    public int getOpenCounts() {
+    public long getOpenCounts() {
         return openCounts;
     }
 
-    public void setOpenCounts(int openCounts) {
+    public void setOpenCounts(long openCounts) {
         this.openCounts = openCounts;
     }
 
-    public int getClosedCounts() {
+    public long getClosedCounts() {
         return closedCounts;
     }
 
-    public void setClosedCounts(int closedCounts) {
+    public void setClosedCounts(long closedCounts) {
         this.closedCounts = closedCounts;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    public long getInProgressCounts() {
+        return inProgressCounts;
+    }
+
+    public void setInProgressCounts(long inProgressCounts) {
+        this.inProgressCounts = inProgressCounts;
     }
 }
