@@ -39,6 +39,7 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -177,18 +178,19 @@ public class TicketManagementResource {
 		log.info("Tickets result - " + result);
 		return result;
 	}
-
-	@RequestMapping(value = "ticketCount/openCountSiteId/{siteId}", method = RequestMethod.GET)
-    public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId) {
+	
+	
+	@RequestMapping(value = "ticketCount/openCountSiteId/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
 		TicketReportCounts openTicketsCount = null;
-		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId);
+		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId,fromDate,toDate);
 		return openTicketsCount;
 	}
 
-    @RequestMapping(value = "ticketCount/severity/{siteId}", method = RequestMethod.GET)
-    public TicketReportCounts getOpenTicketCountBySeverity(@PathVariable("siteId") long siteId) {
+    @RequestMapping(value = "ticketCount/severity/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public TicketReportCounts getOpenTicketCountBySeverity(@PathVariable("siteId") long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
         TicketReportCounts openTicketsCount = null;
-        openTicketsCount = ticketService.getOpenTicketCountBySeverity(siteId);
+        openTicketsCount = ticketService.getOpenTicketCountBySeverity(siteId,fromDate,toDate);
         return openTicketsCount;
     }
 

@@ -11,6 +11,7 @@ import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
+import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -744,10 +747,33 @@ public class TicketManagementService extends AbstractService {
 	long inProgressCount = 0;
 
 
-    public TicketReportCounts getOpenTicketsCountBySiteId(long siteId) {
-    	openTicketCount = ticketRepository.findAssetTicketCountBySiteId(siteId,openStatus);
-    	assignedCount = ticketRepository.findAssetTicketCountBySiteId(siteId,assignedStatus);
-    	inProgressCount = ticketRepository.findAssetTicketCountBySiteId(siteId, inProgressStatus);
+    public TicketReportCounts getOpenTicketsCountBySiteId(long siteId, Date fdate,Date tdate) {
+    	
+    	 log.info("Ticket report params : siteId - "+ siteId + ", fdate - " + fdate + ", tdate -" + tdate );
+         Calendar startCal = DateUtils.toCalendar(fdate);
+ 	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
+ 	    	startCal.set(Calendar.MINUTE, 0);
+ 	    	//startCal.setTimeZone(TimeZone.getDefault());
+ 	    	Calendar endCal = DateUtils.toCalendar(tdate);
+ 	    	endCal.set(Calendar.HOUR_OF_DAY, 23);
+ 	    	endCal.set(Calendar.MINUTE, 59);
+ 	    	//endCal.setTimeZone(TimeZone.getDefault());
+         //java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+         Timestamp sqlDate = DateUtil.convertToTimestamp(startCal.getTime());
+ 	    	ZoneId  zone = ZoneId.of("Asia/Kolkata");
+         ZonedDateTime startZDate = sqlDate.toLocalDateTime().atZone(zone).withHour(0).withMinute(0);
+
+         //java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
+         Timestamp sqlEndDate = DateUtil.convertToTimestamp(endCal.getTime());
+         ZonedDateTime endZDate = sqlEndDate.toLocalDateTime().atZone(zone).withHour(23).withMinute(59);
+         //create sql dates
+         java.sql.Date sqlFromDate = DateUtil.convertToSQLDate(startCal.getTime());
+         java.sql.Date sqlToDate = DateUtil.convertToSQLDate(endCal.getTime());
+    	
+    	
+    	openTicketCount = ticketRepository.findAssetTicketCountBySiteId(siteId,openStatus,startZDate,endZDate);
+    	assignedCount = ticketRepository.findAssetTicketCountBySiteId(siteId,assignedStatus,startZDate,endZDate);
+    	inProgressCount = ticketRepository.findAssetTicketCountBySiteId(siteId, inProgressStatus,startZDate,endZDate);
     	log.debug("Ticket count on getOpenTicketsCountBySiteId - "+openTicketCount+" - "+assignedCount+" - "+inProgressCount);
     	TicketReportCounts openticketCount = new TicketReportCounts();
     	openticketCount.setOpenCounts(openTicketCount);
@@ -756,10 +782,33 @@ public class TicketManagementService extends AbstractService {
     	return openticketCount;
     }
 
-    public TicketReportCounts getOpenTicketCountBySeverity(long siteId){
-       long lowSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"low");
-       long mediumSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"medium");
-       long highSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"high");
+    public TicketReportCounts getOpenTicketCountBySeverity(long siteId, Date fdate,Date tdate){
+    	
+    	log.info("Ticket report params : siteId - "+ siteId + ", fdate - " + fdate + ", tdate -" + tdate );
+        Calendar startCal = DateUtils.toCalendar(fdate);
+	    	startCal.set(Calendar.HOUR_OF_DAY, 0);
+	    	startCal.set(Calendar.MINUTE, 0);
+	    	//startCal.setTimeZone(TimeZone.getDefault());
+	    	Calendar endCal = DateUtils.toCalendar(tdate);
+	    	endCal.set(Calendar.HOUR_OF_DAY, 23);
+	    	endCal.set(Calendar.MINUTE, 59);
+	    	//endCal.setTimeZone(TimeZone.getDefault());
+        //java.sql.Date sqlDate = new java.sql.Date(startCal.getTimeInMillis());
+        Timestamp sqlDate = DateUtil.convertToTimestamp(startCal.getTime());
+	    	ZoneId  zone = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime startZDate = sqlDate.toLocalDateTime().atZone(zone).withHour(0).withMinute(0);
+
+        //java.sql.Date sqlEndDate = new java.sql.Date(endCal.getTimeInMillis());
+        Timestamp sqlEndDate = DateUtil.convertToTimestamp(endCal.getTime());
+        ZonedDateTime endZDate = sqlEndDate.toLocalDateTime().atZone(zone).withHour(23).withMinute(59);
+        //create sql dates
+        java.sql.Date sqlFromDate = DateUtil.convertToSQLDate(startCal.getTime());
+        java.sql.Date sqlToDate = DateUtil.convertToSQLDate(endCal.getTime());
+        
+        
+       long lowSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"low",startZDate,endZDate);
+       long mediumSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"medium",startZDate,endZDate);
+       long highSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"high",startZDate,endZDate);
         TicketReportCounts severityCount = new TicketReportCounts();
         severityCount.setLowSeverityTicketCount(lowSeverityCount);
         severityCount.setMediumSeverityTicketCount(mediumSeverityCount);

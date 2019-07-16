@@ -74,11 +74,11 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
     @Query("SELECT t FROM Ticket t WHERE t.asset.id = :assetId and t.active = 'Y' order by t.title")
 	List<Ticket> findByAssetId(@Param("assetId") long assetId);
 
-    @Query("SELECT count(t) from Ticket t where t.site.id =:siteId and t.asset.id is not null and t.status =:status ")
-    long findAssetTicketCountBySiteId(@Param("siteId") Long siteId, @Param("status") String status);
+    @Query("SELECT count(t) from Ticket t where t.site.id =:siteId and t.asset.id is not null and t.status =:status and  t.createdDate between :startDate and :endDate  ")
+    long findAssetTicketCountBySiteId(@Param("siteId") Long siteId, @Param("status") String status, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
-    @Query("SELECT count(t) from Ticket t where t.site.id =:siteId and t.asset.id is not null and t.severity =:severity ")
-    long findAssetTicketCountBySiteIdByServerity(@Param("siteId") Long siteId, @Param("severity") String severity);
+    @Query("SELECT count(t) from Ticket t where t.site.id =:siteId and t.asset.id is not null and t.severity =:severity and  t.createdDate between :startDate and :endDate ")
+    long findAssetTicketCountBySiteIdByServerity(@Param("siteId") Long siteId, @Param("severity") String severity ,@Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 
     @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and t.status = :status and t.asset.id is not null and  t.createdDate between :startDate and :endDate ")
     long findAssetTicketCountBySiteIdAndDateRangeAndStatus(@Param("siteIds") List<Long> siteIds, @Param("status") String status ,@Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
