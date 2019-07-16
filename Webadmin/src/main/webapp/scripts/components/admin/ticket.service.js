@@ -119,14 +119,14 @@ angular.module('timeSheetApp')
         	});
         },
 
-        getAssetTicketOpenCount : function(siteId){
-            return $http.get('api/ticketCount/openCountSiteId/'+siteId).then(function (response) {
+        getAssetTicketOpenCount : function(siteId, fromDate, toDate){
+            return $http.get('api/ticketCount/openCountSiteId/'+siteId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
                 return response.data;
             })
         },
 
-        getAssetTicketSeverityCount: function(siteId){
-            return $http.get('api/ticketCount/severity/'+siteId).then(function (response) {
+        getAssetTicketSeverityCount: function(siteId, fromDate, toDate){
+            return $http.get('api/ticketCount/severity/'+siteId+'/fromDate/'+fromDate+'/toDate/'+toDate).then(function (response) {
                 return response.data;
             })
         }

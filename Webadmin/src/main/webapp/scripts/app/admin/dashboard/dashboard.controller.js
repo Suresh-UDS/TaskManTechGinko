@@ -77,6 +77,7 @@ angular.module('timeSheetApp')
         $scope.clientFilterDisable = false;
 
         $scope.assetOpenTicketsCount = [];
+        $scope.assetSeverityTicketsCount = [];
         /** root scope (searchCriteria) **/
         $rootScope.searchFilterCriteria = {};
 
@@ -1045,8 +1046,8 @@ angular.module('timeSheetApp')
         	if($scope.selectedSite) {
 
         	    var siteId = $scope.selectedSite.id;
-        	    $scope.loadAssetOpenTicketsCount(siteId);
-        	    $scope.loadAssetSeverityTicketCount(siteId);
+        	    $scope.loadAssetOpenTicketsCount(siteId,$scope.startDate,$scope.endDate);
+        	    $scope.loadAssetSeverityTicketCount(siteId,$scope.startDate,$scope.endDate);
 
         		/** root scope (searchCriteria) **/
         		if($scope.selectedRegion){
@@ -1501,19 +1502,12 @@ angular.module('timeSheetApp')
             });
         };
 
-        $scope.loadAssetSeverityTicketCount = function(siteId){
-            TicketComponent.getAssetTicketSeverityCount(siteId).then(function (data) {
+        $scope.loadAssetSeverityTicketCount = function(siteId, fromDate, toDate){
+
+            TicketComponent.getAssetTicketSeverityCount(siteId, fromDate, toDate).then(function (data) {
                 console.log("ticket count based on severity");
                 console.log(data);
-
-            })
-        };
-
-        $scope.loadAssetOpenTicketsCount = function (siteId) {
-            TicketComponent.getAssetTicketOpenCount(siteId).then(function (data) {
-                console.log(data);
-
-                $scope.assetOpenTicketsCount = data;
+                $scope.assetSeverityTicketsCount = data;
 
                 Highcharts.setOptions({
                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
@@ -1530,6 +1524,51 @@ angular.module('timeSheetApp')
                         };
                     })
                 });
+
+                Highcharts.chart('assetPieChartContainer', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                connectorColor: 'silver'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Share',
+                        data: [
+                            { name: 'Medium', y: $scope.assetSeverityTicketsCount.mediumSeverityTicketCount  },
+                            { name: 'High', y:  $scope.assetSeverityTicketsCount.highSeverityTicketCount },
+                            { name: 'Low', y: $scope.assetSeverityTicketsCount.lowSeverityTicketCount}
+                        ]
+                    }]
+                });
+
+            })
+        };
+
+        $scope.loadAssetOpenTicketsCount = function (siteId, fromDate, toDate) {
+            TicketComponent.getAssetTicketOpenCount(siteId, fromDate, toDate).then(function (data) {
+                console.log(data);
+
+                $scope.assetOpenTicketsCount = data;
+
+
 
                 Highcharts.chart('container', {
                     chart: {
@@ -2507,39 +2546,7 @@ angular.module('timeSheetApp')
         $scope.assetTicketPieCharts = function(){
 
 
-            Highcharts.chart('assetPieChartContainer', {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            connectorColor: 'silver'
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Share',
-                    data: [
-                        { name: 'In Progress', y: 61.41 },
-                        { name: 'Open', y: 11.84 },
-                        { name: 'Assigned', y: 30.85 }
-                    ]
-                }]
-            });
+
 
             // Build the chart
         };
