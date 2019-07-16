@@ -16,6 +16,12 @@ public class TicketReportCounts {
 
     private long count;
 
+    private long lowSeverityTicketCount;
+
+    private long mediumSeverityTicketCount;
+
+    private long highSeverityTicketCount;
+
     public String getStatus() {
         return status;
     }
@@ -70,5 +76,29 @@ public class TicketReportCounts {
 
     public void setInProgressCounts(long inProgressCounts) {
         this.inProgressCounts = inProgressCounts;
+    }
+
+    public long getLowSeverityTicketCount() {
+        return lowSeverityTicketCount;
+    }
+
+    public void setLowSeverityTicketCount(long lowSeverityTicketCount) {
+        this.lowSeverityTicketCount = lowSeverityTicketCount;
+    }
+
+    public long getMediumSeverityTicketCount() {
+        return mediumSeverityTicketCount;
+    }
+
+    public void setMediumSeverityTicketCount(long mediumSeverityTicketCount) {
+        this.mediumSeverityTicketCount = mediumSeverityTicketCount;
+    }
+
+    public long getHighSeverityTicketCount() {
+        return highSeverityTicketCount;
+    }
+
+    public void setHighSeverityTicketCount(long highSeverityTicketCount) {
+        this.highSeverityTicketCount = highSeverityTicketCount;
     }
 }

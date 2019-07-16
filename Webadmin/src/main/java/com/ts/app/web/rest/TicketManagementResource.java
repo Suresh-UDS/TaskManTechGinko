@@ -60,11 +60,11 @@ public class TicketManagementResource {
 
 	@Inject
 	private TicketManagementService ticketService;
-	
+
 	@Inject
 	private SchedulerHelperService schedulerHelperService;
-	
-	@Inject 
+
+	@Inject
 	private ReportDatabaseService reportDatabaseService;
 
 	@RequestMapping(path = "/ticket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -177,21 +177,21 @@ public class TicketManagementResource {
 		log.info("Tickets result - " + result);
 		return result;
 	}
-	
-//	@RequestMapping(value = "ticketCount/{assetId}/openCountAssetId", method = RequestMethod.GET)
-//	public TicketReportCounts getOpenTicketCountByAssetId(@PathVariable("assetId") long assetId){
-//		TicketReportCounts openCount = null;
-//		openCount = ticketService.getOpenCountByAssetId(assetId);
-//		return openCount;
-//	}
-//	
-//	@RequestMapping(value = "ticketCount/{siteId/openCountSiteId}", method = RequestMethod.GET)
-//    public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId) {
-//		TicketReportCounts openTicketsCount = null;
-//		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId);
-//		return openTicketsCount;
-//	}
-	
+
+	@RequestMapping(value = "ticketCount/openCountSiteId/{siteId}", method = RequestMethod.GET)
+    public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId) {
+		TicketReportCounts openTicketsCount = null;
+		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId);
+		return openTicketsCount;
+	}
+
+    @RequestMapping(value = "ticketCount/severity/{siteId}", method = RequestMethod.GET)
+    public TicketReportCounts getOpenTicketCountBySeverity(@PathVariable("siteId") long siteId) {
+        TicketReportCounts openTicketsCount = null;
+        openTicketsCount = ticketService.getOpenTicketCountBySeverity(siteId);
+        return openTicketsCount;
+    }
+
 	@RequestMapping(value = "/ticket/image/upload", method = RequestMethod.POST)
 	public ResponseEntity<?> upload(@RequestParam("ticketId") long ticketId,
 			@RequestParam("ticketFile") MultipartFile file) throws JSONException {
@@ -208,20 +208,20 @@ public class TicketManagementResource {
 	public String findQuotationImage(@PathVariable("id") long ticketId, @PathVariable("imageId") String imageId) {
 		return ticketService.getTicketImage(ticketId, imageId);
 	}
-	
+
 	@RequestMapping(value = "/ticket/uploadExistingFile", method = RequestMethod.POST)
 	public String uploadExistingTicketImages() {
 		log.debug("Upload existing ticket image S3");
 		return ticketService.uploadExistingTicketImg();
 	}
-	
+
 	@RequestMapping(value = "/checkDailyReports", method = RequestMethod.GET)
 	public String checkdailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date date, @RequestParam("onDemand") boolean onDemand, @RequestParam(value="siteId", required=false) long siteId) {
 		log.debug("check daily report called...");
 		schedulerHelperService.sendDaywiseReportEmail(date, onDemand, siteId);
 		return "successfully send reports!";
 	}
-	
-	
+
+
 
 }

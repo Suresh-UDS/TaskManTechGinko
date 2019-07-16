@@ -71,9 +71,9 @@ angular.module('timeSheetApp')
                 return response.data;
             })
         },
-        
-        getTicketsByAssetId : function(id) { 
-	        	return $http.get('api/ticket/'+id+'/view').then(function(response) { 
+
+        getTicketsByAssetId : function(id) {
+	        	return $http.get('api/ticket/'+id+'/view').then(function(response) {
 	        		console.log(response);
 	        		return response.data;
 	        	});
@@ -112,11 +112,24 @@ angular.module('timeSheetApp')
                return response.data;
             });
         },
-        
+
         getAverageAge : function() {
         	return $http.get('api/getAvgTicket').then(function(response) {
         		return response.data;
         	});
+        },
+
+        getAssetTicketOpenCount : function(siteId){
+            return $http.get('api/ticketCount/openCountSiteId/'+siteId).then(function (response) {
+                return response.data;
+            })
+        },
+
+        getAssetTicketSeverityCount: function(siteId){
+            return $http.get('api/ticketCount/severity/'+siteId).then(function (response) {
+                return response.data;
+            })
         }
+
     };
 });

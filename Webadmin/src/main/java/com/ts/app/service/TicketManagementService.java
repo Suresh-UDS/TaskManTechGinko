@@ -734,38 +734,40 @@ public class TicketManagementService extends AbstractService {
         List<Ticket> tickets = ticketRepository.findByAssetId(assetId);
         return mapperUtil.toModelList(tickets, TicketDTO.class);
     }
-   
-      
-//	String openStatus = TicketStatus.OPEN.toString();
-//	String assignedStatus = TicketStatus.ASSIGNED.toString();
-//	String inProgressStatus = TicketStatus.INPROGRESS.toString();
-//	long openTicketCount = 0;
-//	long assignedCount = 0;
-//	long inProgressCount = 0;
-//	
-//    public TicketReportCounts getOpenCountByAssetId(long assetId){
-//    	openTicketCount = ticketRepository.findOpenCountByAssetId(assetId,openStatus);
-//    	assignedCount = ticketRepository.findAssignedCountByAssetId(assetId,assignedStatus);
-//    	inProgressCount = ticketRepository.findInProgressCountByAssetId(assetId,inProgressStatus);
-//    	TicketReportCounts openCount = new TicketReportCounts();
-//    	openCount.setOpenCounts(openTicketCount);
-//        openCount.setAssignedCounts(assignedCount);
-//        openCount.setInProgressCounts(inProgressCount);
-//    	return openCount;
-//    }
-//
-//    public TicketReportCounts getOpenTicketsCountBySiteId(long siteId) {
-//    	openTicketCount = ticketRepository.findOpenTicketsCountBySiteId(siteId,openStatus);
-//    	assignedCount = ticketRepository.findAssignedTicketsCountBySiteId(siteId,assignedStatus);
-//    	inProgressCount = ticketRepository.findInProgressTicketsCountBySiteId(siteId, inProgressStatus);
-//    	TicketReportCounts openticketCount = new TicketReportCounts();
-//    	openticketCount.setOpenCounts(openTicketCount);
-//    	openticketCount.setAssignedCounts(assignedCount);
-//    	openticketCount.setInProgressCounts(inProgressCount);
-//    	return openticketCount;
-//    }
-    
-    
+
+
+	String openStatus = TicketStatus.OPEN.toString();
+	String assignedStatus = TicketStatus.ASSIGNED.toString();
+	String inProgressStatus = TicketStatus.INPROGRESS.toString();
+	long openTicketCount = 0;
+	long assignedCount = 0;
+	long inProgressCount = 0;
+
+
+    public TicketReportCounts getOpenTicketsCountBySiteId(long siteId) {
+    	openTicketCount = ticketRepository.findAssetTicketCountBySiteId(siteId,openStatus);
+    	assignedCount = ticketRepository.findAssetTicketCountBySiteId(siteId,assignedStatus);
+    	inProgressCount = ticketRepository.findAssetTicketCountBySiteId(siteId, inProgressStatus);
+    	log.debug("Ticket count on getOpenTicketsCountBySiteId - "+openTicketCount+" - "+assignedCount+" - "+inProgressCount);
+    	TicketReportCounts openticketCount = new TicketReportCounts();
+    	openticketCount.setOpenCounts(openTicketCount);
+    	openticketCount.setAssignedCounts(assignedCount);
+    	openticketCount.setInProgressCounts(inProgressCount);
+    	return openticketCount;
+    }
+
+    public TicketReportCounts getOpenTicketCountBySeverity(long siteId){
+       long lowSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"low");
+       long mediumSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"medium");
+       long highSeverityCount = ticketRepository.findAssetTicketCountBySiteIdByServerity(siteId,"high");
+        TicketReportCounts severityCount = new TicketReportCounts();
+        severityCount.setLowSeverityTicketCount(lowSeverityCount);
+        severityCount.setMediumSeverityTicketCount(mediumSeverityCount);
+        severityCount.setHighSeverityTicketCount(highSeverityCount);
+        return severityCount;
+    }
+
+
     @Transactional
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 
