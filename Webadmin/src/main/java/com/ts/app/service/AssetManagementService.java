@@ -218,14 +218,11 @@ public class AssetManagementService extends AbstractService {
 		asset.setAmcVendor(vendor);
 		if(asset.getParentAsset()!=null) {
 			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAsset().getId());
-//			log.info("Parent===>"+parentAsse.getParentAsset().getId());
-//			System.out.println("Parent===>"+parentAsse.getParentAsset().getId());
 			if(!StringUtils.isEmpty(parentAsse)) {
-	//		asset.setParentAsset(assetDTO.getParentAsset());
 			asset.setParentAsset(parentAsse);
 			}
 		}
-        //asset.setParentAsset(assetDTO.getParentAsset());
+
 		//create status history
 		if(!StringUtils.isEmpty(AssetStatus.valueOf(assetDTO.getStatus()).getStatus())) {
 			AssetStatusHistory assetStatusHistory = new AssetStatusHistory();
