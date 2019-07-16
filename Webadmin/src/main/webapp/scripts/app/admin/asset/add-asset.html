@@ -89,7 +89,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetHierarchy();getAssetGrpHierarchy();" name="AssetSite"  required tabindex="2">
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetHierarchy();getAssetGrpHierarchy(); loadAssetType();" name="AssetSite"  required tabindex="2">
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -236,7 +236,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-3" ng-show="isReleationShipEnabled">
- 
+
                                                                                 <div class="form-group selectcon is-empty">
 
                                                                                     <div class="row">
