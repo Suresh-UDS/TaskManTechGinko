@@ -73,10 +73,16 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t WHERE t.asset.id = :assetId and t.active = 'Y' order by t.title")
 	List<Ticket> findByAssetId(@Param("assetId") long assetId);
-    
-    @Query("SELECT count(t) FROM Ticket WHERE t.asset.id = assetId and t.status = :status and t.active = 'Y'")
-    List<Ticket> findOpenCountByAssetid(@Param("assetId") long assetId,@Param("status") TicketStatus status);
 
+    @Query("SELECT count(t) FROM Ticket WHERE t.asset.id = assetId and t.status = :status")
+    long findOpenCountByAssetId(@Param("assetId") long assetId,@Param("status") String status);
+
+    @Query("SELECT count(t) FROM Ticket WHERE t.asset.id = assetId and t.status :status")
+    long findAssignedCountByAssetId(@Param("assetId") long assetId,@Param("status") String status);
+    
+    @Query("SELECT count(t) FROM Ticket t WHERE asset.id = assetId and t.status = :status")
+    long findInProgressCountByAssetId(@Param("assetId") long assetId,@Param("status") String status);
+    
     @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and  t.createdDate between :startDate and :endDate ")
 	long findCountBySiteIdAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);
 

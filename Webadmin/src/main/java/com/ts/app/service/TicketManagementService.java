@@ -736,12 +736,25 @@ public class TicketManagementService extends AbstractService {
     }
    
       
-    public List<TicketDTO> getOpenCountByAssetId(long assetId){
-    	TicketStatus status = TicketStatus.OPEN;
-    	List<Ticket> ticketsCount = ticketRepository.findOpenCountByAssetid(assetId,status);
-    	return mapperUtil.toModelList(ticketsCount, TicketDTO.class);
+    public TicketReportCounts getOpenCountByAssetId(long assetId){
+    	String openStatus = TicketStatus.OPEN.toString();
+    	String assignedStatus = TicketStatus.ASSIGNED.toString();
+    	String inProgressStatus = TicketStatus.INPROGRESS.toString();
+    	long openTicketCount = 0;
+    	long assignedCount = 0;
+    	long inProgressCount = 0;
+    	openTicketCount = ticketRepository.findOpenCountByAssetId(assetId,openStatus);
+    	assignedCount = ticketRepository.findAssignedCountByAssetId(assetId,assignedStatus);
+    	inProgressCount = ticketRepository.findInProgressCountByAssetId(assetId,inProgressStatus);
+    	TicketReportCounts reportCount = new TicketReportCounts();
+        reportCount.setOpenCounts(openTicketCount);
+        reportCount.setAssignedCounts(assignedCount);
+        reportCount.setInProgressCounts(inProgressCount);
+    	return  reportCount;
     }
 
+    
+    
     @Transactional
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {
 

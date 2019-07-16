@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketReportCounts;
 import com.ts.app.domain.TicketStatus;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.MapperUtil;
@@ -177,11 +179,13 @@ public class TicketManagementResource {
 	}
 	
 	@RequestMapping(value = "ticketCount/{assetId}/openCount", method = RequestMethod.GET)
-	public List<TicketDTO> getOpenTicketCountByAssetId(@PathVariable("assetId") long assetId){
-		List<TicketDTO> openCount = null;
+	public TicketReportCounts getOpenTicketCountByAssetId(@PathVariable("assetId") long assetId){
+		TicketReportCounts openCount = null;
 		openCount = ticketService.getOpenCountByAssetId(assetId);
 		return openCount;
 	}
+	
+	//@RequestMapping(value = "ticketCount/{siteId/openCount}")
 
 	@RequestMapping(value = "/ticket/image/upload", method = RequestMethod.POST)
 	public ResponseEntity<?> upload(@RequestParam("ticketId") long ticketId,
