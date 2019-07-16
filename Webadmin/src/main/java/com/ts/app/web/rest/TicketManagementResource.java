@@ -178,15 +178,20 @@ public class TicketManagementResource {
 		return result;
 	}
 	
-	@RequestMapping(value = "ticketCount/{assetId}/openCount", method = RequestMethod.GET)
-	public TicketReportCounts getOpenTicketCountByAssetId(@PathVariable("assetId") long assetId){
-		TicketReportCounts openCount = null;
-		openCount = ticketService.getOpenCountByAssetId(assetId);
-		return openCount;
-	}
+//	@RequestMapping(value = "ticketCount/{assetId}/openCountAssetId", method = RequestMethod.GET)
+//	public TicketReportCounts getOpenTicketCountByAssetId(@PathVariable("assetId") long assetId){
+//		TicketReportCounts openCount = null;
+//		openCount = ticketService.getOpenCountByAssetId(assetId);
+//		return openCount;
+//	}
+//	
+//	@RequestMapping(value = "ticketCount/{siteId/openCountSiteId}", method = RequestMethod.GET)
+//    public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId) {
+//		TicketReportCounts openTicketsCount = null;
+//		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId);
+//		return openTicketsCount;
+//	}
 	
-	//@RequestMapping(value = "ticketCount/{siteId/openCount}")
-
 	@RequestMapping(value = "/ticket/image/upload", method = RequestMethod.POST)
 	public ResponseEntity<?> upload(@RequestParam("ticketId") long ticketId,
 			@RequestParam("ticketFile") MultipartFile file) throws JSONException {

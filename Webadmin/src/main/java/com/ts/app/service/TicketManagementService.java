@@ -736,23 +736,34 @@ public class TicketManagementService extends AbstractService {
     }
    
       
-    public TicketReportCounts getOpenCountByAssetId(long assetId){
-    	String openStatus = TicketStatus.OPEN.toString();
-    	String assignedStatus = TicketStatus.ASSIGNED.toString();
-    	String inProgressStatus = TicketStatus.INPROGRESS.toString();
-    	long openTicketCount = 0;
-    	long assignedCount = 0;
-    	long inProgressCount = 0;
-    	openTicketCount = ticketRepository.findOpenCountByAssetId(assetId,openStatus);
-    	assignedCount = ticketRepository.findAssignedCountByAssetId(assetId,assignedStatus);
-    	inProgressCount = ticketRepository.findInProgressCountByAssetId(assetId,inProgressStatus);
-    	TicketReportCounts reportCount = new TicketReportCounts();
-        reportCount.setOpenCounts(openTicketCount);
-        reportCount.setAssignedCounts(assignedCount);
-        reportCount.setInProgressCounts(inProgressCount);
-    	return  reportCount;
-    }
-
+//	String openStatus = TicketStatus.OPEN.toString();
+//	String assignedStatus = TicketStatus.ASSIGNED.toString();
+//	String inProgressStatus = TicketStatus.INPROGRESS.toString();
+//	long openTicketCount = 0;
+//	long assignedCount = 0;
+//	long inProgressCount = 0;
+//	
+//    public TicketReportCounts getOpenCountByAssetId(long assetId){
+//    	openTicketCount = ticketRepository.findOpenCountByAssetId(assetId,openStatus);
+//    	assignedCount = ticketRepository.findAssignedCountByAssetId(assetId,assignedStatus);
+//    	inProgressCount = ticketRepository.findInProgressCountByAssetId(assetId,inProgressStatus);
+//    	TicketReportCounts openCount = new TicketReportCounts();
+//    	openCount.setOpenCounts(openTicketCount);
+//        openCount.setAssignedCounts(assignedCount);
+//        openCount.setInProgressCounts(inProgressCount);
+//    	return openCount;
+//    }
+//
+//    public TicketReportCounts getOpenTicketsCountBySiteId(long siteId) {
+//    	openTicketCount = ticketRepository.findOpenTicketsCountBySiteId(siteId,openStatus);
+//    	assignedCount = ticketRepository.findAssignedTicketsCountBySiteId(siteId,assignedStatus);
+//    	inProgressCount = ticketRepository.findInProgressTicketsCountBySiteId(siteId, inProgressStatus);
+//    	TicketReportCounts openticketCount = new TicketReportCounts();
+//    	openticketCount.setOpenCounts(openTicketCount);
+//    	openticketCount.setAssignedCounts(assignedCount);
+//    	openticketCount.setInProgressCounts(inProgressCount);
+//    	return openticketCount;
+//    }
     
     
     @Transactional
