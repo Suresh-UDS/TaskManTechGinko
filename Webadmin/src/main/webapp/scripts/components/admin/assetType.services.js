@@ -50,7 +50,7 @@ angular.module('timeSheetApp')
 			},
 
             findBySiteId: function (siteId) {
-                return $http.get('api/assetType/'+siteId).then(function (response) {
+                return $http.get('api/assetType/siteId/'+siteId).then(function (response) {
                     return response.data;
                 });
             },

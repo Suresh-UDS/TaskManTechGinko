@@ -120,7 +120,47 @@
                                 
                                 <guages-list class="col-md-4 col-lg-4 col-sm-4" has-permision="Site:List" ng-repeat="guageResult in guageResults" meterValue="guageResult.meterValue" title="{{guageResult.title}}" data="guageResult" data-method="setCurrentReading" ></guage-list>
                                 
+                          
+                        </div>
 
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Accordion end -->
+
+        <!-- Accordion Pie Chart for Asset Tickets start -->
+
+        <div class="panel-group" id="accordion" role="tablist"
+             aria-multiselectable="true">
+
+            <!-- Main panel start -->
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                       data-target="#collapseAssetTicketPie" aria-expanded="true"
+                       aria-controls="collapseOne" class="collapsed">
+                        <h4 class="panel-title">
+                            Asset Ticket Info <i class="material-icons">keyboard_arrow_down</i>
+                        </h4>
+                    </a>
+                </div>
+
+                <div id="collapseAssetTicketPie"
+                     class="panel-collapse collapse collapseOne in" role="tabpanel"
+                     aria-labelledby="headingOne" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-sm-1">
+                                <div id="container" style="min-width: 600px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6 col-sm-1">
+                                <div id="assetPieChartContainer" style="min-width: 600px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                            </div>
                         </div>
 
                     </div>
@@ -672,10 +712,12 @@
                 </div>
                 <!-- Quotation panel end -->
             </div>
-            
+
         </div>
 
         <!-- Accordion end -->
+
+
 
     </div>
 
