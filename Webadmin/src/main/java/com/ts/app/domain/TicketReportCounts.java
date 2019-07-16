@@ -6,6 +6,8 @@ public class TicketReportCounts {
 
     private long assignedCounts;
 
+    private long inProgressCounts;
+
     private long openCounts;
 
     private long closedCounts;
@@ -60,5 +62,13 @@ public class TicketReportCounts {
 
     public void setCount(long count) {
         this.count = count;
+    }
+
+    public long getInProgressCounts() {
+        return inProgressCounts;
+    }
+
+    public void setInProgressCounts(long inProgressCounts) {
+        this.inProgressCounts = inProgressCounts;
     }
 }
