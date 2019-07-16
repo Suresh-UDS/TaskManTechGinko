@@ -1,6 +1,9 @@
 package com.ts.app.repository;
 
 import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketStatus;
+
+import org.junit.runners.Parameterized.Parameters;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -70,6 +73,9 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t WHERE t.asset.id = :assetId and t.active = 'Y' order by t.title")
 	List<Ticket> findByAssetId(@Param("assetId") long assetId);
+    
+    @Query("SELECT count(t) FROM Ticket WHERE t.asset.id = assetId and t.status = :status and t.active = 'Y'")
+    List<Ticket> findOpenCountByAssetid(@Param("assetId") long assetId,@Param("status") TicketStatus status);
 
     @Query("SELECT count(t) from Ticket t where t.site.id IN (:siteIds) and  t.createdDate between :startDate and :endDate ")
 	long findCountBySiteIdAndDateRange(@Param("siteIds") List<Long> siteIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate);

@@ -734,6 +734,13 @@ public class TicketManagementService extends AbstractService {
         List<Ticket> tickets = ticketRepository.findByAssetId(assetId);
         return mapperUtil.toModelList(tickets, TicketDTO.class);
     }
+   
+      
+    public List<TicketDTO> getOpenCountByAssetId(long assetId){
+    	TicketStatus status = TicketStatus.OPEN;
+    	List<Ticket> ticketsCount = ticketRepository.findOpenCountByAssetid(assetId,status);
+    	return mapperUtil.toModelList(ticketsCount, TicketDTO.class);
+    }
 
     @Transactional
     public TicketDTO uploadFile(TicketDTO ticketDTO) throws JSONException {

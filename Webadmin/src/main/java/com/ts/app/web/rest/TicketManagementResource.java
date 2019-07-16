@@ -175,6 +175,13 @@ public class TicketManagementResource {
 		log.info("Tickets result - " + result);
 		return result;
 	}
+	
+	@RequestMapping(value = "ticketCount/{assetId}/openCount", method = RequestMethod.GET)
+	public List<TicketDTO> getOpenTicketCountByAssetId(@PathVariable("assetId") long assetId){
+		List<TicketDTO> openCount = null;
+		openCount = ticketService.getOpenCountByAssetId(assetId);
+		return openCount;
+	}
 
 	@RequestMapping(value = "/ticket/image/upload", method = RequestMethod.POST)
 	public ResponseEntity<?> upload(@RequestParam("ticketId") long ticketId,
