@@ -884,6 +884,34 @@ angular.module('timeSheetApp')
     $rootScope.exportStatusObj = {};
 
 
+	$scope.exportAllMeterReadingData = function(type){
+        $scope.searchCriteria.exportType = type;
+        $scope.typeMsg = type;
+        $rootScope.exportStatusObj = {};
+        $scope.downloader=true;
+        $scope.downloaded = false;
+        $scope.searchCriteria.report = true;
+        $scope.searchCriteria.columnName = "createdDate";
+        $scope.searchCriteria.sortByAsc = false;
+        AssetComponent.exportAllData($scope.searchCriteria).then(function(data){
+            var result = data.results[0];
+            console.log(result);
+            console.log(result.file + ', ' + result.status + ',' + result.msg);
+            var exportAllStatus = {
+                fileName : result.file,
+                exportMsg : 'Exporting All...',
+                url: result.url
+            };
+            $rootScope.exportStatusObj = exportAllStatus;
+            console.log('exportStatusObj size - ' + $rootScope.exportStatusObj.length);
+            $scope.start();
+        }).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
+	};
+	
     $scope.exportAllData = function(type){
         $scope.searchCriteria.exportType = type;
         $scope.typeMsg = type;

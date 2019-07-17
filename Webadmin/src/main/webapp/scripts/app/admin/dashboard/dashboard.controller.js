@@ -28,10 +28,26 @@ angular.module('timeSheetApp')
                     ]
                   }};
                 scope.xAxis = []
-                for(var i=0; i < scope.readings.length; i++) {
-                    var indexItm = [];
-                    scope.xAxis.push(scope.readings[i].date);
-                    scope.pushingItems.data.push(scope.readings[i].value);
+                if(scope.readings.length > 0){
+
+                    for(var i=0; i < scope.readings.length; i++) {
+                        var indexItm = [];
+                        scope.xAxis.push(scope.readings[i].date);
+                        scope.pushingItems.data.push(scope.readings[i].value);
+
+                    }
+                    
+                }
+                else{
+
+                    for(i=6;i>=0;i--){
+
+                        var date = moment( new Date() );
+                        date.subtract(i,'days');
+                        scope.xAxis.push(date.format('Y-MM-D'));
+                        scope.pushingItems.data.push(0);
+
+                    }
 
                 }
                 console.log("Asset Reading chart directives -" +JSON.stringify(scope.pushingItems));
@@ -427,7 +443,7 @@ angular.module('timeSheetApp')
 
                         difference = meterValue - parentMeterValue;
 
-                        guageResultObject.meterValue = ((parentMeterValue-difference)/parentMeterValue) * 100;
+                        guageResultObject.meterValue = difference == 0 ? 0 : (((parentMeterValue-difference)/parentMeterValue) * 100);
 
                     }
                     else{
