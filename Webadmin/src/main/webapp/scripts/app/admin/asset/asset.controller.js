@@ -760,22 +760,6 @@ angular.module('timeSheetApp')
 				$scope.clearField = false;
 				$scope.uiType.splice(0,$scope.uiType.length);
                 var siteId = $scope.selectedSites ? $scope.selectedSites.id : 0;
-                if(siteId>0){
-                    AssetTypeComponent.findBySiteId(siteId).then(function (data) {
-                        console.log("Loading AssetType By siteId-- " , data);
-                        //$scope.selectedAssetType = null;
-                        $scope.searchAssetType = null;
-                        $scope.assetTypes = data;
-                        //Filter
-                        for(var i=0;i<$scope.assetTypes.length;i++)
-                        {
-                            $scope.uiType[i] = $scope.assetTypes[i].name;
-                        }
-                        $scope.typeFilterDisable = false;
-                        //
-                    });
-
-                }else{
                     AssetTypeComponent.findAll().then(function (data) {
                         ////console.log("Loading all AssetType -- " , data)
                         //$scope.selectedAssetType = null;
@@ -790,7 +774,6 @@ angular.module('timeSheetApp')
                         $scope.typeFilterDisable = false;
                         //
                     });
-                }
 
 
 			};
@@ -806,6 +789,7 @@ angular.module('timeSheetApp')
             }
 
 			$scope.loadAssetGroup = function () {
+			    console.log("Loading Asset group");
 				$scope.searchAssetGroup = null;
 				$scope.clearField = false;
 				$scope.uiGroup.splice(0,$scope.uiGroup.length);
@@ -2810,6 +2794,7 @@ angular.module('timeSheetApp')
 							$scope.assetGroup = "";
 							$scope.showNotifications('top','center','success','Asset Group has been added Successfully!!');
 							$scope.loadAssetGroup();
+							$scope.getAssetGrpHierarchy();
 						}
 						$scope.loadingStop();
 
