@@ -178,16 +178,16 @@ public class TicketManagementResource {
 		log.info("Tickets result - " + result);
 		return result;
 	}
-	
-	
-	@RequestMapping(value = "ticketCount/openCountSiteId/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+
+
+	@RequestMapping(value = "/ticketCount/openCountSiteId/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
     public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
 		TicketReportCounts openTicketsCount = null;
 		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId,fromDate,toDate);
 		return openTicketsCount;
 	}
 
-    @RequestMapping(value = "ticketCount/severity/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    @RequestMapping(value = "/ticketCount/severity/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
     public TicketReportCounts getOpenTicketCountBySeverity(@PathVariable("siteId") long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
         TicketReportCounts openTicketsCount = null;
         openTicketsCount = ticketService.getOpenTicketCountBySeverity(siteId,fromDate,toDate);
