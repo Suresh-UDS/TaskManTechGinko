@@ -2494,6 +2494,18 @@ ul.ckLstDot li:before {
 span.AppliedFilterTxtCon span.label-info{
     line-height: 25px !important;
 }
-
-
-
+.highcharts-credits{
+    display: none;
+}
+.loadingGuage{
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    color:#000;
+}
+.loadingGuage div{
+    background:rgba(244, 67, 54, 0.2);
+    height: 100%;
+    position: absolute;
+    z-index: 500;
+}

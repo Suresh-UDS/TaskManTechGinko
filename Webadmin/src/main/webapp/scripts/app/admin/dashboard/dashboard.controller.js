@@ -15,12 +15,12 @@ angular.module('timeSheetApp')
 
                 // $scope.sampleData = data[0];
                 scope.readings = scope.data.readings;
-                scope.pushingItems = [];
+                scope.pushingItems = {"name":"Readings","data":[]};
+                scope.xAxis = []
                 for(var i=0; i < scope.readings.length; i++) {
                     var indexItm = [];
-                    indexItm[0] = scope.readings[i].date;
-                    indexItm[1] = scope.readings[i].value;
-                    scope.pushingItems.push(indexItm);
+                    scope.xAxis.push(scope.readings[i].date);
+                    scope.pushingItems.data.push(scope.readings[i].value);
                 }
                 console.log("Asset Reading chart directives -" +JSON.stringify(scope.pushingItems));
 
@@ -29,22 +29,192 @@ angular.module('timeSheetApp')
                         type: 'column'
                     },
                     title: {
-                        text: scope.title
+                        text: scope.data.assetName
                     },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                            }
+                    xAxis: {
+                        categories: scope.xAxis,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Consumtion'
                         }
                     },
-                    series: [{
-                        data: scope.pushingItems
-                    }]
+                    tooltip: {
+                        backgroundColor: '#FFF',
+                        borderColor: '#ff9800',
+                        borderRadius: 10,
+                        borderWidth: 3
+    /*
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><br>',
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}: </span><br>' +
+                            '<b>{point.y:.1f} </b>',
+                        footerFormat: '',
+                        shared: true,
+                        useHTML: true */
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [scope.pushingItems]
                 });
+            }
+        };
+    })
+    .directive('guagesList', function ($timeout) {
+        return {
+            restrict: 'E',
+            template: '<div></div>',
+            scope: {
+                title: '@', 
+                data: '=',
+                fromDirectiveFn: '=method'
+            },
+            link: function (scope, element, attrs) {
+
+               var guageData = scope.data;
+                
+                if(!guageData.meterValue){
+
+                    guageData.meterValue = 0;
+
+                }
+
+                element.parent().append('<div id="'+scope.data.id+'" class="col-lg-4 loadingGuage"></div>');
+
+                $(element[0]).click(function(){
+
+                    console.log(scope.data);
+
+                    if(scope.data.data && scope.data.data.length > 0){
+
+                        scope.fromDirectiveFn(scope.data);
+                        $('#deleteModal').modal();
+
+                    }
+                    
+                })
+
+                var guageChartInfo = {
+
+                    chart: {
+                        type: 'gauge',
+                        plotBackgroundColor: null,
+                        plotBackgroundImage: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false
+                    },
+                
+                    title: {
+                        text: scope.title
+                    },
+                
+                    pane: {
+                        startAngle: -150,
+                        endAngle: 150,
+                        background: [{
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [
+                                    [0, '#FFF'],
+                                    [1, '#333']
+                                ]
+                            },
+                            borderWidth: 0,
+                            outerRadius: '109%'
+                        }, {
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [
+                                    [0, '#333'],
+                                    [1, '#FFF']
+                                ]
+                            },
+                            borderWidth: 1,
+                            outerRadius: '107%'
+                        }, {
+                            // default background
+                        }, {
+                            backgroundColor: '#DDD',
+                            borderWidth: 0,
+                            outerRadius: '105%',
+                            innerRadius: '103%'
+                        }]
+                    },
+                
+                    // the value axis
+                    yAxis: {
+                        min: 0,
+                        max: 100,
+                
+                        minorTickInterval: 'auto',
+                        minorTickWidth: 1,
+                        minorTickLength: 10,
+                        minorTickPosition: 'inside',
+                        minorTickColor: '#666',
+                
+                        tickPixelInterval: 30,
+                        tickWidth: 2,
+                        tickPosition: 'inside',
+                        tickLength: 10,
+                        tickColor: '#666',
+                        labels: {
+                            step: 2,
+                            rotation: 'auto'
+                        },
+                        title: {
+                            text: scope.data.label
+                        },
+                        plotBands: [{
+                            from: 0,
+                            to: 20,
+                            color: '#55BF3B' // green
+                        }, {
+                            from: 20,
+                            to: 70,
+                            color: '#DDDF0D' // yellow
+                        }, {
+                            from: 70,
+                            to: 100,
+                            color: '#DF5353' // red
+                        }]
+                    },
+                
+                    series: [{
+                        name: scope.data.label,
+                        data:  [guageData.meterValue],
+                        tooltip: {
+                            valueSuffix: " "+scope.data.unit
+                        }
+                    }]
+                
+                };
+                
+                scope.$watch('data.data', function(newValue, oldValue) {
+
+                    console.log(newValue);
+
+                });
+
+                scope.$watch('data.meterValue', function(newValue, oldValue) {
+
+                    guageChartInfo.series[0].data = [newValue];
+                    
+                    Highcharts.chart(element[0], guageChartInfo);
+ 
+                });
+
+                $timeout(function(){
+
+                    Highcharts.chart(element[0], guageChartInfo);
+
+                });
+                
+                
             }
         };
     })
@@ -54,6 +224,8 @@ angular.module('timeSheetApp')
         $rootScope.loginView = false;
 
         $scope.ready = false;
+
+        $rootScope.currentReadings = {};
 
         if($rootScope.loginView == false){
             $(".content").removeClass("remove-mr");
@@ -112,6 +284,11 @@ angular.module('timeSheetApp')
         		totalJobCount: 0
         };
 
+        $scope.guageResults = [
+            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"Ltr","label":"Fuel","id":"fuelGuageContainer"},
+            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"Ltr","label":"Water","id":"waterGuageContainer"},
+            {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":"Kwh","label":"Power","id":"powerGuageContainer"}
+        ]
 
         $scope.init = function() {
             $scope.loadAllProjects();
@@ -126,33 +303,177 @@ angular.module('timeSheetApp')
             // $scope.loadCharts();
             $scope.loadAllJobs();
             $scope.loadAllQuotations();
-            $scope.loadAllTickets();
-            $scope.fuelGauge1();
-            $scope.fuelGauge2();
-            $scope.fuelGauge3();
+            $scope.loadAllTickets(); 
             $scope.assetTicketPieCharts();
-            var searchCriteria = {};
-            searchCriteria.fromDate = new Date;
-            searchCriteria.toDate = new Date;
-            searchCriteria.siteId = 224;
-            searchCriteria.assetTypeName = "ENERGY METER";
-
-            DashboardComponent.getReadingsFromDate(searchCriteria).then(function(data) {
-               console.log(JSON.stringify(data));
-               $scope.chartSamples = data;
-            });
-
 
         };
 
+        $scope.buildGuages = function(){
+
+            for(var i in $scope.guageResults){
+
+                var searchCriteria = {};
+                searchCriteria.fromDate = new Date;
+                searchCriteria.toDate = new Date;
+                searchCriteria.siteId = $scope.selectedSite.id;
+                searchCriteria.assetTypeName = $scope.guageResults[i].guageType;
+    
+                $scope.loadGuageData(searchCriteria,$scope.guageResults[i]);
+    
+           }
+
+        }
+        
+        $scope.clearGuageResults = function(){
+
+            for(var i in $scope.guageResults){
+
+                $scope.guageResults[i].data = [];
+                $scope.guageResults[i].meterValue = 0;
+
+            }
+
+        }
+
+        $scope.toggleGuageLoading = function(id,opt){
+
+            var ele = $("#"+id);
+
+            if(ele.length>0){
+
+                if(opt){
+    
+                        ele.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;Loading.. ');    
+                }
+                else{
+
+                    ele.html('&nbsp;');
+
+                }
+
+            }
+            
+
+        }
+
+        $scope.loadGuageData = function(searchCriteria,guageResultObject){
+
+            $scope.toggleGuageLoading(guageResultObject.id,1);
+
+            DashboardComponent.getReadingsFromDate(searchCriteria).then(function(data) {
+               
+                $scope.toggleGuageLoading(guageResultObject.id,0);
+
+                guageResultObject.data = data;
+
+                var meterValue = 0;
+
+                var parentMeterValue = 0;
+
+                var difference = 0;
+
+                var isRelationshipBased = false;
+
+                for(var i in guageResultObject.data){
+
+                    for(var j in guageResultObject.data[i].readings){
+
+                        if(guageResultObject.data[i].readings[j].value){
+
+                            meterValue += guageResultObject.data[i].readings[j].value;
+
+                        }
+
+                        if(i == 0){
+
+                            parentMeterValue = meterValue;
+
+                            if(guageResultObject.data[i].parent){
+
+                                isRelationshipBased = true;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                if(searchCriteria.assetTypeName == "ENERGY METER"){
+
+                    if(isRelationshipBased){
+
+                        difference = meterValue - parentMeterValue;
+
+                        guageResultObject.meterValue = (difference/meterValue) * 100;
+
+                    }
+                    else{
+                        
+                        guageResultObject.meterValue = meterValue - parentMeterValue;
+
+                    }
+
+                }
+                else{
+
+                    if(isRelationshipBased){
+
+                        guageResultObject.meterValue = meterValue - parentMeterValue;
+
+                    }
+                    else{
+
+                        guageResultObject.meterValue = meterValue;
+
+                    }
+
+                }
+
+                if(isNaN(guageResultObject.meterValue)){
+                   
+                    guageResultObject.meterValue = 0;
+
+                }
+
+            });
+
+        }
+ 
+        $scope.setCurrentReading = function(incomingValue){
+
+            //console.log(incomingValue);
+
+            $scope.currentReadings = incomingValue.data;
+
+            //console.log($scope.currentReadings);
+
+        }
 
         // Load Charts function
         $scope.loadCharts = function(){
+            
             // $scope.loadQuotationReportChart();
             // $scope.loadAllJobsByCategoryCntFunc();
             // $scope.loadAllJobsByStatusCntFunc();
             // $scope.loadTicketAgeChart();
             // $scope.loadAttendanceStatusCounts();
+
+            if(!_.isEmpty($scope.selectedSite)){
+
+                
+                $scope.clearGuageResults(); 
+
+                $scope.buildGuages();
+ 
+            }
+            else{
+                
+                $scope.clearGuageResults(); 
+
+            }
+
         };
 
         $scope.loadAllJobsByCategoryCntFunc = function(){
@@ -1767,326 +2088,9 @@ angular.module('timeSheetApp')
 
         //$rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
 
-        $scope.fuelGauge1 = function(){
+        
 
-            $timeout(function(){
-
-
-                Highcharts.chart('Fuel', {
-
-                    chart: {
-                        type: 'gauge',
-                        plotBackgroundColor: null,
-                        plotBackgroundImage: null,
-                        plotBorderWidth: 0,
-                        plotShadow: false
-                    },
-
-                    title: {
-                        text: 'Fuel Consumtion'
-                    },
-
-                    pane: {
-                        startAngle: -150,
-                        endAngle: 150,
-                        background: [{
-                            backgroundColor: {
-                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                                stops: [
-                                    [0, '#FFF'],
-                                    [1, '#333']
-                                ]
-                            },
-                            borderWidth: 0,
-                            outerRadius: '109%'
-                        }, {
-                            backgroundColor: {
-                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                                stops: [
-                                    [0, '#333'],
-                                    [1, '#FFF']
-                                ]
-                            },
-                            borderWidth: 1,
-                            outerRadius: '107%'
-                        }, {
-                            // default background
-                        }, {
-                            backgroundColor: '#DDD',
-                            borderWidth: 0,
-                            outerRadius: '105%',
-                            innerRadius: '103%'
-                        }]
-                    },
-
-                    // the value axis
-                    yAxis: {
-                        min: 0,
-                        max: 100,
-
-                        minorTickInterval: 'auto',
-                        minorTickWidth: 1,
-                        minorTickLength: 10,
-                        minorTickPosition: 'inside',
-                        minorTickColor: '#666',
-
-                        tickPixelInterval: 30,
-                        tickWidth: 2,
-                        tickPosition: 'inside',
-                        tickLength: 10,
-                        tickColor: '#666',
-                        labels: {
-                            step: 2,
-                            rotation: 'auto'
-                        },
-                        title: {
-                            text: 'Fuel'
-                        },
-                        plotBands: [{
-                            from: 0,
-                            to: 20,
-                            color: '#55BF3B' // green
-                        }, {
-                            from: 20,
-                            to: 70,
-                            color: '#DDDF0D' // yellow
-                        }, {
-                            from: 70,
-                            to: 100,
-                            color: '#DF5353' // red
-                        }]
-                    },
-
-                    series: [{
-                        name: 'Speed',
-                        data: [80],
-                        tooltip: {
-                            valueSuffix: ' km/h'
-                        }
-                    }]
-
-                });
-
-
-            },10);
-
-
-
-        };
-
-        $scope.fuelGauge2 = function(){
-
-            $timeout(function(){
-
-
-                Highcharts.chart('Water', {
-
-                    chart: {
-                        type: 'gauge',
-                        plotBackgroundColor: null,
-                        plotBackgroundImage: null,
-                        plotBorderWidth: 0,
-                        plotShadow: false
-                    },
-
-                    title: {
-                        text: 'Water Consumtion'
-                    },
-
-                    pane: {
-                        startAngle: -150,
-                        endAngle: 150,
-                        background: [{
-                            backgroundColor: {
-                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                                stops: [
-                                    [0, '#FFF'],
-                                    [1, '#333']
-                                ]
-                            },
-                            borderWidth: 0,
-                            outerRadius: '109%'
-                        }, {
-                            backgroundColor: {
-                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                                stops: [
-                                    [0, '#333'],
-                                    [1, '#FFF']
-                                ]
-                            },
-                            borderWidth: 1,
-                            outerRadius: '107%'
-                        }, {
-                            // default background
-                        }, {
-                            backgroundColor: '#DDD',
-                            borderWidth: 0,
-                            outerRadius: '105%',
-                            innerRadius: '103%'
-                        }]
-                    },
-
-                    // the value axis
-                    yAxis: {
-                        min: 0,
-                        max: 100,
-
-                        minorTickInterval: 'auto',
-                        minorTickWidth: 1,
-                        minorTickLength: 10,
-                        minorTickPosition: 'inside',
-                        minorTickColor: '#666',
-
-                        tickPixelInterval: 30,
-                        tickWidth: 2,
-                        tickPosition: 'inside',
-                        tickLength: 10,
-                        tickColor: '#666',
-                        labels: {
-                            step: 2,
-                            rotation: 'auto'
-                        },
-                        title: {
-                            text: 'Reading'
-                        },
-                        plotBands: [{
-                            from: 0,
-                            to: 20,
-                            color: '#55BF3B' // green
-                        }, {
-                            from: 20,
-                            to: 70,
-                            color: '#DDDF0D' // yellow
-                        }, {
-                            from: 70,
-                            to: 100,
-                            color: '#DF5353' // red
-                        }]
-                    },
-
-                    series: [{
-                        name: 'Speed',
-                        data: [40],
-                        tooltip: {
-                            valueSuffix: ' km/h'
-                        }
-                    }]
-
-                });
-
-
-            },10);
-
-
-
-        };
-
-        $scope.fuelGauge3 = function(){
-
-            $timeout(function(){
-
-
-                Highcharts.chart('Energy', {
-
-                    chart: {
-                        type: 'gauge',
-                        plotBackgroundColor: null,
-                        plotBackgroundImage: null,
-                        plotBorderWidth: 0,
-                        plotShadow: false
-                    },
-
-                    title: {
-                        text: 'Energy Consumtion'
-                    },
-
-                    pane: {
-                        startAngle: -150,
-                        endAngle: 150,
-                        background: [{
-                            backgroundColor: {
-                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                                stops: [
-                                    [0, '#FFF'],
-                                    [1, '#333']
-                                ]
-                            },
-                            borderWidth: 0,
-                            outerRadius: '109%'
-                        }, {
-                            backgroundColor: {
-                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                                stops: [
-                                    [0, '#333'],
-                                    [1, '#FFF']
-                                ]
-                            },
-                            borderWidth: 1,
-                            outerRadius: '107%'
-                        }, {
-                            // default background
-                        }, {
-                            backgroundColor: '#DDD',
-                            borderWidth: 0,
-                            outerRadius: '105%',
-                            innerRadius: '103%'
-                        }]
-                    },
-
-                    // the value axis
-                    yAxis: {
-                        min: 0,
-                        max: 100,
-
-                        minorTickInterval: 'auto',
-                        minorTickWidth: 1,
-                        minorTickLength: 10,
-                        minorTickPosition: 'inside',
-                        minorTickColor: '#666',
-
-                        tickPixelInterval: 30,
-                        tickWidth: 2,
-                        tickPosition: 'inside',
-                        tickLength: 10,
-                        tickColor: '#666',
-                        labels: {
-                            step: 2,
-                            rotation: 'auto'
-                        },
-                        title: {
-                            text: 'Energy'
-                        },
-                        plotBands: [{
-                            from: 0,
-                            to: 20,
-                            color: '#55BF3B' // green
-                        }, {
-                            from: 20,
-                            to: 70,
-                            color: '#DDDF0D' // yellow
-                        }, {
-                            from: 70,
-                            to: 100,
-                            color: '#DF5353' // red
-                        }]
-                    },
-
-                    series: [{
-                        name: 'Speed',
-                        data: [50],
-                        tooltip: {
-                            valueSuffix: ' km/h'
-                        }
-                    }]
-
-                });
-
-
-            },10);
-
-
-
-        }
+       
 
         $rootScope.ticketGraph = function () {
          $scope.ticketsChart = Highcharts.chart('ticketStackedCharts', {

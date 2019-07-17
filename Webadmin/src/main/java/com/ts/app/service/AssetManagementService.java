@@ -2384,10 +2384,10 @@ public class AssetManagementService extends AbstractService {
 //				
 //				List<Object[]> readings = assetRepository.findReadings(fromDate, toDate);
 				
-				Query readingsQuery = manager.createNativeQuery("SELECT SUM(initial_value), SUM(final_value), SUM(consumption), DATE(created_date) FROM asset_parameter_reading WHERE created_date between :fromDate and :toDate and asset_id = :assetId group by DATE(created_date)");
+				Query readingsQuery = manager.createNativeQuery("SELECT SUM(initial_value), SUM(final_value), SUM(consumption), DATE(created_date) FROM asset_parameter_reading WHERE DATE(created_date) between :fromDate and :toDate and asset_id = :assetId group by DATE(created_date)");
 				readingsQuery.setParameter("fromDate", fromDate);
 				readingsQuery.setParameter("toDate", toDate);
-				readingsQuery.setParameter("assetId", searchCriteria.getAssetId());
+				readingsQuery.setParameter("assetId", asset.getId());
 				
 				List<Object[]> readings = readingsQuery.getResultList();
 				
@@ -2405,16 +2405,27 @@ public class AssetManagementService extends AbstractService {
 					
 						Readings reading = new Readings();
 						
-						reading.setClosingValue((Long)columns[0]);
-						reading.setOpeningValue((Long)columns[1]);
-						reading.setValue((Long)columns[2]);
-						reading.setDate((String)columns[3]);
+						reading.setClosingValue((double)columns[0]);
+						reading.setOpeningValue((double)columns[1]);
+						reading.setValue((double)columns[2]);
+						reading.setDate(columns[3].toString());
 						
 						resultReadings.add(reading);
 					
 					}
 					
 					assetInfo.setReadings(resultReadings);
+					
+				}
+				
+				if(asset.getAssets()!=null) {
+					
+					assetInfo.setParent(true);
+					
+				}
+				else {
+					
+					assetInfo.setParent(false);
 					
 				}
 				
