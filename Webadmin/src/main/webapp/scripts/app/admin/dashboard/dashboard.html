@@ -166,7 +166,7 @@
                 <div id="collapseAssetTicketPie"
                      class="panel-collapse collapse collapseOne in" role="tabpanel"
                      aria-labelledby="headingOne" aria-expanded="true">
-                    <div class="panel-body">
+                    <div class="panel-body" ng-show="showAssetTicketPieChart">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-sm-1">
                                 <div id="container" style="min-width: 600px; height: 400px; max-width: 600px; margin: 0 auto"></div>
@@ -178,7 +178,21 @@
                         </div>
 
                     </div>
-                </div>
+
+                    <div class="panel-body" ng-show="!showAssetTicketPieChart">
+                        <div class="row">
+                            <div >
+                                <div class="card card-pricing card-plain">
+                                    <div class="content">
+                                        <div class="icon">
+                                            <i class="fas fa-ticket-alt" style="font-size: 40px"></i>
+                                        </div>
+                                        <h3 class="card-title">No Ticket for Assets in Current Selection</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
 
 

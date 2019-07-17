@@ -138,3 +138,12 @@ body {
     background: #999;
     color: #fff;
 }
+
+.asset-img{
+    width:300px !important;
+    height:300px !important;
+}
+
+.asset-img-container{
+    text-align: right;
+}
