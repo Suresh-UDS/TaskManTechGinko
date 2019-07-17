@@ -198,7 +198,7 @@ angular.module('timeSheetApp')
                 
                     series: [{
                         name: scope.data.label,
-                        data:  [guageData.meterValue.toFixed(2)],
+                        data:  [guageData.meterValue],
                         tooltip: {
                             valueSuffix: " "+scope.data.unit
                         }
@@ -461,6 +461,8 @@ angular.module('timeSheetApp')
                     guageResultObject.meterValue = 0;
 
                 }
+
+                guageResultObject.meterValue = parseFloat(guageResultObject.meterValue.toFixed(2));
 
             });
 
