@@ -15,12 +15,24 @@ angular.module('timeSheetApp')
 
                 // $scope.sampleData = data[0];
                 scope.readings = scope.data.readings;
-                scope.pushingItems = {"name":"Readings","data":[]};
+                scope.pushingItems = {"name":"Readings","data":[],"color" :{
+                    linearGradient: {
+                      x1: 0,
+                      x2: 0,
+                      y1: 0,
+                      y2: 1
+                    },
+                    stops: [
+                      [0, '#f699ff'],
+                      [1, '#d71ee8']
+                    ]
+                  }};
                 scope.xAxis = []
                 for(var i=0; i < scope.readings.length; i++) {
                     var indexItm = [];
                     scope.xAxis.push(scope.readings[i].date);
                     scope.pushingItems.data.push(scope.readings[i].value);
+                    
                 }
                 console.log("Asset Reading chart directives -" +JSON.stringify(scope.pushingItems));
 
@@ -58,7 +70,7 @@ angular.module('timeSheetApp')
                         column: {
                             pointPadding: 0.2,
                             borderWidth: 0
-                        }
+                        } 
                     },
                     series: [scope.pushingItems]
                 });
@@ -186,7 +198,7 @@ angular.module('timeSheetApp')
                 
                     series: [{
                         name: scope.data.label,
-                        data:  [guageData.meterValue],
+                        data:  [guageData.meterValue.toFixed(2)],
                         tooltip: {
                             valueSuffix: " "+scope.data.unit
                         }
@@ -284,8 +296,8 @@ angular.module('timeSheetApp')
         };
 
         $scope.guageResults = [
-            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"Ltr","label":"Fuel","id":"fuelGuageContainer"},
-            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"Ltr","label":"Water","id":"waterGuageContainer"},
+            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"%","label":"Fuel","id":"fuelGuageContainer"},
+            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"%","label":"Water","id":"waterGuageContainer"},
             {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":"Kwh","label":"Power","id":"powerGuageContainer"}
         ]
 
@@ -324,6 +336,8 @@ angular.module('timeSheetApp')
         }
         
         $scope.clearGuageResults = function(){
+
+            $scope.setCurrentReading ({});
 
             for(var i in $scope.guageResults){
 
@@ -373,6 +387,10 @@ angular.module('timeSheetApp')
 
                 var isRelationshipBased = false;
 
+                var closingValue = 0;
+
+                var parentMeterClosingValue = 0;
+
                 for(var i in guageResultObject.data){
 
                     for(var j in guageResultObject.data[i].readings){
@@ -380,6 +398,7 @@ angular.module('timeSheetApp')
                         if(guageResultObject.data[i].readings[j].value){
 
                             meterValue += guageResultObject.data[i].readings[j].value;
+                            closingValue += guageResultObject.data[i].readings[j].closingValue;
 
                         }
 
@@ -390,6 +409,8 @@ angular.module('timeSheetApp')
                             if(guageResultObject.data[i].parent){
 
                                 isRelationshipBased = true;
+
+                                parentMeterClosingValue = closingValue;
 
                             }
 
@@ -417,14 +438,18 @@ angular.module('timeSheetApp')
                 }
                 else{
 
-                    if(isRelationshipBased){
+                    if(isRelationshipBased && meterValue > parentMeterValue){
 
                         guageResultObject.meterValue = meterValue - parentMeterValue;
+
+                        guageResultObject.meterValue = ( guageResultObject.meterValue / parentMeterClosingValue ) * 100 
 
                     }
                     else{
 
                         guageResultObject.meterValue = meterValue;
+
+                        guageResultObject.meterValue = ( guageResultObject.meterValue / closingValue ) * 100 
 
                     }
 
@@ -1846,39 +1871,39 @@ angular.module('timeSheetApp')
                     })
                 });
 
-                Highcharts.chart('assetPieChartContainer', {
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                connectorColor: 'silver'
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Share',
-                        data: [
-                            { name: 'Medium', y: $scope.assetSeverityTicketsCount.mediumSeverityTicketCount  },
-                            { name: 'High', y:  $scope.assetSeverityTicketsCount.highSeverityTicketCount },
-                            { name: 'Low', y: $scope.assetSeverityTicketsCount.lowSeverityTicketCount}
-                        ]
-                    }]
-                });
+                // Highcharts.chart('assetPieChartContainer', {
+                //     chart: {
+                //         plotBackgroundColor: null,
+                //         plotBorderWidth: null,
+                //         plotShadow: false,
+                //         type: 'pie'
+                //     },
+                //     title: {
+                //         text: ''
+                //     },
+                //     tooltip: {
+                //         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                //     },
+                //     plotOptions: {
+                //         pie: {
+                //             allowPointSelect: true,
+                //             cursor: 'pointer',
+                //             dataLabels: {
+                //                 enabled: true,
+                //                 format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                //                 connectorColor: 'silver'
+                //             }
+                //         }
+                //     },
+                //     series: [{
+                //         name: 'Share',
+                //         data: [
+                //             { name: 'Medium', y: $scope.assetSeverityTicketsCount.mediumSeverityTicketCount  },
+                //             { name: 'High', y:  $scope.assetSeverityTicketsCount.highSeverityTicketCount },
+                //             { name: 'Low', y: $scope.assetSeverityTicketsCount.lowSeverityTicketCount}
+                //         ]
+                //     }]
+                // });
 
             })
         };
