@@ -198,7 +198,7 @@ angular.module('timeSheetApp')
 
                     series: [{
                         name: scope.data.label,
-                        data:  [guageData.meterValue)],
+                        data:  [guageData.meterValue],
                         tooltip: {
                             valueSuffix: " "+scope.data.unit
                         }
