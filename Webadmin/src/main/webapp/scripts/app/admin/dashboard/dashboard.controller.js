@@ -427,7 +427,7 @@ angular.module('timeSheetApp')
 
                         difference = meterValue - parentMeterValue;
 
-                        guageResultObject.meterValue = (difference/meterValue) * 100;
+                        guageResultObject.meterValue = ((parentMeterValue-difference)/parentMeterValue) * 100;
 
                     }
                     else{
@@ -441,9 +441,9 @@ angular.module('timeSheetApp')
 
                     if(isRelationshipBased && meterValue > parentMeterValue){
 
-                        guageResultObject.meterValue = meterValue - parentMeterValue;
+                        //guageResultObject.meterValue = meterValue - parentMeterValue;
 
-                        guageResultObject.meterValue = ( guageResultObject.meterValue / parentMeterClosingValue ) * 100
+                        guageResultObject.meterValue = ( parentMeterValue / parentMeterClosingValue ) * 100
 
                     }
                     else{
