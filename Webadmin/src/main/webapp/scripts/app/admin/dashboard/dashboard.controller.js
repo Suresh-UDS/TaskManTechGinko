@@ -32,7 +32,7 @@ angular.module('timeSheetApp')
                     var indexItm = [];
                     scope.xAxis.push(scope.readings[i].date);
                     scope.pushingItems.data.push(scope.readings[i].value);
-                    
+
                 }
                 console.log("Asset Reading chart directives -" +JSON.stringify(scope.pushingItems));
 
@@ -70,7 +70,7 @@ angular.module('timeSheetApp')
                         column: {
                             pointPadding: 0.2,
                             borderWidth: 0
-                        } 
+                        }
                     },
                     series: [scope.pushingItems]
                 });
@@ -82,14 +82,14 @@ angular.module('timeSheetApp')
             restrict: 'E',
             template: '<div></div>',
             scope: {
-                title: '@', 
+                title: '@',
                 data: '=',
                 fromDirectiveFn: '=method'
             },
             link: function (scope, element, attrs) {
 
                var guageData = scope.data;
-                
+
                 if(!guageData.meterValue){
 
                     guageData.meterValue = 0;
@@ -108,7 +108,7 @@ angular.module('timeSheetApp')
                         $('#deleteModal').modal();
 
                     }
-                    
+
                 })
 
                 var guageChartInfo = {
@@ -120,11 +120,11 @@ angular.module('timeSheetApp')
                         plotBorderWidth: 0,
                         plotShadow: false
                     },
-                
+
                     title: {
                         text: scope.title
                     },
-                
+
                     pane: {
                         startAngle: -150,
                         endAngle: 150,
@@ -157,18 +157,18 @@ angular.module('timeSheetApp')
                             innerRadius: '103%'
                         }]
                     },
-                
+
                     // the value axis
                     yAxis: {
                         min: 0,
                         max: 100,
-                
+
                         minorTickInterval: 'auto',
                         minorTickWidth: 1,
                         minorTickLength: 10,
                         minorTickPosition: 'inside',
                         minorTickColor: '#666',
-                
+
                         tickPixelInterval: 30,
                         tickWidth: 2,
                         tickPosition: 'inside',
@@ -195,17 +195,17 @@ angular.module('timeSheetApp')
                             color: '#DF5353' // red
                         }]
                     },
-                
+
                     series: [{
                         name: scope.data.label,
-                        data:  [guageData.meterValue.toFixed(2)],
+                        data:  [guageData.meterValue)],
                         tooltip: {
                             valueSuffix: " "+scope.data.unit
                         }
                     }]
-                
+
                 };
-                
+
                 scope.$watch('data.data', function(newValue, oldValue) {
 
                     console.log(newValue);
@@ -215,9 +215,9 @@ angular.module('timeSheetApp')
                 scope.$watch('data.meterValue', function(newValue, oldValue) {
 
                     guageChartInfo.series[0].data = [newValue];
-                    
+
                     Highcharts.chart(element[0], guageChartInfo);
- 
+
                 });
 
                 $timeout(function(){
@@ -225,8 +225,8 @@ angular.module('timeSheetApp')
                     Highcharts.chart(element[0], guageChartInfo);
 
                 });
-                
-                
+
+
             }
         };
     })
@@ -315,7 +315,7 @@ angular.module('timeSheetApp')
             // $scope.loadCharts();
             $scope.loadAllJobs();
             $scope.loadAllQuotations();
-            $scope.loadAllTickets(); 
+            $scope.loadAllTickets();
             $scope.assetTicketPieCharts();
 
         };
@@ -329,13 +329,13 @@ angular.module('timeSheetApp')
                 searchCriteria.toDate = new Date;
                 searchCriteria.siteId = $scope.selectedSite.id;
                 searchCriteria.assetTypeName = $scope.guageResults[i].guageType;
-    
+
                 $scope.loadGuageData(searchCriteria,$scope.guageResults[i]);
-    
+
            }
 
         }
-        
+
         $scope.clearGuageResults = function(){
 
             $scope.setCurrentReading ({});
@@ -356,8 +356,8 @@ angular.module('timeSheetApp')
             if(ele.length>0){
 
                 if(opt){
-    
-                        ele.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;Loading.. ');    
+
+                        ele.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;Loading.. ');
                 }
                 else{
 
@@ -366,7 +366,7 @@ angular.module('timeSheetApp')
                 }
 
             }
-            
+
 
         }
 
@@ -375,7 +375,7 @@ angular.module('timeSheetApp')
             $scope.toggleGuageLoading(guageResultObject.id,1);
 
             DashboardComponent.getReadingsFromDate(searchCriteria).then(function(data) {
-               
+
                 $scope.toggleGuageLoading(guageResultObject.id,0);
 
                 guageResultObject.data = data;
@@ -431,7 +431,7 @@ angular.module('timeSheetApp')
 
                     }
                     else{
-                        
+
                         guageResultObject.meterValue = meterValue - parentMeterValue;
 
                     }
@@ -443,29 +443,31 @@ angular.module('timeSheetApp')
 
                         guageResultObject.meterValue = meterValue - parentMeterValue;
 
-                        guageResultObject.meterValue = ( guageResultObject.meterValue / parentMeterClosingValue ) * 100 
+                        guageResultObject.meterValue = ( guageResultObject.meterValue / parentMeterClosingValue ) * 100
 
                     }
                     else{
 
                         guageResultObject.meterValue = meterValue;
 
-                        guageResultObject.meterValue = ( guageResultObject.meterValue / closingValue ) * 100 
+                        guageResultObject.meterValue = ( guageResultObject.meterValue / closingValue ) * 100
 
                     }
 
                 }
 
                 if(isNaN(guageResultObject.meterValue)){
-                   
+
                     guageResultObject.meterValue = 0;
 
                 }
 
+                guageResultObject.meterValue = guageResultObject.meterValue.toFixed(2);
+
             });
 
         }
- 
+
         $scope.setCurrentReading = function(incomingValue){
 
             //console.log(incomingValue);
@@ -478,7 +480,7 @@ angular.module('timeSheetApp')
 
         // Load Charts function
         $scope.loadCharts = function(){
-            
+
             // $scope.loadQuotationReportChart();
             // $scope.loadAllJobsByCategoryCntFunc();
             // $scope.loadAllJobsByStatusCntFunc();
@@ -487,15 +489,15 @@ angular.module('timeSheetApp')
 
             if(!_.isEmpty($scope.selectedSite)){
 
-                
-                $scope.clearGuageResults(); 
+
+                $scope.clearGuageResults();
 
                 $scope.buildGuages();
- 
+
             }
             else{
-                
-                $scope.clearGuageResults(); 
+
+                $scope.clearGuageResults();
 
             }
 
@@ -2113,9 +2115,9 @@ angular.module('timeSheetApp')
 
         //$rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
 
-        
 
-       
+
+
 
         $rootScope.ticketGraph = function () {
          $scope.ticketsChart = Highcharts.chart('ticketStackedCharts', {
