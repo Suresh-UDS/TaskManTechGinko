@@ -199,14 +199,14 @@ angular.module('timeSheetApp')
                         },
                         plotBands: [{
                             from: 0,
-                            to: 20,
+                            to: 25,
                             color: '#55BF3B' // green
                         }, {
-                            from: 20,
-                            to: 70,
+                            from: 25,
+                            to: 50,
                             color: '#DDDF0D' // yellow
                         }, {
-                            from: 70,
+                            from: 50,
                             to: 100,
                             color: '#DF5353' // red
                         }]
