@@ -613,6 +613,9 @@ angular.module('timeSheetApp')
             if(siteId){
 
                 $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.startDate,$scope.endDate);
+                // Asset ticket information pie chart
+                $scope.loadAssetSeverityTicketCount($scope.selectedSite.id, $scope.startDate, $scope.endDate);
+                $scope.loadAssetOpenTicketsCount($scope.selectedSite.id, $scope.startDate, $scope.endDate);
 
             }else if(region && branch){
                 $scope.loadChartDataByBranch(projectId,region,branch,$scope.startDate,$scope.endDate);
@@ -1249,7 +1252,6 @@ angular.module('timeSheetApp')
         		if($scope.selectedSite && $scope.selectedSite.id) {
         			$scope.refreshReportBySite();
                     $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
-
                 }else if($scope.selectedBranch && $scope.selectedBranch.id){
                 	$scope.sites= "";
                     $scope.refreshReportByBranch();
@@ -1868,21 +1870,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.loadAssetSeverityTicketCount = function(siteId, fromDate, toDate){
-            Highcharts.setOptions({
-                colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
-                    return {
-                        radialGradient: {
-                            cx: 0.5,
-                            cy: 0.3,
-                            r: 0.7
-                        },
-                        stops: [
-                            [0, color],
-                            [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-                        ]
-                    };
-                })
-            });
+
             TicketComponent.getAssetTicketSeverityCount(siteId, fromDate, toDate).then(function (data) {
                 console.log("ticket count based on severity");
                 console.log(data);
@@ -2597,7 +2585,21 @@ angular.module('timeSheetApp')
 
         $scope.assetTicketPieCharts = function(){
 
-
+            Highcharts.setOptions({
+                colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                    return {
+                        radialGradient: {
+                            cx: 0.5,
+                            cy: 0.3,
+                            r: 0.7
+                        },
+                        stops: [
+                            [0, color],
+                            [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                        ]
+                    };
+                })
+            });
 
 
             // Build the chart
