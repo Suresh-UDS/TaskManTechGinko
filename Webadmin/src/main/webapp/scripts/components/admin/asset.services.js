@@ -471,6 +471,12 @@ angular.module('timeSheetApp')
                 return $http.get('api/assetSiteGroupHierarichy/'+criteria.siteId).then(function (response) {
                    return response.data;
                 });
+            },
+
+            getMTTR : function (assetId) {
+                return $http.get('api/asset/mttr/'+assetId).then(function (response) {
+                    return response.data;
+                })
             }
 
 

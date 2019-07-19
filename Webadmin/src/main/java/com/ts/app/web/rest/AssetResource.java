@@ -867,6 +867,11 @@ public class AssetResource {
 	    return assetService.getAssetCountsBySiteId(siteId);
     }
 
+    @RequestMapping(value = "/asset/mttr/{assetId}", method = RequestMethod.GET)
+    public AssetCountDTO getMTTRForAsset(@PathVariable("assetId") long assetId){
+        return assetService.getMTTR(assetId);
+    }
+
 
 
 
