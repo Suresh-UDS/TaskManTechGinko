@@ -30,6 +30,8 @@ angular.module('timeSheetApp')
         $scope.selectedParameter = {};
         $scope.selectedParameterUOM = {};
         $scope.selectedRule ="";
+        $scope.selectedMinValue = null;
+		$scope.selectedMaxValue = null;
 
         $scope.consumptionMonitoringRequired = {value:false};
         $scope.alertRequired = {value: true};
@@ -205,6 +207,8 @@ angular.module('timeSheetApp')
                 $scope.validationRequired.value = $scope.parameterConfig.validationRequired;
                 $scope.consumptionMonitoringRequired.value = $scope.parameterConfig.consumptionMonitoringRequired;
                 $scope.alertRequired.value = $scope.parameterConfig.alertRequired;
+                $scope.selectedMinValue = $scope.parameterConfig.min;
+				$scope.selectedMaxValue = $scope.parameterConfig.max;
                 $rootScope.loadingStop();
 
             });
@@ -308,6 +312,12 @@ angular.module('timeSheetApp')
 	        	if($scope.selectedThreshold){
 	        		$scope.parameterConfig.threshold = $scope.selectedThreshold;
 	        	}
+	        	if($scope.selectedMinValue) {
+					$scope.parameterConfig.min = $scope.selectedMinValue;
+				}
+				if($scope.selectedMaxValue) {
+					$scope.parameterConfig.max = $scope.selectedMaxValue;
+				}
 	        	if($scope.selectedRule){
 	        		$scope.parameterConfig.rule = $scope.selectedRule;
 	        	}
@@ -339,6 +349,8 @@ angular.module('timeSheetApp')
                     $scope.selectedParameterUOM =null;
                     $scope.selectedRule ="";
                     $scope.selectedThreshold =null;
+                    $scope.selectedMinValue = null;
+                    $scope.selectedMaxValue = null;
                     $scope.validationRequired.value =false;
                     $scope.consumptionMonitoringRequired.value =false;
                     $scope.btnDisabled = false;
@@ -399,6 +411,8 @@ angular.module('timeSheetApp')
             $scope.searchCriteria = {};
             $scope.selectedSite = null;
             $scope.selectedStatus = null;
+            $scope.selectedMinValue = null;
+			$scope.selectedMaxValue = null;
             $scope.pages = {
                 currPage: 1,
                 totalPages: 0
@@ -417,6 +431,26 @@ angular.module('timeSheetApp')
                 $scope.alertRequired.value = false;
                 $scope.isEdit = false;
         }
+         
+         $scope.checkMinMax = function(){
+
+				if($scope.selectedMinValue != null && $scope.selectedMaxValue != null){
+
+					if($scope.selectedMinValue >= $scope.selectedMaxValue){
+
+						$scope.minError =true;
+						$scope.maxError =true;
+
+					}else{
+						$scope.minError =false;
+						$scope.maxError =false;
+					}
+
+				}else{
+					$scope.minError =false;
+					$scope.maxError =false;
+				}
+			}
 
         // init load
         $scope.initLoad = function(){

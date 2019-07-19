@@ -98,6 +98,8 @@ public class ParameterConfigService extends AbstractService {
 		parameterConfig.setConsumptionMonitoringRequired(parameterConfigDTO.isConsumptionMonitoringRequired());
 		parameterConfig.setValidationRequired(parameterConfigDTO.isValidationRequired());
 		parameterConfig.setThreshold(parameterConfigDTO.getThreshold());
+		parameterConfig.setMax(parameterConfigDTO.getMax());
+		parameterConfig.setMin(parameterConfigDTO.getMin());
 	}
 
 	private ParameterConfigDTO mapToModel(ParameterConfig parameterConfig, boolean includeShifts) {
@@ -109,6 +111,8 @@ public class ParameterConfigService extends AbstractService {
 		parameterConfigDTO.setValidationRequired(parameterConfig.isValidationRequired());
 		parameterConfigDTO.setConsumptionMonitoringRequired(parameterConfig.isConsumptionMonitoringRequired());
 		parameterConfigDTO.setAssetType(parameterConfig.getAssetType());
+		parameterConfigDTO.setMax(parameterConfig.getMax());
+		parameterConfigDTO.setMin(parameterConfig.getMin());
 		return parameterConfigDTO;
 	}
 

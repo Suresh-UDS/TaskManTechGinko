@@ -40,6 +40,11 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
     
     private double threshold;
     
+    private int min;
+    
+    private int max;   
+   
+    
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = true)
     private String rule;
@@ -115,6 +120,24 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 	public void setRule(String rule) {
 		this.rule = rule;
 	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
+	}
+	
+	
 
     
 }
