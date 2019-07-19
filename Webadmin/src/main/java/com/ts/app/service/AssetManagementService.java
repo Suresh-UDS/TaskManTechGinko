@@ -28,6 +28,9 @@ import javax.print.attribute.standard.PrinterState;
 
 import java.io.Console;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -2621,6 +2624,33 @@ public class AssetManagementService extends AbstractService {
 
 	    return assetCountDTO;
 
+    }
+
+    public AssetCountDTO getMTTR(long assetId){
+	    AssetCountDTO assetCountDTO = new AssetCountDTO();
+
+	    long maintenanceHours = 0;
+	    List<AssetStatusHistory> breakdownAssetsHistory = assetStatusHistoryRepository.findByAssetAndStatus(assetId, String.valueOf(AssetStatus.BREAKDOWN));
+	    List<AssetStatusHistory> inUseAssetHistory = assetStatusHistoryRepository.findByAssetAndStatus(assetId, String.valueOf(AssetStatus.IN_USE));
+	    List<AssetStatusHistory> underMaintenanceAssetHistory = assetStatusHistoryRepository.findByAssetAndStatus(assetId, String.valueOf(AssetStatus.UNDER_MAINTENANCE));
+        log.debug("Number of breakDowns - "+breakdownAssetsHistory.size());
+        for(AssetStatusHistory assetStatusHistory: breakdownAssetsHistory) {
+            List<AssetStatusHistory> inUseAssetHistoryBetweenBreakDowns = assetStatusHistoryRepository.findByAssetAndStatusAndDateRange(assetId, String.valueOf(AssetStatus.IN_USE), assetStatusHistory.getCreatedDate());
+            if(inUseAssetHistoryBetweenBreakDowns.size()>0){
+                maintenanceHours = maintenanceHours+zonedDateTimeDifference(inUseAssetHistoryBetweenBreakDowns.get(0).getCreatedDate(),assetStatusHistory.getCreatedDate(),ChronoUnit.HOURS);
+                log.debug("Maintenance Hours - "+ Duration.between(assetStatusHistory.getCreatedDate(),inUseAssetHistoryBetweenBreakDowns.get(0).getCreatedDate()));
+            }else{
+                maintenanceHours = maintenanceHours+zonedDateTimeDifference(ZonedDateTime.now(),assetStatusHistory.getCreatedDate(),ChronoUnit.HOURS);
+            }
+            log.debug("Maintenance Hours - "+maintenanceHours);
+        }
+        assetCountDTO.setMaintenanceHours(maintenanceHours);
+        assetCountDTO.setAssetTicketsCount(breakdownAssetsHistory.size());
+	    return assetCountDTO;
+    }
+
+    static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
+        return unit.between(d1, d2);
     }
 
 }

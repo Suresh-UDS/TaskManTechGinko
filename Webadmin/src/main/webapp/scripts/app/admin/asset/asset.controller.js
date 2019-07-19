@@ -97,8 +97,8 @@ angular.module('timeSheetApp')
             $scope.criticalStatusList = [];
             $scope.displayImage = "";
             $scope.statuses = [];
-
-			$('#dPlayNone').hide();
+            $scope.mttr =0;
+            $('#dPlayNone').hide();
 
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			$scope.searchAcquiredDate = "";
@@ -1727,7 +1727,7 @@ angular.module('timeSheetApp')
 				if(parseInt($stateParams.id) > 0){
 					var assetId = $stateParams.id;
 					$rootScope.loadingStart();
-
+                    $scope.getMTTRForAssets(assetId);
 					AssetComponent.findById(assetId).then(function(data){
 						//console.log("Asset details List==" + JSON.stringify(data));
 						$scope.assetDetail= data;
@@ -2220,7 +2220,17 @@ angular.module('timeSheetApp')
 			$scope.updateSite = function(selectedSite) {
 				$scope.selectedSites = selectedSite;
 
-			}
+			};
+
+			$scope.getMTTRForAssets = function(assetId){
+			    console.log("Get MTTR for assets - "+assetId);
+			    AssetComponent.getMTTR(assetId).then(function (data) {
+                    console.log(data);
+                    var mttr = Math.abs(data.maintenanceHours)/data.assetTicketsCount;
+                    console.log(mttr);
+                    $scope.mttr = mttr;
+                });
+            };
 
 
 			/* Update and save asset */

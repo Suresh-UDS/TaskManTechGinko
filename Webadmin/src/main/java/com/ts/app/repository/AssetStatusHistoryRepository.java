@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public interface AssetStatusHistoryRepository extends JpaRepository<AssetStatusHistory, Long> {
@@ -21,4 +22,11 @@ public interface AssetStatusHistoryRepository extends JpaRepository<AssetStatusH
 
 	@Query("SELECT at FROM AssetStatusHistory at WHERE at.asset.id = :assetId order by at.createdDate desc")
 	Page<AssetStatusHistory> findByAssetId(@Param("assetId") long assetId, Pageable pageRequest);
+
+	@Query("SELECT at FROM AssetStatusHistory at WHERE at.asset.id= :assetId and at.status =:status order by at.createdDate asc ")
+    List<AssetStatusHistory> findByAssetAndStatus(@Param("assetId") long assetId, @Param("status") String status);
+
+    @Query("SELECT at FROM AssetStatusHistory at WHERE at.asset.id= :assetId and at.status =:status and at.createdDate>= :startDate order by at.createdDate asc ")
+    List<AssetStatusHistory> findByAssetAndStatusAndDateRange(@Param("assetId") long assetId, @Param("status") String status, @Param("startDate") ZonedDateTime startDate);
+
 }
