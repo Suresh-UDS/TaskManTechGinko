@@ -36,7 +36,7 @@ angular.module('timeSheetApp')
                         scope.pushingItems.data.push(scope.readings[i].value);
 
                     }
-                    
+
                 }
                 else{
 
@@ -270,7 +270,7 @@ angular.module('timeSheetApp')
         $scope.branchList=null;
         $scope.selectedRegion=null;
         $scope.selectedBranch = null;
-
+        $scope.assetAvailability = {};
         $scope.siteFilterDisable = false;
         $scope.regionFilterDisable = false;
         $scope.branchFilterDisable = false;
@@ -614,6 +614,7 @@ angular.module('timeSheetApp')
 
                 $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.startDate,$scope.endDate);
                 // Asset ticket information pie chart
+                $scope.loadAssetsCountForChart(siteId);
                 $scope.loadAssetSeverityTicketCount($scope.selectedSite.id, $scope.startDate, $scope.endDate);
                 $scope.loadAssetOpenTicketsCount($scope.selectedSite.id, $scope.startDate, $scope.endDate);
 
@@ -1963,6 +1964,50 @@ angular.module('timeSheetApp')
 
             });
         };
+
+        $scope.loadAssetsCountForChart = function(siteId){
+            console.log("Asset count function");
+          DashboardComponent.getAssetCountData(siteId).then(function (data) {
+              console.log("Asset count information");
+              console.log(data);
+              $scope.assetAvailability = data;
+
+              Highcharts.chart('assetAvailability', {
+                  chart: {
+                      plotBackgroundColor: null,
+                      plotBorderWidth: null,
+                      plotShadow: false,
+                      type: 'pie'
+                  },
+                  title: {
+                      text: ''
+                  },
+                  tooltip: {
+                      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                  },
+                  plotOptions: {
+                      pie: {
+                          allowPointSelect: true,
+                          cursor: 'pointer',
+                          dataLabels: {
+                              enabled: true,
+                              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                              connectorColor: 'silver'
+                          }
+                      }
+                  },
+                  series: [{
+                      name: 'Share',
+                      data: [
+                          { name: 'Assets Under Maintenance', y: $scope.assetAvailability.assetsUnderMaintenance },
+                          { name: 'Breakdown Assets', y: $scope.assetAvailability.breakDownAssets },
+                          { name: 'Available Assets', y: $scope.assetAvailability.workingAssets}
+                      ]
+                  }]
+              });
+          })
+        };
+
 
         $scope.initCalender();
 

@@ -225,7 +225,7 @@
                                                                                             <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetParent as (assetParent.group | uppercase) for assetParent in assetParentList" required tabindex="6">
                                                                                                 <option value="">Select Asset Group ..</option>
                                                                                             </select>
-                                                                                            
+
                                                                                             <div ng-show="form.$submitted || form.assetGroupName.$touched || form.assetGroupName.$dirty">
                                                                                                     <div ng-show="form.assetGroupName.$dirty || form.assetGroupName.$invalid">
                                                                                                     <p class="help-block" style="color:maroon"
@@ -1149,10 +1149,10 @@
                                                                                         <tr>
                                                                                             <th>Type</th>
                                                                                             <th>Units</th>
-                                                                                            <th>Rule</th>
-                                                                                            <th>Threshold</th>
-                                                                                            <th>Min Value</th>
-                                                                                            <th>Max Value</th>
+                                                                                            <!--<th>Rule</th>-->
+                                                                                            <!--<th>Threshold</th>-->
+                                                                                            <th>Threshold Min Value</th>
+                                                                                            <th>Threshold Max Value</th>
                                                                                             <th>Consumption</th>
 
                                                                                             <th class="text-right" >Actions</th>
@@ -1165,8 +1165,8 @@
                                                                                             <tr ng-repeat="assetParam in assetParameters">
                                                                                                 <td>{{assetParam.assetType}}</td>
                                                                                                 <td>{{assetParam.uom}}</td>
-                                                                                                <td>{{assetParam.rule}}</td>
-                                                                                                <td>{{assetParam.threshold}}</td>
+                                                                                                <!--<td>{{assetParam.rule}}</td>-->
+                                                                                                <!--<td>{{assetParam.threshold}}</td>-->
                                                                                                 <td>{{assetParam.min}}</td>
                                                                                                 <td>{{assetParam.max}}</td>
                                                                                                 <td>

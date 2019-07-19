@@ -176,7 +176,7 @@ public class AssetManagementService extends AbstractService {
 
 	@Inject
 	private TicketManagementService ticketMgmtservice;
-	
+
     @PersistenceContext
 	private EntityManager manager;
 
@@ -333,7 +333,7 @@ public class AssetManagementService extends AbstractService {
 
 //		assetDTO.setId(asset.getId());
 //		return assetDTO;
-		
+
 		return mapperUtil.toModel(asset, AssetDTO.class);
 
 	}
@@ -1612,9 +1612,140 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
-	public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
+//	Commented by Karthick, created a new function in the same name to save asset reading as per new requirements as on date 18-07-2019
+//	public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
+//
+//		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
+//
+//		AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
+//
+//		List<AssetParameterReadingRule> readingRuleLists = assetReadingRuleRepository.findByAssetConfigId(assetParamReadingDTO.getAssetParameterConfigId());
+//
+//		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
+//
+//		String assetCode = asset.getCode();
+//
+//		String assetName = asset.getTitle();
+//
+//		Site site = siteRepository.findOne(asset.getSite().getId());
+//
+//		String siteName = site.getName();
+//
+//		Date date = new Date();
+//
+//		boolean checkInvalidEntry = false;
+//
+//		if(prevReading != null) {
+//
+//			for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
+//
+//				AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
+//
+//				switch(rule) {
+//
+//				case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
+//
+//					if(!assetParameterReading.isConsumptionMonitoringRequired()) {
+//
+//						String type = "reading";
+//
+//						if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
+//
+//							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+//
+//							if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+//
+//								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+//
+//								if(settingEntity.getSettingValue().length() > 0) {
+//
+//									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+//									for(String email : emailLists) {
+//										mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+//									}
+//
+//								} else {
+//
+//									log.info("There is no email ids registered");
+//								}
+//							}
+//
+//						}
+//					}
+//
+//
+//				case CURRENT_READING_LESS_THAN_PREVIOUS_READING :
+//
+//					if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+//
+//						if(assetParamReadingDTO.getValue() < prevReading.getValue()) {
+//
+//							if(assetReadingRuleList.isValidationRequired()) {
+//
+//								checkInvalidEntry = true;
+//
+//							}
+//						}
+//
+//					}
+//
+//				default:
+//
+//				}
+//
+//			}
+//		}
+//
+//
+//		if(checkInvalidEntry) {
+//
+//			AssetParameterReadingDTO assetParamEntity = new AssetParameterReadingDTO();
+//			assetParamEntity.setErrorStatus(true);
+//			return assetParamEntity;
+//
+//		} else {
+//
+//			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
+//			assetParamReadingDTO.setErrorStatus(false);
+//			Asset assetEntity = assetRepository.findOne(assetParamReadingDTO.getAssetId());
+//			assetParameterReading.setAsset(assetEntity);
+//			if(assetParamReadingDTO.getJobId() > 0) {
+//				Job jobEntity = jobRepository.findOne(assetParamReadingDTO.getJobId());
+//				assetParameterReading.setJob(jobEntity);
+//			}else{
+//				assetParameterReading.setJob(null);
+//			}
+//
+//			Calendar now = Calendar.getInstance();
+//
+//			if(assetParamReadingDTO.isConsumptionMonitoringRequired()) {
+//				if(assetParamReadingDTO.getFinalValue() > 0) {
+//					assetParameterReading.setFinalReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+//				}
+//				if(assetParamReadingDTO.getInitialValue() > 0) {
+//					assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+//				}
+//
+//
+//			} else {
+//				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
+//			}
+//
+//			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
+//			assetParameterReading.setAssetParameterConfig(assetParameterConfig);
+//			assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
+//			assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
+//			return assetParamReadingDTO;
+//
+//		}
+//
+//
+//	}
 
+    public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
 		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
+
+        AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 
 		AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
 
@@ -1636,65 +1767,12 @@ public class AssetManagementService extends AbstractService {
 
 		if(prevReading != null) {
 
-			for(AssetParameterReadingRule assetReadingRuleList : readingRuleLists) {
+                if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
 
-				AssetReadingRule rule = AssetReadingRule.valueOf(assetReadingRuleList.getRule());
+                    checkInvalidEntry = true;
 
-				switch(rule) {
-
-				case CURRENT_READING_GREATER_THAN_PREVIOUS_READING :
-
-					if(!assetParameterReading.isConsumptionMonitoringRequired()) {
-
-						String type = "reading";
-
-						if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
-
-							Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-
-							if(setting.getSettingValue().equalsIgnoreCase("true") ) {
-
-								Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-
-								if(settingEntity.getSettingValue().length() > 0) {
-
-									List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-									for(String email : emailLists) {
-										mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-									}
-
-								} else {
-
-									log.info("There is no email ids registered");
-								}
-							}
-
-						}
-					}
-
-
-				case CURRENT_READING_LESS_THAN_PREVIOUS_READING :
-
-					if(!assetParamReadingDTO.isConsumptionMonitoringRequired()) {
-
-						if(assetParamReadingDTO.getValue() < prevReading.getValue()) {
-
-							if(assetReadingRuleList.isValidationRequired()) {
-
-								checkInvalidEntry = true;
-
-							}
-						}
-
-					}
-
-				default:
-
-				}
-
-			}
+                }
 		}
-
 
 		if(checkInvalidEntry) {
 
@@ -1703,6 +1781,59 @@ public class AssetManagementService extends AbstractService {
 			return assetParamEntity;
 
 		} else {
+
+		    log.debug("Parameter threshold min value - "+assetParameterConfig.getMin());
+		    log.debug("Parameter Initial Reading - "+assetParameterReading.getInitialValue());
+
+		    if(assetParameterReading.getFinalValue()>0){
+                log.debug("Parameter Final Reading - "+assetParameterReading.getFinalValue());
+
+		        if(assetParameterReading.getFinalValue()>assetParameterConfig.getMax()){
+                    String type = "reading";
+
+                    Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+
+                    if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
+                        Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+
+                        if(settingEntity.getSettingValue().length() > 0) {
+
+                            List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+                            for(String email : emailLists) {
+                                mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+                            }
+
+                        } else {
+
+                            log.info("There is no email ids registered");
+                        }
+                    }
+                }
+            }
+
+            if(assetParameterReading.getInitialValue()<assetParameterConfig.getMin()){
+                String type = "reading";
+
+                Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
+
+                if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
+                    Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
+
+                    if(settingEntity.getSettingValue().length() > 0) {
+
+                        List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+                        for(String email : emailLists) {
+                            mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+                        }
+
+                    } else {
+
+                        log.info("There is no email ids registered");
+                    }
+                }
+            }
 
 			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
 			assetParamReadingDTO.setErrorStatus(false);
@@ -1730,7 +1861,6 @@ public class AssetManagementService extends AbstractService {
 				assetParameterReading.setInitialReadingTime(new java.sql.Timestamp(now.getTimeInMillis()));
 			}
 
-			AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 			assetParameterReading.setAssetParameterConfig(assetParameterConfig);
 			assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
 			assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
@@ -2372,99 +2502,125 @@ public class AssetManagementService extends AbstractService {
        return transactions;
 
 	}
- 
+
 	public void assetDetailedReadingReport(List<AssetReadingReport> reportList,List<Asset> assets,SearchCriteria searchCriteria) {
-		
+
 		if(assets!=null) {
-			
+
 			for(Asset asset:assets) {
-				
+
 				String fromDate = DateUtil.formatToDateString(searchCriteria.getFromDate(), "yyyy-MM-dd");
 				String toDate = DateUtil.formatToDateString(searchCriteria.getToDate(), "yyyy-MM-dd");
-//				
+//
 //				List<Object[]> readings = assetRepository.findReadings(fromDate, toDate);
-				
+
 				Query readingsQuery = manager.createNativeQuery("SELECT SUM(initial_value), SUM(final_value), SUM(consumption), DATE(created_date) FROM asset_parameter_reading WHERE DATE(created_date) between :fromDate and :toDate and asset_id = :assetId group by DATE(created_date)");
 				readingsQuery.setParameter("fromDate", fromDate);
 				readingsQuery.setParameter("toDate", toDate);
 				readingsQuery.setParameter("assetId", asset.getId());
-				
+
 				List<Object[]> readings = readingsQuery.getResultList();
-				
-				
+
+
 				AssetReadingReport assetInfo = new AssetReadingReport();
-				
+
 				assetInfo.setAssetCode(asset.getCode());
 				assetInfo.setAssetName(asset.getTitle());
-				
+
 				if(readings!=null) {
-					
-					List<Readings> resultReadings = new ArrayList<Readings>(); 
-					
+
+					List<Readings> resultReadings = new ArrayList<Readings>();
+
 					for(Object[] columns : readings) {
-					
+
 						Readings reading = new Readings();
-						
+
 						reading.setClosingValue((double)columns[0]);
 						reading.setOpeningValue((double)columns[1]);
 						reading.setValue((double)columns[2]);
 						reading.setDate(columns[3].toString());
-						
+
 						resultReadings.add(reading);
-					
+
 					}
-					
+
 					assetInfo.setReadings(resultReadings);
-					
+
 				}
-				
+
 				if(asset.getAssets()!=null) {
-					
+
 					assetInfo.setParent(true);
-					
+
 				}
 				else {
-					
+
 					assetInfo.setParent(false);
-					
+
 				}
-				
+
 				reportList.add(assetInfo);
-				
+
 				assetDetailedReadingReport(reportList,asset.getAssets(),searchCriteria);
-				
+
 			}
-			
+
 		}
-		
-	} 
-	
-	public List<AssetReadingReport> initAssetDetailedReadingReport(SearchCriteria searchCriteria){
-		
-		List<AssetReadingReport> report = new ArrayList<AssetReadingReport>();
-		
-		if(searchCriteria.getAssetTypeName()!=null) {
-		
-			AssetType assetType = assetTypeRepository.findByName(searchCriteria.getAssetTypeName());
-			
-			if(assetType!=null) {
-			
-				List<Asset> assets = getSiteAssetHierarchy(searchCriteria.getSiteId(),assetType.getId());
-				
-				if(assets!=null) {
-					
-					assetDetailedReadingReport(report,assets,searchCriteria);
-					
-				}
-				
-			}
-			
-			
-			
-		}
-		
-		return report;
-		
+
 	}
-  
+
+	public List<AssetReadingReport> initAssetDetailedReadingReport(SearchCriteria searchCriteria){
+
+		List<AssetReadingReport> report = new ArrayList<AssetReadingReport>();
+
+		if(searchCriteria.getAssetTypeName()!=null) {
+
+			AssetType assetType = assetTypeRepository.findByName(searchCriteria.getAssetTypeName());
+
+			if(assetType!=null) {
+
+				List<Asset> assets = getSiteAssetHierarchy(searchCriteria.getSiteId(),assetType.getId());
+
+				if(assets!=null) {
+
+					assetDetailedReadingReport(report,assets,searchCriteria);
+
+				}
+
+			}
+
+
+
+		}
+
+		return report;
+
+	}
+
+	public AssetCountDTO getAssetCountsBySiteId(long siteId){
+	    AssetCountDTO assetCountDTO = new AssetCountDTO();
+        long commissionedAssets= assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.COMMISSIONED));
+        long inUseAssets = assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.IN_USE));
+        long assetsUnderMaintenance = assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.UNDER_MAINTENANCE));
+        long assetsUnderRepair = assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.UNDER_REPAIR));
+        long stolenAssets= assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.STOLEN));
+        long missingAssets= assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.MISSING));
+        long deCommissionedAssets= assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.DE_COMMISSIONED));
+        long disposedAssets= assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.DISPOSED));
+        long breakDownAssetCount = assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.BREAKDOWN));
+	    long retiredAssets = assetRepository.getAssetCountByStatus(siteId, String.valueOf(AssetStatus.RETIRED));
+
+	    long availableAssets = commissionedAssets+inUseAssets;
+	    long unAvailableAssets = stolenAssets+missingAssets+deCommissionedAssets+disposedAssets+retiredAssets;
+	    long breakDownAssets = breakDownAssetCount+assetsUnderRepair;
+
+	    assetCountDTO.setAssetsUnderMaintenance(assetsUnderMaintenance);
+	    assetCountDTO.setBreakDownAssets(breakDownAssets);
+	    assetCountDTO.setTotalAssets(assetRepository.getAssetCount(siteId));
+	    assetCountDTO.setWorkingAssets(availableAssets);
+
+	    return assetCountDTO;
+
+    }
+
 }

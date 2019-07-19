@@ -96,6 +96,7 @@ angular.module('timeSheetApp')
             $scope.isReleationShipEnabled = false;
             $scope.criticalStatusList = [];
             $scope.displayImage = "";
+            $scope.statuses = [];
 
 			$('#dPlayNone').hide();
 
@@ -3941,7 +3942,6 @@ angular.module('timeSheetApp')
 				AssetComponent.getStatus().then(function(data) {
 					console.log('Asset status list-- '  );
 					console.log(data);
-					$scope.statuses = [];
 					for(var i=0;i<data.length;i++){
                         var status = {};
                         status.status = data[i];

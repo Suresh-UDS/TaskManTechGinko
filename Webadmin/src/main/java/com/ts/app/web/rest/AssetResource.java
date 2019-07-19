@@ -138,10 +138,10 @@ public class AssetResource {
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
 	}
-	
+
 	@RequestMapping(path = "/siteAssetHierarchy/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Iterable<Asset>> getSiteAssetHierarchy(@PathVariable("siteId") Long siteId,@PathVariable("typeId") long typeId) {
-		
+
 		try {
 			return new ResponseEntity<Iterable<Asset>>(assetService.getSiteAssetHierarchy(siteId,typeId), HttpStatus.OK);
 		} catch (Exception e) {
@@ -151,14 +151,14 @@ public class AssetResource {
 
 	@RequestMapping(path = "/assetSiteGroupHierarichy/{siteId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Iterable<AssetGroup>> getSiteGroupAssetHierarchy(@PathVariable("siteId") Long siteId) {
-		
+
 		try {
 			return new ResponseEntity<Iterable<AssetGroup>>(assetService.getSiteAssetGroupHierarchy(siteId), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Iterable<AssetGroup>>(HttpStatus.BAD_REQUEST);
 		}
 	}
- 
+
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public AssetDTO getAsset(@PathVariable("id") Long id) {
 		log.debug(">>> get asset details! by asset id from resource <<<" + id);
@@ -683,7 +683,7 @@ public class AssetResource {
 		}
 		return resp;
 	}
-	
+
 	@RequestMapping(value = "/assets/meterReading/export", method = RequestMethod.POST)
 	public ExportResponse exportAssetMeterReading(@RequestBody SearchCriteria searchCriteria) {
 		// log.debug("JOB EXPORT STARTS HERE **********");
@@ -853,14 +853,20 @@ public class AssetResource {
 
 	@RequestMapping(value = "/asset/reading", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetReadingReport> getAssetReadingChartData(@RequestBody SearchCriteria searchCriteria) {
-		
-		
+
+
 		// setting last 7 days
 		searchCriteria.setFromDate( DateUtil.addDaysInDate(searchCriteria.getFromDate(), -6) );
-		
+
 	    return assetService.initAssetDetailedReadingReport(searchCriteria);
-	    
+
     }
+
+    @RequestMapping(value = "/asset/count/{siteId}", method = RequestMethod.GET)
+    public AssetCountDTO getAssetCounts(@PathVariable("siteId") long siteId){
+	    return assetService.getAssetCountsBySiteId(siteId);
+    }
+
 
 
 
