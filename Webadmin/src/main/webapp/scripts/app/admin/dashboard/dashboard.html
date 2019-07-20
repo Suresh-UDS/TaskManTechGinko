@@ -13,84 +13,99 @@
 
         <!-- Filters start -->
 
-        <div class="panel panel-default">
-            <!--<div class="panel-heading">Panel Heading</div>-->
-            <div class="panel-body">
-
-                <div class="row">
-
-                    <div class="col-md-4">
-
-                        <div class="form-group">
-                            <label class="label-control">From date</label>
-                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-
-                            <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off"/>
-
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group">
-
-                            <label class="label-control">To date</label>
-                            <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
-                            <input type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedToDate"  autocomplete="off"/>
-
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-                        <div class="dropdown">
-                            <label class="label-control">Select Client</label>
-                            <span ng-show="!clientFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                            <span ng-show="clientFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                            <select class="form-control " ng-model="selectedProject" ng-change="LoadFilterProjects()" ng-options="project as project.name for project in projects track by project.name" >
-                                <option value="">Please select Client...</option>
-                            </select>
-                        </div>
-                    </div>
+        <div class="panel-group" id="filter" role="tablist"
+             aria-multiselectable="true">
+            <div class="panel panel-default">
+                <!--<div class="panel-heading">Panel Heading</div>-->
+                <div class="panel-heading" role="tab" id="headingTwoFilter">
+                    <a class="collapsed" role="button" data-toggle="collapse"
+                       data-parent="#accordion" data-target="#collapseTwoFilter"
+                       aria-expanded="false" aria-controls="collapseTwoFilter">
+                        <h4 class="panel-title">
+                            Filter <i class="material-icons">keyboard_arrow_down</i>
+                        </h4>
+                    </a>
                 </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="dropdown ">
-                            <label class="label-control">Select Region</label>
-                            <span ng-show="!regionFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                            <span ng-show="regionFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                            <select class="form-control " ng-model="selectedRegion" ng-change="LoadFilterRegions()" ng-options="region as region.name for region in regionList track by region.name">
-                                <option value="">Please select Region...</option>
-                            </select>
+                <div id="collapseTwoFilter" class="panel-collapse collapse"
+                     role="tabpanel" aria-labelledby="headingTwoFilter"
+                     aria-expanded="false" style="height: 0px;">
+                    <div class="panel-body JobsDashContainer">
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+                                <label class="label-control">From date</label>
+                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+
+                                <input type="text" class="form-control datepicker"  id="dateFilterFrom"  ng-model="selectedFromDate" autocomplete="off"/>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+
+                                <label class="label-control">To date</label>
+                                <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                <input type="text" class="form-control datepicker"  id="dateFilterTo" ng-model="selectedToDate"  autocomplete="off"/>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="dropdown">
+                                <label class="label-control">Select Client</label>
+                                <span ng-show="!clientFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                <span ng-show="clientFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                <select class="form-control " ng-model="selectedProject" ng-change="LoadFilterProjects()" ng-options="project as project.name for project in projects track by project.name" >
+                                    <option value="">Please select Client...</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="dropdown ">
-                            <label class="label-control">Select Branch</label>
-                            <span ng-show="!branchFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                            <span ng-show="branchFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                            <select class="form-control " ng-model="selectedBranch" ng-change="LoadFilterBranches()" ng-options="branch as branch.name for branch in branchList track by branch.name">
-                                <option value="">Please select Branch...</option>
-                            </select>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="dropdown ">
+                                <label class="label-control">Select Region</label>
+                                <span ng-show="!regionFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                <span ng-show="regionFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                <select class="form-control " ng-model="selectedRegion" ng-change="LoadFilterRegions()" ng-options="region as region.name for region in regionList track by region.name">
+                                    <option value="">Please select Region...</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="dropdown ">
-                            <label class="label-control">Select Site</label>
-                            <span ng-show="!siteFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                            <span ng-show="siteFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                            <select class="form-control " ng-model="selectedSite" ng-change="LoadFilterSites()" ng-options="site as site.name for site in sites track by site.name">
-                                <option value="">Please select Site...</option>
-                            </select>
+                        <div class="col-md-4">
+                            <div class="dropdown ">
+                                <label class="label-control">Select Branch</label>
+                                <span ng-show="!branchFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                <span ng-show="branchFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                <select class="form-control " ng-model="selectedBranch" ng-change="LoadFilterBranches()" ng-options="branch as branch.name for branch in branchList track by branch.name">
+                                    <option value="">Please select Branch...</option>
+                                </select>
+                            </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="dropdown ">
+                                <label class="label-control">Select Site</label>
+                                <span ng-show="!siteFilterDisable" class="form-control-feedback d-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                <span ng-show="siteFilterDisable"  class="form-control-feedback d-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                <select class="form-control " ng-model="selectedSite" ng-change="LoadFilterSites()" ng-options="site as site.name for site in sites track by site.name">
+                                    <option value="">Please select Site...</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
-
+                </div>
             </div>
         </div>
-
         <!-- Filters end -->
 
         <!-- Accordion Gauge Container start -->
@@ -138,13 +153,13 @@
              aria-multiselectable="true">
 
             <!-- Main panel start -->
-            <div class="panel panel-default">
+            <div class="panel panel-default" has-permission="Asset:List">
                 <div class="panel-heading" role="tab" id="headingOne">
                     <a role="button" data-toggle="collapse" data-parent="#accordion"
                        data-target="#collapseAssetAvailability" aria-expanded="true"
                        aria-controls="collapseOne" class="collapsed">
                         <h4 class="panel-title">
-                            Asset Availability Status <i class="material-icons">keyboard_arrow_down</i>
+                            Asset  <i class="material-icons">keyboard_arrow_down</i>
                         </h4>
                     </a>
                 </div>
@@ -154,7 +169,7 @@
                      aria-labelledby="headingOne" aria-expanded="true">
                     <div class="panel-body" >
                         <div class="row">
-                            <div class="col-md-4 col-lg-4 col-sm-1">
+                            <div class="col-md-4 col-lg-4 col-sm-1" ng-show="showAssetAvailabilityChart">
                                 <div id="assetAvailability" style="min-width: 400px; height: 400px; max-width: 400px; margin: 0 auto"></div>
                             </div>
 
@@ -166,28 +181,558 @@
                                 <div id="assetPieChartContainer" style="min-width: 400px; height: 400px; max-width: 400px; margin: 0 auto"></div>
                             </div>
 
-                            <div class="col-md-8 col-lg-8" style="padding-top: 60px;" ng-show="!showAssetTicketPieChart" >
+                            <div class="col-md-6 col-lg-6"  ng-show="!showAssetAvailabilityChart" >
                                 <div class="card card-pricing card-plain">
                                     <div class="content">
                                         <div class="icon">
-                                            <i class="fas fa-ticket-alt" style="font-size: 40px"></i>
+                                            <!--<i class="fas fa-ticket-alt" style="font-size: 40px"></i>-->
+                                            <i class="material-icons">devices_other</i>
+                                        </div>
+                                        <h3 class="card-title">No Assets Found in Current Selection</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6"  ng-show="!showAssetTicketPieChart" >
+                                <div class="card card-pricing card-plain">
+                                    <div class="content">
+                                        <div class="icon">
+                                            <!--<i class="fas fa-ticket-alt" style="font-size: 40px"></i>-->
+                                            <i class="material-icons">bug_report</i>
                                         </div>
                                         <h3 class="card-title">No Ticket for Assets in Current Selection</h3>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
-
                     </div>
-
-
                 </div>
-
-
             </div>
 
+
+            <!-- Main panel end -->
+
+        <!-- Main panel start -->
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <a role="button" data-toggle="collapse" data-parent="#accordion"
+                   data-target="#collapseOne" aria-expanded="true"
+                   aria-controls="collapseOne" class="collapsed">
+                    <h4 class="panel-title">
+                        Main <i class="material-icons">keyboard_arrow_down</i>
+                    </h4>
+                </a>
+            </div>
+
+            <div id="collapseOne"
+                 class="panel-collapse collapse collapseOne in" role="tabpanel"
+                 aria-labelledby="headingOne" aria-expanded="true"
+                 style="height: 250px;">
+                <div class="panel-body">
+
+                    <div class="row">
+
+                        <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Client:List">
+                            <a  ui-sref="projects" ng-click="dbdFilter();">
+                                <div class="card blueBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">domain</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Clients</h4>
+                                        <h3>{{projectCount ? projectCount : 0}}</h3>
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Site:List">
+                            <a  ui-sref="sites" ng-click="dbdFilter();">
+                                <div class="card skyblueBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">location_city</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Sites</h4>
+                                        <h3>{{siteCount ? siteCount : 0}}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Employee:List">
+                            <a  ui-sref="employees" ng-click="dbdNoFilter('');">
+                                <div class="card yellowBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">
+                                            people_outline
+                                        </i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Employees</h4>
+                                        <h3>{{totalEmployeeCount ? totalEmployeeCount : 0}}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Job:List">
+                            <a  ui-sref="jobs" ng-click="dbdNoFilter('');">
+                                <div class="card greenBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">build</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Jobs</h4>
+                                        <h3>{{currentJobCount ? currentJobCount : 0}}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Quotation:List">
+                            <a  ui-sref="quotation-list" ng-click="dbdNoFilter('');">
+                                <div class="card yellowBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">receipt</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Quotations</h4>
+                                        <h3>{{totalCurrentQuotationCount ? totalCurrentQuotationCount : 0}}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-2" has-permission="Ticket:List">
+                            <a  ui-sref="tickets" ng-click="dbdNoFilter('');">
+                                <div class="card yellowBg cardWithbg">
+                                    <div class="card-header">
+                                        <i class="material-icons">bug_report</i>
+
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Tickets</h4>
+                                        <h3>{{totalCurrenTicketsCount ? totalCurrenTicketsCount : 0}}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main panel end -->
+            <div ng-show="searchFilterCriteria.projectId || searchFilterCriteria.siteId">
+                <!-- Job panel start -->
+                <div class="panel panel-default" has-permission="DashboardJob:View">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <a class="collapsed" role="button" data-toggle="collapse"
+                           data-parent="#accordion" data-target="#collapseTwo"
+                           aria-expanded="false" aria-controls="collapseTwo">
+                            <h4 class="panel-title">
+                                Jobs <i class="material-icons">keyboard_arrow_down</i>
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse"
+                         role="tabpanel" aria-labelledby="headingTwo"
+                         aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body JobsDashContainer">
+                            <div class="row">
+
+                                <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
+                                    <a ui-sref="jobs" ng-click="dbdStatusFilter('');">
+                                        <div class="card skyblueBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">business_center</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Total Jobs</h4>
+                                                <h3>{{result.totalJobCount ? result.totalJobCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
+                                    <a ui-sref="jobs" ng-click="dbdStatusFilter('ASSIGNED');">
+                                        <div class="card yellowBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">how_to_reg</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Assigned</h4>
+                                                <h3>{{result.assignedJobCount ? result.assignedJobCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
+                                    <a ui-sref="jobs" ng-click="dbdStatusFilter('COMPLETED');">
+                                        <div class="card greenBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">
+                                                    check_circle_outline
+                                                </i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Completed</h4>
+                                                <h3>{{result.completedJobCount ? result.completedJobCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4 col-xs-6">
+                                    <a ui-sref="jobs" ng-click="dbdStatusFilter('OVERDUE');">
+                                        <div class="card lightRedBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">error_outline</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Overdue</h4>
+                                                <h3>{{result.overdueJobCount ? result.overdueJobCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                            </div>
+
+                            <!--<div class="row" style="padding-top: 30px;">-->
+
+                                <!--<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="border-right: 1px solid #dfdfdf;">-->
+
+                                    <!--<div id="jobStackedCharts" style="min-width:  530px; height: 400px; margin: 0 auto"></div>-->
+
+                                <!--</div>-->
+                                <!--<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="">-->
+
+                                    <!--<hc-pie-chart title="All Jobs" ng-if="ready" data="pieSeries" style="width:100% ;" >Placeholder for pie chart</hc-pie-chart>-->
+
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Job panel end -->
+                <!-- Attendance panel start -->
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" has-permission="DashboardAttendance:View" id="headingThree">
+                        <a class="collapsed" role="button" data-toggle="collapse"
+                           data-parent="#accordion" data-target="#collapseThree"
+                           aria-expanded="false" aria-controls="collapseTwo">
+                            <h4 class="panel-title">
+                                Attendance <span class="red-star">(Present and Absent count are based on today's date) </span><i class="material-icons">keyboard_arrow_down</i>
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse"
+                         role="tabpanel" aria-labelledby="headingTwo"
+                         aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="employees" ng-click="dbdEmpFilter('');">
+                                        <div class="card blueBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">people_outline</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Total Employees</h4>
+                                                <h3>{{employeeCount ? employeeCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 col-lg-3 col-sm-3">
+                                    <a ui-sref="attendances" ng-click="dbdFilter('Present');">
+                                        <div class="card greenBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">check_circle_outline</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Present</h4>
+                                                <h3>{{presentCount ? presentCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 col-lg-3 col-sm-3">
+                                    <a ui-sref="employees" ng-click="dbdFilter('Absent');">
+                                        <div class="card lightRedBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">
+                                                    highlight_off
+                                                </i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Absent</h4>
+                                                <h3>{{absentCount ? absentCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <!--<div class="col-md-2 col-lg-2 col-sm-3">
+                                    <a ui-sref="employees" ng-click="dbdFilter('Left');">
+                                        <div class="card skyblueBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">exit_to_app</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Left</h4>
+                                                <h3>{{leftCount ? leftCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>-->
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="emp-reliever">
+                                        <div class="card yellowBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">compare_arrows
+                                                </i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Reliever</h4>
+                                                <h3>{{relieverCnt ? relieverCnt : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                            </div>
+
+                            <!--<div class="row" style="padding-top: 30px;">-->
+
+                                <!--<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">-->
+
+                                    <!--<div id="AttendanceStackedCharts" style="min-width:  530px; height: 400px; margin: 0 auto"></div>-->
+
+                                <!--</div>-->
+
+
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Attendance panel end -->
+                <!-- Tickets panel start -->
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" has-permission="DashboardTicket:View" id="headingFour">
+                        <a class="collapsed" role="button" data-toggle="collapse"
+                           data-parent="#accordion" data-target="#collapseFour"
+                           aria-expanded="false" aria-controls="collapseTwo">
+                            <h4 class="panel-title">
+                                Tickets <i class="material-icons">keyboard_arrow_down</i>
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse"
+                         role="tabpanel" aria-labelledby="headingTwo"
+                         aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="tickets" ng-click="dbdTStatusFilter('');">
+                                        <div class="card blueBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">list</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Total tickets</h4>
+                                                <h3>{{overAllTicketsTotalCount ? overAllTicketsTotalCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="tickets" ng-click="dbdTStatusFilter('OPEN');">
+                                        <div class="card skyblueBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">open_in_browser</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Open</h4>
+                                                <h3>{{openTicketTotalCnt ? openTicketTotalCnt : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="tickets" ng-click="dbdTStatusFilter('ASSIGNED');">
+                                        <div class="card yellowBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">
+                                                    how_to_reg
+                                                </i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Assigned</h4>
+                                                <h3>{{assignedTicketTotalCount ? assignedTicketTotalCount : 0 }}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="tickets" ng-click="dbdTStatusFilter('CLOSED');">
+                                    <div class="card lightRedBg cardWithbg">
+                                        <div class="card-header">
+                                            <i class="material-icons">highlight_off</i>
+                                        </div>
+                                        <div class="card-content">
+                                            <h4>Closed</h4>
+                                            <h3>
+                                                {{closedTicketsTotalCount ? closedTicketsTotalCount : 0 }}</h3>
+                                        </div>
+                                    </div>
+                                    </a>
+                                </div>
+
+
+                            </div>
+
+                            <!--<div class="row" style="padding-top: 30px;">-->
+
+                                <!--<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="border-right: 1px solid #dfdfdf;">-->
+
+                                    <!--<div id="ticketSingleStackedCharts" style="min-width: 530px; height: 400px; margin: 0 auto"></div>-->
+
+                                <!--</div>-->
+                                <!--<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12" style="">-->
+
+                                    <!--<div id="ticketStackedCharts" style="min-width:  530px; height: 400px; margin: 0 auto"></div>-->
+
+                                <!--</div>-->
+
+                                <!--<div class="col-md-12 col-lg-12" style="padding-top: 30px;">-->
+
+                                    <!--<div id="catgAgeTicketsCharts" style="min-width: 530px; height: 400px; margin: 0 auto"></div>-->
+
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Tickets panel end -->
+                <!-- Quotation panel start -->
+                <div class="panel panel-default" >
+                    <div class="panel-heading" role="tab" has-permission="DashboardQuotation:View" id="headingFive">
+                        <a class="collapsed" role="button" data-toggle="collapse"
+                           data-parent="#accordion" data-target="#collapseFive"
+                           aria-expanded="false" aria-controls="collapseFive">
+                            <h4 class="panel-title">
+                                Quotation <i class="material-icons">keyboard_arrow_down</i>
+                            </h4>
+                        </a>
+                    </div>
+                    <div id="collapseFive" class="panel-collapse collapse"
+                         role="tabpanel" aria-labelledby="headingTwo"
+                         aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                   <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('');" >
+                                       <div class="card blueBg cardWithbg">
+                                           <div class="card-header">
+                                               <i class="material-icons">list</i>
+                                           </div>
+                                           <div class="card-content">
+                                               <h4>Total quotations</h4>
+                                               <h3>{{overAllQuotationCount ? overAllQuotationCount : 0}}</h3>
+                                           </div>
+                                       </div>
+                                   </a>
+
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-4">
+                                    <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Waiting for approval');" >
+                                        <div class="card skyblueBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">open_in_browser</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Waiting for Approval</h4>
+                                                <h3>{{waitingQuotationCount ? waitingQuotationCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 col-lg-2 col-sm-4">
+                                    <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Pending');" >
+                                        <div class="card yellowBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">
+                                                    error_outline
+                                                </i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Pending</h4>
+                                                <h3>
+                                                    {{pendingQuotationCount ? pendingQuotationCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 col-lg-2 col-sm-4">
+                                    <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Approved');" >
+                                        <div class="card greenBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">check_circle_outline</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Approved</h4>
+                                                <h3>
+                                                    {{approvedQuotationCount ? approvedQuotationCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 col-lg-2 col-sm-4">
+                                    <a ui-sref="quotation-list" ng-click="dbdQuotStatusFilter('Rejected');" >
+                                        <div class="card lightRedBg cardWithbg">
+                                            <div class="card-header">
+                                                <i class="material-icons">highlight_off</i>
+                                            </div>
+                                            <div class="card-content">
+                                                <h4>Rejected</h4>
+                                                <h3>
+                                                    {{rejectedQuotationCount ? rejectedQuotationCount : 0}}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                            </div>
+
+                            <!--<div class="row" style="padding-top: 30px;">-->
+
+
+                                <!--<div class="col-md-12 col-lg-12" style="padding-top: 30px;">-->
+
+                                    <!--<div id="quotationStackedCharts" style="min-width: 530px; height: 400px; margin: 0 auto"></div>-->
+
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Quotation panel end -->
+            </div>
+
+        </div>
+
+        <!-- Accordion end -->
+
+    </div>
 
 </div>
 

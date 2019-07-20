@@ -279,6 +279,7 @@ angular.module('timeSheetApp')
         $scope.assetOpenTicketsCount = [];
         $scope.assetSeverityTicketsCount = [];
         $scope.showAssetTicketPieChart = false;
+        $scope.showAssetAvailabilityChart = false;
         /** root scope (searchCriteria) **/
         $rootScope.searchFilterCriteria = {};
 
@@ -1885,10 +1886,10 @@ angular.module('timeSheetApp')
                             type: 'pie'
                         },
                         title: {
-                            text: ''
+                            text: '<b>Asset Breakdown Ticket Severity Status</b>'
                         },
                         tooltip: {
-                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}% - {point.y} No(s)</b>'
                         },
                         plotOptions: {
                             pie: {
@@ -1896,7 +1897,7 @@ angular.module('timeSheetApp')
                                 cursor: 'pointer',
                                 dataLabels: {
                                     enabled: true,
-                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} % - {point.y} No(s)',
                                     connectorColor: 'silver'
                                 }
                             }
@@ -1931,10 +1932,10 @@ angular.module('timeSheetApp')
                             type: 'pie'
                         },
                         title: {
-                            text: ''
+                            text: '<b>Asset Breakdown Ticket Status</b>'
                         },
                         tooltip: {
-                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}% - {point.y} No(s)</b>'
                         },
                         plotOptions: {
                             pie: {
@@ -1942,7 +1943,7 @@ angular.module('timeSheetApp')
                                 cursor: 'pointer',
                                 dataLabels: {
                                     enabled: true,
-                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} % - {point.y} No(s)',
                                     connectorColor: 'silver'
                                 }
                             }
@@ -1972,39 +1973,44 @@ angular.module('timeSheetApp')
               console.log(data);
               $scope.assetAvailability = data;
 
-              Highcharts.chart('assetAvailability', {
-                  chart: {
-                      plotBackgroundColor: null,
-                      plotBorderWidth: null,
-                      plotShadow: false,
-                      type: 'pie'
-                  },
-                  title: {
-                      text: ''
-                  },
-                  tooltip: {
-                      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                  },
-                  plotOptions: {
-                      pie: {
-                          allowPointSelect: true,
-                          cursor: 'pointer',
-                          dataLabels: {
-                              enabled: true,
-                              format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                              connectorColor: 'silver'
+              if(data && (data.assetsUnderMaintenance>0 || data.breakDownAssets>0 || data.workingAssets>0)){
+                  $scope.showAssetAvailabilityChart = true;
+                  Highcharts.chart('assetAvailability', {
+                      chart: {
+                          plotBackgroundColor: null,
+                          plotBorderWidth: null,
+                          plotShadow: false,
+                          type: 'pie'
+                      },
+                      title: {
+                          text: '<b>Asset Availability Status</b>'
+                      },
+                      tooltip: {
+                          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> - {point} No(s)'
+                      },
+                      plotOptions: {
+                          pie: {
+                              allowPointSelect: true,
+                              cursor: 'pointer',
+                              dataLabels: {
+                                  enabled: true,
+                                  format: '<b>{point.name}</b>: {point.percentage:.1f} % - {point.y} No(s)',
+                                  connectorColor: 'silver'
+                              }
                           }
-                      }
-                  },
-                  series: [{
-                      name: 'Share',
-                      data: [
-                          { name: 'Assets Under Maintenance', y: $scope.assetAvailability.assetsUnderMaintenance },
-                          { name: 'Breakdown Assets', y: $scope.assetAvailability.breakDownAssets },
-                          { name: 'Available Assets', y: $scope.assetAvailability.workingAssets}
-                      ]
-                  }]
-              });
+                      },
+                      series: [{
+                          name: 'Share',
+                          data: [
+                              { name: 'Assets Under Maintenance', y: $scope.assetAvailability.assetsUnderMaintenance },
+                              { name: 'Breakdown Assets', y: $scope.assetAvailability.breakDownAssets },
+                              { name: 'Available Assets', y: $scope.assetAvailability.workingAssets}
+                          ]
+                      }]
+                  });
+              }
+
+
           })
         };
 
