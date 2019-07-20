@@ -198,16 +198,16 @@ angular.module('timeSheetApp')
                             text: scope.data.label
                         },
                         plotBands: [{
-                            from: 0,
-                            to: 25,
+                            from: scope.data.critical.good[0],
+                            to:  scope.data.critical.good[1],
                             color: '#55BF3B' // green
                         }, {
-                            from: 25,
-                            to: 50,
+                            from: scope.data.critical.better[0],
+                            to: scope.data.critical.better[1],
                             color: '#DDDF0D' // yellow
                         }, {
-                            from: 50,
-                            to: 100,
+                            from: scope.data.critical.bad[0],
+                            to: scope.data.critical.bad[1],
                             color: '#DF5353' // red
                         }]
                     },
@@ -314,9 +314,9 @@ angular.module('timeSheetApp')
         };
 
         $scope.guageResults = [
-            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"%","label":"Fuel","id":"fuelGuageContainer"},
-            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"%","label":"Water","id":"waterGuageContainer"},
-            {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":"Kwh","label":"Power","id":"powerGuageContainer"}
+            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"%","label":"Fuel","id":"fuelGuageContainer","critical":{"good":[0,25],"better":[25,50],"bad":[50,100]}},
+            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"%","label":"Water","id":"waterGuageContainer","critical":{"good":[0,25],"better":[25,50],"bad":[50,100]}},
+            {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":"Kwh","label":"Power","id":"powerGuageContainer","critical":{"good":[0,10],"better":[10,40],"bad":[40,100]}}
         ]
 
         $scope.init = function() {
