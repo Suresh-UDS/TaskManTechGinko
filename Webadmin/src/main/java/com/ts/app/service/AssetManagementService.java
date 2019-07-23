@@ -220,7 +220,7 @@ public class AssetManagementService extends AbstractService {
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
 		if(asset.getParentAsset()!=null) {
-			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAssetId());
+			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAsset().getId());
 			if(!StringUtils.isEmpty(parentAsse)) {
 			asset.setParentAsset(parentAsse);
 			}
@@ -639,7 +639,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
 
-		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAssetId()));
+		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAsset().getId()));
 
 		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
 

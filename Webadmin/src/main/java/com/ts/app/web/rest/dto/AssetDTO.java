@@ -64,7 +64,7 @@ public class AssetDTO extends BaseDTO {
     private String url;
     private String parentAssetCode;
     private long parentAssetId;
-    
+    @JsonIgnore
     private Asset parentAsset;
     
     private boolean inserted;
@@ -388,13 +388,11 @@ public class AssetDTO extends BaseDTO {
 	public void setParentAssetId(long parentAssetId) {
 		this.parentAssetId = parentAssetId;
 	}
-	public long getParentAsset() {
-		return parentAsset.getId();
+	public Asset getParentAsset() {
+		return parentAsset;
 	}
 	public void setParentAsset(Asset parentAsset) {
-	    if(parentAsset!=null) {
-            this.parentAssetId= parentAsset.getId();
-        }
+		this.parentAsset = parentAsset;
 	}
 	public int getRowNumber() {
 		return rowNumber;
