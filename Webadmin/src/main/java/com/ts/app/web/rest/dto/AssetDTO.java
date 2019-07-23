@@ -388,11 +388,13 @@ public class AssetDTO extends BaseDTO {
 	public void setParentAssetId(long parentAssetId) {
 		this.parentAssetId = parentAssetId;
 	}
-	public Asset getParentAsset() {
-		return parentAsset;
+	public long getParentAsset() {
+		return parentAsset.getId();
 	}
 	public void setParentAsset(Asset parentAsset) {
-		this.parentAsset = parentAsset;
+	    if(parentAsset!=null) {
+            this.parentAssetId= parentAsset.getId();
+        }
 	}
 	public int getRowNumber() {
 		return rowNumber;
