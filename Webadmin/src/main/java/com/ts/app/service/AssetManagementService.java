@@ -220,7 +220,7 @@ public class AssetManagementService extends AbstractService {
 		Vendor vendor = getVendor(assetDTO.getVendorId());
 		asset.setAmcVendor(vendor);
 		if(asset.getParentAsset()!=null) {
-			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAsset().getId());
+			Asset parentAsse = assetRepository.findOne(assetDTO.getParentAssetId());
 			if(!StringUtils.isEmpty(parentAsse)) {
 			asset.setParentAsset(parentAsse);
 			}
@@ -639,7 +639,7 @@ public class AssetManagementService extends AbstractService {
 		}
 		asset.setUdsAsset(assetDTO.isUdsAsset());
 
-		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAsset().getId()));
+		asset.setParentAsset(assetRepository.findOne(assetDTO.getParentAssetId()));
 
 		if(assetDTO.getStatus().equalsIgnoreCase(AssetStatus.BREAKDOWN.getStatus())) {
 
@@ -1408,7 +1408,10 @@ public class AssetManagementService extends AbstractService {
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
 		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
-		AssetGroup parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
+        AssetGroup parent = null;
+		if(assetGroupDTO.getParentGroupId()>0){
+            parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
+        }
 
 		if(existingGroup == null) {
 			assetgroup.setActive(AssetGroup.ACTIVE_YES);

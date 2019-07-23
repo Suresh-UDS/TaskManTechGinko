@@ -11,6 +11,7 @@ public class AssetgroupDTO extends BaseDTO implements Serializable {
     private String assetgroup;
 	private String assetGroupCode;
 	private AssetGroup parentGeroup;
+	private long parentGroupId;
 	
 	public long getId() {
 		return id;
@@ -44,6 +45,12 @@ public class AssetgroupDTO extends BaseDTO implements Serializable {
 		this.parentGeroup = parentGeroup;
 	}
 
-	
-	
+
+    public long getParentGroupId() {
+        return parentGroupId;
+    }
+
+    public void setParentGroupId(long parentGroupId) {
+        this.parentGroupId = parentGroupId;
+    }
 }
