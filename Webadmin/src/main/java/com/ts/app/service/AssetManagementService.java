@@ -1407,7 +1407,7 @@ public class AssetManagementService extends AbstractService {
 
 	public AssetgroupDTO createAssetGroup(AssetgroupDTO assetGroupDTO) {
 		AssetGroup assetgroup = mapperUtil.toEntity(assetGroupDTO, AssetGroup.class);
-		AssetGroup existingGroup = assetGroupRepository.findByName(assetGroupDTO.getAssetgroup());
+		AssetGroup existingGroup = assetGroupRepository.findByNameAndSite(assetGroupDTO.getAssetgroup(),assetGroupDTO.getSiteId());
         AssetGroup parent = null;
 		if(assetGroupDTO.getParentGroupId()>0){
             parent = assetGroupRepository.findOne(assetGroupDTO.getParentGeroup().getId());
