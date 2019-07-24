@@ -7,6 +7,7 @@ public class AssetReadingReport {
     private String assetCode;
     private List<Readings> readings;
     private boolean parent;
+    private int level; 
 
     public AssetReadingReport() {}
     
@@ -47,5 +48,15 @@ public class AssetReadingReport {
 	public void setParent(boolean parent) {
 		this.parent = parent;
 	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	
 
 }
