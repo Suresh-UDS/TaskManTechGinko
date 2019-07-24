@@ -64,7 +64,7 @@ public class AssetDTO extends BaseDTO {
     private String url;
     private String parentAssetCode;
     private long parentAssetId;
-    
+    @JsonIgnore
     private Asset parentAsset;
     
     private boolean inserted;

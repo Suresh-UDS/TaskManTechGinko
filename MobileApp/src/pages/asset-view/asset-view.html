@@ -94,9 +94,20 @@
                 <ion-icon name="close-circle" class="fnt-28  clr-white" ></ion-icon>
             </button>
 
+            <ion-label *ngIf="assetBreakDown" class="margin0 bg-orange" color="dark">Mark In Use</ion-label>
+            <!--<ion-label class="margin0 bg-orange" color="dark" *ngSwitchCase =" 'details' ">Mark Breakdown</ion-label>-->
+            <button *ngIf="assetBreakDown" ion-fab color="primary" (click)="markInUse(assetDetails)">
+                <ion-icon name="close-circle" class="fnt-28  clr-white" ></ion-icon>
+            </button>
+
             <ion-label class="margin0 bg-orange" color="dark">Reading</ion-label>
             <button ion-fab color="primary" (click)="getReadings()">
                 <ion-icon name="speedometer" class="fnt-28  clr-white" ></ion-icon>
+            </button>
+
+            <ion-label class="margin0 bg-orange" color="dark">Top Up</ion-label>
+            <button ion-fab color="primary" (click)="getReadings()">
+                <ion-icon name="arrow-up" class="fnt-28  clr-white" ></ion-icon>
             </button>
 
             <!--<ion-label class="margin0 bg-orange" color="dark">Inventory</ion-label>-->

@@ -2226,9 +2226,14 @@ angular.module('timeSheetApp')
 			    console.log("Get MTTR for assets - "+assetId);
 			    AssetComponent.getMTTR(assetId).then(function (data) {
                     console.log(data);
-                    var mttr = Math.abs(data.maintenanceHours)/data.assetTicketsCount;
-                    console.log(mttr);
-                    $scope.mttr = mttr;
+                    if(data.maintenanceHours>0){
+                        var mttr = Math.abs(data.maintenanceHours)/data.assetTicketsCount;
+                        console.log(mttr);
+                        $scope.mttr = mttr;
+                    }else{
+                        $scope.mttr = data.maintenanceHours;
+                    }
+
                 });
             };
 
@@ -2794,6 +2799,7 @@ angular.module('timeSheetApp')
 				    $scope.loadingStart();
 				    //alert($scope.selectedParentGroup.id)
 				    $scope.assetGroup.parentGeroup = $scope.selectedParentGroup;
+				    $scope.assetGroup.parentGroupId = $scope.selectedParentGroup.id;
 				    //alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
