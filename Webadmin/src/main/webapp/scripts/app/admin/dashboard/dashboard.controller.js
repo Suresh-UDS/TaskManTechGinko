@@ -247,6 +247,13 @@ angular.module('timeSheetApp')
                         Highcharts.chart(element[0], guageChartInfo);
                         
                     }
+                    else{
+
+                        guageChartInfo.series[0].tooltip.valueSuffix = " "+scope.data.unit;
+
+                        Highcharts.chart(element[0], guageChartInfo);
+
+                    }
                 });
  
                 $timeout(function(){
@@ -465,8 +472,8 @@ angular.module('timeSheetApp')
 
                         difference = firstChildSumValue - parentMeterValue;
 
-                        guageResultObject.meterValueTooltip =  "<br/>"+"PM : "+ ((parentMeterValue-difference).toFixed())+"<br/>"+
-                                                               "CM : "+ (parentMeterValue.toFixed());
+                        guageResultObject.meterValueTooltip =  "<br/>"+"PM : "+ (parentMeterValue.toFixed())+"<br/>"+
+                                                               "CM : "+ ((parentMeterValue-difference).toFixed());
 
                         guageResultObject.meterValue = difference == 0 ? 0 : (((parentMeterValue-difference)/parentMeterValue) * 100);
 
