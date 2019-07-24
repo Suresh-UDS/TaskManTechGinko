@@ -43,7 +43,10 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
     private int min;
     
     private int max;
-    
+
+    @Column(columnDefinition ="long default 1")
+    private long multiplicationFactor;
+
     private String rule;
     
     private boolean validationRequired;
@@ -146,5 +149,12 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
 		this.alertRequired = alertRequired;
 	}
 
-    
+
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
 }

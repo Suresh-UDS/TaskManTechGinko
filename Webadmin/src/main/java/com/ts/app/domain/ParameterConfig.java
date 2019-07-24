@@ -42,9 +42,11 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
     
     private int min;
     
-    private int max;   
-   
-    
+    private int max;
+
+    private long multiplicationFactor;
+
+
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = true)
     private String rule;
@@ -136,8 +138,13 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 	public void setMax(int max) {
 		this.max = max;
 	}
-	
-	
 
-    
+
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
 }

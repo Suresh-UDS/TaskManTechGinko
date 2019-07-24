@@ -1751,6 +1751,11 @@ public class AssetManagementService extends AbstractService {
     public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
 		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
 
+
+
+		log.debug("Asset readings with mulitplication factor- "+assetParamReadingDTO.getInitialValue()+" - "+assetParamReadingDTO.getFinalValue());
+		log.debug("Asset readings without multiplication factor - "+assetParameterReading.getInitialValue()+" - "+assetParameterReading.getFinalValue());
+
         AssetParameterConfig assetParameterConfig = assetParamConfigRepository.findOne(assetParamReadingDTO.getAssetParameterConfigId());
 
 		AssetParameterReadingDTO prevReading = getLatestParamReading(assetParamReadingDTO.getAssetId(), assetParamReadingDTO.getAssetParameterConfigId());
@@ -1773,12 +1778,15 @@ public class AssetManagementService extends AbstractService {
 
 		if(prevReading != null) {
 
+            if (!assetParameterConfig.isConsumptionMonitoringRequired()) {
+
                 if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
 
                     checkInvalidEntry = true;
 
                 }
-		}
+            }
+        }
 
 		if(checkInvalidEntry) {
 
@@ -1818,7 +1826,9 @@ public class AssetManagementService extends AbstractService {
                 }
             }
 
-            if(assetParameterReading.getInitialValue()<assetParameterConfig.getMin()){
+
+
+            if(assetParameterReading.getInitialValue()>0 && assetParameterReading.getInitialValue()<assetParameterConfig.getMin()){
                 String type = "reading";
 
                 Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
@@ -1868,6 +1878,17 @@ public class AssetManagementService extends AbstractService {
 			}
 
 			assetParameterReading.setAssetParameterConfig(assetParameterConfig);
+            assetParameterReading.setActualConsumption(assetParameterReading.getConsumption());
+            assetParameterReading.setActualInitialValue(assetParameterReading.getInitialValue());
+            assetParameterReading.setActualFinalValue(assetParameterReading.getFinalValue());
+            assetParameterReading.setActualValue(assetParameterReading.getValue());
+            assetParameterReading.setInitialValue(assetParamReadingDTO.getInitialValue()*assetParameterConfig.getMultiplicationFactor());
+            assetParameterReading.setFinalValue(assetParamReadingDTO.getFinalValue()*assetParameterConfig.getMultiplicationFactor());
+            assetParameterReading.setValue(assetParamReadingDTO.getValue()*assetParamReadingDTO.getMultiplicationFactor());
+            assetParameterReading.setConsumption(Math.abs(assetParameterReading.getInitialValue() - assetParameterReading.getFinalValue()));
+
+            log.debug("Acutal consumption - "+assetParameterReading.getActualConsumption());
+            log.debug("consumption with multiplication factor- "+assetParameterReading.getConsumption());
 			assetParameterReading = assetParamReadingRepository.save(assetParameterReading);
 			assetParamReadingDTO = mapperUtil.toModel(assetParameterReading, AssetParameterReadingDTO.class);
 			return assetParamReadingDTO;

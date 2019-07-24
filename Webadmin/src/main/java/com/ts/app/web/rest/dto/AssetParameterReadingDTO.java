@@ -16,11 +16,21 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
     
     private double initialValue;
 
+    private double actualInitialValue;
+
+    private double actualFinalValue;
+
+    private double actualConsumption;
+
     private double finalValue;
 
     private double consumption;
 
     private double value;
+
+    private double actualValue;
+
+    private long multiplicationFactor;
     
 	private long assetId;
 	
@@ -168,6 +178,44 @@ public class AssetParameterReadingDTO extends BaseDTO implements Serializable {
 		this.runMinutes = runMinutes;
 	}
 
-	
-    
+
+    public double getActualInitialValue() {
+        return actualInitialValue;
+    }
+
+    public void setActualInitialValue(double actualInitialValue) {
+        this.actualInitialValue = actualInitialValue;
+    }
+
+    public double getActualFinalValue() {
+        return actualFinalValue;
+    }
+
+    public void setActualFinalValue(double actualFinalValue) {
+        this.actualFinalValue = actualFinalValue;
+    }
+
+    public double getActualConsumption() {
+        return actualConsumption;
+    }
+
+    public void setActualConsumption(double actualConsumption) {
+        this.actualConsumption = actualConsumption;
+    }
+
+    public double getActualValue() {
+        return actualValue;
+    }
+
+    public void setActualValue(double actualValue) {
+        this.actualValue = actualValue;
+    }
+
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
 }

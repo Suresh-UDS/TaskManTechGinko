@@ -26,6 +26,8 @@ public class AssetParameterConfigDTO extends BaseDTO implements Serializable {
     private String assetTitle;
     
     private double threshold;
+
+    private long multiplicationFactor;
     
     private int min;
     
@@ -141,7 +143,12 @@ public class AssetParameterConfigDTO extends BaseDTO implements Serializable {
 		this.alertRequired = alertRequired;
 	}
 
-	
 
-    
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
 }

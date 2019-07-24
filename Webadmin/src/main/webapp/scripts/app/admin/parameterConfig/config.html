@@ -177,48 +177,70 @@
 
 
                                      <div class="col-md-2">
-                                                                            <div class="form-group">
-                                                                                <label class="control-label">Threshold Min Value  </label>
-                                                                                <input id='min'
-									                                                 ng-model="selectedMinValue"
-									                                                 class='form-control'
-									                                                 name='MinValue'
-                                                                                     value="1"
-                                                                                     min="1"
-                                                                                     ng-change="checkMinMax()"
-									                                                 type='number' value=""
-									                                                 autofocus
-									                                                  />
-                                                                                <div ng-show="form6.$submitted || form6.MinValue.$touched">
-                                                                                    <p class="help-block" style="color:maroon" ng-show="minError">
-                                                                                       Min value must below max value.
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Threshold Min Value  </label>
+                                                <input id='min'
+                                                     ng-model="selectedMinValue"
+                                                     class='form-control'
+                                                     name='MinValue'
+                                                     value="1"
+                                                     min="1"
+                                                     ng-change="checkMinMax()"
+                                                     type='number' value=""
+                                                     autofocus
+                                                      />
+                                                <div ng-show="form6.$submitted || form6.MinValue.$touched">
+                                                    <p class="help-block" style="color:maroon" ng-show="minError">
+                                                       Min value must below max value.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
                                                                         
                                                                         
                                                                         
-                                          <div class="col-md-2">
-                                                                             <div class="form-group">
-                                                                                <label class="control-label">Threshold Max Value </label>
-                                                                                <input id='max'
-									                                                 ng-model="selectedMaxValue"
-									                                                 class='form-control'
-									                                                 name='MaxValue'
-                                                                                     value="1"
-                                                                                     min="1"
-                                                                                     ng-change="checkMinMax()"
-									                                                 type='number' value=""
-									                                                 autofocus
-									                                                  />
-                                                                                  <div ng-show="form6.$submitted || form6.MaxValue.$touched">
-                                                                                    <p class="help-block" style="color:maroon" ng-show="maxError">
-                                                                                       Max value must above min value.
-                                                                                    </p>
-                                                                                 </div>
-                                                                            </div>
-                                                                        </div>                                
+                                      <div class="col-md-2">
+                                             <div class="form-group">
+                                                <label class="control-label">Threshold Max Value </label>
+                                                <input id='max'
+                                                     ng-model="selectedMaxValue"
+                                                     class='form-control'
+                                                     name='MaxValue'
+                                                     value="1"
+                                                     min="1"
+                                                     ng-change="checkMinMax()"
+                                                     type='number' value=""
+                                                     autofocus
+                                                      />
+                                                  <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                    <p class="help-block" style="color:maroon" ng-show="maxError">
+                                                       Max value must above min value.
+                                                    </p>
+                                                 </div>
+                                            </div>
+                                        </div>
+
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Multiplication Factor</label>
+                                            <input id='multiplicationFactor'
+                                                   ng-model="selectedMuliplicationFactor"
+                                                   class='form-control'
+                                                   name='multiplicationFactor'
+                                                   value="1"
+                                                   min="1"
+                                                   ng-change="checkMultiplicationFactor()"
+                                                   type='number' value=""
+                                                   autofocus
+                                            />
+                                            <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                <p class="help-block" style="color:maroon" ng-show="mulFactorError">
+                                                    Multiplication Factor should be greater than 1.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
                                     <div class="col-md-2">
