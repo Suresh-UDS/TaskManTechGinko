@@ -15,7 +15,7 @@ angular.module('timeSheetApp')
 
                 // $scope.sampleData = data[0];
                 scope.readings = scope.data.readings;
-                scope.pushingItems = {"name":"Readings","data":[],"color" :{
+                scope.pushingItems = {"name":"Consumption","data":[],"color" :{
                     linearGradient: {
                       x1: 0,
                       x2: 0,
@@ -33,7 +33,7 @@ angular.module('timeSheetApp')
                     for(var i=0; i < scope.readings.length; i++) {
                         var indexItm = [];
                         scope.xAxis.push(scope.readings[i].date);
-                        scope.pushingItems.data.push(scope.readings[i].value);
+                        scope.pushingItems.data.push(parseFloat(scope.readings[i].value.toFixed(2)));
 
                     }
 
@@ -314,9 +314,9 @@ angular.module('timeSheetApp')
         };
 
         $scope.guageResults = [
-            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"%","label":"Fuel","id":"fuelGuageContainer","critical":{"good":[0,25],"better":[25,50],"bad":[50,100]}},
-            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"%","label":"Water","id":"waterGuageContainer","critical":{"good":[0,25],"better":[25,50],"bad":[50,100]}},
-            {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":"Kwh","label":"Power","id":"powerGuageContainer","critical":{"good":[0,10],"better":[10,40],"bad":[40,100]}}
+            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":"% Ltr","label":"Fuel","id":"fuelGuageContainer","critical":{"good":[0,25],"better":[25,50],"bad":[50,100]}},
+            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":"% Kltr","label":"Water","id":"waterGuageContainer","critical":{"good":[0,25],"better":[25,50],"bad":[50,100]}},
+            {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":"% Units","label":"Power","id":"powerGuageContainer","critical":{"good":[0,10],"better":[10,40],"bad":[40,100]}}
         ]
 
         $scope.init = function() {
@@ -422,7 +422,7 @@ angular.module('timeSheetApp')
 
                         }
 
-                        if( guageResultObject.data[i]  == 0){
+                        if( guageResultObject.data[i].level  == 0){
 
                             parentMeterValue = meterValue;
 
@@ -436,7 +436,7 @@ angular.module('timeSheetApp')
 
                         }
 
-                        if( guageResultObject.data[i] == 1){
+                        if( guageResultObject.data[i].level == 1){
 
                             firstChildSumValue = meterValue;
 
