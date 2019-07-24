@@ -401,6 +401,8 @@ angular.module('timeSheetApp')
 
                 var parentMeterValue = 0;
 
+                var firstChildSumValue = 0;
+
                 var difference = 0;
 
                 var isRelationshipBased = false;
@@ -420,7 +422,7 @@ angular.module('timeSheetApp')
 
                         }
 
-                        if(i == 0){
+                        if( guageResultObject.data[i]  == 0){
 
                             parentMeterValue = meterValue;
 
@@ -434,6 +436,12 @@ angular.module('timeSheetApp')
 
                         }
 
+                        if( guageResultObject.data[i] == 1){
+
+                            firstChildSumValue = meterValue;
+
+                        }
+
                     }
 
                 }
@@ -442,14 +450,14 @@ angular.module('timeSheetApp')
 
                     if(isRelationshipBased){
 
-                        difference = meterValue - parentMeterValue;
+                        difference = firstChildSumValue - parentMeterValue;
 
                         guageResultObject.meterValue = difference == 0 ? 0 : (((parentMeterValue-difference)/parentMeterValue) * 100);
 
                     }
                     else{
 
-                        guageResultObject.meterValue = meterValue - parentMeterValue;
+                        guageResultObject.meterValue = 0;
 
                     }
 

@@ -2506,7 +2506,7 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
-	public void assetDetailedReadingReport(List<AssetReadingReport> reportList,List<Asset> assets,SearchCriteria searchCriteria) {
+	public void assetDetailedReadingReport(List<AssetReadingReport> reportList,List<Asset> assets,SearchCriteria searchCriteria,int level) {
 
 		if(assets!=null) {
 
@@ -2551,7 +2551,7 @@ public class AssetManagementService extends AbstractService {
 
 				}
 
-				if(asset.getAssets()!=null) {
+				if(asset.getAssets().size() > 0) {
 
 					assetInfo.setParent(true);
 
@@ -2561,10 +2561,12 @@ public class AssetManagementService extends AbstractService {
 					assetInfo.setParent(false);
 
 				}
+				
+				assetInfo.setLevel(level);
 
 				reportList.add(assetInfo);
 
-				assetDetailedReadingReport(reportList,asset.getAssets(),searchCriteria);
+				assetDetailedReadingReport(reportList,asset.getAssets(),searchCriteria,level+1);
 
 			}
 
@@ -2586,7 +2588,7 @@ public class AssetManagementService extends AbstractService {
 
 				if(assets!=null) {
 
-					assetDetailedReadingReport(report,assets,searchCriteria);
+					assetDetailedReadingReport(report,assets,searchCriteria,0);
 
 				}
 
