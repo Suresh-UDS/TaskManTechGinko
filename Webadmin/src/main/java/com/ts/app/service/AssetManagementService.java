@@ -32,6 +32,7 @@ import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing Asset information.
@@ -1974,7 +1975,35 @@ public class AssetManagementService extends AbstractService {
 	}
 
 	public AssetParameterReadingDTO getLatestParamReading(long assetId, long assetParamId) {
-		List<AssetParameterReading> assetParamReadings = assetRepository.findAssetReadingById(assetId, assetParamId);
+		
+		AssetParameterConfig config = assetParamConfigRepository.findById(assetParamId);
+		
+		List<AssetParameterConfig> configs = null; 
+		
+		List<AssetParameterReading> assetParamReadings = null;
+		
+		if(config!=null) {
+		
+			configs = assetParamConfigRepository.findByAssetIdAndAllowTopUp(assetId,true);
+			
+			List<Long> configIds;
+			
+			if(configs!=null) {
+				
+				configIds = configs.stream().map(s->s.getId()).collect(Collectors.toList());
+			
+				assetParamReadings = assetRepository.findAssetReadingByIds(assetId,configIds);
+				
+			}
+			 
+		}
+		
+		if(assetParamReadings == null) {
+
+			assetParamReadings = assetRepository.findAssetReadingById(assetId, assetParamId);
+			
+		}
+ 
 		AssetParameterReading assetLatestParamReading = null;
 		if(CollectionUtils.isNotEmpty(assetParamReadings)) {
 			assetLatestParamReading = assetParamReadings.get(0);
