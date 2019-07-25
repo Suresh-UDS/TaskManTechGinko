@@ -100,7 +100,8 @@ angular.module('timeSheetApp')
             $scope.mttr =0;
             $scope.selectedMuliplicationFactor=1;
             $scope.mulFactorError = false;
-            $scope.allowTopup = false;
+            $scope.allowTopUp = false;
+            $scope.selectedTopup = false;
             $('#dPlayNone').hide();
 
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -2101,7 +2102,7 @@ angular.module('timeSheetApp')
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
 					if($scope.selectedZone){$scope.assetGen.zone = $scope.selectedZone;}
                     $scope.assetGen.criticalStatusList = $scope.criticalStatusList;
-					$scope.assetGen.allowTopUp = $scope.allowTopup;
+					$scope.assetGen.allowTopUp = $scope.selectedTopup;
                     console.log("After adding critical status list");
                     console.log($scope.assetGen);
 					//console.log("Asset Create List -- ",$scope.assetGen);
@@ -2339,7 +2340,7 @@ angular.module('timeSheetApp')
 					$scope.assetEdit.warrantyToDate = $scope.warToDate;
 				}
                 $scope.assetEdit.criticalStatusList = $scope.criticalStatusList;
-				$scope.assetEdit.allowTopUp = $scope.allowTopUp;
+                // $scope.assetEdit.allowTopUp = $scope.selectedTopup;
 				//console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
 				//$scope.asset.assetStatus = $scope.selectedStatus.name;
@@ -2567,6 +2568,7 @@ angular.module('timeSheetApp')
 				$scope.selectedThreshold =null;
 				$scope.validationRequired = false;
 				$scope.consumptionMonitoringRequired = false;
+				$scope.allowTopUp = false;
 				$scope.alertRequired = false;
 				$scope.selectedMinValue = null;
 				$scope.selectedMaxValue = null;
@@ -3022,6 +3024,7 @@ angular.module('timeSheetApp')
 					}
 
                     $scope.parameterConfig.multiplicationFactor = $scope.selectedMuliplicationFactor;
+					$scope.parameterConfig.allowTopUp = $scope.selectedTopup;
 					var post = $scope.isEdit ? AssetComponent.updateAssetParamConfig : AssetComponent.createAssetParamConfig;
 					post($scope.parameterConfig).then(function () {
 
@@ -3988,7 +3991,8 @@ angular.module('timeSheetApp')
 			    console.log("Current Status");
 			    console.log(status);
 			    console.log(i);
-			    if($scope.statuses[i].isCurrentStatus){
+			    $scope.selectedAssetStatus = status.status;
+                if($scope.statuses[i].isCurrentStatus){
                     for(var j=0;j<$scope.statuses.length;j++){
                         if(j===i){
                             $scope.statuses[j].allowCurrentStatus = true;

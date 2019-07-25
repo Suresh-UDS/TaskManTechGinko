@@ -1034,10 +1034,9 @@
                                                                        <tr>
                                                                            <th>Type</th>
                                                                            <th>Units</th>
-                                                                           <th>Rule</th>
-                                                                           <th>Threshold</th>
-                                                                           <th>Min Value</th>
-                                                                           <th>Max value</th>
+                                                                           <th>Name</th>
+                                                                           <th>Min Threshold Value</th>
+                                                                           <th>Max Threshold value</th>
                                                                            <th>Consumption</th>
                                                                            <th>Alert</th>
                                                                            <th>Validation</th>
@@ -1050,8 +1049,7 @@
                                                                       <tr ng-repeat="assetParam in assetParameters">
                                                                        <td>{{assetParam.assetType}}</td>
                                                                        <td>{{assetParam.uom}}</td>
-                                                                       <td>{{assetParam.rule}}</td>
-                                                                       <td>{{assetParam.threshold}}</td>
+                                                                       <td>{{assetParam.name}}</td>
                                                                        <td>{{assetParam.min}}</td>
                                                                        <td>{{assetParam.max}}</td>
                                                                        <td>

@@ -1967,7 +1967,7 @@ angular.module('timeSheetApp')
                             text: '<b>Asset Breakdown Ticket Status</b>'
                         },
                         tooltip: {
-                            pointFormat: '{series.name}: <b>{point.percentage:.1f}% - {point.y} No(s)</b>'
+                            pointFormat: '{series.name}: <b>{point.y} No(s) : {point.percentage:.1f}%</b>'
                         },
                         plotOptions: {
                             pie: {
@@ -1975,7 +1975,7 @@ angular.module('timeSheetApp')
                                 cursor: 'pointer',
                                 dataLabels: {
                                     enabled: true,
-                                    format: '<b>{point.name}</b>: {point.percentage:.1f} % - {point.y} No(s)',
+                                    format: '<b>{point.name}</b>: {point.y} No(s) : {point.percentage:.1f} %',
                                     connectorColor: 'silver'
                                 }
                             }
@@ -2018,7 +2018,7 @@ angular.module('timeSheetApp')
                           text: '<b>Asset Availability Status</b>'
                       },
                       tooltip: {
-                          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> - {point} No(s)'
+                          pointFormat: '{series.name}: <b>{point.y} No(s) : {point.percentage:.1f}%</b>'
                       },
                       plotOptions: {
                           pie: {
@@ -2026,7 +2026,7 @@ angular.module('timeSheetApp')
                               cursor: 'pointer',
                               dataLabels: {
                                   enabled: true,
-                                  format: '<b>{point.name}</b>: {point.percentage:.1f} % - {point.y} No(s)',
+                                  format: '<b>{point.name}</b>: {point.y} No(s) : {point.percentage:.1f} % ',
                                   connectorColor: 'silver'
                               }
                           }
