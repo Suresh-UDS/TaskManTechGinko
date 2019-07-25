@@ -1994,7 +1994,11 @@ public class AssetManagementService extends AbstractService {
 				
 				configIds = configs.stream().map(s->s.getId()).collect(Collectors.toList());
 			
-				assetParamReadings = assetRepository.findAssetReadingByIds(assetId,configIds);
+				if(configIds.size()>0) {
+					
+					assetParamReadings = assetRepository.findAssetReadingByIds(assetId,configIds);
+				
+				}
 				
 			}
 			 
