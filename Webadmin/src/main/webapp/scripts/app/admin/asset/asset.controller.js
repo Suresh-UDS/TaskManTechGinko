@@ -2231,7 +2231,7 @@ angular.module('timeSheetApp')
 			    console.log("Get MTTR for assets - "+assetId);
 			    AssetComponent.getMTTR(assetId).then(function (data) {
                     console.log(data);
-                    if(data.maintenanceHours>0){
+                    if(Math.abs(data.maintenanceHours)>0){
                         var mttr = Math.abs(data.maintenanceHours)/data.assetTicketsCount;
                         console.log(mttr);
                         $scope.mttr = mttr;
