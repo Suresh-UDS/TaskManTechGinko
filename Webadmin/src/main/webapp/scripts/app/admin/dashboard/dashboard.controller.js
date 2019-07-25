@@ -334,7 +334,7 @@ angular.module('timeSheetApp')
         };
 
         $scope.guageResults = [
-            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":" Ltr","label":"Fuel","id":"fuelGuageContainer","min":0,"max":100,"critical":{"good":[0,0],"better":[0,0],"bad":[0,0]}},
+            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":" Ltr","label":"Fuel","id":"fuelGuageContainer","min":0,"max":10000,"critical":{"good":[0,0],"better":[0,0],"bad":[0,0]}},
             {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":" Kltr","label":"Water","id":"waterGuageContainer","min":0,"max":100000,"critical":{"good":[0,0],"better":[0,0],"bad":[0,0]}},
             {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":" % Units","label":"Power","id":"powerGuageContainer","min":0,"max":100,"critical":{"good":[0,10],"better":[10,40],"bad":[40,100]}}
         ]
