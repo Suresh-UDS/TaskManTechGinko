@@ -53,6 +53,8 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
     
     private boolean alertRequired;
 
+    private boolean allowTopUp;
+
     public Long getId() {
         return id;
     }
@@ -156,5 +158,13 @@ public class AssetParameterConfig extends AbstractAuditingEntity implements Seri
 
     public void setMultiplicationFactor(long multiplicationFactor) {
         this.multiplicationFactor = multiplicationFactor;
+    }
+
+    public boolean isAllowTopUp() {
+        return allowTopUp;
+    }
+
+    public void setAllowTopUp(boolean allowTopUp) {
+        this.allowTopUp = allowTopUp;
     }
 }
