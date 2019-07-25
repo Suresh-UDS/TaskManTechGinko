@@ -32,7 +32,8 @@ angular.module('timeSheetApp')
         $scope.selectedRule ="";
         $scope.selectedMinValue = null;
 		$scope.selectedMaxValue = null;
-
+        $scope.selectedMuliplicationFactor=1;
+        $scope.mulFactorError = false;
         $scope.consumptionMonitoringRequired = {value:false};
         $scope.alertRequired = {value: true};
         $scope.validationRequired = {value: true};
@@ -325,6 +326,7 @@ angular.module('timeSheetApp')
 	        	$scope.parameterConfig.consumptionMonitoringRequired  = $scope.consumptionMonitoringRequired.value;
 	        	$scope.parameterConfig.validationRequired = $scope.validationRequired.value;
 	        	$scope.parameterConfig.alertRequired = $scope.alertRequired.value;
+	        	$scope.parameterConfig.multiplicationFactor = $scope.selectedMuliplicationFactor;
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
                 post($scope.parameterConfig).then(function () {
@@ -351,6 +353,7 @@ angular.module('timeSheetApp')
                     $scope.selectedThreshold =null;
                     $scope.selectedMinValue = null;
                     $scope.selectedMaxValue = null;
+                    $scope.selectedMuliplicationFactor = 1;
                     $scope.validationRequired.value =false;
                     $scope.consumptionMonitoringRequired.value =false;
                     $scope.btnDisabled = false;
@@ -450,7 +453,15 @@ angular.module('timeSheetApp')
 					$scope.minError =false;
 					$scope.maxError =false;
 				}
-			}
+        }
+
+        $scope.checkMultiplicationFactor = function(){
+            if($scope.selectedMuliplicationFactor !=null && $scope.selectedMuliplicationFactor >=1){
+                $scope.mulFactorError = false;
+            }else{
+                $scope.mulFactorError= true;
+            }
+        }
 
         // init load
         $scope.initLoad = function(){

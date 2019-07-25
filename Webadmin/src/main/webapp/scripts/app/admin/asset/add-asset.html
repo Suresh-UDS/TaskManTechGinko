@@ -1083,13 +1083,34 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-2 col-md-offset-2">
-                                                                        <div class="checkbox" style="padding-top: 25px">
-                                                                            <label>
-                                                                                <input type="checkbox" ng-model="alertRequired" name="terms"> Alert Required
-                                                                            </label>
+                                                                    <div class="col-md-2">
+                                                                        <div class="form-group">
+                                                                            <label class="control-label">Multiplication Factor</label>
+                                                                            <input id='multiplicationFactor'
+                                                                                   ng-model="selectedMuliplicationFactor"
+                                                                                   class='form-control'
+                                                                                   name='multiplicationFactor'
+                                                                                   value="1"
+                                                                                   min="1"
+                                                                                   ng-change="checkMultiplicationFactor()"
+                                                                                   type='number' value=""
+                                                                                   autofocus
+                                                                            />
+                                                                            <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                                                <p class="help-block" style="color:maroon" ng-show="mulFactorError">
+                                                                                    Multiplication Factor should be greater than 1.
+                                                                                </p>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
+
+<!--                                                                    <div class="col-md-2 col-md-offset-2">-->
+<!--                                                                        <div class="checkbox" style="padding-top: 25px">-->
+<!--                                                                            <label>-->
+<!--                                                                                <input type="checkbox" ng-model="alertRequired" name="terms"> Alert Required-->
+<!--                                                                            </label>-->
+<!--                                                                        </div>-->
+<!--                                                                    </div>-->
 
                                                                     <div class="col-md-2">
                                                                         <div class="checkbox" style="padding-top: 25px">

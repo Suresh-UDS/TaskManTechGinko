@@ -32,10 +32,22 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
     private double initialValue;
 
     @Column(nullable = true)
+    private double actualInitialValue;
+
+    @Column(nullable = true)
+    private double actualFinalValue;
+
+    @Column(nullable = true)
     private double finalValue;
 
     @Column(nullable = true)
     private double consumption;
+
+    @Column(nullable = true)
+    private double actualConsumption;
+
+    @Column(nullable = true)
+    private double actualValue;
 
     @Column(nullable = true)
     private double value;
@@ -187,6 +199,36 @@ public class AssetParameterReading extends AbstractAuditingEntity implements Ser
 		this.runMinutues = runMinutues;
 	}
 
-	
-    
+
+    public double getActualInitialValue() {
+        return actualInitialValue;
+    }
+
+    public void setActualInitialValue(double actualInitialValue) {
+        this.actualInitialValue = actualInitialValue;
+    }
+
+    public double getActualFinalValue() {
+        return actualFinalValue;
+    }
+
+    public void setActualFinalValue(double actualFinalValue) {
+        this.actualFinalValue = actualFinalValue;
+    }
+
+    public double getActualConsumption() {
+        return actualConsumption;
+    }
+
+    public void setActualConsumption(double actualConsumption) {
+        this.actualConsumption = actualConsumption;
+    }
+
+    public double getActualValue() {
+        return actualValue;
+    }
+
+    public void setActualValue(double actualValue) {
+        this.actualValue = actualValue;
+    }
 }

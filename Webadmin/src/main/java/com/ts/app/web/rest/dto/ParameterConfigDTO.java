@@ -34,6 +34,8 @@ public class ParameterConfigDTO extends BaseDTO implements Serializable {
     
     private int max;
 
+    private long multiplicationFactor;
+
 	public long getId() {
 		return id;
 	}
@@ -121,8 +123,13 @@ public class ParameterConfigDTO extends BaseDTO implements Serializable {
 	public void setMax(int max) {
 		this.max = max;
 	}
-	
-	
 
-    
+
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
 }

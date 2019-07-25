@@ -98,6 +98,8 @@ angular.module('timeSheetApp')
             $scope.displayImage = "";
             $scope.statuses = [];
             $scope.mttr =0;
+            $scope.selectedMuliplicationFactor=1;
+            $scope.mulFactorError = false;
             $('#dPlayNone').hide();
 
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -3016,6 +3018,7 @@ angular.module('timeSheetApp')
 						//console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 					}
 
+                    $scope.parameterConfig.multiplicationFactor = $scope.selectedMuliplicationFactor;
 					var post = $scope.isEdit ? AssetComponent.updateAssetParamConfig : AssetComponent.createAssetParamConfig;
 					post($scope.parameterConfig).then(function () {
 
@@ -3042,6 +3045,7 @@ angular.module('timeSheetApp')
                         $scope.alertRequired = false;
                         $scope.selectedMinValue = null;
                         $scope.selectedMaxValue = null;
+                        $scope.selectedMuliplicationFactor=1;
                         $scope.isEdit = false;
                         $scope.assetConfig();
 						$scope.loadingStop();
@@ -4898,6 +4902,13 @@ angular.module('timeSheetApp')
 
         }
 
+        $scope.checkMultiplicationFactor = function(){
+            if($scope.selectedMuliplicationFactor !=null && $scope.selectedMuliplicationFactor >=1){
+                $scope.mulFactorError = false;
+            }else{
+                $scope.mulFactorError= true;
+            }
+        }
 
 
 
