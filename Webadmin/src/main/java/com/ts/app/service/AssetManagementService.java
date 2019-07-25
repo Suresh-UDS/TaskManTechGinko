@@ -1782,7 +1782,7 @@ public class AssetManagementService extends AbstractService {
 
                 if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
 
-                    checkInvalidEntry = true;
+                    checkInvalidEntry = false;
 
                 }
             }

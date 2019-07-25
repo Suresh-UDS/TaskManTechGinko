@@ -100,6 +100,7 @@ angular.module('timeSheetApp')
             $scope.mttr =0;
             $scope.selectedMuliplicationFactor=1;
             $scope.mulFactorError = false;
+            $scope.allowTopup = false;
             $('#dPlayNone').hide();
 
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
@@ -2100,6 +2101,7 @@ angular.module('timeSheetApp')
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
 					if($scope.selectedZone){$scope.assetGen.zone = $scope.selectedZone;}
                     $scope.assetGen.criticalStatusList = $scope.criticalStatusList;
+					$scope.assetGen.allowTopUp = $scope.allowTopup;
                     console.log("After adding critical status list");
                     console.log($scope.assetGen);
 					//console.log("Asset Create List -- ",$scope.assetGen);
@@ -2336,7 +2338,8 @@ angular.module('timeSheetApp')
 				if($scope.warToDate){
 					$scope.assetEdit.warrantyToDate = $scope.warToDate;
 				}
-                $scope.assetGen.criticalStatusList = $scope.criticalStatusList;
+                $scope.assetEdit.criticalStatusList = $scope.criticalStatusList;
+				$scope.assetEdit.allowTopUp = $scope.allowTopUp;
 				//console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
 				//$scope.asset.assetStatus = $scope.selectedStatus.name;
