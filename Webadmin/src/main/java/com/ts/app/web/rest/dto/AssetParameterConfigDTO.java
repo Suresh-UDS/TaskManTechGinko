@@ -38,6 +38,8 @@ public class AssetParameterConfigDTO extends BaseDTO implements Serializable {
     private boolean validationRequired;
     
     private boolean alertRequired;
+
+    private boolean allowTopUp;
     
     public Long getId() {
         return id;
@@ -150,5 +152,13 @@ public class AssetParameterConfigDTO extends BaseDTO implements Serializable {
 
     public void setMultiplicationFactor(long multiplicationFactor) {
         this.multiplicationFactor = multiplicationFactor;
+    }
+
+    public boolean isAllowTopUp() {
+        return allowTopUp;
+    }
+
+    public void setAllowTopUp(boolean allowTopUp) {
+        this.allowTopUp = allowTopUp;
     }
 }
