@@ -153,7 +153,7 @@ public interface AssetRepository extends JpaRepository<Asset, Long>,JpaSpecifica
     @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id = :assetParamId and r.active = 'Y' order by r.createdDate DESC")
 	List<AssetParameterReading> findAssetReadingById(@Param("assetId") long assetId, @Param("assetParamId") long assetParamId);
     
-    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id IN (:assetParamIds) and r.active = 'Y' order by r.createdDate DESC")
+    @Query("SELECT r FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.assetParameterConfig.id IN :assetParamIds and r.active = 'Y' order by r.createdDate DESC")
 	List<AssetParameterReading> findAssetReadingByIds(@Param("assetId") long assetId, @Param("assetParamIds") List<Long> assetParamIds);
 
     @Query("SELECT SUM(r.initialValue),AVG(SUM(r.initialValue)),SUM(r.finalValue),AVG(SUM(r.finalValue)),AVG(SUM(r.finalValue) - SUM(r.initialValue)) FROM AssetParameterReading r WHERE r.asset.id = :assetId and r.createdDate between :fromDate and :toDate and r.active = 'Y' order by r.createdDate DESC")
