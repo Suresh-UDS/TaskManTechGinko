@@ -1882,11 +1882,13 @@ public class AssetManagementService extends AbstractService {
             assetParameterReading.setActualConsumption(assetParameterReading.getConsumption());
             assetParameterReading.setActualInitialValue(assetParameterReading.getInitialValue());
             assetParameterReading.setActualFinalValue(assetParameterReading.getFinalValue());
-            assetParameterReading.setActualValue(assetParameterReading.getValue());
+            assetParameterReading.setActualValue(assetParamReadingDTO.getValue());
             assetParameterReading.setInitialValue(assetParamReadingDTO.getInitialValue()*assetParameterConfig.getMultiplicationFactor());
             assetParameterReading.setFinalValue(assetParamReadingDTO.getFinalValue()*assetParameterConfig.getMultiplicationFactor());
             assetParameterReading.setValue(assetParamReadingDTO.getValue()*assetParamReadingDTO.getMultiplicationFactor());
-            assetParameterReading.setConsumption(Math.abs(assetParameterReading.getInitialValue() - assetParameterReading.getFinalValue()));
+            if(assetParameterConfig.isConsumptionMonitoringRequired()){
+                assetParameterReading.setConsumption(Math.abs(assetParameterReading.getInitialValue() - assetParameterReading.getFinalValue()));
+            }
 
             log.debug("Acutal consumption - "+assetParameterReading.getActualConsumption());
             log.debug("consumption with multiplication factor- "+assetParameterReading.getConsumption());
