@@ -257,7 +257,9 @@
                                                                                <img class="asset-img" style="width: 300px !important; height:300px !important;" src="../../../../assets/img/asset-placeholder.png">
                                                                            </div>
                                                                            <div style="text-align: center">
-                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="mttr>0" >{{mttr}} Hr(s)</span></button>
+                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="mttr>0" >{{mttr}} Hr(s)</span>
+                                                                                    <span ng-if="mttr<=0" > Less than 1 Hr</span>
+                                                                               </button>
                                                                            </div>
                                                                        </div>
                                                                    </div>
