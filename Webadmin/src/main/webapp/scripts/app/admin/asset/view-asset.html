@@ -244,7 +244,12 @@
                                                                            <div class="asset-img-container" style="text-align: center">
                                                                                <img class="asset-img" style="width: 300px !important; height:300px !important;" ng-src={{displayImage.url}} alt="Display image">
                                                                            </div>
+                                                                       </div>
 
+                                                                           <div style="text-align: center">
+                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="mttr>0" >{{mttr}} Hr(s)</span>
+                                                                                   <span ng-if="mttr<=0" > Less than 1 Hr</span>
+                                                                               </button>
                                                                            </div>
 
                                                                          </div>

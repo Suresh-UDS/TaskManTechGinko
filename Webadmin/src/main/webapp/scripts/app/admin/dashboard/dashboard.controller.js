@@ -441,41 +441,43 @@ angular.module('timeSheetApp')
                             closingValue += guageResultObject.data[i].readings[j].closingValue;
 
                         }
-
-                        if( guageResultObject.data[i].level  == 0){
-
-                            parentMeterValue = meterValue;
-
-                            if(guageResultObject.data[i].parent){
-
-                                isRelationshipBased = true;
-
-                                parentMeterClosingValue = closingValue;
-
-                            }
-
-                        }
-
-                        if( guageResultObject.data[i].level == 1){
-
-                            firstChildSumValue = meterValue;
-
-                        }
-
+ 
                     }
+
+                    if( guageResultObject.data[i].level  == 0){
+
+                        parentMeterValue = meterValue;
+  
+                        if(guageResultObject.data[i].parent){
+
+                            isRelationshipBased = true;
+
+                            parentMeterClosingValue = closingValue;
+
+                            meterValue = 0;
+ 
+                        }
+ 
+                    }
+
+                    if( guageResultObject.data[i].level == 1){
+
+                        firstChildSumValue = meterValue;
+
+                     }
 
                 }
 
                 if(searchCriteria.assetTypeName == "ENERGY METER"){
 
                     if(isRelationshipBased){
-
-                        difference = firstChildSumValue - parentMeterValue;
+ 
+                        difference = Math.abs(firstChildSumValue - parentMeterValue);
 
                         guageResultObject.meterValueTooltip =  "<br/>"+"PM : "+ (parentMeterValue.toFixed())+"<br/>"+
-                                                               "CM : "+ ((parentMeterValue-difference).toFixed());
+                                                               "CM : "+ ((firstChildSumValue).toFixed());
 
-                        guageResultObject.meterValue = difference == 0 ? 0 : (((parentMeterValue-difference)/parentMeterValue) * 100);
+                        guageResultObject.meterValue = difference == 0 ? 0 : (((difference)/parentMeterValue) * 100);
 
                     }
                     else{
