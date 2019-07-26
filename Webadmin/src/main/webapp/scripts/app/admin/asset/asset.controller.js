@@ -4853,6 +4853,7 @@ angular.module('timeSheetApp')
         $scope.assetParentList = [];
        // $scope.selectedAssetParent = {};
 		$scope.getAssetHierarchy = function() {
+		    $scope.choosenAssetParent = {};
 		    var obj = {
 		        "siteId": $scope.selectedSites.id,
                 "assetTypeId" : $scope.selectedAssetType ? $scope.selectedAssetType.id : 0

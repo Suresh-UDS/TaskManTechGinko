@@ -251,10 +251,17 @@
                                                                                 <div class="form-group selectcon is-empty">
 
                                                                                     <div class="row">
-                                                                                        <div class="col-md-12 pad-r-0px">
+                                                                                        <div class="col-md-12 pad-r-0px" ng-if="assetFinalLists.length>0">
                                                                                             <label class="control-label">Parent</label>
                                                                                             <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                            <select class="form-control" ng-model="choosenAssetParent" ng-options="assetPar as assetPar.title | uppercase for assetPar in assetFinalLists" tabindex="6">
+                                                                                            <select class="form-control" ng-model="choosenAssetParent" ng-options="assetPar as assetPar.title | uppercase for assetPar in assetFinalLists" tabindex="6" ng-init="choosenAssetParent = assetFinalLists[0]">
+                                                                                            </select>
+                                                                                        </div>
+
+                                                                                        <div class="col-md-12 pad-r-0px" ng-if="assetFinalLists.length ==0">
+                                                                                            <label class="control-label">Parent</label>
+                                                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                            <select class="form-control"  tabindex="6">
                                                                                                 <option value="">No Parent..</option>
                                                                                             </select>
                                                                                         </div>
