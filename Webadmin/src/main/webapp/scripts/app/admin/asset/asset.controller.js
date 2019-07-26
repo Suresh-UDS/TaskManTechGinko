@@ -2807,6 +2807,7 @@ angular.module('timeSheetApp')
 				    //alert($scope.selectedParentGroup.id)
 				    $scope.assetGroup.parentGeroup = $scope.selectedParentGroup;
 				    $scope.assetGroup.parentGroupId = $scope.selectedParentGroup.id;
+				    $scope.assetGroup.siteId = $scope.selectedSites.id;
 				    //alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {

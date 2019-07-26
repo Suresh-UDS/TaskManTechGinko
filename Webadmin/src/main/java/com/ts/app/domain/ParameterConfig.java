@@ -46,6 +46,9 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 
     private long multiplicationFactor;
 
+    private boolean allowTopUp;
+
+
 
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = true)
@@ -146,5 +149,13 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 
     public void setMultiplicationFactor(long multiplicationFactor) {
         this.multiplicationFactor = multiplicationFactor;
+    }
+
+    public boolean isAllowTopUp() {
+        return allowTopUp;
+    }
+
+    public void setAllowTopUp(boolean allowTopUp) {
+        this.allowTopUp = allowTopUp;
     }
 }

@@ -37,7 +37,7 @@ angular.module('timeSheetApp')
         $scope.consumptionMonitoringRequired = {value:false};
         $scope.alertRequired = {value: true};
         $scope.validationRequired = {value: true};
-
+        $scope.selectedTopup = false;
         $scope.selectedThreshold;
         $scope.btnDisabled = false;
         $scope.noData = false;
@@ -327,6 +327,8 @@ angular.module('timeSheetApp')
 	        	$scope.parameterConfig.validationRequired = $scope.validationRequired.value;
 	        	$scope.parameterConfig.alertRequired = $scope.alertRequired.value;
 	        	$scope.parameterConfig.multiplicationFactor = $scope.selectedMuliplicationFactor;
+	        	$scope.parameterConfig.allowTopUp = $scope.selectedTopup;
+
 	        	console.log('parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 	        	var post = $scope.isEdit ? ParameterConfigComponent.update : ParameterConfigComponent.create
                 post($scope.parameterConfig).then(function () {

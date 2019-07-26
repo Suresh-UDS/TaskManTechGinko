@@ -327,6 +327,11 @@ public class AssetManagementService extends AbstractService {
 				assetParamConfig.setAlertRequired(parameterConfig.isAlertRequired());
 				assetParamConfig.setRule(parameterConfig.getRule());
 				assetParamConfig.setThreshold(parameterConfig.getThreshold());
+				assetParamConfig.setMin(parameterConfig.getMin());
+				assetParamConfig.setMax(parameterConfig.getMax());
+				assetParamConfig.setValidationRequired(parameterConfig.isValidationRequired());
+				assetParamConfig.setAllowTopUp(parameterConfig.isAllowTopUp());
+				assetParamConfig.setMultiplicationFactor(parameterConfig.getMultiplicationFactor());
 				assetParamConfig.setConsumptionMonitoringRequired(parameterConfig.isConsumptionMonitoringRequired());
 				assetParamConfig.setName(parameterConfig.getName());
 				assetParamConfig.setUom(parameterConfig.getUom());

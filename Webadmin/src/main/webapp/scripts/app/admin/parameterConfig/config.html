@@ -162,13 +162,7 @@
                                           </div>
 
                                     </div> -->
-                                   <!--  <div class="col-md-3">
-                                        <div class="checkbox">
-                                            <label style="padding-top: 23px;">
-                                                <input type="checkbox" name="terms" ng-model="alertRequired.value"> Alert Required
-                                            </label>
-                                        </div>
-                                    </div> -->
+
 
                                 <!-- </div> -->
 
@@ -250,6 +244,25 @@
                                             </label>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-2">
+                                        <div class="checkbox">
+                                            <label style="padding-top: 23px;">
+                                                <input type="checkbox" name="terms" ng-model="alertRequired.value"> Alert Required
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <div class="checkbox" style="padding-top: 25px">
+                                            <label>
+                                                <input type="checkbox" ng-model="selectedTopup" name="terms"> Level Reading
+                                            </label>
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-4">
                                         <div class="checkbox" style = "padding: 25px">
                                             <label>
@@ -257,11 +270,11 @@
                                             </label>
                                         </div>
                                     </div>
-</div>
-                                   
+                                    </div>
+
                                    <div class = "row">
 
-                                    <div class="col-md-7 txt-align-rgt" ng-switch="isEdit">
+                                    <div class="col-md-12 txt-align-rgt" ng-switch="isEdit">
                                         <!--<button class="btn btn-success" type="submit" ng-switch-when="false"-->
                                                 <!--id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">-->
                                             <!--<span class="btn-label"><i class="material-icons">add</i></span> Add-->
@@ -308,8 +321,12 @@
                                         <tr>
                                             <th>Asset Type</th>
                                             <th>Parameter</th>
-                                            <th>Unit</th>
-                                            <th>Consumption Monitoring Required</th>
+                                            <th>Threshold</th>
+                                            <th>Consumption</th>
+                                            <th>Multiplication Factor</th>
+                                            <th>Alert</th>
+                                            <th>Validation</th>
+                                            <th>Level Reading</th>
                                             <th class="text-right" >Actions</th>
                                         </tr>
 
@@ -319,8 +336,8 @@
 
                                         	<tr ng-repeat="parameterConfig in parameterConfigs" repeat-done="initDataTables()">
 											<td>{{parameterConfig.assetType}}</td>
-											<td>{{parameterConfig.name}}</td>
-			                                	<td>{{parameterConfig.uom}}</td>
+											<td>{{parameterConfig.name}} - {{parameterConfig.uom}}</td>
+                                            <td>{{parameterConfig.min}} - {{parameterConfig.max}}</td>
 										   	<td>
 										   		<div class="checkbox">
                                                     <label>
@@ -328,6 +345,30 @@
                                                     </label>
                                                 </div>
                                              </td>
+                                            <td>
+                                                {{parameterConfig.multiplicationFactor}}
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="alert" ng-model="parameterConfig.alertRequired" disabled >
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="alert" ng-model="parameterConfig.validationRequired" disabled >
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="alert" ng-model="parameterConfig.allowTopUp" disabled >
+                                                    </label>
+                                                </div>
+                                            </td>
 			                                 <td class="text-right">
                                                 <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="AssetConfig:Edit"  title="Edit"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 			                                 	<a  has-permission="AssetConfig:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" title="Delete" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>

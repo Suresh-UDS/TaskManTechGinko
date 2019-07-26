@@ -36,6 +36,8 @@ public class ParameterConfigDTO extends BaseDTO implements Serializable {
 
     private long multiplicationFactor;
 
+    private boolean allowTopUp;
+
 	public long getId() {
 		return id;
 	}
@@ -131,5 +133,13 @@ public class ParameterConfigDTO extends BaseDTO implements Serializable {
 
     public void setMultiplicationFactor(long multiplicationFactor) {
         this.multiplicationFactor = multiplicationFactor;
+    }
+
+    public boolean isAllowTopUp() {
+        return allowTopUp;
+    }
+
+    public void setAllowTopUp(boolean allowTopUp) {
+        this.allowTopUp = allowTopUp;
     }
 }
