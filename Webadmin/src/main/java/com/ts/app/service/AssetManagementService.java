@@ -1754,6 +1754,39 @@ public class AssetManagementService extends AbstractService {
 //
 //	}
 
+    private class AlertMinMax{
+        boolean min;
+	    boolean max;
+	    AlertMinMax(boolean minValue, boolean maxValue){
+                min = minValue;
+                max = maxValue;
+        }
+        public boolean isMin(){
+	        return min;
+        }
+
+        public boolean isMax(){
+	        return max;
+        }
+    }
+
+    private AlertMinMax isAlertRequired(double actualValue,double minValue,double maxValue){
+
+	    AlertMinMax alertMinMax = null;
+	    boolean result = false;
+
+	    if(actualValue < minValue){
+	        alertMinMax = new AlertMinMax(true,false);
+        }
+
+	    if(actualValue > maxValue){
+            alertMinMax = new AlertMinMax(false,true);
+        }
+
+	    return alertMinMax;
+
+
+    }
     public AssetParameterReadingDTO saveAssetReadings(AssetParameterReadingDTO assetParamReadingDTO) {
 		AssetParameterReading assetParameterReading = mapperUtil.toEntity(assetParamReadingDTO, AssetParameterReading.class);
 
@@ -1778,15 +1811,15 @@ public class AssetManagementService extends AbstractService {
 
 		if(prevReading != null) {
 
-            if (!assetParameterConfig.isConsumptionMonitoringRequired() && assetParameterConfig.isValidationRequired()) {
+            if ( assetParameterConfig.isValidationRequired()) {
 
-                if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
+                if(assetParamReadingDTO.getValue() < prevReading.getValue()) {
 
                     checkInvalidEntry = true;
 
-                    if(assetParameterConfig.isAlertRequired()){
-                        sendReadingAlert(asset,date);
-                    }
+//                    if(assetParameterConfig.isAlertRequired()){
+//                        sendReadingAlert(asset,date);
+//                    }
 
                 }
             }
@@ -1804,22 +1837,38 @@ public class AssetManagementService extends AbstractService {
 		    log.debug("Parameter threshold min value - "+assetParameterConfig.getMin());
 		    log.debug("Parameter Initial Reading - "+assetParameterReading.getInitialValue());
 
-		    if(!assetParameterConfig.isConsumptionMonitoringRequired()&& assetParameterReading.getFinalValue()>0){
-                log.debug("Parameter Final Reading - "+assetParameterReading.getFinalValue());
-		        if( assetParameterReading.getFinalValue()>assetParameterConfig.getMax()){
-                    sendReadingAlert(asset,date);
+		    if(assetParameterConfig.isAlertRequired()){
+                if(assetParameterConfig.isConsumptionMonitoringRequired()){
+
+                    AlertMinMax consumptionMinMaxAlert = isAlertRequired(assetParameterReading.getConsumption(),assetParameterConfig.getMin(),assetParameterConfig.getMax());
+
+                    if(consumptionMinMaxAlert.isMin()){
+                        sendReadingAlert(asset,date,"email.consumption.min");
+                    }else if(consumptionMinMaxAlert.isMax()){
+                        sendReadingAlert(asset,date,"email.consumption.max");
+                    }
+
+                }
+                else{
+
+                    AlertMinMax consumptionMinMaxAlert =isAlertRequired(assetParameterReading.getValue(),assetParameterConfig.getMin(),assetParameterConfig.getMax());
+                    if(consumptionMinMaxAlert.isMin()){
+                        sendReadingAlert(asset,date,"email.reading.min");
+                    }else if(consumptionMinMaxAlert.isMax()){
+                        sendReadingAlert(asset,date,"email.reading.max");
+                    }
                 }
             }
 
-		    if(assetParameterConfig.isConsumptionMonitoringRequired() && assetParameterReading.getFinalValue()>0){
-                if(assetParameterReading.getConsumption()>assetParameterConfig.getMax()){
-                    sendReadingAlert(asset,date);
-                }
-            }
-
-            if(assetParameterReading.getInitialValue()>0 && assetParameterReading.getInitialValue()<assetParameterConfig.getMin()){
-                sendReadingAlert(asset,date);
-            }
+//		    if(assetParameterConfig.isConsumptionMonitoringRequired() && assetParameterReading.getFinalValue()>0){
+//                if(assetParameterReading.getConsumption()>assetParameterConfig.getMax()){
+//                    sendReadingAlert(asset,date);
+//                }
+//            }
+//
+//            if(assetParameterReading.getInitialValue()>0 && assetParameterReading.getInitialValue()<assetParameterConfig.getMin()){
+//                sendReadingAlert(asset,date);
+//            }
 
 			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
 			assetParamReadingDTO.setErrorStatus(false);
@@ -1870,7 +1919,7 @@ public class AssetManagementService extends AbstractService {
 
 	}
 
-	public void sendReadingAlert(Asset asset, Date date){
+	public void sendReadingAlert(Asset asset, Date date, String alertType){
         String type = "reading";
 
         List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_READING,asset.getSite().getId());
@@ -1885,7 +1934,7 @@ public class AssetManagementService extends AbstractService {
 
                         List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
                         for(String email : emailLists) {
-                            mailService.sendReadingAlert(email, asset.getSite().getName(), asset.getCode(), asset.getTitle(), type, date);
+                            mailService.sendReadingAlert(email, asset.getSite().getName(), asset.getCode(), asset.getTitle(), type, date,alertType);
                         }
 
                     } else {
@@ -2073,7 +2122,7 @@ public class AssetManagementService extends AbstractService {
 										if(settingEntity.getSettingValue().length() > 0) {
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
 											for(String email : emailLists) {
-												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date,"");
 											}
 										}
 									}
@@ -2102,7 +2151,7 @@ public class AssetManagementService extends AbstractService {
 										if(settingEntity.getSettingValue().length() > 0) {
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
 											for(String email : emailLists) {
-												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date,"");
 											}
 										}
 									}
@@ -2131,7 +2180,7 @@ public class AssetManagementService extends AbstractService {
 
 											List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
 											for(String email : emailLists) {
-												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+												mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date,"");
 											}
 
 										} else {
@@ -2165,7 +2214,7 @@ public class AssetManagementService extends AbstractService {
 
 										List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
 										for(String email : emailLists) {
-											mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
+											mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date,"");
 										}
 
 									} else {
