@@ -543,6 +543,7 @@ public class MailService {
         context.setVariable("assetCode", assetCode);
         context.setVariable("siteName", siteName);
         context.setVariable("date", date);
+        context.setVariable("message", messageSource.getMessage(alertType+".content", null, locale));
         String content = templateEngine.process("assetReadingAlert", context);
         String subject = messageSource.getMessage(alertType+".title", null, locale);
         sendEmail(emailIds, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
