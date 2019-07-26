@@ -1842,20 +1842,25 @@ public class AssetManagementService extends AbstractService {
 
                     AlertMinMax consumptionMinMaxAlert = isAlertRequired(assetParameterReading.getConsumption(),assetParameterConfig.getMin(),assetParameterConfig.getMax());
 
-                    if(consumptionMinMaxAlert.isMin()){
-                        sendReadingAlert(asset,date,"email.consumption.min");
-                    }else if(consumptionMinMaxAlert.isMax()){
-                        sendReadingAlert(asset,date,"email.consumption.max");
+                    if(consumptionMinMaxAlert!=null){
+                        if(consumptionMinMaxAlert.isMin()){
+                            sendReadingAlert(asset,date,"email.consumption.min");
+                        }else if(consumptionMinMaxAlert.isMax()){
+                            sendReadingAlert(asset,date,"email.consumption.max");
+                        }
                     }
 
                 }
                 else{
 
                     AlertMinMax consumptionMinMaxAlert =isAlertRequired(assetParameterReading.getValue(),assetParameterConfig.getMin(),assetParameterConfig.getMax());
-                    if(consumptionMinMaxAlert.isMin()){
-                        sendReadingAlert(asset,date,"email.reading.min");
-                    }else if(consumptionMinMaxAlert.isMax()){
-                        sendReadingAlert(asset,date,"email.reading.max");
+
+                    if(consumptionMinMaxAlert!=null){
+                        if(consumptionMinMaxAlert.isMin()){
+                            sendReadingAlert(asset,date,"email.reading.min");
+                        }else if(consumptionMinMaxAlert.isMax()){
+                            sendReadingAlert(asset,date,"email.reading.max");
+                        }
                     }
                 }
             }
