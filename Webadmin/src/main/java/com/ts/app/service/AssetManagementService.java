@@ -1813,7 +1813,7 @@ public class AssetManagementService extends AbstractService {
 
             if ( assetParameterConfig.isValidationRequired()) {
 
-                if(assetParamReadingDTO.getValue() < prevReading.getValue()) {
+                if(assetParamReadingDTO.getFinalValue() < prevReading.getFinalValue()) {
 
                     checkInvalidEntry = true;
 
