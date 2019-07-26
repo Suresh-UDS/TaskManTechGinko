@@ -3025,6 +3025,9 @@ angular.module('timeSheetApp')
 
                     $scope.parameterConfig.multiplicationFactor = $scope.selectedMuliplicationFactor;
 					$scope.parameterConfig.allowTopUp = $scope.selectedTopup;
+					console.log("Asset parameter config save");
+					console.log($scope.parameterConfig);
+					// return;
 					var post = $scope.isEdit ? AssetComponent.updateAssetParamConfig : AssetComponent.createAssetParamConfig;
 					post($scope.parameterConfig).then(function () {
 
@@ -3052,6 +3055,7 @@ angular.module('timeSheetApp')
                         $scope.selectedMinValue = null;
                         $scope.selectedMaxValue = null;
                         $scope.selectedMuliplicationFactor=1;
+                        $scope.selectedTopup=false;
                         $scope.isEdit = false;
                         $scope.assetConfig();
 						$scope.loadingStop();

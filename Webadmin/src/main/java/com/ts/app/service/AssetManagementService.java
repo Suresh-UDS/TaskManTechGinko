@@ -1765,13 +1765,7 @@ public class AssetManagementService extends AbstractService {
 
 		Asset asset = assetRepository.findOne(assetParamReadingDTO.getAssetId());
 
-		String assetCode = asset.getCode();
-
-		String assetName = asset.getTitle();
-
 		Site site = siteRepository.findOne(asset.getSite().getId());
-
-		String siteName = site.getName();
 
 		Date date = new Date();
 
@@ -1779,11 +1773,15 @@ public class AssetManagementService extends AbstractService {
 
 		if(prevReading != null) {
 
-            if (!assetParameterConfig.isConsumptionMonitoringRequired()) {
+            if (!assetParameterConfig.isConsumptionMonitoringRequired() && assetParameterConfig.isValidationRequired()) {
 
                 if(assetParamReadingDTO.getValue() > prevReading.getValue()) {
 
-                    checkInvalidEntry = false;
+                    checkInvalidEntry = true;
+
+                    if(assetParameterConfig.isAlertRequired()){
+                        sendReadingAlert(asset,date);
+                    }
 
                 }
             }
@@ -1793,6 +1791,7 @@ public class AssetManagementService extends AbstractService {
 
 			AssetParameterReadingDTO assetParamEntity = new AssetParameterReadingDTO();
 			assetParamEntity.setErrorStatus(true);
+			assetParamEntity.setErrorMessage("Current reading cannot be greater than previous reading");
 			return assetParamEntity;
 
 		} else {
@@ -1800,56 +1799,21 @@ public class AssetManagementService extends AbstractService {
 		    log.debug("Parameter threshold min value - "+assetParameterConfig.getMin());
 		    log.debug("Parameter Initial Reading - "+assetParameterReading.getInitialValue());
 
-		    if(assetParameterReading.getFinalValue()>0){
+		    if(!assetParameterConfig.isConsumptionMonitoringRequired()&& assetParameterReading.getFinalValue()>0){
                 log.debug("Parameter Final Reading - "+assetParameterReading.getFinalValue());
-
-		        if(assetParameterReading.getFinalValue()>assetParameterConfig.getMax()){
-                    String type = "reading";
-
-                    Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-
-                    if(setting.getSettingValue().equalsIgnoreCase("true") ) {
-
-                        Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-
-                        if(settingEntity.getSettingValue().length() > 0) {
-
-                            List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-                            for(String email : emailLists) {
-                                mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-                            }
-
-                        } else {
-
-                            log.info("There is no email ids registered");
-                        }
-                    }
+		        if( assetParameterReading.getFinalValue()>assetParameterConfig.getMax()){
+                    sendReadingAlert(asset,date);
                 }
             }
 
-
+		    if(assetParameterConfig.isConsumptionMonitoringRequired() && assetParameterReading.getFinalValue()>0){
+                if(assetParameterReading.getConsumption()>assetParameterConfig.getMax()){
+                    sendReadingAlert(asset,date);
+                }
+            }
 
             if(assetParameterReading.getInitialValue()>0 && assetParameterReading.getInitialValue()<assetParameterConfig.getMin()){
-                String type = "reading";
-
-                Setting setting = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING);
-
-                if(setting.getSettingValue().equalsIgnoreCase("true") ) {
-
-                    Setting settingEntity = settingRepository.findSettingByKey(EMAIL_NOTIFICATION_READING_EMAILS);
-
-                    if(settingEntity.getSettingValue().length() > 0) {
-
-                        List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
-                        for(String email : emailLists) {
-                            mailService.sendReadingAlert(email, siteName, assetCode, assetName, type, date);
-                        }
-
-                    } else {
-
-                        log.info("There is no email ids registered");
-                    }
-                }
+                sendReadingAlert(asset,date);
             }
 
 			assetParameterReading.setActive(AssetParameterReading.ACTIVE_YES);
@@ -1900,6 +1864,35 @@ public class AssetManagementService extends AbstractService {
 
 
 	}
+
+	public void sendReadingAlert(Asset asset, Date date){
+        String type = "reading";
+
+        List<Setting> settings = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_READING,asset.getSite().getId());
+
+        for (Setting setting : settings){
+            if(setting.getSettingValue().equalsIgnoreCase("true") ) {
+
+                List<Setting> settingEntitys = settingRepository.findSettingByKeyAndSiteId(EMAIL_NOTIFICATION_READING_EMAILS,asset.getSite().getId());
+
+                for(Setting settingEntity: settingEntitys){
+                    if(settingEntity.getSettingValue().length() > 0) {
+
+                        List<String> emailLists = CommonUtil.convertToList(settingEntity.getSettingValue(), ",");
+                        for(String email : emailLists) {
+                            mailService.sendReadingAlert(email, asset.getSite().getName(), asset.getCode(), asset.getTitle(), type, date);
+                        }
+
+                    } else {
+
+                        log.info("There is no email ids registered");
+                    }
+                }
+
+            }
+        }
+
+    }
 
 	public AssetParameterReadingDTO viewReadings(long id) {
 		AssetParameterReading paramReading = assetParamReadingRepository.findOne(id);

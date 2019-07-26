@@ -89,7 +89,7 @@
                                                                                 <div class="form-group">
                                                                                     <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                     <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetHierarchy();getAssetGrpHierarchy(); loadAssetType();" name="AssetSite"  required tabindex="2">
+                                                                                    <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites " ng-change="loadBlocks();loadEmployees();getAssetHierarchy();getAssetGrpHierarchy();" name="AssetSite"  required tabindex="2">
                                                                                         <option value="">Select Site ...</option>
                                                                                     </select>
 
@@ -885,7 +885,7 @@
                                                                                 <div class="row">
 
 
-                                                                                    <div class="col-md-6">
+                                                                                    <div class="col-md-4">
 
                                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
@@ -923,7 +923,7 @@
 
                                                                                     </div>
 
-                                                                                    <div class="col-md-6">
+                                                                                    <div class="col-md-4">
                                                                                         <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                             <div class="" style="float:left;width:90%;">
@@ -956,6 +956,45 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                             <span class="material-input"></span> -->
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-2">
+                                                                                        <div class="form-group">
+                                                                                            <label class="control-label">Threshold Min Value  </label>
+                                                                                            <input id='min'
+                                                                                                   ng-model="selectedMinValue"
+                                                                                                   class='form-control'
+                                                                                                   name='MinValue'
+                                                                                                   value="1"
+                                                                                                   min="1"
+                                                                                                   ng-change="checkMinMax()"
+                                                                                                   type='number' value=""
+                                                                                                   autofocus
+                                                                                            />
+                                                                                            <div ng-show="form2.$submitted || form2.MinValue.$touched">
+                                                                                                <p class="help-block" style="color:maroon" ng-show="minError">
+                                                                                                    Min value must below max value.
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-2">
+                                                                                        <div class="form-group">
+                                                                                            <label class="control-label"> Threshold Max Value </label>
+                                                                                            <input id='max'
+                                                                                                   ng-model="selectedMaxValue"
+                                                                                                   class='form-control'
+                                                                                                   name='MaxValue'
+                                                                                                   ng-change="checkMinMax()"
+                                                                                                   type='number' value=""
+                                                                                                   autofocus
+                                                                                            />
+                                                                                            <div ng-show="form2.$submitted || form2.MaxValue.$touched">
+                                                                                                <p class="help-block" style="color:maroon" ng-show="maxError">
+                                                                                                    Max value must above min value.
+                                                                                                </p>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
 
@@ -1044,44 +1083,7 @@
                                                                 </div>
 
                                                                 <div class="row">
-                                                                    <div class="col-md-2">
-                                                                        <div class="form-group">
-                                                                            <label class="control-label">Threshold Min Value  </label>
-                                                                            <input id='min'
-        						                                                 ng-model="selectedMinValue"
-        						                                                 class='form-control'
-        						                                                 name='MinValue'
-                                                                     value="1"
-                                                                     min="1"
-                                                                     ng-change="checkMinMax()"
-        						                                                 type='number' value=""
-        						                                                  autofocus
-        						                                                  />
-                                                                                <div ng-show="form2.$submitted || form2.MinValue.$touched">
-                                                                                    <p class="help-block" style="color:maroon" ng-show="minError">
-                                                                                       Min value must below max value.
-                                                                                    </p>
-                                                                                </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                         <div class="form-group">
-                                                                            <label class="control-label"> Threshold Max Value </label>
-                                                                            <input id='max'
-        						                                                 ng-model="selectedMaxValue"
-        						                                                 class='form-control'
-        						                                                 name='MaxValue'
-                                                                                  ng-change="checkMinMax()"
-        						                                                 type='number' value=""
-        						                                                  autofocus
-        						                                                  />
-                                                                              <div ng-show="form2.$submitted || form2.MaxValue.$touched">
-                                                                                <p class="help-block" style="color:maroon" ng-show="maxError">
-                                                                                   Max value must above min value.
-                                                                                </p>
-                                                                             </div>
-                                                                        </div>
-                                                                    </div>
+
 
                                                                     <div class="col-md-2">
                                                                         <div class="form-group">
@@ -1104,7 +1106,7 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-md-2 col-md-offset-2">
+                                                                    <div class="col-md-2 ">
                                                                         <div class="checkbox" style="padding-top: 25px">
                                                                             <label>
                                                                                 <input type="checkbox" ng-model="alertRequired" name="terms"> Alert Required
@@ -1123,45 +1125,42 @@
                                                                     <div class="col-md-2">
                                                                         <div class="checkbox" style="padding-top: 25px">
                                                                             <label>
-                                                                                <input type="checkbox" ng-model="allowTopUp" name="terms"> Level Reading
+                                                                                <input type="checkbox" ng-model="selectedTopup" name="terms"> Level Reading
                                                                             </label>
                                                                         </div>
                                                                     </div>
 
 
+
+                                                                    <div class="col-md-4">
+                                                                        <div class="checkbox" style="padding-top: 25px">
+                                                                            <label>
+                                                                                <input type="checkbox" ng-model="consumptionMonitoringRequired" name="terms"> Consumption Monitor Reading
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                    <div class="col-md-12 txt-align-rgt" ng-switch="isEdit">
+                                                                        <button class="btn btn-success" ng-disabled="form2.$invalid || minError || maxError" ng-switch-when="false"
+                                                                                id="form-button-add">
+                                                                            <span class="btn-label"><i class="material-icons">add</i></span> Add
+                                                                        </button>
+                                                                        <button class="btn btn-success" type="submit" ng-switch-when="true"
+                                                                                id="form-button-add"  ng-disabled="form2.$invalid || minError || maxError">
+                                                                            <span class="btn-label"><i class="material-icons">save</i></span> Update
+                                                                        </button>
+                                                                        <button class="btn btn-danger" type="button"
+                                                                                ng-click="clear();" id="cancel-button">
+                                                                            <i class="material-icons">close</i> Clear
+                                                                        </button>
+                                                                    </div>
+
                                                                 </div>
 
+                                                                    </div>
 
-                                                                                <div class="row">
-
-                                                                                    <div class="col-md-8">
-                                                                                        <div class="checkbox">
-                                                                                            <label>
-                                                                                                <input type="checkbox" ng-model="consumptionMonitoringRequired" name="terms"> Consumption Monitor Reading
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div class="col-md-4 txt-align-rgt" ng-switch="isEdit">
-                                                                                        <button class="btn btn-success" ng-disabled="form2.$invalid || minError || maxError" ng-switch-when="false"
-                                                                                                id="form-button-add">
-                                                                                            <span class="btn-label"><i class="material-icons">add</i></span> Add
-                                                                                        </button>
-                                                                                        <button class="btn btn-success" type="submit" ng-switch-when="true"
-                                                                                                id="form-button-add"  ng-disabled="form2.$invalid || minError || maxError">
-                                                                                            <span class="btn-label"><i class="material-icons">save</i></span> Update
-                                                                                        </button>
-                                                                                        <button class="btn btn-danger" type="button"
-                                                                                                ng-click="clear();" id="cancel-button">
-                                                                                            <i class="material-icons">close</i> Clear
-                                                                                        </button>
-                                                                                    </div>
-
-                                                                                </div>
-
-                                                                            </div>
-
-                                                                        </div>
+                                                                </div>
                                                                     </div>
                                                                     <div class="col-md-12" >
                                                                         <div class="panel panel-default" style="min-height: 200px;">
@@ -1176,15 +1175,16 @@
 
                                                                                         <thead>
                                                                                         <tr>
-                                                                                            <th>Type</th>
-                                                                                            <th>Units</th>
+                                                                                            <th class="col-md-1">Type</th>
+                                                                                            <th class="col-md-1">Parameter</th>
+                                                                                            <th class="col-md-1">Units</th>
                                                                                             <!--<th>Rule</th>-->
                                                                                             <!--<th>Threshold</th>-->
-                                                                                            <th>Threshold Min Value</th>
-                                                                                            <th>Threshold Max Value</th>
-                                                                                            <th>Consumption</th>
+                                                                                            <th class="col-md-2">Threshold Min Value</th>
+                                                                                            <th class="col-md-2">Threshold Max Value</th>
+                                                                                            <th class="col-md-1">Consumption</th>
 
-                                                                                            <th class="text-right" >Actions</th>
+                                                                                            <th class="col-md-1" class="text-right" >Actions</th>
                                                                                         </tr>
 
                                                                                         </thead>
@@ -1193,6 +1193,7 @@
 
                                                                                             <tr ng-repeat="assetParam in assetParameters">
                                                                                                 <td>{{assetParam.assetType}}</td>
+                                                                                                <td>{{assetParam.parameter}}</td>
                                                                                                 <td>{{assetParam.uom}}</td>
                                                                                                 <!--<td>{{assetParam.rule}}</td>-->
                                                                                                 <!--<td>{{assetParam.threshold}}</td>-->
