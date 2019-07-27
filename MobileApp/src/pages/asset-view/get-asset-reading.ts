@@ -30,7 +30,7 @@ export class GetAssetReading {
     current:any;
     enableButton:any;
     offlineReading:any;
-
+    showTopUpOnly:any;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public modalController: ModalController,
                 public componentService:componentService, public popoverCtrl:PopoverController, public camera:Camera,
@@ -44,10 +44,14 @@ export class GetAssetReading {
         this.offlineReading = [];
         this.enableButton = true;
 
+        this.showTopUpOnly = this.assetDetails.topUp;
+
+
     }
     ionViewWillEnter(){
         // this.componentService.showLoader("Readings")
        this.getAssetConfigsReading();
+
     }
 
     showHide(i){
@@ -84,13 +88,13 @@ export class GetAssetReading {
                             this.componentService.closeLoader()
                             if(response.consumptionMonitoringRequired){
                                 if(response.initialValue>0){
-                                    config.previousValue = response.initialValue;
+                                    config.previousValue = response.actualInitialValue;
                                 }else{
                                     config.previousValue = null;
                                 }
                             }else{
                                 if(response.value>0){
-                                    config.previousValue = response.value;
+                                    config.previousValue = response.actualValue;
                                 }else{
                                     config.previousValue = null;
                                 }
@@ -104,13 +108,13 @@ export class GetAssetReading {
                             }
                             else if(response.finalValue<=0)
                             {
-                                config.previousValue=response.initialValue;
-                                config.reading=response.initialValue;
+                                config.previousValue=response.actualInitialValue;
+                                config.reading=response.actualInitialValue;
                                 console.log(this.assetConfig);
                                 config.previousReadingId=response.id;
                             }else{
-                                config.previousValue=response.finalValue;
-                                config.reading=response.initialValue;
+                                config.previousValue=response.actualFinalValue;
+                                config.reading=response.actualInitialValue;
                                 console.log(this.assetConfig);
 
                             }
@@ -182,7 +186,7 @@ export class GetAssetReading {
 
             if( reading.max>0){
                 if(reading.currentValue>0){
-                    if(reading.currentValue>reading.min && reading.currentValue<reading.max ){
+                    // if(reading.currentValue>reading.min && reading.currentValue<reading.max ){
                         assetReading = {
                             name:reading.name,
                             uom:reading.uom,
@@ -197,10 +201,10 @@ export class GetAssetReading {
                         };
                         console.log(assetReading);
                         this.assetSaveReading(assetReading); //online
-                    }else{
-                        var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
-                        this.componentService.showToastMessage(msg,'bottom');
-                    }
+                    // }else{
+                    //     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
+                    //     this.componentService.showToastMessage(msg,'bottom');
+                    // }
                 }else{
                     assetReading = {
                         name:reading.name,
@@ -244,7 +248,7 @@ export class GetAssetReading {
         }else if(reading.consumptionMonitoringRequired){
             if( reading.max>0) {
                 if(reading.currentValue>0){
-                    if(reading.currentValue>reading.min && reading.currentValue<reading.max ){
+                    // if(reading.currentValue>reading.min && reading.currentValue<reading.max ){
                         assetReading = {
                             name:reading.name,
                             uom:reading.uom,
@@ -258,10 +262,10 @@ export class GetAssetReading {
                         console.log(assetReading);
                         this.assetSaveReading(assetReading); //online
 
-                    }else{
-                        var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
-                        this.componentService.showToastMessage(msg,'bottom');
-                    }
+                    // }else{
+                    //     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
+                    //     this.componentService.showToastMessage(msg,'bottom');
+                    // }
                 }else{
                     assetReading = {
                         name:reading.name,
@@ -297,11 +301,13 @@ export class GetAssetReading {
 
         }else{
             if( reading.max>0) {
-                if (reading.currentValue > reading.min && reading.currentValue < reading.max) {
+                // if (reading.currentValue > reading.min && reading.currentValue < reading.max) {
                     assetReading = {
                         name:reading.name,
                         uom:reading.uom,
                         value:reading.currentValue,
+                        initialValue:reading.previousValue,
+                        finalValue:reading.currentValue,
                         assetId:reading.assetId,
                         assetParameterConfigId:reading.id,
                         consumptionMonitoringRequired:reading.consumptionMonitoringRequired,
@@ -310,10 +316,10 @@ export class GetAssetReading {
                     this.assetSaveReading(assetReading); //online
 
 
-                }else{
-                    var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
-                    this.componentService.showToastMessage(msg,'bottom');
-                }
+                // }else{
+                //     var msg = "Asset reading should be greater than "+reading.min+"or less than "+reading.max;
+                //     this.componentService.showToastMessage(msg,'bottom');
+                // }
             }else{
                 assetReading = {
                     name:reading.name,

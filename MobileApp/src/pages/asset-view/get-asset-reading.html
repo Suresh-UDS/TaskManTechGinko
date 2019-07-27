@@ -34,7 +34,7 @@
 
     <ion-list *ngFor="let config of assetConfig;let i=index;">
 
-        <div *ngIf="config.name === 'TOPUP'">
+        <div *ngIf="showTopUpOnly && config.name ==='TOPUP'">
             <ion-row class="margin0 border-btm-blk" data-toggle="collapse" [attr.data-target]="'#'+i" >
                 <ion-col col-2 class="ver-center">
                     <button ion-button clear color="primary" class="">
@@ -167,7 +167,7 @@
             </div>
         </div>
 
-        <div *ngIf="config.name != 'TOPUP'">
+        <div *ngIf="!showTopUpOnly && config.name != 'TOPUP'">
             <ion-row class="margin0 border-btm-blk" data-toggle="collapse" [attr.data-target]="'#'+i" >
                 <ion-col col-2 class="ver-center">
                     <button ion-button clear color="primary" class="">

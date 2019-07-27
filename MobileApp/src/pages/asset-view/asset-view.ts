@@ -77,6 +77,7 @@ export class AssetView {
     this.jobMaterials = [];
     this.jobMaterialsList = [];
     this.assetBreakDown = false;
+    this.assetDetails.topUp = false;
   }
     showCalendar()
     {
@@ -114,7 +115,7 @@ export class AssetView {
 
     getReadings(){
         // this.navCtrl.push(GetAssetReading,{assetDetails:this.assetDetails});
-
+        this.assetDetails.topUp = false;
         let profileModal = this.modalCtrl.create(GetAssetReading, {assetDetails:this.assetDetails });
         profileModal.onDidDismiss(data => {
             console.log(data);
@@ -124,6 +125,17 @@ export class AssetView {
         });
         profileModal.present();
 
+    }
+
+    topUp(){
+        this.assetDetails.topUp = true;
+        let profileModal = this.modalCtrl.create(GetAssetReading,{assetDetails:this.assetDetails});
+        profileModal.onDidDismiss(data=>{
+            console.log(data);
+            this.componentService.closeAll();
+            this.getReading(this.readingSearchCriteria);
+        });
+        profileModal.present();
     }
 
     // Segment Change
@@ -139,7 +151,6 @@ export class AssetView {
             assetId:this.assetDetails.id
         }
     }
-    //
 
     // addAssetImage() {
     //
@@ -1011,6 +1022,42 @@ export class AssetView {
     markBreakDown(asset, fab:FabContainer) {
         const confirm = this.alertCtrl.create({
             title:"<h5>Is The Asset Broke Down?</h5>" ,
+            buttons: [
+                {
+                    text: 'No',
+                    handler: () => {
+                        console.log('No clicked');
+
+                    }
+                },
+                {
+                    text: 'Yes',
+                    handler: () => {
+                        this.assetService.markBreakDown(asset).subscribe(
+                            response=>{
+                                if(response.errorStatus){
+                                    demo.showSwal('warning-message-and-confirmation-ok',response.errorMessage);
+                                }else{
+                                    console.log("Updated successfully");
+                                    console.log(response);
+                                    // demo.showSwal('success-message-and-confirmation-ok','Asset Marked Broke Down');
+                                    this.componentService.showToastMessage('Asset Marked Broke Down','center');
+                                    this.assetBreakDown = true;
+                                    fab.close();
+                                }
+
+                            }
+                        )
+                    }
+                }
+            ]
+        });
+        confirm.present();
+    }
+
+    markInUse(asset, fab:FabContainer) {
+        const confirm = this.alertCtrl.create({
+            title:"<h5>Is The Asset Back to Use?</h5>" ,
             buttons: [
                 {
                     text: 'No',
