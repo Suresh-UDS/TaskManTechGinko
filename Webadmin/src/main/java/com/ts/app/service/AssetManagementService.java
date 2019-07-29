@@ -2742,8 +2742,10 @@ public class AssetManagementService extends AbstractService {
 
     public AssetCountDTO getMTTR(long assetId){
 	    AssetCountDTO assetCountDTO = new AssetCountDTO();
-
+        TimeDifference timeDifference = new TimeDifference(0,0,0);
 	    long maintenanceHours = 0;
+	    long maintenanceMins = 0;
+	    long maintenanceSecs = 0;
 	    List<AssetStatusHistory> breakdownAssetsHistory = assetStatusHistoryRepository.findByAssetAndStatus(assetId, String.valueOf(AssetStatus.BREAKDOWN));
 	    List<AssetStatusHistory> inUseAssetHistory = assetStatusHistoryRepository.findByAssetAndStatus(assetId, String.valueOf(AssetStatus.IN_USE));
 	    List<AssetStatusHistory> underMaintenanceAssetHistory = assetStatusHistoryRepository.findByAssetAndStatus(assetId, String.valueOf(AssetStatus.UNDER_MAINTENANCE));
@@ -2751,20 +2753,110 @@ public class AssetManagementService extends AbstractService {
         for(AssetStatusHistory assetStatusHistory: breakdownAssetsHistory) {
             List<AssetStatusHistory> inUseAssetHistoryBetweenBreakDowns = assetStatusHistoryRepository.findByAssetAndStatusAndDateRange(assetId, String.valueOf(AssetStatus.IN_USE), assetStatusHistory.getCreatedDate());
             if(inUseAssetHistoryBetweenBreakDowns.size()>0){
-                maintenanceHours = maintenanceHours+zonedDateTimeDifference(inUseAssetHistoryBetweenBreakDowns.get(0).getCreatedDate(),assetStatusHistory.getCreatedDate(),ChronoUnit.HOURS);
+                timeDifference = printDifference(Date.from(inUseAssetHistoryBetweenBreakDowns.get(0).getCreatedDate().toInstant()),Date.from(assetStatusHistory.getCreatedDate().toInstant()));
+                maintenanceHours = maintenanceHours+Math.abs(timeDifference.getElapsedHours());
+                maintenanceMins = maintenanceMins+Math.abs(timeDifference.getElapsedMins());
+                maintenanceSecs = maintenanceSecs+Math.abs(timeDifference.getElapsedSecs());
                 log.debug("Maintenance Hours - "+ Duration.between(assetStatusHistory.getCreatedDate(),inUseAssetHistoryBetweenBreakDowns.get(0).getCreatedDate()));
             }else{
-                maintenanceHours = maintenanceHours+zonedDateTimeDifference(ZonedDateTime.now(),assetStatusHistory.getCreatedDate(),ChronoUnit.HOURS);
+                timeDifference = printDifference(Date.from(ZonedDateTime.now().toInstant()),Date.from(assetStatusHistory.getCreatedDate().toInstant()));
+                maintenanceHours = maintenanceHours+Math.abs(timeDifference.getElapsedHours());
+                maintenanceMins = maintenanceMins+Math.abs(timeDifference.getElapsedMins());
+                maintenanceSecs = maintenanceSecs+Math.abs(timeDifference.getElapsedSecs());
             }
             log.debug("Maintenance Hours - "+maintenanceHours);
+            log.debug("Maintenance Mins - "+maintenanceMins);
+            log.debug("Maintenance Seconds - "+maintenanceSecs);
         }
         assetCountDTO.setMaintenanceHours(maintenanceHours);
+        assetCountDTO.setMaintenanceMins(maintenanceMins);
+        assetCountDTO.setMaintenanceSecs(maintenanceSecs);
         assetCountDTO.setAssetTicketsCount(breakdownAssetsHistory.size());
 	    return assetCountDTO;
     }
 
     static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
         return unit.between(d1, d2);
+    }
+
+
+    private class TimeDifference{
+        long elapsedHours;
+        long elapsedMins;
+        long elapsedSecs;
+        TimeDifference(long hours, long mins, long secs){
+            hours = elapsedHours;
+            mins = elapsedMins;
+            secs= elapsedSecs;
+        }
+        public long getElapsedHours(){
+            return elapsedHours;
+        }
+
+        public long getElapsedMins(){
+            return elapsedMins;
+        }
+
+        public long getElapsedSecs(){
+            return elapsedSecs;
+        }
+
+        public void setElapsedHours(long elapsedHours) {
+            this.elapsedHours = elapsedHours;
+        }
+
+        public void setElapsedMins(long elapsedMins) {
+            this.elapsedMins = elapsedMins;
+        }
+
+        public void setElapsedSecs(long elapsedSecs) {
+            this.elapsedSecs = elapsedSecs;
+        }
+
+    }
+
+    //1 minute = 60 seconds
+    //1 hour = 60 x 60 = 3600
+    //1 day = 3600 x 24 = 86400
+    public TimeDifference printDifference(Date startDate, Date endDate){
+
+	    TimeDifference timeDifference = new TimeDifference(0,0,0);
+
+        //milliseconds
+        long different = endDate.getTime() - startDate.getTime();
+
+        System.out.println("startDate : " + startDate);
+        System.out.println("endDate : "+ endDate);
+        System.out.println("different : " + different);
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        //long elapsedDays = different / daysInMilli;
+        //different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        timeDifference.setElapsedHours(elapsedHours);
+        timeDifference.setElapsedMins(elapsedMinutes);
+        timeDifference.setElapsedSecs(elapsedSeconds);
+
+        System.out.printf(
+            "%d hours, %d minutes, %d seconds%n",
+            elapsedHours, elapsedMinutes, elapsedSeconds);
+
+        return timeDifference;
+
+
+
     }
 
 }

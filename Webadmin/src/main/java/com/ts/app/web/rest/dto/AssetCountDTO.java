@@ -16,6 +16,10 @@ public class AssetCountDTO extends BaseDTO {
 
     private double maintenanceHours;
 
+    private double maintenanceMins;
+
+    private double maintenanceSecs;
+
     private long assetTicketsCount;
 
     public long getTotalAssets() {
@@ -64,5 +68,21 @@ public class AssetCountDTO extends BaseDTO {
 
     public void setAssetTicketsCount(long assetTicketsCount) {
         this.assetTicketsCount = assetTicketsCount;
+    }
+
+    public double getMaintenanceMins() {
+        return maintenanceMins;
+    }
+
+    public void setMaintenanceMins(double maintenanceMins) {
+        this.maintenanceMins = maintenanceMins;
+    }
+
+    public double getMaintenanceSecs() {
+        return maintenanceSecs;
+    }
+
+    public void setMaintenanceSecs(double maintenanceSecs) {
+        this.maintenanceSecs = maintenanceSecs;
     }
 }

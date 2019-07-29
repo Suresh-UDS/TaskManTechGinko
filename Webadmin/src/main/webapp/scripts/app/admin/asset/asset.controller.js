@@ -98,6 +98,7 @@ angular.module('timeSheetApp')
             $scope.displayImage = "";
             $scope.statuses = [];
             $scope.mttr =0;
+            $scope.maintenanceHours = 0;
             $scope.selectedMuliplicationFactor=1;
             $scope.mulFactorError = false;
             $scope.allowTopUp = false;
@@ -2229,12 +2230,26 @@ angular.module('timeSheetApp')
 
 			$scope.getMTTRForAssets = function(assetId){
 			    console.log("Get MTTR for assets - "+assetId);
-			    AssetComponent.getMTTR(assetId).then(function (data) {
+                var minsToHours = 0;
+                var totalMaintenanceHours=0;
+                var mttr=0;
+                AssetComponent.getMTTR(assetId).then(function (data) {
                     console.log(data);
+                    $scope.maintenanceHours = data.maintenanceHours;
                     if(Math.abs(data.maintenanceHours)>0){
-                        var mttr = Math.abs(data.maintenanceHours)/data.assetTicketsCount;
+                        minsToHours = data.maintenanceMins/60;
+                        totalMaintenanceHours = data.maintenanceHours+minsToHours;
+                        console.log("Total Maintenance hours "+ totalMaintenanceHours);
+                        mttr = Math.abs(totalMaintenanceHours)/data.assetTicketsCount;
                         console.log(mttr);
                         $scope.mttr = mttr;
+                    }else if(Math.abs(data.maintenanceMins)>0){
+                        minsToHours = data.maintenanceMins/60;
+                        totalMaintenanceHours = data.maintenanceHours+minsToHours;
+                        console.log("Total Maintenance hours "+ totalMaintenanceHours);
+                        mttr= 60*(Math.abs(totalMaintenanceHours)/data.assetTicketsCount);
+                        $scope.mttr = mttr;
+                        console.log(mttr);
                     }else{
                         $scope.mttr = data.maintenanceHours;
                     }

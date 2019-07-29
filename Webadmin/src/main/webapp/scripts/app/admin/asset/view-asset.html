@@ -247,8 +247,8 @@
                                                                        </div>
 
                                                                            <div style="text-align: center">
-                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="mttr>0" >{{mttr}} Hr(s)</span>
-                                                                                   <span ng-if="mttr<=0" > Less than 1 Hr</span>
+                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="maintenanceHours>0" >{{mttr  | number:2}} Hr(s)</span>
+                                                                                   <span ng-if="maintenanceHours<=0" > {{mttr  | number:2}} Min(s)</span>
                                                                                </button>
                                                                            </div>
 
@@ -262,8 +262,8 @@
                                                                                <img class="asset-img" style="width: 300px !important; height:300px !important;" src="../../../../assets/img/asset-placeholder.png">
                                                                            </div>
                                                                            <div style="text-align: center">
-                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="mttr>0" >{{mttr}} Hr(s)</span>
-                                                                                    <span ng-if="mttr<=0" > Less than 1 Hr</span>
+                                                                               <button style="font-size: 18px" class="btn btn-warning">MTTR : <span ng-if="maintenanceHours>0" >{{mttr  | number:2}} Hr(s)</span>
+                                                                                   <span ng-if="maintenanceHours<=0" > {{mttr  | number:2}} Min(s)</span>
                                                                                </button>
                                                                            </div>
                                                                        </div>
