@@ -484,6 +484,8 @@ angular.module('timeSheetApp')
 
                         guageResultObject.meterValue = 0;
 
+                        guageResultObject.meterValueTooltip = "";
+
                     }
 
                 }
