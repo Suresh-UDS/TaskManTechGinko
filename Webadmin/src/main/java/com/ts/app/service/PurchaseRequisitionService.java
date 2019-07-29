@@ -216,7 +216,7 @@ public class PurchaseRequisitionService extends AbstractService {
             List<Long> siteIds = new ArrayList<Long>();
             if(employee != null && !user.isAdmin()) {
                 for (EmployeeProjectSiteDTO site : sites) {
-                    siteIds.add(site.getId());
+                    siteIds.add(site.getSiteId());
                     searchCriteria.setSiteIds(siteIds);
                 }
             }else if(user.isAdmin()){

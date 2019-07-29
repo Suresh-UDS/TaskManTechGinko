@@ -1858,7 +1858,7 @@ angular.module('timeSheetApp')
 					$scope.selectedMinValue = $scope.parameterConfig.min;
 					$scope.selectedMaxValue = $scope.parameterConfig.max;
 					$scope.selectedMuliplicationFactor = $scope.parameterConfig.multiplicationFactor;
-					$scope.selectedTopup = $scope.parameterConfig.allowTop;
+					$scope.selectedTopup = $scope.parameterConfig.allowTopUp;
 					$rootScope.loadingStop();
 
 				}).catch(function(response){
