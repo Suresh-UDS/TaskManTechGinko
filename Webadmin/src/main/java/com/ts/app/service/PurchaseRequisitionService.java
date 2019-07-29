@@ -59,6 +59,9 @@ public class PurchaseRequisitionService extends AbstractService {
 	private MailService mailService;
 
 	@Inject
+    private EmployeeService employeeService;
+
+	@Inject
 	private ReportUtil reportUtil;
 
 	@Inject
@@ -204,23 +207,23 @@ public class PurchaseRequisitionService extends AbstractService {
 		SearchResult<PurchaseReqDTO> result = new SearchResult<PurchaseReqDTO>();
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
-		Employee employee = user.getEmployee();
-		log.debug(">>> user <<<"+ employee.getFullName() +" and "+ employee.getId());
-		List<EmployeeProjectSite> sites = employee.getProjectSites();
+        EmployeeDTO employee = employeeService.findOne(user.getEmployee().getId());
+        log.debug(">>> user <<<"+ employee.getFullName() +" and "+ employee.getId());
+        List<EmployeeProjectSiteDTO> sites = employee.getProjectSites();
 
-		if (searchCriteria != null) {
+        if (searchCriteria != null) {
 
-			List<Long> siteIds = new ArrayList<Long>();
-			if(employee != null && !user.isAdmin()) {
-				for (EmployeeProjectSite site : sites) {
-					siteIds.add(site.getSite().getId());
-					searchCriteria.setSiteIds(siteIds);
-				}
-			}else if(user.isAdmin()){
-				searchCriteria.setAdmin(true);
-			}
+            List<Long> siteIds = new ArrayList<Long>();
+            if(employee != null && !user.isAdmin()) {
+                for (EmployeeProjectSiteDTO site : sites) {
+                    siteIds.add(site.getId());
+                    searchCriteria.setSiteIds(siteIds);
+                }
+            }else if(user.isAdmin()){
+                searchCriteria.setAdmin(true);
+            }
 
-			Pageable pageRequest = null;
+            Pageable pageRequest = null;
 			if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
 				Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
 				log.debug("Sorting object" + sort);

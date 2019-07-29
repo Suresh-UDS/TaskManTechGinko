@@ -2365,6 +2365,7 @@ public class AssetManagementService extends AbstractService {
 		assetParamConfig.setRule(assetParameterConfigDTO.getRule());
 		assetParamConfig.setUom(assetParameterConfigDTO.getUom());
 		assetParamConfig.setMultiplicationFactor(assetParameterConfigDTO.getMultiplicationFactor());
+		assetParamConfig.setAllowTopUp(assetParameterConfigDTO.isAllowTopUp());
 		assetParamConfig.setValidationRequired(assetParameterConfigDTO.isValidationRequired());
 	}
 

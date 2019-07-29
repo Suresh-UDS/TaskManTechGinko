@@ -1989,14 +1989,16 @@
 
                                                                             <thead>
                                                                             <tr>
-                                                                                <th>Type</th>
-                                                                                <th>Units</th>
+                                                                                <th class="col-md-1">Type</th>
+                                                                                <th class="col-md-1">Parameter</th>
+                                                                                <th class="col-md-1">Units</th>
                                                                                 <!--<th>Rule</th>-->
                                                                                 <!--<th>Threshold</th>-->
-                                                                                <th> Threshold Min Value</th>
-                                                                                <th>Threshold Max Value</th>
-                                                                                <th>Consumption</th>
-                                                                                <th class="text-right">Actions</th>
+                                                                                <th class="col-md-2">Threshold Min Value</th>
+                                                                                <th class="col-md-2">Threshold Max Value</th>
+                                                                                <th class="col-md-1">Consumption</th>
+
+                                                                                <th class="col-md-1" class="text-right" >Actions</th>
                                                                             </tr>
 
                                                                             </thead>
@@ -2005,6 +2007,7 @@
 
                                                                                 <tr ng-repeat="assetParam in assetParameters">
                                                                                     <td>{{assetParam.assetType}}</td>
+                                                                                    <td>{{assetParam.name}}</td>
                                                                                     <td>{{assetParam.uom}}</td>
                                                                                     <!--<td>{{assetParam.rule}}</td>-->
                                                                                     <!--<td>{{assetParam.threshold}}</td>-->

@@ -1841,8 +1841,10 @@ angular.module('timeSheetApp')
 			$scope.getParameterConfigDetails = function(id, mode) {
 				$rootScope.loadPageTop();
 				$scope.loadingStart();
-				$scope.isEdit = (mode == 'edit' ? true : false)
+				$scope.isEdit = (mode == 'edit' ? true : false);
+				console.log("Asset edit config");
 				AssetComponent.getAssetParamConfig(id).then(function (data) {
+				    console.log(data);
 					$scope.parameterConfig = data;
 					//console.log('Parameter by id',$scope.parameterConfig);
 					//$scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
@@ -1855,6 +1857,8 @@ angular.module('timeSheetApp')
 					$scope.alertRequired = $scope.parameterConfig.alertRequired;
 					$scope.selectedMinValue = $scope.parameterConfig.min;
 					$scope.selectedMaxValue = $scope.parameterConfig.max;
+					$scope.selectedMuliplicationFactor = $scope.parameterConfig.multiplicationFactor;
+					$scope.selectedTopup = $scope.parameterConfig.allowTop;
 					$rootScope.loadingStop();
 
 				}).catch(function(response){
