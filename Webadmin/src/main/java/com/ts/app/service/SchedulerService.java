@@ -601,7 +601,7 @@ public class SchedulerService extends AbstractService {
 	}
 
 //	@Scheduled(cron = "0 0 9 1 * ?")
-	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
+//	@Scheduled(cron = "0 */30 * 1/1 * ?") // send detailed attendance report
 	public void attendanceMusterrollReportSchedule() {
 		log.info("Attendance muster roll report scheduler invoked");
 		Calendar startCal = Calendar.getInstance();
