@@ -175,7 +175,7 @@ dependencies {
         exclude module: 'mapstruct'
     }
     
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+    compile group: 'mysql', name: 'mysql-connector-java'
     compile group: 'com.h2database', name: 'h2'
     compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version
