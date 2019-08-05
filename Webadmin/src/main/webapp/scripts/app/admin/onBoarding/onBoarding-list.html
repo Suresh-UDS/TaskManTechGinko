@@ -1,0 +1,282 @@
+<div   ng-init="initLoad()" >
+
+
+    <div class="row" ng-init="loadProjects();">
+        <div class="col-md-6 txt-align-lft">
+
+            <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
+            <!--<i class="material-icons">filter_list</i> Basic Filter-->
+            <!--<div class="ripple-container"></div>-->
+            <!--</button>-->
+            <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">-->
+            <!--<i class="material-icons">filter_list</i> Advanced Filter-->
+            <!--<div class="ripple-container"></div>-->
+            <!--</button>-->
+            <button class="btn btn-success add-btn margn-tb0" ng-click="filterModal1()" tabindex="0">
+                <i class="material-icons">filter_list</i>Filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-warning add-btn margn-tb0"  ng-click="refreshPage()" tabindex="0">
+                <i class="material-icons">refresh</i> Clear filter
+                <div class="ripple-container"></div>
+            </button>
+            <button class="btn btn-info  add-btn margn-tb0" ng-show="isDashboard"  ng-click="backToDashboard()" tabindex="0">
+                <i class="material-icons">keyboard_return</i>Dashboard
+                <div class="ripple-container"></div>
+            </button>
+        </div>
+        <div class="col-md-6 txt-align-rgt">
+
+
+
+            <!--<button ng-show="attendancesData.length" class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='html')}"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
+                <i class="material-icons">description</i> Export HTML
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>-->
+
+            <button ng-show="attendancesData.length" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader)}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
+                <i class="material-icons">file_download</i> Export Excel
+                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
+                <div class="ripple-container"></div>
+            </button>
+
+            <span ng-if="exportMsg(0)=='Download'">
+                 <a class="download-btn" href="{{exportFile(0)}}" download target="_self" ng-click="clsDownload()" ng-hide="downloaded">{{exportMsg(0)}}</a>
+                 <div class="downloaderMd" ng-show="downloader"></div>
+            </span>
+            <span ng-if="exportMsg(0)!='Download'">
+                 <a class="download-btn" href="javascript:void(0);">{{exportMsg(0)}}</a>
+            </span>
+
+            <div class="downloaderMd" ng-show="downloader"></div>
+
+        </div>
+    </div>
+
+    <div class="AppliedFilterCon">
+            <span class="AppliedFilterTxtCon">
+                <span
+                    class="tag label label-info" style="margin-right: 10px"
+                    ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
+					Client: {{searchCriteras.projectName}}
+			    </span>
+
+			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
+                    Region: {{searchCriteras.region}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
+                    Branch: {{searchCriteras.branch}}
+                </span>
+
+                <span class="tag label label-info" style="margin-right: 10px"
+                      ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
+					Site: {{searchCriteras.siteName}}
+			    </span>
+
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
+                    From: {{searchCriteras.checkInDateTimeFrom  | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
+                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.employeeEmpId">
+                    Employee Id: {{searchCriteras.employeeEmpId}}
+                </span>
+                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.name">
+                    Employee Name: {{searchCriteras.name}}
+                </span>
+            </span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card margin-TB-5 TableCard" >
+                <!--<div class="card-header card-header-icon" data-background-color="purple">-->
+                <!--<i class="material-icons">assignment</i>-->
+                <!--</div>-->
+                <div class="card-content">
+
+                    <div class="table-responsive tablecard">
+                        <table class="table table-hover withSortingIcons">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 60px;">Code
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+                                <th style="min-width: 110px;">Name
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.fullName')" ng-class="isActiveAsc == 'employee.fullName' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('employee.fullName')" ng-class="isActiveDesc == 'employee.fullName' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+
+                                <th style="min-width: 100px;">Site
+                                    <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                </th>
+
+                                <th style="min-width: 100px;">Status</th>
+                                <th style="min-width: 100px;text-align: right">Actions</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+                                <td>242312</td>
+                                <td>MUTHU SELVAM</td>
+                                <td>
+                                    <span>CHENNAI METRO RAIL LIMITED</span><br>
+                                    <span style="color: #3C3D3C;">Shenoy Nagar</span>
+                                </td>
+                                <td>Action Required</td>
+                                <td class="td-actions text-right">
+                                    <a ui-sref="view-onBoarding" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </a>
+                                    <button type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>382922</td>
+                                <td>VIGNESH R</td>
+                                <td>
+                                    <span>CHENNAI METRO RAIL LIMITED</span><br>
+                                    <span style="color: #3C3D3C;">Guindy</span>
+                                </td>
+                                <td>To be Verified</td>
+                                <td class="td-actions text-right">
+                                    <a ui-sref="view-onBoarding" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <i class="material-icons">remove_red_eye</i>
+                                    </a>
+                                    <button type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">
+                                        <i class="material-icons">close</i>
+                                    </button>
+
+                                </td>
+                            </tr>
+<!--                            <tr ng-repeat="attendance in onBoardingEmployees">-->
+
+<!--                                <td>{{attendance.employeeEmpId}}</td>-->
+<!--                                <td>{{attendance.employeeName +" "+ attendance.employeeLastName}}</td>-->
+<!--                                <td>{{attendance.siteName}}</td>-->
+<!--                                <td>-->
+<!--                                    {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}-->
+<!--                                    <br/>-->
+<!--                                    <label ng-show="attendance.late">Late</label>-->
+<!--                                </td>-->
+<!--                                <td ng-if="attendance.checkInImage">-->
+<!--                                    <a id="images1" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">-->
+<!--                                        <img ng-src={{attendance.checkInImgUrl}} width="30px" height="30px"/>-->
+<!--                                    </a>-->
+<!--                                </td>-->
+<!--                                <td ng-if="!attendance.checkInImage">-->
+<!--                                    <img ng-src="assets/img/user.png" width="30px" height="30px"/>-->
+<!--                                </td>-->
+
+
+<!--                                <td>{{attendance.checkOutTime | date:'dd/MM/yyyy @ h:mma'}}</td>-->
+
+<!--                                <td ng-if="attendance.checkOutImage"><a id="images" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)" >-->
+<!--                                    <img ng-src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>-->
+<!--                                </a>-->
+<!--                                </td>-->
+<!--                                <td ng-if="!attendance.checkOutImage">-->
+<!--                                    <img ng-src="assets/img/user.png" width="30px" height="30px"/>-->
+<!--                                </td>-->
+
+<!--                                <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}-->
+<!--                                </td>-->
+
+<!--                                <td ng-if="!attendance.invalid" align="center">-->
+<!--                                    <i style="color: green; font-size: larger" class="far fa-check-square"></i>-->
+<!--                                </td>-->
+
+<!--                                <td ng-if="attendance.invalid" align="center">-->
+<!--                                    <i ng-if="attendance.invalid" style="color: red; font-size: larger" class="fas fa-exclamation-triangle"></i>-->
+<!--                                </td>-->
+
+<!--                                <td align="center">-->
+<!--                                    <a id="maps" href="javascript:void(0);" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >-->
+<!--                                        &lt;!&ndash;<img ng-src="assets/img/map-icon-2-1.jpg" width="20px" height="20px" />&ndash;&gt;-->
+<!--                                        <i style="font-size: larger; color: darkblue" class="fas fa-map-marker-alt"></i>-->
+<!--                                    </a>-->
+
+
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <a class="" href="javascript:void(0);" ng-click="addRemarksId(attendance.id,attendance.remarks)" id="remarks"  onClick="$('#remarksModal').modal()" data-target="#remarksModal" data-dismiss="#remarksModal" >-->
+<!--                                        <i class="fa fa-edit" style="font-size: larger; color: black"></i>-->
+<!--                                    </a>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+
+<!--                    <div class="txt-align-center LoaderCon"  ng-hide="onBoardingEmployeesLoader">-->
+
+<!--                        <div class="pad-TB-30">-->
+<!--                            <div loader-css="ball-pulse"></div>-->
+<!--                            <h3 >Loading, please wait...</h3>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+
+<!--                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">-->
+
+<!--                        <h3>No data Found</h3>-->
+
+<!--                    </div>-->
+
+
+
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+
+
+    <!-- Pagination directive start -->
+
+    <pagination-new></pagination-new>
+
+    <!-- Pagination directive end -->
+
+</div>

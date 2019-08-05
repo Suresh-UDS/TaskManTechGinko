@@ -2509,3 +2509,8 @@ span.AppliedFilterTxtCon span.label-info{
     position: absolute;
     z-index: 500;
 }
+
+.onBoarding-label-on-left{
+    padding:10px 5px 0 0;
+    text-align: right;
+}
