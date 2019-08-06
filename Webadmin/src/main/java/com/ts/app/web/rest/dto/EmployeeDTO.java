@@ -6,7 +6,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ts.app.domain.Site;
 import org.apache.commons.collections.CollectionUtils;
 
+import javax.persistence.Column;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -98,6 +102,437 @@ public class EmployeeDTO extends BaseDTO {
     private String region;
 
     private String branch;
+
+/*************************Modified by Vinoth***********************************************************/    
+    
+    @Size(min = 1, max = 50)
+    private String fatherName;
+    
+    private String motherName;
+    
+    @Size(min = 1, max = 10)
+    private String gender;
+    
+    @Size(min =10, max = 50)
+    private String maritalStatus;
+    
+    private Date dob;
+
+    private Date doj;
+    
+    private String religion;
+    
+    private String bloodGroup;
+    
+    @Size(min = 1, max = 2500)
+    private String personalIdentificationMark1;
+    
+    @Size(min = 1, max = 2500)
+    private String personalIdentificationMark2;
+    
+    private String educationalQulification;
+    
+    private String boardInstitute;
+    
+    @Size(min = 1, max = 16)
+    private String adharCardNumber;
+
+    @Size(min = 1, max =10)
+    private String mobile;
+    
+    private String emergencyContactNumber;
+
+    private String permanentAddress;
+
+    private String permanentCity;
+
+    private String permanentState;
+   
+    private String presentAddress;
+   
+    private String presentCity;
+ 
+    private String presentState;
+    
+    private String addressProofImage;
+
+    private String nomineeName;
+
+    private String nomineeRelationship;
+    
+    private String nomineeContactNumber;
+
+    private double percentage;
+    
+    private String employer;
+    
+    private String previousDesignation;
+
+    private String accountNumber;
+
+    private String ifscCode;
+    
+    private String bankPassbookImage;
+    
+    private String adharFrontImage;
+    
+    private String adharBackImage;
+    
+    private String fingerPrintLeft;
+    
+    private String fingerPrintRight;
+    
+    private String drivingLicense;
+    
+    private String voterId;
+    
+    private String panCard;
+
+    private String clientName;
+
+    private String clientDescription;
+
+    private String wbsId;
+
+    private String wbsDescription;
+    
+    public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+
+	public String getMotherName() {
+		return motherName;
+	}
+
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+	public Date getDoj() {
+		return doj;
+	}
+
+	public void setDoj(Date doj) {
+		this.doj = doj;
+	}
+
+	public String getReligion() {
+		return religion;
+	}
+
+	public void setReligion(String religion) {
+		this.religion = religion;
+	}
+
+	public String getBloodGroup() {
+		return bloodGroup;
+	}
+
+	public void setBloodGroup(String bloodGroup) {
+		this.bloodGroup = bloodGroup;
+	}
+
+	public String getPersonalIdentificationMark1() {
+		return personalIdentificationMark1;
+	}
+
+	public void setPersonalIdentificationMark1(String personalIdentificationMark1) {
+		this.personalIdentificationMark1 = personalIdentificationMark1;
+	}
+
+	public String getPersonalIdentificationMark2() {
+		return personalIdentificationMark2;
+	}
+
+	public void setPersonalIdentificationMark2(String personalIdentificationMark2) {
+		this.personalIdentificationMark2 = personalIdentificationMark2;
+	}
+
+	public String getEducationalQulification() {
+		return educationalQulification;
+	}
+
+	public void setEducationalQulification(String educationalQulification) {
+		this.educationalQulification = educationalQulification;
+	}
+
+	public String getBoardInstitute() {
+		return boardInstitute;
+	}
+
+	public void setBoardInstitute(String boardInstitute) {
+		this.boardInstitute = boardInstitute;
+	}
+
+	public String getAdharCardNumber() {
+		return adharCardNumber;
+	}
+
+	public void setAdharCardNumber(String adharCardNumber) {
+		this.adharCardNumber = adharCardNumber;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getEmergencyContactNumber() {
+		return emergencyContactNumber;
+	}
+
+	public void setEmergencyContactNumber(String emergencyContactNumber) {
+		this.emergencyContactNumber = emergencyContactNumber;
+	}
+
+	public String getPermanentAddress() {
+		return permanentAddress;
+	}
+
+	public void setPermanentAddress(String permanentAddress) {
+		this.permanentAddress = permanentAddress;
+	}
+
+	public String getPermanentCity() {
+		return permanentCity;
+	}
+
+	public void setPermanentCity(String permanentCity) {
+		this.permanentCity = permanentCity;
+	}
+
+	public String getPermanentState() {
+		return permanentState;
+	}
+
+	public void setPermanentState(String permanentState) {
+		this.permanentState = permanentState;
+	}
+
+	public String getPresentAddress() {
+		return presentAddress;
+	}
+
+	public void setPresentAddress(String presentAddress) {
+		this.presentAddress = presentAddress;
+	}
+
+	public String getPresentCity() {
+		return presentCity;
+	}
+
+	public void setPresentCity(String presentCity) {
+		this.presentCity = presentCity;
+	}
+
+	public String getPresentState() {
+		return presentState;
+	}
+
+	public void setPresentState(String presentState) {
+		this.presentState = presentState;
+	}
+
+	public String getAddressProofImage() {
+		return addressProofImage;
+	}
+
+	public void setAddressProofImage(String addressProofImage) {
+		this.addressProofImage = addressProofImage;
+	}
+
+	public String getNomineeName() {
+		return nomineeName;
+	}
+
+	public void setNomineeName(String nomineeName) {
+		this.nomineeName = nomineeName;
+	}
+
+	public String getNomineeRelationship() {
+		return nomineeRelationship;
+	}
+
+	public void setNomineeRelationship(String nomineeRelationship) {
+		this.nomineeRelationship = nomineeRelationship;
+	}
+
+	public String getNomineeContactNumber() {
+		return nomineeContactNumber;
+	}
+
+	public void setNomineeContactNumber(String nomineeContactNumber) {
+		this.nomineeContactNumber = nomineeContactNumber;
+	}
+
+	public double getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(double percentage) {
+		this.percentage = percentage;
+	}
+
+	public String getEmployer() {
+		return employer;
+	}
+
+	public void setEmployer(String employer) {
+		this.employer = employer;
+	}
+
+	public String getPreviousDesignation() {
+		return previousDesignation;
+	}
+
+	public void setPreviousDesignation(String previousDesignation) {
+		this.previousDesignation = previousDesignation;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getIfscCode() {
+		return ifscCode;
+	}
+
+	public void setIfscCode(String ifscCode) {
+		this.ifscCode = ifscCode;
+	}
+
+	public String getBankPassbookImage() {
+		return bankPassbookImage;
+	}
+
+	public void setBankPassbookImage(String bankPassbookImage) {
+		this.bankPassbookImage = bankPassbookImage;
+	}
+
+	public String getAdharFrontImage() {
+		return adharFrontImage;
+	}
+
+	public void setAdharFrontImage(String adharFrontImage) {
+		this.adharFrontImage = adharFrontImage;
+	}
+
+	public String getAdharBackImage() {
+		return adharBackImage;
+	}
+
+	public void setAdharBackImage(String adharBackImage) {
+		this.adharBackImage = adharBackImage;
+	}
+
+	public String getFingerPrintLeft() {
+		return fingerPrintLeft;
+	}
+
+	public void setFingerPrintLeft(String fingerPrintLeft) {
+		this.fingerPrintLeft = fingerPrintLeft;
+	}
+
+	public String getFingerPrintRight() {
+		return fingerPrintRight;
+	}
+
+	public void setFingerPrintRight(String fingerPrintRight) {
+		this.fingerPrintRight = fingerPrintRight;
+	}
+
+	public String getDrivingLicense() {
+		return drivingLicense;
+	}
+
+	public void setDrivingLicense(String drivingLicense) {
+		this.drivingLicense = drivingLicense;
+	}
+
+	public String getVoterId() {
+		return voterId;
+	}
+
+	public void setVoterId(String voterId) {
+		this.voterId = voterId;
+	}
+
+	public String getPanCard() {
+		return panCard;
+	}
+
+	public void setPanCard(String panCard) {
+		this.panCard = panCard;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getClientDescription() {
+		return clientDescription;
+	}
+
+	public void setClientDescription(String clientDescription) {
+		this.clientDescription = clientDescription;
+	}
+
+	public String getWbsId() {
+		return wbsId;
+	}
+
+	public void setWbsId(String wbsId) {
+		this.wbsId = wbsId;
+	}
+
+	public String getWbsDescription() {
+		return wbsDescription;
+	}
+
+	public void setWbsDescription(String wbsDescription) {
+		this.wbsDescription = wbsDescription;
+	}
+
+/**************************************************************************************/    
 
     public long getId() {
         return id;
