@@ -754,6 +754,4 @@ public class EmployeeResource {
         return ticketList;
     }
 
-
-
 }

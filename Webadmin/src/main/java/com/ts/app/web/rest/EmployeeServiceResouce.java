@@ -12,6 +12,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.service.EmployeeService;
+import com.ts.app.service.OtaskmanService;
 import com.ts.app.web.rest.dto.EmpDTO;
 import com.ts.app.web.rest.dto.EmployeeListDTO;
 import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
@@ -48,6 +50,9 @@ public class EmployeeServiceResouce {
 
     @Value("${onBoarding.empRetrieve}")
     private String URL_ORACLE;
+    
+    @Autowired
+    private OtaskmanService oTaskmanService;
 
 	@RequestMapping(value = "/getBranchList", method = RequestMethod.GET)
 	public List<PersonalAreaDTO> getBranchList() {
@@ -164,10 +169,7 @@ public class EmployeeServiceResouce {
 				});
 		return response.getBody();
 	}
-
-
-
-
+ 
 
 	@RequestMapping(value = "/getEmployeeListByProjectId/{projectId}", method = RequestMethod.GET)
 	public List<EmpDTO> getEmployeeListByProjectId(@PathVariable("projectId") String projectId) {
