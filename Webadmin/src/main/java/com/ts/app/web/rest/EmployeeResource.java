@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -131,7 +132,27 @@ public class EmployeeResource {
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
+    
+/******************************Modified by Vinoth**********************************************************/
+    
+     @RequestMapping(value = "/saveOnboradingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+     @Timed
+     public ResponseEntity<?> saveOnboardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
+    	 long userId = SecurityUtils.getCurrentUserId();
+    	 employeeDTO.setUserId(userId);
+    	 try {
+    		 if(!employeeService.isDuplicate(employeeDTO)) {
+    			 employeeDTO = employeeService.createOnboardingEmployeeInfo(employeeDTO);
+    		 }else {
+    			 employeeDTO.setMessage("error.duplicateRecordError");
+    			 return new ResponseEntity<>(employeeDTO,HttpStatus.BAD_REQUEST);
+    		 }
+    	 }catch(Exception e) {
+    		 throw new TimesheetException(e, employeeDTO);
+    	 }
+    	 return new ResponseEntity<>(HttpStatus.CREATED);
+     }
+/**********************************************************************************************************/    
     @RequestMapping(value = "/employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> updateEmployee(@Valid @RequestBody EmployeeDTO employee, HttpServletRequest request) {

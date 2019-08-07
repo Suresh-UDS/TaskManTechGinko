@@ -235,6 +235,19 @@ public class    EmployeeService extends AbstractService {
         return employeeDto;
     }
 
+/******************************Modified by Vinoth**********************************************************/   
+    
+    public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) {
+        Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
+        employee.setActive(Employee.ACTIVE_YES);
+        employee = employeeRepository.save(employee);
+        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
+    	return employeeDTO;
+    }
+
+
+/******************************Modified by Vinoth**********************************************************/    
+    
     public DesignationDTO createDesignation(DesignationDTO designationDTO) {
         if(StringUtils.isNotEmpty(designationDTO.getDesignation())) {
             Designation designation = new Designation();
@@ -1656,10 +1669,62 @@ public class    EmployeeService extends AbstractService {
         empDto.setRelieved(employee.isRelieved());
         empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProject().getName() : "");
         empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
-        empDto.setClient(employee.isClient());
+        empDto.setClient(employee.isClient());       
         return empDto;
     }
 
+/******************************Modified by Vinoth**********************************************************/
+    
+    private EmployeeDTO mapToModelOnBoarding(Employee employee) {
+    	EmployeeDTO empDto = new EmployeeDTO();
+    	 empDto.setAccountNumber(employee.getAccountNumber());
+         empDto.setAddressProofImage(employee.getAddressProofImage());
+         empDto.setAdharBackImage(employee.getAdharBackImage());
+         empDto.setAdharCardNumber(employee.getAdharCardNumber());
+         empDto.setAdharFrontImage(employee.getAdharFrontImage());
+         empDto.setBankPassbookImage(employee.getBankPassbookImage());
+         empDto.setBloodGroup(employee.getBloodGroup());
+         empDto.setBoardInstitute(employee.getBoardInstitute());
+         empDto.setClientDescription(employee.getClientDescription());
+         empDto.setClientName(employee.getClientName());
+         empDto.setCode(employee.getCode());
+         empDto.setDesignation(employee.getDesignation());
+         empDto.setDob(employee.getDob());
+         empDto.setDoj(employee.getDoj());
+         empDto.setDrivingLicense(employee.getDrivingLicense());
+         empDto.setEducationalQulification(employee.getEducationalQulification());
+         empDto.setEmergencyContactNumber(employee.getEmergencyContactNumber());
+         empDto.setEmployer(employee.getEmployer());
+         empDto.setFatherName(employee.getFatherName());
+         empDto.setFingerPrintLeft(employee.getFingerPrintLeft());
+         empDto.setFingerPrintRight(employee.getFingerPrintRight());
+         empDto.setGender(employee.getGender());
+         empDto.setIfscCode(employee.getIfscCode());
+         empDto.setMaritalStatus(employee.getMaritalStatus());
+         empDto.setMobile(employee.getMobile());
+         empDto.setMotherName(employee.getMotherName());
+         empDto.setNomineeContactNumber(employee.getNomineeContactNumber());
+         empDto.setNomineeName(employee.getNomineeName());
+         empDto.setNomineeRelationship(employee.getNomineeRelationship());
+         empDto.setPanCard(employee.getPanCard());
+         empDto.setPercentage(employee.getPercentage());
+         empDto.setPermanentAddress(employee.getPermanentAddress());
+         empDto.setPermanentCity(employee.getPermanentCity());
+         empDto.setPermanentState(employee.getPermanentState());
+         empDto.setPersonalIdentificationMark1(employee.getPersonalIdentificationMark1());
+         empDto.setPersonalIdentificationMark2(employee.getPersonalIdentificationMark2());
+         empDto.setPresentAddress(employee.getPresentAddress());
+         empDto.setPresentCity(employee.getPresentCity());
+         empDto.setPresentState(employee.getPresentState());
+         empDto.setPreviousDesignation(employee.getPreviousDesignation());
+         empDto.setReligion(employee.getReligion());
+         empDto.setVoterId(employee.getVoterId());
+         empDto.setWbsDescription(employee.getWbsDescription());
+         empDto.setWbsId(employee.getWbsId());
+    	return empDto;
+    }
+    
+/****************************************************************************************/ 
     public String uploadEmpExistingImage() {
         // TODO Auto-generated method stub
         int currPage = 1;
