@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.FeedbackMapping;
+import com.ts.app.domain.SapBusinessCategories;
+import com.ts.app.repository.SapBusinessCategoriesRepository;
 import com.ts.app.service.EmployeeService;
 import com.ts.app.service.OtaskmanService;
+import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmpDTO;
 import com.ts.app.web.rest.dto.EmployeeListDTO;
 import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
 import com.ts.app.web.rest.dto.PersonalAreaDTO;
 import com.ts.app.web.rest.dto.ProjectListDTO;
+import com.ts.app.web.rest.dto.SapBusinessCategoriesDTO;
 import com.ts.app.web.rest.dto.SiteListDTO;
 import com.ts.app.web.rest.dto.WbsByEmpDTO;
 
@@ -53,7 +61,13 @@ public class EmployeeServiceResouce {
     
     @Autowired
     private OtaskmanService oTaskmanService;
+    
+    @Autowired
+    private SapBusinessCategoriesRepository SAPbuisinessCategoriesRepository;
 
+	@Inject
+	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+	
 	@RequestMapping(value = "/getBranchList", method = RequestMethod.GET)
 	public List<PersonalAreaDTO> getBranchList() {
 
@@ -461,6 +475,25 @@ public class EmployeeServiceResouce {
 				HttpMethod.PUT, entity, new ParameterizedTypeReference<EmpDTO>() {
 				});
 		return response.getBody();
+	}
+
+
+
+    @RequestMapping(value="/updateSAPBuisinessCategories", method = RequestMethod.POST)
+	public ResponseEntity<?> updateSAPBuisinessCategoeies(){
+		
+		String categories = oTaskmanService.getBranchProjectWbs();
+		
+		SapBusinessCategoriesDTO buisinessCategiresModel = new SapBusinessCategoriesDTO();
+		
+		buisinessCategiresModel.setElementsJson(categories);
+ 
+		SapBusinessCategories sapBusinessCategories = mapperUtil.toEntity(buisinessCategiresModel, SapBusinessCategories.class);
+		
+		SAPbuisinessCategoriesRepository.save(sapBusinessCategories);
+		
+        return new ResponseEntity<>(HttpStatus.OK);
+        
 	}
 
 }

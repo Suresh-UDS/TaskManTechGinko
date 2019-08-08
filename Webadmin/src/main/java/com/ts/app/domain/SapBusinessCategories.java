@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "onboarding_config")
+@Table(name = "sap_business_categories")
 public class SapBusinessCategories extends AbstractAuditingEntity implements Serializable {
 
     @Id

@@ -33,8 +33,13 @@ public class OtaskmanService {
 
 	public String getBranchProjectWbs() {
  
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+		HttpEntity<String> entity = new HttpEntity<String>(new String(), headers);
+		
 		ResponseEntity<String> response = restTemplete.exchange(URL_ORACLE+"getBranchProjctWBSHierarchy",
-				HttpMethod.GET, null, String.class);
+				HttpMethod.GET, entity, String.class);
 		
 		return response.getBody();
 		
