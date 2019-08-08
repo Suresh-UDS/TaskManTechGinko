@@ -1,14 +1,21 @@
 package com.ts.app.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Asset;
 import com.ts.app.domain.OnboardingUserConfig;
 import com.ts.app.repository.OnboardingUserConfigRepository;
 import com.ts.app.service.util.MapperUtil;
+import com.ts.app.web.rest.dto.AssetDTO;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.OnboardingUserConfigDTO;
 
@@ -30,6 +37,24 @@ public class OnboardingUserConfigService extends AbstractService {
 		onboardingUserList = onboardingUserConfigRepository.save(onboardingUserList);
 		onboardingUserConfigDTO = mapperUtil.toModel(onboardingUserList, OnboardingUserConfigDTO.class);
 		return onboardingUserConfigDTO;
+	}
+	
+	public List<OnboardingUserConfigDTO> findBranchListByUserId(long userId) {
+		List <OnboardingUserConfig> branchModel = onboardingUserConfigRepository.findbranchListByUserId(userId);
+		List<OnboardingUserConfigDTO> branchList = mapperUtil.toModelList(branchModel, OnboardingUserConfigDTO.class);
+		return branchList;
+	}
+	
+	public List<OnboardingUserConfigDTO> findProjectByBranchId(long userId) {
+		List<OnboardingUserConfig> projectModel = onboardingUserConfigRepository.findProjectByBranchId(userId);
+		List<OnboardingUserConfigDTO> projectList = mapperUtil.toModelList(projectModel, OnboardingUserConfigDTO.class);
+		return projectList;
+	}
+	
+	public List<OnboardingUserConfigDTO> findWBSByProjectId(long userId){
+		List<OnboardingUserConfig> wbsModel = onboardingUserConfigRepository.findWBSByProjectId(userId);
+		List<OnboardingUserConfigDTO> wbsList = mapperUtil.toModelList(wbsModel, OnboardingUserConfigDTO.class);
+		return wbsList;
 	}
 	
 	public OnboardingUserConfigDTO mapToModal(OnboardingUserConfig onboardingUserConfig,boolean includeShifts) {
