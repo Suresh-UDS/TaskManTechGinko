@@ -286,6 +286,39 @@ public class ImportUtil {
 		return result;
 
 	}
+	
+/**********************************Modified By Vinoth**************************************************************************/
+	
+	public ImportResult importEmployeeOnboardingData(MultipartFile file, long dateTime) {
+        String fileName = dateTime + ".xlsx";
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
+		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
+		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
+		ImportResult result = new ImportResult();
+		if(statusMap.containsKey(fileKey)) {
+			ImportResult importResult = statusMap.get(fileKey);
+			String status = importResult.getStatus();
+			log.debug("Current status for filename -"+fileKey+", status -" + status);
+		}else {
+			result.setFile(fileKey);
+			result.setStatus("PROCESSING");
+			statusMap.put(fileKey, result);
+		}
+		try {
+			importNewFiles("employeeOnboarding",filePath, fileName, targetFilePath);
+			result.setFile(fileKey);
+		}catch (Exception e) {
+			log.error("Error while importing employee Onbording data",e);
+			result.setStatus("FAILED");
+			result.setMsg(e.getMessage());
+			statusMap.put(fileKey, result);
+		}
+		return result;
+
+	}
+	
+/******************************************************************************************************************************/
 
 	public ImportResult importAssetData(MultipartFile file, long dateTime, boolean isPPM, boolean isAMC) {
         String fileName = dateTime + ".xlsx";
@@ -396,6 +429,9 @@ public class ImportUtil {
 						break;
 					case "employee":
 						importEmployeeFromFile(fileKey, fileObj.getPath());
+						break;
+					case "employeeOnboarding":
+						importEmployeeOnboardingFromFile(fileKey, fileObj.getPath());
 						break;
 					case "client" :
 						importClientFromFile(fileKey,fileObj.getPath());
@@ -1771,6 +1807,192 @@ public class ImportUtil {
 		return response.toString();
 	}
 
+/*******************************************Modified By Vinoth*************************************************************************/
+	
+	private String importEmployeeOnboardingFromFile(String fileKey, String path) throws Exception {
+		StringBuffer response = new StringBuffer();
+		int r = 1;
+		int cellNo = 0;
+		ImportResult importResult = statusMap.get(fileKey);
+		try {
+
+			FileInputStream excelFile = new FileInputStream(new File(path));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			//Iterator<Row> iterator = datatypeSheet.iterator();
+			int lastRow = datatypeSheet.getLastRowNum();
+			log.debug("Last Row number -" + lastRow);
+			for (; r <= lastRow; r++) {
+				log.debug("Current Row number -" + r);
+				Row currentRow = datatypeSheet.getRow(r);
+				try {
+
+					/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
+					log.debug("Employee obj =" + existingEmployee);
+					&& existingEmployee.getActive().equals(Employee.ACTIVE_NO
+					if(existingEmployee!=null){
+						log.debug("*************Existing Employee");
+
+					}
+					else {*/
+					cellNo = 2;
+					if(currentRow.getCell(2).getStringCellValue() != null) {
+						Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
+						if(existingEmployee != null) {
+							List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
+							cellNo = 0;
+							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+							cellNo = 1;
+							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+							EmployeeProjectSite projectSite = new EmployeeProjectSite();
+							/*
+							projectSite.setProjectId(newProj.getId());
+							projectSite.setProjectName(newProj.getName());
+							projectSite.setSiteId(newSite.getId());
+							projectSite.setSiteName(newSite.getName());
+							*/
+							projectSite.setProject(newProj);
+							projectSite.setSite(newSite);
+							projectSite.setEmployee(existingEmployee);
+
+							if(CollectionUtils.isNotEmpty(projSites)) {
+								projSites.add(projectSite);
+							}
+							employeeRepo.save(existingEmployee);
+							log.debug("Update Employee Information with new site info: {}");
+						}else {
+							Employee employee = new Employee();
+							cellNo = 0;
+							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+							cellNo = 1;
+							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+							cellNo = 2;
+							employee.setEmpId(getCellValue(currentRow.getCell(2)));
+							cellNo = 3;
+							employee.setName(getCellValue(currentRow.getCell(3)));
+							employee.setFullName(getCellValue(currentRow.getCell(3)));
+							cellNo = 4;
+							employee.setLastName(getCellValue(currentRow.getCell(4)));
+							cellNo = 5;
+							employee.setPhone(getCellValue(currentRow.getCell(5)));
+							cellNo = 6;
+							employee.setEmail(getCellValue(currentRow.getCell(6)));
+							cellNo = 7;
+							employee.setDesignation(getCellValue(currentRow.getCell(7)));
+							// email, phone number missing
+							ZoneId  zone = ZoneId.of("Asia/Singapore");
+							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+							employee.setCreatedDate(zdt);
+							employee.setActive(Employee.ACTIVE_YES);
+							cellNo = 8;
+							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
+								Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
+								employee.setManager(manager);
+					        }
+							List<Project> projects = new ArrayList<Project>();
+							projects.add(newProj);
+							List<Site> sites = new ArrayList<Site>();
+							sites.add(newSite);
+							employee.setFaceAuthorised(false);
+							employee.setFaceIdEnrolled(false);
+							employee.setLeft(false);
+							employee.setRelieved(false);
+							employee.setReliever(false);
+							List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
+							EmployeeProjectSite projectSite = new EmployeeProjectSite();
+							/*
+							projectSite.setProjectId(newProj.getId());
+							projectSite.setProjectName(newProj.getName());
+							projectSite.setSiteId(newSite.getId());
+							projectSite.setSiteName(newSite.getName());
+							*/
+							projectSite.setProject(newProj);
+							projectSite.setSite(newSite);
+							projectSite.setEmployee(employee);
+							projectSites.add(projectSite);
+							employee.setProjectSites(projectSites);
+
+							employeeRepo.save(employee);
+							//create user if opted.
+							cellNo = 9;
+							String createUser = getCellValue(currentRow.getCell(9));
+							cellNo = 10;
+							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
+							UserDTO user = new UserDTO();
+							if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
+								user.setLogin(employee.getEmpId());
+								user.setPassword(employee.getEmpId());
+								user.setFirstName(employee.getName());
+								user.setLastName(employee.getLastName());
+								user.setAdminFlag("N");
+								user.setUserRoleId(userRoleId);
+								user.setEmployeeId(employee.getId());
+								user.setActivated(true);
+								cellNo = 6;
+								user.setEmail(currentRow.getCell(6).getStringCellValue());
+								user = userService.createUserInformation(user);
+								User userObj = userRepository.findOne(user.getId());
+								employee.setUser(userObj);
+								employeeRepo.save(employee);
+							}
+							log.debug("Created Information for Employee: {}" + employee.getId());
+
+						}
+					}
+				} catch (IllegalStateException | NumberFormatException formatEx) {
+					throw formatEx;
+				} catch (Exception e) {
+					String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+					log.error(msg, e);
+					response.append(e.getMessage());
+					response.append("--" + msg);
+					response.append("--" + "Please correct the data format and retry again");
+					if(importResult == null) {
+						importResult = new ImportResult();
+					}
+					importResult.setStatus(FAILED);
+					importResult.setMsg(response.toString());
+					statusMap.put(fileKey, importResult);
+					throw new Exception(response.toString());
+				}
+
+
+
+			/*}*/
+			}
+
+		} catch (IOException e) {
+			String msg = "Error while reading the employee data file for import";
+			log.error(msg, e);
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw new Exception(response.toString());
+		}  catch (IllegalStateException | NumberFormatException formatEx) {
+			String msg = "Error while getting values from row - " + (r+1) + " - cell - "+ (cellNo+1);
+			log.error(msg, formatEx);
+			response.append(formatEx.getMessage());
+			response.append("--" + msg);
+			response.append("--" + "Please correct the data format and retry again");
+			if(importResult == null) {
+				importResult = new ImportResult();
+			}
+			importResult.setStatus(FAILED);
+			importResult.setMsg(response.toString());
+			statusMap.put(fileKey, importResult);
+			throw new Exception(response.toString());
+		}
+		if(response.length() == 0) {
+			response.append(SUCCESS_MESSAGE);
+		}
+		return response.toString();
+	}
+	
+/**************************************************************************************************************************************/
+	
 	private void changeSiteEmployee(String path){
 
 	    try{

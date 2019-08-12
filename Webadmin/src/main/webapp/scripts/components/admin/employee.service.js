@@ -316,6 +316,30 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            
+/***********************************Modified By Vinoth***************************************************************************************/
+
+            importEmployeeOnboardingFile: function(file) {
+                var fileFormData = new FormData();
+                fileFormData.append('employeeOnboardingFile', file);
+                return $http.post('api/employeeOnboarding/import', fileFormData, {
+                    transformRequest: angular.identity,
+                    headers: {'Content-Type': undefined}
+
+                }).then(function (response) {
+                    return response.data;
+                });
+
+            },
+            importEmployeeOnboardingStatus: function(fileName) {
+                return $http.get('api/employeeOnboarding/import/'+fileName+"/status").then(function (response) {
+                    return response.data;
+                });
+            },
+            
+            
+/********************************************************************************************************************************************/
+            
             importEmployeeShiftFile: function(file) {
                 var fileFormData = new FormData();
                 fileFormData.append('employeeShiftFile', file);

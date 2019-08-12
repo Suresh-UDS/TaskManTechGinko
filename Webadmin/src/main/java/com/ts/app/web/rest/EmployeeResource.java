@@ -683,7 +683,45 @@ public class EmployeeResource {
         }
         return result;
     }
+    
+/*********************************Modified By Vinoth*********************************************************************************/
+    
+    @RequestMapping(path="/employeeOnboarding/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ImportResult> importEmployeeOnboardingData(@RequestParam("employeeOnboardingFile") MultipartFile file){
+        log.info("Employee Onboarding Import Status********************");
+        Calendar cal = Calendar.getInstance();
+        ImportResult result = importService.importEmployeeOnboardingData(file, cal.getTimeInMillis());
+        if(StringUtils.isNotEmpty(result.getStatus()) && result.getStatus().equalsIgnoreCase("FAILED")) {
+        		return new ResponseEntity<ImportResult>(result,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<ImportResult>(result,HttpStatus.OK);
+    }
 
+    @RequestMapping(value = "/employeeOnboarding/import/{fileId}/status",method = RequestMethod.GET)
+    public ImportResult importEmployeeOnboardingStatus(@PathVariable("fileId") String fileId) {
+        log.debug("ImportStatus -  fileId -"+ fileId);
+        ImportResult result = jobService.getImportStatus(fileId);
+        if(result!=null && result.getStatus() != null) {
+            switch(result.getStatus()) {
+                case "PROCESSING" :
+                    result.setMsg("Importing data...");
+                    break;
+                case "COMPLETED" :
+                    result.setMsg("Completed importing");
+                    break;
+                case "FAILED" :
+                    result.setMsg("Failed to import. Please try again");
+                    break;
+                default :
+                    result.setMsg("Completed importing");
+                    break;
+            }
+        }
+        return result;
+    }
+    
+/************************************************************************************************************************************/
+    
     @RequestMapping(path="/employee/shift/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImportResult> importShiftData(@RequestParam("employeeShiftFile") MultipartFile file){
         log.info("Employee Shift Import Status********************");

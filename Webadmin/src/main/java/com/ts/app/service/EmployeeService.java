@@ -1678,11 +1678,11 @@ public class    EmployeeService extends AbstractService {
     private EmployeeDTO mapToModelOnBoarding(Employee employee) {
     	EmployeeDTO empDto = new EmployeeDTO();
     	 empDto.setAccountNumber(employee.getAccountNumber());
-         empDto.setAddressProofImage(employee.getAddressProofImage());
-         empDto.setAdharBackImage(employee.getAdharBackImage());
+//         empDto.setAddressProofImage(employee.getAddressProofImage());
+//         empDto.setAdharBackImage(employee.getAdharBackImage());
          empDto.setAdharCardNumber(employee.getAdharCardNumber());
-         empDto.setAdharFrontImage(employee.getAdharFrontImage());
-         empDto.setBankPassbookImage(employee.getBankPassbookImage());
+//         empDto.setAdharFrontImage(employee.getAdharFrontImage());
+//         empDto.setBankPassbookImage(employee.getBankPassbookImage());
          empDto.setBloodGroup(employee.getBloodGroup());
          empDto.setBoardInstitute(employee.getBoardInstitute());
          empDto.setClientDescription(employee.getClientDescription());
@@ -1691,13 +1691,13 @@ public class    EmployeeService extends AbstractService {
          empDto.setDesignation(employee.getDesignation());
          empDto.setDob(employee.getDob());
          empDto.setDoj(employee.getDoj());
-         empDto.setDrivingLicense(employee.getDrivingLicense());
+         //empDto.setDrivingLicense(employee.getDrivingLicense());
          empDto.setEducationalQulification(employee.getEducationalQulification());
          empDto.setEmergencyContactNumber(employee.getEmergencyContactNumber());
          empDto.setEmployer(employee.getEmployer());
          empDto.setFatherName(employee.getFatherName());
-         empDto.setFingerPrintLeft(employee.getFingerPrintLeft());
-         empDto.setFingerPrintRight(employee.getFingerPrintRight());
+//         empDto.setFingerPrintLeft(employee.getFingerPrintLeft());
+//         empDto.setFingerPrintRight(employee.getFingerPrintRight());
          empDto.setGender(employee.getGender());
          empDto.setIfscCode(employee.getIfscCode());
          empDto.setMaritalStatus(employee.getMaritalStatus());
@@ -1706,7 +1706,7 @@ public class    EmployeeService extends AbstractService {
          empDto.setNomineeContactNumber(employee.getNomineeContactNumber());
          empDto.setNomineeName(employee.getNomineeName());
          empDto.setNomineeRelationship(employee.getNomineeRelationship());
-         empDto.setPanCard(employee.getPanCard());
+         //empDto.setPanCard(employee.getPanCard());
          empDto.setPercentage(employee.getPercentage());
          empDto.setPermanentAddress(employee.getPermanentAddress());
          empDto.setPermanentCity(employee.getPermanentCity());
@@ -1718,7 +1718,7 @@ public class    EmployeeService extends AbstractService {
          empDto.setPresentState(employee.getPresentState());
          empDto.setPreviousDesignation(employee.getPreviousDesignation());
          empDto.setReligion(employee.getReligion());
-         empDto.setVoterId(employee.getVoterId());
+         //empDto.setVoterId(employee.getVoterId());
          empDto.setWbsDescription(employee.getWbsDescription());
          empDto.setWbsId(employee.getWbsId());
     	return empDto;
