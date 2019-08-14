@@ -11,6 +11,4 @@ public interface SapBusinessCategoriesRepository extends JpaRepository<SapBusine
 
     @Query("SELECT s FROM SapBusinessCategories s order by s.createdDate")
     List<SapBusinessCategories> findLatest();
-
-
 }

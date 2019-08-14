@@ -80,6 +80,21 @@ public class ImportService extends AbstractService {
 		return result;
 
 	}
+	
+/*********************************************Modified By Vinoth*********************************************************************************/
+	
+	public ImportResult importEmployeeOnboardingData(MultipartFile file, long dateTime) {
+        ImportResult result = null;
+        try {
+        		result = importUtil.importEmployeeOnboardingData(file, dateTime);
+        }catch (Exception e) {
+        		result = importUtil.getImportResult(String.valueOf(dateTime));
+        }
+		return result;
+
+	}
+	
+/************************************************************************************************************************************************/
 
 	public ImportResult importAssetData(MultipartFile file, long dateTime, boolean isPPM, boolean isAMC) {
         ImportResult result = null;

@@ -229,6 +229,90 @@ angular.module('timeSheetApp')
 	   };*/
 			//Employee end
 
+/*************************************************Modified By Vinoth**************************************************************************/
+
+			// upload Employee Onboarding File  start
+			$scope.uploadEmployeeOnboardingFile = function(){
+				if($scope.selectedEmployeeOnboardingFile){
+					$scope.empImportStatusLoad = true;
+					console.log('selected employee onboarding file - ' + $scope.selectedEmployeeOnboardingFile);
+					EmployeeComponent.importEmployeeOnboardingFile($scope.selectedEmployeeOnboardingFile).then(function(data){
+						console.log(data);
+						var result = data;
+						console.log(result.file + ', ' + result.status + ',' + result.msg);
+						var importStatus = {
+								fileName : result.file,
+								importMsg : result.msg
+						};
+						$scope.employeeOnboardingImportStatus = importStatus;
+						if(result.status == 'COMPLETED') {
+							$scope.showNotification('top','center','success','Employee Onboarding data imported successfuly');
+							$scope.empOnboardingImportStatusLoad = false;
+						}else if(result.status == 'PROCESSING') {
+							$rootScope.start('employeeOnboarding');
+						}
+					},function(err){
+						console.log('Import error');
+						if(err && err.data && err.data.msg) {
+							$scope.showNotification('top','center','danger',err.data.msg);
+						}else {
+							$scope.showNotification('top','center','danger','Error importing Employee Onboarding data, Please check the data and try again');
+						}
+						console.log(err);
+						$scope.empOnboardingImportStatusLoad = false;
+					});
+				}else{
+					console.log('select a file');
+				}
+			}
+
+			$scope.employeeOnboardingImportStatus = function() {
+				EmployeeComponent.importEmployeeOnboardingStatus($scope.employeeOnboardingImportStatus.fileName).then(function(data) {
+					if(data) {
+						$scope.employeeOnboardingImportStatus.importStatus = data.status;
+						console.log('employeeOnboardingImportStatus - '+ $scope.employeeOnboardingImportStatus);
+						$scope.employeeOnboardingImportStatus.importMsg = data.msg;
+						console.log('employeeOnboardingImportStatusMsg - '+ $scope.employeeOnboardingImportStatus.importMsg);
+						if($scope.employeeOnboardingImportStatus.importStatus == 'COMPLETED'){
+							$scope.employeeOnboardingImportStatus.fileName = data.file;
+							console.log('importEmployeeOnboardingFile - '+ $rootScope.employeeOnboardingImportStatus.fileName);
+							$scope.empOnboardingImportStatusLoad = false;
+							$scope.showNotification('top','center','success','Employee Onboarding data imported successfully');
+							$rootScope.stop('employeeOnboarding');
+							$timeout(function() {
+								$scope.employeeOnboardingImportStatus = {};
+							}, 3000);
+						}else if($scope.employeeOnboardingImportStatus.importStatus == 'FAILED'){
+							$scope.showNotification('top','center','danger',$scope.employeeOnboardingImportStatus.importMsg);
+							$rootScope.stop('employeeOnboarding');
+							$scope.empOnboardingImportStatusLoad = false;
+							$timeout(function() {
+								$scope.employeeOnboardingImportStatus = {};
+							}, 3000);
+						}else if($scope.employeeOnboardingImportStatus.importStatus == 'PROCESSING'){
+							//do nothing
+						}else {
+							$rootScope.stop('employeeOnboarding');
+							$scope.showNotification('top','center','danger',$scope.employeeOnboardingImportStatus.importMsg);
+							$scope.employeeOnboardingImportStatus.fileName = '#';
+							$scope.empOnboardingImportStatusLoad = false;
+							$timeout(function() {
+								$scope.employeeOnboardingImportStatus = {};
+							}, 3000);
+						}
+					}
+					$scope.empOnboardingImportStatusLoad = false;
+				}).catch(function () {
+                    $scope.empOnboardingImportStatusLoad = false;
+                    $scope.showNotification('top','center','danger','Error importing Employee status data, Please check the data and try again');
+                });
+			}
+
+			$scope.employeeOnboardingImportMsg = function() {
+				return ('employeeOnboardingMsg - '+$scope.employeeOnboardingImportStatus ? $scope.employeeOnboardingImportStatus.importMsg : '');
+			};
+			
+/************************************************************************************************************************************************/
 			//client upload file start
 			$scope.uploadClients = function() {
 				if($scope.selectedClientFile){

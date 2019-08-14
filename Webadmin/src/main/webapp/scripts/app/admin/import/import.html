@@ -220,7 +220,51 @@
             </div>
         </div>
 
+<!-- *****************************************Modified By Vinoth*************************************************************************** -->
+ <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Employee Onboarding</div>
+                <div class="panel-body">
+                    <form name="importEmployeeOnboardingForm" ng-submit="importEmployeeOnboarding()" novalidate confirm-on-exit>
+                        <div class="row">
+                            <div class="form-group label-floating" >
+                                <div class="col-md-6 pdng-top13">
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative"
+                                             file-model ng-model="selectedEmployeeOnboardingFile"
+                                             name="employeeOnboardingFile" ng-required="true"
+                                      />
+                                     <div ng-show="importEmployeeOnboardingForm.$submitted || importEmployeeOnboardingForm.employeeOnboardingFile.$touched || importEmployeeOnboardingForm.employeeOnboardingFile.$dirty">
+                                        <div ng-show="importEmployeeOnboardingForm.employeeOnboardingFile.$dirty || importEmployeeOnboardingForm.employeeOnboardingFile.$invalid">
+                                            <p class="help-block" style="color:maroon"
+                                               ng-show="importEmployeeOnboardingForm.employeeOnboardingFile.$error.required">
+                                               Employee On boarding file is required.
+                                            </p>
 
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                   <button class="btn btn-success" ng-click="uploadEmployeeOnboardingFile()" ng-disabled="importEmployeeOnboardingForm.$invalid">
+                                        <span class="btn-label">
+                                       		<i class="material-icons">file_upload</i>
+                                   		</span>Import Employees Onboarding
+                                   </button>
+                                   <span ng-show="empOnboardingImportStatusLoad"> <i class="fa fa-spinner fa-spin" style="font-size:15px"></i> </span>
+                                  </div>
+                                  <!-- <div class="col-md-2">
+                                  </div>
+                                  <div class="col-md-3" ng-hide="!employeeImportMsg">
+                                  	<span class="card-title">Status - {{employeeImportMsg}}</span>
+                                  </div> -->
+                              </div>
+							</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+<!-- ************************************************************************************************************************************** -->
 
         <div class="col-md-6">
             <div class="panel panel-default">

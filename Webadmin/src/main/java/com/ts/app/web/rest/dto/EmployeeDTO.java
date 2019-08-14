@@ -154,7 +154,7 @@ public class EmployeeDTO extends BaseDTO {
  
     private String presentState;
     
-    private String addressProofImage;
+    //private String addressProofImage;
 
     private String nomineeName;
 
@@ -172,19 +172,19 @@ public class EmployeeDTO extends BaseDTO {
 
     private String ifscCode;
     
-    private String bankPassbookImage;
-    
-    private String adharFrontImage;
-    
-    private String adharBackImage;
-    
-    private String fingerPrintLeft;
-    
-    private String fingerPrintRight;
-    
-    private String drivingLicense;
-    
-    private String voterId;
+//    private String bankPassbookImage;
+//    
+//    private String adharFrontImage;
+//    
+//    private String adharBackImage;
+//    
+//    private String fingerPrintLeft;
+//    
+//    private String fingerPrintRight;
+//    
+//    private String drivingLicense;
+//    
+//    private String voterId;
     
     private String panCard;
 
@@ -364,13 +364,13 @@ public class EmployeeDTO extends BaseDTO {
 		this.presentState = presentState;
 	}
 
-	public String getAddressProofImage() {
-		return addressProofImage;
-	}
-
-	public void setAddressProofImage(String addressProofImage) {
-		this.addressProofImage = addressProofImage;
-	}
+//	public String getAddressProofImage() {
+//		return addressProofImage;
+//	}
+//
+//	public void setAddressProofImage(String addressProofImage) {
+//		this.addressProofImage = addressProofImage;
+//	}
 
 	public String getNomineeName() {
 		return nomineeName;
@@ -436,61 +436,61 @@ public class EmployeeDTO extends BaseDTO {
 		this.ifscCode = ifscCode;
 	}
 
-	public String getBankPassbookImage() {
-		return bankPassbookImage;
-	}
-
-	public void setBankPassbookImage(String bankPassbookImage) {
-		this.bankPassbookImage = bankPassbookImage;
-	}
-
-	public String getAdharFrontImage() {
-		return adharFrontImage;
-	}
-
-	public void setAdharFrontImage(String adharFrontImage) {
-		this.adharFrontImage = adharFrontImage;
-	}
-
-	public String getAdharBackImage() {
-		return adharBackImage;
-	}
-
-	public void setAdharBackImage(String adharBackImage) {
-		this.adharBackImage = adharBackImage;
-	}
-
-	public String getFingerPrintLeft() {
-		return fingerPrintLeft;
-	}
-
-	public void setFingerPrintLeft(String fingerPrintLeft) {
-		this.fingerPrintLeft = fingerPrintLeft;
-	}
-
-	public String getFingerPrintRight() {
-		return fingerPrintRight;
-	}
-
-	public void setFingerPrintRight(String fingerPrintRight) {
-		this.fingerPrintRight = fingerPrintRight;
-	}
-
-	public String getDrivingLicense() {
-		return drivingLicense;
-	}
-
-	public void setDrivingLicense(String drivingLicense) {
-		this.drivingLicense = drivingLicense;
-	}
-
-	public String getVoterId() {
-		return voterId;
-	}
-
-	public void setVoterId(String voterId) {
-		this.voterId = voterId;
-	}
+//	public String getBankPassbookImage() {
+//		return bankPassbookImage;
+//	}
+//
+//	public void setBankPassbookImage(String bankPassbookImage) {
+//		this.bankPassbookImage = bankPassbookImage;
+//	}
+//
+//	public String getAdharFrontImage() {
+//		return adharFrontImage;
+//	}
+//
+//	public void setAdharFrontImage(String adharFrontImage) {
+//		this.adharFrontImage = adharFrontImage;
+//	}
+//
+//	public String getAdharBackImage() {
+//		return adharBackImage;
+//	}
+//
+//	public void setAdharBackImage(String adharBackImage) {
+//		this.adharBackImage = adharBackImage;
+//	}
+//
+//	public String getFingerPrintLeft() {
+//		return fingerPrintLeft;
+//	}
+//
+//	public void setFingerPrintLeft(String fingerPrintLeft) {
+//		this.fingerPrintLeft = fingerPrintLeft;
+//	}
+//
+//	public String getFingerPrintRight() {
+//		return fingerPrintRight;
+//	}
+//
+//	public void setFingerPrintRight(String fingerPrintRight) {
+//		this.fingerPrintRight = fingerPrintRight;
+//	}
+//
+//	public String getDrivingLicense() {
+//		return drivingLicense;
+//	}
+//
+//	public void setDrivingLicense(String drivingLicense) {
+//		this.drivingLicense = drivingLicense;
+//	}
+//
+//	public String getVoterId() {
+//		return voterId;
+//	}
+//
+//	public void setVoterId(String voterId) {
+//		this.voterId = voterId;
+//	}
 
 	public String getPanCard() {
 		return panCard;
