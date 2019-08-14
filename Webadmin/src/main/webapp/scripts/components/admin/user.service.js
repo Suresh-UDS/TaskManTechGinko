@@ -52,6 +52,16 @@ angular.module('timeSheetApp')
             		return response.data;
             	});
 
+            },
+            getAllUsers: function () {
+                return $http.get('api/user/userSearch').then(function (response) {
+                    return response.data;
+                })
+            },
+            getUserByCode: function (code) {
+                return $http.get('api/users/code/'+code).then(function (response) {
+                    return response.data;
+                })
             }
 
         };

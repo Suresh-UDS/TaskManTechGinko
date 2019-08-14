@@ -2,6 +2,8 @@
 angular.module('timeSheetApp')
 .service('HierarchyNodeService',function() {
 
+    var selectedItems = [];
+
     function lowerCase(str) {
         return str.split(' ').map(function(e){
             return e.toString().toLowerCase();  
@@ -13,12 +15,12 @@ angular.module('timeSheetApp')
             return {};
         }
 
-        if (lowerCase(tree.title).indexOf(lowerCase(query)) > -1) {
+        if (lowerCase(tree.elementName).indexOf(lowerCase(query)) > -1) {
             tree.match = true;
             return tree;
         }
 
-        var branches = _.reduce(tree.items, function(acc, leaf) {
+        var branches = _.reduce(tree.childElements, function(acc, leaf) {
             var newLeaf = treeSearch(leaf, query);
 
             if (!_.isEmpty(newLeaf)) {
@@ -29,8 +31,8 @@ angular.module('timeSheetApp')
         }, []);
 
         if (_.size(branches) > 0) {
-            var trunk = _.omit(tree, 'items');
-            trunk.items = branches;
+            var trunk = _.omit(tree, 'childElements');
+            trunk.childElements = branches;
         
             return trunk;
         }
@@ -42,9 +44,9 @@ angular.module('timeSheetApp')
        if(!node) return;
         arr.push(node);
 
-        if(node.items) {
+        if(node.childElements) {
             //if the node has children call getSelected for each and concat to array
-            node.items.forEach(function(childNode) {
+            node.childElements.forEach(function(childNode) {
                 arr = arr.concat(getAllChildren(childNode,[]))  
             })
         }
@@ -59,8 +61,8 @@ angular.module('timeSheetApp')
             return;
         }
         
-        if(node.items) {
-            node.items.forEach(function(item){
+        if(node.childElements) {
+            node.childElements.forEach(function(item){
                 findParent(item,node,targetNode,cb);
             });
         }
@@ -75,9 +77,9 @@ angular.module('timeSheetApp')
             return arr;
         }
         
-        if(node.items) {
+        if(node.childElements) {
             //if the node has children call getSelected for each and concat to array
-            node.items.forEach(function(childNode) {
+            node.childElements.forEach(function(childNode) {
                 arr = arr.concat(getSelected(childNode,[]))  
             })
         }
@@ -88,9 +90,9 @@ angular.module('timeSheetApp')
 
         //set as selected
         children.isSelected = val;
-        if(children.items) {
+        if(children.childElements) {
             //recursve to set all children as selected
-            children.items.forEach(function(el) {
+            children.childElements.forEach(function(el) {
                 selectChildren(el,val);  
             })
         }
@@ -98,15 +100,26 @@ angular.module('timeSheetApp')
     
     function trimLeafs(node,parent) {
         
-            if(!node.items) {
+            if(!node.childElements) {
                 //da end of the road
-                delete parent.items;
+                delete parent.childElements;
             } else {
-                node.items.forEach(function(item){
+                node.childElements.forEach(function(item){
                     trimLeafs(item,node);
                 })
             }
-        
+    }
+
+    var setSelected = function (selected,rootNode){
+        console.log("Set selected");
+        console.log(selected);
+        selectedItems = selected;
+    }
+
+    function getSelectedItems(){
+        console.log("Get selected Items");
+        console.log(selectedItems);
+        return selectedItems;
     }
     
     
@@ -116,7 +129,9 @@ angular.module('timeSheetApp')
        selectChildren:selectChildren,
        trimLeafs:trimLeafs,
        treeSearch:treeSearch,
-       findParent:findParent
+       findParent:findParent,
+       setSelected:setSelected,
+       getSelectedItems:getSelectedItems
    };
    
 })
