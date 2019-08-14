@@ -14,15 +14,13 @@ public class OnboardingUserConfig extends AbstractAuditingEntity implements Seri
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
+    @OneToOne(fetch = FetchType.LAZY,optional=true)
+    @JoinColumn(name = "userId", nullable = true)
+    private User user;
 	
-	@NotNull
 	@Size(min = 1, max = 250)
-	@Column(length = 250, nullable = false)
-	private long userId;
-	
-	@NotNull
-	@Size(min = 1, max = 250)
-	@Column(length = 250,nullable = false)
+	@Column(length = 250)
 	private String elementParent;
 	
 	@NotNull
@@ -35,6 +33,11 @@ public class OnboardingUserConfig extends AbstractAuditingEntity implements Seri
 	@Column(length = 250, nullable = false)
 	private String elementType;
 
+    @NotNull
+    @Size(min = 1, max =250)
+    @Column(length = 250, nullable = false)
+    private String elementCode;
+
 	
 	public long getId() {
 		return id;
@@ -42,14 +45,6 @@ public class OnboardingUserConfig extends AbstractAuditingEntity implements Seri
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public String getElementParent() {
@@ -75,4 +70,16 @@ public class OnboardingUserConfig extends AbstractAuditingEntity implements Seri
 	public void setElementType(String elementType) {
 		this.elementType = elementType;
 	}
+
+    public String getElementCode() { return elementCode;    }
+
+    public void setElementCode(String elementCode) { this.elementCode = elementCode; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

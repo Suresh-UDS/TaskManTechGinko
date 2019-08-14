@@ -346,6 +346,21 @@ public class UserService extends AbstractService {
 		return userModel;
 	}
 
+    @Transactional(readOnly = true)
+    public UserDTO getUserDetailsByCode(String code) {
+        User user = userRepository.findByLogin(code);
+        user.getAuthorities().size(); // eagerly load the association
+        UserDTO userModel = mapperUtil.toModel(user, UserDTO.class);
+        Set<Authority> authorities = user.getAuthorities();
+        Set<String> authNames = new HashSet<String>();
+        for (Authority auth : authorities) {
+            authNames.add(auth.getName().equalsIgnoreCase("ROLE_USER") ? "User" : "Admin");
+        }
+        userModel.setAuthorities(authNames);
+
+        return userModel;
+    }
+
 	@Transactional(readOnly = true)
 	public UserDTO getUserWithAuthorities() {
 		User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
@@ -486,5 +501,15 @@ public class UserService extends AbstractService {
 		return userDto;
 	}
 
+
+    public List<UserDTO> getUserNames() {
+	    List<User> userList = userRepository.findAllActiveUsers();
+	    List<UserDTO> userDTOList = null;
+	    for(User user:userList){
+	        userDTOList.add(mapToModel(user));
+        }
+
+	    return userDTOList;
+    }
 
 }

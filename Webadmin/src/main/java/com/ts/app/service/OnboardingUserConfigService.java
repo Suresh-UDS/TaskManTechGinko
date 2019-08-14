@@ -1,6 +1,16 @@
 package com.ts.app.service;
 
 import javax.inject.Inject;
+
+import com.ts.app.domain.SapBusinessCategories;
+import com.ts.app.domain.User;
+import com.ts.app.repository.SapBusinessCategoriesRepository;
+import com.ts.app.repository.UserRepository;
+import com.ts.app.security.SecurityUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,6 +22,9 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.OnboardingUserConfigDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class OnboardingUserConfigService extends AbstractService {
@@ -20,6 +33,12 @@ public class OnboardingUserConfigService extends AbstractService {
 	
 	@Inject
 	OnboardingUserConfigRepository onboardingUserConfigRepository;
+
+	@Inject
+    SapBusinessCategoriesRepository sapBusinessCategoriesRepository;
+
+	@Inject
+    UserRepository userRepository;
 	
 	@Inject
 	MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
@@ -31,11 +50,41 @@ public class OnboardingUserConfigService extends AbstractService {
 		onboardingUserConfigDTO = mapperUtil.toModel(onboardingUserList, OnboardingUserConfigDTO.class);
 		return onboardingUserConfigDTO;
 	}
-	
+
+	public List<OnboardingUserConfig> saveOnBoardingUserConfigList(List<OnboardingUserConfigDTO> onboardingUserConfigDTOList){
+	    OnboardingUserConfigDTO userConfigDTO = new OnboardingUserConfigDTO();
+	    List<OnboardingUserConfig> responseUserConfig = new ArrayList<>();
+	    OnboardingUserConfigDTO userConfigDTO1 = new OnboardingUserConfigDTO();
+	    User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        if(clearAllUserConfigs(SecurityUtils.getCurrentUserId())){
+            for(OnboardingUserConfigDTO onboardingUserConfigDTO: onboardingUserConfigDTOList){
+            OnboardingUserConfig userConfig = new OnboardingUserConfig();
+                userConfig = mapperUtil.toEntity(onboardingUserConfigDTO, OnboardingUserConfig.class);
+                userConfig.setUser(user);
+                userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
+                userConfig = onboardingUserConfigRepository.save(userConfig);
+                responseUserConfig.add(userConfig);
+            if(CollectionUtils.isNotEmpty(onboardingUserConfigDTO.getChildElements()) && onboardingUserConfigDTO.getChildElements().size()>0){
+                for(OnboardingUserConfigDTO configDTO : onboardingUserConfigDTO.getChildElements()){
+                    userConfig = mapperUtil.toEntity(configDTO, OnboardingUserConfig.class);
+                    userConfig.setElementParent(onboardingUserConfigDTO.getElement());
+                    userConfig.setUser(user);
+                    userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
+                    userConfig=onboardingUserConfigRepository.save(userConfig);
+                    responseUserConfig.add(userConfig);
+                }
+                }
+            }
+        }
+
+
+        return responseUserConfig;
+    }
+
 	public OnboardingUserConfigDTO mapToModal(OnboardingUserConfig onboardingUserConfig,boolean includeShifts) {
 		OnboardingUserConfigDTO onboardingUserConfigDTO = new OnboardingUserConfigDTO();
 		onboardingUserConfigDTO.setId(onboardingUserConfig.getId());
-		onboardingUserConfigDTO.setUserId(onboardingUserConfig.getUserId());
+		onboardingUserConfigDTO.setUserId(onboardingUserConfig.getUser().getId());
 		onboardingUserConfigDTO.setElement(onboardingUserConfig.getElement());
 		onboardingUserConfigDTO.setElementParent(onboardingUserConfig.getElementParent());
 		onboardingUserConfigDTO.setElementType(onboardingUserConfig.getElementType());
@@ -43,9 +92,47 @@ public class OnboardingUserConfigService extends AbstractService {
 	}
 	
 	private void mapToEntity(OnboardingUserConfigDTO onboardingUserConfigDTO,OnboardingUserConfig onboardingUserConfig) {		
-		onboardingUserConfig.setUserId(onboardingUserConfigDTO.getUserId());
+		onboardingUserConfig.setUser(userRepository.findOne(onboardingUserConfigDTO.getUserId()));
 		onboardingUserConfig.setElement(onboardingUserConfigDTO.getElement());
 		onboardingUserConfig.setElementParent(onboardingUserConfigDTO.getElementParent());
 		onboardingUserConfig.setElementType(onboardingUserConfigDTO.getElementType());
 	}
+
+	public SapBusinessCategories getOnBoardingConfigDetails(){
+	    List<SapBusinessCategories> sapBusinessCategories = sapBusinessCategoriesRepository.findLatest();
+
+        return sapBusinessCategories.get(0);
+
+    }
+
+    public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser(long userId) throws JSONException {
+        List<OnboardingUserConfig> userConfigs = onboardingUserConfigRepository.findElementParentsByUserId(userId); // Get all element parents for the user id
+        List<OnboardingUserConfigDTO> userConfigDTOS = mapperUtil.toModelList(userConfigs, OnboardingUserConfigDTO.class);
+        List<SapBusinessCategories> sapBusinessCategories1 = sapBusinessCategoriesRepository.findLatest();
+        SapBusinessCategories sapBusinessCategories = sapBusinessCategories1.get(0);
+        JSONArray ja = new JSONArray(sapBusinessCategories.getElementsJson());
+//
+//        for (int i=0; i<ja.length();i++){
+//            OnboardingUserConfigDTO o
+//        }
+
+
+//        for(OnboardingUserConfigDTO userConfig: userConfigDTOS){
+//            List<OnboardingUserConfig> userConfigs1 = onboardingUserConfigRepository.findElementChildsByUserId(userId,userConfig.getElementParent());
+//            userConfig.setChildElements(mapperUtil.toModelList(userConfigs1, OnboardingUserConfigDTO.class));
+//
+//        }
+        return (List<OnboardingUserConfigDTO>) ja;
+    }
+
+    public boolean clearAllUserConfigs(long userId){
+	    try {
+            onboardingUserConfigRepository.deleteByUserId(userId);
+            return true;
+        }catch (Exception e){
+	        log.debug("Error in deleting configs"+e);
+	        return false;
+        }
+    }
+
 }
