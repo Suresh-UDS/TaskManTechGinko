@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
+//import java.util.Date;
 
 
 @Entity
@@ -34,9 +35,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, nullable = false)
     private String fullName;
 
-    @NotNull
+    //@NotNull
     @Size(min = 1, max = 50)
-    @Column(length = 50, nullable = true)
     private String name;
 
     private String lastName;
@@ -55,9 +55,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy="manager")
     private Set<Employee> subOrdinates;
 
-    @NotNull
+    //@NotNull
     @Size(min = 1, max = 50)
-    @Column(length = 50, nullable = true)
     private String designation;
 
 
@@ -70,8 +69,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<EmployeeReliever> relievers;
 
-    @NotNull
-    @Column(length = 10, nullable = true)
+//    @NotNull
+//    @Column(length = 10, nullable = true)
     private long code;
 
     private boolean isFaceIdEnrolled;
@@ -108,14 +107,14 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private String gender;
     
     @NotNull
-    @Size(min =10, max = 50)
+    @Size(min =1, max = 50)
     @Column(length = 50, nullable = true)
     private String maritalStatus;
     
-    @NotNull
+    //@NotNull
     private Date dob;
     
-    @NotNull
+    //@NotNull
     private Date doj;
     
     private String religion;
@@ -199,10 +198,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 //    
 //    private String panCard;
     
-    @NotNull
+    //@NotNull
     private String clientName;
     
-    @NotNull
+    //@NotNull
     private String clientDescription;
     
     @NotNull

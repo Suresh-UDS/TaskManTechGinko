@@ -235,6 +235,7 @@ angular.module('timeSheetApp')
 			$scope.uploadEmployeeOnboardingFile = function(){
 				if($scope.selectedEmployeeOnboardingFile){
 					$scope.empImportStatusLoad = true;
+					//alert("Import File===>"+$scope.selectedEmployeeOnboardingFile);
 					console.log('selected employee onboarding file - ' + $scope.selectedEmployeeOnboardingFile);
 					EmployeeComponent.importEmployeeOnboardingFile($scope.selectedEmployeeOnboardingFile).then(function(data){
 						console.log(data);

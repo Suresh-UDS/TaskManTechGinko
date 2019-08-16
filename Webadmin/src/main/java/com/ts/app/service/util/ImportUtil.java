@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.boon.Str;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.FileSystem;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -55,6 +58,7 @@ public class ImportUtil {
 	private static final String SITE_FOLDER = "site";
 	private static final String LOCATION_FOLDER = "location";
     private static final String INVENTORY_FOLDER = "inventory";
+    private static final String EMPLOYEE_ONBOARDING_FOLDER = "employeeOnboarding";
     private static final String COMPLETED_IMPORT_FOLDER = "import.file.path.completed";
 	private static final String SEPARATOR = System.getProperty("file.separator");
 
@@ -291,9 +295,9 @@ public class ImportUtil {
 	
 	public ImportResult importEmployeeOnboardingData(MultipartFile file, long dateTime) {
         String fileName = dateTime + ".xlsx";
-		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
+		String filePath = env.getProperty(NEW_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_ONBOARDING_FOLDER;
 		String uploadedFileName = fileUploadHelper.uploadJobImportFile(file, filePath, fileName);
-		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_FOLDER;
+		String targetFilePath = env.getProperty(COMPLETED_IMPORT_FOLDER) + SEPARATOR +  EMPLOYEE_ONBOARDING_FOLDER;
 		String fileKey = fileName.substring(0, fileName.indexOf(".xlsx"));
 		ImportResult result = new ImportResult();
 		if(statusMap.containsKey(fileKey)) {
@@ -1912,12 +1916,99 @@ public class ImportUtil {
 							projectSites.add(projectSite);
 							employee.setProjectSites(projectSites);
 
-							employeeRepo.save(employee);
+							//employeeRepo.save(employee);
 							//create user if opted.
 							cellNo = 9;
 							String createUser = getCellValue(currentRow.getCell(9));
 							cellNo = 10;
 							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
+
+/*******************************************Modified By Vinoth***********************************************************************************/
+                            cellNo = 11;
+                            employee.setFatherName(getCellValue(currentRow.getCell(11)));
+                            cellNo = 12;
+                            employee.setFatherName(getCellValue(currentRow.getCell(12)));
+                            cellNo = 13;
+                            employee.setMotherName(getCellValue(currentRow.getCell(13)));
+                            cellNo = 14;
+                            employee.setGender(getCellValue(currentRow.getCell(14)));
+                            cellNo = 15;
+                            employee.setMaritalStatus(getCellValue(currentRow.getCell(15)));
+                            cellNo = 16;
+                            
+                            
+                            Date dobDate = currentRow.getCell(16) != null ? currentRow.getCell(16).getDateCellValue() : null;
+        					if(dobDate != null) {
+        						employee.setDob(DateUtil.convertToSQLDate(dobDate));
+        						//employee.setDob(dobDate);
+        					}else{
+        						employee.setDob(null);
+        					}
+                            
+                            cellNo = 17;
+                            
+                         
+                            Date dojDate = currentRow.getCell(17) != null ? currentRow.getCell(17).getDateCellValue() : null;
+                            if(dojDate != null) {
+                            	employee.setDoj(DateUtil.convertToSQLDate(dojDate));
+                            	//employee.setDoj(dojDate);
+                            }else {
+                            	employee.setDoj(null);
+                            }
+                            
+                            cellNo = 18;
+                            employee.setReligion(getCellValue(currentRow.getCell(18)));
+                            cellNo = 19;
+                            employee.setBloodGroup(getCellValue(currentRow.getCell(19)));
+                            cellNo = 20;
+                            employee.setPersonalIdentificationMark1(getCellValue(currentRow.getCell(20)));
+                            cellNo = 21;
+                            employee.setPersonalIdentificationMark2(getCellValue(currentRow.getCell(21)));
+                            cellNo = 22;
+                            employee.setMobile(getCellValue(currentRow.getCell(22)));
+                            cellNo = 23;
+                            employee.setEmergencyContactNumber(getCellValue(currentRow.getCell(23)));
+                            cellNo = 24;
+                            employee.setPresentAddress(getCellValue(currentRow.getCell(24)));
+                            cellNo = 25;
+                            employee.setPresentCity(getCellValue(currentRow.getCell(25)));
+                            cellNo = 26;
+                            employee.setPresentState(getCellValue(currentRow.getCell(26)));
+                            cellNo = 27;
+                            employee.setPermanentAddress(getCellValue(currentRow.getCell(27)));
+                            cellNo = 28;
+                            employee.setPermanentCity(getCellValue(currentRow.getCell(28)));
+                            cellNo = 29;
+                            employee.setPermanentState(getCellValue(currentRow.getCell(29)));
+                            cellNo = 30;
+                            employee.setEducationalQulification(getCellValue(currentRow.getCell(30)));
+                            cellNo = 31;
+                            employee.setBoardInstitute(getCellValue(currentRow.getCell(31)));
+                            cellNo = 32;
+                            employee.setNomineeName(getCellValue(currentRow.getCell(32)));
+                            cellNo = 33;
+                            employee.setNomineeRelationship(getCellValue(currentRow.getCell(33)));
+                            cellNo = 34;
+                            String per = getCellValue(currentRow.getCell(34));
+                            Double perDob = Double.parseDouble(per);
+                            employee.setPercentage(perDob);
+                            cellNo = 35;
+                            employee.setEmployer(getCellValue(currentRow.getCell(35)));
+                            cellNo = 36;
+                            employee.setDesignation(getCellValue(currentRow.getCell(36)));
+                            cellNo = 37;
+                            employee.setAdharCardNumber(getCellValue(currentRow.getCell(37)));
+                            cellNo = 38;
+                            employee.setAccountNumber(getCellValue(currentRow.getCell(38)));
+                            cellNo = 39;
+                            employee.setIfscCode(getCellValue(currentRow.getCell(39)));
+                            cellNo = 40;
+                            employee.setWbsId(getCellValue(currentRow.getCell(40)));
+                            cellNo = 41;
+                            employee.setWbsDescription(getCellValue(currentRow.getCell(41)));
+                            
+                            employeeRepo.save(employee);
+/************************************************************************************************************************************************/ 
 							UserDTO user = new UserDTO();
 							if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
 								user.setLogin(employee.getEmpId());

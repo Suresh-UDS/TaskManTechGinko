@@ -688,6 +688,7 @@ public class EmployeeResource {
     
     @RequestMapping(path="/employeeOnboarding/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImportResult> importEmployeeOnboardingData(@RequestParam("employeeOnboardingFile") MultipartFile file){
+    	System.out.println("Hiii");
         log.info("Employee Onboarding Import Status********************");
         Calendar cal = Calendar.getInstance();
         ImportResult result = importService.importEmployeeOnboardingData(file, cal.getTimeInMillis());
