@@ -287,6 +287,21 @@ public class UserResource {
         return new ResponseEntity<Object>(userDto,HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @RequestMapping(value = "/user/userSearch",method = RequestMethod.GET)
+    public List<UserDTO> userNameSearch(){
+
+	    return userService.getUserNames();
+    }
+
+    @RequestMapping(value = "/users/code/{code}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    @Transactional(readOnly = true)
+    public ResponseEntity<UserDTO> getUserDetails(@PathVariable("code") String code) throws URISyntaxException {
+//        UserDTO userDto = userService.getUserWithAuthorities(id);
+        UserDTO userDto = userService.getUserDetailsByCode(code);
+        return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
+    }
+
 
 
 }

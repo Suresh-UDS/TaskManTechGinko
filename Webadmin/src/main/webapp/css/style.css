@@ -155,3 +155,11 @@ body {
     padding:10px 5px 0 0;
     text-align: right;
 }
+
+
+
+
+#onBoarding .switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked){
+    opacity: 1 !important;
+    position: initial !important;
+}

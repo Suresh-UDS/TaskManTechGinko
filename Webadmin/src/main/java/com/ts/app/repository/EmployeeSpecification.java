@@ -123,6 +123,12 @@ public class EmployeeSpecification implements Specification<Employee> {
             predicates.add(builder.equal(root.get("active"), "Y"));
         }
 
+        if(searchCriteria.isVerified()){
+            predicates.add(builder.equal(root.get("verified"),true));
+        }else{
+            predicates.add(builder.equal(root.get("verified"),false));
+        }
+
         query.orderBy(builder.desc(root.get("createdDate")));
 
         query.distinct(true);

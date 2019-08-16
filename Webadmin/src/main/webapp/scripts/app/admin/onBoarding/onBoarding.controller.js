@@ -2,170 +2,13 @@
 
 angular.module('timeSheetApp')
 
-// .directive('hierarchySearch',function(HierarchyNodeService,$timeout) {
-//
-//     return {
-//         restrict:'E',
-//         templateUrl:'hierarchySearch.tpl.html',
-//         scope: {
-//             dataset:'='
-//         },
-//         controller:function($scope) {
-//             $scope.numSelected = 0;
-//             //$scope.list is used by ng-tree, dataset should never be modified
-//             $scope.list = angular.copy($scope.dataset);
-//
-//             $scope.options = {};
-//
-//             $scope.expandNode = function(n,$event) {
-//                 $event.stopPropagation();
-//                 n.toggle();
-//             }
-//
-//
-//             $scope.itemSelect = function(item) {
-//                 var rootVal = !item.isSelected;
-//                 HierarchyNodeService.selectChildren(item,rootVal)
-//
-//                 HierarchyNodeService.findParent($scope.list[0],null,item,selectParent);
-//                 var s = _.compact(HierarchyNodeService.getAllChildren($scope.list[0],[]).map(function(c){ return c.isSelected && !c.items;}));
-//                 $scope.numSelected = s.length;
-//             }
-//
-//             function selectParent(parent) {
-//                 var children = HierarchyNodeService.getAllChildren(parent,[]);
-//
-//                 if(!children) return;
-//                 children = children.slice(1).map(function(c){ return c.isSelected;});
-//
-//                 parent.isSelected =  children.length === _.compact(children).length;
-//                 HierarchyNodeService.findParent($scope.list[0],null,parent,selectParent)
-//             }
-//
-//             $scope.nodeStatus = function(node) {
-//                 var flattenedTree = getAllChildren(node,[]);
-//                 flattenedTree = flattenedTree.map(function(n){ return n.isSelected });
-//
-//                 return flattenedTree.length === _.compact(flattenedTree);
-//             }
-//
-//         },
-//         link:function(scope,el,attr) {
-//
-//             scope.$watch('pastUsersFilter',function(nv){
-//                if(_.isUndefined(nv)) return;
-//
-//                if(nv) {
-//                    HierarchyNodeService.trimLeafs(scope.list[0]);
-//                } else {
-//                    scope.list = angular.copy(scope.dataset);
-//                }
-//
-//             });
-//
-//
-//             var inputTimeout;
-//             var time = 300;
-//             scope.$watch('searchValue',function(nv) {
-//                 if(!nv && nv !== '') {
-//                     return;
-//                 }
-//                 var previousDataset = angular.copy(scope.list);
-//                 var newData = (scope.searchValue === '') ? angular.copy(scope.dataset) : [HierarchyNodeService.treeSearch(angular.copy(scope.dataset[0]),scope.searchValue)];
-//
-//                 if(newData.length === 1 && _.isEmpty(newData[0]) ) {
-//                   scope.emptyData = true;
-//                   return;
-//                 }
-//
-//                 scope.emptyData = false;
-//                 if(_.isEqual(previousDataset,newData)) {
-//                   clearTimeout(inputTimeout);
-//                   return;
-//                 }
-//
-//                 scope.list = newData;
-//
-//
-//                 $timeout.cancel(inputTimeout);
-//                 inputTimeout = $timeout(function() {
-//
-//                     var els = document.querySelectorAll('[ui-tree-node]');
-//
-//                     Array.prototype.forEach.call(els,function(el) {
-//                         el = angular.element(el);
-//                         var elScope = el.scope();
-//                         if(elScope.$modelValue.match) {
-//
-//                             elScope.expand();
-//
-//                             //loop through all parents and keep expanding until no more parents are found
-//                             var p = elScope.$parentNodeScope;
-//                             while(p) {
-//                               p.expand();
-//                               p = p.$parentNodeScope;
-//
-//                             }
-//                         }
-//                     });
-//                 },500);
-//             });
-//
-//
-//
-//
-//             scope.$watch('list',function(nv,ov) {
-//                 if(!nv) return;
-//                 if(nv && !ov) { scope.$apply();}
-//
-//
-//                 //UPDATE SELECTED IDs FOR QUERY
-//                 //get the root node
-//                 var rootNode = nv[0];
-//
-//                 //get all elements where isSelected == true
-//                 var a = HierarchyNodeService.getSelected(rootNode,[]);
-//
-//                 //get the ids of each element
-//                 a = _.pluck(a,'id');
-//
-//                 scope.selected = a;
-//
-//             },true);
-//         }
-//     }
-// })
-//
-// .directive('indeterminateCheckbox',function(HierarchyNodeService) {
-// 	return {
-// 		restrict:'A',
-// 		scope: {
-// 			node:'='
-// 		},
-// 		link: function(scope, element, attr) {
-//
-// 			scope.$watch('node',function(nv) {
-//
-// 				var flattenedTree = HierarchyNodeService.getAllChildren(scope.node,[]);
-// 				flattenedTree = flattenedTree.map(function(n){ return n.isSelected });
-// 				var initalLength = flattenedTree.length;
-// 				var compactedTree = _.compact(flattenedTree);
-//
-// 				var r = compactedTree.length > 0 && compactedTree.length < flattenedTree.length;
-// 				element.prop('indeterminate', r);
-//
-// 			},true);
-//
-// 		}
-// 	}
-// })
-
 .controller('OnBoardingController', function ($rootScope, $scope, $state, $timeout,
 		ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, UserComponent,$http,
-		$stateParams,$location,$interval,PaginationComponent,$filter,Idle) {
+		$stateParams,$location,$interval,PaginationComponent,$filter,Idle, OnBoardingComponent) {
     Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
+	$rootScope.empCode = '';
 	$scope.success = null;
 	$scope.error = null;
 	$scope.errorMessage = null;
@@ -184,7 +27,7 @@ angular.module('timeSheetApp')
     $scope.onBoardingEmployees = [];
 	$scope.employeeDesignations = ["MD","Operations Manger","Supervisor"];
     $scope.allUsers = [];
-    $scope.userDetails = {};
+    $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
 	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -230,9 +73,10 @@ angular.module('timeSheetApp')
 	$scope.branchsListOne = {};
 	$scope.branchsLists = [];
 	$scope.branchsListOne.selected =  null;
+    $scope.userDetails = {};
+    $scope.showUserDetails = false;
 
-
-	$scope.now = new Date()
+	$scope.now = new Date();
 
 	$scope.initCalender = function(){
 
@@ -383,7 +227,7 @@ angular.module('timeSheetApp')
 	$scope.loadDepSitesList = function (searchProject) {
 		$scope.siteSpin = true;
 		$scope.searchProject = searchProject;
-		if(jQuery.isEmptyObject($scope.searchProject) == true){
+		if(jQuery.isEmptyObject($scope.searchProject) === true){
 			SiteComponent.findAll().then(function (data) {
 				$scope.selectedSite = null;
 				$scope.sitesList = data;
@@ -399,10 +243,10 @@ angular.module('timeSheetApp')
 				$scope.siteSpin = false;
 			});
 		}else{
-			if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+			if(jQuery.isEmptyObject($scope.selectedProject) === false) {
 				var depProj=$scope.selectedProject.id;
 				$scope.selectedSite = null;
-			}else if(jQuery.isEmptyObject($scope.searchProject) == false){
+			}else if(jQuery.isEmptyObject($scope.searchProject) === false){
 				var depProj=$scope.searchProject.id;
 			}else{
 				var depProj=0;
@@ -501,7 +345,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.loadSearchSite = function (searchSite) {
-		$scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+		$scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
 		$scope.hideSite = true;
 	};
 	$scope.employeeSearch = function () {
@@ -513,11 +357,40 @@ angular.module('timeSheetApp')
 		}
 	};
 
-	$scope.allSites=[{name:'UDS'},{name:'Zappy'}]
+	$scope.allSites=[{name:'UDS'},{name:'Zappy'}];
 
 	$scope.refreshPage = function() {
 		$scope.loadAttendances();
 	};
+
+    $scope.saveDetails = function(){
+        var a = HierarchyNodeService.getSelectedItems();
+        console.log(a);
+        console.log(a.length);
+        console.log($scope.userDetails.id);
+        OnBoardingComponent.create(a,$scope.userDetails.id,function(response,err){
+            if(response){
+                console.log("Successfully saved on boarding user config details");
+                console.log(response);
+            }
+            if(err){
+                console.log("Error in saving on boarding user config details");
+                console.log(err);
+            }
+        })
+    };
+
+
+
+    $scope.getUserDetails = function(code){
+        UserComponent.getUserByCode(code).then(function (data){
+            console.log(data);
+            $scope.showUserDetails = true;
+            $scope.userDetails = data;
+            $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
+            // $scope.getUserConfigDetails(data.id);
+        })
+    };
 
 	$scope.loadSites = function () {
 		$scope.showLoader();
@@ -588,11 +461,7 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria = searchCriteria;
 
 		}
-		//console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
-		//console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
-		//console.log('Selected  project -' + $scope.searchEmployee + ", " + $scope.searchProject +" , "+ $scope.searchSite);
-		//console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
 		$scope.searchCriteria.currPage = currPageVal;
 
 		/* Root scope (search criteria) start*/
@@ -782,7 +651,10 @@ angular.module('timeSheetApp')
 		$scope.onBoardingEmployees = [];
 		$scope.onBoardingEmployeesLoader = false;
 		$scope.loadPageTop();
-		AttendanceComponent.search($scope.searchCriteria).then(function (data) {
+		$scope.searchCriteria.verified= true;
+		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+		    console.log("on boarding employee list");
+		    console.log(data);
 			$scope.onBoardingEmployees = data.transactions;
 			$scope.onBoardingEmployeesLoader = true;
 
@@ -1064,7 +936,9 @@ angular.module('timeSheetApp')
 		$scope.init();
 		//$scope.setPage(1);
 
-	};
+        $scope.search();
+
+    };
 
 
 	/*

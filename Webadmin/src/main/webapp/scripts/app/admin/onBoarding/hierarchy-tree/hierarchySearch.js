@@ -8,44 +8,80 @@
         scope: {
             dataset:'='
         },
-        controller:function($scope) {
+        controller:function($scope, $rootScope,OnBoardingComponent, MyList) {
+            $scope.selectedItems = {};
+            $scope.loadSapBusinessCategories= function(){
+                console.log("Getting sap business categories");
+                OnBoardingComponent.getSapBusinessCategories().then(function (data) {
+                    console.log(data);
+                    console.log(JSON.parse(data.elementsJson));
+                    console.log(MyList);
+                    $scope.baseList = JSON.parse(data.elementsJson);
+                    $scope.list = $scope.baseList;
+                })
+            };
             $scope.numSelected = 0;
             //$scope.list is used by ng-tree, dataset should never be modified
             $scope.list = angular.copy($scope.dataset);
-            
+
             $scope.options = {};
-            
+
             $scope.expandNode = function(n,$event) {
                 $event.stopPropagation();
                 n.toggle();
-            }
-            
-            
+            };
+
+            $rootScope.$on("GetUserConfigDetailsMethod", function (event,data) {
+                console.log("Calling get user config details method from on boarding controller");
+                // $scope.getUserConfigDetails($rootScope.empCode);
+                console.log(data.userId);
+
+                OnBoardingComponent.getElementsByUser(data.userId).then(function (data) {
+                    console.log(data);
+                    console.log(data.length);
+                    if(data && data.length && data.length>0){
+                        for(var i=0;i<data.length;i++){
+                            $scope.itemSelect(data[i]);
+                        }
+                    }
+
+                })
+
+            })
+
+            $scope.getUserConfigDetails = function(userId){
+                OnBoardingComponent.getElementsByUser(userId).then(function (data) {
+                    console.log(data);
+                })
+            };
+
+
             $scope.itemSelect = function(item) {
+                console.log("Selecting item");
+                console.log(item);
                 var rootVal = !item.isSelected;
-                HierarchyNodeService.selectChildren(item,rootVal)
-                
+                HierarchyNodeService.selectChildren(item,rootVal);
                 HierarchyNodeService.findParent($scope.list[0],null,item,selectParent);
                 var s = _.compact(HierarchyNodeService.getAllChildren($scope.list[0],[]).map(function(c){ return c.isSelected && !c.items;}));
                 $scope.numSelected = s.length;
-            }   
-            
+            };
+
             function selectParent(parent) {
                 var children = HierarchyNodeService.getAllChildren(parent,[]);
-                
+
                 if(!children) return;
                 children = children.slice(1).map(function(c){ return c.isSelected;});
-                
+
                 parent.isSelected =  children.length === _.compact(children).length;
                 HierarchyNodeService.findParent($scope.list[0],null,parent,selectParent)
-            }       
+            }
 
             $scope.nodeStatus = function(node) {
                 var flattenedTree = getAllChildren(node,[]);
                 flattenedTree = flattenedTree.map(function(n){ return n.isSelected });
-    
+
                 return flattenedTree.length === _.compact(flattenedTree);
-            }  
+            }
  
         },
         link:function(scope,el,attr) {
@@ -109,27 +145,28 @@
                 },500);
             });
             
-            
-          
-            
             scope.$watch('list',function(nv,ov) {
                 if(!nv) return;
                 if(nv && !ov) { scope.$apply();}
-                
-                
+
+                console.log(nv);
+                console.log(ov);
+
                 //UPDATE SELECTED IDs FOR QUERY
                 //get the root node
                 var rootNode = nv[0];
-                
                 //get all elements where isSelected == true
                 var a = HierarchyNodeService.getSelected(rootNode,[]);
-                
+                console.log("Selected");
+                console.log(a);
+                HierarchyNodeService.setSelected(a,nv);
                 //get the ids of each element
-                a = _.map(a,'id');
-                
+                a = _.map(a,'elemetCode');
                 scope.selected = a;
-        
+
             },true);
+
+
         }
     }
 })
