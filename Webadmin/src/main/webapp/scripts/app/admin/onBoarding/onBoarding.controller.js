@@ -4,10 +4,11 @@ angular.module('timeSheetApp')
 
 .controller('OnBoardingController', function ($rootScope, $scope, $state, $timeout,
 		ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, UserComponent,$http,
-		$stateParams,$location,$interval,PaginationComponent,$filter,Idle) {
+		$stateParams,$location,$interval,PaginationComponent,$filter,Idle, OnBoardingComponent) {
     Idle.watch();
 	$rootScope.loadingStop();
 	$rootScope.loginView = false;
+	$rootScope.empCode = '';
 	$scope.success = null;
 	$scope.error = null;
 	$scope.errorMessage = null;
@@ -26,7 +27,7 @@ angular.module('timeSheetApp')
     $scope.onBoardingEmployees = [];
 	$scope.employeeDesignations = ["MD","Operations Manger","Supervisor"];
     $scope.allUsers = [];
-    $scope.userDetails = {};
+    $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
 	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -75,7 +76,7 @@ angular.module('timeSheetApp')
     $scope.userDetails = {};
     $scope.showUserDetails = false;
 
-	$scope.now = new Date()
+	$scope.now = new Date();
 
 	$scope.initCalender = function(){
 
@@ -226,7 +227,7 @@ angular.module('timeSheetApp')
 	$scope.loadDepSitesList = function (searchProject) {
 		$scope.siteSpin = true;
 		$scope.searchProject = searchProject;
-		if(jQuery.isEmptyObject($scope.searchProject) == true){
+		if(jQuery.isEmptyObject($scope.searchProject) === true){
 			SiteComponent.findAll().then(function (data) {
 				$scope.selectedSite = null;
 				$scope.sitesList = data;
@@ -242,10 +243,10 @@ angular.module('timeSheetApp')
 				$scope.siteSpin = false;
 			});
 		}else{
-			if(jQuery.isEmptyObject($scope.selectedProject) == false) {
+			if(jQuery.isEmptyObject($scope.selectedProject) === false) {
 				var depProj=$scope.selectedProject.id;
 				$scope.selectedSite = null;
-			}else if(jQuery.isEmptyObject($scope.searchProject) == false){
+			}else if(jQuery.isEmptyObject($scope.searchProject) === false){
 				var depProj=$scope.searchProject.id;
 			}else{
 				var depProj=0;
@@ -344,7 +345,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.loadSearchSite = function (searchSite) {
-		$scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)]
+		$scope.searchSite = $scope.sites[$scope.uiSite.indexOf(searchSite)];
 		$scope.hideSite = true;
 	};
 	$scope.employeeSearch = function () {
@@ -356,7 +357,7 @@ angular.module('timeSheetApp')
 		}
 	};
 
-	$scope.allSites=[{name:'UDS'},{name:'Zappy'}]
+	$scope.allSites=[{name:'UDS'},{name:'Zappy'}];
 
 	$scope.refreshPage = function() {
 		$scope.loadAttendances();
@@ -378,11 +379,16 @@ angular.module('timeSheetApp')
             }
         })
     };
+
+
+
     $scope.getUserDetails = function(code){
         UserComponent.getUserByCode(code).then(function (data){
             console.log(data);
             $scope.showUserDetails = true;
             $scope.userDetails = data;
+            $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
+            // $scope.getUserConfigDetails(data.id);
         })
     };
 
@@ -455,11 +461,7 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria = searchCriteria;
 
 		}
-		//console.log('criteria in root scope -'+JSON.stringify($rootScope.searchCriteriaAttendances));
-		//console.log('criteria in scope -'+JSON.stringify($scope.searchCriteria));
 
-		//console.log('Selected  project -' + $scope.searchEmployee + ", " + $scope.searchProject +" , "+ $scope.searchSite);
-		//console.log('Selected  date range -' + $scope.checkInDateTimeFrom + ", " + $scope.checkInDateTimeTo);
 		$scope.searchCriteria.currPage = currPageVal;
 
 		/* Root scope (search criteria) start*/
@@ -649,7 +651,10 @@ angular.module('timeSheetApp')
 		$scope.onBoardingEmployees = [];
 		$scope.onBoardingEmployeesLoader = false;
 		$scope.loadPageTop();
-		AttendanceComponent.search($scope.searchCriteria).then(function (data) {
+		$scope.searchCriteria.verified= true;
+		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+		    console.log("on boarding employee list");
+		    console.log(data);
 			$scope.onBoardingEmployees = data.transactions;
 			$scope.onBoardingEmployeesLoader = true;
 
@@ -931,7 +936,9 @@ angular.module('timeSheetApp')
 		$scope.init();
 		//$scope.setPage(1);
 
-	};
+        $scope.search();
+
+    };
 
 
 	/*

@@ -8,7 +8,7 @@
         scope: {
             dataset:'='
         },
-        controller:function($scope, OnBoardingComponent,MyList) {
+        controller:function($scope, $rootScope,OnBoardingComponent, MyList) {
             $scope.selectedItems = {};
             $scope.loadSapBusinessCategories= function(){
                 console.log("Getting sap business categories");
@@ -29,17 +29,42 @@
             $scope.expandNode = function(n,$event) {
                 $event.stopPropagation();
                 n.toggle();
-            }
+            };
+
+            $rootScope.$on("GetUserConfigDetailsMethod", function (event,data) {
+                console.log("Calling get user config details method from on boarding controller");
+                // $scope.getUserConfigDetails($rootScope.empCode);
+                console.log(data.userId);
+
+                OnBoardingComponent.getElementsByUser(data.userId).then(function (data) {
+                    console.log(data);
+                    console.log(data.length);
+                    if(data && data.length && data.length>0){
+                        for(var i=0;i<data.length;i++){
+                            $scope.itemSelect(data[i]);
+                        }
+                    }
+
+                })
+
+            })
+
+            $scope.getUserConfigDetails = function(userId){
+                OnBoardingComponent.getElementsByUser(userId).then(function (data) {
+                    console.log(data);
+                })
+            };
 
 
             $scope.itemSelect = function(item) {
+                console.log("Selecting item");
+                console.log(item);
                 var rootVal = !item.isSelected;
                 HierarchyNodeService.selectChildren(item,rootVal);
-
                 HierarchyNodeService.findParent($scope.list[0],null,item,selectParent);
                 var s = _.compact(HierarchyNodeService.getAllChildren($scope.list[0],[]).map(function(c){ return c.isSelected && !c.items;}));
                 $scope.numSelected = s.length;
-            }
+            };
 
             function selectParent(parent) {
                 var children = HierarchyNodeService.getAllChildren(parent,[]);
@@ -120,9 +145,6 @@
                 },500);
             });
             
-            
-          
-            
             scope.$watch('list',function(nv,ov) {
                 if(!nv) return;
                 if(nv && !ov) { scope.$apply();}
@@ -143,6 +165,8 @@
                 scope.selected = a;
 
             },true);
+
+
         }
     }
 })

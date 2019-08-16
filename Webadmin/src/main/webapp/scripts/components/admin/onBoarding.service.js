@@ -22,8 +22,8 @@ angular.module('timeSheetApp')
 
             },
 
-            getElementsByUser: function(){
-                return $http.get('api/onBoardingConfig/getUserDetails/'+1).then(function (response) {
+            getElementsByUser: function(userId){
+                return $http.get('api/onBoardingConfig/getUserDetails/'+userId).then(function (response) {
                     console.log(response.data);
                     return response.data;
                 })

@@ -273,6 +273,8 @@ public class SearchCriteria extends Paginator {
 
 	private String schedule;
 
+	private boolean verified;
+
 	public String getModule() {
 		return module;
 	}
@@ -1412,5 +1414,13 @@ public class SearchCriteria extends Paginator {
 
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

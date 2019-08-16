@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div >
             <div class="card">
-                <form id="TypeValidation" class="form-horizontal" action="" method="">
+                <form id="TypeValidation" role="form" class="form-horizontal" ng-submit="getUserDetails(empCode)">
                     <!--                <div class="card-header card-header-text" data-background-color="rose">-->
                     <!--                    <h4 class="card-title">Employee Details</h4>-->
                     <!--                </div>-->
@@ -17,19 +17,9 @@
                         <div class="row" style="margin-top: 15px">
                             <label class="col-sm-3 onBoarding-label-on-left">Search User</label>
                             <div class="col-sm-7">
-<!--                                <ui-select ng-model="userDetails" on-select="loadUserDetails(userDetails)" >-->
-<!--                                    <ui-select-match placeholder="Select Users..." >{{userDetails.firstName}}-->
-<!--                                        <a   ng-click="clearUsers($event)" ng-show="userDetails.firstName" ng-class="{'ui-select-allow-clear': $select.selected.name}" aria-label="Select box clear" style="margin-right: 10px"-->
-<!--                                             class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">-->
-<!--                                            <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>-->
-<!--                                    </ui-select-match>-->
-<!--                                    <ui-select-choices repeat="user in allUsers | filter: $select.search" ng-click="" null-option="allClients" loose-null>-->
 
-<!--                                        <span ng-bind-html="user.firstName | highlight: $select.search"></span>-->
-<!--                                    </ui-select-choices>-->
-<!--                                </ui-select>-->
                                 <div class="form-group label-floating">
-                                    <input class="form-control" ng-model="empCode" type="text" name="empCode" />
+                                    <input class="form-control" ng-model="empCode" type="text" name="empCode" required />
                                 </div>
                             </div>
                             <div class="" style="float:left;">
@@ -37,9 +27,7 @@
                             </div>
                         </div>
                     </div>
-                    <!--                <div class="card-footer text-center">-->
-                    <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
-                    <!--                </div>-->
+
                 </form>
             </div>
         </div>
@@ -130,11 +118,6 @@
 
    <div class="col-md-6" >
         <div class="card">
-            <!--                <form id="hierarchy" class="form-horizontal" action="" method="">-->
-            <!--                <div class="card-header card-header-text" data-background-color="rose">-->
-            <!--                    <h4 class="card-title">Employee Details</h4>-->
-            <!--                </div>-->
-
             <div class="panel panel-default" >
                 <div class="panel-heading">
                     Configure
@@ -148,8 +131,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div id="onBoarding" class="col-lg-6">
-                                    <!--                                    <h1>Hierarchy Selector</h1>-->
-                                    <!--                                    <hr>-->
+
                                     <hierarchy-search dataset="list"></hierarchy-search>
                                 </div>
                             </div>
@@ -159,10 +141,10 @@
 
 
             </div>
-                            <div class="card-footer text-center">
-                                <button type="submit" class="btn btn-rose btn-fill" ng-click="saveDetails()">Save</button>
-                                <div class="ripple-container"></div>
-                            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-rose btn-fill" ng-click="saveDetails()">Save</button>
+                <div class="ripple-container"></div>
+            </div>
         </div>
     </div>
 

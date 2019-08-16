@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.sql.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -195,6 +196,22 @@ public class EmployeeDTO extends BaseDTO {
     private String wbsId;
 
     private String wbsDescription;
+
+    private String onBoardSource;
+
+    private String onBoardedFrom;
+
+    private boolean imported;
+
+    private boolean verified;
+
+    private boolean syncToSAP;
+
+    private String verifiedBy;
+
+    private ZonedDateTime verifiedDate;
+
+    private String syncedBy;
     
     public String getFatherName() {
 		return fatherName;
@@ -879,5 +896,69 @@ public class EmployeeDTO extends BaseDTO {
             }
         }
         return sb.toString();
+    }
+
+    public String getOnBoardSource() {
+        return onBoardSource;
+    }
+
+    public void setOnBoardSource(String onBoardSource) {
+        this.onBoardSource = onBoardSource;
+    }
+
+    public String getOnBoardedFrom() {
+        return onBoardedFrom;
+    }
+
+    public void setOnBoardedFrom(String onBoardedFrom) {
+        this.onBoardedFrom = onBoardedFrom;
+    }
+
+    public boolean isImported() {
+        return imported;
+    }
+
+    public void setImported(boolean imported) {
+        this.imported = imported;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public boolean isSyncToSAP() {
+        return syncToSAP;
+    }
+
+    public void setSyncToSAP(boolean syncToSAP) {
+        this.syncToSAP = syncToSAP;
+    }
+
+    public String getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(String verifiedBy) {
+        this.verifiedBy = verifiedBy;
+    }
+
+    public ZonedDateTime getVerifiedDate() {
+        return verifiedDate;
+    }
+
+    public void setVerifiedDate(ZonedDateTime verifiedDate) {
+        this.verifiedDate = verifiedDate;
+    }
+
+    public String getSyncedBy() {
+        return syncedBy;
+    }
+
+    public void setSyncedBy(String syncedBy) {
+        this.syncedBy = syncedBy;
     }
 }

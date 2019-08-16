@@ -136,18 +136,13 @@ public class OnboardingUserConfigService extends AbstractService {
         List<SapBusinessCategories> sapBusinessCategories1 = sapBusinessCategoriesRepository.findLatest();
         SapBusinessCategories sapBusinessCategories = sapBusinessCategories1.get(0);
         JSONArray ja = new JSONArray(sapBusinessCategories.getElementsJson());
-//
-//        for (int i=0; i<ja.length();i++){
-//            OnboardingUserConfigDTO o
-//        }
-
 
 //        for(OnboardingUserConfigDTO userConfig: userConfigDTOS){
 //            List<OnboardingUserConfig> userConfigs1 = onboardingUserConfigRepository.findElementChildsByUserId(userId,userConfig.getElementParent());
 //            userConfig.setChildElements(mapperUtil.toModelList(userConfigs1, OnboardingUserConfigDTO.class));
 //
 //        }
-        return (List<OnboardingUserConfigDTO>) ja;
+        return userConfigDTOS;
     }
 
     public boolean clearAllUserConfigs(long userId){
