@@ -64,7 +64,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Size(min = 1, max = 50)
     private String designation;
 
-
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EmployeeProjectSite> projectSites;
 
@@ -102,6 +101,14 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     @NotNull
     @Size(min = 1, max = 50)
+    private String projectId;
+    
+    @NotNull
+    @Size(min = 1, max = 2500)
+    private String projectDescription;
+    
+    @NotNull
+    @Size(min = 1, max = 50)
     private String fatherName;
     
     private String motherName;
@@ -116,10 +123,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, nullable = true)
     private String maritalStatus;
     
-    //@NotNull
+    @NotNull
     private Date dob;
     
-    //@NotNull
+    @NotNull
     private Date doj;
     
     private String religion;
@@ -573,6 +580,23 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	public void setWbsDescription(String wbsDescription) {
 		this.wbsDescription = wbsDescription;
 	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectDescription() {
+		return projectDescription;
+	}
+
+	public void setProjectDescription(String projectDescription) {
+		this.projectDescription = projectDescription;
+	}
+
 
 /*********************************************************************************************************/
     public Long getId() {
