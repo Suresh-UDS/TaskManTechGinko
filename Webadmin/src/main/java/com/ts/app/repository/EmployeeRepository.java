@@ -3,7 +3,7 @@ package com.ts.app.repository;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.User;
 
-import org.junit.runners.Parameterized.Parameters;
+//import org.junit.runners.Parameterized.Parameters;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,7 +31,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 	@Query("SELECT e FROM Employee e WHERE e.empId = :empId and e.wbsId = :wbsId and e.active='Y'")
 	Employee findByEmpIdandWbsId(@Param("empId") String empId,@Param("wbsId") String wbsId);
 	
-	@Query("SELECT e FROM Employee e WHERE e.empId = :empId and e.projectId = :projId and e.active='Y'")
+	@Query("SELECT e FROM Employee e WHERE e.empId = :empId and e.projectCode = :projId and e.active='Y'")
 	Employee findByEmpIdandProjId(@Param("empId") String empId,@Param("projId") String projId);
 
 /*******************************************************************************************************************************************************/

@@ -315,6 +315,10 @@ public class SearchCriteria extends Paginator {
 		this.elementParent = elementParent;
 	}
 
+	private String projectCode;
+
+	private String WBSCode;
+
 	public String getModule() {
 		return module;
 	}
@@ -1462,5 +1466,21 @@ public class SearchCriteria extends Paginator {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getWBSCode() {
+        return WBSCode;
+    }
+
+    public void setWBSCode(String WBSCode) {
+        this.WBSCode = WBSCode;
     }
 }

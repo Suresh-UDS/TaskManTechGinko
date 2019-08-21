@@ -11,16 +11,22 @@ import { ObserveOnSubscriber } from "rxjs/operators/observeOn";
 import { windowTime } from '../../../node_modules/rxjs/operators';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import {AutoCompleteService} from 'ionic2-auto-complete';
+import 'rxjs/add/operator/map';
 
 @Injectable()
-export class OnboardingService {
+export class OnboardingService implements AutoCompleteService {
     leaddetails: any;
+    labelAttribute = "element";
+   
+    formValueAttribute = "numericCode";
+    element: any;
 
     BASE_URL = 'http://13.127.251.152:8088';
 
-    constructor(private transfer: FileTransfer, private http: HttpClient, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN)
-    private config: ApplicationConfig) {
-    }
+    constructor(private transfer: FileTransfer,  private http: Http, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN)
+    private config: ApplicationConfig) { 
+    } 
 
     AllProjects(): Observable<any> {
         return this.http.get(this.config.Url + 'api/onboard/getProjectList').map(
@@ -31,7 +37,7 @@ export class OnboardingService {
                 console.log("error in getting all projects");
                 console.log(error);
                 return Observable.throw(error.json());
-            })
+             })
     }
     allSites(id): Observable<any> {
         console.log(id);
@@ -85,14 +91,128 @@ export class OnboardingService {
             })
     }
 
+   
+
     getAllOnboardingUser(): Observable<any> {
-        return this.http.get('assets/data/project.json').map(
+        return this.http.get(this.config.Url+'assets/data/project.json').map(
             response => {
                 return JSON.parse(response['_body']);
             }).catch(error => {
                 return Observable.throw(error.json());
             })
     }
+
+    // getBranchList: function(userId){
+    //     return $http.get('api/getBranchId'+userId).then(function(response){
+    //         return response.data;
+    //     })
+    // }
+
+    // getProjectList: function(branchId){
+    //     return $http.get('api/getProjectListByBranchId'+branchId).then(function(response){
+    //         return response.data;
+    //     })
+    // }
+
+    // getWBSList: function(projectId){
+    //     return $http.get('api/getWBSListByProjectId/'+projectId).then(function(response){
+    //         return response.data;
+    //     })
+    // }
+
+
+    getProjectList(): Observable<any>{
+       // return this.http.get(this.config.Url+'api/getProjectListByBranchId').map(response=> {
+        let url = 'http://localhost:8088/api/getProjectListByBranchId';
+        return this.http.get(url).map(response=> {   
+            console.log(response.json()); 
+       return response.json();
+         }).catch(error=>{
+            alert("Error in getting ProjectList");
+            console.log(error);
+           return Observable.throw(error.json());
+      
+              });
+     }
+
+     getBranchList(): Observable<any>{
+      // return this.http.get(this.config.Url+'api/getBranchList/').map(response=> {
+        let url = 'http://localhost:8088/api/getBranchList';
+        return this.http.get(url).map(response=> {
+            console.log(response.json());
+            return response.json();
+          
+        }).catch(error=>{
+      alert("Error in getting BranchList");
+      console.log(error);
+     return Observable.throw(error.json());
+
+        });
+    }
+
+    getWBSList(): Observable<any>{
+             let url = 'http://localhost:8088/api/getWBSListByProjectId';
+        //http://localhost:8088/api/getWBSListByProjectId
+        return this.http.get(url).map(response=> {
+            console.log(response.json());
+             return response.json();
+         }).catch(error=>{
+            alert("Error in getting WBSList");
+            console.log(error);
+           return Observable.throw(error.json());
+      
+              });
+     }
+ 
+
+     getResults(keyword:string): Observable<any> {
+         
+         return this.http.get('http://localhost:8088/api/getBranchList')
+          //return this.http.get('https://restcountries.eu/rest/v1/name/'+keyword)
+          .map(
+            result =>
+            {
+              return result.json()
+                .filter(item => item.element.toLowerCase() )
+            });
+ }
+
+
+ getDeclarationList(): Observable<any>
+{
+    //let url = 'http://localhost:8088/api/getWBSListByProjectId';
+    let url = 'http://localhost:8088/api/getDeclarationForm';
+   // return this.http.get('http://localhost:8088/api/getDeclarationForm')
+   return this.http.get(url).map(response=> {
+    console.log(response.json());
+     return response.json();
+ }).catch(error=>{
+    alert("Error in getting WBSList");
+    console.log(error);
+   return Observable.throw(error.json());
+
+      });
+}
+
+
+//    getBranchList(userId): Observable<any>{
+//     let url = this.config.Url + 'api/getBranchList/' + userId;
+//    return this.http.get(url).map(response=> {
+         
+//     console.log('employee id =======');
+//     this.leaddetails = response.json();
+//     for (var i = 0; i < this.leaddetails.length; i++) {
+//         console.log('res init2' + this.leaddetails[i].userId); //here you'll get sendernewcall value for all entry
+//          window.localStorage.setItem('wbsId', this.leaddetails[i].wbsId);
+//     }
+//     console.log('resp_init ' + this.leaddetails[0].userId);
+//     return this.leaddetails[0].userId;
+// }).catch(error => {
+//     console.log(error);
+//     return Observable.throw(error.json);
+// })
+       
+// }
 
     initGetEmployeeListByWbs(): Observable<any> {
         //  let url = 'http://172.16.1.45:8080/api/getWbsDetailsByEmpIds/['+ empId+']';
@@ -112,6 +232,7 @@ export class OnboardingService {
             return Observable.throw(error.json);
         })
     }
+    
     imageUpLoad(filename, key, id) {
         let type = '';
         // if (key.match("fingerPrintRight")) {

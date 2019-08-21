@@ -72,6 +72,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private List<EmployeeRelieverDTO> relievers;
 
+    private List<EmployeeDocumentsDTO> documents;
+
     private boolean isLeft;
 
     private boolean isReliever;
@@ -213,7 +215,12 @@ public class EmployeeDTO extends BaseDTO {
     private ZonedDateTime verifiedDate;
 
     private String syncedBy;
-    
+
+    private String projectCode;
+
+    private String projectDescription;
+
+
     public String getFatherName() {
 		return fatherName;
 	}
@@ -961,5 +968,29 @@ public class EmployeeDTO extends BaseDTO {
 
     public void setSyncedBy(String syncedBy) {
         this.syncedBy = syncedBy;
+    }
+
+    public List<EmployeeDocumentsDTO> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<EmployeeDocumentsDTO> documents) {
+        this.documents = documents;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getProjectDescription() {
+        return projectDescription;
+    }
+
+    public void setProjectDescription(String projectDescription) {
+        this.projectDescription = projectDescription;
     }
 }

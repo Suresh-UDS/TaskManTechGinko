@@ -1840,7 +1840,7 @@ public class ImportUtil {
 			            }else {
 			            	Employee employee = new Employee();
 							cellNo = 0;
-							employee.setProjectId(getCellValue(currentRow.getCell(0)));
+							employee.setProjectCode(getCellValue(currentRow.getCell(0)));
 							cellNo = 1;
 							employee.setProjectDescription(getCellValue(currentRow.getCell(1)));
 							cellNo = 2;

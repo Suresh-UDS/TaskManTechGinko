@@ -29,6 +29,7 @@
     },
     kycDetails: {
         aadharNumber: '',
+        
         bankDetails: '',
         aadharPhotoCopy: 'assets/imgs/placeholder.png',
         employeeSignature: 'assets/imgs/placeholder.png',

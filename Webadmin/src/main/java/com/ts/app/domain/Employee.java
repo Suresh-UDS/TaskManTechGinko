@@ -101,7 +101,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     @NotNull
     @Size(min = 1, max = 50)
-    private String projectId;
+    private String projectCode;
     
     @NotNull
     @Size(min = 1, max = 2500)
@@ -232,8 +232,9 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean syncToSAP;
 
-    @Column(name = "verified_by", length = 50)
-    private String verifiedBy;
+    @OneToOne(fetch = FetchType.LAZY,optional=true)
+    @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
+    private User verifiedBy;
 
     @Column(name = "verified_date")
     private ZonedDateTime verifiedDate;
@@ -581,12 +582,12 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.wbsDescription = wbsDescription;
 	}
 
-	public String getProjectId() {
-		return projectId;
+	public String getProjectCode() {
+		return projectCode;
 	}
 
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
 	}
 
 	public String getProjectDescription() {
@@ -835,14 +836,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.verified = verified;
     }
 
-    public String getVerifiedBy() {
-        return verifiedBy;
-    }
-
-    public void setVerifiedBy(String verifiedBy) {
-        this.verifiedBy = verifiedBy;
-    }
-
     public boolean isSyncToSAP() {
         return syncToSAP;
     }
@@ -865,5 +858,13 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     public ZonedDateTime getVerifiedDate(){
         return verifiedDate;
+    }
+
+    public User getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(User verifiedBy) {
+        this.verifiedBy = verifiedBy;
     }
 }

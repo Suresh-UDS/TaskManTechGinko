@@ -118,6 +118,21 @@ public class AmazonS3Utils {
         return ticketDTO;
     }
 
+    public EmployeeDocumentsDTO uploadEmployeeAddressProofImage(long employeeId, MultipartFile mulitipartfile, EmployeeDocumentsDTO employeeDTO) {
+        String fileUrl = "";
+        try {
+            File file = convertMultiPartToFile(mulitipartfile);
+            String fileName = generateFileName(mulitipartfile);
+            String nameOfFile = employeeId + "_" + fileName;
+            fileUrl = amazonS3Service.uploadOnBoardingAddressToS3(nameOfFile, file);
+            employeeDTO.setDocName(nameOfFile);
+            employeeDTO.setDocUrl(fileUrl);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return employeeDTO;
+    }
+
 	public String deleteAssetFile(String key, String file) {
 		// TODO Auto-generated method stub
 		String fileName = file;

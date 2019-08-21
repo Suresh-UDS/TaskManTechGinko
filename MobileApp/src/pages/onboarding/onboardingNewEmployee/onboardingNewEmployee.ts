@@ -17,7 +17,10 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { Jsonp } from '../../../../node_modules/@angular/http';
 import { onBoardingDataModel } from '../onboardingList/onboardingDataModel';
 
+
 import * as _ from 'underscore';
+import { declaration} from '../../../pages/onboarding/onboardingNewEmployee/declaration/declaration';
+//import{ declaration} from '../../declaration/declaration';
 
 const imageUploadModal = {
   aadharPhotoCopy: String,
@@ -38,6 +41,7 @@ const imageUploadModal = {
 })
 export class onboardingNewEmployee {
 
+ 
   onboardingNewEmpData: any = {};
   navPreviousData: any;
   currentIndex = 0;
@@ -83,12 +87,16 @@ export class onboardingNewEmployee {
   }
 
   wizardObj = [
+   
     // { title: 'OnBoarding Screen', description: 'OnBoarding Screen details', index: 1, component: newEmpOnboardingDetails },
+   
     { title: 'Personal Details', key: 'personalDetails', index: 1, component: newEmpPersonalDetail, formStatus: false },
-    { title: 'Contact Details', key: 'contactDetails', index: 2, component: newEmpContactDetails, formStatus: false },
+    { title: 'Contact Details', key: 'contactDetails', index:2, component: newEmpContactDetails, formStatus: false },
     { title: 'Nominee & Academic', key: 'familyAcademicDetails', index: 3, component: newEmpFamilyAndAcademic, formStatus: false },
     { title: 'Employment Details', key: 'employmentDetails', index: 4, component: newEmpEmployeementDetails, formStatus: false },
-    { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false }
+    { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false },
+    { title: 'Declaration', key: 'declaration', index: 6, component: declaration, formStatus: false }
+
   ];
   ionViewDidLoad() {
     // this.viewContainer.clear();
@@ -356,6 +364,9 @@ export class onboardingNewEmployee {
     });
   }
 
+
+
+  
   saveImages(array, id) {
     let promise = new Promise((resolve, reject) => {
       let imageUpload = Object.keys(imageUploadModal);

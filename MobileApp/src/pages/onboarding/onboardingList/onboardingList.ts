@@ -149,9 +149,6 @@ export class onboardingExistEmployee implements OnInit {
       action: 'add'
     }
     this.storage.set('onboardingCurrentIndex', obj);
-
-    
-    
     console.log("index === " + this.actionRequiredEmp.length);
     this.navCtrl.push(onboardingNewEmployee);
   }

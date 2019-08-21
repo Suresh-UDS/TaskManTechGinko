@@ -1,0 +1,35 @@
+<div padding>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+               
+                <ion-item style="width:250px;">
+                    <ion-label style="font-size:10px">Select Language:</ion-label>
+                    <ion-select name="searchFieldBranchList" interface="popover" [(ngModel)]="searchField" (ionChange)="getDeclarationList(searchField)" >
+                        
+                        <ion-option *ngFor="let branch of searchFieldBranchList"  [value]="branch.declarationText">
+                            {{branch.language}}
+                        </ion-option>
+                       
+                    </ion-select>
+                  
+                </ion-item>
+                
+    <p style="padding:50px"> {{declationText}} </p>
+
+    <div *ngIf="declationText" style="padding:50px">
+
+        <ion-checkbox> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
+  
+
+    <!-- <form [formGroup]="declarationForm" novalidate>
+        <ion-checkbox (click)="declarationAccept()"> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
+  
+    </form> -->
+    
+       </div>  
+
+   
+        </div>
+    </div>
+</div>
+
