@@ -178,7 +178,7 @@ public class EmployeeServiceResouce {
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 
 		ResponseEntity<List<EmpDTO>> response = restTemplete.exchange(
-				URL_ORACLE+"getEmployeeListByWbs/" + wbs, HttpMethod.GET, null,
+				URL_EMPSERVICE+"api/employeesByWbs/" + wbs, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<EmpDTO>>() {
 				});
 		return response.getBody();
