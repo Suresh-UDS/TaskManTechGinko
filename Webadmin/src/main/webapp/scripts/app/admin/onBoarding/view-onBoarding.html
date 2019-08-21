@@ -1,0 +1,466 @@
+<div ng-init="loadEmployee()" >
+    <div class="col-md-5">
+<!--        Client Details Card-->
+        <div class="card">
+            <form id="TypeValidation" class="form-horizontal" action="" method="">
+<!--                <div class="card-header card-header-text" data-background-color="rose">-->
+<!--                    <h4 class="card-title">Employee Details</h4>-->
+<!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Client Details
+                    </div>
+                </div>
+
+
+
+                <div class="card-content">
+                    <div class="table-responsive">
+                        <table class="table">
+
+                            <tbody>
+                            <tr>
+                                <td class="col-sm-4">Branch Name</td>
+                                <td class="col-sm-8">{{employee.branchName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-4">Description</td>
+                                <td class="col-sm-8">{{employee.branchDescription  }}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="col-sm-4">Client Name</td>
+                                <td class="col-sm-8">{{employee.projectName}}</td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="col-sm-4">Description</td>
+                                <td class="col-sm-8">{{employee.clientDescription  }}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="col-sm-4">WBS Id</td>
+                                <td class="col-sm-8">{{employee.wbsId}}</td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="col-sm-4">Description</td>
+                                <td class="col-sm-8">{{employee.wbsDescription  }}</td>
+
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+<!--        Address Details Card-->
+        <div class="card">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Address Details
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <div class="table-responsive">
+                            <table class="table">
+                            <tbody class="">
+                                <tr>
+                                    <td class="col-sm-4">Mobile Number</td>
+                                    <td class="col-sm-8">{{employee.mobile}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">Emergency Contact No.</td>
+                                    <td class="col-sm-8">{{employee.emergencyContactNumber}}</td>
+                                </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Present Address</td>
+                                        <td class="col-sm-8">{{employee.presentAddress}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">City</td>
+                                        <td class="col-sm-8">{{employee.presentCity}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">State</td>
+                                        <td class="col-sm-8">{{employee.presentState}}</td>
+                                    </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">Permanent Address</td>
+                                    <td class="col-sm-8">{{employee.permanentAddress}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">City</td>
+                                    <td class="col-sm-8">{{employee.permanentCity}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">State</td>
+                                    <td class="col-sm-8">{{employee.permanentState}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                            <label>Address Proof Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
+                                    <img ng-if="!addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+
+<!--        Previous Employer Details Card-->
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Previous Employer Details
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="row" style="margin-top: 15px">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody class="">
+                            <tr>
+                                <td class="col-sm-4">Employer</td>
+                                <td class="col-sm-8">{{employee.employer}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-4">Designation</td>
+                                <td class="col-sm-8">{{employee.previousDesignation}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         </div>
+        </div>
+    </div>
+
+
+<div>
+    <div class="col-md-7">
+<!--        Employee Details Card-->
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Employee Details
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="row" style="margin-top: 15px">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody class="">
+                            <tr>
+                                <td class="col-sm-4">Name</td>
+                                <td class="col-sm-8">{{employee.name}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Code</td>
+                                <td class="col-sm-8">{{employee.empId}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Father Name</td>
+                                <td class="col-sm-8">{{employee.fatherName}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Mother Name</td>
+                                <td class="col-sm-8">{{employee.motherName}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Gender</td>
+                                <td class="col-sm-8">{{employee.gender}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Gender</td>
+                                <td class="col-sm-8">{{employee.gender}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">D.O.B</td>
+                                <td class="col-sm-8">{{employee.dob}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">D.O.J</td>
+                                <td class="col-sm-8">{{employee.doj}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Religion</td>
+                                <td class="col-sm-8">{{employee.religion}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Blood Group</td>
+                                <td class="col-sm-8">{{employee.bloodGroup}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Personal Identification Mark 1</td>
+                                <td class="col-sm-8">{{employee.personalIdentificationMark1}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Personal Identification Mark 2</td>
+                                <td class="col-sm-8">{{employee.personalIdentificationMark2}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Education Qualification</td>
+                                <td class="col-sm-8">{{employee.educationalQulification}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Education Qualification</td>
+                                <td class="col-sm-8">{{employee.educationalQulification}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Board / Institute</td>
+                                <td class="col-sm-8">{{employee.boardInstitute}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Adhar Card Number</td>
+                                <td class="col-sm-8">{{employee.adharCardNumber}}</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+<!--        Nominee Details Card -->
+        <div class="card">
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Nominee Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody class="">
+                                    <tr>
+                                        <td class="col-sm-4">Nominee Name</td>
+                                        <td class="col-sm-8">{{employee.nomineeName}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Relationship</td>
+                                        <td class="col-sm-8">{{employee.nomineeRelationship}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Contact No. </td>
+                                        <td class="col-sm-8">{{employee.nomineeContactNumber}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Percentage</td>
+                                        <td class="col-sm-8">{{employee.percentage}}</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+<!--        Bank Details Card-->
+        <div class="card">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Bank Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody class="">
+                                <tr>
+                                    <td class="col-sm-4">Account Number</td>
+                                    <td class="col-sm-8">{{employee.accountNumber}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">IFSC Code</td>
+                                    <td class="col-sm-8">{{employee.ifscCode}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <label>Bank Passbook Image</label>
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail">
+                                        <img ng-if="bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{bankPassBookImageUrl}} alt="...">
+                                        <img ng-if="!bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+<!--    Documents upload Card-->
+    <div class="col-md-12">
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Documents
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <label>Adharcard Front Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
+                                <img ng-if="!adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Adharcard Back Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
+                                <img ng-if="!adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Fingerprint Left Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
+                                <img ng-if="!fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Fingerprint Right Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
+                                <img ng-if="!fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <label>Driving License Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
+                                <img ng-if="!drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Voter Id Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
+                                <img ng-if="!voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Pancard Image</label>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                <img ng-if="!pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="txt-align-rgt">
+
+    <button class="btn btn-default close-button-right b10" type="button" ng-click="goBack()" id="close-button-right">
+        Back
+    </button>
+
+    <button class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified" ng-click="approveOnBoardingEmployee(employee)" id="close-button-right">
+        Approve Employee
+    </button>
+
+</div>

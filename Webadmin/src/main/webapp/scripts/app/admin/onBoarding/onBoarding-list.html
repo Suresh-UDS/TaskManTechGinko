@@ -1,17 +1,9 @@
 <div   ng-init="initLoad()" >
 
 
-    <div class="row" ng-init="loadProjects();">
+    <div class="row" ng-init="getBranchList();">
         <div class="col-md-6 txt-align-lft">
 
-            <!--<button class="btn btn-info add-btn margn-tb0" data-toggle="modal" data-target="#basicFilter" tabindex="0">-->
-            <!--<i class="material-icons">filter_list</i> Basic Filter-->
-            <!--<div class="ripple-container"></div>-->
-            <!--</button>-->
-            <!--<button class="btn btn-success add-btn margn-tb0" data-toggle="modal" data-target="#advancedFilter" tabindex="0">-->
-            <!--<i class="material-icons">filter_list</i> Advanced Filter-->
-            <!--<div class="ripple-container"></div>-->
-            <!--</button>-->
             <button class="btn btn-success add-btn margn-tb0" ng-click="filterModal1()" tabindex="0">
                 <i class="material-icons">filter_list</i>Filter
                 <div class="ripple-container"></div>
@@ -26,14 +18,6 @@
             </button>
         </div>
         <div class="col-md-6 txt-align-rgt">
-
-
-
-            <!--<button ng-show="attendancesData.length" class="btn btn-success add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader && typeMsg=='html')}"  title="Export HTML"  ng-click=exportAllData('html') tabindex="0">
-                <i class="material-icons">description</i> Export HTML
-                <i class="ld ld-ring ld-spin" ng-show="downloader"></i>
-                <div class="ripple-container"></div>
-            </button>-->
 
             <button ng-show="attendancesData.length" class="btn btn-info add-btn margn-tb0 ld ld-over-inverse" ng-class="{'running':(downloader)}"   title="Export Excel"  ng-click=exportAllData('xlsx') tabindex="0">
                 <i class="material-icons">file_download</i> Export Excel
@@ -92,18 +76,33 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card margin-TB-5 TableCard" >
-                <!--<div class="card-header card-header-icon" data-background-color="purple">-->
-                <!--<i class="material-icons">assignment</i>-->
-                <!--</div>-->
+            <div class="card TableCard">
                 <div class="card-content">
+                    <div class="panel panel-default TabsContainer mar10px jobType">
+                        <div class="panel-body pad0px">
+                            <ul class="nav nav-pills nav-pills-warning mar0px">
+                                <li class="active"><a href=".toBeVerified" data-toggle="tab"
+                                                     >To Be Verified</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="table-responsive tablecard">
-                        <table class="table table-hover withSortingIcons">
-                            <thead>
-                            <tr>
-                                <th style="min-width: 60px;">Code
-                                    <span class="sortingIcons">
+        <div class="tab-content TabsContent ViewTables" style="">
+
+            <div class="tab-pane fade actionRequired" id="actionRequired" >
+                <div class="card margin-TB-5 TableCard" >
+
+                    <div class="card-content">
+
+                        <div class="table-responsive tablecard">
+                            <table class="table table-hover withSortingIcons">
+                                <thead>
+                                <tr>
+                                    <th style="min-width: 60px;">Code
+                                        <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
@@ -111,9 +110,9 @@
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                </th>
-                                <th style="min-width: 110px;">Name
-                                    <span class="sortingIcons">
+                                    </th>
+                                    <th style="min-width: 110px;">Name
+                                        <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('employee.fullName')" ng-class="isActiveAsc == 'employee.fullName' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
@@ -121,10 +120,10 @@
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                </th>
+                                    </th>
 
-                                <th style="min-width: 100px;">Site
-                                    <span class="sortingIcons">
+                                    <th style="min-width: 100px;">Site
+                                        <span class="sortingIcons">
                                         <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
                                             <i  class="fa fa-caret-up"></i>
                                         </span>
@@ -132,141 +131,158 @@
                                              <i  ng-class="class" class="fa fa-caret-down"></i>
                                         </span>
                                     </span>
-                                </th>
+                                    </th>
 
-                                <th style="min-width: 100px;">Status</th>
-                                <th style="min-width: 100px;text-align: right">Actions</th>
+                                    <th style="min-width: 100px;">Status</th>
+                                    <th style="min-width: 100px;text-align: right">Actions</th>
 
-                            </tr>
-                            </thead>
-                            <tbody>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                            <tr>
-                                <td>242312</td>
-                                <td>MUTHU SELVAM</td>
-                                <td>
-                                    <span>CHENNAI METRO RAIL LIMITED</span><br>
-                                    <span style="color: #3C3D3C;">Shenoy Nagar</span>
-                                </td>
-                                <td>Action Required</td>
-                                <td class="td-actions text-right">
-                                    <a ui-sref="view-onBoarding" type="button" rel="tooltip" class="btn btn-info btn-simple">
-                                        <i class="material-icons">remove_red_eye</i>
-                                    </a>
-                                    <button type="button" rel="tooltip" class="btn btn-info btn-simple">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>382922</td>
-                                <td>VIGNESH R</td>
-                                <td>
-                                    <span>CHENNAI METRO RAIL LIMITED</span><br>
-                                    <span style="color: #3C3D3C;">Guindy</span>
-                                </td>
-                                <td>To be Verified</td>
-                                <td class="td-actions text-right">
-                                    <a ui-sref="view-onBoarding" type="button" rel="tooltip" class="btn btn-info btn-simple">
-                                        <i class="material-icons">remove_red_eye</i>
-                                    </a>
-                                    <button type="button" rel="tooltip" class="btn btn-info btn-simple">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">
-                                        <i class="material-icons">close</i>
-                                    </button>
-
-                                </td>
-                            </tr>
-<!--                            <tr ng-repeat="attendance in onBoardingEmployees">-->
-
-<!--                                <td>{{attendance.employeeEmpId}}</td>-->
-<!--                                <td>{{attendance.employeeName +" "+ attendance.employeeLastName}}</td>-->
-<!--                                <td>{{attendance.siteName}}</td>-->
-<!--                                <td>-->
-<!--                                    {{attendance.checkInTime | date:'dd/MM/yyyy @ h:mma'}}-->
-<!--                                    <br/>-->
-<!--                                    <label ng-show="attendance.late">Late</label>-->
-<!--                                </td>-->
-<!--                                <td ng-if="attendance.checkInImage">-->
-<!--                                    <a id="images1" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkInImgUrl, attendance.enrollImgUrl)">-->
-<!--                                        <img ng-src={{attendance.checkInImgUrl}} width="30px" height="30px"/>-->
-<!--                                    </a>-->
-<!--                                </td>-->
-<!--                                <td ng-if="!attendance.checkInImage">-->
-<!--                                    <img ng-src="assets/img/user.png" width="30px" height="30px"/>-->
-<!--                                </td>-->
+                                <tr ng-repeat="employee in onBoardingEmployees">
+                                    <td>{{employee.empId}}</td>
+                                    <td>{{employee.name}} {{employee.lastName}}</td>
+                                    <td>
+                                        <span>{{employee.projectName}}</span><br>
+                                        <span style="color: #3C3D3C;">{{employee.siteName}}</span>
+                                    </td>
+                                    <td>Action Required</td>
+                                    <td class="td-actions text-right">
+                                        <a ui-sref="view-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </a>
+                                        <a ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                        <!--                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">-->
+                                        <!--                                        <i class="material-icons">close</i>-->
+                                        <!--                                    </button>-->
+                                    </td>
+                                </tr>
 
 
-<!--                                <td>{{attendance.checkOutTime | date:'dd/MM/yyyy @ h:mma'}}</td>-->
+                                </tbody>
+                            </table>
 
-<!--                                <td ng-if="attendance.checkOutImage"><a id="images" href="javascript:void(0);" onClick="$('#myModal').modal()" data-target="#myModal" data-dismiss="#myModal" ng-click="loadImagesNew(attendance.checkOutImgUrl, attendance.enrollImgUrl)" >-->
-<!--                                    <img ng-src={{attendance.checkOutImgUrl}} width="30px" height="30px"/>-->
-<!--                                </a>-->
-<!--                                </td>-->
-<!--                                <td ng-if="!attendance.checkOutImage">-->
-<!--                                    <img ng-src="assets/img/user.png" width="30px" height="30px"/>-->
-<!--                                </td>-->
+                        </div>
+                        <div class="txt-align-center LoaderCon"  ng-hide="onBoardingEmployeesLoader">
 
-<!--                                <td>{{attendance.shiftStartTime}} - {{attendance.shiftEndTime}}-->
-<!--                                </td>-->
+                            <div class="pad-TB-30">
+                                <div loader-css="ball-pulse"></div>
+                                <h3 >Loading, please wait...</h3>
+                            </div>
 
-<!--                                <td ng-if="!attendance.invalid" align="center">-->
-<!--                                    <i style="color: green; font-size: larger" class="far fa-check-square"></i>-->
-<!--                                </td>-->
+                        </div>
 
-<!--                                <td ng-if="attendance.invalid" align="center">-->
-<!--                                    <i ng-if="attendance.invalid" style="color: red; font-size: larger" class="fas fa-exclamation-triangle"></i>-->
-<!--                                </td>-->
+                        <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
 
-<!--                                <td align="center">-->
-<!--                                    <a id="maps" href="javascript:void(0);" ng-click="newInitMap('mapIn',attendance.latitudeIn, attendance.longitudeIn, 'mapOut', attendance.latitudeOut, attendance.longitudeOut)" onClick="$('#mapModal').modal()" data-target="#mapModal" >-->
-<!--                                        &lt;!&ndash;<img ng-src="assets/img/map-icon-2-1.jpg" width="20px" height="20px" />&ndash;&gt;-->
-<!--                                        <i style="font-size: larger; color: darkblue" class="fas fa-map-marker-alt"></i>-->
-<!--                                    </a>-->
+                            <h3>No data Found</h3>
 
-
-<!--                                </td>-->
-<!--                                <td>-->
-<!--                                    <a class="" href="javascript:void(0);" ng-click="addRemarksId(attendance.id,attendance.remarks)" id="remarks"  onClick="$('#remarksModal').modal()" data-target="#remarksModal" data-dismiss="#remarksModal" >-->
-<!--                                        <i class="fa fa-edit" style="font-size: larger; color: black"></i>-->
-<!--                                    </a>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-
-                            </tbody>
-                        </table>
-
+                        </div>
 
 
                     </div>
-
-<!--                    <div class="txt-align-center LoaderCon"  ng-hide="onBoardingEmployeesLoader">-->
-
-<!--                        <div class="pad-TB-30">-->
-<!--                            <div loader-css="ball-pulse"></div>-->
-<!--                            <h3 >Loading, please wait...</h3>-->
-<!--                        </div>-->
-
-<!--                    </div>-->
-
-<!--                    <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">-->
-
-<!--                        <h3>No data Found</h3>-->
-
-<!--                    </div>-->
-
-
-
+                    <!-- end content-->
                 </div>
-                <!-- end content-->
+                <!--  end card  -->
             </div>
-            <!--  end card  -->
+
+            <div class="tab-pane fade in active toBeVerified" id="toBeVerified" >
+                <div class="card margin-TB-5 TableCard" >
+
+                    <div class="card-content">
+
+                        <div class="table-responsive tablecard">
+                            <table class="table table-hover withSortingIcons">
+                                <thead>
+                                <tr>
+                                    <th style="min-width: 60px;">Code
+                                        <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                    <th style="min-width: 110px;">Name
+                                        <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.fullName')" ng-class="isActiveAsc == 'employee.fullName' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('employee.fullName')" ng-class="isActiveDesc == 'employee.fullName' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+
+                                    <th style="min-width: 100px;">Site
+                                        <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('site.name')" ng-class="isActiveAsc == 'site.name' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('site.name')" ng-class="isActiveDesc == 'site.name' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+
+                                    <th style="min-width: 100px;">Status</th>
+                                    <th style="min-width: 100px;text-align: right">Actions</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr ng-repeat="employee in onBoardingEmployees">
+                                    <td>{{employee.empId}}</td>
+                                    <td>{{employee.name}} {{employee.lastName}}</td>
+                                    <td>
+                                        <span>{{employee.projectName}}</span><br>
+                                        <span style="color: #3C3D3C;">{{employee.siteName}}</span>
+                                    </td>
+                                    <td>Action Required</td>
+                                    <td class="td-actions text-right">
+                                        <a ui-sref="view-onBoarding ({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </a>
+                                        <a ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                        <!--                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">-->
+                                        <!--                                        <i class="material-icons">close</i>-->
+                                        <!--                                    </button>-->
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="txt-align-center LoaderCon"  ng-hide="onBoardingEmployeesLoader">
+
+                            <div class="pad-TB-30">
+                                <div loader-css="ball-pulse"></div>
+                                <h3 >Loading, please wait...</h3>
+                            </div>
+
+                        </div>
+
+                        <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                            <h3>No data Found</h3>
+
+                        </div>
+
+
+                    </div>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
         </div>
         <!-- end col-md-12 -->
     </div>
@@ -280,3 +296,160 @@
     <!-- Pagination directive end -->
 
 </div>
+
+<!-- Filter New -->
+
+<div class="modal fade AdvancedFilterModal FilterModalCon" id="Filter"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="searchForm" role="form" ng-submit ="searchFilter()"  novalidate >
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Filter</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                   data-target="#collapseOne" aria-expanded="true"
+                                   aria-controls="collapseOne" class="collapsed">
+                                    <h4 class="panel-title">
+                                        Basic Filter <i class="material-icons">keyboard_arrow_down</i>
+                                    </h4>
+                                </a>
+                            </div>
+                            <div id="collapseOne"
+                                 class="panel-collapse collapse collapseOne in" role="tabpanel"
+                                 aria-labelledby="headingOne" aria-expanded="true"
+                                 style="height: 230px;">
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6" >
+                                            <div class="form-group">
+                                                <div class="dropdown">
+                                                    <label class="label-control">Branch</label>
+                                                    <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="client.selected" on-select="getProjectListByBranch(client.selected)"  ng-disabled="clientFilterDisable">
+                                                        <ui-select-match placeholder="Select Branch...">{{$select.selected.element}}
+                                                            <a   ng-click="clearProject($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="client in branchList | filter: {element:$select.search}"  null-option="allClients" loose-null>
+
+                                                            <span ng-bind-html="client.element | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="form-group" >
+
+                                                <div class="dropdown">
+                                                    <label class="label-control">Project</label>
+                                                    <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="regionsListOne.selected" on-select="getWBSListByProject(regionsListOne.selected)"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+                                                        <ui-select-match placeholder="Select Project...">{{$select.selected.element}}
+                                                            <a   ng-click="clearRegion($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="regionsListOne in projectList | filter: {element:$select.search}"  null-option="allRegions" loose-null>
+                                                            <span ng-bind-html="regionsListOne.element | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <span ng-if="regionsLists.length == 1"><p class="error-msg margin0">No region</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6 col-lg-6">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <label class="label-control">WBS</label>
+                                                    <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                    <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+
+                                                    <ui-select ng-model="branchsListOne.selected" on-select="selectWBS(branchsListOne.selected.element)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+                                                        <ui-select-match placeholder="Select WBS...">{{$select.selected.element}}
+                                                            <a   ng-click="clearBranch($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
+                                                                 class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
+                                                                <i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="branchsListOne in wbsList | filter: {element:$select.search}"  null-option="allRegions" loose-null>
+                                                            <span ng-bind-html="branchsListOne.element | highlight: $select.search"></span>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                    <span ng-if="branchsLists.length == 1"><p class="error-msg margin0">No branch</p></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-xs-12  col-md-6 col-lg-6">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <input type="text"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Search Employee Id"
+                                                           ng-model="searchEmployeeId"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12  col-md-6 col-lg-6">
+                                            <div class="form-group" >
+                                                <div class="dropdown">
+                                                    <input type="text"
+                                                           class="form-control border-bottom-input"
+                                                           placeholder="Search Employee Name"
+                                                           ng-model="searchEmployeeName"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>
+                    <button type="submit" class="btn btn-success btn-simple" >Apply Filter</button>
+                    <!--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

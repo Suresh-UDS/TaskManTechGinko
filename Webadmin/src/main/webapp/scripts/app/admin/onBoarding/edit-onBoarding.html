@@ -1,0 +1,675 @@
+<div ng-init="loadEmployee()" >
+    <div class="col-md-5">
+        <!--        Client Details Card-->
+        <div class="card">
+            <form id="TypeValidation" class="form-horizontal" action="" method="">
+                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
+                <!--                    <h4 class="card-title">Employee Details</h4>-->
+                <!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Client Details
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="table-responsive">
+                    </div>
+
+                    <div class="row" style="margin-top: 15px">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Client Name</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input  class="form-control" type="text" ng-model="employee.projectName"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-4 onBoarding-label-on-left">Client Description</label>
+                        <div class=" col-sm-8">
+                            <input  class="form-control" type="text" ng-model="employee.projectDescription"/>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">WBS Id</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.wbsId" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">WBS Description</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.wbsDescription" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <!--        Address Details Card-->
+        <div class="card">
+            <form id="TypeValidation" class="form-horizontal" action="" method="">
+                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
+                <!--                    <h4 class="card-title">Employee Details</h4>-->
+                <!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Address Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Mobile Number</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.mobile" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Emergency Contact No. </label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.emergencyContactNumber" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label>Present Address</label>
+                    </div>
+                    <hr style="margin-top:10px !important; margin-bottom: 10px !important;">
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Address </label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.presentAddress" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">City </label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.presentCity" />
+                            </div>
+                        </div>
+
+                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">State </label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.presentState" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label>Permanent Address</label>
+                    </div>
+                    <hr style="margin-top:10px !important; margin-bottom: 10px !important;">
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Address </label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.permanentAddress" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">City </label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.permanentCity" />
+                            </div>
+                        </div>
+
+                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">State </label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.permanentState" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group label-floating" >
+                                <div class="pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="addressProofImage"
+                                           name="addressProofImage" tabindex="9"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+        <!--        Previous Employer Details Card-->
+        <div class="card">
+            <form id="TypeValidation" class="form-horizontal" action="" method="">
+                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
+                <!--                    <h4 class="card-title">Employee Details</h4>-->
+                <!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Previous Employeer Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Employer</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="number" ng-model="employee.employer" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Designation</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="number" ng-model="employee.previousDesignation" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="col-md-7">
+        <!--        Employee Details Card-->
+        <div class="card">
+            <form id="" class="form-horizontal" action="" method="">
+                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
+                <!--                    <h4 class="card-title">Employee Details</h4>-->
+                <!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Employee Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Name</label>
+                        <div class="col-sm-4">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.name" />
+                            </div>
+                        </div>
+                        <!--                        <div class="" style="float:left;">-->
+                        <!--                            <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" ><i class="material-icons">edit</i><div class="ripple-container" ></div></a>-->
+                        <!--                        </div>-->
+                        <!--                    </div>-->
+                        <!--                    <div class="row">-->
+                        <label style="width: 8% !important;" class="col-lg-2 onBoarding-label-on-left">Code</label>
+                        <div class="col-lg-2">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.empId" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Father Name </label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.fatherName" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Mother Name</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.motherName" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Gender</label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.gender" name="param"  aria-invalid="false" required>
+                                    <option value="" class="" >Select Gender ..</option>
+                                    <option >FEMALE</option>
+                                    <option >MALE</option>
+                                    <option >OTHERS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">Marital Status</label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.maritalStatus"  name="param"  aria-invalid="false" required>
+                                    <option value="" class="" selected="selected">Select Status ..</option>
+                                    <option >Married</option>
+                                    <option >Un Married</option>
+                                    <option >Divorced</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">D.O.B</label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input type="text" class="form-control datetimepicker" ng-model="employee.dob" id="dateOfBirth"  />
+                            </div>
+                        </div>
+
+                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">D.O.J</label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input type="text" class="form-control datetimepicker" ng-model="employee.doj"  id="dateOfJoining"  />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Religion</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.religion"  name="param"  aria-invalid="false" required>
+                                    <option value="" class="" selected="selected">Select Religion ..</option>
+                                    <option >Hindu</option>
+                                    <option >Muslim</option>
+                                    <option >Christian</option>
+                                    <option >Buddhism</option>
+                                    <option >Jain</option>
+                                    <option >Sikh</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Blood Group</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.bloodGroup"  name="param"  aria-invalid="false" required>
+                                    <option value="" class="" selected="selected">Select Blood Group ..</option>
+                                    <option >A+</option>
+                                    <option >B+</option>
+                                    <option >A-</option>
+                                    <option >B-</option>
+                                    <option >AB+</option>
+                                    <option >AB-</option>
+                                    <option >O+</option>
+                                    <option >O-</option>
+                                </select>                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Personal Identification Mark 1</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.personalIdentificationMark1" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Personal Identification Mark 2</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.personalIdentificationMark1" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Education Qualification</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.educationalQulification" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Board / Institute</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.boardInstitute" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Adhar Card Number</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.adharCardNumber" />
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <!--                <div class="card-footer text-center">-->
+                <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
+                <!--                </div>-->
+            </form>
+        </div>
+
+        <!--        Nominee Details Card -->
+        <div class="card">
+            <form id="nomineeDetails" class="form-horizontal" action="" method="">
+                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
+                <!--                    <h4 class="card-title">Employee Details</h4>-->
+                <!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Nominee Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Nominee Name</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.nomineeName" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Relationship</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.nomineeRelationship" />
+                            </div>
+                        </div>
+                        <
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Contact No.  </label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.nomineeContactNumber" />
+                            </div>
+                        </div>
+
+                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">Percentage </label>
+                        <div class="col-sm-3">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.percentage" />
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <!--                <div class="card-footer text-center">-->
+                <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
+                <!--                </div>-->
+            </form>
+        </div>
+
+        <!--        Bank Details Card-->
+        <div class="card">
+            <form id="bankDetails" class="form-horizontal" action="" method="">
+                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
+                <!--                    <h4 class="card-title">Employee Details</h4>-->
+                <!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Bank Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Account Number</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.accountNumber" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">IFSC Code</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.ifscCode" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group label-floating" >
+                                <div class="pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="bankPassBookImage"
+                                           name="bankPassBookImage" tabindex="9"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--                <div class="card-footer text-center">-->
+                <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
+                <!--                </div>-->
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <!--    Documents upload Card-->
+    <div class="col-md-12">
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Documents
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <legend>Adhar Card Front Image</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="adharCardImageFront"
+                                       name="adharCardImageFront" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <legend>Adhar Card Back Image</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="adharCardImageBack"
+                                       name="adharCardImageBack" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <legend>Fingerprint Left</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="fingerprintLeftImage"
+                                       name="fingerprintLeftImage" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <legend>Fingerprint Right</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="fingerprintRightImage"
+                                       name="fingerprintRightImage" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        <legend>Driving License</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="drivingLicenseImageFront"
+                                       name="drivingLicenseImageFront" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                        <legend>Voter Id</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="voterIdImage"
+                                       name="voterIdImage" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                        <legend>Pancard</legend>
+                        <div class="form-group label-floating" >
+                            <div class="pdng-top13" >
+                                <input type="file"
+                                       class="form-control" style="opacity:100;position:relative" file-model
+                                       ng-model="pancardImage"
+                                       name="pancardImage" tabindex="9"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="txt-align-rgt">
+
+    <button class="btn btn-default close-button-right b10" type="button" ng-click="goBack()" id="close-button-right">
+        Back
+    </button>
+
+    <button class="btn btn-success ld ld-over-inverse" type="button" ng-click="saveOnBoardingEmployeeDetails(employee)" id="close-button-right">
+        Save
+    </button>
+
+</div>
+

@@ -83,6 +83,9 @@ public class AmazonS3Service {
     @Value("${AWS.s3-locationqr-path}")
     private String locationQrCodePath;
 
+    @Value("${AWS.s3-employeeDocument-path}")
+    private String employeeDocumentsPath;
+
     @PostConstruct
     private void initializeAmazon() {
        log.info("Amazon S3 credentials accessKey -" + this.accessKey + ", secretKey -" + this.secretKey);
@@ -528,6 +531,36 @@ public class AmazonS3Service {
 		}
 		 return prefixUrl;
 	}
+
+    public String uploadOnBoardingAddressToS3(String fileName, File file) {
+        log.debug("upload Expense document to S3 bucket");
+        String prefixUrl = "";
+        try {
+
+            String folder = bucketEnv + expenseDocumentPath + fileName;
+            String ext = FilenameUtils.getExtension(fileName);
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType("application/"+ ext);
+            metadata.setContentDisposition("attachment;filename="+ fileName +"");
+
+            PutObjectResult result = s3client.putObject(new PutObjectRequest(bucketName, folder, file)
+                .withMetadata(metadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+            URL url = s3client.getUrl(bucketName, folder);
+            log.debug("S3 uploaded url" +url);
+            prefixUrl = cloudFrontUrl + folder;
+            log.debug("Result from S3 -" +result);
+
+        }catch(AmazonS3Exception e) {
+            log.debug("Error while upload expense document to S3 bucket " + e.getMessage());
+            log.debug("Error Status code " + e.getErrorCode());
+            e.printStackTrace();
+        }
+
+        return prefixUrl;
+
+    }
 
 	public void getAllFiles() {
 		log.debug("===================== Calling a AWS S3 for get files =====================");

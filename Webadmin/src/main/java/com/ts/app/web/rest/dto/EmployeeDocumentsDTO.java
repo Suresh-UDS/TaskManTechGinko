@@ -1,14 +1,20 @@
 package com.ts.app.web.rest.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class EmployeeDocumentsDTO extends BaseDTO{
 	
     private long id;
 	
 	private String docType;
 	
-	private String empId;
+	private long employeeId;
 	
-	private String docLocation;
+	private MultipartFile docLocation;
+
+	private String docName;
+
+	private String docUrl;
 
 	public long getId() {
 		return id;
@@ -26,19 +32,35 @@ public class EmployeeDocumentsDTO extends BaseDTO{
 		this.docType = docType;
 	}
 
-	public String getEmpId() {
-		return empId;
-	}
+    public MultipartFile getDocLocation() {
+        return docLocation;
+    }
 
-	public void setEmpId(String empId) {
-		this.empId = empId;
-	}
+    public void setDocLocation(MultipartFile docLocation) {
+        this.docLocation = docLocation;
+    }
 
-	public String getDocLocation() {
-		return docLocation;
-	}
+    public long getEmployeeId() {
+        return employeeId;
+    }
 
-	public void setDocLocation(String docLocation) {
-		this.docLocation = docLocation;
-	}
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getDocUrl() {
+        return docUrl;
+    }
+
+    public void setDocUrl(String docUrl) {
+        this.docUrl = docUrl;
+    }
+
+    public String getDocName() {
+        return docName;
+    }
+
+    public void setDocName(String docName) {
+        this.docName = docName;
+    }
 }

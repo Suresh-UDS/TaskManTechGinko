@@ -225,8 +225,9 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean syncToSAP;
 
-    @Column(name = "verified_by", length = 50)
-    private String verifiedBy;
+    @OneToOne(fetch = FetchType.LAZY,optional=true)
+    @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
+    private User verifiedBy;
 
     @Column(name = "verified_date")
     private ZonedDateTime verifiedDate;
@@ -811,14 +812,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.verified = verified;
     }
 
-    public String getVerifiedBy() {
-        return verifiedBy;
-    }
-
-    public void setVerifiedBy(String verifiedBy) {
-        this.verifiedBy = verifiedBy;
-    }
-
     public boolean isSyncToSAP() {
         return syncToSAP;
     }
@@ -841,5 +834,13 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     public ZonedDateTime getVerifiedDate(){
         return verifiedDate;
+    }
+
+    public User getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(User verifiedBy) {
+        this.verifiedBy = verifiedBy;
     }
 }

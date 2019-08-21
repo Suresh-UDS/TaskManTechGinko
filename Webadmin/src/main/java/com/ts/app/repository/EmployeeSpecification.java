@@ -102,6 +102,10 @@ public class EmployeeSpecification implements Specification<Employee> {
         	predicates.add(builder.equal(projectSiteJoin.get("site").get("branch"), searchCriteria.getBranch()));
         }
 
+        if(searchCriteria.getProjectCode() !=null && StringUtils.isNotEmpty(searchCriteria.getProjectCode())){
+            predicates.add(builder.equal())
+        }
+
         if(searchCriteria.getFromDate() != null) {
             if(searchCriteria.getToDate() != null) {
                 log.debug("Employee created to date -" + searchCriteria.getFromDate());

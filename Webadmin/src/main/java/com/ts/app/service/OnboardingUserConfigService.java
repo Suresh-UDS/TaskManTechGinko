@@ -1,36 +1,23 @@
 package com.ts.app.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
-import com.ts.app.domain.SapBusinessCategories;
-import com.ts.app.domain.User;
-import com.ts.app.repository.SapBusinessCategoriesRepository;
-import com.ts.app.repository.UserRepository;
+import com.ts.app.domain.*;
+import com.ts.app.repository.*;
 import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.util.AmazonS3Utils;
+import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.ts.app.domain.AbstractAuditingEntity;
-import com.ts.app.domain.Asset;
-import com.ts.app.domain.OnboardingUserConfig;
-import com.ts.app.repository.OnboardingUserConfigRepository;
 import com.ts.app.service.util.MapperUtil;
-import com.ts.app.web.rest.dto.AssetDTO;
-import com.ts.app.web.rest.dto.BaseDTO;
-import com.ts.app.web.rest.dto.OnboardingUserConfigDTO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -46,9 +33,18 @@ public class OnboardingUserConfigService extends AbstractService {
 
 	@Inject
     UserRepository userRepository;
+
+    @Inject
+    EmployeeRepository employeeRepository;
+
+    @Inject
+    EmployeeDocumentRepository employeeDocumentRepository;
 	
 	@Inject
 	MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
+
+    @Inject
+    private AmazonS3Utils amazonS3utils;
 		
 	public OnboardingUserConfigDTO saveOnboardingUserInfo(OnboardingUserConfigDTO onboardingUserConfigDTO) {
 		OnboardingUserConfig onboardingUserList = mapperUtil.toEntity(onboardingUserConfigDTO, OnboardingUserConfig.class);
@@ -74,7 +70,7 @@ public class OnboardingUserConfigService extends AbstractService {
             if(CollectionUtils.isNotEmpty(onboardingUserConfigDTO.getChildElements()) && onboardingUserConfigDTO.getChildElements().size()>0){
                 for(OnboardingUserConfigDTO configDTO : onboardingUserConfigDTO.getChildElements()){
                     userConfig = mapperUtil.toEntity(configDTO, OnboardingUserConfig.class);
-                    userConfig.setElementParent(onboardingUserConfigDTO.getElement());
+                    userConfig.setElementParent(onboardingUserConfigDTO.getElementCode());
                     userConfig.setUser(user);
                     userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
                     userConfig=onboardingUserConfigRepository.save(userConfig);
@@ -89,22 +85,29 @@ public class OnboardingUserConfigService extends AbstractService {
     }
 
 	public List<OnboardingUserConfigDTO> findBranchListByUserId(long userId) {
-		List <OnboardingUserConfig> branchModel = onboardingUserConfigRepository.findbranchListByUserId(userId);
-		List<OnboardingUserConfigDTO> branchList = mapperUtil.toModelList(branchModel, OnboardingUserConfigDTO.class);
-		return branchList;
+		List <OnboardingUserConfig> branchModel = onboardingUserConfigRepository.findBranchByUserId(userId);
+        return mapperUtil.toModelList(branchModel, OnboardingUserConfigDTO.class);
 	}
 	
-	public List<OnboardingUserConfigDTO> findProjectByBranchId(long userId) {
-		List<OnboardingUserConfig> projectModel = onboardingUserConfigRepository.findProjectByBranchId(userId);
-		List<OnboardingUserConfigDTO> projectList = mapperUtil.toModelList(projectModel, OnboardingUserConfigDTO.class);
-		return projectList;
+	public List<OnboardingUserConfigDTO> findProjectByUserId(long userId) {
+		List<OnboardingUserConfig> projectModel = onboardingUserConfigRepository.findProjectByUserId(userId);
+        return mapperUtil.toModelList(projectModel, OnboardingUserConfigDTO.class);
 	}
 	
-	public List<OnboardingUserConfigDTO> findWBSByProjectId(long userId){
-		List<OnboardingUserConfig> wbsModel = onboardingUserConfigRepository.findWBSByProjectId(userId);
-		List<OnboardingUserConfigDTO> wbsList = mapperUtil.toModelList(wbsModel, OnboardingUserConfigDTO.class);
-		return wbsList;
+	public List<OnboardingUserConfigDTO> findWBSByUserId(long userId){
+		List<OnboardingUserConfig> wbsModel = onboardingUserConfigRepository.findWBSByUserId(userId);
+        return mapperUtil.toModelList(wbsModel, OnboardingUserConfigDTO.class);
 	}
+
+	public List<OnboardingUserConfigDTO> findProjectByBranchCode(long userId, String branchCode){
+	    List<OnboardingUserConfig> projectList = onboardingUserConfigRepository.findProjectByBranchId(userId, branchCode);
+	    return mapperUtil.toModelList(projectList, OnboardingUserConfigDTO.class);
+    }
+
+    public List<OnboardingUserConfigDTO> findWBSByProjectCode(long userId, String projectCode){
+        List<OnboardingUserConfig> projectList = onboardingUserConfigRepository.findWBSByProjectId(userId, projectCode);
+        return mapperUtil.toModelList(projectList, OnboardingUserConfigDTO.class);
+    }
 	
 	public OnboardingUserConfigDTO mapToModal(OnboardingUserConfig onboardingUserConfig,boolean includeShifts) {
 		OnboardingUserConfigDTO onboardingUserConfigDTO = new OnboardingUserConfigDTO();
@@ -154,5 +157,42 @@ public class OnboardingUserConfigService extends AbstractService {
 	        return false;
         }
     }
+
+    @Transactional
+    public EmployeeDocumentsDTO uploadFile(EmployeeDocumentsDTO employeeDTO) throws JSONException {
+
+	    if(checkImageExists(employeeDTO.getEmployeeId(),employeeDTO.getDocType())){
+	        log.debug("image already exisits and made active false");
+        }else{
+	        log.debug("no images exisists");
+        }
+
+        log.debug("employee address proof images upload to AWS s3 -"+employeeDTO.getEmployeeId());
+        employeeDTO = amazonS3utils.uploadEmployeeAddressProofImage(employeeDTO.getEmployeeId(), employeeDTO.getDocLocation(), employeeDTO);
+//        employeeDTO.setDocLocation(employeeDTO.getDocLocation());
+        employeeDTO.setDocUrl(employeeDTO.getDocUrl());
+        employeeDTO.setActive(EmployeeDocuments.ACTIVE_YES);
+        EmployeeDocuments employeeDocuments = mapperUtil.toEntity(employeeDTO,EmployeeDocuments.class);
+        employeeDocumentRepository.save(employeeDocuments);
+        employeeDTO.setDocName(employeeDTO.getDocName());
+        employeeDTO.setDocType(employeeDTO.getDocType());
+        employeeDTO.setDocUrl(employeeDTO.getDocUrl());
+        return employeeDTO;
+    }
+
+    public boolean checkImageExists(long employeeId, String document_type){
+	    EmployeeDocuments employeeDocuments = employeeDocumentRepository.findByEmployeeIdAndDocumentType(employeeId, document_type);
+        if(employeeDocuments !=null && employeeDocuments.getId()>0){
+            employeeDocuments.setActive(EmployeeDocuments.ACTIVE_NO);
+            employeeDocumentRepository.saveAndFlush(employeeDocuments);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+
+
 
 }

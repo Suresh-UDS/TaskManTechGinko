@@ -2005,7 +2005,8 @@ public class ImportUtil {
                             employee.setWbsId(getCellValue(currentRow.getCell(40)));
                             cellNo = 41;
                             employee.setWbsDescription(getCellValue(currentRow.getCell(41)));
-                            
+
+                            employee.setImported(true);
                             employeeRepo.save(employee);
 /************************************************************************************************************************************************/ 
 							UserDTO user = new UserDTO();

@@ -376,6 +376,13 @@ angular.module('timeSheetApp')
                     console.log(response);
                     return response.data;
                 });
+            },
+
+            getEmployeeDocuments: function (employeeId) {
+                return $http.get('api/employee/documents/'+employeeId).then(function (response) {
+                    console.log(response);
+                    return response.data;
+                })
             }
 
         };

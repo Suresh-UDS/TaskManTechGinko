@@ -29,7 +29,8 @@ angular.module('timeSheetApp')
     $scope.allUsers = [];
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
-	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
+    $scope.addressProofImage;
+    //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
 	$scope.pages = { currPage : 1};
 
@@ -75,6 +76,22 @@ angular.module('timeSheetApp')
 	$scope.branchsListOne.selected =  null;
     $scope.userDetails = {};
     $scope.showUserDetails = false;
+
+    $scope.allBranches = {id:0, element:' -- All Branches --'};
+    $scope.branch={};
+    $scope.branches = [];
+
+    $scope.allProjects = {id:0, element:' -- All Projects --'};
+    $scope.project={};
+    $scope.projects=[];
+
+    $scope.allWBS = {id:0, element:' -- All WBS --'};
+    $scope.wbs = {};
+    $scope.wbsList = [];
+
+    $scope.selectedBranchCode = null;
+    $scope.selectedProjectCode = null;
+    $scope.selectedWBSCode = null;
 
 	$scope.now = new Date();
 
@@ -205,7 +222,9 @@ angular.module('timeSheetApp')
 
 	$scope.loadProjects = function () {
 		//console.log("Loading all projects")
-		ProjectComponent.findAll().then(function (data) {
+        OnBoardingComponent.getBranchList().then(function (data) {
+            console.log("Getting branch list ");
+            console.log(data);
 			$scope.projects = data;
 			/** Ui-select scope **/
 			$scope.clients[0] = $scope.allClients;
@@ -222,7 +241,49 @@ angular.module('timeSheetApp')
 		});
 	};
 
-	/** Ui-select function **/
+    $scope.getBranchList = function(){
+        OnBoardingComponent.getBranchList().then(function (branchList) {
+            $scope.branchList = branchList;
+
+            $scope.branches= branchList;
+            $scope.clientDisable=false;
+            $scope.clientFilterDisable = false;
+            console.log("Getting branch list ");
+            console.log(branchList);
+        })
+    };
+
+    $scope.getProjectListByBranch = function(branchCode){
+        $scope.selectedBranchCode = branchCode.elementCode;
+        $scope.siteSpin = true;
+        console.log(branchCode.elementCode);
+        OnBoardingComponent.getProjectListByBranchCode(branchCode.elementCode).then(function (projectList) {
+            console.log("Getting project list by branch code");
+            console.log(projectList);
+            $scope.projectList = projectList;
+            $scope.siteFilterDisable = false;
+            $scope.siteSpin = false;
+        })
+    };
+
+    $scope.getWBSListByProject = function(projectCode){
+        $scope.selectedProjectCode = projectCode.elementCode;
+        console.log(projectCode.elementCode);
+        $scope.branchSpin = true;
+        OnBoardingComponent.getWBSListByProjectCode(projectCode.elementCode).then(function (wbsList) {
+            console.log("Getting wbs id by project code");
+            console.log(wbsList);
+            $scope.wbsList = wbsList;
+            $scope.branchSpin = false;
+            $scope.branchFilterDisable = false;
+        })
+    };
+
+    $scope.selectWBS = function(wbsCode){
+        $scope.selectedWBSCode = wbsCode.elementCode;
+    };
+
+    /** Ui-select function **/
 
 	$scope.loadDepSitesList = function (searchProject) {
 		$scope.siteSpin = true;
@@ -448,6 +509,11 @@ angular.module('timeSheetApp')
 		$scope.search();
 	};
 
+	$scope.getTobeVerifiedEmployees = function(){
+	    $scope.verified = false;
+	    $scope.search();
+    };
+
 	$scope.search = function () {
 		$scope.noData = false;
 		//console.log($scope.datePickerDate);
@@ -651,7 +717,15 @@ angular.module('timeSheetApp')
 		$scope.onBoardingEmployees = [];
 		$scope.onBoardingEmployeesLoader = false;
 		$scope.loadPageTop();
-		$scope.searchCriteria.verified= true;
+		console.log("to be verified");
+		console.log($scope.verified);
+		$scope.searchCriteria.verified= $scope.verified;
+		if($scope.selectedProjectCode !=null){
+		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode
+        }
+		if($scope.selectedWBSCode !=null){
+		    $scope.searchCriteria.WBSCode = $scope.selectedWBSCode;
+        }
 		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
@@ -683,7 +757,7 @@ angular.module('timeSheetApp')
 
 			if($scope.onBoardingEmployees && $scope.onBoardingEmployees.length > 0 ){
 				$scope.showCurrPage = data.currPage;
-				$scope.pageEntries = $scope.projects.length;
+				$scope.pageEntries = $scope.onBoardingEmployees.length;
 				$scope.totalCountPages = data.totalCount;
 				$scope.pageSort = 10;
 				$scope.noData = false;
@@ -699,6 +773,227 @@ angular.module('timeSheetApp')
         });
 
 	};
+
+    $scope.loadEmployee = function() {
+        if(parseInt($stateParams.id)>0){
+            var empId = parseInt($stateParams.id);
+            EmployeeComponent.findOne(empId).then(function (data) {
+
+                console.log('employee data -');
+                console.log(data);
+
+                EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
+                    console.log("Employee documents");
+                    console.log(documents);
+                    if(documents && documents.length>0){
+                        for(var i=0; i<documents.length;i++){
+                            console.log(documents[i].docType);
+                            if(documents[i].docType === "address_proof_image"){
+                                $scope.addressproofImageUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "bank_passbook_image"){
+                                $scope.bankPassBookImageUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "adhar_card_front"){
+                                $scope.adharCardFrontUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "adhar_card_back"){
+                                $scope.adharCardBackUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "fingerprint_left"){
+                                $scope.fingerprintLeftUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "fingerprint_right"){
+                                $scope.fingerprintrightUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "driving_license"){
+                                $scope.drivingLicenseUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "voter_id"){
+                                $scope.voterIdUrl = documents[i].docUrl;
+                            }
+                            if(documents[i].docType === "pancard"){
+                                $scope.pancardUrl = documents[i].docUrl;
+                            }
+                        }
+                    }
+                });
+
+
+                $scope.employee = data;
+                if($scope.employee){
+                    // $scope.title = $scope.employee.name +' '+ $scope.employee.lastName;
+                    // $scope.projectSiteList = $scope.employee.projectSites;
+                    // $scope.locationList = $scope.employee.locations;
+                    // $scope.employee.code = pad($scope.employee.code , 4);
+                    // $scope.SelectedDesig = {designation:$scope.employee.designation};
+                    // $scope.loadSelectedProject($scope.employee.projectId);
+                    // $scope.loadSelectedSite($scope.employee.siteId);
+                    // $scope.loadSelectedManager($scope.employee.managerId);
+                    // $scope.loadSelectedRole($scope.employee.userRoleId);
+                    // $scope.sites = $scope.employee.sites;
+                    // $scope.projectSitesCnt = ($scope.employee.projectSites).length;
+                    // if($scope.projectSitesCnt == 0) {
+                    //     $scope.empLocation = true;
+                    // }
+                }else{
+                    $location.path('/onBoarding-list');
+                }
+                $scope.loadingStop();
+
+            }).catch(function(){
+                $location.path('/onBoarding-list');
+            });
+        }else{
+            $location.path('/onBoarding-list');
+        }
+
+    };
+
+    $scope.conform = function(text,validation)
+    {
+        //console.log($scope.selectedProject)
+        $rootScope.conformText = text;
+        $scope.valid = validation;
+        $('#conformationModal').modal();
+
+    }
+
+    $scope.approveOnBoardingEmployee = function(employee){
+        employee.verified =true;
+        OnBoardingComponent.verifyOnBoardingEmployee(employee).then(function (data) {
+            console.log("on boarding employee successfully saved");
+            console.log(data);
+        });
+    };
+
+    $scope.saveOnBoardingEmployeeDetails = function(employee){
+        console.log("Saving employee details");
+        OnBoardingComponent.editOnBoardingEmployee(employee).then(function (data) {
+            console.log("on boarding employee successfully saved");
+            console.log(data);
+        });
+
+        if($scope.addressProofImage){
+            $scope.uploadAddressProofImage(employee.id);
+        }
+        if($scope.bankPassBookImage){
+            $scope.uploadBankPassbookImage(employee.id);
+        }
+        if($scope.adharCardImageBack){
+            $scope.uploadAdharCardImageBack(employee.id);
+        }
+        if($scope.adharCardImageFront){
+            $scope.uploadAdharCardImageFront(employee.id);
+        }
+        if($scope.fingerprintRightImage){
+            $scope.uploadFingerPrintRight(employee.id);
+        }
+        if($scope.fingerprintLeftImage){
+            $scope.uploadFingerPrintLeft(employee.id);
+        }
+        if($scope.drivingLicenseImageFront){
+            $scope.uploadDrivingLicense(employee.id);
+        }
+        if($scope.voterIdImage){
+            $scope.uploadVoterId(employee.id);
+        }
+        if($scope.pancardImage){
+            $scope.uploadPancard(employee.id);
+        }
+
+
+    };
+
+    $scope.uploadAddressProofImage = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.addressProofImage,'address_proof_image')
+            .then(function (response) {
+                console.log("Address proof image uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload address proof image",response);
+        });
+    };
+
+    $scope.uploadBankPassbookImage = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.bankPassBookImage,'bank_passbook_image')
+            .then(function (response) {
+                console.log("bankPassBookImage uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload bankPassBookImage",response);
+        });
+    };
+
+    $scope.uploadAdharCardImageFront = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.adharCardImageFront,'adhar_card_front')
+            .then(function (response) {
+                console.log("adharCardImageFront uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload adharCardImageFront",response);
+        });
+    };
+
+    $scope.uploadAdharCardImageBack = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.adharCardImageBack,'adhar_card_back')
+            .then(function (response) {
+                console.log("adharCardImageBack uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload adharCardImageBack",response);
+        });
+    };
+
+    $scope.uploadFingerPrintLeft = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.fingerprintLeftImage,'fingerprint_left')
+            .then(function (response) {
+                console.log("fingerprintLeftImage uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload fingerprintLeftImage",response);
+        });
+    };
+
+    $scope.uploadFingerPrintRight = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.fingerprintRightImage,'fingerprint_right')
+            .then(function (response) {
+                console.log("fingerprintRightImage uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload fingerprintRightImage",response);
+        });
+    };
+
+    $scope.uploadDrivingLicense = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.drivingLicenseImageFront,'driving_license')
+            .then(function (response) {
+                console.log("drivingLicenseImageFront uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload drivingLicenseImageFront",response);
+        });
+    };
+
+    $scope.uploadVoterId = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.voterIdImage,'voter_id')
+            .then(function (response) {
+                console.log("voterIdImage uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload voterIdImage",response);
+        });
+    };
+
+    $scope.uploadPancard = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.pancardImage,'pancard')
+            .then(function (response) {
+                console.log("pancardImage uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload pancardImage ",response);
+        });
+    };
 
 	$scope.loadEnrImage = function(enrollId) {
 
@@ -935,10 +1230,13 @@ angular.module('timeSheetApp')
 		$scope.loadPageTop();
 		$scope.init();
 		//$scope.setPage(1);
-
-        $scope.search();
-
+        $scope.getTobeVerifiedEmployees();
     };
+
+
+
+
+
 
 
 	/*

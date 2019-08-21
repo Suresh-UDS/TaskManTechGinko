@@ -72,6 +72,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private List<EmployeeRelieverDTO> relievers;
 
+    private List<EmployeeDocumentsDTO> documents;
+
     private boolean isLeft;
 
     private boolean isReliever;
@@ -961,5 +963,13 @@ public class EmployeeDTO extends BaseDTO {
 
     public void setSyncedBy(String syncedBy) {
         this.syncedBy = syncedBy;
+    }
+
+    public List<EmployeeDocumentsDTO> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<EmployeeDocumentsDTO> documents) {
+        this.documents = documents;
     }
 }
