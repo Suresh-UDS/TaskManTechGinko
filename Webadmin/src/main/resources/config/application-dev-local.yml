@@ -208,6 +208,8 @@ AWS:
    s3-checklist-path : checkListImages/
    s3-locationqr-path : locationQrCodes/
    s3-expenseDocument-path: expenseDocuments/
+   s3-employeeDocument-path: employeeDocuments/
+
 
 scheduler:
    job:
