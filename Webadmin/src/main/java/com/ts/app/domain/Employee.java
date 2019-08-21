@@ -1,12 +1,18 @@
 package com.ts.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
+//import java.util.Date;
 
 
 @Entity
@@ -34,9 +40,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, nullable = false)
     private String fullName;
 
-    @NotNull
+    //@NotNull
     @Size(min = 1, max = 50)
-    @Column(length = 50, nullable = true)
     private String name;
 
     private String lastName;
@@ -55,11 +60,9 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy="manager")
     private Set<Employee> subOrdinates;
 
-    @NotNull
+    //@NotNull
     @Size(min = 1, max = 50)
-    @Column(length = 50, nullable = true)
     private String designation;
-
 
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EmployeeProjectSite> projectSites;
@@ -70,8 +73,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<EmployeeReliever> relievers;
 
-    @NotNull
-    @Column(length = 10, nullable = true)
+//    @NotNull
+//    @Column(length = 10, nullable = true)
     private long code;
 
     private boolean isFaceIdEnrolled;
@@ -98,6 +101,14 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     @NotNull
     @Size(min = 1, max = 50)
+    private String projectCode;
+    
+    @NotNull
+    @Size(min = 1, max = 2500)
+    private String projectDescription;
+    
+    @NotNull
+    @Size(min = 1, max = 50)
     private String fatherName;
     
     private String motherName;
@@ -108,7 +119,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private String gender;
     
     @NotNull
-    @Size(min =10, max = 50)
+    @Size(min =1, max = 50)
     @Column(length = 50, nullable = true)
     private String maritalStatus;
     
@@ -199,10 +210,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 //    
 //    private String panCard;
     
-    @NotNull
+    //@NotNull
     private String clientName;
     
-    @NotNull
+    //@NotNull
     private String clientDescription;
     
     @NotNull
@@ -210,9 +221,32 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     @NotNull
     private String wbsDescription;
-    
-    
-   public String getFatherName() {
+
+    private String onBoardSource;
+
+    private String onBoardedFrom;
+
+    private boolean imported;
+
+    private boolean verified;
+
+    private boolean syncToSAP;
+
+    @OneToOne(fetch = FetchType.LAZY,optional=true)
+    @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
+    private User verifiedBy;
+
+    @Column(name = "verified_date")
+    private ZonedDateTime verifiedDate;
+
+    @Column(name="synced_by", length = 50)
+    private String syncedBy;
+
+    public Employee() {
+    }
+
+
+    public String getFatherName() {
 		return fatherName;
 	}
 
@@ -548,6 +582,23 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.wbsDescription = wbsDescription;
 	}
 
+	public String getProjectCode() {
+		return projectCode;
+	}
+
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
+	}
+
+	public String getProjectDescription() {
+		return projectDescription;
+	}
+
+	public void setProjectDescription(String projectDescription) {
+		this.projectDescription = projectDescription;
+	}
+
+
 /*********************************************************************************************************/
     public Long getId() {
         return id;
@@ -753,5 +804,67 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     }
 
 
-    
+    public String getOnBoardSource() {
+        return onBoardSource;
+    }
+
+    public void setOnBoardSource(String onBoardSource) {
+        this.onBoardSource = onBoardSource;
+    }
+
+    public String getOnBoardedFrom() {
+        return onBoardedFrom;
+    }
+
+    public void setOnBoardedFrom(String onBoardedFrom) {
+        this.onBoardedFrom = onBoardedFrom;
+    }
+
+    public boolean isImported() {
+        return imported;
+    }
+
+    public void setImported(boolean imported) {
+        this.imported = imported;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public boolean isSyncToSAP() {
+        return syncToSAP;
+    }
+
+    public void setSyncToSAP(boolean syncToSAP) {
+        this.syncToSAP = syncToSAP;
+    }
+
+    public void setSyncedBy(String syncedBy) {
+        this.syncedBy = syncedBy;
+    }
+
+    public String getSyncedBy(){
+        return syncedBy;
+    }
+
+    public void setVerifiedDate(ZonedDateTime verifiedDate) {
+        this.verifiedDate = verifiedDate;
+    }
+
+    public ZonedDateTime getVerifiedDate(){
+        return verifiedDate;
+    }
+
+    public User getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(User verifiedBy) {
+        this.verifiedBy = verifiedBy;
+    }
 }

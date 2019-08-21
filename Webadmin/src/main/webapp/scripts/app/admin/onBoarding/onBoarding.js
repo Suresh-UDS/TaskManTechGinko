@@ -20,7 +20,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
 		}
 	}).state('view-onBoarding', {
         parent : 'manage',
-        url : '/view-onBoarding',
+        url : '/view-onBoarding/:id',
         //controller : 'EmployeeController',
         data : {
             authorities : [],
@@ -28,7 +28,7 @@ angular.module('timeSheetApp').config(function($stateProvider) {
         },
         views : {
             'content@' : {
-                templateUrl : 'scripts/app/admin/onBoarding/view-noBoarding.html',
+                templateUrl : 'scripts/app/admin/onBoarding/view-onBoarding.html',
                 controller : 'OnBoardingController'
             }
         },
@@ -52,5 +52,19 @@ angular.module('timeSheetApp').config(function($stateProvider) {
         resolve : {
 
         }
+    }).state('edit-onBoarding', {
+        parent: 'manage',
+        url: '/edit-onBoarding/:id',
+        data: {
+            authorities: [],
+            pageTitle: 'Edit Employee'
+        },
+        views: {
+            'content@': {
+                templateUrl: 'scripts/app/admin/onBoarding/edit-onBoarding.html',
+                controller: 'OnBoardingController'
+            }
+        },
+        resolve: {}
     });
 });

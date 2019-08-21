@@ -120,6 +120,9 @@ public class    EmployeeService extends AbstractService {
     private EmployeeRelieverRepository employeeRelieverRepository;
 
     @Inject
+    private EmployeeDocumentRepository employeeDocumentRepository;
+
+    @Inject
     private Environment env;
 
     @Inject
@@ -243,6 +246,27 @@ public class    EmployeeService extends AbstractService {
         employee = employeeRepository.save(employee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
     	return employeeDTO;
+    }
+
+    public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
+        Employee employee = employeeRepository.findOne(employeeDTO.getId());
+        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
+        employee = employeeRepository.saveAndFlush(updateEmployee);
+        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
+        return employeeDTO;
+    }
+
+    public EmployeeDTO verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
+        Employee employee = employeeRepository.findOne(employeeDTO.getId());
+        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        if(updateEmployee.isVerified()){
+            updateEmployee.setVerifiedBy(user);
+            updateEmployee.setVerifiedDate(ZonedDateTime.now());
+        }
+        employee = employeeRepository.saveAndFlush(updateEmployee);
+        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
+        return employeeDTO;
     }
 
 
@@ -1905,5 +1929,10 @@ public class    EmployeeService extends AbstractService {
         Employee employee = employeeRepository.findOne(employeeId);
         List<Ticket> tickets = ticketRepository.findEmployeeUnClosedTickets(employee.getId());
         return tickets;
+    }
+
+    public List<EmployeeDocuments> getEmployeeDocuments(long employeeId){
+        List<EmployeeDocuments> documents = employeeDocumentRepository.findByEmployeeId(employeeId);
+        return  documents;
     }
 }

@@ -62,7 +62,24 @@ public class EmployeeSpecification implements Specification<Employee> {
         if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
             predicates.add(builder.equal(root.get("empId"), searchCriteria.getEmployeeEmpId()));
         }
+        
+        if(StringUtils.isNotEmpty(searchCriteria.getElement())) {
+        	predicates.add(builder.equal(root.get("element"), searchCriteria.getElement()));
+        }
+        
+        if(StringUtils.isNotEmpty(searchCriteria.getElementCode())) {
+        	predicates.add(builder.equal(root.get("elementCode"), searchCriteria.getElementCode()));
+        }
 
+        if(StringUtils.isNotEmpty(searchCriteria.getElementType())) {
+        	predicates.add(builder.equal(root.get("elementType"),searchCriteria.getElementType()));
+        }
+        
+        if(StringUtils.isNotEmpty(searchCriteria.getElementParent())) {
+        	predicates.add(builder.equal(root.get("elementParent"), searchCriteria.getElementParent()));
+        }
+        
+        
         log.debug("EmpSpecification toPredicate - searchCriteria isLeft -" + searchCriteria.isLeft());
         if (searchCriteria.isLeft()) {
             predicates.add(builder.equal(root.get("isLeft"), true));
@@ -102,6 +119,14 @@ public class EmployeeSpecification implements Specification<Employee> {
         	predicates.add(builder.equal(projectSiteJoin.get("site").get("branch"), searchCriteria.getBranch()));
         }
 
+        if(searchCriteria.getProjectCode() !=null && StringUtils.isNotEmpty(searchCriteria.getProjectCode())){
+            predicates.add(builder.equal(root.get("projectCode"),searchCriteria.getProjectCode()));
+        }
+
+        if (searchCriteria.getWBSCode()!=null && StringUtils.isNotEmpty(searchCriteria.getWBSCode())){
+            predicates.add(builder.equal(root.get("wbsId"),searchCriteria.getWBSCode()));
+        }
+
         if(searchCriteria.getFromDate() != null) {
             if(searchCriteria.getToDate() != null) {
                 log.debug("Employee created to date -" + searchCriteria.getFromDate());
@@ -121,6 +146,12 @@ public class EmployeeSpecification implements Specification<Employee> {
             predicates.add(builder.equal(root.get("active"), "N"));
         } else {
             predicates.add(builder.equal(root.get("active"), "Y"));
+        }
+
+        if(searchCriteria.isVerified()){
+            predicates.add(builder.equal(root.get("verified"),true));
+        }else{
+            predicates.add(builder.equal(root.get("verified"),false));
         }
 
         query.orderBy(builder.desc(root.get("createdDate")));

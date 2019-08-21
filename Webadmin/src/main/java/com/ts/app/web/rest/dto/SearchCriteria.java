@@ -273,6 +273,52 @@ public class SearchCriteria extends Paginator {
 
 	private String schedule;
 
+	private boolean verified;
+	
+	private String elementCode;
+	
+	private String element;
+	
+	private String elementType;
+	
+	private String elementParent;
+
+	public String getElementCode() {
+		return elementCode;
+	}
+
+	public void setElementCode(String elementCode) {
+		this.elementCode = elementCode;
+	}
+
+	public String getElement() {
+		return element;
+	}
+
+	public void setElement(String element) {
+		this.element = element;
+	}
+
+	public String getElementType() {
+		return elementType;
+	}
+
+	public void setElementType(String elementType) {
+		this.elementType = elementType;
+	}
+
+	public String getElementParent() {
+		return elementParent;
+	}
+
+	public void setElementParent(String elementParent) {
+		this.elementParent = elementParent;
+	}
+
+	private String projectCode;
+
+	private String WBSCode;
+
 	public String getModule() {
 		return module;
 	}
@@ -1412,5 +1458,29 @@ public class SearchCriteria extends Paginator {
 
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getWBSCode() {
+        return WBSCode;
+    }
+
+    public void setWBSCode(String WBSCode) {
+        this.WBSCode = WBSCode;
     }
 }

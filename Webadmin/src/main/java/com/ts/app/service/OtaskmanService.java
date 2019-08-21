@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ts.app.web.rest.dto.EmpDTO;
 
-import net.minidev.json.JSONArray;
 
 @Service
 @Transactional

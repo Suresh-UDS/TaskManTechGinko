@@ -1,13 +1,6 @@
 'use strict';
 
 angular.module('timeSheetApp')
-        .controller('MainCtrl', function($scope,$timeout,MyList,HierarchyNodeService) {
-
-            //console.log(HierarchyNodeService);
-            $scope.baseList = MyList;
-            $scope.list = $scope.baseList;
-
-        })
         .directive('indeterminateCheckbox',function(HierarchyNodeService) {
             return {
                 restrict:'A',

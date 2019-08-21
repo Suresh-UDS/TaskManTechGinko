@@ -1,17 +1,26 @@
 package com.ts.app.web.rest.dto;
 
+import java.util.List;
+
 public class OnboardingUserConfigDTO extends BaseDTO{
 	
 	private long id;
 	
 	private long userId;
+
+	private long onBoardingUserId;
 	
 	private String elementParent;
 	
 	private String element;
 	
 	private String elementType;
-	
+
+	private String elementCode;
+
+	private boolean isSelected;
+
+    private List<OnboardingUserConfigDTO> childElements;
 
 	public long getId() {
 		return id;
@@ -52,6 +61,36 @@ public class OnboardingUserConfigDTO extends BaseDTO{
 	public void setElementType(String elementType) {
 		this.elementType = elementType;
 	}
-	
-	
+
+    public long getOnBoardingUserId() {
+        return onBoardingUserId;
+    }
+
+    public void setOnBoardingUserId(long onBoardingUserId) {
+        this.onBoardingUserId = onBoardingUserId;
+    }
+
+    public List<OnboardingUserConfigDTO> getChildElements() {
+        return childElements;
+    }
+
+    public void setChildElements(List<OnboardingUserConfigDTO> childElements) {
+        this.childElements = childElements;
+    }
+
+    public String getElementCode() {
+        return elementCode;
+    }
+
+    public void setElementCode(String elementCode) {
+        this.elementCode = elementCode;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }

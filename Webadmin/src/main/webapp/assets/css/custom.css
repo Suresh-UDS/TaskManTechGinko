@@ -2514,3 +2514,92 @@ span.AppliedFilterTxtCon span.label-info{
     padding:10px 5px 0 0;
     text-align: right;
 }
+
+#onBoarding .switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked){
+    opacity: 1 !important;
+    position: initial !important;
+}
+
+
+
+#onBoarding .noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#onBoarding .past-users-filter {
+    cursor:pointer;
+    margin-left:20px;
+}
+#onBoarding .no-results {
+    padding-left:20px;
+    padding-bottom:10px;
+}
+
+/*matched result from search*/
+#onBoarding .matched {
+    font-weight:700 !important;
+}
+
+/*wraps entire selector*/
+#onBoarding .hierarchy-wrap {
+    /*background: #FFFFFF;*/
+    /*border:1px solid #ccc;*/
+    /*border-radius:5px;*/
+}
+/* past users + search */
+#onBoarding .hierarchy-header {
+    padding:10px;
+}
+
+#onBoarding .hierarchy-header .search-wrap {
+    margin-bottom:5px;
+}
+
+#onBoarding .angular-ui-tree-handle {
+    color: black;
+    padding: 5px;
+    font-weight:normal;
+    cursor:pointer;
+}
+
+#onBoarding .angular-ui-tree-nodes .angular-ui-tree-nodes { padding-left:0; }
+#onBoarding .angular-ui-tree-nodes .angular-ui-tree-nodes .node-embed {
+    padding-left:10px !important;
+}
+#onBoarding .angular-ui-tree-nodes .angular-ui-tree-nodes .angular-ui-tree-nodes .node-embed {
+    padding-left:40px !important;
+}
+
+#onBoarding .angular-ui-tree-nodes .angular-ui-tree-nodes .angular-ui-tree-nodes .angular-ui-tree-nodes .node-embed {
+    padding-left: 20% !important;
+}
+
+
+#onBoarding .angular-ui-tree-handle:hover {
+    color: black;
+    background: #f5f5f5;
+}
+
+#onBoarding .node-header {
+    padding-right:5px;
+}
+
+#onBoarding .nodeActive {
+    background:#deeaf9;
+}
+
+#onBoarding .nodeActive:hover {
+    background: #428bca;
+    color:#FEFEFA;
+}
+
+#onBoarding .angular-ui-tree-handle i {
+    color:black;
+}
+
+

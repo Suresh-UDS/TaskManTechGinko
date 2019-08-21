@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.Ticket;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -152,6 +153,32 @@ public class EmployeeResource {
     	 }
     	 return new ResponseEntity<>(HttpStatus.CREATED);
      }
+
+    @RequestMapping(value = "/editOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> editOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
+        long userId = SecurityUtils.getCurrentUserId();
+        employeeDTO.setUserId(userId);
+        try {
+                employeeDTO = employeeService.editOnBoardingEmployeeInfo(employeeDTO);
+        }catch(Exception e) {
+            throw new TimesheetException(e, employeeDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/verifyOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> verifyOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
+        long userId = SecurityUtils.getCurrentUserId();
+        employeeDTO.setUserId(userId);
+        try {
+            employeeDTO = employeeService.verifyOnBoardingEmployeeInfo(employeeDTO);
+        }catch(Exception e) {
+            throw new TimesheetException(e, employeeDTO);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 /**********************************************************************************************************/    
     @RequestMapping(value = "/employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -688,6 +715,7 @@ public class EmployeeResource {
     
     @RequestMapping(path="/employeeOnboarding/import", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ImportResult> importEmployeeOnboardingData(@RequestParam("employeeOnboardingFile") MultipartFile file){
+    	System.out.println("Hiii");
         log.info("Employee Onboarding Import Status********************");
         Calendar cal = Calendar.getInstance();
         ImportResult result = importService.importEmployeeOnboardingData(file, cal.getTimeInMillis());
@@ -790,6 +818,11 @@ public class EmployeeResource {
         List<Ticket> ticketList = null;
         ticketList = employeeService.getPendingTickets(employeeId);
         return ticketList;
+    }
+
+    @RequestMapping(value = "/employee/documents/{employeeId}",method=RequestMethod.GET)
+    public List<EmployeeDocuments> getEmployeeDocuments(@PathVariable("employeeId") long employeeId){
+        return employeeService.getEmployeeDocuments(employeeId);
     }
 
 }
