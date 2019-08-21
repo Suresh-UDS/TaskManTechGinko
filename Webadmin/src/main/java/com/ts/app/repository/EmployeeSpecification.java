@@ -62,7 +62,24 @@ public class EmployeeSpecification implements Specification<Employee> {
         if (StringUtils.isNotEmpty(searchCriteria.getEmployeeEmpId())) {
             predicates.add(builder.equal(root.get("empId"), searchCriteria.getEmployeeEmpId()));
         }
+        
+        if(StringUtils.isNotEmpty(searchCriteria.getElement())) {
+        	predicates.add(builder.equal(root.get("element"), searchCriteria.getElement()));
+        }
+        
+        if(StringUtils.isNotEmpty(searchCriteria.getElementCode())) {
+        	predicates.add(builder.equal(root.get("elementCode"), searchCriteria.getElementCode()));
+        }
 
+        if(StringUtils.isNotEmpty(searchCriteria.getElementType())) {
+        	predicates.add(builder.equal(root.get("elementType"),searchCriteria.getElementType()));
+        }
+        
+        if(StringUtils.isNotEmpty(searchCriteria.getElementParent())) {
+        	predicates.add(builder.equal(root.get("elementParent"), searchCriteria.getElementParent()));
+        }
+        
+        
         log.debug("EmpSpecification toPredicate - searchCriteria isLeft -" + searchCriteria.isLeft());
         if (searchCriteria.isLeft()) {
             predicates.add(builder.equal(root.get("isLeft"), true));
