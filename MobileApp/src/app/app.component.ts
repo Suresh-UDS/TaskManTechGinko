@@ -50,6 +50,10 @@ import {DatabaseProvider} from "../providers/database-provider";
 import {Network} from "@ionic-native/network";
 import {DashboardPage} from "../pages/dashboard/dashboard";
 import {OfflineOnlineLanding} from "../pages/Offline-Online-Landing/offline-online-landing";
+//import {Declaration} from "../pages/declaration/declaration";
+
+
+
 
 @Component({
     templateUrl: 'app.html'
@@ -157,6 +161,7 @@ export class MyApp {
             // { title: 'InventoryMaster', component: InventoryMaster, active: false, icon: 'widgets', permission: 'FeedbackList' },
             // { title: 'Indent', component: Indent, active: false, icon: 'build', permission: 'TicketsList' },
             // { title: 'IndentList', component: IndentList, active: false, icon: 'shopping_cart', permission: 'AttendanceList' },
+           // { title: 'Declaration', component: Declaration, active: false, icon: 'person_add', permission: 'FeedbackList' },
             { title: 'Feedback', component: InitFeedbackPage, active: false, icon: 'feedback', permission: 'FeedbackList' },
             { title: 'ChangePassword', component: ChangePassword, active: false, icon: 'lock', permission: 'FeedbackList' }
             // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},

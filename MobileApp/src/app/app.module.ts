@@ -133,8 +133,7 @@ import { ForgotPassword } from "../pages/forgot-password/forgot-password";
 import { InventoryFilter } from "../pages/inventory-filter/inventory-filter";
 import { AddInventoryTransaction } from "../pages/add-inventory-transaction/add-inventory-transaction";
 import { InventoryService } from "../pages/service/inventoryService";
-import { ExpenseService } from "../pages/service/expenseService";
-import { AutoCompleteModule } from "ionic2-auto-complete";
+import { ExpenseService } from "../pages/service/expenseService"; 
 import { PurchaseRequisitionService } from "../pages/service/PurchaseRequisitionService";
 import { ExpensePage } from "../pages/expense/expense";
 import { TransactionPage } from "../pages/expense/transaction";
@@ -172,6 +171,10 @@ import { onboardingUserFilterPipe } from '../pages/onboarding/onboardingList/onb
 import { onBoardingDataService } from '../pages/onboarding/onboardingNewEmployee/onboarding.messageData.service';
 import * as moment from "moment";
 import Base = moment.unitOfTime.Base;
+import {declaration} from '../pages/onboarding/onboardingNewEmployee/declaration/declaration';
+import { AutoCompleteModule } from 'ionic2-auto-complete';
+import {GetProjectService} from '../pages/service/getProjectService';
+import { GetWBSListService} from '../pages/service/getWBSListService';
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -290,8 +293,9 @@ import Base = moment.unitOfTime.Base;
     onboardingLocation,
     onboardingUserView,
     onboardingListFilter,
-    onboardingUserFilterPipe
-
+    onboardingUserFilterPipe,
+   declaration
+ 
   ],
   imports: [
     BrowserModule,
@@ -299,7 +303,8 @@ import Base = moment.unitOfTime.Base;
     DatePickerModule,
     BrowserAnimationsModule,
     SelectSearchableModule,
-
+    AutoCompleteModule,
+    FormsModule,
     IonicModule.forRoot(MyApp, {
       backButtonText
         : '',
@@ -425,7 +430,8 @@ import Base = moment.unitOfTime.Base;
     newEmpContactDetails,
     onboardingLocation,
     onboardingUserView,
-    onboardingListFilter
+    onboardingListFilter,
+     declaration
 
 
   ],
@@ -476,10 +482,12 @@ import Base = moment.unitOfTime.Base;
     /* Onboarding Servive */ 
     OnboardingService,
     onBoardingDataService,
-
-
+    GetProjectService,
+    GetWBSListService,
+    
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     { provide: MY_CONFIG_TOKEN, useValue: AppConfig }
   ]
 })
 export class AppModule { }
+  

@@ -10,6 +10,7 @@
             </button>
         </ion-buttons>
     </ion-navbar>
+    
     <ion-segment [(ngModel)]="onBoardingAction" (ionChange)="onSegmentChange()">
         <ion-segment-button value="actionRequired">
             Action Required
@@ -45,6 +46,7 @@
                     <h2>Marty</h2>
                 </ion-item> -->
                 <ion-card-content (click)="updateEmployeeDetails(index)">
+                    
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">

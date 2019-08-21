@@ -16,6 +16,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   onboardingPersonalDetailsSubscription;
   storedIndex;
   today;
+  minAge;
+  maxAge;
   // setMinDate: any;
   formActionStatus: any;
   pipe = new DatePipe('en-US');
@@ -28,7 +30,14 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     })
 
     this.today = new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toJSON().split('T')[0];
+    
+    var today = new Date();
+    var minAge = 18;
+    var maxAge = 58;
+   this.minAge = new Date(today.getFullYear() - minAge,  today.getMonth(), today.getDate());
+   this.maxAge = new Date(today.getFullYear() - maxAge,  today.getMonth(), today.getDate());
 
+  
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],

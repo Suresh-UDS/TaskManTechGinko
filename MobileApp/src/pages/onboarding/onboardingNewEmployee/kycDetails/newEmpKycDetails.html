@@ -26,22 +26,33 @@
                     </div>
 
                 </div>
+                 <!-- <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 padding0 form-group">
+                        <label class="trequired">Aadhar Back View</label>
+                        <ion-avatar item-start class="inlineElement">
+                            <img [src]="userAllKYCData.aadharPhotoCopyBack" onError="src = 'assets/imgs/placeholder.png'"
+                                (click)="presentActionSheet('back')" class="mdImage" />
+                        </ion-avatar>
+                    </div>
 
+                </div>  -->
+
+         
                 <div class="row form-group">
-                    <div *ngFor="let list of onboardingKYCForm.get('bankDetails').controls; let i = index;"
-                        formArrayName="bankDetails">
+                     <div *ngFor="let list of onboardingKYCForm.get('bankDetails').controls; let i = index;"
+                        formArrayName="bankDetails" >
                         <div [formGroupName]="i">
                             <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                                <label class="control-label trequired">Account Number</label>
-                                <input class="form-control" type="number" minlength="5" maxlength="20" formControlName="accountNo">
+                                <label class="control-label trequired" >  Account Number </label>
+                                <input class="form-control"   disabled="list['value']['ifsc'] !==''" type="number" minlength="5" maxlength="20" formControlName="accountNo">
                             </div>
                             <div   class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                                <label class="control-label trequired">IFSC Number</label>
-                                <!-- gopicg -->
-                                <input class="form-control" type="text" formControlName="ifsc">
+                                <label class="control-label trequired" > IFSC Number</label>
+                              
+                                <input class="form-control" id="ifsc"  type="text" formControlName="ifsc" minlength="11" maxlength="11">
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="col-md-12 col-sm-12 col-xs-12 padding0">
                         <label class="trequired">Bank Passbook</label>
                         <ion-avatar item-start class="inlineElement">

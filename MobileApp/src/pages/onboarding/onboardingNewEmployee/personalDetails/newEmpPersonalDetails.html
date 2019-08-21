@@ -57,8 +57,9 @@
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">DOB</label>
-                        <input class="form-control" [max]="today" type="date" formControlName="dateOfBirth">
+                        <input class="form-control"  min="{{maxAge | date:'yyyy-MM-dd'}}" max="{{minAge | date:'yyyy-MM-dd'}}"  type="date" formControlName="dateOfBirth">
                     </div>
+
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">DOJ</label>
                         <input class="form-control" type="date" min="{{setMinDate}}" formControlName="dateOfJoining">
