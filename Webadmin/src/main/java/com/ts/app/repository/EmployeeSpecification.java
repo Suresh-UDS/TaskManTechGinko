@@ -120,7 +120,11 @@ public class EmployeeSpecification implements Specification<Employee> {
         }
 
         if(searchCriteria.getProjectCode() !=null && StringUtils.isNotEmpty(searchCriteria.getProjectCode())){
-            predicates.add(builder.equal())
+            predicates.add(builder.equal(root.get("projectCode"),searchCriteria.getProjectCode()));
+        }
+
+        if (searchCriteria.getWBSCode()!=null && StringUtils.isNotEmpty(searchCriteria.getWBSCode())){
+            predicates.add(builder.equal(root.get("wbsId"),searchCriteria.getWBSCode()));
         }
 
         if(searchCriteria.getFromDate() != null) {

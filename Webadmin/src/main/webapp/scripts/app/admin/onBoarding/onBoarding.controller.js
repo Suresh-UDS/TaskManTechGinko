@@ -92,6 +92,9 @@ angular.module('timeSheetApp')
     $scope.selectedBranchCode = null;
     $scope.selectedProjectCode = null;
     $scope.selectedWBSCode = null;
+    $scope.selectedBranchDetails={};
+    $scope.selectedWBSDetails={};
+    $scope.selectedProjectDetails={};
 
 	$scope.now = new Date();
 
@@ -255,6 +258,7 @@ angular.module('timeSheetApp')
 
     $scope.getProjectListByBranch = function(branchCode){
         $scope.selectedBranchCode = branchCode.elementCode;
+        $scope.selectedBranchDetails = branchCode;
         $scope.siteSpin = true;
         console.log(branchCode.elementCode);
         OnBoardingComponent.getProjectListByBranchCode(branchCode.elementCode).then(function (projectList) {
@@ -268,6 +272,7 @@ angular.module('timeSheetApp')
 
     $scope.getWBSListByProject = function(projectCode){
         $scope.selectedProjectCode = projectCode.elementCode;
+        $scope.selectedProjectDetails = projectCode;
         console.log(projectCode.elementCode);
         $scope.branchSpin = true;
         OnBoardingComponent.getWBSListByProjectCode(projectCode.elementCode).then(function (wbsList) {
@@ -280,7 +285,9 @@ angular.module('timeSheetApp')
     };
 
     $scope.selectWBS = function(wbsCode){
+        console.log(wbsCode);
         $scope.selectedWBSCode = wbsCode.elementCode;
+        $scope.selectedWBSDetails = wbsCode;
     };
 
     /** Ui-select function **/
@@ -590,32 +597,6 @@ angular.module('timeSheetApp')
 
 		}else{
 
-			if($scope.client.selected && $scope.client.selected.id !=0){
-				$scope.searchProject = $scope.client.selected;
-			}else{
-				$scope.searchProject = null;
-			}
-			if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
-				$scope.searchRegion = $scope.regionsListOne.selected;
-			}else{
-				$scope.searchRegion = null;
-			}
-			if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
-				$scope.searchBranch = $scope.branchsListOne.selected;
-			}else{
-				$scope.searchBranch = null;
-			}
-			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
-				$scope.searchSite = $scope.sitesListOne.selected;
-			}else{
-				$scope.searchSite = null;
-			}
-			if($scope.selectedDateFrom) {
-				$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
-			}
-			if($scope.selectedDateTo) {
-				$scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
-			}
 
 		}
 
@@ -627,7 +608,7 @@ angular.module('timeSheetApp')
 		$scope.searchCriteria.report = false;
 		$scope.searchCriteria.isReport = false;
 
-		if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject) {
+		if(!$scope.searchEmployeeId && !$scope.searchEmployeeName ) {
 			$scope.searchCriteria.findAll = true;
 		}
 
@@ -647,53 +628,6 @@ angular.module('timeSheetApp')
 		else{
 			$scope.searchCriteria.name = "";
 		}
-
-		if(jQuery.isEmptyObject($scope.searchProject) == false) {
-			//console.log('selected project -' + $scope.searchProject.id);
-			$scope.searchCriteria.projectId = $scope.searchProject.id;
-			$scope.searchCriteria.projectName = $scope.searchProject.name;
-		}else{
-			$scope.searchCriteria.projectId = null;
-			$scope.searchCriteria.projectName = null;
-		}
-
-		if(jQuery.isEmptyObject($scope.searchSite) == false) {
-			//console.log('selected site -' + $scope.searchSite.id);
-			$scope.searchCriteria.siteId = $scope.searchSite.id;
-			$scope.searchCriteria.siteName = $scope.searchSite.name;
-		}else{
-			$scope.searchCriteria.siteId = null;
-			$scope.searchCriteria.siteName = null;
-		}
-
-		if($scope.selectedSite) {
-			$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		}
-
-
-		if($scope.selectedProject) {
-			$scope.searchCriteria.projectId = $scope.selectedProject.id;
-
-		}
-
-		if($scope.searchRegion) {
-			$scope.searchCriteria.regionId = $scope.searchRegion.id;
-			$scope.searchCriteria.region = $scope.searchRegion.name;
-
-		}else {
-			$scope.searchCriteria.regionId = null;
-			$scope.searchCriteria.region = null;
-		}
-
-		if($scope.searchBranch) {
-			$scope.searchCriteria.branchId = $scope.searchBranch.id;
-			$scope.searchCriteria.branch = $scope.searchBranch.name;
-
-		}else {
-			$scope.searchCriteria.branchId = null;
-			$scope.searchCriteria.branch = null;
-		}
-
 
 		console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
 		//-------
@@ -726,6 +660,7 @@ angular.module('timeSheetApp')
 		if($scope.selectedWBSCode !=null){
 		    $scope.searchCriteria.WBSCode = $scope.selectedWBSCode;
         }
+		$scope.searchCriteria.verified = false;
 		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
@@ -859,17 +794,39 @@ angular.module('timeSheetApp')
 
     }
 
-    $scope.approveOnBoardingEmployee = function(employee){
-        employee.verified =true;
-        OnBoardingComponent.verifyOnBoardingEmployee(employee).then(function (data) {
+    $rootScope.back = function (text) {
+        if(text == 'cancel' || text == 'back')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.cancel();
+        }
+        else if(text == 'approve')
+        {
+            $scope.approveOnBoardingEmployee();
+        }
+        else if(text == 'update')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.saveOnBoardingEmployeeDetails();
+        }
+    };
+
+    $scope.approveOnBoardingEmployee = function(){
+        $scope.employee.verified =true;
+        OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
             console.log("on boarding employee successfully saved");
             console.log(data);
+            $location.path('/onBoarding-list');
+            $scope.showNotifications('top','center','success',"Employee Approve Successfully");
+
         });
     };
 
-    $scope.saveOnBoardingEmployeeDetails = function(employee){
+    $scope.saveOnBoardingEmployeeDetails = function(){
         console.log("Saving employee details");
-        OnBoardingComponent.editOnBoardingEmployee(employee).then(function (data) {
+        OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
             console.log("on boarding employee successfully saved");
             console.log(data);
         });

@@ -42,29 +42,18 @@
             <span class="AppliedFilterTxtCon">
                 <span
                     class="tag label label-info" style="margin-right: 10px"
-                    ng-show="searchCriteras.projectId !=0 && searchCriteras.projectId !=null">
-					Client: {{searchCriteras.projectName}}
+                    ng-show="selectedBranchCode !=null">
+					Branch: {{selectedBranchDetails.element}}
 			    </span>
 
-			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.regionId !=0 && searchCriteras.regionId !=null">
-                    Region: {{searchCriteras.region}}
+			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="selectedProjectCode!=null">
+                    Project: {{selectedProjectDetails.element}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="searchCriteras.branchId !=0 && searchCriteras.branchId !=null">
-                    Branch: {{searchCriteras.branch}}
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="selectedWBSCode!=null">
+                    WBS: {{selectedWBSDetails.element}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"
-                      ng-show="searchCriteras.siteId !=0 && searchCriteras.siteId !=null">
-					Site: {{searchCriteras.siteName}}
-			    </span>
-
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeFrom">
-                    From: {{searchCriteras.checkInDateTimeFrom  | date:'dd/MM/yyyy'}}
-                </span>
-                <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.checkInDateTimeTo">
-                    To: {{searchCriteras.checkInDateTimeTo | date:'dd/MM/yyyy'}}
-                </span>
                 <span class="tag label label-info"  style="margin-right: 10px" ng-show="searchCriteras.employeeEmpId">
                     Employee Id: {{searchCriteras.employeeEmpId}}
                 </span>
@@ -387,7 +376,7 @@
                                                     <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="branchsListOne.selected" on-select="selectWBS(branchsListOne.selected.element)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+                                                    <ui-select ng-model="branchsListOne.selected" on-select="selectWBS(branchsListOne.selected)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
                                                         <ui-select-match placeholder="Select WBS...">{{$select.selected.element}}
                                                             <a   ng-click="clearBranch($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">

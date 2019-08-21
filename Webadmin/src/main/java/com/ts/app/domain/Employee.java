@@ -101,7 +101,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     @NotNull
     @Size(min = 1, max = 50)
-    private String projectId;
+    private String projectCode;
     
     @NotNull
     @Size(min = 1, max = 2500)
@@ -582,12 +582,12 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.wbsDescription = wbsDescription;
 	}
 
-	public String getProjectId() {
-		return projectId;
+	public String getProjectCode() {
+		return projectCode;
 	}
 
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
 	}
 
 	public String getProjectDescription() {
