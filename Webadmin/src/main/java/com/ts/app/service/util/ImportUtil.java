@@ -1846,7 +1846,7 @@ public class ImportUtil {
 							cellNo = 4;
 							employee.setName(getCellValue(currentRow.getCell(4)));
 							employee.setFullName(getCellValue(currentRow.getCell(4)));
-							employee.setLastName(getCellValue(currentRow.getCell(4)));
+							employee.setLastName("");
 
 							cellNo = 6;
 							employee.setFatherName(getCellValue(currentRow.getCell(6)));
@@ -1930,7 +1930,7 @@ public class ImportUtil {
                     if((currentRow.getCell(5).getStringCellValue() != null) && (StringUtils.isNotEmpty((currentRow.getCell(5).getStringCellValue())))  &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
                         cellNo = 5;
                         employee.setEmpId(getCellValue(currentRow.getCell(5)));
-
+                        employee.setNewEmployee(false);
                         if(isSkipDuplicate((currentRow.getCell(5).getStringCellValue().trim()),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
                             EmployeeDTO employeeDTO = new EmployeeDTO();
                             employeeDTO.setMessage("error.duplicateRecordError");
@@ -1941,7 +1941,7 @@ public class ImportUtil {
                         cellNo = 5;
                         String empId = currentRow.getCell(32).getStringCellValue().substring(7);
                         log.debug("Employee id not present, entering substirng - "+empId);
-
+                        employee.setNewEmployee(true);
                         if(isSkipDuplicate(empId.trim(),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
                             EmployeeDTO employeeDTO = new EmployeeDTO();
                             employeeDTO.setMessage("error.duplicateRecordError");

@@ -757,10 +757,6 @@ angular.module('timeSheetApp')
                 console.log('employee data -');
                 console.log(data);
 
-
-
-
-
                 $scope.employee = data;
                 if($scope.employee){
                     $scope.employee.mobile = parseInt($scope.employee.mobile);
