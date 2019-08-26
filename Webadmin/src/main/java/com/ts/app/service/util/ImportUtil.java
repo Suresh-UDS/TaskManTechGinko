@@ -1941,7 +1941,15 @@ public class ImportUtil {
                         cellNo = 5;
                         String empId = currentRow.getCell(32).getStringCellValue().substring(8);
                         log.debug("Employee id not present, entering substirng - "+empId);
-                        employee.setEmpId(empId);
+
+                        if(isSkipDuplicate(empId.trim(),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
+                            EmployeeDTO employeeDTO = new EmployeeDTO();
+                            employeeDTO.setMessage("error.duplicateRecordError");
+                        }else {
+                            employee.setEmpId(empId);
+                            employeeRepo.save(employee);
+                        }
+
                     }
 					
 					
