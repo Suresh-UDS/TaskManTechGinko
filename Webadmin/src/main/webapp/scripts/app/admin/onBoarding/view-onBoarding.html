@@ -20,26 +20,17 @@
                         <table class="table">
 
                             <tbody>
-                            <tr>
-                                <td class="col-sm-4">Branch Name</td>
-                                <td class="col-sm-8">{{employee.branchName}}</td>
-                            </tr>
-                            <tr>
-                                <td class="col-sm-4">Description</td>
-                                <td class="col-sm-8">{{employee.branchDescription  }}</td>
-
-                            </tr>
 
                             <tr>
 
-                                <td class="col-sm-4">Client Name</td>
-                                <td class="col-sm-8">{{employee.projectName}}</td>
+                                <td class="col-sm-4">Project Code</td>
+                                <td class="col-sm-8">{{employee.projectCode}}</td>
 
                             </tr>
                             <tr>
 
                                 <td class="col-sm-4">Description</td>
-                                <td class="col-sm-8">{{employee.clientDescription  }}</td>
+                                <td class="col-sm-8">{{employee.projectDescription  }}</td>
 
                             </tr>
 
@@ -188,6 +179,11 @@
                             </tr>
 
                             <tr>
+                                <td class="col-sm-4">Last Name</td>
+                                <td class="col-sm-8">{{employee.lastName}}</td>
+                            </tr>
+
+                            <tr>
                                 <td class="col-sm-4">Code</td>
                                 <td class="col-sm-8">{{employee.empId}}</td>
                             </tr>
@@ -200,11 +196,6 @@
                             <tr>
                                 <td class="col-sm-4">Mother Name</td>
                                 <td class="col-sm-8">{{employee.motherName}}</td>
-                            </tr>
-
-                            <tr>
-                                <td class="col-sm-4">Gender</td>
-                                <td class="col-sm-8">{{employee.gender}}</td>
                             </tr>
 
                             <tr>
@@ -240,11 +231,6 @@
                             <tr>
                                 <td class="col-sm-4">Personal Identification Mark 2</td>
                                 <td class="col-sm-8">{{employee.personalIdentificationMark2}}</td>
-                            </tr>
-
-                            <tr>
-                                <td class="col-sm-4">Education Qualification</td>
-                                <td class="col-sm-8">{{employee.educationalQulification}}</td>
                             </tr>
 
                             <tr>
@@ -455,7 +441,7 @@
 
 <div class="txt-align-rgt">
 
-    <button class="btn btn-default close-button-right b10" type="button" ng-click="goBack()" id="close-button-right">
+    <button class="btn btn-default close-button-right b10" type="button" ng-click="conform('back')" id="close-button-right">
         Back
     </button>
 

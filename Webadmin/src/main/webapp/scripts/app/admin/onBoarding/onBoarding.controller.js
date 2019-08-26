@@ -98,6 +98,45 @@ angular.module('timeSheetApp')
 
 	$scope.now = new Date();
 
+    $scope.totalStates = [
+        { name: 'Assam', key: 'assam' },
+        { name: 'Andhra Pradesh', key: 'andhrapradesh' },
+        { name: 'Odisha', key: 'odisha' },
+        { name: 'Punjab', key: 'punjab' },
+        { name: 'Delhi', key: 'delhi' },
+        { name: 'Gujarat', key: 'gujarat' },
+        { name: 'Karnataka', key: 'karnataka' },
+        { name: 'Haryana', key: 'haryana' },
+        { name: 'Rajasthan', key: 'rajasthan' },
+        { name: 'Himachal Pradesh', key: 'himachalpradesh' },
+        { name: 'Jharkand', key: 'jharkand' },
+        { name: 'Chhattisgarh', key: 'chhattisgarh' },
+        { name: 'Kerala', key: 'kerala' },
+        { name: 'Tamil Nadu', key: 'tamilnadu' },
+        { name: 'Madhya Pradesh', key: 'madhyapradesh' },
+        { name: 'Bihar', key: 'bihar' },
+        { name: 'Maharashtra', key: 'maharashtra' },
+        { name: 'Chandigarh', key: 'chandigarh' },
+        { name: 'Telangana', key: 'telangana' },
+        { name: 'Jammu and Kashmir', key: 'jammu and kashmir' },
+        { name: 'Tripura', key: 'tripura' },
+        { name: 'Meghalaya', key: 'meghalaya' },
+        { name: 'Goa', key: 'goa' },
+        { name: 'Arunachal Pradesh', key: 'arunachalpradesh' },
+        { name: 'Manipur', key: 'manipur' },
+        { name: 'Mizoram', key: 'mizoram' },
+        { name: 'Sikkim', key: 'sikkim' },
+        { name: 'Puduchery', key: 'puduchery' },
+        { name: 'Nagaland', key: 'nagaland' },
+        { name: 'Andaman and Nicobhar', key: 'andaman and nicobhar' },
+        { name: 'Dadra and Nagar Haveli', key: 'dasra and nagarhaveli' },
+        { name: 'Daman and Diu', key: 'daman and diu' },
+        { name: 'Lakshadweep', key: 'lakshadweep' },
+        { name: 'Uttarakhand', key: 'uttarakhand' },
+        { name: 'Uttar Pradesh', key: 'uttar pradesh' },
+        { name: 'West Bengal', key: 'west bengal' },
+    ];
+
 	$scope.initCalender = function(){
 
 		demo.initFormExtendedDatetimepickers();
@@ -704,7 +743,7 @@ angular.module('timeSheetApp')
 		}).catch(function(){
             $scope.noData = true;
             $scope.onBoardingEmployeesLoader = true;
-            $scope.showNotifications('top','center','danger','Unable to load attendance list..');
+            $scope.showNotifications('top','center','danger','Unable to load Employee list..');
         });
 
 	};
@@ -716,6 +755,7 @@ angular.module('timeSheetApp')
 
                 console.log('employee data -');
                 console.log(data);
+
 
                 EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
                     console.log("Employee documents");
@@ -757,20 +797,10 @@ angular.module('timeSheetApp')
 
                 $scope.employee = data;
                 if($scope.employee){
-                    // $scope.title = $scope.employee.name +' '+ $scope.employee.lastName;
-                    // $scope.projectSiteList = $scope.employee.projectSites;
-                    // $scope.locationList = $scope.employee.locations;
-                    // $scope.employee.code = pad($scope.employee.code , 4);
-                    // $scope.SelectedDesig = {designation:$scope.employee.designation};
-                    // $scope.loadSelectedProject($scope.employee.projectId);
-                    // $scope.loadSelectedSite($scope.employee.siteId);
-                    // $scope.loadSelectedManager($scope.employee.managerId);
-                    // $scope.loadSelectedRole($scope.employee.userRoleId);
-                    // $scope.sites = $scope.employee.sites;
-                    // $scope.projectSitesCnt = ($scope.employee.projectSites).length;
-                    // if($scope.projectSitesCnt == 0) {
-                    //     $scope.empLocation = true;
-                    // }
+                    $scope.employee.mobile = parseInt($scope.employee.mobile);
+                    $scope.employee.emergencyContactNumber= parseInt($scope.employee.emergencyContactNumber);
+                    $scope.employee.nomineeContactNumber = parseInt($scope.employee.nomineeContactNumber);
+
                 }else{
                     $location.path('/onBoarding-list');
                 }
@@ -799,7 +829,7 @@ angular.module('timeSheetApp')
         {
             /** @reatin - retaining scope value.**/
             $rootScope.retain=1;
-            $scope.cancel();
+            $location.path('/onBoarding-list');
         }
         else if(text == 'approve')
         {
@@ -813,14 +843,49 @@ angular.module('timeSheetApp')
         }
     };
 
+    $scope.clearFilter = function() {
+        $scope.searchEmployeeId =null;
+        $scope.selectedBranchCode = null;
+        $scope.selectedProjectCode = null;
+        $scope.selectedWBSCode = null;
+        $scope.selectedBranchDetails={};
+        $scope.selectedWBSDetails={};
+        $scope.selectedProjectDetails={};
+        $scope.employeeEmpId = null;
+
+
+        $scope.pages = {
+            currPage: 1,
+            totalPages: 0
+        }
+        /* Root scope (search criteria) */
+        $rootScope.searchFilterCriteria.isDashboard = false;
+        $scope.search();
+    };
+
     $scope.approveOnBoardingEmployee = function(){
         $scope.employee.verified =true;
         OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
-            console.log("on boarding employee successfully saved");
-            console.log(data);
-            $location.path('/onBoarding-list');
-            $scope.showNotifications('top','center','success',"Employee Approve Successfully");
-
+            if(data.data.errorMesssage) {
+                $scope.saveLoad = false;
+                $scope.success = null;
+                $scope.disable = false;
+                $scope.btnDisable = false;
+                $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.errorMessage);
+                $scope.error = 'ERROR';
+            }else {
+                console.log("on boarding employee successfully saved");
+                console.log(data);
+                $location.path('/onBoarding-list');
+                $scope.showNotifications('top', 'center', 'success', "Employee Approve Successfully");
+            }
+        }).catch(function(){
+            $scope.saveLoad = false;
+            $scope.success = null;
+            $scope.disable = false;
+            $scope.btnDisable = false;
+            $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.errorMessage);
+            $scope.error = 'ERROR';
         });
     };
 
@@ -829,35 +894,47 @@ angular.module('timeSheetApp')
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
             console.log("on boarding employee successfully saved");
             console.log(data);
-        });
+            $location.path('/onBoarding-list');
+            $scope.showNotifications('top', 'center', 'success', "Employee Successfully ");
 
-        if($scope.addressProofImage){
-            $scope.uploadAddressProofImage(employee.id);
-        }
-        if($scope.bankPassBookImage){
-            $scope.uploadBankPassbookImage(employee.id);
-        }
-        if($scope.adharCardImageBack){
-            $scope.uploadAdharCardImageBack(employee.id);
-        }
-        if($scope.adharCardImageFront){
-            $scope.uploadAdharCardImageFront(employee.id);
-        }
-        if($scope.fingerprintRightImage){
-            $scope.uploadFingerPrintRight(employee.id);
-        }
-        if($scope.fingerprintLeftImage){
-            $scope.uploadFingerPrintLeft(employee.id);
-        }
-        if($scope.drivingLicenseImageFront){
-            $scope.uploadDrivingLicense(employee.id);
-        }
-        if($scope.voterIdImage){
-            $scope.uploadVoterId(employee.id);
-        }
-        if($scope.pancardImage){
-            $scope.uploadPancard(employee.id);
-        }
+            if($scope.addressProofImage){
+                $scope.uploadAddressProofImage($scope.employee.id);
+            }
+            if($scope.bankPassBookImage){
+                $scope.uploadBankPassbookImage($scope.employee.id);
+            }
+            if($scope.adharCardImageBack){
+                $scope.uploadAdharCardImageBack($scope.employee.id);
+            }
+            if($scope.adharCardImageFront){
+                $scope.uploadAdharCardImageFront($scope.employee.id);
+            }
+            if($scope.fingerprintRightImage){
+                $scope.uploadFingerPrintRight($scope.employee.id);
+            }
+            if($scope.fingerprintLeftImage){
+                $scope.uploadFingerPrintLeft($scope.employee.id);
+            }
+            if($scope.drivingLicenseImageFront){
+                $scope.uploadDrivingLicense($scope.employee.id);
+            }
+            if($scope.voterIdImage){
+                $scope.uploadVoterId($scope.employee.id);
+            }
+            if($scope.pancardImage){
+                $scope.uploadPancard($scope.employee.id);
+            }
+
+        }).catch(function(){
+            $scope.saveLoad = false;
+            $scope.success = null;
+            $scope.disable = false;
+            $scope.btnDisable = false;
+            $scope.showNotifications('top','center','danger','Error in updating Employee.' + response.data.errorMessage);
+            $scope.error = 'ERROR';
+        });;
+
+
 
 
     };
@@ -982,54 +1059,6 @@ angular.module('timeSheetApp')
 
 	};
 
-	$scope.clearFilter = function() {
-		$('input#dateFilterFrom').data('DateTimePicker').clear();
-		$('input#dateFilterTo').data('DateTimePicker').clear();
-		$scope.noData = false;
-		$scope.clearField = true;
-		$rootScope.exportStatusObj = {};
-		$scope.exportStatusMap = [];
-		$scope.downloader=false;
-		$scope.downloaded = true;
-		$scope.siteFilterDisable = true;
-		$scope.regionFilterDisable = true;
-		$scope.branchFilterDisable = true;
-		$scope.sites = null;
-
-		/** Ui-select scopes **/
-		$scope.client.selected = null;
-		$scope.sitesLists =  [];
-		$scope.sitesListOne.selected =  null;
-		$scope.regionsLists =  [];
-		$scope.regionsListOne.selected =  null;
-		$scope.branchsLists =  [];
-		$scope.branchsListOne.selected =  null;
-
-		$scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-		$scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-		$scope.selectedDateFromSer =  new Date();
-		$scope.selectedDateToSer =  new Date();
-		$('input#dateFilterFrom').val($scope.selectedDateFrom);
-		$('input#dateFilterTo').val($scope.selectedDateTo);
-		$scope.selectedEmployee = null;
-		$scope.selectedProject = null;
-		$scope.selectedSite = null;
-		$scope.searchProject = null;
-		$scope.searchSite = null;
-		$scope.searchEmployeeId = null;
-		$scope.searchEmployeeName = null;
-		$scope.searchCriteria = {};
-		$rootScope.searchCriteriaAttendances   = null;
-		// $scope.selectedDateFrom = null;
-		// $scope.selectedDateTo = null;
-		$scope.filter = true;
-		$scope.siteFilterDisable = true;
-		$scope.pages = {
-				currPage: 1,
-				totalPages: 0
-		}
-		//$scope.search();
-	};
 
 	function pad(num, size) {
 		var s = num+"";
