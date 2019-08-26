@@ -1,0 +1,57 @@
+<div padding>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <form [formGroup]="siteDetailsForm" novalidate>
+        <div class="row form-group">
+
+<!--          <ion-item>-->
+<!--            <ion-label class="label-text" stacked>Branch</ion-label>-->
+<!--            <ion-select interface="popover" >-->
+<!--              <ion-option *ngFor="let branch of branches" [value]="branch.elementCode">{{branch.element}}</ion-option>-->
+<!--            </ion-select>-->
+<!--          </ion-item>-->
+
+            <ion-item class="border">
+              <ion-label  text-capitalize class="client-label" text-left>Branch:</ion-label>
+              <select-searchable class="searchable-select"
+                                 item-content
+                                 [items]="branches"
+                                 itemValueField="elementCode"
+                                 itemTextField="element"
+                                 [canSearch]="true"
+                                 (onChange)="getProjectByBranch($event)">
+              </select-searchable>
+            </ion-item>
+
+            <ion-item class="border" *ngIf="selectedBranch !=null">
+              <ion-label  text-capitalize class="client-label" text-left>Project:</ion-label>
+              <select-searchable class="searchable-select"
+                                 item-content
+                                 formControlName="projectCode"
+                                 [items]="projects"
+                                 itemValueField="elementCode"
+                                 itemTextField="element"
+                                 [canSearch]="true"
+                                 (onChange)="getWBSByProject($event)">
+              </select-searchable>
+            </ion-item>
+
+            <ion-item class="border" *ngIf="selectedProject!=null">
+              <ion-label  text-capitalize class="client-label" text-left>WBS:</ion-label>
+              <select-searchable class="searchable-select"
+                                 item-content
+                                 formControlName="wbsId"
+                                 [items]="wbsList"
+                                 itemValueField="elementCode"
+                                 itemTextField="element"
+                                 [canSearch]="true"
+                                 (onChange)="getEmployees($event)">
+              </select-searchable>
+            </ion-item>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

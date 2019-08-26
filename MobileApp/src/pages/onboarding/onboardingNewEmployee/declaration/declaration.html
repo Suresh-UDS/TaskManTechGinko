@@ -1,7 +1,7 @@
 <div padding>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-               
+
                 <ion-item style="width:250px;">
                     <ion-label style="font-size:10px">Select Language:</ion-label>
                     <ion-select name="searchFieldBranchList" interface="popover" [(ngModel)]="searchField" (ionChange)="getDeclarationList(searchField)" >
@@ -17,10 +17,10 @@
     <p style="padding:50px"> {{declationText}} </p>
 
     <div *ngIf="declationText" style="padding:50px">
+        <form [formGroup]="declarationForm" novalidate>
+        <ion-checkbox formControlName="agreeTermsAndConditions"> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
 
-        <ion-checkbox> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
-  
-
+        </form>
     <!-- <form [formGroup]="declarationForm" novalidate>
         <ion-checkbox (click)="declarationAccept()"> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
   
@@ -28,7 +28,7 @@
     
        </div>  
 
-   
+
         </div>
     </div>
 </div>

@@ -20,6 +20,7 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.onboardingFormStatus = [
+      { name: 'Site Details', key: 'siteDetails', status: '0', icon: 'checkmark' },
       { name: 'Personal Details', key: 'personalDetails', status: '0', icon: 'checkmark' },
       { name: 'Contact Details', key: 'contactDetails', status: '0', icon: 'checkmark' },
       { name: 'Nominee & Academic', key: 'familyAcademicDetails', status: '0', icon: 'checkmark' },

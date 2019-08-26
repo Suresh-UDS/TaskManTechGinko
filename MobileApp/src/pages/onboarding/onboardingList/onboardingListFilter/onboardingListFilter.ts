@@ -36,7 +36,7 @@ test;
 
     @Input('popOverEvent') popoverEvent;
     constructor(public navCtrl: NavController, private _viewController: ViewController, private onBoardingService: OnboardingService, private getProjectService: GetProjectService, private getWBSListService: GetWBSListService, private employeeService: EmployeeService) { 
-         onBoardingService.getBranchList().subscribe(res=>{
+         onBoardingService.getBranches().subscribe(res=>{
          this.searchFieldBranchList=res;
          });
 

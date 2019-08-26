@@ -73,17 +73,17 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
 
       console.log('KYCdataaa== ' + JSON.stringify(this.onboardingKYCForm.value));
 
-if(JSON.stringify(this.onboardingKYCForm.controls.bankDetails.value[0]['ifsc'])){
-      //if(this.onboardingKYCForm.controls.bankDetails.value[0]['accountNo'] !== ''){
-        alert(this.onboardingKYCForm.controls.bankDetails.value[0]['ifsc']);
-      
-       this.ele.nativeElement.getElementsById('ifsc').disabled = true;
-        this.isenabled =true; 
-      
-      }else{
-        
-        this.isenabled =false;
-         }
+// if(JSON.stringify(this.onboardingKYCForm.controls.bankDetails.value[0]['ifsc'])){
+//       //if(this.onboardingKYCForm.controls.bankDetails.value[0]['accountNo'] !== ''){
+//         alert(this.onboardingKYCForm.controls.bankDetails.value[0]['ifsc']);
+//
+//        this.ele.nativeElement.getElementsById('ifsc').disabled = true;
+//         this.isenabled =true;
+//
+//       }else{
+//
+//         this.isenabled =false;
+//          }
 
 
       if (status == 'VALID') {

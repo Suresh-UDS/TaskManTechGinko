@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {ModalController, NavController} from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
 import { Network } from "@ionic-native/network";
 import { onboardingNewEmployee } from '../onboardingNewEmployee/onboardingNewEmployee';
@@ -14,6 +14,8 @@ import { Storage } from '@ionic/storage';
 import { onBoardingModel } from './onboarding';
 import { onBoardingDataModel } from './onboardingDataModel';
 import {AppConfig} from '../../service/app-config';
+import {JobFilter} from "../../jobs/job-filter/job-filter";
+import {OnBoardingEmployeeFilter} from "./on-boarding-employee-filter/on-boarding-employee-filter";
 
 @Component({
   selector: 'page-onboarding-list',
@@ -31,7 +33,7 @@ export class onboardingExistEmployee implements OnInit {
   wbsId;
   AppConfig = AppConfig;
 
-  constructor(private storage: Storage, private network: Network, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController,
+  constructor(private storage: Storage, private network: Network, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public modalCtrl: ModalController,
     public component: componentService) {
     this.setStorage();
     // this.storage.get('onboardingProjectSiteIds').then((Ids) => {
@@ -44,7 +46,6 @@ export class onboardingExistEmployee implements OnInit {
       if (data) {
         this.actionRequiredEmp = data['actionRequired'];
         this.completedEmp = data["completed"];
-        this.onSegmentChange();
         this.getPercentage();
       }
       // this.component.closeLoader();
@@ -52,93 +53,10 @@ export class onboardingExistEmployee implements OnInit {
   }
 
   ngOnInit() {
-    this.component.showLoader("Please wait....");
-
+    // this.component.showLoader("Please wait....");
     console.log('onboard home Empid ' + window.localStorage.getItem('employeeId'));
     console.log('onboard home UserId ' + window.localStorage.getItem('employeeUserId'));
-    //  console.log('onboard home EmpName ' + window.localStorage.getItem('employeeDetails'));
 
-
-    if (this.network.type != 'none') {
-      this.onboardingService.initGetEmployeeListByWbs().subscribe(projectId => {
-        console.log('res init in page ' + projectId);
-        this.wbsId = projectId;
-
-        window.localStorage.setItem('projectId', projectId);
-
-        this.storage.get('OnBoardingData').then((localStoragedData) => {
-
-          localStoragedData["completed"] = [];
-
-          this.onboardingService.getEmployeeListByProjectId(projectId).subscribe(res => {
-            let objectsKeys;
-            let objectsValues;
-
-
-            for (var i = 0; i < res.length; i++) {
-
-              if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
-
-                if(res[i]["submitted"]){
-                  localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
-                }
-                else{
-                  localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
-                }
-
-                this.storage.set('OnBoardingData', localStoragedData);
-
-              }
-
-            }
-            //console.log(onBoardingModel);
-            this.actionRequiredEmp = localStoragedData['actionRequired'];
-            this.completedEmp = localStoragedData["completed"];
-            this.getPercentage();
-            this.component.closeLoader();
-          }, err => {
-            console.log('onbList3');
-            this.actionRequiredEmp = localStoragedData['actionRequired'];
-            this.completedEmp = localStoragedData["completed"];
-            this.onSegmentChange();
-            this.getPercentage();
-            this.component.closeLoader();
-            this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
-          });
-        },err=>{
-          this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
-          this.component.closeAll();
-        });
-      },
-        err => {
-          console.log('onbList2');
-          // this.actionRequiredEmp = localStoragedData['actionRequired'];
-          //  this.completedEmp = localStoragedData["completed"];
-          this.onSegmentChange();
-          this.getPercentage();
-          this.component.closeLoader();
-          this.component.showToastMessage('Server Unreachable', 'bottom');
-          console.log(err);
-        })
-    } else {
-      console.log(' No network ');
-      this.component.showToastMessage(' No network ', 'bottom');
-      this.storage.get('OnBoardingData').then((data) => {
-        if (!data) {
-          this.actionRequiredEmp = data['actionRequired'];
-          this.completedEmp = data["completed"];
-          this.onSegmentChange();
-          this.getPercentage();
-          this.component.closeLoader();
-          this.component.showToastMessage('Server Unreachable', 'bottom');
-        }else{
-          this.component.closeAll();
-        }
-      },err=>{
-        this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
-        this.component.closeAll();
-      })
-    }
   }
 
 
@@ -167,15 +85,17 @@ export class onboardingExistEmployee implements OnInit {
     this.navCtrl.push(onboardingUserView, { userListData: data });
   }
   userFilter() {
-    this.actionRequiredfilterData = {};
-    this.popOverEvent = this.popoverCtrl.create(onboardingListFilter, {}, { enableBackdropDismiss: false });
-    this.popOverEvent.present();
-    this.popOverEvent.onDidDismiss(data => {
+
+    const modal = this.modalCtrl.create(OnBoardingEmployeeFilter);
+    modal.present();
+    modal.onDidDismiss(data=>{
       console.log(data);
-      if (this.onBoardingAction == 'actionRequired') {
-        this.actionRequiredfilterData = data;
-      } else if (this.onBoardingAction == 'completed') {
-        this.completedfilterData = data;
+      if(data.project !=null && data.project.element){
+        if(data.wbs !=null && data.wbs.element){
+          this.getEmployeesByWBSId(data.project.elementCode,data.wbs.elementCode);
+        }else{
+          this.getEmployeesByProjectId(data.project.elementCode);
+        }
       }
     });
   }
@@ -219,13 +139,7 @@ export class onboardingExistEmployee implements OnInit {
       return true;
     }
   }
-  onSegmentChange() {
-    if (this.onBoardingAction == 'actionRequired') {
-      this.hideFilter = this.actionRequiredEmp['length'] ? true : false;
-    } else {
-      this.hideFilter = this.completedEmp['length'] ? true : false;
-    }
-  }
+
   sortByKey(array, key) {
     return array.sort(function (a, b) {
       var x = a[key]; var y = b[key];
@@ -252,6 +166,101 @@ export class onboardingExistEmployee implements OnInit {
         this.storage.set('OnBoardingData', { actionRequired: [], completed: [] });
       }
     })
+  }
+
+  getEmployeesByProjectId(projectId){
+    window.localStorage.setItem('projectId', projectId);
+
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+
+      localStoragedData["completed"] = [];
+
+      this.onboardingService.getEmployeeListByProjectId(projectId).subscribe(res => {
+        let objectsKeys;
+        let objectsValues;
+
+
+        for (var i = 0; i < res.length; i++) {
+
+          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+
+            if(res[i]["submitted"]){
+              localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
+            }
+            else{
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+            }
+
+            this.storage.set('OnBoardingData', localStoragedData);
+
+          }
+
+        }
+        //console.log(onBoardingModel);
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        this.getPercentage();
+        this.component.closeLoader();
+      }, err => {
+        console.log('onbList3');
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        this.getPercentage();
+        this.component.closeLoader();
+        this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+      });
+    },err=>{
+      this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+      this.component.closeAll();
+    });
+  }
+
+  getEmployeesByWBSId(projectId,wbsId){
+
+    window.localStorage.setItem('projectId', projectId);
+
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+
+      localStoragedData["completed"] = [];
+
+      this.onboardingService.getEmployeeListByWbs(wbsId).subscribe(res => {
+        let objectsKeys;
+        let objectsValues;
+
+
+        for (var i = 0; i < res.length; i++) {
+
+          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+
+            if(res[i]["submitted"]){
+              localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
+            }
+            else{
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+            }
+
+            this.storage.set('OnBoardingData', localStoragedData);
+
+          }
+
+        }
+        //console.log(onBoardingModel);
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        this.getPercentage();
+        this.component.closeLoader();
+      }, err => {
+        console.log('onbList3');
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        this.getPercentage();
+        this.component.closeLoader();
+        this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+      });
+    },err=>{
+      this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+      this.component.closeAll();
+    });
   }
 
 }

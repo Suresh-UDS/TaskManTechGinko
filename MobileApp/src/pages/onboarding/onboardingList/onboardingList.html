@@ -4,14 +4,14 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>On Boarding List</ion-title>
-        <ion-buttons right *ngIf="hideFilter">
+        <ion-buttons right >
             <button ion-button class="fnt-black" icon-only (click)="userFilter()">
                 <ion-icon name="funnel"></ion-icon>
             </button>
         </ion-buttons>
     </ion-navbar>
     
-    <ion-segment [(ngModel)]="onBoardingAction" (ionChange)="onSegmentChange()">
+    <ion-segment  [(ngModel)]="onBoardingAction" >
         <ion-segment-button value="actionRequired">
             Action Required
         </ion-segment-button>
@@ -37,6 +37,7 @@
                         <img src="assets/imgs/warning.svg" class="mdImage">
                         <span>
                             <p text-center>No Data Found</p>
+                            <p text-center>Please use filter to get the employees</p>
                         </span>
                     </ion-card-content>
                 </ion-card>

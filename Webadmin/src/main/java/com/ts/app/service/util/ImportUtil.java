@@ -1833,11 +1833,7 @@ public class ImportUtil {
 					cellNo = 5;
 					cellNo = 2;
 					cellNo = 0;
-					if((currentRow.getCell(5).getStringCellValue() != null) &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
-					 if(isSkipDuplicate((currentRow.getCell(5).getStringCellValue().trim()),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
-						    EmployeeDTO employeeDTO = new EmployeeDTO();
-						    employeeDTO.setMessage("error.duplicateRecordError");
-			            }else {
+
 			            	Employee employee = new Employee();
 							cellNo = 0;
 							employee.setProjectCode(getCellValue(currentRow.getCell(0)));
@@ -1851,8 +1847,7 @@ public class ImportUtil {
 							employee.setName(getCellValue(currentRow.getCell(4)));
 							employee.setFullName(getCellValue(currentRow.getCell(4)));
 							employee.setLastName(getCellValue(currentRow.getCell(4)));
-							cellNo = 5;
-							employee.setEmpId(getCellValue(currentRow.getCell(5)));
+
 							cellNo = 6;
 							employee.setFatherName(getCellValue(currentRow.getCell(6)));
 							cellNo = 7;
@@ -1928,9 +1923,26 @@ public class ImportUtil {
 							employee.setLeft(false);
 							employee.setRelieved(false);
 							employee.setReliever(false);
+							employee.setImported(true);
+							employee.setOnBoardedFrom("Web");
+							employee.setOnBoardSource("Import");
+
+                    if((currentRow.getCell(5).getStringCellValue() != null) &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
+                        cellNo = 5;
+                        employee.setEmpId(getCellValue(currentRow.getCell(5)));
+
+                        if(isSkipDuplicate((currentRow.getCell(5).getStringCellValue().trim()),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
+                            EmployeeDTO employeeDTO = new EmployeeDTO();
+                            employeeDTO.setMessage("error.duplicateRecordError");
+                        }else {
                             employeeRepo.save(employee);
 			            }
-					}
+					}else{
+                        cellNo = 5;
+                        String empId = currentRow.getCell(32).getStringCellValue().substring(8);
+                        log.debug("Employee id not present, entering substirng - "+empId);
+                        employee.setEmpId(empId);
+                    }
 					
 					
 //					cellNo = 5;
