@@ -210,6 +210,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private boolean syncToSAP;
 
+    private boolean newEmployee;
+
     private String verifiedBy;
 
     private ZonedDateTime verifiedDate;
@@ -992,5 +994,13 @@ public class EmployeeDTO extends BaseDTO {
 
     public void setProjectDescription(String projectDescription) {
         this.projectDescription = projectDescription;
+    }
+
+    public boolean isNewEmployee() {
+        return newEmployee;
+    }
+
+    public void setNewEmployee(boolean newEmployee) {
+        this.newEmployee = newEmployee;
     }
 }

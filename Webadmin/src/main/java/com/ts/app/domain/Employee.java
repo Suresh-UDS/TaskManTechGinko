@@ -232,6 +232,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean syncToSAP;
 
+    private boolean newEmployee;
+
     @OneToOne(fetch = FetchType.LAZY,optional=true)
     @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
     private User verifiedBy;
@@ -866,5 +868,13 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     public void setVerifiedBy(User verifiedBy) {
         this.verifiedBy = verifiedBy;
+    }
+
+    public boolean isNewEmployee() {
+        return newEmployee;
+    }
+
+    public void setNewEmployee(boolean newEmployee) {
+        this.newEmployee = newEmployee;
     }
 }

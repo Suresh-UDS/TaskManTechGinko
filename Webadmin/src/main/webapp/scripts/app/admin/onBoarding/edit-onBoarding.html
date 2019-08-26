@@ -1,8 +1,10 @@
+<form ng-show="!success" name="form" role="form" novalidate
+      ng-submit="conform('update')" confirm-on-exit class="form-horizontal">
+
 <div ng-init="loadEmployee()" >
     <div class="col-md-5">
         <!--        Client Details Card-->
         <div class="card">
-            <form id="TypeValidation" class="form-horizontal" action="" method="">
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
                 <!--                    <h4 class="card-title">Employee Details</h4>-->
                 <!--                </div>-->
@@ -17,50 +19,47 @@
                     </div>
 
                     <div class="row" style="margin-top: 15px">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Client Name</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Project Code <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
-                                <label class="control-label"></label>
-                                <input  class="form-control" type="text" ng-model="employee.projectName"/>
+                                <input disabled  class="form-control" type="text" ng-model="employee.projectCode"/>
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class="col-sm-4 onBoarding-label-on-left">Client Description</label>
+                        <label class="col-sm-4 onBoarding-label-on-left">Project Description <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
-                            <input  class="form-control" type="text" ng-model="employee.projectDescription"/>
+                            <input disabled  class="form-control" type="text" ng-model="employee.projectDescription"/>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">WBS Id</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">WBS Id <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.wbsId" />
+                                <input  disabled class="form-control" type="text" ng-model="employee.wbsId" />
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">WBS Description</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">WBS Description <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.wbsDescription" />
+                                <input disabled class="form-control" type="text" ng-model="employee.wbsDescription" />
                             </div>
                         </div>
 
                     </div>
 
                 </div>
-            </form>
         </div>
 
         <!--        Address Details Card-->
         <div class="card">
-            <form id="TypeValidation" class="form-horizontal" action="" method="">
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
                 <!--                    <h4 class="card-title">Employee Details</h4>-->
                 <!--                </div>-->
@@ -73,11 +72,32 @@
 
                 <div class="card-content">
                     <div class="row" style="margin-top: 15px">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Mobile Number</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Mobile Number <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.mobile" />
+                                <input ng-maxlength="10" ng-minlength="10" name="empMobile" class="form-control" type="number" ng-model="employee.mobile" />
+
+                                <div ng-show="form.$submitted || form.empMobile.$touched || form.empMobile.$dirty">
+                                    <div ng-show="form.empMobile.$dirty || form.empMobile.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.empMobile.$error.required">
+                                            Mobile Number is required.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                           ng-show="form.empMobile.$error.minlength">
+                                            Mobile Number is required to be at least 10 character.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                           ng-show="form.empMobile.$error.maxlength">
+                                            Mobile Number cannot be longer than 10 characters.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.empMobile.$error.pattern">
+                                            Mobile Number can only contain number.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,7 +106,28 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.emergencyContactNumber" />
+                                <input ng-maxlength="10" ng-minlength="10" class="form-control" type="number" name="empEmergency" ng-model="employee.emergencyContactNumber" />
+                            </div>
+
+                            <div ng-show="form.$submitted || form.empEmergency.$touched || form.empEmergency.$dirty">
+                                <div ng-show="form.empEmergency.$dirty || form.empEmergency.$invalid">
+                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                       ng-show="form.empEmergency.$error.required">
+                                        Emergency Number is required.
+                                    </p>
+                                    <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                       ng-show="form.empEmergency.$error.minlength">
+                                        Emergency Number is required to be at least 10 character.
+                                    </p>
+                                    <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                       ng-show="form.empEmergency.$error.maxlength">
+                                        Emergency Number cannot be longer than 10 characters.
+                                    </p>
+                                    <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                       ng-show="form.empEmergency.$error.pattern">
+                                        Emergency Number can only contain number.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
@@ -96,70 +137,151 @@
                     </div>
                     <hr style="margin-top:10px !important; margin-bottom: 10px !important;">
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Address </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Address <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.presentAddress" />
+                                <input class="form-control" type="text" ng-model="employee.presentAddress" name="presentAddress" required />
+
+                                <div ng-show="form.$submitted || form.presentAddress.$touched || form.presentAddress.$dirty">
+                                    <div ng-show="form.presentAddress.$dirty || form.presentAddress.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.presentAddress.$error.required">
+                                            Present Address is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">City </label>
-                        <div class="col-sm-3">
+                        <label class=" col-sm-4 onBoarding-label-on-left">City <span class="red-star">*</span> </label>
+                        <div class="col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.presentCity" />
+                                <input class="form-control" type="text" ng-model="employee.presentCity" name="presentCity" required />
+
+                                <div ng-show="form.$submitted || form.presentCity.$touched || form.presentCity.$dirty">
+                                    <div ng-show="form.presentCity.$dirty || form.presentCity.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.presentCity.$error.required">
+                                            Present City is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
 
-                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">State </label>
-                        <div class="col-sm-3">
+                        <label  class=" col-sm-4 onBoarding-label-on-left">State <span class="red-star">*</span> </label>
+                        <div class="col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.presentState" />
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.presentState"  name="presentState"  aria-invalid="false" ng-options="state.name as state.name for state in totalStates | orderBy:'state'"  required>
+                                    <option value="" class="" selected="selected">-- Select State --</option>
+                                </select>
+
+                                <div ng-show="form.$submitted || form.presentState.$touched || form.presentState.$dirty">
+                                    <div ng-show="form.presentState.$dirty || form.presentState.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.presentState.$error.required">
+                                            Present State is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
                         <label>Permanent Address</label>
+
                     </div>
                     <hr style="margin-top:10px !important; margin-bottom: 10px !important;">
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Address </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Address <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.permanentAddress" />
+                                <input class="form-control" type="text" ng-model="employee.permanentAddress" name="permanentAddress" required />
+
+                                <div ng-show="form.$submitted || form.permanentAddress.$touched || form.permanentAddress.$dirty">
+                                    <div ng-show="form.permanentAddress.$dirty || form.permanentAddress.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.permanentAddress.$error.required">
+                                            Permanent Address is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">City </label>
-                        <div class="col-sm-3">
+                        <label class=" col-sm-4 onBoarding-label-on-left">City <span class="red-star">*</span> </label>
+                        <div class="col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.permanentCity" />
+                                <input class="form-control" type="text" ng-model="employee.permanentCity" name="permanentCity" required />
+
+                                <div ng-show="form.$submitted || form.permanentCity.$touched || form.permanentCity.$dirty">
+                                    <div ng-show="form.permanentCity.$dirty || form.permanentCity.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.permanentCity.$error.required">
+                                            Permanent City is required.
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label  class=" col-sm-4 onBoarding-label-on-left">State <span class="red-star">*</span> </label>
+                        <div class="col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.permanentState"  name="permanentState"  aria-invalid="false" ng-options="state.name as state.name for state in totalStates | orderBy:'state'"  required>
+                                    <option value="" class="" selected="selected">-- Select State --</option>
+                                </select>
+
+                                <div ng-show="form.$submitted || form.permanentState.$touched || form.permanentState.$dirty">
+                                    <div ng-show="form.permanentState.$dirty || form.permanentState.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.permanentState.$error.required">
+                                            Permanent State is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">State </label>
-                        <div class="col-sm-3">
-                            <div class="form-group label-floating">
-                                <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.permanentState" />
+                    </div>
+
+                    <div class="row" ng-if="addressproofImageUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Address proof Image <span class="red-star">*</span> </label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
+                                </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="row">
 
                         <div class="col-md-6">
                             <div class="form-group label-floating" >
+                                <label>Address proof Image <span class="red-star">*</span> </label>
                                 <div class="pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
@@ -167,18 +289,26 @@
                                            name="addressProofImage" tabindex="9"
                                     />
                                 </div>
+
+                                <div ng-show="form.$submitted || form.addressProofImage.$touched || form.addressProofImage.$dirty">
+                                    <div ng-show="form.addressProofImage.$dirty || form.addressProofImage.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.addressProofImage.$error.required">
+                                            Address proof image is required.
+                                        </p>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-            </form>
         </div>
 
         <!--        Previous Employer Details Card-->
         <div class="card">
-            <form id="TypeValidation" class="form-horizontal" action="" method="">
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
                 <!--                    <h4 class="card-title">Employee Details</h4>-->
                 <!--                </div>-->
@@ -195,24 +325,26 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="number" ng-model="employee.employer" />
+                                <input class="form-control" type="text" ng-model="employee.employer" />
                             </div>
                         </div>
 
                     </div>
+
+
+
                     <div class="row">
                         <label class=" col-sm-4 onBoarding-label-on-left">Designation</label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="number" ng-model="employee.previousDesignation" />
+                                <input class="form-control" type="text" ng-model="employee.previousDesignation" />
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-            </form>
         </div>
     </div>
 </div>
@@ -222,7 +354,6 @@
     <div class="col-md-7">
         <!--        Employee Details Card-->
         <div class="card">
-            <form id="" class="form-horizontal" action="" method="">
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
                 <!--                    <h4 class="card-title">Employee Details</h4>-->
                 <!--                </div>-->
@@ -234,34 +365,96 @@
                 </div>
 
                 <div class="card-content">
-                    <div class="row" style="margin-top: 15px">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Name</label>
-                        <div class="col-sm-4">
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">First Name <span class="red-star">*</span>  </label>
+                        <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.name" />
-                            </div>
-                        </div>
-                        <!--                        <div class="" style="float:left;">-->
-                        <!--                            <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple" ><i class="material-icons">edit</i><div class="ripple-container" ></div></a>-->
-                        <!--                        </div>-->
-                        <!--                    </div>-->
-                        <!--                    <div class="row">-->
-                        <label style="width: 8% !important;" class="col-lg-2 onBoarding-label-on-left">Code</label>
-                        <div class="col-lg-2">
-                            <div class="form-group label-floating">
-                                <label class="control-label"></label>
-                                <input disabled class="form-control" type="text" ng-model="employee.empId" />
+                                <input class="form-control" name="empName" ng-pattern='^[a-zA-Z0-9._-]+$' type="text" ng-model="employee.name" required />
+
+                                <div ng-show="form.$submitted || form.empName.$touched || form.empName.$dirty">
+                                    <div ng-show="form.empName.$dirty || form.empName.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.empName.$error.required">
+                                            Employee Name is required.
+                                        </p>
+
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.empName.$error.pattern">
+                                            Employee name can only contain alphabets.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Father Name </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Last Name <span class="red-star">*</span>  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.fatherName" />
+                                <input class="form-control" type="text" name="empLastName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.lastName" required/>
+
+                                <div ng-show="form.$submitted || form.empLastName.$touched || form.empLastName.$dirty">
+                                    <div ng-show="form.empLastName.$dirty || form.empLastName.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.empLastName.$error.required">
+                                            Employee Last Name is required.
+                                        </p>
+
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.empLastName.$error.pattern">
+                                            Employee Last name can only contain alphabets.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Emp Code <span class="red-star">*</span> </label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" ng-disabled="employee.newEmployee" type="text" name="empCode" ng-model="employee.empId" required />
+
+                                <div ng-show="form.$submitted || form.empCode.$touched || form.empCode.$dirty">
+                                    <div ng-show="form.empCode.$dirty || form.empCode.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.empCode.$error.required">
+                                            Employee Code is required.
+                                        </p>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Father Name <span class="red-star">*</span>  </label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" name="fatherName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.fatherName" required />
+
+                                <div ng-show="form.$submitted || form.fatherName.$touched || form.fatherName.$dirty">
+                                    <div ng-show="form.fatherName.$dirty || form.fatherName.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.fatherName.$error.required">
+                                            Father Name is required.
+                                        </p>
+
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.fatherName.$error.pattern">
+                                            Father name can only contain alphabets.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -271,14 +464,28 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.motherName" />
+                                <input class="form-control" type="text" name="motherName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.motherName" />
+
+                                <div ng-show="form.$submitted || form.fatherName.$touched || form.fatherName.$dirty">
+                                    <div ng-show="form.fatherName.$dirty || form.fatherName.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.fatherName.$error.required">
+                                            Mother Name is required.
+                                        </p>
+
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.fatherName.$error.pattern">
+                                            Mother name can only contain alphabets.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Gender</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Gender <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -291,12 +498,12 @@
                             </div>
                         </div>
 
-                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">Marital Status</label>
+                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">Marital Status <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.maritalStatus"  name="param"  aria-invalid="false" required>
-                                    <option value="" class="" selected="selected">Select Status ..</option>
+                                    <option value="" class="" selected="selected">-- Select Status --</option>
                                     <option >Married</option>
                                     <option >Un Married</option>
                                     <option >Divorced</option>
@@ -307,26 +514,26 @@
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">D.O.B</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">D.O.B <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input type="text" class="form-control datetimepicker" ng-model="employee.dob" id="dateOfBirth"  />
+                                <input type="text" class="form-control datepicker" ng-model="employee.dob" id="dateOfBirth"  required />
                             </div>
                         </div>
 
-                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">D.O.J</label>
+                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">D.O.J <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input type="text" class="form-control datetimepicker" ng-model="employee.doj"  id="dateOfJoining"  />
+                                <input type="text" class="form-control datepicker" ng-model="employee.doj"  id="dateOfJoining" required  />
                             </div>
                         </div>
 
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Religion</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Religion <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -345,7 +552,7 @@
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Blood Group</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Blood Group <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -359,7 +566,8 @@
                                     <option >AB-</option>
                                     <option >O+</option>
                                     <option >O-</option>
-                                </select>                            </div>
+                                </select>
+                            </div>
                         </div>
 
                     </div>
@@ -380,25 +588,34 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.personalIdentificationMark1" />
+                                <input class="form-control" type="text" ng-model="employee.personalIdentificationMark2" />
                             </div>
                         </div>
 
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Education Qualification</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Education Qualification <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.educationalQulification" />
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.educationalQulification"  name="param"  aria-invalid="false" >
+                                    <option value="" class="" selected="selected">Select Education Qualification..</option>
+                                    <option value="Below 5th">Below 5th</option>
+                                    <option value="5th to 8th">5th to 8th</option>
+                                    <option value="9th to 10th">9th to 10th</option>
+                                    <option value="11th to 12th">11th to 12th</option>
+                                    <option value="diploma">Diploma</option>
+                                    <option value="Under Graduate">Under Graduate</option>
+                                    <option value="Post Graduate">Post Graduate</option>
+                                </select>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Board / Institute</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Board / Institute  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -409,11 +626,32 @@
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Adhar Card Number</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Adhar Card Number <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.adharCardNumber" />
+                                <input class="form-control" ng-minlength="12" ng-maxlength="16" type="text" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
+
+                                <div ng-show="form.$submitted || form.adharCardNumber.$touched || form.adharCardNumber.$dirty">
+                                    <div ng-show="form.adharCardNumber.$dirty || form.adharCardNumber.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.adharCardNumber.$error.required">
+                                            Aadhar Card number is required.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                           ng-show="form.adharCardNumber.$error.minlength">
+                                            Aadhar Card number is required to be at least 12 character.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                           ng-show="form.adharCardNumber.$error.maxlength">
+                                            Aadhar Card number cannot be longer than 16 characters.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.adharCardNumber.$error.pattern">
+                                            Aadhar Card number can only contain number.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -424,12 +662,10 @@
                 <!--                <div class="card-footer text-center">-->
                 <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
                 <!--                </div>-->
-            </form>
         </div>
 
         <!--        Nominee Details Card -->
         <div class="card">
-            <form id="nomineeDetails" class="form-horizontal" action="" method="">
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
                 <!--                    <h4 class="card-title">Employee Details</h4>-->
                 <!--                </div>-->
@@ -442,58 +678,72 @@
 
                 <div class="card-content">
                     <div class="row" style="margin-top: 15px">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Nominee Name</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Nominee Name <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.nomineeName" />
+                                <input class="form-control" type="text" ng-pattern='^[a-zA-Z0-9._-]+$' name="nomineeName" ng-model="employee.nomineeName" required />
+
+                                <div ng-show="form.$submitted || form.nomineeName.$touched || form.nomineeName.$dirty">
+                                    <div ng-show="form.nomineeName.$dirty || form.nomineeName.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.nomineeName.$error.required">
+                                            Nominee Name is required.
+                                        </p>
+
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.nomineeName.$error.pattern">
+                                            Nominee name can only contain alphabets.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Relationship</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Relationship <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.nomineeRelationship" />
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.nomineeRelationship" name="param"  aria-invalid="false" required>
+                                    <option value="" class="" >-- Select Relationship --</option>
+                                    <option value="father">Father</option>
+                                    <option value="mother">Mother</option>
+                                    <option value="husband">Husband</option>
+                                    <option value="wife">Wife</option>
+                                    <option value="son">Son</option>
+                                    <option value="daughter">Daughter</option>
+                                    <option value="brother">Brother</option>
+                                    <option value="sister">Sister</option>
+                                </select>
                             </div>
                         </div>
-                        <
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Contact No.  </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Contact No.  <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.nomineeContactNumber" />
+                                <input class="form-control" type="number" ng-model="employee.nomineeContactNumber" />
                             </div>
                         </div>
 
-                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">Percentage </label>
+                        <label style="width: 8% !important;" class=" col-sm-4 onBoarding-label-on-left">Percentage <span class="red-star">*</span>  </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.percentage" />
+                                <input class="form-control" type="number" ng-model="employee.percentage" />
                             </div>
                         </div>
 
                     </div>
-
-
                 </div>
-                <!--                <div class="card-footer text-center">-->
-                <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
-                <!--                </div>-->
-            </form>
+
         </div>
 
         <!--        Bank Details Card-->
         <div class="card">
-            <form id="bankDetails" class="form-horizontal" action="" method="">
-                <!--                <div class="card-header card-header-text" data-background-color="rose">-->
-                <!--                    <h4 class="card-title">Employee Details</h4>-->
-                <!--                </div>-->
 
                 <div class="panel panel-default" >
                     <div class="panel-heading">
@@ -503,24 +753,35 @@
 
                 <div class="card-content">
                     <div class="row" style="margin-top: 15px">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Account Number</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Account Number <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.accountNumber" />
+                                <input class="form-control" type="text" ng-disabled="employee.newEmployee" ng-model="employee.accountNumber" required />
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">IFSC Code</label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">IFSC Code <span class="red-star">*</span> </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.ifscCode" />
+                                <input class="form-control" type="text" ng-disabled="employee.newEmployee" ng-model="employee.ifscCode"  required/>
                             </div>
                         </div>
 
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Bank Passbook Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{bankPassBookImageUrl}} alt="...">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -532,6 +793,7 @@
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="bankPassBookImage"
                                            name="bankPassBookImage" tabindex="9"
+                                           ng-disabled="employee.newEmployee"
                                     />
                                 </div>
                             </div>
@@ -542,7 +804,6 @@
                 <!--                <div class="card-footer text-center">-->
                 <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
                 <!--                </div>-->
-            </form>
         </div>
 
     </div>
@@ -560,9 +821,20 @@
             </div>
 
             <div class="card-content">
+
                 <div class="row">
+                    <div class="row" ng-if="adharCardFrontUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Adhar card Front Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-3 col-sm-3">
-                        <legend>Adhar Card Front Image</legend>
+                        <legend>Adhar Card Front Image <span class="red-star">*</span> </legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -571,11 +843,32 @@
                                        name="adharCardImageFront" tabindex="9"
                                 />
                             </div>
+
+                            <div ng-show="form.$submitted || form.adharCardImageFront.$touched || form.adharCardImageFront.$dirty">
+                                <div ng-show="form.adharCardImageFront.$dirty || form.adharCardImageFront.$invalid">
+                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                       ng-show="form.adharCardImageFront.$error.required">
+                                        Adharcard image is required.
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" ng-if="adharCardBackUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Adhar Card Back Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <legend>Adhar Card Back Image</legend>
+                        <legend>Adhar Card Back Image <span class="red-star">*</span> </legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -584,11 +877,32 @@
                                        name="adharCardImageBack" tabindex="9"
                                 />
                             </div>
+
+                            <div ng-show="form.$submitted || form.adharCardImageBack.$touched || form.adharCardImageBack.$dirty">
+                                <div ng-show="form.adharCardImageBack.$dirty || form.adharCardImageBack.$invalid">
+                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                       ng-show="form.adharCardImageBack.$error.required">
+                                        Adharcard image is required.
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" ng-if="fingerprintLeftUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Fingerprint Left Image <span class="red-star">*</span> </label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <legend>Fingerprint Left</legend>
+                        <legend>Fingerprint Left <span class="red-star">*</span></legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -597,11 +911,23 @@
                                        name="fingerprintLeftImage" tabindex="9"
                                 />
                             </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row" ng-if="fingerprintrightUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Fingerprint Right Image </label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <legend>Fingerprint Right</legend>
+                        <legend>Fingerprint Right <span class="red-star">*</span></legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -615,8 +941,20 @@
                 </div>
                 <hr>
                 <div class="row">
+
+                    <div class="row" ng-if="drivingLicenseUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Driving License Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-4 col-sm-4">
-                        <legend>Driving License</legend>
+                        <legend>Driving License <span class="red-star">*</span></legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -628,8 +966,19 @@
                         </div>
                     </div>
 
+                    <div class="row" ng-if="voterIdUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Voter Id Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-4 col-sm-4">
-                        <legend>Voter Id</legend>
+                        <legend>Voter Id <span class="red-star">*</span></legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -641,8 +990,19 @@
                         </div>
                     </div>
 
+                    <div class="row" ng-if="pancardUrl">
+                        <div class="col-md-3 col-sm-3">
+                            <label>Pancard Image</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-4 col-sm-4">
-                        <legend>Pancard</legend>
+                        <legend>Pancard <span class="red-star">*</span></legend>
                         <div class="form-group label-floating" >
                             <div class="pdng-top13" >
                                 <input type="file"
@@ -663,13 +1023,16 @@
 </div>
 <div class="txt-align-rgt">
 
-    <button class="btn btn-default close-button-right b10" type="button" ng-click="goBack()" id="close-button-right">
+    <button class="btn btn-default" type="button"
+             ng-click="conform('back')" id="cancel-button" tabindex="34">
         Back
     </button>
 
-    <button class="btn btn-success ld ld-over-inverse" type="button" ng-click="conform('update')" id="close-button-right">
+    <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
+    type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="33" >
         Save
     </button>
 
 </div>
 
+</form>
