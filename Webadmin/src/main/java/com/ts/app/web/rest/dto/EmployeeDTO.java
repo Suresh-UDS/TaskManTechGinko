@@ -117,7 +117,7 @@ public class EmployeeDTO extends BaseDTO {
     @Size(min = 1, max = 10)
     private String gender;
     
-    @Size(min =10, max = 50)
+    @Size(min =1, max = 50)
     private String maritalStatus;
     
     private Date dob;
