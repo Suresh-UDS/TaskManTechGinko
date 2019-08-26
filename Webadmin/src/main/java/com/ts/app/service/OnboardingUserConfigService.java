@@ -136,15 +136,12 @@ public class OnboardingUserConfigService extends AbstractService {
     public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser(long userId) throws JSONException {
         List<OnboardingUserConfig> userConfigs = onboardingUserConfigRepository.findElementParentsByUserId(userId); // Get all element parents for the user id
         List<OnboardingUserConfigDTO> userConfigDTOS = mapperUtil.toModelList(userConfigs, OnboardingUserConfigDTO.class);
-        List<SapBusinessCategories> sapBusinessCategories1 = sapBusinessCategoriesRepository.findLatest();
-        SapBusinessCategories sapBusinessCategories = sapBusinessCategories1.get(0);
-        JSONArray ja = new JSONArray(sapBusinessCategories.getElementsJson());
 
-//        for(OnboardingUserConfigDTO userConfig: userConfigDTOS){
-//            List<OnboardingUserConfig> userConfigs1 = onboardingUserConfigRepository.findElementChildsByUserId(userId,userConfig.getElementParent());
-//            userConfig.setChildElements(mapperUtil.toModelList(userConfigs1, OnboardingUserConfigDTO.class));
-//
-//        }
+        for(OnboardingUserConfigDTO userConfig: userConfigDTOS){
+            List<OnboardingUserConfig> userConfigs1 = onboardingUserConfigRepository.findElementChildsByUserId(userId,userConfig.getElementParent());
+            userConfig.setChildElements(mapperUtil.toModelList(userConfigs1, OnboardingUserConfigDTO.class));
+
+        }
         return userConfigDTOS;
     }
 
