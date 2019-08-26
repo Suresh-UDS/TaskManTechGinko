@@ -30,6 +30,7 @@ angular.module('timeSheetApp')
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
     $scope.addressProofImage;
+    $scope.enableApproval= false;
     //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
 	$scope.pages = { currPage : 1};
@@ -757,42 +758,7 @@ angular.module('timeSheetApp')
                 console.log(data);
 
 
-                EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
-                    console.log("Employee documents");
-                    console.log(documents);
-                    if(documents && documents.length>0){
-                        for(var i=0; i<documents.length;i++){
-                            console.log(documents[i].docType);
-                            if(documents[i].docType === "address_proof_image"){
-                                $scope.addressproofImageUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "bank_passbook_image"){
-                                $scope.bankPassBookImageUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "adhar_card_front"){
-                                $scope.adharCardFrontUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "adhar_card_back"){
-                                $scope.adharCardBackUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "fingerprint_left"){
-                                $scope.fingerprintLeftUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "fingerprint_right"){
-                                $scope.fingerprintrightUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "driving_license"){
-                                $scope.drivingLicenseUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "voter_id"){
-                                $scope.voterIdUrl = documents[i].docUrl;
-                            }
-                            if(documents[i].docType === "pancard"){
-                                $scope.pancardUrl = documents[i].docUrl;
-                            }
-                        }
-                    }
-                });
+
 
 
                 $scope.employee = data;
@@ -800,6 +766,84 @@ angular.module('timeSheetApp')
                     $scope.employee.mobile = parseInt($scope.employee.mobile);
                     $scope.employee.emergencyContactNumber= parseInt($scope.employee.emergencyContactNumber);
                     $scope.employee.nomineeContactNumber = parseInt($scope.employee.nomineeContactNumber);
+
+                    EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
+                        console.log("Employee documents");
+                        console.log(documents);
+                        if(documents && documents.length>0){
+                            for(var i=0; i<documents.length;i++){
+                                console.log(documents[i].docType);
+                                if(documents[i].docType === "address_proof_image"){
+                                    $scope.addressproofImageUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "bank_passbook_image"){
+                                    $scope.bankPassBookImageUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "adhar_card_front"){
+                                    $scope.adharCardFrontUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "adhar_card_back"){
+                                    $scope.adharCardBackUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "fingerprint_left"){
+                                    $scope.fingerprintLeftUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "fingerprint_right"){
+                                    $scope.fingerprintrightUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "driving_license"){
+                                    $scope.drivingLicenseUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "voter_id"){
+                                    $scope.voterIdUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "pancard"){
+                                    $scope.pancardUrl = documents[i].docUrl;
+                                }
+                            }
+
+                            if(
+                                $scope.employee.accountNumber !=null &&
+                                $scope.employee.adharCardNumber !=null &&
+                                $scope.employee.bloodGroup !=null &&
+                                $scope.employee.boardInstitute !=null &&
+                                $scope.employee.dob !=null &&
+                                $scope.employee.doj !=null &&
+                                $scope.employee.educationalQulification !=null &&
+                                $scope.employee.empId !=null &&
+                                $scope.employee.fatherName !=null &&
+                                $scope.employee.gender !=null &&
+                                $scope.employee.ifscCode !=null &&
+                                $scope.employee.lastName !=null &&
+                                $scope.employee.maritalStatus !=null &&
+                                $scope.employee.mobile !=null &&
+                                $scope.employee.name !=null &&
+                                $scope.employee.nomineeContactNumber !=null &&
+                                $scope.employee.nomineeName !=null &&
+                                $scope.employee.nomineeRelationship !=null &&
+                                $scope.employee.percentage !=null &&
+                                $scope.employee.permanentAddress !=null &&
+                                $scope.employee.permanentCity !=null &&
+                                $scope.employee.permanentState !=null &&
+                                $scope.employee.presentAddress !=null &&
+                                $scope.employee.presentCity !=null &&
+                                $scope.employee.presentState !=null &&
+                                $scope.employee.projectCode !=null &&
+                                $scope.employee.projectDescription !=null &&
+                                $scope.employee.religion !=null &&
+                                $scope.employee.wbsDescription !=null &&
+                                $scope.employee.wbsId !=null &&
+                                documents.length>8
+
+                            ){
+                                $scope.enableApproval = true;
+                            }
+                        }
+
+
+                    });
+
+
 
                 }else{
                     $location.path('/onBoarding-list');
@@ -844,14 +888,43 @@ angular.module('timeSheetApp')
     };
 
     $scope.clearFilter = function() {
-        $scope.searchEmployeeId =null;
+        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
+        $scope.client = {};
+        $scope.clients = [];
+        $scope.allSitesVal = {id:0 , name: '-- ALL SITES --'};
+        $scope.sitesListOne = {};
+        $scope.sitesLists = [];
+        $scope.sitesListOne.selected =  null;
+        $scope.allRegions = {id:0 , name: '-- SELECT REGIONS --'};
+        $scope.regionsListOne = {};
+        $scope.regionsLists = [];
+        $scope.regionsListOne.selected =  null;
+        $scope.allBranchs = {id:0 , name: '-- SELECT BRANCHES --'};
+        $scope.branchsListOne = {};
+        $scope.branchsLists = [];
+        $scope.branchsListOne.selected =  null;
+        $scope.userDetails = {};
+        $scope.showUserDetails = false;
+
+        $scope.allBranches = {id:0, element:' -- All Branches --'};
+        $scope.branch={};
+        $scope.branches = [];
+
+        $scope.allProjects = {id:0, element:' -- All Projects --'};
+        $scope.project={};
+        $scope.projects=[];
+
+        $scope.allWBS = {id:0, element:' -- All WBS --'};
+        $scope.wbs = {};
+        $scope.wbsList = [];
+
         $scope.selectedBranchCode = null;
         $scope.selectedProjectCode = null;
         $scope.selectedWBSCode = null;
         $scope.selectedBranchDetails={};
         $scope.selectedWBSDetails={};
         $scope.selectedProjectDetails={};
-        $scope.employeeEmpId = null;
+        delete $scope.searchCriteria.projectCode;
 
 
         $scope.pages = {
@@ -866,19 +939,11 @@ angular.module('timeSheetApp')
     $scope.approveOnBoardingEmployee = function(){
         $scope.employee.verified =true;
         OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
-            if(data.data.errorMesssage) {
-                $scope.saveLoad = false;
-                $scope.success = null;
-                $scope.disable = false;
-                $scope.btnDisable = false;
-                $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.errorMessage);
-                $scope.error = 'ERROR';
-            }else {
+            console.log(data);
                 console.log("on boarding employee successfully saved");
                 console.log(data);
                 $location.path('/onBoarding-list');
                 $scope.showNotifications('top', 'center', 'success', "Employee Approve Successfully");
-            }
         }).catch(function(){
             $scope.saveLoad = false;
             $scope.success = null;
