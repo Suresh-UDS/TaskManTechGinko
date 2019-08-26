@@ -30,7 +30,8 @@ angular.module('timeSheetApp')
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
     $scope.addressProofImage;
-    //$timeout(function (){angular.element('[ng-model="name"]').focus();});
+	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
+	$scope.sapBusinessCategoriesList = {};
 
 	$scope.pages = { currPage : 1};
 
@@ -103,6 +104,20 @@ angular.module('timeSheetApp')
 		demo.initFormExtendedDatetimepickers();
 
 	};
+
+	$scope.loadgetSapBusinessCategories = function(){
+
+		OnBoardingComponent.getSapBusinessCategories().then(function(data){
+
+			$scope.sapBusinessCategoriesList = JSON.parse(data.elementsJson);
+
+			//  $scope.sapBranches = _.map($scope.sapBusinessCategoriesList,_.partialRight(_.pick,['elemetType','elementName']));
+  
+			//  console.log($scope.sapBranches);
+
+		})
+		
+	}
 
 	$('#dateFilterFrom').on('dp.change', function(e){
 		$scope.selectedDateFromSer =new Date(e.date._d);
@@ -454,8 +469,15 @@ angular.module('timeSheetApp')
         UserComponent.getUserByCode(code).then(function (data){
             console.log(data);
             $scope.showUserDetails = true;
-            $scope.userDetails = data;
-            $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
+			$scope.userDetails = data;
+			
+			OnBoardingComponent.getElementsByUser(data.userId).then(function (data) {
+				console.log(data);
+				 
+
+			});
+
+           // $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
             // $scope.getUserConfigDetails(data.id);
         })
     };

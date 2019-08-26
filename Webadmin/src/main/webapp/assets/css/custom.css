@@ -2515,11 +2515,12 @@ span.AppliedFilterTxtCon span.label-info{
     text-align: right;
 }
 
-#onBoarding .switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked){
+ #onBoarding .switch label input[type=checkbox]:checked, [type=checkbox]:not(:checked){
     opacity: 1 !important;
     position: initial !important;
+    pointer-events: fill !important;
 }
-
+/*
 
 
 #onBoarding .noselect {
@@ -2541,17 +2542,13 @@ span.AppliedFilterTxtCon span.label-info{
 }
 
 /*matched result from search*/
-#onBoarding .matched {
+/* #onBoarding .matched {
     font-weight:700 !important;
-}
+} */
 
 /*wraps entire selector*/
-#onBoarding .hierarchy-wrap {
-    /*background: #FFFFFF;*/
-    /*border:1px solid #ccc;*/
-    /*border-radius:5px;*/
-}
-/* past users + search */
+ 
+/* past users + search 
 #onBoarding .hierarchy-header {
     padding:10px;
 }
@@ -2602,4 +2599,4 @@ span.AppliedFilterTxtCon span.label-info{
     color:black;
 }
 
-
+ */
