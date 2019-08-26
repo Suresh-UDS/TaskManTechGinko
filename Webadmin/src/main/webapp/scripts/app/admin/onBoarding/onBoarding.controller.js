@@ -30,6 +30,8 @@ angular.module('timeSheetApp')
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
     $scope.addressProofImage;
+	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
+	$scope.sapBusinessCategoriesList = {};
     $scope.enableApproval= false;
     //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
@@ -143,6 +145,21 @@ angular.module('timeSheetApp')
 		demo.initFormExtendedDatetimepickers();
 
 	};
+
+	$scope.loadgetSapBusinessCategories = function(){
+
+		OnBoardingComponent.getSapBusinessCategories().then(function(data){
+
+			$scope.sapBusinessCategoriesList.rootElements = JSON.parse(data.elementsJson);
+			$scope.sapBusinessCategoriesList.userConfElements = $scope.mappedData;
+
+			//  $scope.sapBranches = _.map($scope.sapBusinessCategoriesList,_.partialRight(_.pick,['elemetType','elementName']));
+  
+			//  console.log($scope.sapBranches);
+
+		})
+		
+	}
 
 	$('#dateFilterFrom').on('dp.change', function(e){
 		$scope.selectedDateFromSer =new Date(e.date._d);
@@ -471,12 +488,49 @@ angular.module('timeSheetApp')
 		$scope.loadAttendances();
 	};
 
+	$scope.postMapping = [];
+
+	function designInput(elements,elementParentCode){
+
+		for(var i in elements){
+ 
+			if( $(".ip_"+elements[i].elementCode+"_"+elements[i].elemetType).is(":checked") ){
+ 
+				$scope.postMapping.push( { 
+											elementParent: elementParentCode,
+											element : elements[i].elementName,
+											elementType : elements[i].elemetType,
+											elementCode : elements[i].elementCode,
+											onBoardingUserId : $scope.userDetails.id,
+											userId : null,
+											childElements : []
+										} ); 
+
+				designInput(elements[i].childElements,elements[i].elementCode);
+
+			}
+
+		}
+
+	}
+
+	function initDesignInput(){
+
+		designInput($scope.sapBusinessCategoriesList.rootElements,null);
+
+		console.log($scope.postMapping);
+	}
+
     $scope.saveDetails = function(){
-        var a = HierarchyNodeService.getSelectedItems();
-        console.log(a);
-        console.log(a.length);
-        console.log($scope.userDetails.id);
-        OnBoardingComponent.create(a,$scope.userDetails.id,function(response,err){
+        // var a = HierarchyNodeService.getSelectedItems();
+        // console.log(a);
+        // console.log(a.length);
+		// console.log($scope.userDetails.id);
+		
+		initDesignInput();
+
+
+        OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,function(response,err){
             if(response){
                 console.log("Successfully saved on boarding user config details");
                 console.log(response);
@@ -488,14 +542,22 @@ angular.module('timeSheetApp')
         })
     };
 
-
-
+	$scope.mappedData = [];
+ 
     $scope.getUserDetails = function(code){
         UserComponent.getUserByCode(code).then(function (data){
-            console.log(data);
+            
             $scope.showUserDetails = true;
-            $scope.userDetails = data;
-            $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
+			$scope.userDetails = data;
+			
+			OnBoardingComponent.getElementsByUser(data.userId).then(function (data) {
+
+				$scope.mappedData = data; 
+				$scope.loadgetSapBusinessCategories();
+
+			});
+
+           // $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
             // $scope.getUserConfigDetails(data.id);
         })
     };

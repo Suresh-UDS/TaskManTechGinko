@@ -1,5 +1,5 @@
-<div  ng-init="loadPageTop();loadUsers();loadItems();" >
-    <div class="col-md-6">
+<div  ng-init="loadPageTop();" >
+    <div class="">
         <div >
             <div class="card">
                 <form id="TypeValidation" role="form" class="form-horizontal" ng-submit="getUserDetails(empCode)">
@@ -115,9 +115,8 @@
         </div>
 
     </div>
-
-   <div class="col-md-6" >
-        <div class="card">
+    
+    <div class="card">
             <div class="panel panel-default" >
                 <div class="panel-heading">
                     Configure
@@ -130,9 +129,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div id="onBoarding" class="col-lg-6">
-
-                                    <hierarchy-search dataset="list"></hierarchy-search>
+                                <div id="onBoarding" > 
+                                     <ul class="nested-checkbox-list">
+                                        <nested-check-box ng-repeat="item in sapBusinessCategoriesList.rootElements" item="[item,sapBusinessCategoriesList.userConfElements,1]" ></nested-check-box> 
+                                     </ul>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +145,6 @@
                 <button type="submit" class="btn btn-rose btn-fill" ng-click="saveDetails()">Save</button>
                 <div class="ripple-container"></div>
             </div>
-        </div>
     </div>
 
 
