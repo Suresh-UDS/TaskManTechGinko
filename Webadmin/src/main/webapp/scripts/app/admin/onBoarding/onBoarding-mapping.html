@@ -1,4 +1,4 @@
-<div  ng-init="loadPageTop();loadUsers();loadgetSapBusinessCategories();" >
+<div  ng-init="loadPageTop();" >
     <div class="">
         <div >
             <div class="card">
@@ -131,7 +131,7 @@
                             <div class="row">
                                 <div id="onBoarding" > 
                                      <ul class="nested-checkbox-list">
-                                        <nested-check-box ng-repeat="item in sapBusinessCategoriesList" item="item"></nested-check-box> 
+                                        <nested-check-box ng-repeat="item in sapBusinessCategoriesList.rootElements" item="[item,sapBusinessCategoriesList.userConfElements,1]" ></nested-check-box> 
                                      </ul>
                                 </div>
                             </div>

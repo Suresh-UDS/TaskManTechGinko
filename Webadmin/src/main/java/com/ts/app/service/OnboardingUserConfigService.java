@@ -137,11 +137,11 @@ public class OnboardingUserConfigService extends AbstractService {
         List<OnboardingUserConfig> userConfigs = onboardingUserConfigRepository.findElementParentsByUserId(userId); // Get all element parents for the user id
         List<OnboardingUserConfigDTO> userConfigDTOS = mapperUtil.toModelList(userConfigs, OnboardingUserConfigDTO.class);
 
-        for(OnboardingUserConfigDTO userConfig: userConfigDTOS){
-            List<OnboardingUserConfig> userConfigs1 = onboardingUserConfigRepository.findElementChildsByUserId(userId,userConfig.getElementParent());
-            userConfig.setChildElements(mapperUtil.toModelList(userConfigs1, OnboardingUserConfigDTO.class));
-
-        }
+//        for(OnboardingUserConfigDTO userConfig: userConfigDTOS){
+//            List<OnboardingUserConfig> userConfigs1 = onboardingUserConfigRepository.findElementChildsByUserId(userId,userConfig.getElementParent());
+//            userConfig.setChildElements(mapperUtil.toModelList(userConfigs1, OnboardingUserConfigDTO.class));
+//
+//        }
         return userConfigDTOS;
     }
 

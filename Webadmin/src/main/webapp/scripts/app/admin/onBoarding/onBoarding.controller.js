@@ -109,7 +109,8 @@ angular.module('timeSheetApp')
 
 		OnBoardingComponent.getSapBusinessCategories().then(function(data){
 
-			$scope.sapBusinessCategoriesList = JSON.parse(data.elementsJson);
+			$scope.sapBusinessCategoriesList.rootElements = JSON.parse(data.elementsJson);
+			$scope.sapBusinessCategoriesList.userConfElements = $scope.mappedData;
 
 			//  $scope.sapBranches = _.map($scope.sapBusinessCategoriesList,_.partialRight(_.pick,['elemetType','elementName']));
   
@@ -446,12 +447,49 @@ angular.module('timeSheetApp')
 		$scope.loadAttendances();
 	};
 
+	$scope.postMapping = [];
+
+	function designInput(elements,elementParentCode){
+
+		for(var i in elements){
+ 
+			if( $(".ip_"+elements[i].elementCode+"_"+elements[i].elemetType).is(":checked") ){
+ 
+				$scope.postMapping.push( { 
+											elementParent: elementParentCode,
+											element : elements[i].elementName,
+											elementType : elements[i].elemetType,
+											elementCode : elements[i].elementCode,
+											onBoardingUserId : $scope.userDetails.id,
+											userId : null,
+											childElements : []
+										} ); 
+
+				designInput(elements[i].childElements,elements[i].elementCode);
+
+			}
+
+		}
+
+	}
+
+	function initDesignInput(){
+
+		designInput($scope.sapBusinessCategoriesList.rootElements,null);
+
+		console.log($scope.postMapping);
+	}
+
     $scope.saveDetails = function(){
-        var a = HierarchyNodeService.getSelectedItems();
-        console.log(a);
-        console.log(a.length);
-        console.log($scope.userDetails.id);
-        OnBoardingComponent.create(a,$scope.userDetails.id,function(response,err){
+        // var a = HierarchyNodeService.getSelectedItems();
+        // console.log(a);
+        // console.log(a.length);
+		// console.log($scope.userDetails.id);
+		
+		initDesignInput();
+
+
+        OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,function(response,err){
             if(response){
                 console.log("Successfully saved on boarding user config details");
                 console.log(response);
@@ -463,17 +501,18 @@ angular.module('timeSheetApp')
         })
     };
 
-
-
+	$scope.mappedData = [];
+ 
     $scope.getUserDetails = function(code){
         UserComponent.getUserByCode(code).then(function (data){
-            console.log(data);
+            
             $scope.showUserDetails = true;
 			$scope.userDetails = data;
 			
 			OnBoardingComponent.getElementsByUser(data.userId).then(function (data) {
-				console.log(data);
-				 
+
+				$scope.mappedData = data; 
+				$scope.loadgetSapBusinessCategories();
 
 			});
 
