@@ -1927,7 +1927,7 @@ public class ImportUtil {
 							employee.setOnBoardedFrom("Web");
 							employee.setOnBoardSource("Import");
 
-                    if((currentRow.getCell(5).getStringCellValue() != null) &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
+                    if((currentRow.getCell(5).getStringCellValue() != null) && (StringUtils.isNotEmpty((currentRow.getCell(5).getStringCellValue())))  &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
                         cellNo = 5;
                         employee.setEmpId(getCellValue(currentRow.getCell(5)));
 
@@ -1939,7 +1939,7 @@ public class ImportUtil {
 			            }
 					}else{
                         cellNo = 5;
-                        String empId = currentRow.getCell(32).getStringCellValue().substring(8);
+                        String empId = currentRow.getCell(32).getStringCellValue().substring(7);
                         log.debug("Employee id not present, entering substirng - "+empId);
 
                         if(isSkipDuplicate(empId.trim(),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
