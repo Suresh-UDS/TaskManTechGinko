@@ -45,4 +45,14 @@ export class componentService
         );
 
     }
+
+    async presentToast(msg) {
+        const toast = await this.toastCtrl.create({
+            message: msg,
+            duration: 2000
+        });
+        toast.present();
+    }
+
+
 }

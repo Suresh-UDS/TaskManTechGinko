@@ -161,6 +161,7 @@ import { newEmpEmployeementDetails } from '../pages/onboarding/onboardingNewEmpl
 import { newEmpContactDetails } from '../pages/onboarding/onboardingNewEmployee/contactDetails/newEmpContactDetails';
 import { onboardingLocation } from '../pages/onboarding/onboardingLocation/onboardingLocation';
 import { onboardingUserView } from '../pages/onboarding/onboardingList/onboardingUserView/onboardingUserView';
+import {OnBoardingEmployeeFilter} from '../pages/onboarding/onboardingList/on-boarding-employee-filter/on-boarding-employee-filter'
 
 import { IonicStepperModule } from 'ionic-stepper';
 
@@ -175,6 +176,7 @@ import {declaration} from '../pages/onboarding/onboardingNewEmployee/declaration
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 import {GetProjectService} from '../pages/service/getProjectService';
 import { GetWBSListService} from '../pages/service/getWBSListService';
+import {NewEmpSiteDetails} from "../pages/onboarding/onboardingNewEmployee/new-emp-site-details/new-emp-site-details";
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -294,7 +296,9 @@ import { GetWBSListService} from '../pages/service/getWBSListService';
     onboardingUserView,
     onboardingListFilter,
     onboardingUserFilterPipe,
-   declaration
+   declaration,
+    OnBoardingEmployeeFilter,
+    NewEmpSiteDetails
  
   ],
   imports: [
@@ -431,7 +435,9 @@ import { GetWBSListService} from '../pages/service/getWBSListService';
     onboardingLocation,
     onboardingUserView,
     onboardingListFilter,
-     declaration
+     declaration,
+    OnBoardingEmployeeFilter,
+    NewEmpSiteDetails
 
 
   ],
@@ -490,4 +496,3 @@ import { GetWBSListService} from '../pages/service/getWBSListService';
   ]
 })
 export class AppModule { }
-  

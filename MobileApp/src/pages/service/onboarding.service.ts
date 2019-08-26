@@ -24,7 +24,7 @@ export class OnboardingService implements AutoCompleteService {
 
     BASE_URL = 'http://13.127.251.152:8088';
 
-    constructor(private transfer: FileTransfer,  private http: Http, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN)
+    constructor(private transfer: FileTransfer,  private http: HttpClient, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN)
     private config: ApplicationConfig) { 
     } 
 
@@ -81,17 +81,28 @@ export class OnboardingService implements AutoCompleteService {
     saveOnboardingUser(object) {
         //object = JSON.stringify(object);
         object['isSync'] = true;
+        var adharNumber = object['adharCardNumber'].toString();
+        if(object['empId'] == null){
+            object['empId'] = adharNumber.substr(7);
+        }
         //cg change to true
-        return this.http.post(this.config.Url + 'api/onboard/employees', object).map(
-            response => {
-                return response.json();
-            }).catch(error => {
-                console.log(error);
-                return Observable.throw(error.json());
-            })
-    }
+        // return this.http.post(this.config.Url + 'api/onboard/employees', object).map(
+        //     response => {
+        //         return response.json();
+        //     }).catch(error => {
+        //         console.log(error);
+        //         return Observable.throw(error.json());
+        //     })
 
-   
+        return this.http.post(this.config.Url+'api/saveOnboradingEmployee',object).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }).catch(err=>{
+                console.log(err);
+                return Observable.throw(err.json());
+        })
+    }
 
     getAllOnboardingUser(): Observable<any> {
         return this.http.get(this.config.Url+'assets/data/project.json').map(
@@ -180,18 +191,14 @@ export class OnboardingService implements AutoCompleteService {
 
  getDeclarationList(): Observable<any>
 {
-    //let url = 'http://localhost:8088/api/getWBSListByProjectId';
-    let url = 'http://localhost:8088/api/getDeclarationForm';
-   // return this.http.get('http://localhost:8088/api/getDeclarationForm')
-   return this.http.get(url).map(response=> {
+   return this.http.get(this.config.Url+'api/getDeclarationForm').map(response=> {
     console.log(response.json());
      return response.json();
  }).catch(error=>{
     alert("Error in getting WBSList");
     console.log(error);
-   return Observable.throw(error.json());
-
-      });
+    return Observable.throw(error.json());
+  });
 }
 
 
@@ -277,5 +284,44 @@ export class OnboardingService implements AutoCompleteService {
                 });
         });
         return promise;
+    }
+
+    getBranches():Observable<any>{
+        return this.http.get(this.config.Url+'api/getBranchListForUser').map(
+            response=>{
+                console.log("Getting branches");
+                console.log(response);
+                return response.json();
+            }).catch(error=>{
+                console.log("error in getting branches");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
+    }
+
+    getProjectsByBranch(branchCode): Observable<any>{
+        return this.http.get(this.config.Url+'api/getProjectByBranchCode/'+branchCode).map(
+            response=>{
+                console.log("Getting projects by branch");
+                console.log(response);
+                return response.json();
+            }).catch(err=>{
+                console.log("Error in getting projects by branch");
+                console.log(err);
+                return Observable.throw(err.json());
+        })
+    }
+
+    getWBSByProject(projectCode):Observable<any>{
+        return this.http.get(this.config.Url+'api/getWBSByProjectCode/'+projectCode).map(
+            response=>{
+                console.log("Getting wbs by project");
+                console.log(response);
+                return response.json();
+            }).catch(err=>{
+                console.log("error in getting wbs by project");
+                console.log(err);
+                return Observable.throw(err.json());
+        })
     }
 }
