@@ -77,6 +77,9 @@ public class    EmployeeService extends AbstractService {
     
     @Inject
     private AttendanceRepository attendanceRepository;
+    
+    @Inject
+    private NomineeRelationshipRepository nomineeRelationshipRepository ;
 
     @Inject
     private EmployeeRepository employeeRepository;
@@ -309,7 +312,7 @@ public class    EmployeeService extends AbstractService {
 		
     }
 
-    public EmployeeDTO verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
+    public ZempReturn verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findOne(employeeDTO.getId());
         Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
         User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
@@ -427,9 +430,11 @@ public class    EmployeeService extends AbstractService {
 		
 		tableOfZempIdsStr.getItem().add(zempIdsStr);
 		
+		List<NomineeRelationship> relationships = nomineeRelationshipRepository.findByTitle(employee.getNomineeRelationship());
+		
 		zempPfnominiDet.setEmpId(employee.getEmpId());
 		zempPfnominiDet.setNominiName(employee.getNomineeName());
-		zempPfnominiDet.setNominiRel(employee.getNomineeRelationship());
+		zempPfnominiDet.setNominiRel(relationships.size()>0 ? relationships.get(0).getCode() : "1");
 		zempPfnominiDet.setNominiPercen(new BigDecimal("100"));
 		
 		tableOfZempPfnominiDet.getItem().add(zempPfnominiDet);
@@ -456,15 +461,20 @@ public class    EmployeeService extends AbstractService {
 		
 		// sap save response handler needed to be added 
 		
-        if(updateEmployee.isVerified()){
-            updateEmployee.setVerifiedBy(user);
-            updateEmployee.setVerifiedDate(ZonedDateTime.now());
-        }
-        
-        
-        employee = employeeRepository.saveAndFlush(updateEmployee);
-        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
-        return employeeDTO;
+		ZempReturn returnObject = response.getReturnLog().getItem().get(0);
+		
+		if(!returnObject.equals("E")) {
+		
+			if(updateEmployee.isVerified()){
+	        	updateEmployee.setEmpId(returnObject.getEmpId());
+	            updateEmployee.setVerifiedBy(user);
+	            updateEmployee.setVerifiedDate(ZonedDateTime.now());
+	            employee = employeeRepository.saveAndFlush(updateEmployee);
+	        }
+			
+		}
+		 
+        return returnObject;
     }
 
 

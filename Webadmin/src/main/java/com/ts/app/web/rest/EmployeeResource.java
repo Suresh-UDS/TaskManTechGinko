@@ -39,6 +39,7 @@ import com.ts.app.service.MailService;
 import com.ts.app.service.NotificationService;
 import com.ts.app.service.UserService;
 import com.ts.app.service.util.ImportUtil;
+import com.ts.app.soap.classes.ZempReturn;
 import com.ts.app.web.rest.dto.CheckInOutDTO;
 import com.ts.app.web.rest.dto.CheckInOutImageDTO;
 import com.ts.app.web.rest.dto.DesignationDTO;
@@ -174,15 +175,16 @@ public class EmployeeResource {
 
     @RequestMapping(value = "/verifyOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> verifyOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
+    public ZempReturn verifyOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
         long userId = SecurityUtils.getCurrentUserId();
         employeeDTO.setUserId(userId);
+        ZempReturn sapReturn = new ZempReturn();
         try {
-            employeeDTO = employeeService.verifyOnBoardingEmployeeInfo(employeeDTO);
+        	sapReturn = employeeService.verifyOnBoardingEmployeeInfo(employeeDTO);
         }catch(Exception e) {
             throw new TimesheetException(e, employeeDTO);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return sapReturn;
     }
 /**********************************************************************************************************/    
     @RequestMapping(value = "/employee", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
