@@ -295,7 +295,7 @@ public class    EmployeeService extends AbstractService {
         return employeeDTO;
     }
     
-    public ZempdetailUpdateResponse saveEmployeeOnSAP(ZempdetailUpdate zempdetailUpdate) {
+    public ZempdetailUpdateResponse saveEmployeeOnSAP(ZempdetailUpdate zempdetailUpdate) throws Exception {
     	
     	HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -316,41 +316,41 @@ public class    EmployeeService extends AbstractService {
 		
     }
 
-    public ZempReturn verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
+    @SuppressWarnings("finally")
+	public ZempReturn verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findOne(employeeDTO.getId());
         Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
         User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
         
-        ZempdetailUpdate zempdetailUpdate = new ZempdetailUpdate();
-		ZempdetailUpdateResponse zempdetailUpdateResponse = new ZempdetailUpdateResponse();
+        ZempdetailUpdate zempdetailUpdate = new ZempdetailUpdate(); 
 		
 		TableOfZempDetStr tableOfZempDetStr = new TableOfZempDetStr();
-		List<ZempDetStr> zempDetStrList = new ArrayList<ZempDetStr>();
+		 
 		
 		TableOfZempEduDet tableOfZempEduDet = new TableOfZempEduDet();
-		List<ZempEduDet> zempEduDetList = new ArrayList<ZempEduDet>();
+		 
 		
 		TableOfZempFamilyDet tableOfZempFamilyDet = new TableOfZempFamilyDet();
-		List<ZempFamilyDet> zempFamilyDetList = new ArrayList<ZempFamilyDet>();
+		 
 		
 		TableOfZempIdmarkDet tableOfZempIdmarkDet = new TableOfZempIdmarkDet();
-		List<ZempIdmarkDet> zempIdmarkDetList = new ArrayList<ZempIdmarkDet>();
+		 
 		
 		TableOfZempIdsStr tableOfZempIdsStr = new TableOfZempIdsStr();
-		List<ZempIdsStr> zempIdsStrList = new ArrayList<ZempIdsStr>();
+		 
 		
 		TableOfZempPfnominiDet tableOfZempPfnominiDet = new TableOfZempPfnominiDet();
-		List<ZempPfnominiDet> zempPfnominiDetList = new ArrayList<ZempPfnominiDet>();
+		 
 		
 		TableOfZempPrevempDet tableOfZempPrevempDet = new TableOfZempPrevempDet();
-		List<ZempPrevempDet> zempPrevempDetList = new ArrayList<ZempPrevempDet>();
+		 
 		
 		TableOfZempReturn tableOfZempReturn = new TableOfZempReturn();
-		List<ZempReturn> zempReturnList = new ArrayList<ZempReturn>();
+		 
 		
 		ZempDetStr zempDetStr = new ZempDetStr();
 		ZempEduDet zempEduDet = new ZempEduDet();
-		ZempFamilyDet zempFamilyDet = new ZempFamilyDet();
+
 		ZempIdsStr zempIdsStr = new ZempIdsStr();
 		ZempPfnominiDet zempPfnominiDet = new ZempPfnominiDet();
 		ZempPrevempDet zempPrevempDet = new ZempPrevempDet();
@@ -373,10 +373,10 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setEmail(employee.getEmail());
 		zempDetStr.setEmpId(employee.getEmpId());
 		zempDetStr.setAcNo(employee.getAccountNumber());
-		zempDetStr.setAddrLi2M("");
+		zempDetStr.setAddrLi2M(employee.getPresentAddress().substring(0,39));
 		zempDetStr.setCityM(employee.getPresentCity());
 		zempDetStr.setStateM(employee.getPresentState());
-		zempDetStr.setAddrLi2P("");
+		zempDetStr.setAddrLi2P(employee.getPermanentAddress().substring(0,39));
 		zempDetStr.setCityP(employee.getPermanentCity());
 		zempDetStr.setStateP(employee.getPermanentState());
 		zempDetStr.setAcNo(employee.getAccountNumber());
@@ -400,10 +400,21 @@ public class    EmployeeService extends AbstractService {
 		
 		tableOfZempEduDet.getItem().add(zempEduDet);
 		
-		zempFamilyDet.setEmpId(employee.getEmpId());
-		zempFamilyDet.setFamMemName(employee.getNomineeName());
+		ZempFamilyDet zempFamilyDetMother = new ZempFamilyDet();
 		
-		tableOfZempFamilyDet.getItem().add(zempFamilyDet);
+		zempFamilyDetMother.setEmpId(employee.getEmpId());
+		zempFamilyDetMother.setFamMemName(employee.getMotherName());
+		zempFamilyDetMother.setFamMemRelNo("12");
+
+		tableOfZempFamilyDet.getItem().add(zempFamilyDetMother);
+		
+		ZempFamilyDet zempFamilyDetFather = new ZempFamilyDet();
+		
+		zempFamilyDetFather.setEmpId(employee.getEmpId());
+		zempFamilyDetFather.setFamMemName(employee.getFatherName());
+		zempFamilyDetFather.setFamMemRelNo("11");
+		
+		tableOfZempFamilyDet.getItem().add(zempFamilyDetFather);
 		
 		if(StringUtils.isEmpty(employee.getPersonalIdentificationMark1())){
 			
@@ -468,24 +479,38 @@ public class    EmployeeService extends AbstractService {
 		zempdetailUpdate.setEmpPrevempDet(tableOfZempPrevempDet);
 		zempdetailUpdate.setReturnLog(tableOfZempReturn);
 		
-		ZempdetailUpdateResponse response =  saveEmployeeOnSAP(zempdetailUpdate);
+		ZempdetailUpdateResponse response;
+		ZempReturn returnObject = new ZempReturn();;
 		
-		// sap save response handler needed to be added 
-		
-		ZempReturn returnObject = response.getReturnLog().getItem().get(0);
-		
-		if(!returnObject.equals("E")) {
-		
-			if(updateEmployee.isVerified()){
-	        	updateEmployee.setEmpId(returnObject.getEmpId());
-	            updateEmployee.setVerifiedBy(user);
-	            updateEmployee.setVerifiedDate(ZonedDateTime.now());
-	            employee = employeeRepository.saveAndFlush(updateEmployee);
-	        }
+		try {
+			response = saveEmployeeOnSAP(zempdetailUpdate);
+			returnObject = response.getReturnLog().getItem().get(0);
+			if(!returnObject.getType().equals("E")) {
+				
+				if(updateEmployee.isVerified()){
+		        	updateEmployee.setEmpId(returnObject.getEmpId());
+		            updateEmployee.setVerifiedBy(user);
+		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
+		            employee = employeeRepository.saveAndFlush(updateEmployee);
+		        }
+				
+			}
+		} catch (Exception e) {
 			
+			returnObject = new ZempReturn();
+			returnObject.setType("E");
+			returnObject.setMessage(e.getMessage());
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		finally {
+			return returnObject;
+		}
+		
+		
 		 
-        return returnObject;
+        
     }
 
 
