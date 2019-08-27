@@ -304,9 +304,14 @@ public class    EmployeeService extends AbstractService {
 		 
 		HttpEntity<ZempdetailUpdate> request = new HttpEntity<>(zempdetailUpdate,headers);
 
+//		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
+//				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
+//				ZempdetailUpdateResponse.class);
+
 		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
-				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
+				 "http://localhost:8001/updateEmployeeOnSap" , HttpMethod.POST,  request,
 				ZempdetailUpdateResponse.class);
+
 		
 		return response.getBody();
 		
@@ -369,10 +374,10 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setEmail(employee.getEmail());
 		zempDetStr.setEmpId(employee.getEmpId());
 		zempDetStr.setAcNo(employee.getAccountNumber());
-		zempDetStr.setAddrLi2M(employee.getPresentAddress());
+		zempDetStr.setAddrLi2M("");
 		zempDetStr.setCityM(employee.getPresentCity());
 		zempDetStr.setStateM(employee.getPresentState());
-		zempDetStr.setAddrLi2P(employee.getPermanentAddress());
+		zempDetStr.setAddrLi2P("");
 		zempDetStr.setCityP(employee.getPermanentCity());
 		zempDetStr.setStateP(employee.getPermanentState());
 		zempDetStr.setAcNo(employee.getAccountNumber());
@@ -385,7 +390,7 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
 		zempDetStr.setMobileNoM(employee.getMobile());
 		zempDetStr.setMothersName(employee.getMotherName());
-		zempDetStr.setReligion(employee.getReligion());
+		zempDetStr.setReligion("");
 		zempDetStr.setWbs(employee.getWbsId());
 		
 		tableOfZempDetStr.getItem().add(zempDetStr);
@@ -424,9 +429,16 @@ public class    EmployeeService extends AbstractService {
 		
 		zempIdsStr.setEmpId(employee.getEmpId());
 		zempIdsStr.setIdCardNo(employee.getAdharCardNumber());
+		zempIdsStr.setIdentityTypeId("11");
 		zempIdsStr.setNameOnCard(employee.getFullName());
-		zempIdsStr.setDateOfIssue(new Date().toString());
-		zempIdsStr.setValidDate(new Date().toString());
+		
+		Date now = new Date();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        String mysqlDateString = formatter.format(now);
+		
+		zempIdsStr.setDateOfIssue(mysqlDateString);
+		zempIdsStr.setValidDate(mysqlDateString);
 		
 		tableOfZempIdsStr.getItem().add(zempIdsStr);
 		
