@@ -84,7 +84,13 @@ angular.module('timeSheetApp')
                     console.log(response.data);
                     return response.data;
                 })
-            }
+            },
+
+            searchEmployees: function(searchCriteria) {
+                return $http.post('api/onBoarding/employee/search', searchCriteria).then(function (response) {
+                    return response.data;
+                });
+            },
 
         }
 

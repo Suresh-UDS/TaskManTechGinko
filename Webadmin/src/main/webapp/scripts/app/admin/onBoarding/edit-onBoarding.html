@@ -418,7 +418,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-disabled="employee.newEmployee" type="text" name="empCode" ng-model="employee.empId" required />
+                                <input class="form-control" ng-disabled="!employee.newEmployee" type="text" name="empCode" ng-model="employee.empId" required />
 
                                 <div ng-show="form.$submitted || form.empCode.$touched || form.empCode.$dirty">
                                     <div ng-show="form.empCode.$dirty || form.empCode.$invalid">
@@ -802,7 +802,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-disabled="employee.newEmployee" ng-model="employee.accountNumber" required />
+                                <input class="form-control" type="text" ng-disabled="!employee.newEmployee" ng-model="employee.accountNumber" required />
                             </div>
                         </div>
 
@@ -812,7 +812,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-disabled="employee.newEmployee" ng-model="employee.ifscCode"  required/>
+                                <input class="form-control" type="text" ng-disabled="!employee.newEmployee" ng-model="employee.ifscCode"  required/>
                             </div>
                         </div>
 
@@ -838,7 +838,7 @@
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="bankPassBookImage"
                                            name="bankPassBookImage" tabindex="9"
-                                           ng-disabled="employee.newEmployee"
+                                           ng-disabled="!employee.newEmployee"
                                     />
                                 </div>
                             </div>

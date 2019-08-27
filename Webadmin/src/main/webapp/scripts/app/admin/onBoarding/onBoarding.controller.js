@@ -620,7 +620,17 @@ angular.module('timeSheetApp')
 
 	$scope.getTobeVerifiedEmployees = function(){
 	    $scope.verified = false;
-	    $scope.search();
+	    if($scope.selectedProjectCode !=null && $scope.selectedWBSCode !=null){
+            $scope.search();
+        }else{
+	        if($scope.selectedEmployeeId !=null || $scope.selectedEmployeeName != null){
+                $scope.search();
+            }else{
+                $scope.noData = true;
+                $scope.onBoardingEmployeesLoader = true;
+            }
+        }
+
     };
 
 	$scope.search = function () {
@@ -763,7 +773,7 @@ angular.module('timeSheetApp')
 		    $scope.searchCriteria.WBSCode = $scope.selectedWBSCode;
         }
 		$scope.searchCriteria.verified = false;
-		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
 			$scope.onBoardingEmployees = data.transactions;
@@ -895,7 +905,6 @@ angular.module('timeSheetApp')
                                 $scope.enableApproval = true;
                             }
                         }
-
 
                     });
 
