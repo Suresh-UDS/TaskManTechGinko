@@ -1017,11 +1017,21 @@ angular.module('timeSheetApp')
     $scope.approveOnBoardingEmployee = function(){
         $scope.employee.verified =true;
         OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
-            console.log(data);
-                console.log("on boarding employee successfully saved");
-                console.log(data);
-                $location.path('/onBoarding-list');
-                $scope.showNotifications('top', 'center', 'success', "Employee Approve Successfully");
+			 
+				if(data.type!="E"){
+					$location.path('/onBoarding-list'); 
+					$scope.showNotifications('top', 'center', 'success', "Employee Approve Successfully");
+				}
+				else{
+
+					$scope.success = null;
+					$scope.disable = false;
+					$scope.btnDisable = false;
+					$scope.showNotifications('top','center','danger','Error in approving Employee.-> ' + data.message);
+					$scope.error = 'ERROR';
+
+				}
+				
         }).catch(function(){
             $scope.saveLoad = false;
             $scope.success = null;
