@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeDocuments;
+import com.ts.app.domain.NomineeRelationship;
 import com.ts.app.domain.Ticket;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ts.app.repository.NomineeRelationshipRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.EmployeeService;
@@ -81,6 +83,9 @@ public class EmployeeResource {
 
     @Inject
     private NotificationService notificationService;
+    
+    @Inject
+    private NomineeRelationshipRepository nomineeRelationshipRepository; 
 
     @Inject
     private ImportUtil importUtil;
@@ -823,6 +828,13 @@ public class EmployeeResource {
     @RequestMapping(value = "/employee/documents/{employeeId}",method=RequestMethod.GET)
     public List<EmployeeDocuments> getEmployeeDocuments(@PathVariable("employeeId") long employeeId){
         return employeeService.getEmployeeDocuments(employeeId);
+    }
+    
+    @RequestMapping(value = "/getNomineeRelationship",method=RequestMethod.GET)
+    public ResponseEntity<Iterable<NomineeRelationship>> getNomineeRelationship(){
+    	 
+    	return new ResponseEntity<Iterable<NomineeRelationship>>(nomineeRelationshipRepository.findAll(),HttpStatus.CREATED);
+    	
     }
 
 }
