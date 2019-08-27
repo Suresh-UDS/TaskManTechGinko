@@ -7,6 +7,24 @@ import com.ts.app.repository.*;
 import com.ts.app.rule.EmployeeFilter;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.*;
+import com.ts.app.soap.classes.TableOfZempDetStr;
+import com.ts.app.soap.classes.TableOfZempEduDet;
+import com.ts.app.soap.classes.TableOfZempFamilyDet;
+import com.ts.app.soap.classes.TableOfZempIdmarkDet;
+import com.ts.app.soap.classes.TableOfZempIdsStr;
+import com.ts.app.soap.classes.TableOfZempPfnominiDet;
+import com.ts.app.soap.classes.TableOfZempPrevempDet;
+import com.ts.app.soap.classes.TableOfZempReturn;
+import com.ts.app.soap.classes.ZempDetStr;
+import com.ts.app.soap.classes.ZempEduDet;
+import com.ts.app.soap.classes.ZempFamilyDet;
+import com.ts.app.soap.classes.ZempIdmarkDet;
+import com.ts.app.soap.classes.ZempIdsStr;
+import com.ts.app.soap.classes.ZempPfnominiDet;
+import com.ts.app.soap.classes.ZempPrevempDet;
+import com.ts.app.soap.classes.ZempReturn;
+import com.ts.app.soap.classes.ZempdetailUpdate;
+import com.ts.app.soap.classes.ZempdetailUpdateResponse;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,18 +33,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +71,9 @@ public class    EmployeeService extends AbstractService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
+    @Autowired
+    private RestTemplate restTemplate;
+    
     @Inject
     private AttendanceRepository attendanceRepository;
 
@@ -139,6 +169,9 @@ public class    EmployeeService extends AbstractService {
 
     @Value("${AWS.s3-enroll-path}")
     private String enrollImagePath;
+    
+    @Value("${onBoarding.empRetrieve}")
+    private String URL_ORACLE;
 
     public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
@@ -255,15 +288,176 @@ public class    EmployeeService extends AbstractService {
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;
     }
+    
+    public ZempdetailUpdateResponse saveEmployeeOnSAP(ZempdetailUpdate zempdetailUpdate) {
+    	
+    	HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.setContentType( MediaType.APPLICATION_JSON);
+		 
+		HttpEntity<ZempdetailUpdate> request = new HttpEntity<>(zempdetailUpdate,headers);
+
+		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
+				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
+				ZempdetailUpdateResponse.class);
+		
+		return response.getBody();
+		
+    }
 
     public EmployeeDTO verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findOne(employeeDTO.getId());
         Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
         User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        
+        ZempdetailUpdate zempdetailUpdate = new ZempdetailUpdate();
+		ZempdetailUpdateResponse zempdetailUpdateResponse = new ZempdetailUpdateResponse();
+		
+		TableOfZempDetStr tableOfZempDetStr = new TableOfZempDetStr();
+		List<ZempDetStr> zempDetStrList = new ArrayList<ZempDetStr>();
+		
+		TableOfZempEduDet tableOfZempEduDet = new TableOfZempEduDet();
+		List<ZempEduDet> zempEduDetList = new ArrayList<ZempEduDet>();
+		
+		TableOfZempFamilyDet tableOfZempFamilyDet = new TableOfZempFamilyDet();
+		List<ZempFamilyDet> zempFamilyDetList = new ArrayList<ZempFamilyDet>();
+		
+		TableOfZempIdmarkDet tableOfZempIdmarkDet = new TableOfZempIdmarkDet();
+		List<ZempIdmarkDet> zempIdmarkDetList = new ArrayList<ZempIdmarkDet>();
+		
+		TableOfZempIdsStr tableOfZempIdsStr = new TableOfZempIdsStr();
+		List<ZempIdsStr> zempIdsStrList = new ArrayList<ZempIdsStr>();
+		
+		TableOfZempPfnominiDet tableOfZempPfnominiDet = new TableOfZempPfnominiDet();
+		List<ZempPfnominiDet> zempPfnominiDetList = new ArrayList<ZempPfnominiDet>();
+		
+		TableOfZempPrevempDet tableOfZempPrevempDet = new TableOfZempPrevempDet();
+		List<ZempPrevempDet> zempPrevempDetList = new ArrayList<ZempPrevempDet>();
+		
+		TableOfZempReturn tableOfZempReturn = new TableOfZempReturn();
+		List<ZempReturn> zempReturnList = new ArrayList<ZempReturn>();
+		
+		ZempDetStr zempDetStr = new ZempDetStr();
+		ZempEduDet zempEduDet = new ZempEduDet();
+		ZempFamilyDet zempFamilyDet = new ZempFamilyDet();
+		ZempIdsStr zempIdsStr = new ZempIdsStr();
+		ZempPfnominiDet zempPfnominiDet = new ZempPfnominiDet();
+		ZempPrevempDet zempPrevempDet = new ZempPrevempDet();
+		ZempReturn zempReturn = new ZempReturn();
+		
+		
+		String employeeId = employee.getEmpId();
+		
+		if(employee.isNewEmployee()) {
+			
+			zempDetStr.setEmployeeType("N");
+			
+		}
+		
+		zempDetStr.setEmpId(employeeId);
+		zempDetStr.setEmpName(employee.getFullName());
+		zempDetStr.setBloodGroup(employee.getBloodGroup());
+		zempDetStr.setDateOfBirth(employee.getDob().toString());
+		zempDetStr.setDateOfJoin(employee.getDoj().toString());
+		zempDetStr.setEmail(employee.getEmail());
+		zempDetStr.setEmpId(employee.getEmpId());
+		zempDetStr.setAcNo(employee.getAccountNumber());
+		zempDetStr.setAddrLi2M(employee.getPresentAddress());
+		zempDetStr.setCityM(employee.getPresentCity());
+		zempDetStr.setStateM(employee.getPresentState());
+		zempDetStr.setAddrLi2P(employee.getPermanentAddress());
+		zempDetStr.setCityP(employee.getPermanentCity());
+		zempDetStr.setStateP(employee.getPermanentState());
+		zempDetStr.setAcNo(employee.getAccountNumber());
+		zempDetStr.setBankKey("9100");
+		
+		String gender = employee.getGender().toLowerCase().substring(0,1).equals("m") ? "1" : ( employee.getGender().toLowerCase().substring(0,1).equals("f") ? "2" : "3" ); 
+	 	
+		zempDetStr.setGender(gender);
+		zempDetStr.setIfscCode(employee.getIfscCode());
+		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
+		zempDetStr.setMobileNoM(employee.getMobile());
+		zempDetStr.setMothersName(employee.getMotherName());
+		zempDetStr.setReligion(employee.getReligion());
+		zempDetStr.setWbs(employee.getWbsId());
+		
+		tableOfZempDetStr.getItem().add(zempDetStr);
+		
+		
+		zempEduDet.setBoardUniv(employee.getBoardInstitute());
+		zempEduDet.setEmpId(employee.getEmpId());
+		
+		tableOfZempEduDet.getItem().add(zempEduDet);
+		
+		zempFamilyDet.setEmpId(employee.getEmpId());
+		zempFamilyDet.setFamMemName(employee.getNomineeName());
+		
+		tableOfZempFamilyDet.getItem().add(zempFamilyDet);
+		
+		if(StringUtils.isEmpty(employee.getPersonalIdentificationMark1())){
+			
+			ZempIdmarkDet zempIdmarkDet1 = new ZempIdmarkDet();
+			
+			zempIdmarkDet1.setEmpId(employeeId);
+			zempIdmarkDet1.setIdenmarkText(employee.getPersonalIdentificationMark1());
+			
+			tableOfZempIdmarkDet.getItem().add(zempIdmarkDet1);
+		}
+		if(StringUtils.isEmpty(employee.getPersonalIdentificationMark2())){
+			
+			ZempIdmarkDet zempIdmarkDet2 = new ZempIdmarkDet();
+			
+			zempIdmarkDet2.setEmpId(employeeId);
+			zempIdmarkDet2.setIdenmarkText(employee.getPersonalIdentificationMark2());
+			
+			tableOfZempIdmarkDet.getItem().add(zempIdmarkDet2);
+		}
+
+
+		
+		zempIdsStr.setEmpId(employee.getEmpId());
+		zempIdsStr.setIdCardNo(employee.getAdharCardNumber());
+		zempIdsStr.setNameOnCard(employee.getFullName());
+		zempIdsStr.setDateOfIssue(new Date().toString());
+		zempIdsStr.setValidDate(new Date().toString());
+		
+		tableOfZempIdsStr.getItem().add(zempIdsStr);
+		
+		zempPfnominiDet.setEmpId(employee.getEmpId());
+		zempPfnominiDet.setNominiName(employee.getNomineeName());
+		zempPfnominiDet.setNominiRel(employee.getNomineeRelationship());
+		zempPfnominiDet.setNominiPercen(new BigDecimal("100"));
+		
+		tableOfZempPfnominiDet.getItem().add(zempPfnominiDet);
+		
+		zempPrevempDet.setEmpId(employee.getEmpId());
+		zempPrevempDet.setNamePrevOrg(employee.getEmployer());
+		
+		tableOfZempPrevempDet.getItem().add(zempPrevempDet);
+		
+		zempReturn.setEmpId(employee.getEmpId());
+		
+		tableOfZempReturn.getItem().add(zempReturn);
+		
+		zempdetailUpdate.setEmpDet(tableOfZempDetStr);
+		zempdetailUpdate.setEmpEduDet(tableOfZempEduDet);
+		zempdetailUpdate.setEmpFamilyDet(tableOfZempFamilyDet);
+		zempdetailUpdate.setEmpIdentityProof(tableOfZempIdsStr);
+		zempdetailUpdate.setEmpIdmarkDet(tableOfZempIdmarkDet);
+		zempdetailUpdate.setEmpPfnominiDet(tableOfZempPfnominiDet);
+		zempdetailUpdate.setEmpPrevempDet(tableOfZempPrevempDet);
+		zempdetailUpdate.setReturnLog(tableOfZempReturn);
+		
+		ZempdetailUpdateResponse response =  saveEmployeeOnSAP(zempdetailUpdate);
+		
+		// sap save response handler needed to be added 
+		
         if(updateEmployee.isVerified()){
             updateEmployee.setVerifiedBy(user);
             updateEmployee.setVerifiedDate(ZonedDateTime.now());
         }
+        
+        
         employee = employeeRepository.saveAndFlush(updateEmployee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;
