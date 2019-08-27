@@ -99,6 +99,7 @@ angular.module('timeSheetApp')
     $scope.selectedWBSDetails={};
     $scope.selectedProjectDetails={};
 
+    $scope.showCategoriesLoader = false;
 	$scope.now = new Date();
 
     $scope.totalStates = [
@@ -147,11 +148,14 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.loadgetSapBusinessCategories = function(){
+	    $scope.showCategoriesLoader = true;
 
 		OnBoardingComponent.getSapBusinessCategories().then(function(data){
 
 			$scope.sapBusinessCategoriesList.rootElements = JSON.parse(data.elementsJson);
 			$scope.sapBusinessCategoriesList.userConfElements = $scope.mappedData;
+
+            $scope.showCategoriesLoader = false;
 
 			//  $scope.sapBranches = _.map($scope.sapBusinessCategoriesList,_.partialRight(_.pick,['elemetType','elementName']));
   
@@ -620,7 +624,17 @@ angular.module('timeSheetApp')
 
 	$scope.getTobeVerifiedEmployees = function(){
 	    $scope.verified = false;
-	    $scope.search();
+	    if($scope.selectedProjectCode !=null && $scope.selectedWBSCode !=null){
+            $scope.search();
+        }else{
+	        if($scope.selectedEmployeeId !=null || $scope.selectedEmployeeName != null){
+                $scope.search();
+            }else{
+                $scope.noData = true;
+                $scope.onBoardingEmployeesLoader = true;
+            }
+        }
+
     };
 
 	$scope.search = function () {
@@ -756,14 +770,19 @@ angular.module('timeSheetApp')
 		console.log("to be verified");
 		console.log($scope.verified);
 		$scope.searchCriteria.verified= $scope.verified;
+
+		if($scope.selectedBranchCode !=null){
+		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
+        }
+
 		if($scope.selectedProjectCode !=null){
-		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode
+		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode;
         }
 		if($scope.selectedWBSCode !=null){
-		    $scope.searchCriteria.WBSCode = $scope.selectedWBSCode;
+		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
         }
 		$scope.searchCriteria.verified = false;
-		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
 			$scope.onBoardingEmployees = data.transactions;
@@ -864,7 +883,6 @@ angular.module('timeSheetApp')
                                 $scope.employee.accountNumber !=null &&
                                 $scope.employee.adharCardNumber !=null &&
                                 $scope.employee.bloodGroup !=null &&
-                                $scope.employee.boardInstitute !=null &&
                                 $scope.employee.dob !=null &&
                                 $scope.employee.doj !=null &&
                                 $scope.employee.educationalQulification !=null &&
@@ -872,7 +890,6 @@ angular.module('timeSheetApp')
                                 $scope.employee.fatherName !=null &&
                                 $scope.employee.gender !=null &&
                                 $scope.employee.ifscCode !=null &&
-                                $scope.employee.lastName !=null &&
                                 $scope.employee.maritalStatus !=null &&
                                 $scope.employee.mobile !=null &&
                                 $scope.employee.name !=null &&
@@ -897,7 +914,6 @@ angular.module('timeSheetApp')
                                 $scope.enableApproval = true;
                             }
                         }
-
 
                     });
 
@@ -982,7 +998,11 @@ angular.module('timeSheetApp')
         $scope.selectedBranchDetails={};
         $scope.selectedWBSDetails={};
         $scope.selectedProjectDetails={};
+        $scope.searchEmployeeId=null;
+        $scope.searchEmployeeName=null;
         delete $scope.searchCriteria.projectCode;
+        delete $scope.searchCriteria.employeeEmpId;
+        delete $scope.searchCriteria.name;
 
 
         $scope.pages = {
@@ -1015,47 +1035,60 @@ angular.module('timeSheetApp')
     $scope.saveOnBoardingEmployeeDetails = function(){
         console.log("Saving employee details");
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
-            console.log("on boarding employee successfully saved");
-            console.log(data);
-            $location.path('/onBoarding-list');
-            $scope.showNotifications('top', 'center', 'success', "Employee Successfully ");
 
-            if($scope.addressProofImage){
-                $scope.uploadAddressProofImage($scope.employee.id);
-            }
-            if($scope.bankPassBookImage){
-                $scope.uploadBankPassbookImage($scope.employee.id);
-            }
-            if($scope.adharCardImageBack){
-                $scope.uploadAdharCardImageBack($scope.employee.id);
-            }
-            if($scope.adharCardImageFront){
-                $scope.uploadAdharCardImageFront($scope.employee.id);
-            }
-            if($scope.fingerprintRightImage){
-                $scope.uploadFingerPrintRight($scope.employee.id);
-            }
-            if($scope.fingerprintLeftImage){
-                $scope.uploadFingerPrintLeft($scope.employee.id);
-            }
-            if($scope.drivingLicenseImageFront){
-                $scope.uploadDrivingLicense($scope.employee.id);
-            }
-            if($scope.voterIdImage){
-                $scope.uploadVoterId($scope.employee.id);
-            }
-            if($scope.pancardImage){
-                $scope.uploadPancard($scope.employee.id);
+            if(data.errorStatus){
+                $scope.saveLoad = false;
+                $scope.success = null;
+                $scope.disable = false;
+                $scope.btnDisable = false;
+                console.log(response);
+                $scope.showNotifications('top','center','danger','Error in updating Employee.' + data.errorMessage);
+                $scope.error = 'ERROR';
+            }else{
+                console.log("on boarding employee successfully saved");
+                console.log(data);
+                $location.path('/onBoarding-list');
+                $scope.showNotifications('top', 'center', 'success', "Employee Successfully ");
+
+                if($scope.addressProofImage){
+                    $scope.uploadAddressProofImage($scope.employee.id);
+                }
+                if($scope.bankPassBookImage){
+                    $scope.uploadBankPassbookImage($scope.employee.id);
+                }
+                if($scope.adharCardImageBack){
+                    $scope.uploadAdharCardImageBack($scope.employee.id);
+                }
+                if($scope.adharCardImageFront){
+                    $scope.uploadAdharCardImageFront($scope.employee.id);
+                }
+                if($scope.fingerprintRightImage){
+                    $scope.uploadFingerPrintRight($scope.employee.id);
+                }
+                if($scope.fingerprintLeftImage){
+                    $scope.uploadFingerPrintLeft($scope.employee.id);
+                }
+                if($scope.drivingLicenseImageFront){
+                    $scope.uploadDrivingLicense($scope.employee.id);
+                }
+                if($scope.voterIdImage){
+                    $scope.uploadVoterId($scope.employee.id);
+                }
+                if($scope.pancardImage){
+                    $scope.uploadPancard($scope.employee.id);
+                }
             }
 
-        }).catch(function(){
+
+        }).catch(function(response){
             $scope.saveLoad = false;
             $scope.success = null;
             $scope.disable = false;
             $scope.btnDisable = false;
-            $scope.showNotifications('top','center','danger','Error in updating Employee.' + response.data.errorMessage);
+            console.log(response);
+            $scope.showNotifications('top','center','danger','Error in updating Employee.' + response.statusText);
             $scope.error = 'ERROR';
-        });;
+        });
 
 
 
