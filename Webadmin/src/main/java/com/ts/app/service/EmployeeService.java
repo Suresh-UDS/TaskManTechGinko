@@ -10,6 +10,7 @@ import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.boon.di.In;
 import org.hibernate.Hibernate;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +107,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private JobManagementService jobManagementService;
+
+    @Inject
+    private OnboardingUserConfigService onboardingUserConfigService;
 
     @Inject
     private AttendanceService attendanceService;
@@ -1557,6 +1561,10 @@ public class    EmployeeService extends AbstractService {
                 }else {
                     pageRequest = createPageRequest(searchCriteria.getCurrPage());
                 }
+            }
+
+            if(StringUtils.isNotEmpty(searchCriteria.getBranchCode()) && (StringUtils.isEmpty(searchCriteria.getProjectCode()) && StringUtils.isEmpty(searchCriteria.getWbsCode()))){
+                searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByBranch(user.getId(),searchCriteria.getBranchCode()));
             }
 
             log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());

@@ -99,6 +99,7 @@ angular.module('timeSheetApp')
     $scope.selectedWBSDetails={};
     $scope.selectedProjectDetails={};
 
+    $scope.showCategoriesLoader = false;
 	$scope.now = new Date();
 
     $scope.totalStates = [
@@ -147,11 +148,14 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.loadgetSapBusinessCategories = function(){
+	    $scope.showCategoriesLoader = true;
 
 		OnBoardingComponent.getSapBusinessCategories().then(function(data){
 
 			$scope.sapBusinessCategoriesList.rootElements = JSON.parse(data.elementsJson);
 			$scope.sapBusinessCategoriesList.userConfElements = $scope.mappedData;
+
+            $scope.showCategoriesLoader = false;
 
 			//  $scope.sapBranches = _.map($scope.sapBusinessCategoriesList,_.partialRight(_.pick,['elemetType','elementName']));
   
@@ -766,11 +770,16 @@ angular.module('timeSheetApp')
 		console.log("to be verified");
 		console.log($scope.verified);
 		$scope.searchCriteria.verified= $scope.verified;
+
+		if($scope.selectedBranchCode !=null){
+		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
+        }
+
 		if($scope.selectedProjectCode !=null){
-		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode
+		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode;
         }
 		if($scope.selectedWBSCode !=null){
-		    $scope.searchCriteria.WBSCode = $scope.selectedWBSCode;
+		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
         }
 		$scope.searchCriteria.verified = false;
 		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
