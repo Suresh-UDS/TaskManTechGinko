@@ -317,7 +317,13 @@ public class SearchCriteria extends Paginator {
 
 	private String projectCode;
 
-	private String WBSCode;
+	private String wbsCode;
+
+	private String branchCode;
+
+    private List<String> projectCodes;
+
+	private List<String> wbsCodes;
 
 	public String getModule() {
 		return module;
@@ -1476,11 +1482,36 @@ public class SearchCriteria extends Paginator {
         this.projectCode = projectCode;
     }
 
-    public String getWBSCode() {
-        return WBSCode;
+    public String getBranchCode() {
+        return branchCode;
     }
 
-    public void setWBSCode(String WBSCode) {
-        this.WBSCode = WBSCode;
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
+    }
+
+
+    public List<String> getProjectCodes() {
+        return projectCodes;
+    }
+
+    public void setProjectCodes(List<String> projectCodes) {
+        this.projectCodes = projectCodes;
+    }
+
+    public List<String> getWbsCodes() {
+        return wbsCodes;
+    }
+
+    public void setWbsCodes(List<String> wbsCodes) {
+        this.wbsCodes = wbsCodes;
+    }
+
+    public String getWbsCode() {
+        return wbsCode;
+    }
+
+    public void setWbsCode(String wbsCode) {
+        this.wbsCode = wbsCode;
     }
 }

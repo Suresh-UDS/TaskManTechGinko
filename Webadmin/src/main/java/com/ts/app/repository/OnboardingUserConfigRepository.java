@@ -40,6 +40,9 @@ public interface OnboardingUserConfigRepository extends JpaRepository<Onboarding
     @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' and ob.elementParent = :branchCode order by ob.element")
     List<OnboardingUserConfig> findProjectByBranchId(@Param("userId") long userId, @Param("branchCode") String branchCode );
 
+    @Query("SELECT ob.elementCode from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' and ob.elementParent = :branchCode order by ob.element")
+    List<String> findProjectCodesByBranch(@Param("userId") long userId, @Param("branchCode") String branchCode );
+
     @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' and ob.elementParent = :projectCode order by ob.element")
     List<OnboardingUserConfig> findWBSByProjectId(@Param("userId") long userId, @Param("projectCode") String projectCode);
 }

@@ -460,6 +460,19 @@ public class EmployeeResource {
         return result;
     }
 
+    @RequestMapping(value = "/onBoarding/employee/search",method = RequestMethod.POST)
+    public SearchResult<EmployeeDTO> findOnBoardingBySearchCrieria(@RequestBody SearchCriteria searchCriteria) {
+        if(searchCriteria != null) {
+            log.debug("search criteria - " + searchCriteria.getEmployeeEmpId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        }
+        SearchResult<EmployeeDTO> result = null;
+        if(searchCriteria != null) {
+            result = employeeService.findOnBoardingBySearchCrieria(searchCriteria);
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/employee/shift/search",method = RequestMethod.POST)
     public SearchResult<EmployeeShiftDTO> searchEmployeesShift(@RequestBody SearchCriteria searchCriteria) {
         if(searchCriteria != null) {
