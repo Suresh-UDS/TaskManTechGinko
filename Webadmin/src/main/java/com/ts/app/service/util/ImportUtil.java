@@ -1849,7 +1849,7 @@ public class ImportUtil {
 							
 							if(fullName.length > 1) {
  								
-								employee.setName(Arrays.stream(fullName).skip(fullName.length-1).collect(Collectors.joining(" ")));
+								employee.setName(Arrays.stream(fullName).limit(fullName.length-1).collect(Collectors.joining(" ")));
 								
 								employee.setLastName(fullName[fullName.length-1]);
 								
