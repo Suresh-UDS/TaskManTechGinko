@@ -81,6 +81,9 @@ public class    EmployeeService extends AbstractService {
     private NomineeRelationshipRepository nomineeRelationshipRepository ;
 
     @Inject
+    private ReligionRepository religionRepository ;
+ 
+    @Inject
     private EmployeeRepository employeeRepository;
 
     @Inject
@@ -389,9 +392,11 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
 		zempDetStr.setMobileNoM(employee.getMobile());
 		zempDetStr.setMothersName(employee.getMotherName());
-		zempDetStr.setReligion(employee.getReligion());
-		zempDetStr.setWbs(employee.getWbsId());
 		
+		List<Religion> religion = religionRepository.findByTitle(employee.getReligion());
+		zempDetStr.setReligion(religion.size() > 0 ? religion.get(0).getCode() : "22");
+
+		zempDetStr.setWbs(employee.getWbsId());
 		tableOfZempDetStr.getItem().add(zempDetStr);
 		
 		
