@@ -2102,6 +2102,19 @@ public class    EmployeeService extends AbstractService {
          empDto.setWbsId(employee.getWbsId());
          empDto.setProjectCode(employee.getProjectCode());
          empDto.setProjectDescription(employee.getProjectDescription());
+         empDto.setActive(employee.getActive());
+         empDto.setPosition(employee.getPosition());
+         empDto.setImported(employee.isImported());
+         empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
+         
+         if(empDto.isVerified()){
+        	 empDto.setVerifiedBy(employee.getVerifiedBy().getFirstName());
+         }
+         if(employee.getVerifiedDate() != null) {
+         empDto.setVerifiedDate(employee.getVerifiedDate());
+         }
+         empDto.setCreatedBy(employee.getCreatedBy());
+         empDto.setCreatedDate(employee.getCreatedDate());
     	return empDto;
     }
     

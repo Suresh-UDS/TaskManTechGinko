@@ -2118,8 +2118,19 @@ public class ExportUtil {
 					dataRow.createCell(7).setCellValue(transaction.getMotherName());
 					dataRow.createCell(8).setCellValue(transaction.getGender());
 					dataRow.createCell(9).setCellValue(transaction.getMaritalStatus());
-					dataRow.createCell(10).setCellValue(transaction.getDob());
-					dataRow.createCell(11).setCellValue(transaction.getDoj());
+					
+					Date now = transaction.getDob();
+			        String pattern = "dd-MM-yyyy";
+			        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+			        String dobDate = formatter.format(now);
+			        
+			        Date now1 = transaction.getDoj();
+			        String pattern1 = "dd-MM-yyyy";
+			        SimpleDateFormat formatter1 = new SimpleDateFormat(pattern1);
+			        String dojDate = formatter1.format(now1);
+			        
+					dataRow.createCell(10).setCellValue(dobDate);
+					dataRow.createCell(11).setCellValue(dojDate);
 					dataRow.createCell(12).setCellValue(transaction.getRegion());
 					dataRow.createCell(13).setCellValue(transaction.getBloodGroup());
 					dataRow.createCell(14).setCellValue(transaction.getPersonalIdentificationMark1());
@@ -2143,6 +2154,18 @@ public class ExportUtil {
 					dataRow.createCell(32).setCellValue(transaction.getAdharCardNumber());
 					dataRow.createCell(33).setCellValue(transaction.getAccountNumber());
 					dataRow.createCell(34).setCellValue(transaction.getIfscCode());
+					dataRow.createCell(35).setCellValue(transaction.getActive());
+					dataRow.createCell(36).setCellValue(transaction.getPosition());
+					dataRow.createCell(37).setCellValue(transaction.isImported());
+					dataRow.createCell(38).setCellValue(transaction.getOnBoardedFrom());
+					if(transaction.isVerified()) {
+					dataRow.createCell(39).setCellValue(transaction.getVerifiedBy());
+					}
+					if(transaction.getVerifiedDate() != null) {
+					dataRow.createCell(40).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getVerifiedDate().toInstant())));
+					}
+					dataRow.createCell(41).setCellValue(transaction.getCreatedBy());
+					dataRow.createCell(42).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
 				}
 
 //				for (int i = 0; i < EMP_HEADER.length; i++) {
