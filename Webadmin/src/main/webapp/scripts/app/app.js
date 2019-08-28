@@ -213,6 +213,11 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
         {
             $('#advancedFilter').modal();
         }
+        
+        $rootScope.filterModalOnboarding = function()
+        {
+            $('#OnbordingFilterExport').modal();
+        }
 
 
 

@@ -611,7 +611,107 @@ angular.module('timeSheetApp')
 		$scope.setPage(1);
 		$scope.search();
 	};
+	
+/*******************************************Modified by Vinoth*************************************************************************************/
+	
+	$rootScope.exportStatusObj = {};
 
+	$scope.exportAllData = function(){
+		$('.AdvancedFilterModalexport.in').modal('hide');
+		$rootScope.exportStatusObj = {};
+		$scope.downloaded = false;
+		$scope.downloader=true;
+		$scope.searchCriteria.list = true;
+		$scope.searchCriteria.report = true;
+		$scope.searchCriteria.columnName = "createdDate";
+		$scope.searchCriteria.sortByAsc = false;
+		if($scope.selectedBranchCode !=null){
+		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
+        }
+
+		if($scope.selectedProjectCode !=null){
+		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode;
+        }
+		if($scope.selectedWBSCode !=null){
+		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
+        }
+		$scope.searchCriteria.verified = false;
+		alert("before");
+		EmployeeComponent.exportOnboardingAllData($scope.searchCriteria).then(function(data){
+			alert("after")
+			var result = data.results[0];
+
+
+			//console.log(result);
+			//console.log(result.file + ', ' + result.status + ',' + result.msg);
+
+
+			var exportAllStatus = {
+					fileName : result.file,
+					exportMsg : 'Exporting All...'
+			};
+			$rootScope.exportStatusObj = exportAllStatus;
+			$scope.start();
+
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
+	};
+	
+	
+	
+	$scope.exportStatus = function() {
+
+		//console.log('exportStatusObj -'+$rootScope.exportStatusObj);
+		EmployeeComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+			if(data) {
+				$rootScope.exportStatusObj.exportStatus = data.status;
+				//console.log('exportStatus - '+ $rootScope.exportStatusObj);
+				$rootScope.exportStatusObj.exportMsg = data.msg;
+				$scope.downloader=false;
+				//console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+				if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+					$rootScope.exportStatusObj.exportFile = data.file;
+					//console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+
+					$scope.stop();
+				}else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+					$scope.stop();
+				}else if(!$rootScope.exportStatusObj.exportStatus){
+					$scope.stop();
+				}else {
+					$rootScope.exportStatusObj.exportFile = '#';
+				}
+			}
+
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
+
+	}
+
+	$scope.exportFile = function() {
+		return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+	}
+
+
+	$scope.exportMsg = function() {
+		return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
+	};
+
+	$scope.downloaded = false;
+
+	$scope.clsDownload = function(){
+		$scope.downloaded = true;
+		$rootScope.exportStatusObj = {};
+	}
+
+/**************************************************************************************************************************************	*/
+	
 	$scope.searchFilter1 = function () {
 		$scope.clearField = false;
 		$scope.SearchEmployeeId = null;
@@ -1234,36 +1334,6 @@ angular.module('timeSheetApp')
 		return s;
 	}
 
-
-	$scope.exportAllData = function(type){
-		$scope.searchCriteria.exportType = type;
-		$rootScope.exportStatusObj = {};
-		$scope.exportStatusMap = [];
-		$scope.downloaded = false;
-		$scope.downloader=true;
-		$scope.searchCriteria.list = true;
-		$scope.searchCriteria.report = true;
-		$scope.searchCriteria.isReport = true;
-		$scope.searchCriteria.columnName = "createdDate";
-		$scope.searchCriteria.sortByAsc = false;
-		AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
-			var result = data.results[0];
-			console.log(result);
-			console.log(result.file + ', ' + result.status + ',' + result.msg);
-			var exportAllStatus = {
-					fileName : result.file,
-					exportMsg : 'Exporting All...'
-			};
-			$scope.exportStatusMap[0] = exportAllStatus;
-			console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
-			$scope.start();
-		}).catch(function(){
-            $scope.downloader=false;
-            $scope.stop();
-            $scope.showNotifications('top','center','danger','Unable to export file..');
-        });
-	};
-
 	// store the interval promise in this variable
 	var promise;
 
@@ -1280,85 +1350,6 @@ angular.module('timeSheetApp')
 	// stops the interval
 	$scope.stop = function() {
 		$interval.cancel(promise);
-	};
-
-	$scope.exportStatusMap = [];
-
-
-	$scope.exportStatus = function() {
-		//console.log('empId='+$scope.empId);
-		console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
-		angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-			if(!exportStatusObj.empId) {
-				exportStatusObj.empId = 0;
-			}
-			AttendanceComponent.exportStatus(exportStatusObj.empId,exportStatusObj.fileName).then(function(data) {
-				if(data) {
-					exportStatusObj.exportStatus = data.status;
-					console.log('exportStatus - '+ exportStatusObj);
-					exportStatusObj.exportMsg = data.msg;
-					$scope.downloader=false;
-					console.log('exportMsg - '+ exportStatusObj.exportMsg);
-					if(exportStatusObj.exportStatus == 'COMPLETED'){
-						exportStatusObj.exportFile = data.file;
-						console.log('exportFile - '+ exportStatusObj.exportFile);
-						$scope.stop();
-					}else if(exportStatusObj.exportStatus == 'FAILED'){
-						$scope.stop();
-					}else if(!exportStatusObj.exportStatus){
-						$scope.stop();
-					}else {
-						$rootScope.exportStatusObj.exportFile = '#';
-					}
-				}
-
-			}).catch(function(){
-                $scope.downloader=false;
-                $scope.stop();
-                $scope.showNotifications('top','center','danger','Unable to export file..');
-            });
-		});
-
-	};
-
-	$scope.exportFile = function(empId) {
-		if(empId != 0) {
-			var exportFile = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportFile = exportStatusObj.exportFile;
-					return exportFile;
-				}
-			});
-			return exportFile;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
-		}
-	};
-
-
-	$scope.exportMsg = function(empId) {
-		if(empId != 0) {
-			var exportMsg = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportMsg = exportStatusObj.exportMsg;
-					return exportMsg;
-				}
-			});
-			return exportMsg;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
-		}
-
-	};
-
-	$scope.downloaded = false;
-
-	$scope.clsDownload = function(){
-		$scope.downloaded = true;
-		$rootScope.exportStatusObj = {};
-		$scope.exportStatusMap = [];
 	};
 
 	$scope.showLoader = function(){
@@ -1425,78 +1416,6 @@ angular.module('timeSheetApp')
 	// stops the interval
 	$scope.stop = function() {
 		$interval.cancel(promise);
-	};
-
-	$scope.exportStatusMap = [];
-
-
-	$scope.exportStatus = function() {
-		//console.log('empId='+$scope.empId);
-
-		//console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
-		angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-			if(!exportStatusObj.empId) {
-				exportStatusObj.empId = 0;
-			}
-			AttendanceComponent.exportStatus(exportStatusObj.empId,exportStatusObj.fileName).then(function(data) {
-				if(data) {
-					exportStatusObj.exportStatus = data.status;
-					//console.log('exportStatus - '+ exportStatusObj);
-					exportStatusObj.exportMsg = data.msg;
-					$scope.downloader=false;
-					//console.log('exportMsg - '+ exportStatusObj.exportMsg);
-					if(exportStatusObj.exportStatus == 'COMPLETED'){
-						if(exportStatusObj.url) {
-							exportStatusObj.exportFile = exportStatusObj.url;
-						}else {
-							exportStatusObj.exportFile = data.file;
-						}
-						//console.log('exportFile - '+ exportStatusObj.exportFile);
-						$scope.stop();
-					}else if(exportStatusObj.exportStatus == 'FAILED'){
-						$scope.stop();
-					}else if(!exportStatusObj.exportStatus){
-						$scope.stop();
-					}else {
-                        $rootScope.exportStatusObj.exportFile = '#';
-					}
-				}
-
-			});
-		});
-
-	};
-
-	$scope.exportFile = function(empId) {
-		if(empId != 0) {
-			var exportFile = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportFile = exportStatusObj.exportFile;
-					return exportFile;
-				}
-			});
-			return exportFile;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
-		}
-	};
-
-
-	$scope.exportMsg = function(empId) {
-		if(empId != 0) {
-			var exportMsg = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportMsg = exportStatusObj.exportMsg;
-					return exportMsg;
-				}
-			});
-			return exportMsg;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
-		}
-
 	};
 
 

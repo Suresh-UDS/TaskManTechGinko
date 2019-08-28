@@ -1978,6 +1978,32 @@ public class    EmployeeService extends AbstractService {
     public byte[] getExportFile(String fileName) {
         return exportUtil.readEmployeeExportExcelFile(fileName);
     }
+    
+//*******************************************Modified by Vinoth***********************************************************************
+ 
+    public ExportResult exportOnboarding(List<EmployeeDTO> transactions) {
+        //return exportUtil.writeToCsvFile(transactions, null);
+        log.debug("ready to EXPORT EXCEL-------->");
+        return exportUtil.writeToOnboardingExcelFile(transactions,null);
+    }
+    
+    public ExportResult getOnboardingExportStatus(String fileId) {
+        ExportResult er = new ExportResult();
+        fileId += ".xlsx";
+        if(!StringUtils.isEmpty(fileId)) {
+            String status = exportUtil.getExportStatus(fileId);
+            er.setFile(fileId);
+            //er.setEmpId(empId);
+            er.setStatus(status);
+        }
+        return er;
+    }
+    
+    public byte[] getOnboardingExportFile(String fileName) {
+        return exportUtil.readOnboardingEmployeeExportExcelFile(fileName);
+    }
+    
+//************************************************************************************************************************************
 
 
     public List<DesignationDTO> findAllDesignations() {

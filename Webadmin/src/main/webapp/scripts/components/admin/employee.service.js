@@ -204,6 +204,30 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            
+/*************************************Modified by Vinoth************************************************************************************/           
+            
+            exportOnboardingAllData: function(searchCriteria) {
+            	alert("Export service");
+                return $http.post('api/employeeOnboarding/export', searchCriteria).then(function (response) {
+                	alert("Export service after");
+                    console.log("Emp - Export------>"+JSON.stringify(response));
+                    return response.data;
+                });
+            },
+            exportStatus: function(fileName) {
+                return $http.get('api/employeeOnboarding/export/'+fileName+"/status").then(function (response) {
+                    return response.data;
+                });
+            },
+
+            getExportFile: function(fileName) {
+                return $http.get('api/employeeOnboarding/export/'+fileName).then(function (response) {
+                    return response.data;
+                });
+            },
+            
+/****************************************************************************************************************************************/
 
             assignReliever: function (relieverDetails) {
 

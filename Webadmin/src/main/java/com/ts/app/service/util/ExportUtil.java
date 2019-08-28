@@ -64,6 +64,11 @@ public class ExportUtil {
 
 	private String[] EMP_HEADER = { "EMPLOYEE ID", "EMPLOYEE NAME", "DESIGNATION", "REPORTING TO", "CLIENT", "SITE",
 			"ACTIVE" };
+	private String[] EMP_ONB_HEADER = { "PROJECT ID", "PROJECT DESCRIPTION", "WBS ID",  "WBS DESCRIPTION", "EMPLOYEE NAME", "EMPLOYEE CODE", 
+			"FATHER NAME", "MOTHER NAME", "GENDER", "MARTIAL STATUS", "DOB", "DOJ", "RELIGION", "BLOOD GROUP", "PERSONAL IDENTIFICATION MARK 1", "PERSONAL IDENTIFICATION MARK 2", 
+			"MOBILE NUMBER", "EMERGENCY CONTACT NUMBER", "PRESENT ADDRESS", "PRESENT CITY", "PRESENT STATE", "PERMANENT ADDRESS", "PERMANENT CITY", "PERMANENT STATE", "HIGHEST EDUCATION QUALIFICATION",
+			"BOARD/INSTITUTE", "NOMINEE NAME", "RELATIONSHIP", "CONTACT NUMBER", "PERCENTAGE", "EMPLOYED EARLIER - EMPLOYER NAME", "EMPLOYED EARLIER - DESIGNATION", 
+			"AADHAR CARD NUMBER", "BANK ACCOUNT NUMBER", "IFSC NUMBER", "STATUS", "POSITION", "IMPORTED", "ON BOARDED FROM", "VERIFIED BY", "VERIFIED DATE", "CREATED BY", "CREATED DATE"};
 //JOB HEADER WITH RELIEVER INFO
 //	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 //			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK", "RELIEVER", "RELIEVER ID", "RELIEVER NAME" };
@@ -97,6 +102,7 @@ public class ExportUtil {
 	private final static String EMPLOYEE_REPORT = "EMPLOYEE_REPORT";
 	private final static String FEEDBACK_REPORT = "FEEDBACK_REPORT";
 	private final static String QUOTATION_REPORT = "QUOTATION_REPORT";
+	private final static String EMPLOYEE_ONBOARDING_REPORT = "EMPLOYEE_ONBOARDING_REPORT";
 
 	@Inject
 	private Environment env;
@@ -1978,6 +1984,196 @@ public class ExportUtil {
 		return emp_excelData;
 
 	}
+
+//*******************************************Modified by Vinoth***********************************************************************
+	
+	public byte[] readOnboardingEmployeeExportExcelFile(String fileName) {
+
+		// log.info("INSIDE OF readExportFILE **********");
+
+		String filePath = env.getProperty("export.file.path");
+		// filePath += "/" + fileName +".xlsx";
+
+		filePath += "/" + fileName + ".xlsx";
+
+		// log.debug("PATH OF THE READ EXPORT FILE*********"+filePath);
+		File file = new File(filePath);
+		// log.debug("NAME OF THE READ EXPORT FILE*********"+file);
+
+		FileInputStream fileInputStream = null;
+		byte emponb_excelData[] = null;
+
+		try {
+
+			File readFile = new File(filePath);
+			emponb_excelData = new byte[(int) readFile.length()];
+
+			// read file into bytes[]
+			fileInputStream = new FileInputStream(file);
+			fileInputStream.read(emponb_excelData);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+		return emponb_excelData;
+
+	}
+	
+	public ExportResult writeToOnboardingExcelFile(List<EmployeeDTO> content, ExportResult result) {
+		log.debug("Welcome here to EXPORT-------->");
+
+		boolean isAppend = (result != null);
+		// log.debug("result === " + result + ", isAppend === " + isAppend);
+		if (result == null) {
+			result = new ExportResult();
+		}
+
+		// Create a function to export .xls file
+
+		String file_Name = null;
+		if (StringUtils.isEmpty(result.getFile())) {
+			file_Name = EMPLOYEE_ONBOARDING_REPORT + "_" + System.currentTimeMillis() + ".xlsx";
+		} else {
+			file_Name = result.getFile() + ".xlsx";
+		}
+		if (statusMap.containsKey(file_Name)) {
+			String status = statusMap.get(file_Name);
+			// log.debug("Current status for file_Name - "+file_Name+", status - "+status);
+		} else {
+			statusMap.put(file_Name, "PROCESSING");
+		}
+		final String exportFileName = file_Name;
+		if (lock == null) {
+			lock = new Lock();
+		}
+		try {
+			lock.lock();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Thread writerThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				String filePath = env.getProperty("export.file.path");
+				FileSystem fileSystem = FileSystems.getDefault();
+				// log.debug("FILE SYSTEM -----" + fileSystem);
+
+				// if(StringUtils.isNotEmpty(empId)) {
+				// filePath += "/" + empId;
+				// }
+				Path path = fileSystem.getPath(filePath);
+				// log.debug("PATH----------" + path);
+				// path = path.resolve(String.valueOf(empId));
+				if (!Files.exists(path)) {
+					Path newEmpPath = Paths.get(filePath);
+					try {
+						Files.createDirectory(newEmpPath);
+					} catch (IOException e) {
+						log.error("Error while creating path " + newEmpPath);
+					}
+				}
+				filePath += "/" + exportFileName;
+				// log.debug("NEW EXCEL_FILE PATH TO EXPORT----------" + filePath);
+
+				// create workbook
+				XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+				// create worksheet with title
+				XSSFSheet xssfSheet = xssfWorkbook.createSheet("EMPLOYEE_ONBOARDING_REPORT");
+
+				Row headerRow = xssfSheet.createRow(0);
+
+				for (int i = 0; i < EMP_ONB_HEADER.length; i++) {
+					Cell cell = headerRow.createCell(i);
+					cell.setCellValue(EMP_ONB_HEADER[i]);
+				}
+
+				int rowNum = 1;
+
+				for (EmployeeDTO transaction : content) {
+
+					log.info("Entered into EMP-FOR Loop--------->");
+
+					Row dataRow = xssfSheet.createRow(rowNum++);
+
+					dataRow.createCell(0).setCellValue(transaction.getProjectCode());
+					dataRow.createCell(1).setCellValue(transaction.getProjectDescription());
+					dataRow.createCell(2).setCellValue(transaction.getWbsId());
+					dataRow.createCell(3).setCellValue(transaction.getWbsDescription());
+					dataRow.createCell(4).setCellValue(transaction.getFullName());
+					dataRow.createCell(5).setCellValue(transaction.getEmpId());
+					dataRow.createCell(6).setCellValue(transaction.getFatherName());
+					dataRow.createCell(7).setCellValue(transaction.getMotherName());
+					dataRow.createCell(8).setCellValue(transaction.getGender());
+					dataRow.createCell(9).setCellValue(transaction.getMaritalStatus());
+					dataRow.createCell(10).setCellValue(transaction.getDob());
+					dataRow.createCell(11).setCellValue(transaction.getDoj());
+					dataRow.createCell(12).setCellValue(transaction.getRegion());
+					dataRow.createCell(13).setCellValue(transaction.getBloodGroup());
+					dataRow.createCell(14).setCellValue(transaction.getPersonalIdentificationMark1());
+					dataRow.createCell(15).setCellValue(transaction.getPersonalIdentificationMark2());
+					dataRow.createCell(16).setCellValue(transaction.getMobile());
+					dataRow.createCell(17).setCellValue(transaction.getEmergencyContactNumber());
+					dataRow.createCell(18).setCellValue(transaction.getPresentAddress());
+					dataRow.createCell(19).setCellValue(transaction.getPresentCity());
+					dataRow.createCell(20).setCellValue(transaction.getPresentState());
+					dataRow.createCell(21).setCellValue(transaction.getPermanentAddress());
+					dataRow.createCell(22).setCellValue(transaction.getPermanentCity());
+					dataRow.createCell(23).setCellValue(transaction.getPermanentState());
+					dataRow.createCell(24).setCellValue(transaction.getEducationalQulification());
+					dataRow.createCell(25).setCellValue(transaction.getBoardInstitute());
+					dataRow.createCell(26).setCellValue(transaction.getNomineeName());
+					dataRow.createCell(27).setCellValue(transaction.getNomineeRelationship());
+					dataRow.createCell(28).setCellValue(transaction.getNomineeContactNumber());
+					dataRow.createCell(29).setCellValue(transaction.getPercentage());
+					dataRow.createCell(30).setCellValue(transaction.getEmployer());
+					dataRow.createCell(31).setCellValue(transaction.getDesignation());
+					dataRow.createCell(32).setCellValue(transaction.getAdharCardNumber());
+					dataRow.createCell(33).setCellValue(transaction.getAccountNumber());
+					dataRow.createCell(34).setCellValue(transaction.getIfscCode());
+				}
+
+//				for (int i = 0; i < EMP_HEADER.length; i++) {
+//					xssfSheet.autoSizeColumn(i);
+//				}
+				// log.info(exportFileName + " Excel file was created successfully !!!");
+				statusMap.put(exportFileName, "COMPLETED");
+
+				// String fName = "F:\\Export\\Employee.xlsx";
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(filePath);
+					xssfWorkbook.write(fileOutputStream);
+					fileOutputStream.close();
+				} catch (IOException e) {
+					log.error("Error while flushing/closing  !!!");
+					statusMap.put(exportFileName, "FAILED");
+				}
+				lock.unlock();
+			}
+		});
+		writerThread.start();
+
+		// result.setEmpId(empId);
+		result.setFile(file_Name.substring(0, file_Name.indexOf('.')));
+		result.setStatus(getExportStatus(file_Name));
+		return result;
+	}
+	
+	
+//************************************************************************************************************************************	
 
 	public byte[] readJobExportFile(String fileName) {
 
