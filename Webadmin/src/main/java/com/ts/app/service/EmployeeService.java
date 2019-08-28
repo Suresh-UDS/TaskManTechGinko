@@ -373,10 +373,10 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setEmail(employee.getEmail());
 		zempDetStr.setEmpId(employee.getEmpId());
 		zempDetStr.setAcNo(employee.getAccountNumber());
-		zempDetStr.setAddrLi2M(employee.getPresentAddress().substring(0,39));
+		zempDetStr.setAddrLi2M((employee.getPresentAddress().length() >= 40 ?  employee.getPresentAddress().substring(0,39) : employee.getPresentAddress() ));
 		zempDetStr.setCityM(employee.getPresentCity());
 		zempDetStr.setStateM(employee.getPresentState());
-		zempDetStr.setAddrLi2P(employee.getPermanentAddress().substring(0,39));
+		zempDetStr.setAddrLi2P((employee.getPermanentAddress().length() >= 40 ?  employee.getPermanentAddress().substring(0,39) : employee.getPermanentAddress() ));
 		zempDetStr.setCityP(employee.getPermanentCity());
 		zempDetStr.setStateP(employee.getPermanentState());
 		zempDetStr.setAcNo(employee.getAccountNumber());
@@ -389,7 +389,7 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
 		zempDetStr.setMobileNoM(employee.getMobile());
 		zempDetStr.setMothersName(employee.getMotherName());
-		zempDetStr.setReligion("");
+		zempDetStr.setReligion(employee.getReligion());
 		zempDetStr.setWbs(employee.getWbsId());
 		
 		tableOfZempDetStr.getItem().add(zempDetStr);

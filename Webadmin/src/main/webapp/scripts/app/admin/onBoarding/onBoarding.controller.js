@@ -1022,7 +1022,7 @@ angular.module('timeSheetApp')
 
 					$scope.employee.verified =true;
 					$location.path('/onBoarding-list'); 
-					$scope.showNotifications('top', 'center', 'success', "Employee Approve Successfully");
+					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId);
 				}
 				else{
 
