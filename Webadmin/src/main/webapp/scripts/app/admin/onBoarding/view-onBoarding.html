@@ -333,7 +333,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
-                                <label>Bank Passbook Image <span class="red-star">*</span></label>
+                                <label>Bank Passbook Image <span ng-if="employee.newEmployee" class="red-star">*</span></label>
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
                                         <img ng-if="bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{bankPassBookImageUrl}} alt="...">
@@ -385,7 +385,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <label>Fingerprint Left Image <span class="red-star">*</span></label>
+                        <label>Fingerprint Left Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
@@ -395,7 +395,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <label>Fingerprint Right Image <span class="red-star">*</span></label>
+                        <label>Fingerprint Right Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
@@ -407,7 +407,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-3 col-sm-3">
-                        <label>Driving License Image <span class="red-star">*</span></label>
+                        <label>Driving License Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
@@ -417,7 +417,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <label>Voter Id Image <span class="red-star">*</span></label>
+                        <label>Voter Id Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
@@ -427,7 +427,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <label>Pancard Image <span class="red-star">*</span></label>
+                        <label>Pancard Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
@@ -451,7 +451,7 @@
         Back
     </button>
 
-    <button class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval" ng-click="conform('approve')" id="close-button-right">
+    <button class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval" ng-click="conform('approve')" ng-class="{'running':saveLoad}" id="close-button-right">
         Approve Employee
     </button>
 

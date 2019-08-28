@@ -1021,9 +1021,13 @@ angular.module('timeSheetApp')
     };
 
     $scope.approveOnBoardingEmployee = function(){
-        
+		
+		$scope.saveLoad = true;
+
         OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
 			 
+				$scope.saveLoad = false;
+
 				if(data.type!="E"){
 
 					$scope.employee.verified =true;
@@ -1031,7 +1035,7 @@ angular.module('timeSheetApp')
 					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId);
 				}
 				else{
-
+					
 					$scope.success = null;
 					$scope.disable = false;
 					$scope.btnDisable = false;
@@ -1040,7 +1044,7 @@ angular.module('timeSheetApp')
 
 				}
 
-        }).catch(function(){
+        }).catch(function(response){
             $scope.saveLoad = false;
             $scope.success = null;
             $scope.disable = false;
@@ -1380,7 +1384,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.showNotifications= function(position,alignment,color,msg){
-		demo.showNotification(position,alignment,color,msg);
+		demo.showNotificationLonger(position,alignment,color,msg);
 	};
 
 	$scope.initCalender();
