@@ -303,13 +303,13 @@ public class    EmployeeService extends AbstractService {
 		 
 		HttpEntity<ZempdetailUpdate> request = new HttpEntity<>(zempdetailUpdate,headers);
 
-//		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
-//				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
-//				ZempdetailUpdateResponse.class);
-
 		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
-				 "http://localhost:8001/updateEmployeeOnSap" , HttpMethod.POST,  request,
+				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
 				ZempdetailUpdateResponse.class);
+
+//		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
+//				 "http://localhost:8001/updateEmployeeOnSap" , HttpMethod.POST,  request,
+//				ZempdetailUpdateResponse.class);
 
 		
 		return response.getBody();

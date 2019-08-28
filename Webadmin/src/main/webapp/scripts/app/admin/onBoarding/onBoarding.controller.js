@@ -1015,10 +1015,12 @@ angular.module('timeSheetApp')
     };
 
     $scope.approveOnBoardingEmployee = function(){
-        $scope.employee.verified =true;
+        
         OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
 			 
 				if(data.type!="E"){
+
+					$scope.employee.verified =true;
 					$location.path('/onBoarding-list'); 
 					$scope.showNotifications('top', 'center', 'success', "Employee Approve Successfully");
 				}
@@ -1031,7 +1033,7 @@ angular.module('timeSheetApp')
 					$scope.error = 'ERROR';
 
 				}
-				
+
         }).catch(function(){
             $scope.saveLoad = false;
             $scope.success = null;
