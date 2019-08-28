@@ -1843,10 +1843,25 @@ public class ImportUtil {
 							employee.setWbsId(getCellValue(currentRow.getCell(2)));
 							cellNo = 3;
 							employee.setWbsDescription(getCellValue(currentRow.getCell(3)));
-							cellNo = 4;
-							employee.setName(getCellValue(currentRow.getCell(4)));
-							employee.setFullName(getCellValue(currentRow.getCell(4)));
-							employee.setLastName("");
+							cellNo = 4; 
+							
+							String[] fullName = getCellValue(currentRow.getCell(4)).split(" ");
+							
+							if(fullName.length > 1) {
+ 								
+								employee.setName(Arrays.stream(fullName).limit(fullName.length-1).collect(Collectors.joining(" ")));
+								
+								employee.setLastName(fullName[fullName.length-1]);
+								
+							}
+							else {
+								
+								employee.setName(fullName[0]);
+								employee.setLastName("");
+								
+							}
+							
+							employee.setFullName(getCellValue(currentRow.getCell(4)));;
 
 							cellNo = 6;
 							employee.setFatherName(getCellValue(currentRow.getCell(6)));
@@ -1914,6 +1929,9 @@ public class ImportUtil {
 							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
 							cellNo = 34;
 							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
+							cellNo = 35;
+							employee.setPosition(getCellValue(currentRow.getCell(35)));
+							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 							employee.setCreatedDate(zdt);

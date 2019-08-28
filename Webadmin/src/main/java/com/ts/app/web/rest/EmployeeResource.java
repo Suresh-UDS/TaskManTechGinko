@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.NomineeRelationship;
+import com.ts.app.domain.Religion;
 import com.ts.app.domain.Ticket;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.repository.NomineeRelationshipRepository;
+import com.ts.app.repository.ReligionRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.EmployeeService;
@@ -88,6 +90,9 @@ public class EmployeeResource {
     @Inject
     private NomineeRelationshipRepository nomineeRelationshipRepository; 
 
+    @Inject
+    private ReligionRepository religionRepository; 
+ 
     @Inject
     private ImportUtil importUtil;
 
@@ -906,6 +911,13 @@ public class EmployeeResource {
     public ResponseEntity<Iterable<NomineeRelationship>> getNomineeRelationship(){
     	 
     	return new ResponseEntity<Iterable<NomineeRelationship>>(nomineeRelationshipRepository.findAll(),HttpStatus.CREATED);
+    	
+    }
+    
+    @RequestMapping(value = "/getReligionList",method=RequestMethod.GET)
+    public ResponseEntity<Iterable<Religion>> getReligion(){
+    	 
+    	return new ResponseEntity<Iterable<Religion>>(religionRepository.findAll(),HttpStatus.CREATED);
     	
     }
 
