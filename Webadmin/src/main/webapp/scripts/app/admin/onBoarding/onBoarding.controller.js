@@ -908,7 +908,9 @@ angular.module('timeSheetApp')
                                 $scope.employee.religion !=null &&
                                 $scope.employee.wbsDescription !=null &&
                                 $scope.employee.wbsId !=null &&
-                                documents.length>8
+								_.where(documents,{docType:'adhar_card_front'}) &&
+								_.where(documents,{docType:'adhar_card_back'}) && 
+								employee.newEmployee &&  _.where(documents,{docType:'bank_passbook_image'}) &&
 
                             ){
                                 $scope.enableApproval = true;
