@@ -46,6 +46,12 @@
                                 <td class="col-sm-8">{{employee.wbsDescription  }}</td>
 
                             </tr>
+                            <tr>
+
+                                <td class="col-sm-4">Designation No<span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.position  }}</td>
+
+                            </tr>
 
 
                             </tbody>
@@ -451,7 +457,7 @@
         Back
     </button>
 
-    <button class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval" ng-click="conform('approve')" ng-class="{'running':saveLoad}" id="close-button-right">
+    <button class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval" ng-click="conform('approve')" id="close-button-right">
         Approve Employee
     </button>
 

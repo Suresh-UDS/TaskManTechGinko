@@ -1929,6 +1929,9 @@ public class ImportUtil {
 							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
 							cellNo = 34;
 							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
+							cellNo = 35;
+							employee.setPosition(getCellValue(currentRow.getCell(35)));
+							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 							employee.setCreatedDate(zdt);
