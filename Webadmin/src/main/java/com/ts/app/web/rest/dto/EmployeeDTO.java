@@ -109,15 +109,15 @@ public class EmployeeDTO extends BaseDTO {
 
 /*************************Modified by Vinoth***********************************************************/    
     
-    @Size(min = 1, max = 50)
+
     private String fatherName;
     
     private String motherName;
     
-    @Size(min = 1, max = 10)
+
     private String gender;
     
-    @Size(min =1, max = 50)
+
     private String maritalStatus;
     
     private Date dob;
@@ -128,20 +128,16 @@ public class EmployeeDTO extends BaseDTO {
     
     private String bloodGroup;
     
-    @Size( max = 2500)
     private String personalIdentificationMark1;
     
-    @Size( max = 2500)
     private String personalIdentificationMark2;
     
     private String educationalQulification;
     
     private String boardInstitute;
     
-    @Size(min = 1, max = 16)
     private String adharCardNumber;
 
-    @Size(min = 1, max =10)
     private String mobile;
     
     private String emergencyContactNumber;

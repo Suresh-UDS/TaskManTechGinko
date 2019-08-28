@@ -157,7 +157,7 @@ public class EmployeeResource {
     	 }catch(Exception e) {
     		 throw new TimesheetException(e, employeeDTO);
     	 }
-    	 return new ResponseEntity<>(HttpStatus.CREATED);
+    	 return new ResponseEntity<>(employeeDTO,HttpStatus.CREATED);
      }
 
     @RequestMapping(value = "/editOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
