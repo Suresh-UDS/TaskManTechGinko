@@ -844,6 +844,8 @@ angular.module('timeSheetApp')
                     $scope.employee.emergencyContactNumber= parseInt($scope.employee.emergencyContactNumber);
                     $scope.employee.nomineeContactNumber = parseInt($scope.employee.nomineeContactNumber);
 
+					console.log($scope.employee.newEmployee);
+
                     EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
                         console.log("Employee documents");
                         console.log(documents);
@@ -910,7 +912,9 @@ angular.module('timeSheetApp')
                                 $scope.employee.wbsId !=null &&
 								!_.find(documents,{docType:'adhar_card_front'}) &&
 								!_.find(documents,{docType:'adhar_card_back'}) && 
-								(employee.newEmployee &&  !_.find(documents,{docType:'bank_passbook_image'}) )
+								(($scope.employee.newEmployee &&  !_.find(documents,{docType:'bank_passbook_image'}) ||
+								  !$scope.employee.newEmployee )
+								)
 
                             ){
                                 $scope.enableApproval = true;
