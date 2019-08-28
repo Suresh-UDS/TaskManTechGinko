@@ -107,6 +107,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private String branch;
 
+    private String position;
+    
 /*************************Modified by Vinoth***********************************************************/    
     
 
@@ -999,4 +1001,14 @@ public class EmployeeDTO extends BaseDTO {
     public void setNewEmployee(boolean newEmployee) {
         this.newEmployee = newEmployee;
     }
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+    
+    
 }

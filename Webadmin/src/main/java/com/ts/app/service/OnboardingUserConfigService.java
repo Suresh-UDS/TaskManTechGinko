@@ -137,6 +137,22 @@ public class OnboardingUserConfigService extends AbstractService {
         return sapBusinessCategories.get(0);
 
     }
+	
+	public String getParentElementOfProject(String elementCode,long userId){
+		
+		List<String> parentCodeList = onboardingUserConfigRepository.getParentElementOfProject(elementCode, userId);
+		 	
+		if(parentCodeList.size() > 0) {
+			
+			return parentCodeList.get(0);
+			
+		}
+		else {
+			
+			return "";
+		}
+	
+	}
 
     public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser(long userId) throws JSONException {
         List<OnboardingUserConfig> userConfigs = onboardingUserConfigRepository.findElementParentsByUserId(userId); // Get all element parents for the user id

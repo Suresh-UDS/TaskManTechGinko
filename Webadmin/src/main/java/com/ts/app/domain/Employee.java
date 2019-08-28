@@ -165,6 +165,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @NotNull
     private String presentAddress;
     
+    private String position;
+    
     @NotNull
     private String presentCity;
     
@@ -877,4 +879,16 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     public void setNewEmployee(boolean newEmployee) {
         this.newEmployee = newEmployee;
     }
+
+
+	public String getPosition() {
+		return position;
+	}
+
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+    
+    
 }

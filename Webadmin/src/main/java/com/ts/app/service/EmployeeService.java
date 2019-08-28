@@ -81,6 +81,9 @@ public class    EmployeeService extends AbstractService {
     private NomineeRelationshipRepository nomineeRelationshipRepository ;
 
     @Inject
+    private ReligionRepository religionRepository ;
+ 
+    @Inject
     private EmployeeRepository employeeRepository;
 
     @Inject
@@ -360,23 +363,25 @@ public class    EmployeeService extends AbstractService {
 		String employeeId = employee.getEmpId();
 		
 		if(employee.isNewEmployee()) {
-			
+			 
 			zempDetStr.setEmployeeType("N");
 			
 		}
 		
 		zempDetStr.setEmpId(employeeId);
 		zempDetStr.setEmpName(employee.getFullName());
+		zempDetStr.setDesigNo(employee.getPosition());
+		zempDetStr.setPersa(onboardingUserConfigService.getParentElementOfProject(employee.getProjectCode(),SecurityUtils.getCurrentUserId()));
 		zempDetStr.setBloodGroup(employee.getBloodGroup());
 		zempDetStr.setDateOfBirth(employee.getDob().toString());
 		zempDetStr.setDateOfJoin(employee.getDoj().toString());
 		zempDetStr.setEmail(employee.getEmail());
 		zempDetStr.setEmpId(employee.getEmpId());
 		zempDetStr.setAcNo(employee.getAccountNumber());
-		zempDetStr.setAddrLi2M(employee.getPresentAddress().substring(0,39));
+		zempDetStr.setAddrLi2M((employee.getPresentAddress().length() >= 40 ?  employee.getPresentAddress().substring(0,39) : employee.getPresentAddress() ));
 		zempDetStr.setCityM(employee.getPresentCity());
 		zempDetStr.setStateM(employee.getPresentState());
-		zempDetStr.setAddrLi2P(employee.getPermanentAddress().substring(0,39));
+		zempDetStr.setAddrLi2P((employee.getPermanentAddress().length() >= 40 ?  employee.getPermanentAddress().substring(0,39) : employee.getPermanentAddress() ));
 		zempDetStr.setCityP(employee.getPermanentCity());
 		zempDetStr.setStateP(employee.getPermanentState());
 		zempDetStr.setAcNo(employee.getAccountNumber());
@@ -389,9 +394,11 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
 		zempDetStr.setMobileNoM(employee.getMobile());
 		zempDetStr.setMothersName(employee.getMotherName());
-		zempDetStr.setReligion("");
-		zempDetStr.setWbs(employee.getWbsId());
 		
+		List<Religion> religion = religionRepository.findByTitle(employee.getReligion());
+		zempDetStr.setReligion(religion.size() > 0 ? religion.get(0).getCode() : "22");
+
+		zempDetStr.setWbs(employee.getWbsId());
 		tableOfZempDetStr.getItem().add(zempDetStr);
 		
 		
@@ -1978,6 +1985,32 @@ public class    EmployeeService extends AbstractService {
     public byte[] getExportFile(String fileName) {
         return exportUtil.readEmployeeExportExcelFile(fileName);
     }
+    
+//*******************************************Modified by Vinoth***********************************************************************
+ 
+    public ExportResult exportOnboarding(List<EmployeeDTO> transactions) {
+        //return exportUtil.writeToCsvFile(transactions, null);
+        log.debug("ready to EXPORT EXCEL-------->");
+        return exportUtil.writeToOnboardingExcelFile(transactions,null);
+    }
+    
+    public ExportResult getOnboardingExportStatus(String fileId) {
+        ExportResult er = new ExportResult();
+        fileId += ".xlsx";
+        if(!StringUtils.isEmpty(fileId)) {
+            String status = exportUtil.getExportStatus(fileId);
+            er.setFile(fileId);
+            //er.setEmpId(empId);
+            er.setStatus(status);
+        }
+        return er;
+    }
+    
+    public byte[] getOnboardingExportFile(String fileName) {
+        return exportUtil.readOnboardingEmployeeExportExcelFile(fileName);
+    }
+    
+//************************************************************************************************************************************
 
 
     public List<DesignationDTO> findAllDesignations() {
@@ -2069,6 +2102,19 @@ public class    EmployeeService extends AbstractService {
          empDto.setWbsId(employee.getWbsId());
          empDto.setProjectCode(employee.getProjectCode());
          empDto.setProjectDescription(employee.getProjectDescription());
+         empDto.setActive(employee.getActive());
+         empDto.setPosition(employee.getPosition());
+         empDto.setImported(employee.isImported());
+         empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
+         
+         if(empDto.isVerified()){
+        	 empDto.setVerifiedBy(employee.getVerifiedBy().getFirstName());
+         }
+         if(employee.getVerifiedDate() != null) {
+         empDto.setVerifiedDate(employee.getVerifiedDate());
+         }
+         empDto.setCreatedBy(employee.getCreatedBy());
+         empDto.setCreatedDate(employee.getCreatedDate());
     	return empDto;
     }
     

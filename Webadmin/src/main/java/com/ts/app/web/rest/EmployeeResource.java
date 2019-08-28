@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.NomineeRelationship;
+import com.ts.app.domain.Religion;
 import com.ts.app.domain.Ticket;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.repository.NomineeRelationshipRepository;
+import com.ts.app.repository.ReligionRepository;
 import com.ts.app.repository.UserRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.EmployeeService;
@@ -88,6 +90,9 @@ public class EmployeeResource {
     @Inject
     private NomineeRelationshipRepository nomineeRelationshipRepository; 
 
+    @Inject
+    private ReligionRepository religionRepository; 
+ 
     @Inject
     private ImportUtil importUtil;
 
@@ -569,6 +574,63 @@ public class EmployeeResource {
         return content;
     }
 
+//***************************************Modified by Vinoth***********************************************************************************************
+    @RequestMapping(value = "/employeeOnboarding/export",method = RequestMethod.POST)
+    public ExportResponse exportEmployeeOnboarding(@RequestBody SearchCriteria searchCriteria) {
+        ExportResponse resp = new ExportResponse();
+        if(searchCriteria != null) {
+            log.debug("Emp - control comes here....");
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+            SearchResult<EmployeeDTO> result = employeeService.findOnBoardingBySearchCrieria(searchCriteria);
+            log.debug("Everything is FINE------->");
+            List<EmployeeDTO> results = result.getTransactions();
+            log.debug("VALUES OF RESULTS --------->"+results);
+            resp.addResult(employeeService.exportOnboarding(results));
+        }
+        return resp;
+    }
+
+    @RequestMapping(value = "/employeeOnboarding/export/{fileId}/status",method = RequestMethod.GET)
+    public ExportResult exportOnboardingStatus(@PathVariable("fileId") String fileId) {
+        //log.debug("ExportStatus -  fileId -"+ fileId);
+        ExportResult result = employeeService.getOnboardingExportStatus(fileId);
+        if(result!=null && result.getStatus() != null) {
+            //log.info("result.getSTATUS----------"+result.getStatus());
+            switch(result.getStatus()) {
+                case "PROCESSING" :
+                    result.setMsg("Exporting...");
+                    break;
+                case "COMPLETED" :
+                    result.setMsg("Download");
+                    //log.info("FILE-ID--------"+fileId);
+                    result.setFile("/api/employee/export/"+fileId);
+                    //log.info("FILE-ID AFTER RESULT--------"+result);
+                    break;
+                case "FAILED" :
+                    result.setMsg("Failed to export. Please try again");
+                    break;
+                default :
+                    result.setMsg("Failed to export. Please try again");
+                    break;
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/employeeOnboarding/export/{fileId}",method = RequestMethod.GET)
+    public byte[] getOnboardingExportFile(@PathVariable("fileId") String fileId, HttpServletResponse response) {
+        // log.debug("FILE-ID++++++++++++"+fileId);
+        byte[] content = employeeService.getOnboardingExportFile(fileId);
+        //log.debug("GET EXPORT FILE FILE-ID----"+content);
+        response.setContentType("Application/x-msexcel");
+        response.setContentLength(content.length);
+        response.setHeader("Content-Transfer-Encoding", "binary");
+        response.setHeader("Content-Disposition","attachment; filename=\"" + fileId + ".xlsx\"");
+        return content;
+    }
+/**********************************************************************************************************************************************************/
+    
+    
     @RequestMapping(value = "/employee/assignReliever", method = RequestMethod.POST)
     public ResponseEntity<?> assignReliever(@RequestBody RelieverDTO reliever) {
 
@@ -849,6 +911,13 @@ public class EmployeeResource {
     public ResponseEntity<Iterable<NomineeRelationship>> getNomineeRelationship(){
     	 
     	return new ResponseEntity<Iterable<NomineeRelationship>>(nomineeRelationshipRepository.findAll(),HttpStatus.CREATED);
+    	
+    }
+    
+    @RequestMapping(value = "/getReligionList",method=RequestMethod.GET)
+    public ResponseEntity<Iterable<Religion>> getReligion(){
+    	 
+    	return new ResponseEntity<Iterable<Religion>>(religionRepository.findAll(),HttpStatus.CREATED);
     	
     }
 
