@@ -363,7 +363,7 @@ public class    EmployeeService extends AbstractService {
 		String employeeId = employee.getEmpId();
 		
 		if(employee.isNewEmployee()) {
-			
+			 
 			zempDetStr.setEmployeeType("N");
 			
 		}
@@ -371,6 +371,7 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setEmpId(employeeId);
 		zempDetStr.setEmpName(employee.getFullName());
 		zempDetStr.setDesigNo(employee.getPosition());
+		zempDetStr.setPersa(onboardingUserConfigService.getParentElementOfProject(employee.getProjectCode(),SecurityUtils.getCurrentUserId()));
 		zempDetStr.setBloodGroup(employee.getBloodGroup());
 		zempDetStr.setDateOfBirth(employee.getDob().toString());
 		zempDetStr.setDateOfJoin(employee.getDoj().toString());

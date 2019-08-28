@@ -882,7 +882,8 @@ angular.module('timeSheetApp')
                             }
 
                             if(
-                                $scope.employee.accountNumber !=null &&
+								$scope.employee.accountNumber !=null &&
+								$scope.employee.position !=null &&
                                 $scope.employee.adharCardNumber !=null &&
                                 $scope.employee.bloodGroup !=null &&
                                 $scope.employee.dob !=null &&
