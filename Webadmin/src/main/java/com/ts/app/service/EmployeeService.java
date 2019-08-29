@@ -284,6 +284,7 @@ public class    EmployeeService extends AbstractService {
     
     public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
+        employee.setUser(null);
         employee.setActive(Employee.ACTIVE_YES);
         employee = employeeRepository.save(employee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
@@ -293,6 +294,7 @@ public class    EmployeeService extends AbstractService {
     public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findOne(employeeDTO.getId());
         Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
+        employee.setUser(null);
         employee = employeeRepository.saveAndFlush(updateEmployee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;

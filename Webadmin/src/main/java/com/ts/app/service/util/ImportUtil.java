@@ -1944,6 +1944,7 @@ public class ImportUtil {
 							employee.setImported(true);
 							employee.setOnBoardedFrom("Web");
 							employee.setOnBoardSource("Import");
+							employee.setUser(null);
 
                     if((currentRow.getCell(5).getStringCellValue() != null) && (StringUtils.isNotEmpty((currentRow.getCell(5).getStringCellValue())))  &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
                         cellNo = 5;

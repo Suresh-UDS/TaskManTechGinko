@@ -1118,7 +1118,11 @@ angular.module('timeSheetApp')
         }
         /* Root scope (search criteria) */
         $rootScope.searchFilterCriteria.isDashboard = false;
-        $scope.search();
+        // $scope.search();
+        $scope.onBoardingEmployees = [];
+
+        $scope.getTobeVerifiedEmployees();
+
     };
 
     $scope.approveOnBoardingEmployee = function(){
