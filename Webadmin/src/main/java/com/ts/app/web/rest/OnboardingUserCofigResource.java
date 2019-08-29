@@ -65,13 +65,13 @@ public class OnboardingUserCofigResource {
 	return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-    @RequestMapping(value = "/saveOnboardingUserConfigList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/saveOnboardingUserConfigList/{userId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> saveOnboardingUserConfigList(@Valid @RequestBody List<OnboardingUserConfigDTO> onboardingUserConfigDTO,HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> saveOnboardingUserConfigList(@PathVariable("userId") long userId, @Valid @RequestBody List<OnboardingUserConfigDTO> onboardingUserConfigDTO,HttpServletRequest httpServletRequest){
         List<OnboardingUserConfig> createdUserlist = null;
         try {
 //            onboardingUserConfigDTO.setUserId(SecurityUtils.getCurrentUserId());
-            createdUserlist = onboardingUserConfigService.saveOnBoardingUserConfigList(onboardingUserConfigDTO);
+            createdUserlist = onboardingUserConfigService.saveOnBoardingUserConfigList(onboardingUserConfigDTO,userId);
         }catch(Exception cve){
             String msg = "Error while creating Onboarding user,Please check the information";
 //            throw new TimesheetException(cve,onboardingUserConfigDTO);
@@ -89,10 +89,10 @@ public class OnboardingUserCofigResource {
         return onboardingUserConfigService.getOnBoardingConfigDetails();
     }
 
-    @RequestMapping(value = "/onBoardingConfig/getUserDetails/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/onBoardingConfig/getUserDetails/{id}/branch/{branch}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser (@PathVariable ("id") long id) throws JSONException {
-        return onboardingUserConfigService.getOnBoardingConfigDetailsForUser(id);
+    public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser (@PathVariable ("id") long id,@PathVariable ("branch") String branch) throws JSONException {
+        return onboardingUserConfigService.getOnBoardingConfigDetailsForUser(id,branch);
     }
 
     @RequestMapping(value = "/getBranchListForUser", method = RequestMethod.GET)

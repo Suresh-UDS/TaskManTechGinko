@@ -78,7 +78,9 @@ angular.module('timeSheetApp')
 	$scope.branchsLists = [];
 	$scope.branchsListOne.selected =  null;
     $scope.userDetails = {};
-    $scope.showUserDetails = false;
+	$scope.showUserDetails = false;
+	$scope.selctedSapBusinessCategoriesList = [];
+	$scope.selectedBranch = "";
 
     $scope.allBranches = {id:0, element:' -- All Branches --'};
     $scope.branch={};
@@ -146,6 +148,30 @@ angular.module('timeSheetApp')
 		demo.initFormExtendedDatetimepickers();
 
 	};
+
+	$scope.setSelectedBranch = function(){
+ 
+		$scope.selctedSapBusinessCategoriesList = [];
+		$scope.selctedSapBusinessCategoriesList.push(_.find($scope.sapBusinessCategoriesList.rootElements,{elementCode:$scope.selectedBranch}));
+
+		//console.log(console.log($scope.selctedSapBusinessCategoriesList));
+
+		OnBoardingComponent.getElementsByUser($scope.userDetails.id,$scope.selectedBranch).then(function (data) {
+
+			$scope.mappedData = data; 
+			
+			for(var i in $scope.mappedData){
+
+				console.log(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType);
+
+				$(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType).prop("checked",true);
+
+			}
+ 
+			 
+		});
+
+	}
 
 	$scope.loadgetSapBusinessCategories = function(){
 	    $scope.showCategoriesLoader = true;
@@ -499,13 +525,14 @@ angular.module('timeSheetApp')
 		for(var i in elements){
  
 			if( $(".ip_"+elements[i].elementCode+"_"+elements[i].elemetType).is(":checked") ){
- 
+			//if(elements.checked){
 				$scope.postMapping.push( { 
 											elementParent: elementParentCode,
 											element : elements[i].elementName,
 											elementType : elements[i].elemetType,
 											elementCode : elements[i].elementCode,
 											onBoardingUserId : $scope.userDetails.id,
+											branch : $scope.selctedSapBusinessCategoriesList[0].elementCode,
 											userId : null,
 											childElements : []
 										} ); 
@@ -520,7 +547,9 @@ angular.module('timeSheetApp')
 
 	function initDesignInput(){
 
-		designInput($scope.sapBusinessCategoriesList.rootElements,null);
+		$scope.postMapping = [];
+
+		designInput($scope.selctedSapBusinessCategoriesList,null);
 
 		console.log($scope.postMapping);
 	}
@@ -536,12 +565,13 @@ angular.module('timeSheetApp')
 
         OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,function(response,err){
             if(response){
-                console.log("Successfully saved on boarding user config details");
-                console.log(response);
+				
+				$scope.showNotifications('top', 'center', 'success', "Buisiness Area are mapped Successfully");
+ 
             }
             if(err){
-                console.log("Error in saving on boarding user config details");
-                console.log(err);
+                $scope.showNotifications('top', 'center', 'danger', "error in save");
+                
             }
         })
     };
@@ -553,13 +583,9 @@ angular.module('timeSheetApp')
             
             $scope.showUserDetails = true;
 			$scope.userDetails = data;
-			
-			OnBoardingComponent.getElementsByUser(data.userId).then(function (data) {
 
-				$scope.mappedData = data; 
-				$scope.loadgetSapBusinessCategories();
-
-			});
+			$scope.loadgetSapBusinessCategories();
+ 
 
            // $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
             // $scope.getUserConfigDetails(data.id);

@@ -11,7 +11,7 @@ angular.module('timeSheetApp')
 
             create : function(categoryList,onBoardingUserId,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/saveOnboardingUserConfigList',categoryList).then(
+                return $http.post('api/saveOnboardingUserConfigList/'+onBoardingUserId,categoryList).then(
                     function (response) {
                         return cb(response,null);
                     }).catch(
@@ -22,8 +22,8 @@ angular.module('timeSheetApp')
 
             },
 
-            getElementsByUser: function(userId){
-                return $http.get('api/onBoardingConfig/getUserDetails/'+userId).then(function (response) {
+            getElementsByUser: function(userId,branch){
+                return $http.get('api/onBoardingConfig/getUserDetails/'+userId+'/branch/'+branch).then(function (response) {
                     console.log(response.data);
                     return response.data;
                 })

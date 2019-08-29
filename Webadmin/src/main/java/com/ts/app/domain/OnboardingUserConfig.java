@@ -37,6 +37,11 @@ public class OnboardingUserConfig extends AbstractAuditingEntity implements Seri
     @Size(min = 1, max =250)
     @Column(length = 250, nullable = false)
     private String elementCode;
+    
+    @NotNull
+    @Size(min = 1, max =250)
+    @Column(length = 250, nullable = false)
+    private String branch;
 
 	
 	public long getId() {
@@ -82,4 +87,14 @@ public class OnboardingUserConfig extends AbstractAuditingEntity implements Seri
     public void setUser(User user) {
         this.user = user;
     }
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+    
+    
 }

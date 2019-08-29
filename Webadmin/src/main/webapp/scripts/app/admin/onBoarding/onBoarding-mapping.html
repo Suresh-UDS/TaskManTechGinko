@@ -127,11 +127,31 @@
 
                 <div class="container">
                     <div class="row">
+                            
+                            <div class="col-md-6">
+
+                                    <label>Branch</label>
+                                    <select class="form-control" name="designations" ng-model="selectedBranch"  ng-change="setSelectedBranch()">
+                                        <option value="">Select Branch</option>
+                                        <option ng-repeat="item in sapBusinessCategoriesList.rootElements track by $index" value="{{item.elementCode}}">{{item.elementName}} - {{item.elementCode}}</option>
+                                    </select>
+                         
+                            </div>
+
+                            <div class="col-md-6">
+                                
+                                    <label>Filter</label>
+                                    <input type="text" class="form-control"  ng-model="wbsFilter"   placeholder="Filter"/> 
+                         
+                            </div>
+
+                    </div>
+                    <div class="row">
                         <div class="col-md-12">
                             <div class="row">
                                 <div id="onBoarding" > 
                                      <ul class="nested-checkbox-list">
-                                        <nested-check-box ng-repeat="item in sapBusinessCategoriesList.rootElements" item="[item,sapBusinessCategoriesList.userConfElements,1]" ></nested-check-box> 
+                                        <nested-check-box ng-repeat="curItem in selctedSapBusinessCategoriesList" item="[curItem,sapBusinessCategoriesList.userConfElements,1]" ></nested-check-box> 
                                      </ul>
                                 </div>
                             </div>

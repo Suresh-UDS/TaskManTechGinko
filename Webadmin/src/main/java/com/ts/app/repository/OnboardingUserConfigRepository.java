@@ -21,10 +21,16 @@ public interface OnboardingUserConfigRepository extends JpaRepository<Onboarding
     @Query("DELETE from OnboardingUserConfig o where o.user.id= :userId")
     @Transactional
     void deleteByUserId(@Param("userId") long userId);
+    
+    @Modifying
+    @Query("DELETE from OnboardingUserConfig o where o.user.id= :userId and o.branch=:branch")
+    @Transactional
+    void deleteByUserIdAndBranch(@Param("userId") long userId,@Param("branch") String branch);
 
 //    @Query("SELECT o FROM OnboardingUserConfig o WHERE o.user.id =:userId and o.elementParent is null ")
     @Query("SELECT o FROM OnboardingUserConfig o WHERE o.user.id =:userId ")
     List<OnboardingUserConfig> findElementParentsByUserId(@Param("userId") long userId);
+    List<OnboardingUserConfig> findElementParentsByUserIdAndBranch(@Param("userId") long userId,@Param("branch") String branch);
 
     @Query("SELECT o FROM OnboardingUserConfig o WHERE o.user.id =:userId and o.elementParent = :elementParent")
     List<OnboardingUserConfig> findElementChildsByUserId(@Param("userId") long userId, @Param("elementParent") String elementParent);

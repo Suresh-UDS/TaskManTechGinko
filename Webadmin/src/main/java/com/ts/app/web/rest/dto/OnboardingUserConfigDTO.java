@@ -17,6 +17,8 @@ public class OnboardingUserConfigDTO extends BaseDTO{
 	private String elementType;
 
 	private String elementCode;
+	
+	private String branch;
 
 	private boolean isSelected;
 
@@ -93,4 +95,16 @@ public class OnboardingUserConfigDTO extends BaseDTO{
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	
+    
+    
 }
