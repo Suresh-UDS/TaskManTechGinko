@@ -1338,7 +1338,15 @@ angular.module('timeSheetApp')
 
 	};
 
+//****************************modified by suresh */
+	$scope.loadCompletedJob = function(imageUrl) {
+		var eleId = 'photoStart';
+		var ele = document.getElementById(eleId);
+		ele.setAttribute('src',imageUrl);
 
+	};
+
+//*********************************************** */
 	function pad(num, size) {
 		var s = num+"";
 		while (s.length < size) s = "0" + s;
