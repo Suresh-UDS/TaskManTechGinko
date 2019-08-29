@@ -373,6 +373,10 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setEmpId(employeeId);
 		zempDetStr.setEmpName(employee.getFullName());
 		zempDetStr.setDesigNo(employee.getPosition());
+		
+		log.info("personal area");
+		log.info(employee.getProjectCode()+"-"+SecurityUtils.getCurrentUserId());
+		
 		zempDetStr.setPersa(onboardingUserConfigService.getParentElementOfProject(employee.getProjectCode(),SecurityUtils.getCurrentUserId()));
 		zempDetStr.setBloodGroup(employee.getBloodGroup());
 		zempDetStr.setDateOfBirth(employee.getDob().toString());
