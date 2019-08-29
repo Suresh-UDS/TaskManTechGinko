@@ -100,26 +100,26 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 /*************************Modified by Vinoth***********************************************************/    
     
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     private String projectCode;
     
     @NotNull
-    @Size(min = 1, max = 2500)
+    @Size(max = 2500)
     private String projectDescription;
     
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     private String fatherName;
     
     private String motherName;
     
     @NotNull
-    @Size(min = 1, max = 10)
+    @Size(max = 10)
     @Column(length = 10, nullable = true)
     private String gender;
     
     @NotNull
-    @Size(min =1, max = 50)
+    @Size(max = 50)
     @Column(length = 50, nullable = true)
     private String maritalStatus;
     
@@ -133,10 +133,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     private String bloodGroup;
     
-    @Size(min = 1, max = 2500)
+    @Size( max = 2500)
     private String personalIdentificationMark1;
     
-    @Size(min = 1, max = 2500)
+    @Size(max = 2500)
     private String personalIdentificationMark2;
     
     private String educationalQulification;
@@ -144,11 +144,11 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private String boardInstitute;
     
     @NotNull
-    @Size(min = 1, max = 16)
+    @Size(max = 16)
     private String adharCardNumber;
 
     @NotNull
-    @Size(min = 1, max =10)
+    @Size(max =10)
     private String mobile;
     
     private String emergencyContactNumber;
