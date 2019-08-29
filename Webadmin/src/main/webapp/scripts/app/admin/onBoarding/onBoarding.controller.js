@@ -636,9 +636,9 @@ angular.module('timeSheetApp')
 		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
         }
 		$scope.searchCriteria.verified = false;
-		alert("before");
+		//alert("before");
 		EmployeeComponent.exportOnboardingAllData($scope.searchCriteria).then(function(data){
-			alert("after")
+			//alert("after")
 			var result = data.results[0];
 
 
