@@ -1201,7 +1201,7 @@ angular.module('timeSheetApp')
                 console.log("on boarding employee successfully saved");
                 console.log(data);
                 $location.path('/onBoarding-list');
-                $scope.showNotifications('top', 'center', 'success', "Employee Successfully ");
+                $scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully ");
 
                 if($scope.addressProofImage){
                     $scope.uploadAddressProofImage($scope.employee.id);
