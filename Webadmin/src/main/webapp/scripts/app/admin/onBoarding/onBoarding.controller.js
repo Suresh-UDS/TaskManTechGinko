@@ -636,9 +636,9 @@ angular.module('timeSheetApp')
 		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
         }
 		$scope.searchCriteria.verified = false;
-		alert("before");
+		//alert("before");
 		EmployeeComponent.exportOnboardingAllData($scope.searchCriteria).then(function(data){
-			alert("after")
+			//alert("after")
 			var result = data.results[0];
 
 
@@ -1342,7 +1342,15 @@ angular.module('timeSheetApp')
 
 	};
 
+//****************************modified by suresh */
+	$scope.loadCompletedJob = function(imageUrl) {
+		var eleId = 'photoStart';
+		var ele = document.getElementById(eleId);
+		ele.setAttribute('src',imageUrl);
 
+	};
+
+//*********************************************** */
 	function pad(num, size) {
 		var s = num+"";
 		while (s.length < size) s = "0" + s;

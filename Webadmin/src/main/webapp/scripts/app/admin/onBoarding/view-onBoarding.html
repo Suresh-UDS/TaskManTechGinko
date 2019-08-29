@@ -122,9 +122,11 @@
                             <label>Address Proof Image <span class="red-star">*</span></label>
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(addressproofImageUrl)" >
+                               
+                                        <img ng-if="addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
                                     <img ng-if="!addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                                </div>
+                               </a> </div>
                             </div>
                         </div>
                     </div>
@@ -342,9 +344,16 @@
                                 <label>Bank Passbook Image <span ng-if="employee.newEmployee" class="red-star">*</span></label>
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
-                                        <img ng-if="bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{bankPassBookImageUrl}} alt="...">
-                                        <img ng-if="!bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                                    </div>
+                                      <!-----------------modiffed by suresh-->
+                                        <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(bankPassBookImageUrl)" >
+                                       
+                                            <img ng-if="!bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                      <img  ng-if="bankPassBookImageUrl" ng-src="{{bankPassBookImageUrl}}" style="width: 100% !important; height: 100% !important; border-radius: 0px">
+
+                                        </a>
+
+                                       <!----------------------------------------->
+                                         </div>
                                 </div>
                             </div>
                         </div>
@@ -356,6 +365,29 @@
 
     </div>
 
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="myModalLabel">Job Photo</h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="txt-align-center">
+                    <img id="photoStart" style="width:300px;height:300px" />
+                </div>
+
+
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-danger btn-round" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -374,9 +406,15 @@
                         <label>Adharcard Front Image <span class="red-star">*</span></label>
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
-                                <img ng-if="!adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardFrontUrl)" >
+                             
+                              <img ng-if="adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
+                              <img ng-if="!adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                          
+
+                                </a>
+
+                               </div>
                         </div>
                     </div>
 
@@ -384,9 +422,12 @@
                         <label>Adharcard Back Image <span class="red-star">*</span></label>
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
-                                <img ng-if="!adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardBackUrl)" >
+                               
+                                    <img ng-if="adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
+                                    <img ng-if="!adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                               </a>
+                                </div>
                         </div>
                     </div>
 
@@ -394,9 +435,16 @@
                         <label>Fingerprint Left Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
-                                <img ng-if="!fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintLeftUrl)" >
+                               
+
+                                    <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
+                                    <img ng-if="!fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                         
+                                    
+                                      </a>
+
+                                  </div>
                         </div>
                     </div>
 
@@ -404,9 +452,11 @@
                         <label>Fingerprint Right Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintrightUrl)" >
+                                    <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
                                 <img ng-if="!fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                           </a> 
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -416,9 +466,11 @@
                         <label>Driving License Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(drivingLicenseUrl)" >
+                                    <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
                                 <img ng-if="!drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                            </a>
+                        </div>
                         </div>
                     </div>
 
@@ -426,9 +478,10 @@
                         <label>Voter Id Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(voterIdUrl)" >
+                                    <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
                                 <img ng-if="!voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                           </a> </div>
                         </div>
                     </div>
 
@@ -436,9 +489,10 @@
                         <label>Pancard Image 
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
+                                    <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
                                 <img ng-if="!pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
+                            </a></div>
                         </div>
                     </div>
                 </div>

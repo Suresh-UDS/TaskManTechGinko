@@ -208,9 +208,9 @@ angular.module('timeSheetApp')
 /*************************************Modified by Vinoth************************************************************************************/           
             
             exportOnboardingAllData: function(searchCriteria) {
-            	alert("Export service");
+            	//alert("Export service");
                 return $http.post('api/employeeOnboarding/export', searchCriteria).then(function (response) {
-                	alert("Export service after");
+                	//alert("Export service after");
                     console.log("Emp - Export------>"+JSON.stringify(response));
                     return response.data;
                 });
