@@ -25,6 +25,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
   ngOnInit() {
     this.storage.get('onboardingCurrentIndex').then(data => {
+      console.log(data);
+      console.log(data['index']);
       this.storedIndex = data['index'];
       this.formActionStatus = data['action'];
     })
@@ -90,8 +92,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           fromStatusValues['data']['identificationMark1'],
           fromStatusValues['data']['identificationMark2']
         ]
-        delete fromStatusValues['data']['identificationMark1'];
-        delete fromStatusValues['data']['identificationMark2'];
+        // delete fromStatusValues['data']['identificationMark1'];
+        // delete fromStatusValues['data']['identificationMark2'];
         this.messageService.formDataMessage(fromStatusValues);
       } else {
         let fromStatusValues = {

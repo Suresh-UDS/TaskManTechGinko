@@ -51,8 +51,6 @@ export class OnboardingService implements AutoCompleteService {
             })
     }
     getEmployeeListByProjectId(projectId): Observable<any> {
-      //  return this.getAllOnboardingUser();
-        // //  let url = 'http://172.16.1.57:8090/api/onboard/getEmployeeListByWbs/UDS200008570001';
         let url = this.config.Url + 'api/onboard/getEmployeeListByProjectId/' + projectId;
         return this.http.get(url).map(
             response => {
@@ -78,21 +76,21 @@ export class OnboardingService implements AutoCompleteService {
                 return Observable.throw(error.json());
             })
     }
+
+    searchOnBoardingEmployees(searchCriteria): Observable<any>{
+        return this.http.post(this.config.Url+'api/onBoarding/employee/search',searchCriteria).map(
+            response=>{
+                console.log("Employee Search");
+                console.log(response);
+                return response.json();
+            }).catch(err=>{
+                console.log("Error in getting employees");
+                console.log(err);
+                return Observable.throw(err.json());
+        })
+    }
+
     saveOnboardingUser(object) {
-        //object = JSON.stringify(object);
-        object['isSync'] = true;
-        var adharNumber = object['adharCardNumber'].toString();
-        if(object['empId'] == null){
-            object['empId'] = adharNumber.substr(7);
-        }
-        //cg change to true
-        // return this.http.post(this.config.Url + 'api/onboard/employees', object).map(
-        //     response => {
-        //         return response.json();
-        //     }).catch(error => {
-        //         console.log(error);
-        //         return Observable.throw(error.json());
-        //     })
 
         return this.http.post(this.config.Url+'api/saveOnboradingEmployee',object).map(
             response=>{
@@ -241,6 +239,9 @@ export class OnboardingService implements AutoCompleteService {
     }
     
     imageUpLoad(filename, key, id) {
+
+        console.log("employee on file upload");
+        console.log(id);
         let type = '';
         // if (key.match("fingerPrintRight")) {
         //     key = 'impressen';
@@ -261,25 +262,24 @@ export class OnboardingService implements AutoCompleteService {
             //  console.log('file name == ' + name);
             console.log("file path == " + filename);
             var options: FileUploadOptions = {
-                fileKey: "file",
+                fileKey: "imageFile",
                 fileName: key,
                 httpMethod: 'POST',
                 params: {
-                    id: id,
-                    type: type
+                    employeeId: id,
+                    document_type: key
                 }
             }
 
-            console.log("image upload => " + this.config.Url + 'api/onboard/' + key)
-
-            fileTransfer.upload(filename, this.config.Url + 'api/onboard/' + key, options)
+            fileTransfer.upload(filename, this.config.Url + 'api/onBoarding/document_image/upload', options)
                 .then((data) => {
                     //alert('success')
                     console.log('image response - ' + JSON.stringify(data));
                     resolve(data);
                 }, (err) => {
                     //            alert('error');
-                    console.error('image err-' + err);
+                    console.error('image err-' );
+                    console.log(err);
                     reject(err);
                 });
         });
@@ -320,6 +320,32 @@ export class OnboardingService implements AutoCompleteService {
                 return response.json();
             }).catch(err=>{
                 console.log("error in getting wbs by project");
+                console.log(err);
+                return Observable.throw(err.json());
+        })
+    }
+
+    getNomineeRelationships():Observable<any>{
+        return this.http.get(this.config.Url+'api/getNomineeRelationship').map(
+            response=>{
+                console.log("Get nominee relationships");
+                console.log(response);
+                return response.json();
+            }).catch(err=>{
+                console.log("error in getting nominee relationships");
+                console.log(err);
+                return Observable.throw(err.json());
+        })
+    }
+
+    getEmployeeDocuments(employeeId):Observable<any>{
+        return this.http.get(this.config.Url+'api/employee/documents/'+employeeId).map(
+            response=>{
+                console.log("Getting employee documents");
+                console.log(response);
+                return response.json();
+            }).catch(err=>{
+                console.log("Error in gerring employee documents");
                 console.log(err);
                 return Observable.throw(err.json());
         })

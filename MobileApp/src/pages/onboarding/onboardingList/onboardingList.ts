@@ -17,10 +17,23 @@ import {AppConfig} from '../../service/app-config';
 import {JobFilter} from "../../jobs/job-filter/job-filter";
 import {OnBoardingEmployeeFilter} from "./on-boarding-employee-filter/on-boarding-employee-filter";
 
+const searchCriteria = {
+  branchCode:null,
+  projectCode: null,
+  wbsCode:null,
+  verified:false,
+  list:true,
+  empId:String,
+  name:String
+};
+
 @Component({
   selector: 'page-onboarding-list',
   templateUrl: 'onboardingList.html',
 })
+
+
+
 export class onboardingExistEmployee implements OnInit {
   onBoardingAction = 'actionRequired';
   popOverEvent: any;
@@ -32,16 +45,34 @@ export class onboardingExistEmployee implements OnInit {
   hideFilter = true;
   wbsId;
   AppConfig = AppConfig;
+  private selectedProjectCode: any;
+  private selectedWbsCode: any;
+
+
 
   constructor(private storage: Storage, private network: Network, private onboardingService: OnboardingService, private navCtrl: NavController, private popoverCtrl: PopoverController, public modalCtrl: ModalController,
     public component: componentService) {
     this.setStorage();
+
+
     // this.storage.get('onboardingProjectSiteIds').then((Ids) => {
     //   this.wbsId = Ids['siteId'];
     // });
   }
   ionViewWillEnter() {
     //  this.component.showLoader("Updating....");
+    this.getNomineeRelationships();
+
+  }
+
+  ngOnInit() {
+    // this.component.showLoader("Please wait....");
+    console.log('onboard home Empid ' + window.localStorage.getItem('employeeId'));
+    console.log('onboard home UserId ' + window.localStorage.getItem('employeeUserId'));
+
+  }
+
+  getLocalData(){
     this.storage.get('OnBoardingData').then((data) => {
       if (data) {
         this.actionRequiredEmp = data['actionRequired'];
@@ -50,13 +81,6 @@ export class onboardingExistEmployee implements OnInit {
       }
       // this.component.closeLoader();
     })
-  }
-
-  ngOnInit() {
-    // this.component.showLoader("Please wait....");
-    console.log('onboard home Empid ' + window.localStorage.getItem('employeeId'));
-    console.log('onboard home UserId ' + window.localStorage.getItem('employeeUserId'));
-
   }
 
 
@@ -92,13 +116,18 @@ export class onboardingExistEmployee implements OnInit {
       console.log(data);
       if(data.project !=null && data.project.element){
         if(data.wbs !=null && data.wbs.element){
-          this.getEmployeesByWBSId(data.project.elementCode,data.wbs.elementCode);
+          searchCriteria.projectCode = data.project.elementCode;
+          searchCriteria.wbsCode = data.wbs.elementCode;
+          this.onSegmentChange();
         }else{
-          this.getEmployeesByProjectId(data.project.elementCode);
+          searchCriteria.projectCode = data.project.elementCode;
+          this.onSegmentChange();
         }
       }
     });
   }
+
+
   getPercentage() {
     for (var i = 0; i < this.actionRequiredEmp.length; i++) {
       let objectPercentage = 0;
@@ -106,6 +135,8 @@ export class onboardingExistEmployee implements OnInit {
       let objectkeys = [];
       let objectValues = [];
       let objectFormattedValues = [];
+      console.log("percentage calculation");
+      console.log(this.actionRequiredEmp[i]);
       for (let list in onBoardingModel) {
         for (let key in onBoardingModel[list]) {
           onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
@@ -121,9 +152,9 @@ export class onboardingExistEmployee implements OnInit {
         objectPercentage += keyPercentage;
 
       }
-      this.actionRequiredEmp[i]['percentage'] = Math.floor(objectPercentage / 5);
+      this.actionRequiredEmp[i]['percentage'] = Math.floor(objectPercentage / 7);
 
-      console.log(Math.floor(objectPercentage / 5));
+      console.log(Math.floor(objectPercentage / 7));
     }
   }
   findSavedDuplication(empdt, key) {
@@ -139,7 +170,21 @@ export class onboardingExistEmployee implements OnInit {
       return true;
     }
   }
-
+  onSegmentChange() {
+    if (this.onBoardingAction == 'actionRequired') {
+      if(searchCriteria.wbsCode !=null){
+        this.getEmployeesByWBSId(searchCriteria.projectCode, searchCriteria.wbsCode);
+      }else if(searchCriteria.projectCode !=null){
+        this.getEmployeesByProjectId(searchCriteria.projectCode);
+      }
+    } else {
+      if(searchCriteria.wbsCode !=null){
+        this.searchEmployees(searchCriteria);
+      }else if(searchCriteria.projectCode !=null){
+        this.searchEmployees(searchCriteria);
+      }
+    }
+  }
   sortByKey(array, key) {
     return array.sort(function (a, b) {
       var x = a[key]; var y = b[key];
@@ -168,7 +213,62 @@ export class onboardingExistEmployee implements OnInit {
     })
   }
 
+  searchEmployees(searchCriteria){
+    this.component.showLoader("Loading Employees");
+    window.localStorage.setItem('projectId', searchCriteria.projectCode);
+
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+
+      localStoragedData["completed"] = [];
+
+
+
+      this.onboardingService.searchOnBoardingEmployees(searchCriteria).subscribe(response => {
+        let objectsKeys;
+        let objectsValues;
+
+        console.log("Search response");
+        console.log(response);
+
+        let res = response.transactions;
+
+
+        for (var i = 0; i < res.length; i++) {
+
+          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+
+            if(res[i]["submitted"]){
+              localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
+            }
+            else{
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+            }
+
+            this.storage.set('OnBoardingData', localStoragedData);
+
+          }
+
+        }
+        //console.log(onBoardingModel);
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = res;
+        this.component.closeLoader();
+      }, err => {
+        console.log('onbList3');
+        this.actionRequiredEmp = localStoragedData['actionRequired'];
+        this.completedEmp = localStoragedData["completed"];
+        this.getPercentage();
+        this.component.closeLoader();
+        this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+      });
+    },err=>{
+      this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
+      this.component.closeAll();
+    });
+  }
+
   getEmployeesByProjectId(projectId){
+    this.component.showLoader("Loading Employees...")
     window.localStorage.setItem('projectId', projectId);
 
     this.storage.get('OnBoardingData').then((localStoragedData) => {
@@ -200,13 +300,13 @@ export class onboardingExistEmployee implements OnInit {
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
         this.getPercentage();
-        this.component.closeLoader();
+        this.component.closeAll();
       }, err => {
         console.log('onbList3');
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
         this.getPercentage();
-        this.component.closeLoader();
+        this.component.closeAll();
         this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
       });
     },err=>{
@@ -216,16 +316,33 @@ export class onboardingExistEmployee implements OnInit {
   }
 
   getEmployeesByWBSId(projectId,wbsId){
-
+    this.component.showLoader("Loading Employees...");
+    this.actionRequiredEmp = [];
+    this.completedEmp = [];
     window.localStorage.setItem('projectId', projectId);
 
     this.storage.get('OnBoardingData').then((localStoragedData) => {
 
       localStoragedData["completed"] = [];
 
+      console.log("Local storage");
+      console.log(localStoragedData);
+      for(let i=0;i<localStoragedData.length;i++){
+
+        console.log(localStoragedData[i]);
+        if(localStoragedData[i].isSync){
+          delete localStoragedData[i];
+        }
+
+        if(i+1 == localStoragedData.length){
+          this.storage.set('OnBoardingData', localStoragedData);
+        }
+      }
+
       this.onboardingService.getEmployeeListByWbs(wbsId).subscribe(res => {
         let objectsKeys;
         let objectsValues;
+
 
 
         for (var i = 0; i < res.length; i++) {
@@ -248,19 +365,27 @@ export class onboardingExistEmployee implements OnInit {
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
         this.getPercentage();
-        this.component.closeLoader();
+        this.component.closeAll();
       }, err => {
         console.log('onbList3');
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
         this.getPercentage();
-        this.component.closeLoader();
+        this.component.closeAll();
         this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
       });
     },err=>{
       this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
       this.component.closeAll();
     });
+  }
+
+  getNomineeRelationships(){
+    this.onboardingService.getNomineeRelationships().subscribe(relationships=>{
+      console.log("Nominee relationships from server");
+      console.log(relationships);
+      this.storage.set('nomineeRelationships',relationships);
+    })
   }
 
 }

@@ -105,7 +105,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   initialKycImage() {
     this.userAllKYCData = {
       aadharPhotoCopy: null,
-      // aadharPhotoCopyBack: null,
+      aadharPhotoCopyBack: null,
       employeeSignature: null,
       profilePicture: null,
       prePrintedStatement: null,
@@ -164,9 +164,9 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
           if (imageSide == 'front') {
             this.userAllKYCData['aadharPhotoCopy'] = imageURI;
           } 
-          // else if (imageSide == 'back') {
-          //   this.userAllKYCData['aadharPhotoCopyBack'] = imageURI;
-          // } 
+          else if (imageSide == 'back') {
+            this.userAllKYCData['aadharPhotoCopyBack'] = imageURI;
+          }
           else if (imageSide == 'passbook') {
             this.userAllKYCData['prePrintedStatement'] = imageURI;
           } 
@@ -251,8 +251,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       //(this.userAllKYCData['aadharNumber'] !== null) &&
       (this.userAllKYCData['aadharPhotoCopy'] !== null) &&
       (this.userAllKYCData['aadharPhotoCopy'] != "") &&
-      // (this.userAllKYCData['aadharPhotoCopyBack'] !== null) &&
-      // (this.userAllKYCData['aadharPhotoCopyBack'] != "") &&
+      (this.userAllKYCData['aadharPhotoCopyBack'] !== null) &&
+      (this.userAllKYCData['aadharPhotoCopyBack'] != "") &&
       (this.userAllKYCData['employeeSignature'] !== null) &&
       (this.userAllKYCData['employeeSignature'] != "") &&
       (this.userAllKYCData['profilePicture'] !== null) &&
@@ -305,11 +305,11 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         }
 
 
-        // this.userAllKYCData['aadharPhotoCopyBack'] = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopyBack'];
-        // if (this.userAllKYCData['aadharPhotoCopyBack'] != null &&
-        //   this.userAllKYCData['aadharPhotoCopyBack'].includes('aadharPhotoCopyBack')) {
-        //   this.userAllKYCData['aadharPhotoCopyBack'] = this.IMG_BASE_URL + this.userAllKYCData['aadharPhotoCopyBack'];
-        // }
+        this.userAllKYCData['aadharPhotoCopyBack'] = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopyBack'];
+        if (this.userAllKYCData['aadharPhotoCopyBack'] != null &&
+          this.userAllKYCData['aadharPhotoCopyBack'].includes('aadharPhotoCopyBack')) {
+          this.userAllKYCData['aadharPhotoCopyBack'] = this.IMG_BASE_URL + this.userAllKYCData['aadharPhotoCopyBack'];
+        }
 
 
         this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];

@@ -37,11 +37,7 @@ export class OfflineOnlineLanding {
           this.online = false;
           this.offline = true;
       }
-      // this.splashScreen.hide();
-      //
-      // setTimeout(() => {
-      //     this.viewCtrl.dismiss();
-      // }, 4000);
+
   }
 
   goOffline(){

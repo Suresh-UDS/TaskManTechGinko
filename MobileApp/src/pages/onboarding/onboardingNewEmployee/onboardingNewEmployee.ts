@@ -33,7 +33,8 @@ const imageUploadModal = {
   thumbImpressenLeft: String,
   drivingLicense: String,
   pancardCopy: String,
-  voterId: String
+  voterId: String,
+  aadharPhotoCopyBack:String
 }
 
 @Component({
@@ -85,6 +86,8 @@ export class onboardingNewEmployee {
     } else {
       this.navPreviousData = '';
     }
+
+    this.getNomineeRelationships();
   }
 
   wizardObj = [
@@ -379,6 +382,7 @@ export class onboardingNewEmployee {
 
           };
           employeeDetails.adharCardNumber = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
+          employeeDetails.mobile = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
           employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
           employeeDetails.bloodGroup = localStoragedData['actionRequired'][this.storedIndex]['bloodGroup'];
           employeeDetails.boardInstitute = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['institute'];
@@ -394,9 +398,8 @@ export class onboardingNewEmployee {
           employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
           employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
           employeeDetails.nomineeContactNumber = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['contactNumber'];
-          employeeDetails.nomineeContactNumber = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['contactNumber'];
-          employeeDetails.nomineeName = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nomineeName'];
-          employeeDetails.nomineeRelationship = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nomineeRelationship'];
+          employeeDetails.nomineeName = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['name'];
+          employeeDetails.nomineeRelationship = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['relationship'];
           employeeDetails.percentage = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nominePercentage'];
           employeeDetails.onBoardSource = 'Mobile';
           employeeDetails.onBoardedFrom = 'Mobile';
@@ -424,13 +427,44 @@ export class onboardingNewEmployee {
           employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['religion'];
           employeeDetails.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['wbsDescription'];
           employeeDetails.wbsId = localStoragedData['actionRequired'][this.storedIndex]['wbsId'];
-
+          let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+          employeeDetails.name = name.split(" ")[0];
+          employeeDetails.lastName = name.split(" ")[1];
+          employeeDetails.fullName = name;
+          let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
+          employeeDetails.empId = adharNumber.toString().substring(5);
           console.log("employee details");
           console.log(employeeDetails);
 
           this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
             console.log("Sucessfully saved employees");
-            console.log(res)
+            console.log(res);
+
+            localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
+            //localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+
+            console.log("res =======" + JSON.stringify(res));
+
+            localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];
+            console.log("res id=======" + res['id']);
+
+
+
+            this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
+
+              console.log('res_image_api ' + JSON.stringify(res));
+              //localStoragedData['completed'].splice(tempIndex, 1);
+              localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+              this.storage.set('OnBoardingData', localStoragedData);
+              // cg
+              this.navCtrl.setRoot(onboardingExistEmployee);
+              this.componentService.showToastMessage("Employee saved successfully ", "center");
+            }, err => {
+              this.componentService.showToastMessage("Error in saving Employee ", "center");
+
+            })
+
+
           },err=>{
             console.log("Error in saving employee");
             console.log(err);
@@ -444,18 +478,22 @@ export class onboardingNewEmployee {
 
   
   saveImages(array, id) {
+    console.log("Images arrya");
+    console.log(id);
+    console.log(array);
     let promise = new Promise((resolve, reject) => {
       let imageUpload = Object.keys(imageUploadModal);
 
       for (var i = 0; i < imageUpload.length; i++) {
         console.log("Image upload");
-        console.log(imageUpload);
-        // this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
-        //   .then(function (res) {
-        //     console.log('image upload ' + res);
-        //   }, function (err) {
-        //     console.log(err);
-        //   })
+        console.log(imageUpload[i]);
+
+        this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
+          .then(function (res) {
+            console.log('image upload ' + res);
+          }, function (err) {
+            console.log(err);
+          })
       }
       if (i == imageUpload.length) {
         resolve('success')
@@ -513,5 +551,13 @@ export class onboardingNewEmployee {
   }
   clearForm() {
     this.messageService.formClearMessage('clear');
+  }
+
+  getNomineeRelationships(){
+    this.onBoardingService.getNomineeRelationships().subscribe(relationships=>{
+      console.log("Nominee relationships from server");
+      console.log(relationships);
+      this.storage.set('nomineeRelationships',relationships);
+    })
   }
 }

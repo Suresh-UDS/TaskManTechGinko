@@ -1,5 +1,10 @@
  
  export const onBoardingModel =  {
+
+    siteDetails:{
+        projectCode:'',
+        wbsId:''
+    },
      
     personalDetails: {
         employeeCode:  '',
@@ -29,7 +34,6 @@
     },
     kycDetails: {
         aadharNumber: '',
-        
         bankDetails: '',
         aadharPhotoCopy: 'assets/imgs/placeholder.png',
         employeeSignature: 'assets/imgs/placeholder.png',
@@ -37,5 +41,9 @@
         thumbImpressenRight:'assets/imgs/placeholder.png',
         thumbImpressenLeft:'assets/imgs/placeholder.png',
         prePrintedStatement: 'assets/imgs/placeholder.png',
-    }
-}
+    },
+
+     declaration:{
+         agreeTermsAndConditions:false
+     }
+};

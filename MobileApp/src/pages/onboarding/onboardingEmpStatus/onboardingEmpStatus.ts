@@ -25,7 +25,8 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
       { name: 'Contact Details', key: 'contactDetails', status: '0', icon: 'checkmark' },
       { name: 'Nominee & Academic', key: 'familyAcademicDetails', status: '0', icon: 'checkmark' },
       { name: 'Employment Details', key: 'employmentDetails', status: '0', icon: 'checkmark' },
-      { name: 'KYC Details', key: 'kycDetails', status: '0', icon: 'checkmark' }
+      { name: 'KYC Details', key: 'kycDetails', status: '0', icon: 'checkmark' },
+      { name: 'Declaration', key: 'declaration', status: '0', icon: 'checkmark' }
     ]
   }
   ngAfterViewChecked() { }
@@ -62,7 +63,10 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
         for (let i = 0; i < data.length; i++) {
 
           let keyData = this.onboardingFormStatus[i]['key'];
+          console.log("key data");
+          console.log(this.onboardingFormStatus[i]['key']);
           for (let key in onBoardingModel[keyData]) {
+            console.log(localStoragedData['actionRequired'][currentIndex][key]);
             console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][key]);
             onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][key];
           }
@@ -145,4 +149,7 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
     }
     this.navCtrl.push(onboardingNewEmployee, { pageData: obj });
   }
+
+
+
 }
