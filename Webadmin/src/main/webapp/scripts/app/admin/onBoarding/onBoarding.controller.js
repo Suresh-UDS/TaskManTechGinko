@@ -952,31 +952,31 @@ angular.module('timeSheetApp')
                         if(documents && documents.length>0){
                             for(var i=0; i<documents.length;i++){
                                 console.log(documents[i].docType);
-                                if(documents[i].docType === "address_proof_image"){
+                                if(documents[i].docType === "address_proof_image" || documents[i].docType === "addressProof" ){
                                     $scope.addressproofImageUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "bank_passbook_image"){
+                                if(documents[i].docType === "bank_passbook_image" || documents[i].docType === "prePrintedStatement"){
                                     $scope.bankPassBookImageUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "adhar_card_front"){
+                                if(documents[i].docType === "adhar_card_front" || documents[i].docType === "aadharPhotoCopy"){
                                     $scope.adharCardFrontUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "adhar_card_back"){
+                                if(documents[i].docType === "adhar_card_back" || documents[i].docType === "aadharPhotoCopy"){
                                     $scope.adharCardBackUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "fingerprint_left"){
+                                if(documents[i].docType === "fingerprint_left" || documents[i].docType === "thumbImpressenLeft"){
                                     $scope.fingerprintLeftUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "fingerprint_right"){
+                                if(documents[i].docType === "fingerprint_right" || documents[i].docType === "thumbImpressenRight"){
                                     $scope.fingerprintrightUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "driving_license"){
+                                if(documents[i].docType === "driving_license" || documents[i].docType === "drivingLicense"){
                                     $scope.drivingLicenseUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "voter_id"){
+                                if(documents[i].docType === "voter_id" || documents[i].docType === "voterId"){
                                     $scope.voterIdUrl = documents[i].docUrl;
                                 }
-                                if(documents[i].docType === "pancard"){
+                                if(documents[i].docType === "pancard" || documents[i].docType === "pancardCopy"){
                                     $scope.pancardUrl = documents[i].docUrl;
                                 }
                             }
