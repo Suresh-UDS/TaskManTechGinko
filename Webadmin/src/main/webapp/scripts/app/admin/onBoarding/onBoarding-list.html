@@ -70,24 +70,131 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+     <!--    <div class="col-md-12">
             <div class="card TableCard">
                 <div class="card-content">
                     <div class="panel panel-default TabsContainer mar10px jobType">
                         <div class="panel-body pad0px">
                             <ul class="nav nav-pills nav-pills-warning mar0px">
-                                <li class="active"><a href=".toBeVerified" data-toggle="tab"
-                                                     >To Be Verified</a></li>
+                                <li class="active"><a href=".oldtoBeVerified" data-toggle="tab"
+                                                     >Old Employee To Be Verified</a></li>
+                                 <li class=""><a href=".newtoBeVerified" data-toggle="tab"
+                                                     >New Employee To Be Verified</a></li>                                      
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="tab-content TabsContent ViewTables" style="">
 
-            <div class="tab-pane fade in active toBeVerified" id="toBeVerified" >
+            <div class="tab-pane fade in active toBeVerified" id="oldtoBeVerified" >
+                <div class="card margin-TB-5 TableCard" >
+
+                    <div class="card-content">
+                    
+                    <div class="panel panel-default TabsContainer mar10px jobType">
+                        <div class="panel-body pad0px" style = "padding-bottom :17px !important">
+                            <ul class="nav nav-pills nav-pills-warning mar0px">
+                                <li class="active"><a href=".oldtoBeVerified" data-toggle="tab"
+                                                     >Old Employee To Be Verified</a></li>
+                                 <li class=""><a href=".newtoBeVerified" data-toggle="tab"
+                                                     ng-click="newempverify('')">New Employee To Be Verified</a></li>  
+                                                                          
+                            </ul>
+                        </div>
+                    </div>
+
+                        <div class="table-responsive tablecard">
+                            <table class="table table-hover withSortingIcons">
+                                <thead>
+                                <tr>
+                                    <th style="min-width: 60px;">Employee Code
+                                        <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('id')" ng-class="isActiveAsc == 'id' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('id')" ng-class="isActiveDesc == 'id' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+                                    <th style="min-width: 110px;">Name
+                                        <span class="sortingIcons">
+                                        <span ng-click="columnAscOrder('employee.fullName')" ng-class="isActiveAsc == 'employee.fullName' ? 'active' : ''" >
+                                            <i  class="fa fa-caret-up"></i>
+                                        </span>
+                                        <span ng-click="columnDescOrder('employee.fullName')" ng-class="isActiveDesc == 'employee.fullName' ? 'active' : ''">
+                                             <i  ng-class="class" class="fa fa-caret-down"></i>
+                                        </span>
+                                    </span>
+                                    </th>
+
+                                    <th style="min-width: 100px;">Project
+
+                                    </th>
+
+                                    <th style="min-width: 100px;">WBS</th>
+                                    <th style="min-width: 100px;text-align: right">Actions</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr ng-repeat="employee in onBoardingEmployees">
+                                    <td>{{employee.empId}}</td>
+                                    <td>{{employee.name}} {{employee.lastName}}</td>
+                                    <td>
+                                        <span>{{employee.projectCode}}</span><br>
+                                        <span style="color: #3C3D3C;">{{employee.projectDescription}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{employee.wbsId}}</span><br>
+                                        <span style="color: #3C3D3C;">{{employee.wbsDescription}}</span>
+                                    </td>
+                                    <td class="td-actions text-right">
+                                        <a ui-sref="view-onBoarding ({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                            <i class="material-icons">remove_red_eye</i>
+                                        </a>
+                                        <a ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                        <!--                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">-->
+                                        <!--                                        <i class="material-icons">close</i>-->
+                                        <!--                                    </button>-->
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="txt-align-center LoaderCon"  ng-hide="onBoardingEmployeesLoader">
+
+                            <div class="pad-TB-30">
+                                <div loader-css="ball-pulse"></div>
+                                <h3 >Loading, please wait...</h3>
+                            </div>
+
+                        </div>
+
+                        <div class="txt-align-center pad-TB-30 noDataCon" ng-show="noData">
+
+                            <h3>No data Found</h3>
+                            <h3>Please Use Filters to get Data</h3>
+
+                        </div>
+
+
+                    </div>
+                    <!-- end content-->
+                </div>
+                <!--  end card  -->
+            </div>
+<!-- *********************************Modified by Vinoth*********************************************************************** -->
+<div class="tab-pane toBeVerified" id="newtoBeVerified" >
                 <div class="card margin-TB-5 TableCard" >
 
                     <div class="card-content">
@@ -179,6 +286,7 @@
                 </div>
                 <!--  end card  -->
             </div>
+<!-- **************************************************************************************************************************   -->          
         </div>
         <!-- end col-md-12 -->
     </div>
