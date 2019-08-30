@@ -58,28 +58,19 @@ public class OnboardingUserConfigService extends AbstractService {
 	    OnboardingUserConfigDTO userConfigDTO = new OnboardingUserConfigDTO();
 	    List<OnboardingUserConfig> responseUserConfig = new ArrayList<>();
 	    OnboardingUserConfigDTO userConfigDTO1 = new OnboardingUserConfigDTO();
-	    User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+	    User user = userRepository.findOne(userId);
 	    
 	    if(onboardingUserConfigDTOList.size() > 0) {
 	    
 	        if(clearAllUserConfigs(userId,onboardingUserConfigDTOList.get(0).getBranch())){
 	            for(OnboardingUserConfigDTO onboardingUserConfigDTO: onboardingUserConfigDTOList){
-	            OnboardingUserConfig userConfig = new OnboardingUserConfig();
+	            	OnboardingUserConfig userConfig = new OnboardingUserConfig();
 	                userConfig = mapperUtil.toEntity(onboardingUserConfigDTO, OnboardingUserConfig.class);
 	                userConfig.setUser(user);
 	                userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
 	                userConfig = onboardingUserConfigRepository.save(userConfig);
 	                responseUserConfig.add(userConfig);
-	            if(CollectionUtils.isNotEmpty(onboardingUserConfigDTO.getChildElements()) && onboardingUserConfigDTO.getChildElements().size()>0){
-	                for(OnboardingUserConfigDTO configDTO : onboardingUserConfigDTO.getChildElements()){
-	                    userConfig = mapperUtil.toEntity(configDTO, OnboardingUserConfig.class);
-	                    userConfig.setElementParent(onboardingUserConfigDTO.getElementCode());
-	                    userConfig.setUser(user);
-	                    userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
-	                    userConfig=onboardingUserConfigRepository.save(userConfig);
-	                    responseUserConfig.add(userConfig);
-	                }
-	                }
+	       
 	            }
 	        }
 	    }

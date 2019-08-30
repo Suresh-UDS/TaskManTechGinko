@@ -60,7 +60,7 @@ angular.module('timeSheetApp')
 	$scope.searchSite = null;
 
 	$scope.searchCriteria = {};
-
+ 
 	/** Ui-select scopes **/
 	$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
 	$scope.client = {};
@@ -245,9 +245,23 @@ angular.module('timeSheetApp')
 
 	});
 
+
+	$scope.initRootScope = function(){
+
+		if(!$rootScope.onBoardingFilter){ 
+
+			$rootScope.onBoardingFilter = {branches:{list:[],selected:{}},projects:{list:[],selected:{}},wbs:{list:[],selected:{}},employee:{name:null,empId:null,page:1}};
+
+		}
+
+	}
+
 	// Init load employees
 	$scope.init = function() {
 		// $scope.loadAttendances();
+
+		$scope.initRootScope();
+
         $scope.loadUsers();
 	};
 
@@ -331,10 +345,44 @@ angular.module('timeSheetApp')
 		});
 	};
 
+	$scope.initFilters = function(){
+  
+		
+
+		if($rootScope.onBoardingFilter.branches.list.length > 0){
+
+			$scope.branchSpin = $scope.clientFilterDisable = $scope.regionSpin = false;
+
+			$scope.branchList = $rootScope.onBoardingFilter.branches.list;
+			$scope.projectList = $rootScope.onBoardingFilter.projects.list;
+			$scope.wbsList = $rootScope.onBoardingFilter.wbs.list;
+
+			$scope.client.selected = $rootScope.onBoardingFilter.branches.selected ;
+			$scope.regionsListOne.selected = $rootScope.onBoardingFilter.projects.selected ;
+			$scope.branchsListOne.selected = $rootScope.onBoardingFilter.wbs.selected ;
+
+			$scope.searchEmployeeId = $scope.onBoardingFilter.employee.empId ;
+			$scope.searchEmployeeName = $scope.onBoardingFilter.employee.name ;
+
+
+			$scope.pages.currPage = $scope.onBoardingFilter.employee.page;
+
+			$scope.doSearchFilter();
+
+		}
+		else{
+
+			$scope.getBranchList();
+			$scope.getTobeVerifiedEmployees();
+
+		}
+ 
+	}
+
     $scope.getBranchList = function(){
         OnBoardingComponent.getBranchList().then(function (branchList) {
             $scope.branchList = branchList;
-
+			$rootScope.onBoardingFilter.branches.list = branchList;
             $scope.branches= branchList;
             $scope.clientDisable=false;
             $scope.clientFilterDisable = false;
@@ -344,6 +392,9 @@ angular.module('timeSheetApp')
     };
 
     $scope.getProjectListByBranch = function(branchCode){
+
+		$rootScope.onBoardingFilter.branches.selected = $scope.client.selected;
+
         $scope.selectedBranchCode = branchCode.elementCode;
         $scope.selectedBranchDetails = branchCode;
         $scope.siteSpin = true;
@@ -351,13 +402,17 @@ angular.module('timeSheetApp')
         OnBoardingComponent.getProjectListByBranchCode(branchCode.elementCode).then(function (projectList) {
             console.log("Getting project list by branch code");
             console.log(projectList);
-            $scope.projectList = projectList;
+			$scope.projectList = projectList;
+			$rootScope.onBoardingFilter.projects.list = projectList;
             $scope.siteFilterDisable = false;
             $scope.siteSpin = false;
         })
     };
 
     $scope.getWBSListByProject = function(projectCode){
+
+		$rootScope.onBoardingFilter.projects.selected = $scope.regionsListOne.selected;
+
         $scope.selectedProjectCode = projectCode.elementCode;
         $scope.selectedProjectDetails = projectCode;
         console.log(projectCode.elementCode);
@@ -365,13 +420,15 @@ angular.module('timeSheetApp')
         OnBoardingComponent.getWBSListByProjectCode(projectCode.elementCode).then(function (wbsList) {
             console.log("Getting wbs id by project code");
             console.log(wbsList);
-            $scope.wbsList = wbsList;
+			$scope.wbsList = wbsList;
+			$rootScope.onBoardingFilter.wbs.list = wbsList;
             $scope.branchSpin = false;
             $scope.branchFilterDisable = false;
         })
     };
 
     $scope.selectWBS = function(wbsCode){
+		$rootScope.onBoardingFilter.wbs.selected = $scope.branchsListOne.selected;
         console.log(wbsCode);
         $scope.selectedWBSCode = wbsCode.elementCode;
         $scope.selectedWBSDetails = wbsCode;
@@ -462,6 +519,9 @@ angular.module('timeSheetApp')
 				SiteComponent.getBranchByProject(projectId,$scope.regionsListOne.selected.id).then(function (response) {
 					//console.log(response);
 					$scope.branchList = response;
+
+					
+
 					if($scope.branchList) {
 						$scope.branchsLists = [];
 						$scope.branchsListOne.selected = null;
@@ -631,11 +691,21 @@ angular.module('timeSheetApp')
 		//$scope.loadAttendances();
 	};
 
+	$scope.doSearchFilter = function(){
+ 
+		$scope.search();
+
+	}
 
 	$scope.searchFilter = function () {
+
 		$('.AdvancedFilterModal.in').modal('hide');
-		$scope.setPage(1);
-		$scope.search();
+
+		$scope.onBoardingFilter.employee.empId = $scope.searchEmployeeId;
+		$scope.onBoardingFilter.employee.name = $scope.searchEmployeeName;
+		
+		$scope.setPage(1,1);
+
 	};
 	
 /*******************************************Modified by Vinoth*************************************************************************************/
@@ -1424,7 +1494,7 @@ angular.module('timeSheetApp')
 		$scope.loadPageTop();
 		$scope.init();
 		//$scope.setPage(1);
-        $scope.getTobeVerifiedEmployees();
+        
     };
 
 
@@ -1439,14 +1509,25 @@ angular.module('timeSheetApp')
 
 	 */
 
-	$scope.setPage = function (page) {
+	$scope.setPage = function () {
+
+		args = this.argument;
+
 
 		if (page < 1 || page > $scope.pager.totalPages) {
 			return;
 		}
 		//alert(page);
 		$scope.pages.currPage = page;
-		$scope.search();
+
+		$rootScope.onBoardingFilter.employee.page = page;
+
+		if(args.length == 1){
+ 
+			$scope.search();
+
+		}
+ 
 	};
 
 
