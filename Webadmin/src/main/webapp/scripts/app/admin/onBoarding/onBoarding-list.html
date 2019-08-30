@@ -76,8 +76,8 @@
                     <div class="panel panel-default TabsContainer mar10px jobType">
                         <div class="panel-body pad0px">
                             <ul class="nav nav-pills nav-pills-warning mar0px">
-                                <li class="active"><a href=".toBeVerified" data-toggle="tab"
-                                                     >To Be Verified</a></li>
+                                <li ng-click="LoadEmpListByType(1)" ng-class="{active:newEmployee}" ><a href="#" >New - To Be Verified</a></li>
+                                <li ng-click="LoadEmpListByType(0)" ng-class="{active:existingEmployee}"><a href="#" >Existing - To Be Verified</a></li>
                             </ul>
                         </div>
                     </div>

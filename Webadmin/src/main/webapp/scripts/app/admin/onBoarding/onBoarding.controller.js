@@ -250,9 +250,29 @@ angular.module('timeSheetApp')
 
 		if(!$rootScope.onBoardingFilter){ 
 
-			$rootScope.onBoardingFilter = {branches:{list:[],selected:{}},projects:{list:[],selected:{}},wbs:{list:[],selected:{}},employee:{name:null,empId:null,page:1}};
+			$rootScope.onBoardingFilter = {branches:{list:[],selected:{}},projects:{list:[],selected:{}},wbs:{list:[],selected:{}},employee:{name:null,empId:null,page:1,type:1}};
 
 		}
+
+	}
+
+	$scope.newEmployee = false;
+	$scope.existingEmployee = false;
+
+	$scope.setListType = function(type){
+
+		$rootScope.onBoardingFilter.employee.type = type;
+
+		$scope.newEmployee = type;
+		$scope.existingEmployee = !type; 
+
+	}
+
+	$scope.LoadEmpListByType = function(type){
+
+		$scope.onBoardingEmployees = [];
+		$scope.setListType(type);
+		$scope.search();
 
 	}
 
