@@ -836,9 +836,36 @@ angular.module('timeSheetApp')
 		$scope.search();
 	};
 
-	$scope.getTobeVerifiedEmployees = function(){
+	$scope.getOldTobeVerifiedEmployees = function(){
 	    $scope.verified = false;
 	    $scope.search();
+	    $scope.newemployee = false;
+	    if($scope.selectedProjectCode !=null && $scope.selectedWBSCode !=null){
+            $scope.search();
+        }else{
+	        if($scope.selectedEmployeeId !=null || $scope.selectedEmployeeName != null){
+                $scope.search();
+            }else{
+                $scope.noData = true;
+                $scope.onBoardingEmployeesLoader = true;
+            }
+        }
+
+    };
+    
+    $scope.getNewTobeVerifiedEmployees = function(){
+	    $scope.verified = false;
+	    $scope.newemployee = true;
+	    if($scope.selectedProjectCode !=null && $scope.selectedWBSCode !=null){
+            $scope.search();
+        }else{
+	        if($scope.selectedEmployeeId !=null || $scope.selectedEmployeeName != null){
+                $scope.search();
+            }else{
+                $scope.noData = true;
+                $scope.onBoardingEmployeesLoader = true;
+            }
+        }
 
     };
 
@@ -975,6 +1002,7 @@ angular.module('timeSheetApp')
 		console.log("to be verified");
 		console.log($scope.verified);
 		$scope.searchCriteria.verified= $scope.verified;
+		$scope.searchCriteria.newemployee = $scope.newemployee;
 
 		if($scope.selectedBranchCode !=null){
 		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
@@ -987,6 +1015,7 @@ angular.module('timeSheetApp')
 		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
         }
 		$scope.searchCriteria.verified = false;
+		$scope.searchCriteria.newemployee = false;
 		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
@@ -1153,6 +1182,13 @@ angular.module('timeSheetApp')
         $('#conformationModal').modal();
 
     }
+    
+    $scope.editpage = function(text)
+    {
+    	if(text == 'edit'){
+    		 $location.path('edit-onBoarding/'+ $scope.employee.id);
+    	}
+    }
 
     $rootScope.back = function (text) {
         if(text == 'cancel' || text == 'back')
@@ -1276,7 +1312,8 @@ angular.module('timeSheetApp')
             }else{
                 console.log("on boarding employee successfully saved");
                 console.log(data);
-                $location.path('/onBoarding-list');
+                $location.path('view-onBoarding/'+ $scope.employee.id);
+                //$location.path('/onBoarding-list');
                 $scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully ");
 
                 if($scope.addressProofImage){
@@ -1500,12 +1537,18 @@ angular.module('timeSheetApp')
 		$scope.loadPageTop();
 		$scope.init();
 		//$scope.setPage(1);
-        
+
+        $scope.getOldTobeVerifiedEmployees();
+
     };
 
 
 
+    $scope.newempverify = function(type){
+    	$scope.loadPageTop();
+    	 $scope.getNewTobeVerifiedEmployees();
 
+	};
 
 
 
