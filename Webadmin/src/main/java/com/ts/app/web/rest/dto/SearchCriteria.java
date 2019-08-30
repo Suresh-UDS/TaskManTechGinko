@@ -283,6 +283,8 @@ public class SearchCriteria extends Paginator {
 	
 	private String elementParent;
 
+	private boolean newEmployee;
+
 	public String getElementCode() {
 		return elementCode;
 	}
@@ -1513,5 +1515,13 @@ public class SearchCriteria extends Paginator {
 
     public void setWbsCode(String wbsCode) {
         this.wbsCode = wbsCode;
+    }
+
+    public boolean isNewEmployee() {
+        return newEmployee;
+    }
+
+    public void setNewEmployee(boolean newEmployee) {
+        this.newEmployee = newEmployee;
     }
 }

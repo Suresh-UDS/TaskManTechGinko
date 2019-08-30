@@ -100,13 +100,33 @@ public class OnboardingUserConfigService extends AbstractService {
     }
 
     public List<String> findProjectCodesByBranch(long userId, String branchCode){
-        List<String> projectCodes = onboardingUserConfigRepository.findProjectCodesByBranch(userId, branchCode);
+        List<String> projectCodes = onboardingUserConfigRepository.findElementCodesAndElementParent(userId, "PROJECT",branchCode);
         return projectCodes;
+    }
+
+    public List<String> findProjectCodesByUser(long userId){
+        List<String> projectCodes = onboardingUserConfigRepository.findElementCodes(userId,"PROJECT");
+        return projectCodes;
+    }
+
+    public List<String> findWBSCodesByUser(long userId){
+        List<String> projectCodes = onboardingUserConfigRepository.findElementCodes(userId,"WBS");
+        return projectCodes;
+    }
+
+    public List<String> findWbsCodesByProjectAndBranch(long userId, String branchCode, String projectCode){
+        List<String> wbsCodes = onboardingUserConfigRepository.findElementCodesAndElementParent(userId, "WBS" ,projectCode);
+        return wbsCodes;
     }
 
     public List<OnboardingUserConfigDTO> findWBSByProjectCode(long userId, String projectCode){
         List<OnboardingUserConfig> projectList = onboardingUserConfigRepository.findWBSByProjectId(userId, projectCode);
         return mapperUtil.toModelList(projectList, OnboardingUserConfigDTO.class);
+    }
+
+    public List<String> findWBSByProjectCodes(long userId, List<String> projectCodes){
+        List<String> wbsCodes = onboardingUserConfigRepository.findElementCodesAndElementParents(userId, "WBS" ,projectCodes);
+        return wbsCodes;
     }
 	
 	public OnboardingUserConfigDTO mapToModal(OnboardingUserConfig onboardingUserConfig,boolean includeShifts) {

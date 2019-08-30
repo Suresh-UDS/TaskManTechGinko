@@ -48,15 +48,15 @@
             <span class="AppliedFilterTxtCon">
                 <span
                     class="tag label label-info" style="margin-right: 10px"
-                    ng-show="selectedBranchCode !=null">
+                    ng-show="enableTags(selectedBranchDetails)">
 					Branch: {{selectedBranchDetails.element}}
 			    </span>
 
-			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="selectedProjectCode!=null">
+			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="enableTags(selectedProjectDetails)">
                     Project: {{selectedProjectDetails.element}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="selectedWBSCode!=null">
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="enableTags(selectedWBSDetails)">
                     WBS: {{selectedWBSDetails.element}}
                 </span>
 
@@ -70,7 +70,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+     <!--    <div class="col-md-12">
             <div class="card TableCard">
                 <div class="card-content">
                     <div class="panel panel-default TabsContainer mar10px jobType">
@@ -83,14 +83,24 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="tab-content TabsContent ViewTables" style="">
 
-            <div class="tab-pane fade in active toBeVerified" id="toBeVerified" >
+            <div class="tab-pane fade in active toBeVerified" id="oldtoBeVerified" >
                 <div class="card margin-TB-5 TableCard" >
 
                     <div class="card-content">
+                    
+                    <div class="panel panel-default TabsContainer mar10px jobType">
+                        <div class="panel-body pad0px" style = "padding-bottom :17px !important">
+                            <ul class="nav nav-pills nav-pills-warning mar0px">
+                                    <li ng-click="LoadEmpListByType(1)" ng-class="{active:newEmployee}" ><a href="#" >New - To Be Verified</a></li>
+                                    <li ng-click="LoadEmpListByType(0)" ng-class="{active:existingEmployee}"><a href="#" >Existing - To Be Verified</a></li>  
+                                                                          
+                            </ul>
+                        </div>
+                    </div>
 
                         <div class="table-responsive tablecard">
                             <table class="table table-hover withSortingIcons">
@@ -179,6 +189,7 @@
                 </div>
                 <!--  end card  -->
             </div>
+ 
         </div>
         <!-- end col-md-12 -->
     </div>
