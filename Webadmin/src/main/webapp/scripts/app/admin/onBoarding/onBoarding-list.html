@@ -48,15 +48,15 @@
             <span class="AppliedFilterTxtCon">
                 <span
                     class="tag label label-info" style="margin-right: 10px"
-                    ng-show="selectedBranchCode !=null">
+                    ng-show="enableTags(selectedBranchDetails)">
 					Branch: {{selectedBranchDetails.element}}
 			    </span>
 
-			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="selectedProjectCode!=null">
+			    <span class="tag label label-info" style="margin-right: 10px"  ng-show="enableTags(selectedProjectDetails)">
                     Project: {{selectedProjectDetails.element}}
                 </span>
 
-                <span class="tag label label-info" style="margin-right: 10px"  ng-show="selectedWBSCode!=null">
+                <span class="tag label label-info" style="margin-right: 10px"  ng-show="enableTags(selectedWBSDetails)">
                     WBS: {{selectedWBSDetails.element}}
                 </span>
 
