@@ -1,7 +1,7 @@
 <div   ng-init="initLoad()" >
 
 
-    <div class="row" ng-init="getBranchList();">
+    <div class="row" ng-init="initFilters();">
         <div class="col-md-6 txt-align-lft">
 
             <button class="btn btn-success add-btn margn-tb0" ng-click="filterModal1()" tabindex="0">
@@ -344,7 +344,7 @@
                                                     <span ng-show="clientFilterDisable"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!clientFilterDisable && !client.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="client.selected" on-select="getProjectListByBranch(client.selected)"  ng-disabled="clientFilterDisable">
+                                                    <ui-select ng-model="client.selected" on-select="getProjectListByBranch(client.selected)"  >
                                                         <ui-select-match placeholder="Select Branch...">{{$select.selected.element}}
                                                             <a   ng-click="clearProject($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -367,7 +367,7 @@
                                                     <span ng-show="regionSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!regionSpin && !regionsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="regionsListOne.selected" on-select="getWBSListByProject(regionsListOne.selected)"  ng-disabled="regionFilterDisable || regionsLists.length == 1">
+                                                    <ui-select ng-model="regionsListOne.selected" on-select="getWBSListByProject(regionsListOne.selected)"  >
                                                         <ui-select-match placeholder="Select Project...">{{$select.selected.element}}
                                                             <a   ng-click="clearRegion($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
@@ -391,7 +391,7 @@
                                                     <span ng-show="branchSpin"  class="form-control-feedback d-big-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
                                                     <span ng-show="!branchSpin && !branchsListOne.selected" class="form-control-feedback d-big-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
 
-                                                    <ui-select ng-model="branchsListOne.selected" on-select="selectWBS(branchsListOne.selected)"  ng-disabled="branchFilterDisable || branchsLists.length == 1">
+                                                    <ui-select ng-model="branchsListOne.selected" on-select="selectWBS(branchsListOne.selected)"  >
                                                         <ui-select-match placeholder="Select WBS...">{{$select.selected.element}}
                                                             <a   ng-click="clearBranch($event)" ng-show="$select.selected.element" ng-class="{'ui-select-allow-clear': $select.selected.element}" aria-label="Select box clear" style="margin-right: 10px"
                                                                  class="btn btn-xs btn-link pull-right clsBtn"  aria-hidden="false">
