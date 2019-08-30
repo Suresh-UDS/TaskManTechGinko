@@ -1816,10 +1816,24 @@ public class    EmployeeService extends AbstractService {
                 }
             }
 
-            if(StringUtils.isNotEmpty(searchCriteria.getBranchCode()) && (StringUtils.isEmpty(searchCriteria.getProjectCode()) && StringUtils.isEmpty(searchCriteria.getWbsCode()))){
-                searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByBranch(user.getId(),searchCriteria.getBranchCode()));
-            }else if(StringUtils.isNotEmpty(searchCriteria.getBranchCode()) && StringUtils.isNotEmpty(searchCriteria.getProjectCode()) && StringUtils.isEmpty(searchCriteria.getWbsCode())){
-                searchCriteria.setWbsCodes(onboardingUserConfigService.findWbsCodesByProjectAndBranch(user.getId(),searchCriteria.getBranchCode(), searchCriteria.getProjectCode()));
+
+            if(StringUtils.isNotEmpty(searchCriteria.getBranchCode())){
+
+
+                if(StringUtils.isNotEmpty(searchCriteria.getProjectCode())){
+
+                    if(StringUtils.isEmpty(searchCriteria.getWbsCode())){
+                        searchCriteria.setWbsCodes(onboardingUserConfigService.findWbsCodesByProjectAndBranch(user.getId(),searchCriteria.getBranchCode(),searchCriteria.getProjectCode()));
+                    }
+
+                }else{
+
+                    searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByBranch(user.getId(),searchCriteria.getBranchCode()));
+                    searchCriteria.setWbsCodes(onboardingUserConfigService.findWBSByProjectCodes(user.getId(),searchCriteria.getProjectCodes()));
+
+
+                }
+
             }else{
                 searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByUser(user.getId()));
                 searchCriteria.setWbsCodes(onboardingUserConfigService.findWBSCodesByUser(user.getId()));
