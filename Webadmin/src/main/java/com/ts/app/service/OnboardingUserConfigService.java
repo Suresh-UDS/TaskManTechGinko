@@ -113,6 +113,21 @@ public class OnboardingUserConfigService extends AbstractService {
         return projectCodes;
     }
 
+    public List<String> findProjectCodesByUser(long userId){
+        List<String> projectCodes = onboardingUserConfigRepository.findProjectCodesByUser(userId);
+        return projectCodes;
+    }
+
+    public List<String> findWBSCodesByUser(long userId){
+        List<String> projectCodes = onboardingUserConfigRepository.findWBSCodesByUser(userId);
+        return projectCodes;
+    }
+
+    public List<String> findWbsCodesByProjectAndBranch(long userId, String branchCode, String projectCode){
+        List<String> wbsCodes = onboardingUserConfigRepository.findWbsCodesByBranchAndProject(userId,  projectCode);
+        return wbsCodes;
+    }
+
     public List<OnboardingUserConfigDTO> findWBSByProjectCode(long userId, String projectCode){
         List<OnboardingUserConfig> projectList = onboardingUserConfigRepository.findWBSByProjectId(userId, projectCode);
         return mapperUtil.toModelList(projectList, OnboardingUserConfigDTO.class);

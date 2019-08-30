@@ -131,6 +131,16 @@ public class EmployeeSpecification implements Specification<Employee> {
             predicates.add(root.get("projectCode").in(searchCriteria.getProjectCodes()));
         }
 
+        if(searchCriteria.getWbsCodes()!=null && CollectionUtils.isNotEmpty(searchCriteria.getWbsCodes())){
+            predicates.add(root.get("wbsId").in(searchCriteria.getWbsCodes()));
+        }
+
+        if(searchCriteria.isNewEmployee()){
+            predicates.add(builder.equal(root.get("newEmployee"),true));
+        }else{
+            predicates.add(builder.equal(root.get("newEmployee"),false));
+        }
+
         if(searchCriteria.getFromDate() != null) {
             if(searchCriteria.getToDate() != null) {
                 log.debug("Employee created to date -" + searchCriteria.getFromDate());

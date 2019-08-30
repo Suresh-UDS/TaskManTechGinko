@@ -54,6 +54,15 @@ public interface OnboardingUserConfigRepository extends JpaRepository<Onboarding
     @Query("SELECT ob.elementCode from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' and ob.elementParent = :branchCode order by ob.element")
     List<String> findProjectCodesByBranch(@Param("userId") long userId, @Param("branchCode") String branchCode );
 
+    @Query("SELECT ob.elementCode from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' order by ob.element")
+    List<String> findProjectCodesByUser(@Param("userId") long userId);
+
+    @Query("SELECT ob.elementCode from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' order by ob.element")
+    List<String> findWBSCodesByUser(@Param("userId") long userId);
+
+    @Query("SELECT ob.elementCode from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' and ob.elementParent = :projectCode order by ob.element")
+    List<String> findWbsCodesByBranchAndProject (@Param("userId") long userId, @Param("projectCode") String projectCode );
+
     @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' and ob.elementParent = :projectCode order by ob.element")
     List<OnboardingUserConfig> findWBSByProjectId(@Param("userId") long userId, @Param("projectCode") String projectCode);
 }
