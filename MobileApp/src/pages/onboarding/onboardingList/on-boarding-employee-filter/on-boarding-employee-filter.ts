@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NavController, NavParams, ViewController} from "ionic-angular";
 import {OnboardingService} from "../../../service/onboarding.service";
 import {SelectSearchableComponent} from "ionic-select-searchable";
+import {componentService} from "../../../service/componentService";
 
 /**
  * Generated class for the OnBoardingEmployeeFilter page.
@@ -28,7 +29,7 @@ export class OnBoardingEmployeeFilter {
     wbs:any
   };
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
-                        public onBoardingService: OnboardingService
+                        public onBoardingService: OnboardingService, public cs:componentService
   ) {
 
     this.selectedBranch = null;
@@ -48,10 +49,14 @@ export class OnBoardingEmployeeFilter {
   }
 
   getBranches(){
+    this.cs.showLoader("Loading Branches...");
     this.onBoardingService.getBranches().subscribe(response=>{
+      this.cs.closeAll();
       console.log("Getting branches");
       console.log(response);
       this.branches = response;
+    },err=>{
+      this.cs.closeAll();
     })
 
   }
@@ -60,11 +65,15 @@ export class OnBoardingEmployeeFilter {
     component: SelectSearchableComponent,
     value: any
   }){
+    this.cs.showLoader("Loading Projects for Branch - "+event.value.element);
     this.selectedBranch = event.value;
     this.onBoardingService.getProjectsByBranch(event.value.elementCode).subscribe(response=>{
+      this.cs.closeLoader();
       console.log("Getting projects");
       console.log(response);
       this.projects = response;
+    },err=>{
+      this.cs.closeAll();
     })
   }
 
@@ -72,11 +81,15 @@ export class OnBoardingEmployeeFilter {
     component: SelectSearchableComponent,
     value: any
   }){
+    this.cs.showLoader("Loading WBS for Project - "+event.value.element);
     this.selectedProject = event.value;
     this.onBoardingService.getWBSByProject(event.value.elementCode).subscribe(response=>{
+      this.cs.closeAll();
       console.log("Getting WBS");
       console.log(response);
       this.wbsList = response;
+    },err=>{
+      this.cs.closeAll();
     })
   }
 

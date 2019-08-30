@@ -10,12 +10,11 @@
             </button>
         </ion-buttons>
     </ion-navbar>
-    
-    <ion-segment  [(ngModel)]="onBoardingAction" >
+    <ion-segment [(ngModel)]="onBoardingAction" (ionChange)="onSegmentChange()">
         <ion-segment-button value="actionRequired">
             Action Required
         </ion-segment-button>
-        <ion-segment-button value="completed">
+        <ion-segment-button value="completed" >
             To be verified
         </ion-segment-button>
     </ion-segment>
@@ -127,28 +126,17 @@
                             <ion-list>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
-                                    <h2 class="textColor">{{list['employeeName']}}</h2>
+                                    <h2 class="textColor">{{list['name']}} {{list['lastName']}}</h2>
                                 </ion-item>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['employeeCode']}}
-                                </ion-item>
-                                <ion-item>
-                                    <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['percentage']}}
+                                    {{list['empId']}}
                                 </ion-item>
                                 <ion-item>
                                     <button ion-button icon-start>
                                         <ion-icon name="eye"></ion-icon>
                                         <div>View</div>
                                     </button>
-                                    <ion-note *ngIf="list['isSync'] == false" item-end>
-                                        <button (click)="syncEmployeeDetails(list, Cindex)" small round ion-button
-                                            icon-start>
-                                            <ion-icon name="sync"></ion-icon>
-                                            SYNC
-                                        </button>
-                                    </ion-note>
                                 </ion-item>
                             </ion-list>
                         </ion-col>

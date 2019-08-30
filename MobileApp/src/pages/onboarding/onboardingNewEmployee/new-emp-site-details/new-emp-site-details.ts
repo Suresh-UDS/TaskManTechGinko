@@ -5,6 +5,7 @@ import {Storage} from "@ionic/storage";
 import {OnboardingService} from "../../../service/onboarding.service";
 import {SelectSearchableComponent} from "ionic-select-searchable";
 import {onBoardingDataService} from "../onboarding.messageData.service";
+import {DatePipe} from "@angular/common";
 
 /**
  * Generated class for the NewEmpSiteDetails page.
@@ -29,6 +30,8 @@ export class NewEmpSiteDetails {
   selectedBranch:any;
   selectedProject:any;
   selectedWBS:any;
+  formActionStatus: any;
+  pipe = new DatePipe('en-US');
   constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, private storage: Storage, private onBoardingService: OnboardingService, private messageService: onBoardingDataService) {
 
     this.selectedBranch = null;
@@ -47,8 +50,12 @@ export class NewEmpSiteDetails {
           this.getBranches();
 
           this.storage.get('onboardingCurrentIndex').then(data => {
+            console.log("Stored index data");
+            console.log(data);
+            console.log(data['index']);
             this.storedIndex = data['index'];
-          });
+            this.formActionStatus = data['action'];
+          })
 
           this.siteDetailsForm = this.fb.group({
             projectCode: ['', [Validators.required]],
@@ -62,10 +69,21 @@ export class NewEmpSiteDetails {
                 status: true,
                 data: this.siteDetailsForm.value
               };
-              delete fromStatusValues['data']['projectCode'];
-              delete fromStatusValues['data']['wbsId'];
-              fromStatusValues['data']['projectCode'] = this.selectedProject;
-              fromStatusValues['data']['wbsId'] = this.selectedWBS;
+              console.log(fromStatusValues['data']['projectCode']);
+              console.log(fromStatusValues['data']['projectCode']['elementCode']);
+              console.log(fromStatusValues['data']['projectCode']['element']);
+              let projectDetails = fromStatusValues['data']['projectCode'];
+              let wbsDetails = fromStatusValues['data']['wbsId'];
+              fromStatusValues['data']['projectCode'] = projectDetails['elementCode'];
+              fromStatusValues['data']['wbsId'] = wbsDetails['elementCode'];
+              fromStatusValues['data']['projectDescription'] = projectDetails['element'];
+              fromStatusValues['data']['wbsDescription'] = wbsDetails['element'];
+              console.log("Wbs id");
+              console.log(fromStatusValues['data']['wbsId']);
+              console.log(fromStatusValues['data']['wbsId']);
+              console.log(fromStatusValues['data']['projectDescription']);
+              console.log(fromStatusValues['data']['wbsDescription']);
+              console.log(fromStatusValues['data']['projectCode']);
 
               this.messageService.formDataMessage(fromStatusValues);
             }
@@ -86,7 +104,7 @@ export class NewEmpSiteDetails {
           component: SelectSearchableComponent,
           value: any
         }){
-          this.selectedBranch = event.value.elementCode;
+          this.selectedBranch = event.value;
           window.localStorage.setItem('projectId',event.value.elementCode);
           this.onBoardingService.getProjectsByBranch(event.value.elementCode).subscribe(response=>{
             console.log("Getting projects");
@@ -99,7 +117,7 @@ export class NewEmpSiteDetails {
           component: SelectSearchableComponent,
           value: any
         }){
-          this.selectedProject = event.value.elementCode;
+          this.selectedProject = event.value;
           window.localStorage.setItem('wbsId',event.value.elementCode);
           this.onBoardingService.getWBSByProject(event.value.elementCode).subscribe(response=>{
             console.log("Getting WBS");
@@ -112,9 +130,9 @@ export class NewEmpSiteDetails {
           component: SelectSearchableComponent,
           value: any
         }){
-          this.selectedWBS = event.value.elementCode;
+          this.selectedWBS = event.value;
           console.log("Filter employees");
-          console.log(event.value);
+          console.log(this.selectedWBS);
         }
 
 }

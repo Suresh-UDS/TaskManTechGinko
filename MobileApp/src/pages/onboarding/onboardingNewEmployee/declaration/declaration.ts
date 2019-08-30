@@ -36,7 +36,7 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
 
     this.declarationForm = this.fb.group(
         {
-          agreeTermsAndConditions: ['',[Validators.required]]
+          agreeTermsAndConditions: [false,[Validators.required]]
         }
     );
 

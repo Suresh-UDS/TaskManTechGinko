@@ -17,9 +17,12 @@ export class newEmpFamilyAndAcademic implements OnInit {
   storedIndex;
   remainTotal = 100;
   nomineeTotalPercentage;
+  private relationships: any;
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
+
+    this.getNomineeRelationships();
 
     this.onboardingFamilyAcademicForm = this.fb.group({
       educationQualification: this.fb.array([this.setEducation()]),
@@ -139,5 +142,13 @@ export class newEmpFamilyAndAcademic implements OnInit {
 
   ngOnDestroy() {
     this.onboardingFamilyAcademicSubscription.unsubscribe();
+  }
+
+  getNomineeRelationships(){
+    this.storage.get('nomineeRelationships').then(relationships=>{
+      console.log("Relationships");
+      console.log(relationships);
+      this.relationships = relationships;
+    })
   }
 }
