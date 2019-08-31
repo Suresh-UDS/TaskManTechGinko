@@ -269,6 +269,7 @@ angular.module('timeSheetApp')
 
 	$scope.LoadEmpListByType = function(type){
 
+		$scope.setPage(1);
 		$scope.onBoardingEmployees = [];
 		$scope.setListType(type);
 		$scope.search();
