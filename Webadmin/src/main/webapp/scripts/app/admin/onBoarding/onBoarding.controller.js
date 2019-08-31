@@ -161,6 +161,8 @@ angular.module('timeSheetApp')
 
 			$scope.mappedData = data; 
 
+			$scope.showCategoriesLoader = false;
+
 			for(var i in $scope.mappedData){
  
 				$(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType).prop("checked",true);
@@ -168,6 +170,12 @@ angular.module('timeSheetApp')
 			}
  
 			 
+		}).catch(function(response){
+
+			$scope.showCategoriesLoader = false;
+
+			$scope.showNotifications('top','center','danger','Problem with network please retry.');
+
 		});
 
 	}
