@@ -503,6 +503,7 @@ public class    EmployeeService extends AbstractService {
 //				if(updateEmployee.isVerified()){
 		        	updateEmployee.setEmpId(returnObject.getEmpId());
 		            updateEmployee.setVerifiedBy(user);
+		            updateEmployee.setVerified(true);
 		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
 		            employee = employeeRepository.save(updateEmployee);
 //		        }

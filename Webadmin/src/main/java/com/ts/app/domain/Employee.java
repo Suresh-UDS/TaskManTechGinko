@@ -236,7 +236,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean newEmployee;
 
-    @OneToOne(fetch = FetchType.LAZY,optional=true)
+    @OneToOne(fetch = FetchType.LAZY,optional=true,cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
     private User verifiedBy;
 
