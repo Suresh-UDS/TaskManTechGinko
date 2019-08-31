@@ -151,6 +151,7 @@ angular.module('timeSheetApp')
 
 	$scope.setSelectedBranch = function(){
  
+		$scope.showCategoriesLoader = true;
 		$scope.selctedSapBusinessCategoriesList = [];
 		$scope.selctedSapBusinessCategoriesList.push(_.find($scope.sapBusinessCategoriesList.rootElements,{elementCode:$scope.selectedBranch}));
 
@@ -159,11 +160,9 @@ angular.module('timeSheetApp')
 		OnBoardingComponent.getElementsByUser($scope.userDetails.id,$scope.selectedBranch).then(function (data) {
 
 			$scope.mappedData = data; 
-			
+
 			for(var i in $scope.mappedData){
-
-				console.log(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType);
-
+ 
 				$(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType).prop("checked",true);
 
 			}
