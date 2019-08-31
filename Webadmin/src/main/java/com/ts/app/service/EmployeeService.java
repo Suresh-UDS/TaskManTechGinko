@@ -500,12 +500,12 @@ public class    EmployeeService extends AbstractService {
 			returnObject = response.getReturnLog().getItem().get(0);
 			if(!returnObject.getType().equals("E")) {
 				
-				if(updateEmployee.isVerified()){
+//				if(updateEmployee.isVerified()){
 		        	updateEmployee.setEmpId(returnObject.getEmpId());
 		            updateEmployee.setVerifiedBy(user);
 		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
-		            employee = employeeRepository.saveAndFlush(updateEmployee);
-		        }
+		            employee = employeeRepository.save(updateEmployee);
+//		        }
 				
 			}
 		} catch (Exception e) {
