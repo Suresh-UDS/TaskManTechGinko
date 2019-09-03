@@ -29,6 +29,8 @@ angular.module('timeSheetApp')
     $scope.allUsers = [];
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
+    $scope.showUserBranchesList = false;
+    $scope.userBranchList = [];
     $scope.addressProofImage;
 	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
 	$scope.sapBusinessCategoriesList = {};
@@ -336,6 +338,14 @@ angular.module('timeSheetApp')
 	    console.log(userDetails);
 	    $scope.userDetails = userDetails;
 	    $scope.showUserDetails = true;
+    };
+
+	$scope.loadUserBranchList = function(userDetails){
+	    console.log("Load userBranch list");
+        OnBoardingComponent.getBranchList().then(function (data) {
+            $scope.showUserBranchesList = true;
+            $scope.userBranchList = data;
+        })
     };
 
 	$scope.clearUsers = function($event){
@@ -699,7 +709,8 @@ angular.module('timeSheetApp')
 			$scope.userDetails = data;
 
 			$scope.loadgetSapBusinessCategories();
- 
+
+			$scope.loadUserBranchList();
 
            // $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
             // $scope.getUserConfigDetails(data.id);

@@ -31,7 +31,13 @@
                 </form>
             </div>
         </div>
-        <div >
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
             <div class="card">
                 <!--            <form id="UserDetails" class="form-horizontal" action="" method="">-->
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
@@ -114,6 +120,43 @@
             </div>
         </div>
 
+        <div class="col-md-6">
+            <div class="card">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Configured Branch List
+                    </div>
+                </div>
+
+                <div class="card-content">
+
+                    <div class="row">
+                        <span ng-repeat="branch in userBranchList" class="tag label label-info" style="margin-right: 10px">
+                            {{branch.element}}
+			                </span>
+                    </div>
+
+                    <div ng-show="!showUserBranchesList">
+                        <div class="card card-pricing card-plain">
+                            <div class="content">
+                                <div class="icon">
+                                    <i class="material-icons">devices_other</i>
+                                </div>
+                                <h3 class="card-title">No configures Branches Found</h3>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <!--                <div class="card-footer text-center">-->
+                <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
+                <!--                </div>-->
+                <!--            </form>-->
+            </div>
+        </div>
     </div>
     
     <div class="card">
