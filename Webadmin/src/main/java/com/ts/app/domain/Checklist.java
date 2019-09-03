@@ -35,6 +35,7 @@ public class Checklist extends AbstractAuditingEntity implements Serializable {
     private Project project;
 
 	@OneToMany(mappedBy = "checklist", cascade = {CascadeType.ALL}, orphanRemoval=true)
+	@OrderBy("id ASC")
 	private Set<ChecklistItem> items;
 
 	
