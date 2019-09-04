@@ -2,12 +2,15 @@ package com.ts.app.domain;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by karthick on 7/1/2017.
@@ -46,6 +49,9 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
     
     @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)    
     private List<AssetStatusHistory> assetStatusHistoryList;
+    
+    @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)    
+    private List<AssetTicketConfig> assetTicketConfigList;
     
     @OneToMany(mappedBy="asset",cascade={CascadeType.ALL}, fetch = FetchType.LAZY)   
     private List<AssetSiteHistory> assetSiteHistoryList;
@@ -111,6 +117,14 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	private boolean udsAsset;
 	
 	private String warrantyType;
+	
+	@JsonIgnore
+	@ManyToOne(cascade={CascadeType.ALL}, fetch = FetchType.LAZY)
+	@JoinColumn(name="parent_asset_id")
+	private Asset parentAsset;
+	
+	@OneToMany( mappedBy = "parentAsset",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+	private List<Asset> assets; 
 
 	public Date getWarrantyFromDate() {
 		return warrantyFromDate;
@@ -323,6 +337,13 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 	public void setAssetStatusHistory(List<AssetStatusHistory> assetStatusHistory) {
 		this.assetStatusHistoryList = assetStatusHistory;
 	}
+	
+	public List<AssetTicketConfig> getAssetTicketConfigList() {
+		return assetTicketConfigList;
+	}
+	public void setAssetTicketConfigList(List<AssetTicketConfig> assetTicketConfigList) {
+		this.assetTicketConfigList = assetTicketConfigList;
+	}
 	public List<AssetSiteHistory> getAssetSiteHistory() {
 		return assetSiteHistoryList;
 	}
@@ -334,6 +355,20 @@ public class Asset extends AbstractAuditingEntity implements Serializable {
 			this.assetSiteHistoryList = assetSiteHistory;
 		}
 	}
-    
+	public Asset getParentAsset() {
+		return parentAsset;
+	}
+	public void setParentAsset(Asset parentAsset) {
+		this.parentAsset = parentAsset;
+	}
+ 
+	public List<Asset> getAssets() {
+		return assets;
+	}
+	public void setAssets(List<Asset> assets) {
+		this.assets = assets;
+	}
+	
+     
 }
 

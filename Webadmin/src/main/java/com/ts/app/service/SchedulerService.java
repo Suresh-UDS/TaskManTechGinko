@@ -807,7 +807,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */05 * * * ?")
+	//@Scheduled(cron = "0 */05 * * * ?")
 	public void slaTicketEscalationNotification()
 	{
 		String mailStatus = "";
@@ -901,7 +901,7 @@ public class SchedulerService extends AbstractService {
 		}
 	}
 
-	@Scheduled(cron = "0 */05 * * * ?")
+	//@Scheduled(cron = "0 */05 * * * ?")
 	public void slaJobEscalationNotification()
 	{
 		String mailStatus = "";

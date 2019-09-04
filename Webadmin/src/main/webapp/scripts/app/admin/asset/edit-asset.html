@@ -1,4 +1,4 @@
-<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();"
+<div class="crud-form" ng-init="editAsset();loadingStart();loadAllParameters();loadAllParameterUOMs();loadStatus()"
 	data-unique-hash="a2ad475d60b22954085c657a73309b8f">
 	<div class="">
         <div class="titleCon">
@@ -186,29 +186,29 @@
 
 
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div class="row">
-                                                                        <div class="col-md-12">
-                                                                            <div class="form-group" ng-init="loadStatus();">
-                                                                                <label class="control-label">Status<span class="red-star">*</span></label>
-                                                                                <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                <select class="form-control" ng-model="selectedAssetStatus" name="AssetStatus" ng-options="(status | uppercase) for status in statuses track by status" required tabindex="8">
-                                                                                    <option value="">Select Status ..</option>
-                                                                                </select>
-                                                                                <div ng-show="form.$submitted || form.AssetStatus.$touched || form.AssetStatus.$dirty">
-                                                                                     <div ng-show="form.AssetStatus.$dirty || form.AssetStatus.$invalid">
-                                                                                     <p class="help-block" style="color: maroon"
-                                                                                        ng-show="form.AssetStatus.$error.required">Status is
-                                                                                         required.</p>
 
-                                                                                     </div>
+                                                                            <div class="form-group selectcon">
+
+                                                                                <div class="row">
+                                                                                    <div class="col-md-10 pad-r-0px">
+                                                                                        <label class="control-label">Parent</label>
+                                                                                        <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                                        <select class="form-control" ng-model="selectedAssetGroup" ng-options="assetgroup as assetgroup.title | uppercase for assetgroup in assetFinalLists" tabindex="6">
+                                                                                            <option value="">Select Asset Parent ..</option>
+                                                                                        </select>
+
+                                                                                    </div>
+
+
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
 
+                                                                            </div>
+
+                                                                        </div>
                                                                     </div>
+
+
 
                                                                 </div>
                                                             </div>
@@ -251,7 +251,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="control-label">Site   <span class="red-star">*</span> </label>
                                                                                         <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites track by site.id" ng-change="siteChange();" name="AssetSite" required tabindex="2">
+                                                                                        <select class="form-control " ng-model="selectedSites"  ng-options="site as (site.name | uppercase) for site in sites track by site.id" ng-change="siteChange();getAssetHierarchy();getAssetGrpHierarchy();" name="AssetSite" required tabindex="2">
                                                                                             <option value="">Select Site ...</option>
                                                                                         </select>
 
@@ -306,6 +306,56 @@
 
                                                         </div>
 
+
+                                                            <div class="col-md-12">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading">Asset Status</div>
+                                                                    <div class="panel-body">
+                                                                        <div class="row" ng-init="loadStatus();">
+                                                                            <div class="form-group" >
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table">
+                                                                                        <thead class="text-primary">
+                                                                                        <th>Status</th>
+                                                                                        <th>Ticket</th>
+                                                                                        <th>Severity</th>
+                                                                                        <th>Current Status</th>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                        <tr ng-repeat="status in statuses track by status.status">
+                                                                                            <td>{{status.status}}</td>
+                                                                                            <td>
+                                                                                                <div class="togglebutton">
+                                                                                                    <label>
+                                                                                                        <input type="checkbox" ng-change="setCritical(status,$index)" ng-model="status.isCritical">
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div class="togglebutton">
+                                                                                                    <label>
+                                                                                                        <input type="checkbox" ng-disabled="!status.isCritical" ng-change="setSeverity()" ng-model="status.isSeverity">
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div class="togglebutton">
+                                                                                                    <label>
+                                                                                                        <input type="checkbox" ng-disabled="!status.allowCurrentStatus" ng-change="setCurrentStatus(status,$index)" ng-model="status.isCurrentStatus">
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
                                                         <div class="col-md-12">
 
@@ -1679,7 +1729,7 @@
 
                                                                         </div>
 
-                                                                        <div class="col-md-4">
+                                                                        <div class="col-md-3">
                                                                             <div class="form-group selectcon is-empty SelectWithAddbtnCon">
 
                                                                                 <div class="" style="float:left;width:90%;">
@@ -1715,133 +1765,159 @@
                                                                             </div>
                                                                         </div>
 
-                                                                    </div>
 
-                                                                     <div class="row">
-
-
-                                                                        <div class="col-md-8">
-
-                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-
-                                                                                <div class="" style="float:left;width:100%;" ng-init="loadAllRules()">
-                                                                                    <label class="control-label">Select Rule </label>
-                                                                                    <span class="form-control-feedback d-arrow-icon" style="padding-right: 30px"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                                    <select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="rule" ng-options="(rule | uppercase) for rule in readingRules"  aria-invalid="false" >
-                                                                                    <option value="" class="" selected="selected">Select Rule ..</option>
-                                                                                    </select>
-                                                                                    <!-- <div ng-show="form6.$submitted || form6.rule.$touched">
-                                                                                        <div ng-show="form6.rule.$dirty || form6.rule.$invalid">
-                                                                                            <p class="help-block" style="color:maroon"
-                                                                                               ng-show="form6.rule.$error.required">
-                                                                                                Rule is required.
-                                                                                            </p>
-
-                                                                                        </div>
-                                                                                    </div> -->
-                                                                                </div>
-                                                                                <!-- <div class="" style="float:left;">
-                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParamet" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
-                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addParamet').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                                </div> -->
-                                                                                <!-- <div class="clear"></div>
-                                                                                <div class="collapse" id="addParamet">
-                                                                                    <div class="">
-                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value=""  aria-invalid="false">
-                                                                                        <a class="btn btn-success" ng-click="addParameter()" >Add</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <span class="material-input"></span> -->
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                        <div class="col-md-4">
-                                                                            <div class="form-group selectcon is-empty SelectWithAddbtnCon">
-
-                                                                                <div class="" style="float:left;width:90%;">
-                                                                                    <label class="control-label">Threshold</label>
-                                                                                    <input id='threshold'
-									                                                 ng-model="selectedThreshold"
-									                                                 class='form-control'
-									                                                 name='threshold'
-									                                                 type='text' value=""
-									                                                 ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus
-									                                                  />
-                                                                                    <!-- <div ng-show="form6.$submitted || form6.paramUOM.$touched">
-                                                                                        <div ng-show="form6.paramUOM.$dirty || form6.paramUOM.$invalid">
-                                                                                            <p class="help-block" style="color:maroon"
-                                                                                               ng-show="form6.paramUOM.$error.required">
-                                                                                                Parameter UOM is required.
-                                                                                            </p>
-
-                                                                                        </div>
-                                                                                    </div> -->
-                                                                                </div>
-                                                                               <!--  <div class="" style="float:left;">
-                                                                                    <a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
-                                                                                        <i class="material-icons">add</i>
-                                                                                    </a>
-                                                                                    <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
-                                                                                </div> -->
-                                                                                <!-- <div class="clear"></div>
-                                                                                <div class="collapse" id="addUnits">
-                                                                                    <div class="">
-                                                                                        <input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameterUOM.uom" name="assetgroupName" type="text" value=""  aria-invalid="false">
-                                                                                        <a class="btn btn-success" ng-click="addParameterUOM()" >Add</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <span class="material-input"></span> -->
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                     <div class="row">
                                                                         <div class="col-md-2">
                                                                             <div class="form-group">
-                                                                                <label class="control-label">Min Value  </label>
+                                                                                <label class="control-label">Threshold Min Value  </label>
                                                                                 <input id='min'
-									                                                 ng-model="selectedMinValue"
-									                                                 class='form-control'
-									                                                 name='MinValue'
-                                                                                     value="1"
-                                                                                     min="1"
-                                                                                     ng-change="checkMinMax()"
-									                                                 type='number' value=""
-									                                                 autofocus
-									                                                  />
+                                                                                       ng-model="selectedMinValue"
+                                                                                       class='form-control'
+                                                                                       name='MinValue'
+                                                                                       value="1"
+                                                                                       min="1"
+                                                                                       ng-change="checkMinMax()"
+                                                                                       type='number' value=""
+                                                                                       autofocus
+                                                                                />
                                                                                 <div ng-show="form6.$submitted || form6.MinValue.$touched">
                                                                                     <p class="help-block" style="color:maroon" ng-show="minError">
-                                                                                       Min value must below max value.
+                                                                                        Min value must below max value.
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-2">
-                                                                             <div class="form-group">
-                                                                                <label class="control-label">Max Value </label>
+                                                                            <div class="form-group">
+                                                                                <label class="control-label">Threshold Max Value </label>
                                                                                 <input id='max'
-									                                                 ng-model="selectedMaxValue"
-									                                                 class='form-control'
-									                                                 name='MaxValue'
-                                                                                     value="1"
-                                                                                     min="1"
-                                                                                     ng-change="checkMinMax()"
-									                                                 type='number' value=""
-									                                                 autofocus
-									                                                  />
-                                                                                  <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                                                       ng-model="selectedMaxValue"
+                                                                                       class='form-control'
+                                                                                       name='MaxValue'
+                                                                                       value="1"
+                                                                                       min="1"
+                                                                                       ng-change="checkMinMax()"
+                                                                                       type='number' value=""
+                                                                                       autofocus
+                                                                                />
+                                                                                <div ng-show="form6.$submitted || form6.MaxValue.$touched">
                                                                                     <p class="help-block" style="color:maroon" ng-show="maxError">
-                                                                                       Max value must above min value.
+                                                                                        Max value must above min value.
                                                                                     </p>
-                                                                                 </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-md-2 col-md-offset-1">
+                                                                    </div>
+
+
+
+                                                                     <div class="row">
+
+
+                                                                        <!--<div class="col-md-8">-->
+
+                                                                            <!--<div class="form-group selectcon is-empty SelectWithAddbtnCon">-->
+
+                                                                                <!--<div class="" style="float:left;width:100%;" ng-init="loadAllRules()">-->
+                                                                                    <!--<label class="control-label">Select Rule </label>-->
+                                                                                    <!--<span class="form-control-feedback d-arrow-icon" style="padding-right: 30px"><i class="material-icons">keyboard_arrow_down</i></span>-->
+                                                                                    <!--<select class="form-control ng-pristine ng-valid ng-touched" ng-model="selectedRule" name="rule" ng-options="(rule | uppercase) for rule in readingRules"  aria-invalid="false" >-->
+                                                                                    <!--<option value="" class="" selected="selected">Select Rule ..</option>-->
+                                                                                    <!--</select>-->
+                                                                                    <!--&lt;!&ndash; <div ng-show="form6.$submitted || form6.rule.$touched">-->
+                                                                                        <!--<div ng-show="form6.rule.$dirty || form6.rule.$invalid">-->
+                                                                                            <!--<p class="help-block" style="color:maroon"-->
+                                                                                               <!--ng-show="form6.rule.$error.required">-->
+                                                                                                <!--Rule is required.-->
+                                                                                            <!--</p>-->
+
+                                                                                        <!--</div>-->
+                                                                                    <!--</div> &ndash;&gt;-->
+                                                                                <!--</div>-->
+                                                                                <!--&lt;!&ndash; <div class="" style="float:left;">-->
+                                                                                    <!--<a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addParamet" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">-->
+                                                                                        <!--<i class="material-icons">add</i>-->
+                                                                                    <!--</a>-->
+                                                                                    <!--<a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addParamet').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>-->
+                                                                                <!--</div> &ndash;&gt;-->
+                                                                                <!--&lt;!&ndash; <div class="clear"></div>-->
+                                                                                <!--<div class="collapse" id="addParamet">-->
+                                                                                    <!--<div class="">-->
+                                                                                        <!--<input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameter.name" name="assetgroupName" type="text" value=""  aria-invalid="false">-->
+                                                                                        <!--<a class="btn btn-success" ng-click="addParameter()" >Add</a>-->
+                                                                                    <!--</div>-->
+                                                                                <!--</div>-->
+                                                                                <!--<span class="material-input"></span> &ndash;&gt;-->
+                                                                            <!--</div>-->
+
+                                                                        <!--</div>-->
+
+                                                                        <!--<div class="col-md-4">-->
+                                                                            <!--<div class="form-group selectcon is-empty SelectWithAddbtnCon">-->
+
+                                                                                <!--<div class="" style="float:left;width:90%;">-->
+                                                                                    <!--<label class="control-label">Threshold</label>-->
+                                                                                    <!--<input id='threshold'-->
+									                                                 <!--ng-model="selectedThreshold"-->
+									                                                 <!--class='form-control'-->
+									                                                 <!--name='threshold'-->
+									                                                 <!--type='text' value=""-->
+									                                                 <!--ng-pattern="/^[A-Za-z0-9\s]*$/" autofocus-->
+									                                                  <!--/>-->
+                                                                                    <!--&lt;!&ndash; <div ng-show="form6.$submitted || form6.paramUOM.$touched">-->
+                                                                                        <!--<div ng-show="form6.paramUOM.$dirty || form6.paramUOM.$invalid">-->
+                                                                                            <!--<p class="help-block" style="color:maroon"-->
+                                                                                               <!--ng-show="form6.paramUOM.$error.required">-->
+                                                                                                <!--Parameter UOM is required.-->
+                                                                                            <!--</p>-->
+
+                                                                                        <!--</div>-->
+                                                                                    <!--</div> &ndash;&gt;-->
+                                                                                <!--</div>-->
+                                                                               <!--&lt;!&ndash;  <div class="" style="float:left;">-->
+                                                                                    <!--<a href="javascript:;" data-toggle="collapse" data-parent="#accordian" data-target="#addUnits" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">-->
+                                                                                        <!--<i class="material-icons">add</i>-->
+                                                                                    <!--</a>-->
+                                                                                    <!--<a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addUnits').modal()" data-target="#myModal"><i class="material-icons">add</i><div class="ripple-container" ></div></a>-->
+                                                                                <!--</div> &ndash;&gt;-->
+                                                                                <!--&lt;!&ndash; <div class="clear"></div>-->
+                                                                                <!--<div class="collapse" id="addUnits">-->
+                                                                                    <!--<div class="">-->
+                                                                                        <!--<input class="input-desc ng-pristine ng-untouched ng-valid" id="assetgroupName" ng-model="parameterUOM.uom" name="assetgroupName" type="text" value=""  aria-invalid="false">-->
+                                                                                        <!--<a class="btn btn-success" ng-click="addParameterUOM()" >Add</a>-->
+                                                                                    <!--</div>-->
+                                                                                <!--</div>-->
+                                                                                <!--<span class="material-input"></span> &ndash;&gt;-->
+                                                                            <!--</div>-->
+                                                                        <!--</div>-->
+
+                                                                    </div>
+
+                                                                     <div class="row">
+
+
+                                                                         <div class="col-md-2">
+                                                                             <div class="form-group">
+                                                                                 <label class="control-label">Multiplication Factor</label>
+                                                                                 <input id='multiplicationFactor'
+                                                                                        ng-model="selectedMuliplicationFactor"
+                                                                                        class='form-control'
+                                                                                        name='multiplicationFactor'
+                                                                                        value="1"
+                                                                                        min="1"
+                                                                                        ng-change="checkMultiplicationFactor()"
+                                                                                        type='number' value=""
+                                                                                        autofocus
+                                                                                 />
+                                                                                 <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                                                     <p class="help-block" style="color:maroon" ng-show="mulFactorError">
+                                                                                         Multiplication Factor should be greater than 1.
+                                                                                     </p>
+                                                                                 </div>
+                                                                             </div>
+                                                                         </div>
+
+                                                                        <div class="col-md-2 ">
                                                                             <div class="checkbox" style="padding-top: 25px">
                                                                                 <label>
                                                                                     <input type="checkbox" ng-model="alertRequired" name="terms"> Alert Required
@@ -1860,6 +1936,14 @@
                                                                              <div class="checkbox"  style="padding-top: 25px">
                                                                                  <label>
                                                                                      <input type="checkbox" ng-model="consumptionMonitoringRequired" name="terms"> Consumption Monitor Reading
+                                                                                 </label>
+                                                                             </div>
+                                                                         </div>
+
+                                                                         <div class="col-md-2">
+                                                                             <div class="checkbox" style="padding-top: 25px">
+                                                                                 <label>
+                                                                                     <input type="checkbox" ng-model="selectedTopup" name="terms" > Level Reading
                                                                                  </label>
                                                                              </div>
                                                                          </div>
@@ -1905,14 +1989,16 @@
 
                                                                             <thead>
                                                                             <tr>
-                                                                                <th>Type</th>
-                                                                                <th>Units</th>
-                                                                                <th>Rule</th>
-                                                                                <th>Threshold</th>
-                                                                                <th>Min Value</th>
-                                                                                <th>Max Value</th>
-                                                                                <th>Consumption</th>
-                                                                                <th class="text-right">Actions</th>
+                                                                                <th class="col-md-1">Type</th>
+                                                                                <th class="col-md-1">Parameter</th>
+                                                                                <th class="col-md-1">Units</th>
+                                                                                <!--<th>Rule</th>-->
+                                                                                <!--<th>Threshold</th>-->
+                                                                                <th class="col-md-2">Threshold Min Value</th>
+                                                                                <th class="col-md-2">Threshold Max Value</th>
+                                                                                <th class="col-md-1">Consumption</th>
+
+                                                                                <th class="col-md-1" class="text-right" >Actions</th>
                                                                             </tr>
 
                                                                             </thead>
@@ -1921,9 +2007,10 @@
 
                                                                                 <tr ng-repeat="assetParam in assetParameters">
                                                                                     <td>{{assetParam.assetType}}</td>
+                                                                                    <td>{{assetParam.name}}</td>
                                                                                     <td>{{assetParam.uom}}</td>
-                                                                                    <td>{{assetParam.rule}}</td>
-                                                                                    <td>{{assetParam.threshold}}</td>
+                                                                                    <!--<td>{{assetParam.rule}}</td>-->
+                                                                                    <!--<td>{{assetParam.threshold}}</td>-->
                                                                                     <td>{{assetParam.min}}</td>
                                                                                     <td>{{assetParam.max}}</td>
                                                                                     <td>
@@ -2419,7 +2506,61 @@
 
                 <form name="addGroupForm">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
+                            Asset Group Code
+                        </div>
+                        <div class="col-md-8">
+                            <input class="" id="assetGroupCode" ng-model="assetGroup.assetGroupCode"   name="assetGroupCode" type="text" value="" ng-required="true" ng-maxlength='250'
+                                   ng-pattern="/^[A-Za-z0-9\s]*$/" />
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetGroupCode.$touched || addGroupForm.assetGroupCode.$dirty">
+                                <div ng-show="addGroupForm.assetGroupCode.$dirty || addGroupForm.assetGroupCode.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupCode.$error.required">
+                                        Asset Group code is required.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupCode.$error.maxlength">
+                                        Asset Group Code cannot be longer than 250 characters.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupCode.$error.pattern">
+                                        Asset Group Code can only contain letters, digits and space.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:5px">
+                        <div class="col-md-4">
+                            Parent Group
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-control" id="assetGroupParent" ng-model="selectedParentGroup" ng-options="assetParent as (assetParent.group | uppercase) for assetParent in assetParentList" tabindex="6">
+                                <option value="">No Parent..</option>
+                            </select>
+                            <div ng-show="addGroupForm.$submitted || addGroupForm.assetGroupParent.$touched || addGroupForm.assetGroupParent.$dirty">
+                                <div ng-show="addGroupForm.assetGroupParent.$dirty || addGroupForm.assetGroupParent.$invalid">
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupParent.$error.required">
+                                        Select Asset Group Parent.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupParent.$error.maxlength">
+                                        Select Asset Group Parent.
+                                    </p>
+                                    <p class="help-block" style="color:maroon"
+                                       ng-show="addGroupForm.assetGroupParent.$error.pattern">
+                                        Select Asset Group Parent.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:5px">
+                        <div class="col-md-4">
+                            Asset Group Name
+                        </div>
+                        <div class="col-md-8">
                             <input class="" id="assetgroupName" ng-model="assetGroup.assetgroup"   name="assetgroupName" type="text" value="" ng-required="true" ng-maxlength='250'
                             ng-pattern="/^[A-Za-z0-9\s]*$/" />
                             <div ng-show="addGroupForm.$submitted || addGroupForm.assetgroupName.$touched || addGroupForm.assetgroupName.$dirty">

@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -535,17 +536,20 @@ public class MailService {
     }
 
     @Async
-    public void sendReadingAlert(String emailIds, String siteName, String assetCode, String assetName, String type, Date date) {
+    public void sendReadingAlert(String emailIds, String siteName, String assetCode, String assetName, String type, Date date, String alertType) {
         log.debug("Sending Reading alert e-mail to '{}'", emailIds);
         Locale locale = Locale.forLanguageTag("en-US");
         Context context = new Context(locale);
         context.setVariable("assetName", assetName);
         context.setVariable("assetCode", assetCode);
         context.setVariable("siteName", siteName);
-        context.setVariable("type", type);
         context.setVariable("date", date);
+
+        String message = MessageFormat.format(messageSource.getMessage(alertType+".content", null, locale),assetName,assetCode,siteName,date);
+
+        context.setVariable("message",message );
         String content = templateEngine.process("assetReadingAlert", context);
-        String subject = messageSource.getMessage("email.reading.title", null, locale);
+        String subject = messageSource.getMessage(alertType+".title", null, locale);
         sendEmail(emailIds, subject, content, true, true, org.apache.commons.lang3.StringUtils.EMPTY);
     }
 

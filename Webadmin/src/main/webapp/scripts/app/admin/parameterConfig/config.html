@@ -133,9 +133,9 @@
 
                                 </div>
 
-                                <div class="row" >
+                               <!--  <div class="row" > -->
 
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <div class="form-group selectcon is-empty" ng-init="loadAllRules()">
 
                                             <label class="control-label">Rules</label>
@@ -147,8 +147,8 @@
 
                                         </div>
 
-                                    </div>
-                                    <div class="col-md-3">
+                                    </div> -->
+                                   <!--  <div class="col-md-3">
 
                                          <div class="form-group selectcon is-empty SelectWithAddbtnCon">
                                               <label class="control-label">Threshold</label>
@@ -161,38 +161,120 @@
                                                   />
                                           </div>
 
+                                    </div> -->
+
+
+                                <!-- </div> -->
+
+
+                                <div class="row">
+
+
+                                     <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label">Threshold Min Value  </label>
+                                                <input id='min'
+                                                     ng-model="selectedMinValue"
+                                                     class='form-control'
+                                                     name='MinValue'
+                                                     value="1"
+                                                     min="1"
+                                                     ng-change="checkMinMax()"
+                                                     type='number' value=""
+                                                     autofocus
+                                                      />
+                                                <div ng-show="form6.$submitted || form6.MinValue.$touched">
+                                                    <p class="help-block" style="color:maroon" ng-show="minError">
+                                                       Min value must below max value.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                        
+                                                                        
+                                                                        
+                                      <div class="col-md-2">
+                                             <div class="form-group">
+                                                <label class="control-label">Threshold Max Value </label>
+                                                <input id='max'
+                                                     ng-model="selectedMaxValue"
+                                                     class='form-control'
+                                                     name='MaxValue'
+                                                     value="1"
+                                                     min="1"
+                                                     ng-change="checkMinMax()"
+                                                     type='number' value=""
+                                                     autofocus
+                                                      />
+                                                  <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                    <p class="help-block" style="color:maroon" ng-show="maxError">
+                                                       Max value must above min value.
+                                                    </p>
+                                                 </div>
+                                            </div>
+                                        </div>
+
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label">Multiplication Factor</label>
+                                            <input id='multiplicationFactor'
+                                                   ng-model="selectedMuliplicationFactor"
+                                                   class='form-control'
+                                                   name='multiplicationFactor'
+                                                   value="1"
+                                                   min="1"
+                                                   ng-change="checkMultiplicationFactor()"
+                                                   type='number' value=""
+                                                   autofocus
+                                            />
+                                            <div ng-show="form6.$submitted || form6.MaxValue.$touched">
+                                                <p class="help-block" style="color:maroon" ng-show="mulFactorError">
+                                                    Multiplication Factor should be greater than 1.
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
+
+
+                                    <div class="col-md-2">
+                                        <div class="checkbox" style ="padding-top: 25px">
+                                            <label>
+                                                <input type="checkbox" name="terms" ng-model="validationRequired.value"> Validation Required
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
                                         <div class="checkbox">
                                             <label style="padding-top: 23px;">
                                                 <input type="checkbox" name="terms" ng-model="alertRequired.value"> Alert Required
                                             </label>
                                         </div>
                                     </div>
-
                                 </div>
-
-
                                 <div class="row">
 
-
-
-                                    <div class="col-md-3">
-                                        <div class="checkbox">
+                                    <div class="col-md-2">
+                                        <div class="checkbox" style="padding-top: 25px">
                                             <label>
-                                                <input type="checkbox" name="terms" ng-model="validationRequired.value"> Validation Required
+                                                <input type="checkbox" ng-model="selectedTopup" name="terms"> Level Reading
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="checkbox">
+
+                                    <div class="col-md-4">
+                                        <div class="checkbox" style = "padding: 25px">
                                             <label>
                                                 <input type="checkbox" name="terms" ng-model="consumptionMonitoringRequired.value" > Consumption Monitoring Required
                                             </label>
                                         </div>
                                     </div>
+                                    </div>
 
-                                    <div class="col-md-6 txt-align-rgt" ng-switch="isEdit">
+                                   <div class = "row">
+
+                                    <div class="col-md-12 txt-align-rgt" ng-switch="isEdit">
                                         <!--<button class="btn btn-success" type="submit" ng-switch-when="false"-->
                                                 <!--id="form-button-add"  ng-disabled="form.$invalid || btnDisabled">-->
                                             <!--<span class="btn-label"><i class="material-icons">add</i></span> Add-->
@@ -239,8 +321,12 @@
                                         <tr>
                                             <th>Asset Type</th>
                                             <th>Parameter</th>
-                                            <th>Unit</th>
-                                            <th>Consumption Monitoring Required</th>
+                                            <th>Threshold</th>
+                                            <th>Consumption</th>
+                                            <th>Multiplication Factor</th>
+                                            <th>Alert</th>
+                                            <th>Validation</th>
+                                            <th>Level Reading</th>
                                             <th class="text-right" >Actions</th>
                                         </tr>
 
@@ -250,8 +336,8 @@
 
                                         	<tr ng-repeat="parameterConfig in parameterConfigs" repeat-done="initDataTables()">
 											<td>{{parameterConfig.assetType}}</td>
-											<td>{{parameterConfig.name}}</td>
-			                                	<td>{{parameterConfig.uom}}</td>
+											<td>{{parameterConfig.name}} - {{parameterConfig.uom}}</td>
+                                            <td>{{parameterConfig.min}} - {{parameterConfig.max}}</td>
 										   	<td>
 										   		<div class="checkbox">
                                                     <label>
@@ -259,6 +345,30 @@
                                                     </label>
                                                 </div>
                                              </td>
+                                            <td>
+                                                {{parameterConfig.multiplicationFactor}}
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="alert" ng-model="parameterConfig.alertRequired" disabled >
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="alert" ng-model="parameterConfig.validationRequired" disabled >
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="alert" ng-model="parameterConfig.allowTopUp" disabled >
+                                                    </label>
+                                                </div>
+                                            </td>
 			                                 <td class="text-right">
                                                 <a  ng-click="getParameterConfigDetails(parameterConfig.id ,'edit')"  has-permission="AssetConfig:Edit"  title="Edit"  class="btn btn-simple btn-info"><i class="material-icons">edit</i></a>
 			                                 	<a  has-permission="AssetConfig:Delete" class="btn btn-simple btn-danger" ng-click="deleteConfirm(parameterConfig.id)" title="Delete" onClick="$('#deleteModal').modal()" data-target="#myModal"><i class="material-icons">delete_forever</i><div class="ripple-container" ></div></a>

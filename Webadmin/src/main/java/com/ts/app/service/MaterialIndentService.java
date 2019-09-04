@@ -61,6 +61,9 @@ public class MaterialIndentService extends AbstractService {
 	private MailService mailService;
 
 	@Inject
+    private EmployeeService employeeService;
+
+	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
 	public static final String EMAIL_NOTIFICATION_PURCHASEREQ = "email.notification.purchasereq";
@@ -182,16 +185,16 @@ public class MaterialIndentService extends AbstractService {
 		SearchResult<MaterialIndentDTO> result = new SearchResult<MaterialIndentDTO>();
 		User user = userRepository.findOne(searchCriteria.getUserId());
 		log.debug(">>> user <<<"+ user.getFirstName() +" and "+user.getId());
-		Employee employee = user.getEmployee();
+		EmployeeDTO employee = employeeService.findOne(user.getEmployee().getId());
 		log.debug(">>> user <<<"+ employee.getFullName() +" and "+ employee.getId());
-		List<EmployeeProjectSite> sites = employee.getProjectSites();
+		List<EmployeeProjectSiteDTO> sites = employee.getProjectSites();
 
 		if (searchCriteria != null) {
 
 			List<Long> siteIds = new ArrayList<Long>();
 			if(employee != null && !user.isAdmin()) {
-				for (EmployeeProjectSite site : sites) {
-					siteIds.add(site.getSite().getId());
+				for (EmployeeProjectSiteDTO site : sites) {
+					siteIds.add(site.getSiteId());
 					searchCriteria.setSiteIds(siteIds);
 				}
 			}else if(user.isAdmin()){

@@ -1,13 +1,13 @@
 package com.ts.app.web.rest.dto;
 
 /**
- * 
+ *
  * @author gnana
  *
  */
 public class AssetTypeDTO extends BaseDTO {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,11 @@ public class AssetTypeDTO extends BaseDTO {
 
 	private String name;
 
-	public Long getId() {
+    private boolean isRelationShipBased;
+    
+    private String assetTypeCode;
+
+    public Long getId() {
 		return id;
 	}
 
@@ -30,7 +34,23 @@ public class AssetTypeDTO extends BaseDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 
+
+    public boolean isRelationShipBased() {
+        return isRelationShipBased;
+    }
+
+    public void setRelationShipBased(boolean relationShipBased) {
+        isRelationShipBased = relationShipBased;
+    }
+
+	public String getAssetTypeCode() {
+		return assetTypeCode;
+	}
+
+	public void setAssetTypeCode(String assetTypeCode) {
+		this.assetTypeCode = assetTypeCode;
+	}
+    
+    
 }

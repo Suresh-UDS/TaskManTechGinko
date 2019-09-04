@@ -1,12 +1,279 @@
 'use strict';
 
 angular.module('timeSheetApp')
+    .directive('hcChartReading', function () {
+        return {
+            restrict: 'E',
+            template: '<div></div>',
+            scope: {
+                title: '@',
+                data: '='
+            },
+            link: function (scope, element) {
+
+                console.log(scope.data);
+
+                // $scope.sampleData = data[0];
+                scope.readings = scope.data.readings;
+                scope.pushingItems = {"name":"Consumption","data":[],"color" :{
+                    linearGradient: {
+                      x1: 0,
+                      x2: 0,
+                      y1: 0,
+                      y2: 1
+                    },
+                    stops: [
+                      [0, '#f699ff'],
+                      [1, '#d71ee8']
+                    ]
+                  }};
+                scope.xAxis = []
+                if(scope.readings.length > 0){
+
+                    for(var i=0; i < scope.readings.length; i++) {
+                        var indexItm = [];
+                        scope.xAxis.push(scope.readings[i].date);
+                        scope.pushingItems.data.push(parseFloat(scope.readings[i].value.toFixed(2)));
+
+                    }
+
+                }
+                else{
+
+                    for(i=6;i>=0;i--){
+
+                        var date = moment( new Date() );
+                        date.subtract(i,'days');
+                        scope.xAxis.push(date.format('Y-MM-D'));
+                        scope.pushingItems.data.push(0);
+
+                    }
+
+                }
+                console.log("Asset Reading chart directives -" +JSON.stringify(scope.pushingItems));
+
+                Highcharts.chart(element[0], {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: scope.data.assetName
+                    },
+                    xAxis: {
+                        categories: scope.xAxis,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Consumtion'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#FFF',
+                        borderColor: '#ff9800',
+                        borderRadius: 10,
+                        borderWidth: 3
+    /*
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><br>',
+                        pointFormat: '<span style="color:{series.color};padding:0">{series.name}: </span><br>' +
+                            '<b>{point.y:.1f} </b>',
+                        footerFormat: '',
+                        shared: true,
+                        useHTML: true */
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [scope.pushingItems]
+                });
+            }
+        };
+    })
+    .directive('guagesList', function ($timeout) {
+        return {
+            restrict: 'E',
+            template: '<div></div>',
+            scope: {
+                title: '@',
+                data: '=',
+                fromDirectiveFn: '=method'
+            },
+            link: function (scope, element, attrs) {
+
+               var guageData = scope.data;
+
+                if(!guageData.meterValue){
+
+                    guageData.meterValue = 0;
+
+                }
+
+                element.parent().append('<div id="'+scope.data.id+'" class="col-lg-4 loadingGuage"></div>');
+
+                $(element[0]).click(function(){
+
+                    console.log(scope.data);
+
+                    if(scope.data.data && scope.data.data.length > 0){
+
+                        scope.fromDirectiveFn(scope.data);
+                        $('#deleteModal').modal();
+
+                    }
+
+                })
+
+                var guageChartInfo = {
+
+                    chart: {
+                        type: 'gauge',
+                        plotBackgroundColor: null,
+                        plotBackgroundImage: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false
+                    },
+
+                    title: {
+                        text: scope.title
+                    },
+
+                    pane: {
+                        startAngle: -150,
+                        endAngle: 150,
+                        background: [{
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [
+                                    [0, '#FFF'],
+                                    [1, '#333']
+                                ]
+                            },
+                            borderWidth: 0,
+                            outerRadius: '109%'
+                        }, {
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [
+                                    [0, '#333'],
+                                    [1, '#FFF']
+                                ]
+                            },
+                            borderWidth: 1,
+                            outerRadius: '107%'
+                        }, {
+                            // default background
+                        }, {
+                            backgroundColor: '#DDD',
+                            borderWidth: 0,
+                            outerRadius: '105%',
+                            innerRadius: '103%'
+                        }]
+                    },
+
+                    // the value axis
+                    yAxis: {
+                        min: scope.data.min,
+                        max: scope.data.max,
+
+                        minorTickInterval: 'auto',
+                        minorTickWidth: 1,
+                        minorTickLength: 10,
+                        minorTickPosition: 'inside',
+                        minorTickColor: '#666',
+
+                        tickPixelInterval: 30,
+                        tickWidth: 2,
+                        tickPosition: 'inside',
+                        tickLength: 10,
+                        tickColor: '#666',
+                        labels: {
+                            step: 2,
+                            rotation: 'auto'
+                        },
+                        title: {
+                            text: scope.data.label
+                        },
+                        plotBands: [{
+                            from: scope.data.critical.good[0],
+                            to:  scope.data.critical.good[1],
+                            color: '#55BF3B' // green
+                        }, {
+                            from: scope.data.critical.better[0],
+                            to: scope.data.critical.better[1],
+                            color: '#DDDF0D' // yellow
+                        }, {
+                            from: scope.data.critical.bad[0],
+                            to: scope.data.critical.bad[1],
+                            color: '#DF5353' // red
+                        }]
+                    },
+
+                    series: [{
+                        name: scope.data.label,
+                        data:  [guageData.meterValue],
+                        tooltip: {
+                            valueSuffix: " "+scope.data.unit
+                        }
+                    }]
+
+                };
+
+                scope.$watch('data.data', function(newValue, oldValue) {
+
+                    console.log(newValue);
+
+                });
+
+                scope.$watch('data.meterValue', function(newValue, oldValue) {
+
+                    guageChartInfo.series[0].data = [newValue];
+
+                    Highcharts.chart(element[0], guageChartInfo);
+
+                });
+
+                scope.$watch('data.meterValueTooltip', function(newValue, oldValue) {
+
+                    console.log("meterValueTooltip changes");
+
+                    if(newValue){
+
+                        guageChartInfo.series[0].tooltip.valueSuffix = " "+scope.data.unit+newValue;
+
+                        Highcharts.chart(element[0], guageChartInfo);
+                        
+                    }
+                    else{
+
+                        guageChartInfo.series[0].tooltip.valueSuffix = " "+scope.data.unit;
+
+                        Highcharts.chart(element[0], guageChartInfo);
+
+                    }
+                });
+ 
+                $timeout(function(){
+
+                    Highcharts.chart(element[0], guageChartInfo);
+
+                });
+
+
+            }
+        };
+    })
     .controller('DashboardController', function ($timeout,$scope,$rootScope,$filter,
         DashboardComponent,JobComponent,EmployeeComponent, $state,$http,$stateParams,$location,TicketComponent,
         SiteComponent,AttendanceComponent,getLocalDbStorage) {
         $rootScope.loginView = false;
 
         $scope.ready = false;
+
+        $rootScope.currentReadings = {};
 
         if($rootScope.loginView == false){
             $(".content").removeClass("remove-mr");
@@ -23,12 +290,16 @@ angular.module('timeSheetApp')
         $scope.branchList=null;
         $scope.selectedRegion=null;
         $scope.selectedBranch = null;
-
+        $scope.assetAvailability = {};
         $scope.siteFilterDisable = false;
         $scope.regionFilterDisable = false;
         $scope.branchFilterDisable = false;
         $scope.clientFilterDisable = false;
 
+        $scope.assetOpenTicketsCount = [];
+        $scope.assetSeverityTicketsCount = [];
+        $scope.showAssetTicketPieChart = false;
+        $scope.showAssetAvailabilityChart = false;
         /** root scope (searchCriteria) **/
         $rootScope.searchFilterCriteria = {};
 
@@ -62,6 +333,11 @@ angular.module('timeSheetApp')
         		totalJobCount: 0
         };
 
+        $scope.guageResults = [
+            {"title":"Fuel Consumtion","guageType":"FUEL METER","meterValue":0,"unit":" Ltr","label":"Fuel","id":"fuelGuageContainer","min":0,"max":10000,"critical":{"good":[0,0],"better":[0,0],"bad":[0,0]}},
+            {"title":"Water Consumtion","guageType":"WATER METER","meterValue":0,"unit":" Kltr","label":"Water","id":"waterGuageContainer","min":0,"max":100000,"critical":{"good":[0,0],"better":[0,0],"bad":[0,0]}},
+            {"title":"Power Loss","guageType":"ENERGY METER","meterValue":0,"unit":" % Units","label":"Power","id":"powerGuageContainer","min":0,"max":100,"critical":{"good":[0,10],"better":[10,40],"bad":[40,100]}}
+        ]
 
         $scope.init = function() {
             $scope.loadAllProjects();
@@ -77,15 +353,207 @@ angular.module('timeSheetApp')
             $scope.loadAllJobs();
             $scope.loadAllQuotations();
             $scope.loadAllTickets();
+            $scope.assetTicketPieCharts();
+
         };
+
+        $scope.buildGuages = function(){
+
+            for(var i in $scope.guageResults){
+
+                var searchCriteria = {};
+                searchCriteria.fromDate = new Date;
+                searchCriteria.toDate = new Date;
+                searchCriteria.siteId = $scope.selectedSite.id;
+                searchCriteria.assetTypeName = $scope.guageResults[i].guageType;
+
+                $scope.loadGuageData(searchCriteria,$scope.guageResults[i]);
+
+           }
+
+        }
+
+        $scope.clearGuageResults = function(){
+
+            $scope.setCurrentReading ({});
+
+            for(var i in $scope.guageResults){
+
+                $scope.guageResults[i].data = [];
+                $scope.guageResults[i].meterValue = 0;
+
+            }
+
+        }
+
+        $scope.toggleGuageLoading = function(id,opt){
+
+            var ele = $("#"+id);
+
+            if(ele.length>0){
+
+                if(opt){
+
+                        ele.html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>&nbsp;Loading.. ');
+                }
+                else{
+
+                    ele.html('&nbsp;');
+
+                }
+
+            }
+
+
+        }
+
+        $scope.loadGuageData = function(searchCriteria,guageResultObject){
+
+            $scope.toggleGuageLoading(guageResultObject.id,1);
+
+            DashboardComponent.getReadingsFromDate(searchCriteria).then(function(data) {
+
+                $scope.toggleGuageLoading(guageResultObject.id,0);
+
+                guageResultObject.data = data;
+
+                var meterValue = 0;
+
+                var parentMeterValue = 0;
+
+                var firstChildSumValue = 0;
+
+                var difference = 0;
+
+                var isRelationshipBased = false;
+
+                var closingValue = 0;
+
+                var parentMeterClosingValue = 0;
+
+                for(var i in guageResultObject.data){
+
+                    for(var j in guageResultObject.data[i].readings){
+
+                        if(guageResultObject.data[i].readings[j].value){
+
+                            meterValue += guageResultObject.data[i].readings[j].value;
+                            closingValue += guageResultObject.data[i].readings[j].closingValue;
+
+                        }
+ 
+                    }
+
+                    if( guageResultObject.data[i].level  == 0){
+
+                        parentMeterValue = meterValue;
+  
+                        if(guageResultObject.data[i].parent){
+
+                            isRelationshipBased = true;
+
+                            parentMeterClosingValue = closingValue;
+
+                            meterValue = 0;
+ 
+                        }
+ 
+                    }
+
+                    if( guageResultObject.data[i].level == 1){
+
+                        firstChildSumValue = meterValue;
+
+                     }
+
+                }
+
+                if(searchCriteria.assetTypeName == "ENERGY METER"){
+
+                    if(isRelationshipBased){
+ 
+                        difference = Math.abs(firstChildSumValue - parentMeterValue);
+
+                        guageResultObject.meterValueTooltip =  "<br/>"+"PM : "+ (parentMeterValue.toFixed())+"<br/>"+
+                                                               "CM : "+ ((firstChildSumValue).toFixed());
+
+                        guageResultObject.meterValue = difference == 0 ? 0 : (((difference)/parentMeterValue) * 100);
+
+                    }
+                    else{
+
+                        guageResultObject.meterValue = 0;
+
+                        guageResultObject.meterValueTooltip = "";
+
+                    }
+
+                }
+                else{
+
+                    if(isRelationshipBased && meterValue > parentMeterValue){
+
+                        //guageResultObject.meterValue = meterValue - parentMeterValue;
+
+                        guageResultObject.meterValue = parentMeterValue ;
+                        guageResultObject.meterValueTooltip = "";
+                    }
+                    else{
+
+                        guageResultObject.meterValue = meterValue;
+                        guageResultObject.meterValueTooltip="";
+
+                        //guageResultObject.meterValue = ( guageResultObject.meterValue / closingValue ) * 100
+
+                    }
+
+                }
+
+                if(isNaN(guageResultObject.meterValue)){
+
+                    guageResultObject.meterValue = 0;
+
+                }
+
+                guageResultObject.meterValue = parseFloat(guageResultObject.meterValue.toFixed(2));
+
+            });
+
+        }
+
+        $scope.setCurrentReading = function(incomingValue){
+
+            //console.log(incomingValue);
+
+            $scope.currentReadings = incomingValue.data;
+
+            //console.log($scope.currentReadings);
+
+        }
 
         // Load Charts function
         $scope.loadCharts = function(){
+
             // $scope.loadQuotationReportChart();
             // $scope.loadAllJobsByCategoryCntFunc();
             // $scope.loadAllJobsByStatusCntFunc();
             // $scope.loadTicketAgeChart();
             // $scope.loadAttendanceStatusCounts();
+
+            if(!_.isEmpty($scope.selectedSite)){
+
+
+                $scope.clearGuageResults();
+
+                $scope.buildGuages();
+
+            }
+            else{
+
+                $scope.clearGuageResults();
+
+            }
+
         };
 
         $scope.loadAllJobsByCategoryCntFunc = function(){
@@ -182,6 +650,10 @@ angular.module('timeSheetApp')
             if(siteId){
 
                 $scope.loadChartDataBySiteId($scope.selectedSite.id,$scope.startDate,$scope.endDate);
+                // Asset ticket information pie chart
+                $scope.loadAssetsCountForChart(siteId);
+                $scope.loadAssetSeverityTicketCount($scope.selectedSite.id, $scope.startDate, $scope.endDate);
+                $scope.loadAssetOpenTicketsCount($scope.selectedSite.id, $scope.startDate, $scope.endDate);
 
             }else if(region && branch){
                 $scope.loadChartDataByBranch(projectId,region,branch,$scope.startDate,$scope.endDate);
@@ -673,9 +1145,9 @@ angular.module('timeSheetApp')
             DashboardComponent.loadAllJobsByDate(fromDate,toDate).then(function(data){
 
                 $scope.currentJobCount = data.totalJobCount ? data.totalJobCount : 0;
-  
+
             })
-        };     
+        };
 
         $scope.loadAllQuotations = function(){
 
@@ -685,7 +1157,7 @@ angular.module('timeSheetApp')
             DashboardComponent.loadAllQuotationByDate(fromDate,toDate).then(function(data){
 
                 $scope.totalCurrentQuotationCount = data.totalCount ? data.totalCount : 0;
-  
+
             })
 
         }
@@ -698,7 +1170,7 @@ angular.module('timeSheetApp')
             DashboardComponent.loadAllTicketByDate(fromDate,toDate).then(function(data){
 
                 $scope.totalCurrenTicketsCount = data.totalTicketsCount ? data.totalTicketsCount : 0;
-  
+
             })
 
         }
@@ -818,7 +1290,6 @@ angular.module('timeSheetApp')
         		if($scope.selectedSite && $scope.selectedSite.id) {
         			$scope.refreshReportBySite();
                     $scope.loadChartData($scope.selectedProject.id,null,null,$scope.selectedSite.id);
-
                 }else if($scope.selectedBranch && $scope.selectedBranch.id){
                 	$scope.sites= "";
                     $scope.refreshReportByBranch();
@@ -978,6 +1449,10 @@ angular.module('timeSheetApp')
 
         $scope.LoadFilterSites = function(){
         	if($scope.selectedSite) {
+
+        	    var siteId = $scope.selectedSite.id;
+        	    $scope.loadAssetOpenTicketsCount(siteId,$scope.startDate,$scope.endDate);
+        	    $scope.loadAssetSeverityTicketCount(siteId,$scope.startDate,$scope.endDate);
 
         		/** root scope (searchCriteria) **/
         		if($scope.selectedRegion){
@@ -1278,7 +1753,7 @@ angular.module('timeSheetApp')
             DashboardComponent.getTotalQuoteCounts(searchCriteria).then(function (data) {
                 console.log("Quotations Total Counts" +JSON.stringify(data));
                 $scope.loadingStop();
-                
+
                 /*
                 if(data.length > 0) {
                     $scope.overAllQuotationCount = data[0].totalQuotations;
@@ -1294,7 +1769,7 @@ angular.module('timeSheetApp')
                     $scope.rejectedQuotationCount = 0;
                 }
                 */
-                
+
                 if(data) {
                     $scope.overAllQuotationCount = data.totalCount;
                     $scope.waitingQuotationCount = data.totalSubmitted;
@@ -1340,7 +1815,7 @@ angular.module('timeSheetApp')
 
             });
 
-        }
+        };
 
         $scope.loadTicketStatusFromInflux = function() {          // Ticket chart for get category wise status counts
             TicketComponent.getStatusCountsByCategory().then(function (data) {
@@ -1355,7 +1830,7 @@ angular.module('timeSheetApp')
                 }
 
             });
-        }
+        };
 
         $scope.loadTicketAgeChart = function() {          // Ticket chart for get Avg age category wise
             TicketComponent.getAverageAge().then(function (data) {
@@ -1370,7 +1845,7 @@ angular.module('timeSheetApp')
                 }
 
             });
-        }
+        };
 
         $scope.loadAttendanceStatusCounts = function() {
             AttendanceComponent.getTotalStatusCounts().then(function (data) {
@@ -1403,9 +1878,9 @@ angular.module('timeSheetApp')
                }
 
             });
-        }
+        };
 
-        $scope.loadTicketStatusCounts = function() {
+        $scope.loadTicketStatusCounts = function(searchCriteria) {
             // Ticket for get total status counts
             var searchCriteriaTicket = {};
             searchCriteriaTicket.fromDate = $scope.selectedFromDateSer;
@@ -1430,7 +1905,151 @@ angular.module('timeSheetApp')
                }
 
             });
-        }
+        };
+
+        $scope.loadAssetSeverityTicketCount = function(siteId, fromDate, toDate){
+
+            TicketComponent.getAssetTicketSeverityCount(siteId, fromDate, toDate).then(function (data) {
+                console.log("ticket count based on severity");
+                console.log(data);
+                $scope.assetSeverityTicketsCount = data;
+
+                    Highcharts.chart('assetPieChartContainer', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: '<b>Asset Breakdown Ticket Severity Status</b>'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}% - {point.y} No(s)</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} % - {point.y} No(s)',
+                                    connectorColor: 'silver'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Share',
+                            data: [
+                                { name: 'Medium', y: $scope.assetSeverityTicketsCount.mediumSeverityTicketCount  },
+                                { name: 'High', y:  $scope.assetSeverityTicketsCount.highSeverityTicketCount },
+                                { name: 'Low', y: $scope.assetSeverityTicketsCount.lowSeverityTicketCount}
+                            ]
+                        }]
+                    });
+
+
+            })
+        };
+
+        $scope.loadAssetOpenTicketsCount = function (siteId, fromDate, toDate) {
+            TicketComponent.getAssetTicketOpenCount(siteId, fromDate, toDate).then(function (data) {
+                console.log(data);
+
+                $scope.assetOpenTicketsCount = data;
+
+                if(data && data.inProgressCounts>0 || data.openCounts>0 || data.assignedCounts>0){
+                    $scope.showAssetTicketPieChart = true;
+                    Highcharts.chart('container', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: '<b>Asset Breakdown Ticket Status</b>'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.y} No(s) : {point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.y} No(s) : {point.percentage:.1f} %',
+                                    connectorColor: 'silver'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Share',
+                            data: [
+                                { name: 'In Progress', y: $scope.assetOpenTicketsCount.inProgressCounts },
+                                { name: 'Open', y: $scope.assetOpenTicketsCount.openCounts },
+                                { name: 'Assigned', y: $scope.assetOpenTicketsCount.assignedCounts }
+                            ]
+                        }]
+                    });
+                }else{
+                    console.log("No tickets found for this selection");
+                    console.log(data);
+                }
+
+
+            });
+        };
+
+        $scope.loadAssetsCountForChart = function(siteId){
+            console.log("Asset count function");
+          DashboardComponent.getAssetCountData(siteId).then(function (data) {
+              console.log("Asset count information");
+              console.log(data);
+              $scope.assetAvailability = data;
+
+              if(data && (data.assetsUnderMaintenance>0 || data.breakDownAssets>0 || data.workingAssets>0)){
+                  $scope.showAssetAvailabilityChart = true;
+                  Highcharts.chart('assetAvailability', {
+                      chart: {
+                          plotBackgroundColor: null,
+                          plotBorderWidth: null,
+                          plotShadow: false,
+                          type: 'pie'
+                      },
+                      title: {
+                          text: '<b>Asset Availability Status</b>'
+                      },
+                      tooltip: {
+                          pointFormat: '{series.name}: <b>{point.y} No(s) : {point.percentage:.1f}%</b>'
+                      },
+                      plotOptions: {
+                          pie: {
+                              allowPointSelect: true,
+                              cursor: 'pointer',
+                              dataLabels: {
+                                  enabled: true,
+                                  format: '<b>{point.name}</b>: {point.y} No(s) : {point.percentage:.1f} % ',
+                                  connectorColor: 'silver'
+                              }
+                          }
+                      },
+                      series: [{
+                          name: 'Share',
+                          data: [
+                              { name: 'Assets Under Maintenance', y: $scope.assetAvailability.assetsUnderMaintenance },
+                              { name: 'Breakdown Assets', y: $scope.assetAvailability.breakDownAssets },
+                              { name: 'Available Assets', y: $scope.assetAvailability.workingAssets}
+                          ]
+                      }]
+                  });
+              }
+
+
+          })
+        };
+
 
         $scope.initCalender();
 
@@ -1505,7 +2124,7 @@ angular.module('timeSheetApp')
               },
               series: $scope.jobStackYSeries
           });
-      }
+      };
         // Timeout jobGraph function
 
         //$rootScope.jobGraphTimeout = $timeout($rootScope.jobGraph(), 2500);
@@ -1581,11 +2200,15 @@ angular.module('timeSheetApp')
              },
              series: $scope.attnStackYSeries
          });
-     }
+     };
 
         //Timeout attendGraph function
 
         //$rootScope.attendGraphTimeout = $timeout($rootScope.attendGraph(), 2500);
+
+
+
+
 
         $rootScope.ticketGraph = function () {
          $scope.ticketsChart = Highcharts.chart('ticketStackedCharts', {
@@ -1637,7 +2260,7 @@ angular.module('timeSheetApp')
              },
              series: $scope.ticketStackYSeries
          });
-     }
+     };
         //Timeout ticketGraph function
 
        //$rootScope.ticketGraphTimeout = $timeout($rootScope.ticketGraph(),1000);
@@ -1754,12 +2377,10 @@ angular.module('timeSheetApp')
                        }
                    }
                },
-
                tooltip: {
                    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
                },
-
                "series": [
                    {
                        "name": "Ticket Categories",
@@ -1988,7 +2609,7 @@ angular.module('timeSheetApp')
                    ]
                }
            });
-       }
+       };
         //Timeout ticketSignalGraph function
 
         //$rootScope.ticketSingleGraphTimeout = $timeout($rootScope.ticketSingleGraph(),2500);
@@ -1996,7 +2617,7 @@ angular.module('timeSheetApp')
 
         // var quotationxdata = ['15/10/2018', '16/10/2018', '17/10/2018', '18/10/2018', '19/10/2018', '20/10/2018', '21/10/2018', '22/10/2018', '23/10/2018',]
 
-         $rootScope.quotGraph = function () {
+        $rootScope.quotGraph = function () {
            $scope.quotationStackChart = Highcharts.chart('quotationStackedCharts', {
                 chart: {
                     type: 'column'
@@ -2047,20 +2668,42 @@ angular.module('timeSheetApp')
                 series: $scope.quoteStackYSeries
             });
 
-        }
+        };
+
+        $scope.assetTicketPieCharts = function(){
+
+            Highcharts.setOptions({
+                colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                    return {
+                        radialGradient: {
+                            cx: 0.5,
+                            cy: 0.3,
+                            r: 0.7
+                        },
+                        stops: [
+                            [0, color],
+                            [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                        ]
+                    };
+                })
+            });
+
+
+            // Build the chart
+        };
 
         // Timeout quotGraph function
 
         //$rootScope.quotGraphTimeout = $timeout($rootScope.quotGraph(),1500);
 
-// Chart data sample end
+//        Chart data sample end
 
 
 //
 //        $scope.overDueJobs=[35,42,67,89];
 //        $scope.completedJobs=[28,40,39,36];
 //        $scope.upcomingJobs = [21,75,55,81];
-//    $scope.value = "Chart"
+//        $scope.value = "Chart"
 //        var chartData = {
 //            type: "bar",  // Specify your chart type here.
 //            title: {
@@ -2086,6 +2729,7 @@ angular.module('timeSheetApp')
 //            width: 600
 //        });
 //
+
 
         $scope.showNotifications= function(position,alignment,color,msg){
             demo.showNotification(position,alignment,color,msg);
@@ -2142,7 +2786,7 @@ angular.module('timeSheetApp')
 
           $scope.selectedFromDateSer = new Date();
           $scope.selectedFromDate = $filter('date')(new Date(), 'dd/MM/yyyy') ;
- 
+
           /** root scope (searchCriteria) from date **/
           $rootScope.searchFilterCriteria.selectedFromDate = $scope.selectedFromDateSer;
 
@@ -2254,5 +2898,8 @@ angular.module('timeSheetApp')
                     });
                 }
             };
+
+
+
         });
 

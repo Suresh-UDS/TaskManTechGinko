@@ -93,14 +93,23 @@ angular.module('timeSheetApp')
 			$rootScope.exportStatusObj  ={};
 			$scope.searchModule ="";
 			$scope.assetQrSite =null;
-			$('#dPlayNone').hide();
-
-
+            $scope.isReleationShipEnabled = false;
+            $scope.criticalStatusList = [];
+            $scope.displayImage = "";
+            $scope.statuses = [];
+            $scope.mttr =0;
+            $scope.maintenanceHours = 0;
+            $scope.selectedMuliplicationFactor=1;
+            $scope.mulFactorError = false;
+            $scope.allowTopUp = false;
+            $scope.selectedTopup = false;
+            $('#dPlayNone').hide();
 
 			//scope.searchAcquiredDate = $filter('date')(new Date(), 'dd/MM/yyyy');
 			$scope.searchAcquiredDate = "";
 			$scope.searchCreatedDate = "";
 
+			$scope.ticketConfigStatuses = [];
 			$scope.asset = {};
 
 			$scope.assetEdit = {};
@@ -161,6 +170,10 @@ angular.module('timeSheetApp')
 			$scope.assetGroupsListOne = {};
 			$scope.assetGroupsLists = [];
 
+			$scope.selectedParentGroup = {};
+
+			$scope.choosenAssetParent = {};
+
 			//console.log("state params",$stateParams);
 
 			var that =  $scope;
@@ -171,16 +184,14 @@ angular.module('timeSheetApp')
 					actualEnd : false,
 					plannedStart : false,
 					plannedEnd : false,
-			}
-
-
+			};
 
 			$scope.initCalender = function(){
 
 				demo.initFormExtendedDatetimepickers();
 
 
-			}
+			};
 
 			$scope.initCalender();
 
@@ -189,14 +200,14 @@ angular.module('timeSheetApp')
 				e.stopPropagation();
 
 				that.calendar[cmp] = true;
-			}
+			};
 
 			$scope.initMaterialWizard = function(){
 
 				demo.initMaterialWizard();
 
 
-			}
+			};
 
 			/* var nottifShow = true ;*/
 
@@ -213,7 +224,7 @@ angular.module('timeSheetApp')
 
 				/*}*/
 
-			}
+			};
 
 			$scope.ppmFromMsg =false;
 
@@ -754,23 +765,37 @@ angular.module('timeSheetApp')
 				$scope.searchAssetType = null;
 				$scope.clearField = false;
 				$scope.uiType.splice(0,$scope.uiType.length);
-				AssetTypeComponent.findAll().then(function (data) {
-					////console.log("Loading all AssetType -- " , data)
-					//$scope.selectedAssetType = null;
-					$scope.searchAssetType = null;
-					$scope.assetTypes = data;
+                var siteId = $scope.selectedSites ? $scope.selectedSites.id : 0;
+                    AssetTypeComponent.findAll().then(function (data) {
+                        ////console.log("Loading all AssetType -- " , data)
+                        //$scope.selectedAssetType = null;
+                        $scope.searchAssetType = null;
+                        $scope.assetTypes = data;
 
-					//Filter
-					for(var i=0;i<$scope.assetTypes.length;i++)
-					{
-						$scope.uiType[i] = $scope.assetTypes[i].name;
-					}
-					$scope.typeFilterDisable = false;
-					//
-				});
-			}
+                        //Filter
+                        for(var i=0;i<$scope.assetTypes.length;i++)
+                        {
+                            $scope.uiType[i] = $scope.assetTypes[i].name;
+                        }
+                        $scope.typeFilterDisable = false;
+                        //
+                    });
+
+
+			};
+
+			$scope.relationShipBased = function(assetType){
+			    console.log("Asset type changes");
+			    console.log(assetType);
+                if(assetType.relationShipBased){
+                    $scope.isReleationShipEnabled = true;
+                }else{
+                    $scope.isReleationShipEnabled = false;
+                }
+            }
 
 			$scope.loadAssetGroup = function () {
+			    console.log("Loading Asset group");
 				$scope.searchAssetGroup = null;
 				$scope.clearField = false;
 				$scope.uiGroup.splice(0,$scope.uiGroup.length);
@@ -778,6 +803,7 @@ angular.module('timeSheetApp')
 					////console.log("Loading all Asset Group -- " , data)
 					$scope.searchAssetGroup = null;
 					$scope.assetGroups = data;
+					console.log(data);
 					$scope.loadingStop();
 
 					//Filter
@@ -790,6 +816,18 @@ angular.module('timeSheetApp')
 					//
 
 				});
+			}
+
+			$scope.loadAssetParent = function(){
+
+
+				AssetComponent.loadAssetParent($scope.selectedSites).then(function(data){
+
+					$scope.assetParentList = data;
+					$scope.loadingStop();
+
+				});
+
 			}
 
 			$scope.loadSelectedProject = function(projectId) {
@@ -808,6 +846,8 @@ angular.module('timeSheetApp')
 					$scope.selectedBlock = null;
 					$scope.selectedFloor = null;
 					$scope.selectedZone = null;
+					$scope.selectedAssetType = null;
+					$scope.isReleationShipEnabled = false;
 					$scope.blocks = data;
 					//console.log("Loading all blocks -- " ,  $scope.blocks);
 				});
@@ -1171,7 +1211,7 @@ angular.module('timeSheetApp')
 							$scope.assetEdit.currentPrice = $scope.assetList.currentPrice;
 							$scope.assetEdit.estimatedDisposePrice = $scope.assetList.estimatedDisposePrice;
 							$scope.assetEdit.vendorLocation = $scope.assetList.vendorLocation;
-							$scope.selectedAssetType ={name:$scope.assetList.assetType};
+							$scope.selectedAssetType ={id: $scope.assetList.assetTypeId, name:$scope.assetList.assetType};
 							$scope.selectedAssetGroup ={assetgroup:$scope.assetList.assetGroup};
 							$scope.selectedSites ={id:$scope.assetList.siteId,name:$scope.assetList.siteName};
 							$scope.selectedBlock = $scope.assetList.block;
@@ -1181,6 +1221,21 @@ angular.module('timeSheetApp')
 							$scope.selectedVendor = {id:$scope.assetList.vendorId};
 							$scope.selectedServiceWarranty = {name:$scope.assetList.warrantyType};
 							$scope.selectedAssetStatus = $scope.assetList.status;
+
+							for(var a=0;a<$scope.statuses.length;a++){
+							    if($scope.statuses[a].status === $scope.selectedAssetStatus){
+							        $scope.statuses[a].isCurrentStatus = true;
+							        $scope.statuses[a].allowCurrentStatus = true;
+                                }
+
+                                for(var b=0;b<$scope.assetList.criticalStatusList.length;b++){
+							        if($scope.statuses[a].status === $scope.assetList.criticalStatusList[b].status){
+                                        $scope.statuses[a].isSeverity = $scope.assetList.criticalStatusList[b].severity;
+                                        $scope.statuses[a].isCritical = $scope.assetList.criticalStatusList[b].ticket;
+                                     }
+                                }
+                            }
+
 							if($scope.assetList.siteId){
 								LocationComponent.findBlocks(0,$scope.assetList.siteId).then(function (data) {
 									//$scope.selectedBlock = null;
@@ -1199,6 +1254,14 @@ angular.module('timeSheetApp')
 									$scope.zones = data;
 									//console.log('zones list',$scope.zones);
 								});
+
+								AssetComponent.getAssetGrpHierarchy($scope.assetList).then(function (data) {
+                                    if(data.length > 0) {
+                                        initMapAssetGrpTree("", data);
+                                    }
+                                })
+
+                                $scope.getAssetHierarchy();
 							}
 
 							$scope.loadSiteShifts();
@@ -1224,15 +1287,19 @@ angular.module('timeSheetApp')
 							/*$scope.asset.selectedSite = {id : data.siteId,name : data.siteName}
                     //console.log($scope.selectedSite)*/
 						}else{
+						    console.log("Asset list error");
 							$location.path('/assets');
 						}
 					}).catch(function(response){
-						$rootScope.loadingStop();
+                        console.log("Asset list error");
+                        console.log(response);
+                        $rootScope.loadingStop();
 						$location.path('/assets');
 
 					});
 				}else{
-					$location.path('/assets');
+                    console.log("Asset list error");
+                    $location.path('/assets');
 				}
 			}
 
@@ -1665,7 +1732,7 @@ angular.module('timeSheetApp')
 				if(parseInt($stateParams.id) > 0){
 					var assetId = $stateParams.id;
 					$rootScope.loadingStart();
-
+                    $scope.getMTTRForAssets(assetId);
 					AssetComponent.findById(assetId).then(function(data){
 						//console.log("Asset details List==" + JSON.stringify(data));
 						$scope.assetDetail= data;
@@ -1673,6 +1740,20 @@ angular.module('timeSheetApp')
 							$location.path('/assets');
 						}
 						$rootScope.loadingStop();
+
+                        AssetComponent.findTicketConfigByAssetId(assetId).then(function(ticketConfig){
+                            console.log("Asset ticket config details");
+                            console.log(ticketConfig);
+                            var ticketConfig = ticketConfig;
+
+                            for(var i=0;i<data.length;i++){
+                                var status = {};
+                                status.status = data[i];
+                                console.log(status);
+                                $scope.ticketConfigStatuses.push(status);
+                            }
+                        });
+
 						//$scope.loadCalendar();
 
 					}).catch(function(response){
@@ -1760,8 +1841,10 @@ angular.module('timeSheetApp')
 			$scope.getParameterConfigDetails = function(id, mode) {
 				$rootScope.loadPageTop();
 				$scope.loadingStart();
-				$scope.isEdit = (mode == 'edit' ? true : false)
+				$scope.isEdit = (mode == 'edit' ? true : false);
+				console.log("Asset edit config");
 				AssetComponent.getAssetParamConfig(id).then(function (data) {
+				    console.log(data);
 					$scope.parameterConfig = data;
 					//console.log('Parameter by id',$scope.parameterConfig);
 					//$scope.selectedAssetType = {name:$scope.parameterConfig.assetType};
@@ -1774,6 +1857,8 @@ angular.module('timeSheetApp')
 					$scope.alertRequired = $scope.parameterConfig.alertRequired;
 					$scope.selectedMinValue = $scope.parameterConfig.min;
 					$scope.selectedMaxValue = $scope.parameterConfig.max;
+					$scope.selectedMuliplicationFactor = $scope.parameterConfig.multiplicationFactor;
+					$scope.selectedTopup = $scope.parameterConfig.allowTopUp;
 					$rootScope.loadingStop();
 
 				}).catch(function(response){
@@ -1968,6 +2053,34 @@ angular.module('timeSheetApp')
 				$scope.success = null;
 				$scope.errorSitesExists = null;
 				$scope.errorSite = null;
+
+				console.log("Asset Status configuration");
+				console.log($scope.statuses);
+
+				for(var a=0; a<$scope.statuses.length;a++){
+				    if($scope.statuses[a].allowCurrentStatus){
+                        $scope.assetGen.status =$scope.statuses[a].status;
+                    }
+
+                    if($scope.statuses[a].isCritical){
+                        var criticalConfigDetails = {};
+                        criticalConfigDetails.ticket = true;
+                        criticalConfigDetails.status = $scope.statuses[a].status;
+                        if($scope.statuses[a].isSeverity){
+                            criticalConfigDetails.severity = true;
+                        }else{
+                            criticalConfigDetails.severity = false;
+                        }
+
+                        $scope.criticalStatusList.push(criticalConfigDetails);
+                    }
+
+                    console.log($scope.criticalStatusList);
+
+                }
+
+
+
 				if(!$scope.selectedSites && !$scope.selectedSites.id){
 					$scope.errorSite = "true";
 					$scope.showNotifications('top','center','danger','Please select site!!!');
@@ -1978,18 +2091,25 @@ angular.module('timeSheetApp')
 				}else{
 
 					if($scope.selectedAssetType && $scope.selectedAssetType.id){ $scope.assetGen.assetType = $scope.selectedAssetType.name; }
-					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.assetgroup;}
-					if($scope.selectedAssetStatus){ $scope.assetGen.status = $scope.selectedAssetStatus;}
+					if($scope.selectedAssetGroup && $scope.selectedAssetGroup.id){ $scope.assetGen.assetGroup = $scope.selectedAssetGroup.plainName;}
+					// if($scope.selectedAssetStatus){ $scope.assetGen.status = $scope.selectedAssetStatus;}
 					if($scope.selectedManufacturer && $scope.selectedManufacturer.id){$scope.assetGen.manufacturerId = $scope.selectedManufacturer.id;}
 					if($scope.selectedServiceProvider && $scope.selectedServiceProvider.id){$scope.assetGen.serviceProvider = $scope.selectedServiceProvider.id;}
 					if($scope.selectedServiceWarranty && $scope.selectedServiceWarranty.id){$scope.assetGen.warrantyType = $scope.selectedServiceWarranty.name;}
 					if($scope.selectedVendor && $scope.selectedVendor.id){$scope.assetGen.vendorId = $scope.selectedVendor.id;}
 					if($scope.selectedSites && $scope.selectedSites.id){$scope.assetGen.siteId = $scope.selectedSites.id;}
+					//alert($scope.choosenAssetParent);
+					console.log($scope.choosenAssetParent);
+					if($scope.choosenAssetParent && $scope.choosenAssetParent.id){$scope.assetGen.parentAsset = $scope.choosenAssetParent;}
+
 					//if($scope.selectedProject.id){$scope.assetGen.projectId = $scope.selectedProject.id;}
 					if($scope.selectedBlock){$scope.assetGen.block = $scope.selectedBlock;}
 					if($scope.selectedFloor){$scope.assetGen.floor = $scope.selectedFloor;}
 					if($scope.selectedZone){$scope.assetGen.zone = $scope.selectedZone;}
-
+                    $scope.assetGen.criticalStatusList = $scope.criticalStatusList;
+					$scope.assetGen.allowTopUp = $scope.selectedTopup;
+                    console.log("After adding critical status list");
+                    console.log($scope.assetGen);
 					//console.log("Asset Create List -- ",$scope.assetGen);
 					AssetComponent.create($scope.assetGen).then(function(response) {
 						//console.log("Asset response",JSON.stringify(response));
@@ -2011,8 +2131,8 @@ angular.module('timeSheetApp')
 						$scope.saveLoad = false;
 						$scope.btnDisabled= false;
 						$scope.success = null;
-						//console.log('Error - '+ response.data);
-						//console.log('status - '+ response.status + ' , message - ' + response.data.message);
+						console.log('Error - '+ response.data);
+						console.log('status - '+ response.status + ' , message - ' + response.data.message);
 						if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
 							$scope.errorAssetsExists = 'ERROR';
 							$scope.showNotifications('top','center','danger','Asset Already Exists');
@@ -2110,7 +2230,36 @@ angular.module('timeSheetApp')
 			$scope.updateSite = function(selectedSite) {
 				$scope.selectedSites = selectedSite;
 
-			}
+			};
+
+			$scope.getMTTRForAssets = function(assetId){
+			    console.log("Get MTTR for assets - "+assetId);
+                var minsToHours = 0;
+                var totalMaintenanceHours=0;
+                var mttr=0;
+                AssetComponent.getMTTR(assetId).then(function (data) {
+                    console.log(data);
+                    $scope.maintenanceHours = data.maintenanceHours;
+                    if(Math.abs(data.maintenanceHours)>0){
+                        minsToHours = data.maintenanceMins/60;
+                        totalMaintenanceHours = data.maintenanceHours+minsToHours;
+                        console.log("Total Maintenance hours "+ totalMaintenanceHours);
+                        mttr = Math.abs(totalMaintenanceHours)/data.assetTicketsCount;
+                        console.log(mttr);
+                        $scope.mttr = mttr;
+                    }else if(Math.abs(data.maintenanceMins)>0){
+                        minsToHours = data.maintenanceMins/60;
+                        totalMaintenanceHours = data.maintenanceHours+minsToHours;
+                        console.log("Total Maintenance hours "+ totalMaintenanceHours);
+                        mttr= 60*(Math.abs(totalMaintenanceHours)/data.assetTicketsCount);
+                        $scope.mttr = mttr;
+                        console.log(mttr);
+                    }else{
+                        $scope.mttr = data.maintenanceHours;
+                    }
+
+                });
+            };
 
 
 			/* Update and save asset */
@@ -2121,6 +2270,28 @@ angular.module('timeSheetApp')
 				$scope.error = null;
 				$scope.success =null;
 				$scope.btnDisabled =true;
+
+                for(var a=0; a<$scope.statuses.length;a++){
+                    if($scope.statuses[a].allowCurrentStatus){
+                        $scope.assetGen.status =$scope.statuses[a].status;
+                    }
+
+                    if($scope.statuses[a].isCritical){
+                        var criticalConfigDetails = {};
+                        criticalConfigDetails.ticket = true;
+                        criticalConfigDetails.status = $scope.statuses[a].status;
+                        if($scope.statuses[a].isSeverity){
+                            criticalConfigDetails.severity = true;
+                        }else{
+                            criticalConfigDetails.severity = false;
+                        }
+
+                        $scope.criticalStatusList.push(criticalConfigDetails);
+                    }
+
+                    console.log($scope.criticalStatusList);
+
+                }
 
 
 				if($scope.selectedAssetType)
@@ -2186,40 +2357,39 @@ angular.module('timeSheetApp')
 				}
 				if($scope.warToDate){
 					$scope.assetEdit.warrantyToDate = $scope.warToDate;
-
 				}
-
-
+                $scope.assetEdit.criticalStatusList = $scope.criticalStatusList;
+                // $scope.assetEdit.allowTopUp = $scope.selectedTopup;
 				//console.log('--- Edit asset details ---', JSON.stringify($scope.assetEdit));
 
 				//$scope.asset.assetStatus = $scope.selectedStatus.name;
 				//var post = $scope.isEdit ? AssetComponent.update : AssetComponent.create
-						AssetComponent.update($scope.assetEdit).then(function () {
+                AssetComponent.update($scope.assetEdit).then(function () {
 
-							$scope.success = 'OK';
-							$scope.saveLoad = false;
-							$scope.loadingStop();
-							$scope.btnDisabled =false;
-							$scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
-							//$scope.loadAssets();
+                    $scope.success = 'OK';
+                    $scope.saveLoad = false;
+                    $scope.loadingStop();
+                    $scope.btnDisabled =false;
+                    $scope.showNotifications('top','center','success','Asset has been updated Successfully!!');
+                    //$scope.loadAssets();
 
-							//$location.path('/assets');
+                    //$location.path('/assets');
 
-						}).catch(function (response) {
-							$scope.saveLoad = false;
-							$rootScope.loadingStop();
-							$scope.success = null;
-							$scope.btnDisabled =false;
+                }).catch(function (response) {
+                    $scope.saveLoad = false;
+                    $rootScope.loadingStop();
+                    $scope.success = null;
+                    $scope.btnDisabled =false;
 
-							//console.log('Error - '+ response.data);
-							if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
-								$scope.errorProjectExists = 'ERROR';
-                                $scope.showNotifications('top','center','danger','Asset has been updated Successfully!!');
-							} else {
-								$scope.error = 'ERROR';
-                                $scope.showNotifications('top','center','danger','Asset has been updated Successfully!!');
-							}
-						});
+                    //console.log('Error - '+ response.data);
+                    if (response.status === 400 && response.data.message === 'error.duplicateRecordError') {
+                        $scope.errorProjectExists = 'ERROR';
+                        $scope.showNotifications('top','center','danger','Asset has been updated Successfully!!');
+                    } else {
+                        $scope.error = 'ERROR';
+                        $scope.showNotifications('top','center','danger','Asset has been updated Successfully!!');
+                    }
+                });
 
 			};
 
@@ -2417,6 +2587,7 @@ angular.module('timeSheetApp')
 				$scope.selectedThreshold =null;
 				$scope.validationRequired = false;
 				$scope.consumptionMonitoringRequired = false;
+				$scope.allowTopUp = false;
 				$scope.alertRequired = false;
 				$scope.selectedMinValue = null;
 				$scope.selectedMaxValue = null;
@@ -2615,12 +2786,14 @@ angular.module('timeSheetApp')
 			/* Add asset type */
 
 			$scope.addAssetType = function () {
-				//console.log($scope.assetType);
+//				alert("Code===>"+$scope.assetType.assetTypeCode);
+//				alert("Relationship===>"+$scope.assetType.relationShipBased);
+				console.log("Asset Type===>" + $scope.assetType);
 				$scope.loadingStart();
 				if($scope.assetType){
 					//console.log("Asset Type entered");
 					AssetTypeComponent.create($scope.assetType).then(function (response) {
-						//console.log(response);
+						console.log($scope.assetType.isRelationShipBased);
 						if(response.data.status && response.data.status === "400") {
 
 							$scope.showNotifications('top','center','danger','Asset type already exists.');
@@ -2647,9 +2820,14 @@ angular.module('timeSheetApp')
 
 			$scope.addAssetGroup = function () {
 
-				//console.log($scope.assetGroup);
+				console.log($scope.selectedParentGroup);
 				if($scope.assetGroup){
 				    $scope.loadingStart();
+				    //alert($scope.selectedParentGroup.id)
+				    $scope.assetGroup.parentGeroup = $scope.selectedParentGroup;
+				    $scope.assetGroup.parentGroupId = $scope.selectedParentGroup.id;
+				    $scope.assetGroup.siteId = $scope.selectedSites.id;
+				    //alert("Parent Group===>"+$scope.assetGroup.parentGeroup);
 					//console.log("Asset Group entered");
 					AssetComponent.createAssetGroup($scope.assetGroup).then(function (response) {
 						//console.log(response);
@@ -2660,6 +2838,7 @@ angular.module('timeSheetApp')
 							$scope.assetGroup = "";
 							$scope.showNotifications('top','center','success','Asset Group has been added Successfully!!');
 							$scope.loadAssetGroup();
+							$scope.getAssetGrpHierarchy();
 						}
 						$scope.loadingStop();
 
@@ -2864,6 +3043,11 @@ angular.module('timeSheetApp')
 						//console.log('Add parameterConfig details ='+ JSON.stringify($scope.parameterConfig));
 					}
 
+                    $scope.parameterConfig.multiplicationFactor = $scope.selectedMuliplicationFactor;
+					$scope.parameterConfig.allowTopUp = $scope.selectedTopup;
+					console.log("Asset parameter config save");
+					console.log($scope.parameterConfig);
+					// return;
 					var post = $scope.isEdit ? AssetComponent.updateAssetParamConfig : AssetComponent.createAssetParamConfig;
 					post($scope.parameterConfig).then(function () {
 
@@ -2890,6 +3074,8 @@ angular.module('timeSheetApp')
                         $scope.alertRequired = false;
                         $scope.selectedMinValue = null;
                         $scope.selectedMaxValue = null;
+                        $scope.selectedMuliplicationFactor=1;
+                        $scope.selectedTopup=false;
                         $scope.isEdit = false;
                         $scope.assetConfig();
 						$scope.loadingStop();
@@ -2982,6 +3168,7 @@ angular.module('timeSheetApp')
                     $scope.assetsPhotoLoader=false;
                     if($scope.uploadAssetPhotos){
                         $scope.photoCount = ($scope.uploadAssetPhotos).length;
+                        $scope.displayImage = $scope.uploadAssetPhotos[0];
                         if($scope.photoCount > 0){
                             $scope.noPhoto=false;
                         }else{
@@ -3803,10 +3990,48 @@ angular.module('timeSheetApp')
 
 			$scope.loadStatus = function() {
 				AssetComponent.getStatus().then(function(data) {
-					//console.log('Asset status list-- ',data);
-					$scope.statuses = data;
+					console.log('Asset status list-- '  );
+					console.log(data);
+					for(var i=0;i<data.length;i++){
+                        var status = {};
+                        status.status = data[i];
+					    status.isCurrentStatus = false;
+					    status.allowCurrentStatus = true;
+					    console.log(status);
+					    $scope.statuses.push(status);
+                    }
 				});
-			}
+			};
+
+			$scope.setCritical = function(status,i){
+			    console.log("Status");
+			    console.log(status);
+			    console.log(i);
+			    $scope.statuses[i].isSeverity = false;
+
+            };
+
+			$scope.setCurrentStatus = function(status,i){
+			    console.log("Current Status");
+			    console.log(status);
+			    console.log(i);
+			    $scope.selectedAssetStatus = status.status;
+                if($scope.statuses[i].isCurrentStatus){
+                    for(var j=0;j<$scope.statuses.length;j++){
+                        if(j===i){
+                            $scope.statuses[j].allowCurrentStatus = true;
+                        }else{
+                            $scope.statuses[j].allowCurrentStatus = false;
+                            $scope.statuses[j].isCurrentStatus = false;
+                        }
+                    }
+                }else{
+                    for(var k=0;k<$scope.statuses.length;k++){
+                        $scope.statuses[k].allowCurrentStatus = true;
+                    }
+                }
+
+            };
 
 
 			$scope.loadAllRules = function() {
@@ -4644,7 +4869,79 @@ angular.module('timeSheetApp')
 			 * Ui select allow-clear modified function end
 			 *
 			 * */
+        $scope.assetFinalLists = [];
+        $scope.assetParentList = [];
+       // $scope.selectedAssetParent = {};
+		$scope.getAssetHierarchy = function() {
+		    $scope.choosenAssetParent = {};
+		    var obj = {
+		        "siteId": $scope.selectedSites.id,
+                "assetTypeId" : $scope.selectedAssetType ? $scope.selectedAssetType.id : 0
+            };
+		    AssetComponent.getAssetHierarchy(obj).then(function(data){
+                console.log("AssetHierarchy is" +JSON.stringify(data));
+                if(data.length > 0) {
+                    initMapAssetTree("", data);   // { assetTitle : "LG Invertor"}, "LG Invertor
+                    console.log($scope.assetFinalLists);
+                }else{
+                    $scope.assetFinalLists = [];
+                    //$scope.selectedAssetParent = null;
+                    console.log(JSON.stringify($scope.assetFinalLists));
+                }
+            });
+        }
+
+        $scope.getAssetGrpHierarchy = function() {
+
+        	$scope.choosenAssetParent = {};
+
+		    var obj = {
+		        "siteId": $scope.selectedSites.id
+            }
+            AssetComponent.getAssetGrpHierarchy(obj).then(function(data) {
+                console.log("Asset Group Hierarchy" +JSON.stringify(data));
+                if(data.length > 0) {
+                    initMapAssetGrpTree("", data)
+                }else{
+                    $scope.assetParentList = [];
+                }
+            });
+        }
+
+        function initMapAssetTree(prefix, assetList){
+
+            for( var i in assetList ){
+
+                $scope.assetFinalLists.push({"id": assetList[i].id, "title": (prefix + assetList[i].title) });
+
+                if(assetList[i].assets && assetList[i].assets.length > 0) {
+                    initMapAssetTree("|__"+prefix,assetList[i].assets);
+                }
+            }
+
+        }
+
+        function initMapAssetGrpTree(prefix, assetGrpList){
+
+            for( var i in assetGrpList ){
+
+                $scope.assetParentList.push({id: assetGrpList[i].id, group: (prefix + assetGrpList[i].assetgroup),plainName: assetGrpList[i].assetgroup });
+
+                if(assetGrpList[i].assetGroup && assetGrpList[i].assetGroup.length > 0) {
+                    initMapAssetGrpTree("|__"+prefix,assetGrpList[i].assetGroup);
+                }
+            }
+
+        }
+
+        $scope.checkMultiplicationFactor = function(){
+            if($scope.selectedMuliplicationFactor !=null && $scope.selectedMuliplicationFactor >=1){
+                $scope.mulFactorError = false;
+            }else{
+                $scope.mulFactorError= true;
+            }
+        }
 
 
 
-		});
+        });

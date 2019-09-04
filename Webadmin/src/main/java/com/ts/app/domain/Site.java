@@ -41,11 +41,17 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 //    @ManyToMany(mappedBy="sites")
 //	private List<Employee> employees;
 
-	@OneToMany(mappedBy="site", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "site", fetch = FetchType.LAZY)
 	private List<EmployeeProjectSite> employeeProjSites;
 
-	@OneToMany(mappedBy="site", fetch = FetchType.LAZY, cascade= CascadeType.ALL, orphanRemoval= true)
+	@OneToMany(mappedBy = "site", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Shift> shifts;
+
+	@OneToMany(mappedBy = "site", fetch = FetchType.LAZY)
+	private List<AssetType> assetType;
+
+	@OneToMany(mappedBy = "site", fetch = FetchType.LAZY)
+	private List<AssetGroup> assetGroup;
 
 	private Date startDate;
 	private Date endDate;
@@ -64,7 +70,6 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	private double addressLng;
 
 	private double radius;
-
 
 	public Long getId() {
 		return id;
@@ -153,8 +158,6 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
-	
 
 //	public List<Employee> getEmployees() {
 //		return employees;
@@ -164,8 +167,7 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 //		this.employees = employees;
 //	}
 
-
-    public String getCity() {
+	public String getCity() {
 		return city;
 	}
 
@@ -182,12 +184,12 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 	}
 
 	public double getRadius() {
-        return radius;
-    }
+		return radius;
+	}
 
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
 
 	public List<EmployeeProjectSite> getEmployeeProjSites() {
 		return employeeProjSites;
@@ -205,19 +207,36 @@ public class Site extends AbstractAuditingEntity implements Serializable {
 		this.shifts = shifts;
 	}
 
-    public String getRegion() {
-        return region;
-    }
+	public String getRegion() {
+		return region;
+	}
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
+	public void setRegion(String region) {
+		this.region = region;
+	}
 
-    public String getBranch() {
-        return branch;
-    }
+	public String getBranch() {
+		return branch;
+	}
 
-    public void setBranch(String branch) {
-        this.branch = branch;
-    }
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public List<AssetType> getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType(List<AssetType> assetType) {
+		this.assetType = assetType;
+	}
+
+	public List<AssetGroup> getAssetGroup() {
+		return assetGroup;
+	}
+
+	public void setAssetGroup(List<AssetGroup> assetGroup) {
+		this.assetGroup = assetGroup;
+	}
+
 }

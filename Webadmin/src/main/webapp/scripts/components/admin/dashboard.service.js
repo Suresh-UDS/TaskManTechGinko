@@ -51,7 +51,7 @@ angular.module('timeSheetApp')
                 return $http.get('api/reports/quotation/currentQuotationCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
                     return response.data;
                 })
-            }, 
+            },
             loadAllTicketByDate: function(fromDate,toDate){
                 return $http.get('api/reports/ticket/currentTicketsCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
                     return response.data;
@@ -97,7 +97,7 @@ angular.module('timeSheetApp')
                 return $http.get('api/reports/quotation/currentQuotationCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
                     return response.data;
                 })
-            }, 
+            },
             loadAllTicketByDate: function(fromDate,toDate){
                 return $http.get('api/reports/ticket/currentTicketsCount/fromDate/'+fromDate+'/toDate/'+toDate).then(function(response){
                     return response.data;
@@ -138,6 +138,19 @@ angular.module('timeSheetApp')
                 return $http.get('api/getAvgTicket/monthly').then(function (response) {
                    return response.data;
                 });
+            },
+
+            getReadingsFromDate : function (searchCriteria) {
+
+                return $http.post('api/asset/reading',searchCriteria).then(function (response) {
+                    return response.data;
+                })
+            },
+
+            getAssetCountData: function (siteId) {
+                return $http.get('api/asset/count/'+siteId).then(function (response) {
+                    return response.data;
+                })
             }
         }
     })

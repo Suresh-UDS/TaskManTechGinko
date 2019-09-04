@@ -47,7 +47,13 @@ angular.module('timeSheetApp')
 				return $http.get('api/assetType').then(function (response) {
 					return response.data;
 				});
-			},            
+			},
+
+            findBySiteId: function (siteId) {
+                return $http.get('api/assetType/siteId/'+siteId).then(function (response) {
+                    return response.data;
+                });
+            },
             findById : function(id){
                 return $http.get('api/assetType/'+id).then(function (response) {
                     return response.data;

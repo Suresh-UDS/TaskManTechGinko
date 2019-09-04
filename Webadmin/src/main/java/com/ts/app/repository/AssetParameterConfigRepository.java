@@ -21,4 +21,8 @@ public interface AssetParameterConfigRepository extends JpaRepository<AssetParam
 	@Query("SELECT a FROM AssetParameterConfig a WHERE a.asset.id= :assetId and a.assetType= :assetType and a.active='Y'")
 	List<AssetParameterConfig> findByAssetConfig(@Param("assetType") String assetType, @Param("assetId") long assetId);
 	
+	AssetParameterConfig findById(long id);
+	
+	List<AssetParameterConfig> findByAssetIdAndAllowTopUp(long assetId,boolean allowTopUp);
+	
 }

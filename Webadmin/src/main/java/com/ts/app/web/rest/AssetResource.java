@@ -5,6 +5,7 @@ import com.ts.app.domain.*;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.AssetManagementService;
 import com.ts.app.service.WarrantyTypeService;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.FileUploadHelper;
 import com.ts.app.web.rest.dto.*;
 import com.ts.app.web.rest.errors.TimesheetException;
@@ -136,6 +137,26 @@ public class AssetResource {
 	@RequestMapping(path = "/site/{id}/asset", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AssetDTO> getSiteAssets(@PathVariable("id") Long siteId) {
 		return assetService.getSiteAssets(siteId);
+	}
+
+	@RequestMapping(path = "/siteAssetHierarchy/{siteId}/{typeId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<Asset>> getSiteAssetHierarchy(@PathVariable("siteId") Long siteId,@PathVariable("typeId") long typeId) {
+
+		try {
+			return new ResponseEntity<Iterable<Asset>>(assetService.getSiteAssetHierarchy(siteId,typeId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Iterable<Asset>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(path = "/assetSiteGroupHierarichy/{siteId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Iterable<AssetGroup>> getSiteGroupAssetHierarchy(@PathVariable("siteId") Long siteId) {
+
+		try {
+			return new ResponseEntity<Iterable<AssetGroup>>(assetService.getSiteAssetGroupHierarchy(siteId), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Iterable<AssetGroup>>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@RequestMapping(path = "/asset/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -663,6 +684,21 @@ public class AssetResource {
 		return resp;
 	}
 
+	@RequestMapping(value = "/assets/meterReading/export", method = RequestMethod.POST)
+	public ExportResponse exportAssetMeterReading(@RequestBody SearchCriteria searchCriteria) {
+		// log.debug("JOB EXPORT STARTS HERE **********");
+		ExportResponse resp = new ExportResponse();
+		if (searchCriteria != null) {
+			searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+			SearchResult<AssetDTO> result = assetService.findBySearchCrieria(searchCriteria);
+			List<AssetDTO> results = result.getTransactions();
+			resp.addResult(assetService.generateReport(results, searchCriteria));
+
+			// log.debug("RESPONSE FOR OBJECT resp *************"+resp);
+		}
+		return resp;
+	}
+
 	@RequestMapping(value = "/assets/export/{fileId}/status", method = RequestMethod.GET)
 	public ExportResult exportStatus(@PathVariable("fileId") String fileId) {
 		// log.debug("ExportStatus - fileId -"+ fileId);
@@ -814,6 +850,28 @@ public class AssetResource {
 		}
 		return result;
 	}
+
+	@RequestMapping(value = "/asset/reading", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AssetReadingReport> getAssetReadingChartData(@RequestBody SearchCriteria searchCriteria) {
+
+
+		// setting last 7 days
+		searchCriteria.setFromDate( DateUtil.addDaysInDate(searchCriteria.getFromDate(), -6) );
+
+	    return assetService.initAssetDetailedReadingReport(searchCriteria);
+
+    }
+
+    @RequestMapping(value = "/asset/count/{siteId}", method = RequestMethod.GET)
+    public AssetCountDTO getAssetCounts(@PathVariable("siteId") long siteId){
+	    return assetService.getAssetCountsBySiteId(siteId);
+    }
+
+    @RequestMapping(value = "/asset/mttr/{assetId}", method = RequestMethod.GET)
+    public AssetCountDTO getMTTRForAsset(@PathVariable("assetId") long assetId){
+        return assetService.getMTTR(assetId);
+    }
+
 
 
 

@@ -40,6 +40,16 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
     
     private double threshold;
     
+    private int min;
+    
+    private int max;
+
+    private long multiplicationFactor;
+
+    private boolean allowTopUp;
+
+
+
     @Size(min = 1, max = 250)
     @Column(length = 250, nullable = true)
     private String rule;
@@ -116,5 +126,36 @@ public class ParameterConfig extends AbstractAuditingEntity implements Serializa
 		this.rule = rule;
 	}
 
-    
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
+	}
+
+
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
+
+    public boolean isAllowTopUp() {
+        return allowTopUp;
+    }
+
+    public void setAllowTopUp(boolean allowTopUp) {
+        this.allowTopUp = allowTopUp;
+    }
 }

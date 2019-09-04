@@ -29,6 +29,14 @@ public class ParameterConfigDTO extends BaseDTO implements Serializable {
     private double threshold;
     
     private String rule;
+    
+    private int min;
+    
+    private int max;
+
+    private long multiplicationFactor;
+
+    private boolean allowTopUp;
 
 	public long getId() {
 		return id;
@@ -102,5 +110,36 @@ public class ParameterConfigDTO extends BaseDTO implements Serializable {
 		this.rule = rule;
 	}
 
-    
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
+	}
+
+
+    public long getMultiplicationFactor() {
+        return multiplicationFactor;
+    }
+
+    public void setMultiplicationFactor(long multiplicationFactor) {
+        this.multiplicationFactor = multiplicationFactor;
+    }
+
+    public boolean isAllowTopUp() {
+        return allowTopUp;
+    }
+
+    public void setAllowTopUp(boolean allowTopUp) {
+        this.allowTopUp = allowTopUp;
+    }
 }

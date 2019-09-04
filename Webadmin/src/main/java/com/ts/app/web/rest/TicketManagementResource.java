@@ -31,12 +31,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.codahale.metrics.annotation.Timed;
 import com.ts.app.config.ReportDatabaseConfiguration;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Ticket;
+import com.ts.app.domain.TicketReportCounts;
 import com.ts.app.domain.TicketStatus;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.ExportResponse;
 import com.ts.app.web.rest.dto.ExportResult;
+import com.ts.app.web.rest.dto.ReportResult;
 import com.ts.app.web.rest.dto.SearchCriteria;
 import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.TicketDTO;
@@ -58,11 +61,11 @@ public class TicketManagementResource {
 
 	@Inject
 	private TicketManagementService ticketService;
-	
+
 	@Inject
 	private SchedulerHelperService schedulerHelperService;
-	
-	@Inject 
+
+	@Inject
 	private ReportDatabaseService reportDatabaseService;
 
 	@RequestMapping(path = "/ticket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -176,6 +179,21 @@ public class TicketManagementResource {
 		return result;
 	}
 
+
+	@RequestMapping(value = "/ticketCount/openCountSiteId/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public TicketReportCounts getOpenTicketCountBySiteId(@PathVariable("siteId") long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
+		TicketReportCounts openTicketsCount = null;
+		openTicketsCount = ticketService.getOpenTicketsCountBySiteId(siteId,fromDate,toDate);
+		return openTicketsCount;
+	}
+
+    @RequestMapping(value = "/ticketCount/severity/{siteId}/fromDate/{fromDate}/toDate/{toDate}", method = RequestMethod.GET)
+    public TicketReportCounts getOpenTicketCountBySeverity(@PathVariable("siteId") long siteId, @PathVariable("fromDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date fromDate,@PathVariable("toDate") @DateTimeFormat(pattern="dd-MM-yyyy") Date toDate) {
+        TicketReportCounts openTicketsCount = null;
+        openTicketsCount = ticketService.getOpenTicketCountBySeverity(siteId,fromDate,toDate);
+        return openTicketsCount;
+    }
+
 	@RequestMapping(value = "/ticket/image/upload", method = RequestMethod.POST)
 	public ResponseEntity<?> upload(@RequestParam("ticketId") long ticketId,
 			@RequestParam("ticketFile") MultipartFile file) throws JSONException {
@@ -192,20 +210,20 @@ public class TicketManagementResource {
 	public String findQuotationImage(@PathVariable("id") long ticketId, @PathVariable("imageId") String imageId) {
 		return ticketService.getTicketImage(ticketId, imageId);
 	}
-	
+
 	@RequestMapping(value = "/ticket/uploadExistingFile", method = RequestMethod.POST)
 	public String uploadExistingTicketImages() {
 		log.debug("Upload existing ticket image S3");
 		return ticketService.uploadExistingTicketImg();
 	}
-	
+
 	@RequestMapping(value = "/checkDailyReports", method = RequestMethod.GET)
 	public String checkdailyReport(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern="dd-MM-yyyy") Date date, @RequestParam("onDemand") boolean onDemand, @RequestParam(value="siteId", required=false) long siteId) {
 		log.debug("check daily report called...");
 		schedulerHelperService.sendDaywiseReportEmail(date, onDemand, siteId);
 		return "successfully send reports!";
 	}
-	
-	
+
+
 
 }

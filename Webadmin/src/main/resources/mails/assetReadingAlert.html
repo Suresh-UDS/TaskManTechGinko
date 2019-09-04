@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{email.reading.title}">Asset Reading Alert</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="#{email.reading.greeting}">
-</p>
 
 
-<p th:text="#{email.reading.content(${assetCode}, ${assetName}, ${siteName}, ${type}, ${date})}">
+<p th:text="${message}">
 
 </p>
 
 <p>
-    <span th:text="#{email.reading.text}">Regards, </span>
-    <br/>
-    <em th:text="#{email.signature}">.</em>
+
+    -- <em th:text="#{email.signature}">.</em>
 </p>
 </body>
 </html>
