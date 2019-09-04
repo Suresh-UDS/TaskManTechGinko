@@ -30,6 +30,7 @@ public class EmpDTO {
 	private String drivingLicense;
 	private String pancardCopy;
 	private String voterId;
+	private String profilePicImg;
 	ArrayList<RelationshipDetailsDTO> relationshipDetails = new ArrayList<>();
 	ArrayList<NomineeDetailDTO> nomineeDetail = new ArrayList<>();
 	ArrayList<String> identificationMark = new ArrayList<>();
@@ -352,5 +353,14 @@ public class EmpDTO {
 	public void setVoterId(String voterId) {
 		this.voterId = voterId;
 	}
+
+	public String getProfilePicImg() {
+		return profilePicImg;
+	}
+
+	public void setProfilePicImg(String profilePicImg) {
+		this.profilePicImg = profilePicImg;
+	}
+	
 	
 }

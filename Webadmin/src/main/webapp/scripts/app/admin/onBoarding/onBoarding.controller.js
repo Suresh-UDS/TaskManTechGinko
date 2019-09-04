@@ -151,7 +151,6 @@ angular.module('timeSheetApp')
 
 	$scope.setSelectedBranch = function(){
  
-		$scope.showCategoriesLoader = true;
 		$scope.selctedSapBusinessCategoriesList = [];
 		$scope.selctedSapBusinessCategoriesList.push(_.find($scope.sapBusinessCategoriesList.rootElements,{elementCode:$scope.selectedBranch}));
 
@@ -160,22 +159,16 @@ angular.module('timeSheetApp')
 		OnBoardingComponent.getElementsByUser($scope.userDetails.id,$scope.selectedBranch).then(function (data) {
 
 			$scope.mappedData = data; 
-
-			$scope.showCategoriesLoader = false;
-
+			
 			for(var i in $scope.mappedData){
- 
+
+				console.log(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType);
+
 				$(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType).prop("checked",true);
 
 			}
  
 			 
-		}).catch(function(response){
-
-			$scope.showCategoriesLoader = false;
-
-			$scope.showNotifications('top','center','danger','Problem with network please retry.');
-
 		});
 
 	}
@@ -198,6 +191,19 @@ angular.module('timeSheetApp')
 		
 	}
 
+	 $('#dateOfBirth').on('dp.change', function(e){
+		 //alert("inside");
+         $.notifyClose();
+         $scope.employee.dob= $filter('date')(e.date._d, 'yyyy-MM-dd');
+     });
+	 
+	 $('#dateOfJoining').on('dp.change', function(e){
+		 //alert("inside");
+         $.notifyClose();
+         $scope.employee.doj= $filter('date')(e.date._d, 'yyyy-MM-dd');
+     });
+	
+	
 	$('#dateFilterFrom').on('dp.change', function(e){
 		$scope.selectedDateFromSer =new Date(e.date._d);
 		$scope.selectedDateFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -225,6 +231,7 @@ angular.module('timeSheetApp')
 		}
 
 	});
+	
 	$('#dateFilterTo').on('dp.change', function(e){
 		$scope.selectedDateToSer =new Date(e.date._d);
 		$scope.selectedDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -1096,6 +1103,7 @@ angular.module('timeSheetApp')
 	};
 
     $scope.loadEmployee = function() {
+    	
         if(parseInt($stateParams.id)>0){
             var empId = parseInt($stateParams.id);
             EmployeeComponent.findOne(empId).then(function (data) {
@@ -1143,6 +1151,9 @@ angular.module('timeSheetApp')
                                 }
                                 if(documents[i].docType === "pancard" || documents[i].docType === "pancardCopy"){
                                     $scope.pancardUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType ==="profilepic" || documents[i].docType === "profilePicImg"){
+                                	$scope.profilepicUrl = documents[i].docUrl;
                                 }
                             }
 
@@ -1330,6 +1341,7 @@ angular.module('timeSheetApp')
 
     $scope.saveOnBoardingEmployeeDetails = function(){
         console.log("Saving employee details");
+        //alert($scope.employee.dob);
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
 
             if(data.errorStatus){
@@ -1346,7 +1358,8 @@ angular.module('timeSheetApp')
                 $location.path('view-onBoarding/'+ $scope.employee.id);
                 //$location.path('/onBoarding-list');
                 $scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully ");
-
+                $('#dateOfBirth').data('DateTimePicker').clear();
+                $('#dateOfJoining').data('DateTimePicker').clear();
                 if($scope.addressProofImage){
                     $scope.uploadAddressProofImage($scope.employee.id);
                 }
@@ -1364,7 +1377,7 @@ angular.module('timeSheetApp')
                 }
                 if($scope.fingerprintLeftImage){
                     $scope.uploadFingerPrintLeft($scope.employee.id);
-                }
+                }$scope.uploadPancard
                 if($scope.drivingLicenseImageFront){
                     $scope.uploadDrivingLicense($scope.employee.id);
                 }
@@ -1373,6 +1386,9 @@ angular.module('timeSheetApp')
                 }
                 if($scope.pancardImage){
                     $scope.uploadPancard($scope.employee.id);
+                }
+                if($scope.profilepicImage){
+                    $scope.uploadProfilePic($scope.employee.id);
                 }
             }
 
@@ -1482,6 +1498,18 @@ angular.module('timeSheetApp')
         });
     };
 
+    $scope.uploadProfilePic = function(employeeId){
+    	console.log("UPloading profile pic");
+    	console.log(employeeId);
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.profilepicImage,'profilepic')
+            .then(function (response) {
+                console.log("profilepicImage uploaded");
+                console.log(response);
+            }).catch(function (response) {
+            console.log("Failed to upload profilepicImage ",response);
+        });
+    };
+    
 	$scope.loadEnrImage = function(enrollId) {
 
 		//Employee Enrolled Image
