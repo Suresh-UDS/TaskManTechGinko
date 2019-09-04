@@ -65,13 +65,13 @@ public class OnboardingUserCofigResource {
 	return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-    @RequestMapping(value = "/saveOnboardingUserConfigList/{userId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/saveOnboardingUserConfigList/{userId}/{branchCode}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> saveOnboardingUserConfigList(@PathVariable("userId") long userId, @Valid @RequestBody List<OnboardingUserConfigDTO> onboardingUserConfigDTO,HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> saveOnboardingUserConfigList(@PathVariable("userId") long userId,@PathVariable("branchCode") String branchCode, @Valid @RequestBody List<OnboardingUserConfigDTO> onboardingUserConfigDTO,HttpServletRequest httpServletRequest){
         List<OnboardingUserConfig> createdUserlist = null;
         try {
 //            onboardingUserConfigDTO.setUserId(SecurityUtils.getCurrentUserId());
-            createdUserlist = onboardingUserConfigService.saveOnBoardingUserConfigList(onboardingUserConfigDTO,userId);
+            createdUserlist = onboardingUserConfigService.saveOnBoardingUserConfigList(onboardingUserConfigDTO,userId,branchCode);
         }catch(Exception cve){
             String msg = "Error while creating Onboarding user,Please check the information";
 //            throw new TimesheetException(cve,onboardingUserConfigDTO);
@@ -95,9 +95,9 @@ public class OnboardingUserCofigResource {
         return onboardingUserConfigService.getOnBoardingConfigDetailsForUser(id,branch);
     }
 
-    @RequestMapping(value = "/getBranchListForUser", method = RequestMethod.GET)
-    public List<OnboardingUserConfigDTO> getBranchListForUser(){
-        long userId = SecurityUtils.getCurrentUserId();
+    @RequestMapping(value = "/getBranchListForUser/{id}", method = RequestMethod.GET)
+    public List<OnboardingUserConfigDTO> getBranchListForUser(@PathVariable ("id") long id){
+        long userId = ( id == 0 ? SecurityUtils.getCurrentUserId() : id );
         List<OnboardingUserConfigDTO> branchList = null;
         try {
         branchList = onboardingUserConfigService.findBranchListByUserId(userId);

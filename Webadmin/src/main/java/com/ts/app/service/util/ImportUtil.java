@@ -656,7 +656,7 @@ public class ImportUtil {
 						cellNo++;
 						Date endTime = currentRow.getCell(11).getDateCellValue();
 						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
-						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
 						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
 						cellNo++;
 						if(currentRow.getCell(12)!=null){
