@@ -23,6 +23,9 @@ import { declaration} from '../../../pages/onboarding/onboardingNewEmployee/decl
 import {NewEmpSiteDetails} from "./new-emp-site-details/new-emp-site-details";
 //import{ declaration} from '../../declaration/declaration';
 
+declare  var demo;
+
+
 const imageUploadModal = {
   aadharPhotoCopy: String,
   profilePicture: String,
@@ -468,12 +471,13 @@ export class onboardingNewEmployee {
           },err=>{
             console.log("Error in saving employee");
             console.log(err);
+            this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
+
           })
         });
       }
     });
   }
-
 
 
   

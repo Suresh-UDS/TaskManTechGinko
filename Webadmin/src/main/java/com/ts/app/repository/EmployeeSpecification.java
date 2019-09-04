@@ -167,6 +167,12 @@ public class EmployeeSpecification implements Specification<Employee> {
         }else{
             predicates.add(builder.equal(root.get("verified"),false));
         }
+        
+        if(searchCriteria.isSubmitted()){
+            predicates.add(builder.equal(root.get("submitted"),true));
+        }else{
+            predicates.add(builder.equal(root.get("submitted"),false));
+        }
 
         query.orderBy(builder.desc(root.get("createdDate")));
 

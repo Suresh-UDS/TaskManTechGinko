@@ -232,6 +232,12 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean verified;
 
+    private boolean submitted;
+    
+    private String submittedBy;
+    
+    private ZonedDateTime submittedOn;
+    
     private boolean syncToSAP;
 
     private boolean newEmployee;
@@ -889,6 +895,34 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-    
-    
+
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
+	}
+
+
+	public String getSubmittedBy() {
+		return submittedBy;
+	}
+
+
+	public void setSubmittedBy(String submittedBy) {
+		this.submittedBy = submittedBy;
+	}
+
+
+	public ZonedDateTime getSubmittedOn() {
+		return submittedOn;
+	}
+
+
+	public void setSubmittedOn(ZonedDateTime submittedOn) {
+		this.submittedOn = submittedOn;
+	}
+	
 }

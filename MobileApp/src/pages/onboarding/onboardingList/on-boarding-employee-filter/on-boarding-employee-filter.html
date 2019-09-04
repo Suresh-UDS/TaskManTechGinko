@@ -27,6 +27,16 @@
     <button (click)="filterEmployees()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
   </ion-fab>
 
+  <ion-item class="border" >
+    <ion-label  text-capitalize class="client-label" text-left>Employee Name</ion-label>
+    <ion-input [(ngModel)]="empNameSearch"></ion-input>
+  </ion-item>
+
+  <ion-item class="border" >
+    <ion-label  text-capitalize class="client-label" text-left>Employee Code</ion-label>
+    <ion-input [(ngModel)]="empCodeSearch"></ion-input>
+  </ion-item>
+
   <ion-item class="border">
     <ion-label  text-capitalize class="client-label" text-left>Branch:</ion-label>
     <select-searchable class="searchable-select"
@@ -62,5 +72,7 @@
                        (onChange)="getEmployees($event)">
     </select-searchable>
   </ion-item>
+
+
 
 </ion-content>

@@ -275,6 +275,8 @@ public class SearchCriteria extends Paginator {
 
 	private boolean verified;
 	
+	private boolean submitted;
+	
 	private String elementCode;
 	
 	private String element;
@@ -1476,7 +1478,15 @@ public class SearchCriteria extends Paginator {
         this.verified = verified;
     }
 
-    public String getProjectCode() {
+    public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
+	}
+
+	public String getProjectCode() {
         return projectCode;
     }
 
