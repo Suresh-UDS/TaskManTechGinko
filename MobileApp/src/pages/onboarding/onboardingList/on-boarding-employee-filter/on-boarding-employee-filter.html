@@ -73,6 +73,19 @@
     </select-searchable>
   </ion-item>
 
-
-
+  <p >
+    <ion-badge  *ngIf="selectedBranch !=null">Selected Branch:  {{selectedBranch.element}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="selectedProject !=null">Selected Project:  {{selectedProject.element}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="selectedWBS !=null">Selected WBS:  {{selectedWBS.element}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="empCodeSearch !=null">Employee Code:  {{empCodeSearch}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="empNameSearch !=null">Employee Name: {{empNameSearch}}</ion-badge>
+  </p>
 </ion-content>
