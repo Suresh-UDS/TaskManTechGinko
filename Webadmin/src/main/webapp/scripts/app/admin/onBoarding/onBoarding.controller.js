@@ -1022,7 +1022,7 @@ angular.module('timeSheetApp')
 		$scope.loadPageTop();
 		console.log("to be verified");
 		console.log($scope.verified);
-		$scope.searchCriteria.verified= $scope.verified;
+		
 		$scope.searchCriteria.newemployee = $scope.newemployee;
  		 
 		$scope.searchCriteria.branchCode = $scope.client.selected ? $scope.client.selected.elementCode : null;
@@ -1032,6 +1032,7 @@ angular.module('timeSheetApp')
 		$scope.searchCriteria.wbsCode = $scope.branchsListOne.selected ? $scope.branchsListOne.selected.elementCode : null;
   	
 		$scope.searchCriteria.verified = false;
+		$scope.searchCriteria.submitted = true;
 		$scope.searchCriteria.newemployee = false;
 		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");

@@ -205,6 +205,8 @@ public class EmployeeDTO extends BaseDTO {
     private boolean imported;
 
     private boolean verified;
+    
+    private boolean submitted;
 
     private boolean syncToSAP;
 
@@ -212,8 +214,12 @@ public class EmployeeDTO extends BaseDTO {
 
     private String verifiedBy;
 
+    private String submittedBy;
+    
     private ZonedDateTime verifiedDate;
 
+    private ZonedDateTime submittedOn;
+    
     private String syncedBy;
 
     private String projectCode;
@@ -251,6 +257,14 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setMaritalStatus(String maritalStatus) {
 		this.maritalStatus = maritalStatus;
+	}
+
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
 	}
 
 	public Date getDob() {
@@ -1009,6 +1023,20 @@ public class EmployeeDTO extends BaseDTO {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-    
-    
+
+	public String getSubmittedBy() {
+		return submittedBy;
+	}
+
+	public void setSubmittedBy(String submittedBy) {
+		this.submittedBy = submittedBy;
+	}
+
+	public ZonedDateTime getSubmittedOn() {
+		return submittedOn;
+	}
+
+	public void setSubmittedOn(ZonedDateTime submittedOn) {
+		this.submittedOn = submittedOn;
+	}
 }
