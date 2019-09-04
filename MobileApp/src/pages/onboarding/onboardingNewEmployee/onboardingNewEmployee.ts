@@ -471,7 +471,7 @@ export class onboardingNewEmployee {
           },err=>{
             console.log("Error in saving employee");
             console.log(err);
-            demo.showSwal('warning-message-and-confirmation-ok',err.errorMessage);
+            this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
 
           })
         });
