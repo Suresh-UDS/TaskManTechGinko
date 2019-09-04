@@ -23,7 +23,7 @@ const searchCriteria = {
   wbsCode:null,
   verified:false,
   list:true,
-  empId:String,
+  employeeEmpId:String,
   name:String
 };
 
@@ -114,16 +114,11 @@ export class onboardingExistEmployee implements OnInit {
     modal.present();
     modal.onDidDismiss(data=>{
       console.log(data);
-      if(data.project !=null && data.project.element){
-        if(data.wbs !=null && data.wbs.element){
-          searchCriteria.projectCode = data.project.elementCode;
-          searchCriteria.wbsCode = data.wbs.elementCode;
-          this.onSegmentChange();
-        }else{
-          searchCriteria.projectCode = data.project.elementCode;
-          this.onSegmentChange();
-        }
-      }
+      searchCriteria.wbsCode = data.wbsCode;
+      searchCriteria.projectCode = data.projectCode;
+      searchCriteria.employeeEmpId = data.employeeEmpId;
+      searchCriteria.name = data.name;
+      this.onSegmentChange()
     });
   }
 

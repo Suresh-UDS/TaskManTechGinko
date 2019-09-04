@@ -22,11 +22,16 @@ export class OnBoardingEmployeeFilter {
   selectedBranch:any;
   selectedProject:any;
   selectedWBS:any;
+  empNameSearch:any;
+  empCodeSearch:any;
+
 
   filterData:{
     branch:any,
-    project:any,
-    wbs:any
+    projectCode:any,
+    wbsCode:any,
+    employeeEmpId:any,
+    name:any
   };
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
                         public onBoardingService: OnboardingService, public cs:componentService
@@ -38,8 +43,10 @@ export class OnBoardingEmployeeFilter {
 
     this.filterData = {
         branch: null,
-        project :null,
-      wbs:null
+      projectCode :null,
+      wbsCode:null,
+        employeeEmpId:null,
+        name:null
     }
   }
 
@@ -107,9 +114,21 @@ export class OnBoardingEmployeeFilter {
   }
 
   filterEmployees(){
-    this.filterData.branch = this.selectedBranch;
-    this.filterData.project = this.selectedProject;
-    this.filterData.wbs = this.selectedWBS;
+    if(this.selectedBranch && this.selectedBranch.element){
+      this.filterData.branch = this.selectedBranch;
+    }
+    if(this.selectedProject && this.selectedProject.element){
+      this.filterData.projectCode = this.selectedProject.elementCode;
+    }
+    if(this.selectedWBS && this.selectedWBS.element){
+      this.filterData.wbsCode = this.selectedWBS.elementCode;
+    }
+    if(this.empCodeSearch){
+      this.filterData.employeeEmpId = this.empCodeSearch;
+    }
+    if(this.empNameSearch){
+      this.filterData.name = this.empNameSearch;
+    }
     this.viewCtrl.dismiss(this.filterData);
   }
 
