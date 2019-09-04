@@ -29,6 +29,8 @@ angular.module('timeSheetApp')
     $scope.allUsers = [];
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
+    $scope.showUserBranchesList = false;
+    $scope.userBranchList = [];
     $scope.addressProofImage;
 	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
 	$scope.sapBusinessCategoriesList = {};
@@ -276,7 +278,7 @@ angular.module('timeSheetApp')
 	$scope.setListType = function(type){
 
 		$rootScope.onBoardingFilter.employee.type = type;
-
+		
 		$scope.newEmployee = type;
 		$scope.existingEmployee = !type; 
 
@@ -345,6 +347,14 @@ angular.module('timeSheetApp')
 	    $scope.showUserDetails = true;
     };
 
+	$scope.loadUserBranchList = function(userDetails){
+	    console.log("Load userBranch list");
+        OnBoardingComponent.getBranchList().then(function (data) {
+            $scope.showUserBranchesList = true;
+            $scope.userBranchList = data;
+        })
+    };
+
 	$scope.clearUsers = function($event){
         $event.stopPropagation();
         $scope.userDetails = null;
@@ -411,7 +421,7 @@ angular.module('timeSheetApp')
 
 		}
 		else{
- 
+			$rootScope.onBoardingFilter.employee.type = 1;
 		    $scope.clearFilterKeys();
             $scope.getBranchList();
 			$scope.search();
@@ -421,13 +431,18 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.enableTags = function(enable){
-	    console.log(enable);
+ 
 	    return !!(enable && enable.element);
     }
 
 	$scope.clearFilterKeys = function(){
 		console.log("clear filter keys");
-		$scope.setListType(1);
+		$scope.setListType($rootScope.onBoardingFilter.employee.type);
+
+		$scope.client.selected = null;
+		$scope.regionsListOne.selected =  null ;
+		$scope.branchsListOne.selected =  null;
+		
         $scope.selectedBranchDetails=null;
         $scope.selectedWBSDetails=null;
         $scope.selectedProjectDetails=null;
@@ -701,7 +716,8 @@ angular.module('timeSheetApp')
 			$scope.userDetails = data;
 
 			$scope.loadgetSapBusinessCategories();
- 
+
+			$scope.loadUserBranchList();
 
            // $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
             // $scope.getUserConfigDetails(data.id);
@@ -873,40 +889,7 @@ angular.module('timeSheetApp')
 		$scope.setPage(1);
 		$scope.search();
 	};
-
-	$scope.getOldTobeVerifiedEmployees = function(){
-	    $scope.verified = false;
-	    $scope.search();
-	    $scope.newemployee = false;
-	    if($scope.selectedProjectCode !=null && $scope.selectedWBSCode !=null){
-            $scope.search();
-        }else{
-	        if($scope.selectedEmployeeId !=null || $scope.selectedEmployeeName != null){
-                $scope.search();
-            }else{
-                $scope.noData = true;
-                $scope.onBoardingEmployeesLoader = true;
-            }
-        }
-
-    };
-    
-    $scope.getNewTobeVerifiedEmployees = function(){
-	    $scope.verified = false;
-	    $scope.newemployee = true;
-	    if($scope.selectedProjectCode !=null && $scope.selectedWBSCode !=null){
-            $scope.search();
-        }else{
-	        if($scope.selectedEmployeeId !=null || $scope.selectedEmployeeName != null){
-                $scope.search();
-            }else{
-                $scope.noData = true;
-                $scope.onBoardingEmployeesLoader = true;
-            }
-        }
-
-    };
-
+ 
 	$scope.search = function () {
 		$scope.noData = false;
 		//console.log($scope.datePickerDate);
@@ -1041,17 +1024,13 @@ angular.module('timeSheetApp')
 		console.log($scope.verified);
 		$scope.searchCriteria.verified= $scope.verified;
 		$scope.searchCriteria.newemployee = $scope.newemployee;
-
-		if($scope.selectedBranchCode !=null){
-		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
-        }
-
-		if($scope.selectedProjectCode !=null){
-		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode;
-        }
-		if($scope.selectedWBSCode !=null){
-		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
-        }
+ 		 
+		$scope.searchCriteria.branchCode = $scope.client.selected ? $scope.client.selected.elementCode : null;
+  
+	    $scope.searchCriteria.projectCode = $scope.regionsListOne.selected ? $scope.regionsListOne.selected.elementCode : null;
+   
+		$scope.searchCriteria.wbsCode = $scope.branchsListOne.selected ? $scope.branchsListOne.selected.elementCode : null;
+  	
 		$scope.searchCriteria.verified = false;
 		$scope.searchCriteria.newemployee = false;
 		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
@@ -1300,8 +1279,8 @@ angular.module('timeSheetApp')
         $rootScope.searchFilterCriteria.isDashboard = false;
         // $scope.search();
         $scope.onBoardingEmployees = [];
-
-        $scope.getTobeVerifiedEmployees();
+ 
+        $scope.LoadEmpListByType($rootScope.onBoardingFilter.employee.type);
 
     };
 

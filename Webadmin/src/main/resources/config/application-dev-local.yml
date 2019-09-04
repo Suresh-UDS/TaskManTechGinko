@@ -22,11 +22,11 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
 
         #url: jdbc:mysql://ec2-54.255.148.73.ap-southeast-1.compute.amazonaws.com:3306/TaskMan?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost:3306/Taskman?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://172.31.17.47:3306/Taskman?useUnicode=true&characterEncoding=utf8
         #url: jdbc:mysql://localhost:3306/TaskMan_R2?useUnicode=true&characterEncoding=utf8
         name:
         username: root
-        password: root
+        password: Uds@2016
         #password: admin
 
     jpa:
