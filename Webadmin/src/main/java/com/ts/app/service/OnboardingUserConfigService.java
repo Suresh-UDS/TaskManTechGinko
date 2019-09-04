@@ -54,25 +54,29 @@ public class OnboardingUserConfigService extends AbstractService {
 		return onboardingUserConfigDTO;
 	}
 
-	public List<OnboardingUserConfig> saveOnBoardingUserConfigList(List<OnboardingUserConfigDTO> onboardingUserConfigDTOList,long userId){
+	public List<OnboardingUserConfig> saveOnBoardingUserConfigList(List<OnboardingUserConfigDTO> onboardingUserConfigDTOList,long userId,String branchCode){
 	    OnboardingUserConfigDTO userConfigDTO = new OnboardingUserConfigDTO();
 	    List<OnboardingUserConfig> responseUserConfig = new ArrayList<>();
 	    OnboardingUserConfigDTO userConfigDTO1 = new OnboardingUserConfigDTO();
 	    User user = userRepository.findOne(userId);
 	    
-	    if(onboardingUserConfigDTOList.size() > 0) {
+	    if(clearAllUserConfigs(userId,branchCode)){
 	    
-	        if(clearAllUserConfigs(userId,onboardingUserConfigDTOList.get(0).getBranch())){
-	            for(OnboardingUserConfigDTO onboardingUserConfigDTO: onboardingUserConfigDTOList){
-	            	OnboardingUserConfig userConfig = new OnboardingUserConfig();
-	                userConfig = mapperUtil.toEntity(onboardingUserConfigDTO, OnboardingUserConfig.class);
-	                userConfig.setUser(user);
-	                userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
-	                userConfig = onboardingUserConfigRepository.save(userConfig);
-	                responseUserConfig.add(userConfig);
-	       
-	            }
-	        }
+		    if(onboardingUserConfigDTOList.size() > 0) {
+		     
+		            for(OnboardingUserConfigDTO onboardingUserConfigDTO: onboardingUserConfigDTOList){
+		            	
+		            	OnboardingUserConfig userConfig = new OnboardingUserConfig();
+		                userConfig = mapperUtil.toEntity(onboardingUserConfigDTO, OnboardingUserConfig.class);
+		                userConfig.setUser(user);
+		                userConfig.setActive(OnboardingUserConfig.ACTIVE_YES);
+		                userConfig = onboardingUserConfigRepository.save(userConfig);
+		                responseUserConfig.add(userConfig);
+		       
+		            }
+		        
+		    }
+		    
 	    }
 
 

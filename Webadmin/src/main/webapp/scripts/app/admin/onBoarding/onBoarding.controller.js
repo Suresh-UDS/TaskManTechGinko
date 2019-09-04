@@ -341,8 +341,9 @@ angular.module('timeSheetApp')
     };
 
 	$scope.loadUserBranchList = function(userDetails){
-	    console.log("Load userBranch list");
-        OnBoardingComponent.getBranchList().then(function (data) {
+		console.log("Load userBranch list");
+		$scope.userBranchList = [];
+        OnBoardingComponent.getBranchList($scope.userDetails.id).then(function (data) {
             $scope.showUserBranchesList = true;
             $scope.userBranchList = data;
         })
@@ -444,7 +445,7 @@ angular.module('timeSheetApp')
     }
 
     $scope.getBranchList = function(){
-        OnBoardingComponent.getBranchList().then(function (branchList) {
+        OnBoardingComponent.getBranchList(0).then(function (branchList) {
             $scope.branchList = branchList;
 			$rootScope.onBoardingFilter.branches.list = branchList;
             $scope.branches= branchList;
@@ -656,7 +657,7 @@ angular.module('timeSheetApp')
 											elementType : elements[i].elemetType,
 											elementCode : elements[i].elementCode,
 											onBoardingUserId : $scope.userDetails.id,
-											branch : $scope.selctedSapBusinessCategoriesList[0].elementCode,
+											branch : $scope.selectedBranch,
 											userId : null,
 											childElements : []
 										} ); 
@@ -678,23 +679,28 @@ angular.module('timeSheetApp')
 		console.log($scope.postMapping);
 	}
 
+	$scope.saveMappingLoader = false;
+
     $scope.saveDetails = function(){
         // var a = HierarchyNodeService.getSelectedItems();
         // console.log(a);
         // console.log(a.length);
 		// console.log($scope.userDetails.id);
+
+		$scope.saveMappingLoader = true;
 		
 		initDesignInput();
 
 
-        OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,function(response,err){
+        OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,$scope.selectedBranch,function(response,err){
             if(response){
-				
+				$scope.saveMappingLoader = false;
 				$scope.showNotifications('top', 'center', 'success', "Buisiness Area are mapped Successfully");
- 
+				$scope.loadUserBranchList();
             }
             if(err){
-                $scope.showNotifications('top', 'center', 'danger', "error in save");
+				$scope.showNotifications('top', 'center', 'danger', "error in save");
+				$scope.saveMappingLoader = false;
                 
             }
         })

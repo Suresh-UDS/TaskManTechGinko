@@ -218,7 +218,7 @@
 
             </div>
             <div class="card-footer text-center">
-                <button type="submit" class="btn btn-rose btn-fill" ng-click="saveDetails()">Save</button>
+                <button type="submit" class="btn btn-rose btn-fill" ng-disabled="saveMappingLoader"  ng-click="saveDetails()"><span  ng-show="saveMappingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Save</button>
                 <div class="ripple-container"></div>
             </div>
     </div>

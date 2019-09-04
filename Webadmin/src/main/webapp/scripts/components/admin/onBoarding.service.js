@@ -9,9 +9,9 @@ angular.module('timeSheetApp')
                 });
             },
 
-            create : function(categoryList,onBoardingUserId,callback){
+            create : function(categoryList,onBoardingUserId,branchCode,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/saveOnboardingUserConfigList/'+onBoardingUserId,categoryList).then(
+                return $http.post('api/saveOnboardingUserConfigList/'+onBoardingUserId+'/'+branchCode,categoryList).then(
                     function (response) {
                         return cb(response,null);
                     }).catch(
@@ -65,8 +65,8 @@ angular.module('timeSheetApp')
 
             },
 
-            getBranchList: function () {
-                return $http.get('api/getBranchListForUser').then(function (response) {
+            getBranchList: function (id) {
+                return $http.get('api/getBranchListForUser/'+id).then(function (response) {
                     console.log(response.data);
                     return response.data;
                 })
