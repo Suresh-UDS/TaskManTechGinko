@@ -126,13 +126,35 @@ public class EmployeeSpecification implements Specification<Employee> {
         if (searchCriteria.getWbsCode()!=null && StringUtils.isNotEmpty(searchCriteria.getWbsCode())){
             predicates.add(builder.equal(root.get("wbsId"),searchCriteria.getWbsCode()));
         }
+        
+        List<String> empty = new ArrayList<String>();
+		empty.add("-");
 
-        if(searchCriteria.getProjectCodes()!=null && CollectionUtils.isNotEmpty(searchCriteria.getProjectCodes())){
-            predicates.add(root.get("projectCode").in(searchCriteria.getProjectCodes()));
+        if(searchCriteria.getProjectCodes()!=null){
+        	
+        	if(CollectionUtils.isEmpty(searchCriteria.getProjectCodes())) {
+        		predicates.add(root.get("projectCode").in(empty));
+        	}
+        	else {
+        		predicates.add(root.get("projectCode").in(searchCriteria.getProjectCodes()));
+        	}
         }
 
-        if(searchCriteria.getWbsCodes()!=null && CollectionUtils.isNotEmpty(searchCriteria.getWbsCodes())){
-            predicates.add(root.get("wbsId").in(searchCriteria.getWbsCodes()));
+        if(searchCriteria.getWbsCodes()!=null ){
+           
+            	if(CollectionUtils.isEmpty(searchCriteria.getWbsCodes())) {
+            		 
+            		predicates.add(root.get("wbsId").in(empty));
+            		
+            	}
+            	else {
+            		
+            		predicates.add(root.get("wbsId").in(searchCriteria.getWbsCodes()));
+            		
+            	}
+                
+            
+        	
         }
 
         if(searchCriteria.isNewEmployee()){
