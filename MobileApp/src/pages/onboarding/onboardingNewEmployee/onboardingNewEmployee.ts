@@ -380,7 +380,8 @@ export class onboardingNewEmployee {
             religion:null,
             wbsDescription:null,
             wbsId:null,
-
+            position:null,
+            submitted:false
 
 
           };
@@ -429,6 +430,7 @@ export class onboardingNewEmployee {
           employeeDetails.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['projectDescription'];
           employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['religion'];
           employeeDetails.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['wbsDescription'];
+          employeeDetails.position = localStoragedData['actionRequired'][this.storedIndex]['position'];
           employeeDetails.wbsId = localStoragedData['actionRequired'][this.storedIndex]['wbsId'];
           let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
           employeeDetails.name = name.split(" ")[0];
