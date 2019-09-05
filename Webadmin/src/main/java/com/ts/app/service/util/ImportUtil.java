@@ -1950,9 +1950,13 @@ public class ImportUtil {
                         cellNo = 5;
                         employee.setEmpId(getCellValue(currentRow.getCell(5)));
                         employee.setNewEmployee(false);
-                        if(isSkipDuplicate((currentRow.getCell(5).getStringCellValue().trim()),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
-                            EmployeeDTO employeeDTO = new EmployeeDTO();
-                            employeeDTO.setMessage("error.duplicateRecordError");
+                        
+                        Employee existing = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
+                        
+                        if(existing!=null) {
+                            employee.setId(employee.getId()); 
+                            //employeeDTO.setMessage("error.duplicateRecordError");
+                            employeeRepo.saveAndFlush(employee);
                         }else {
                             employeeRepo.save(employee);
 			            }
@@ -1961,13 +1965,13 @@ public class ImportUtil {
                         String empId = currentRow.getCell(32).getStringCellValue().substring(7);
                         log.debug("Employee id not present, entering substirng - "+empId);
                         employee.setNewEmployee(true);
-                        if(isSkipDuplicate(empId.trim(),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
-                            EmployeeDTO employeeDTO = new EmployeeDTO();
-                            employeeDTO.setMessage("error.duplicateRecordError");
-                        }else {
+//                        if(isSkipDuplicate(empId.trim(),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
+//                            EmployeeDTO employeeDTO = new EmployeeDTO();
+//                            employeeDTO.setMessage("error.duplicateRecordError");
+//                        }else {
                             employee.setEmpId(empId);
                             employeeRepo.save(employee);
-                        }
+                      //  }
 
                     }
 					
@@ -2135,16 +2139,18 @@ public class ImportUtil {
 
 	
 
-	public boolean isSkipDuplicate(String empId,String wbsId,String projId) {
+	public Employee isSkipDuplicate(String empId) {
 		
-		Employee existingEmployeeWbs = employeeRepo.findByEmpIdandWbsId(empId,wbsId);
-		Employee exsistingEmployeeProjId = employeeRepo.findByEmpIdandProjId(empId,projId);
-		if(existingEmployeeWbs != null || exsistingEmployeeProjId != null) {
-			return true;
-		}else {
-			return false;
-		}
-	    }
+		return employeeRepo.findByEmpId(empId);
+		
+//		Employee existingEmployeeWbs = employeeRepo.findByEmpIdandWbsId(empId,wbsId);
+//		Employee exsistingEmployeeProjId = employeeRepo.findByEmpIdandProjId(empId,projId);
+//		if(existingEmployeeWbs != null || exsistingEmployeeProjId != null) {
+//			return true;
+//		}else {
+//			return false;
+//		}
+	 }
 	
 /**************************************************************************************************************************************/
 	
