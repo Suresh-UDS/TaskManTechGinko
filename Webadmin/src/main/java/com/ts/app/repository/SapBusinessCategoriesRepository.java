@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface SapBusinessCategoriesRepository extends JpaRepository<SapBusinessCategories, Long> {
 
-    @Query("SELECT s FROM SapBusinessCategories s order by s.createdDate")
+    @Query("SELECT s FROM SapBusinessCategories s order by s.createdDate desc")
     List<SapBusinessCategories> findLatest();
 }
