@@ -151,6 +151,23 @@ angular.module('timeSheetApp')
 
 	};
 
+	var mappingValidation = function(){
+
+		if( _.find( $scope.userDetails.userRole.rolePermissions,{actionName:'Restiction'}) ){
+
+			if($("wbsListCheckBox:checked").length > 4){
+ 
+				$scope.showNotifications('top','center','danger','We can choose only one WBS for this type of users');
+				return false;
+
+			}
+			
+		}
+
+		return true;
+
+	}
+
 	$scope.setSelectedBranch = function(){
  
 		$scope.selctedSapBusinessCategoriesList = [];
@@ -689,28 +706,32 @@ angular.module('timeSheetApp')
 	$scope.saveMappingLoader = false;
 
     $scope.saveDetails = function(){
-        // var a = HierarchyNodeService.getSelectedItems();
-        // console.log(a);
-        // console.log(a.length);
-		// console.log($scope.userDetails.id);
 
-		$scope.saveMappingLoader = true;
-		
-		initDesignInput();
+		if(mappingValidation()){ 
+			// var a = HierarchyNodeService.getSelectedItems();
+			// console.log(a);
+			// console.log(a.length);
+			// console.log($scope.userDetails.id);
+
+			$scope.saveMappingLoader = true;
+			
+			initDesignInput();
 
 
-        OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,$scope.selectedBranch,function(response,err){
-            if(response){
-				$scope.saveMappingLoader = false;
-				$scope.showNotifications('top', 'center', 'success', "Buisiness Area are mapped Successfully");
-				$scope.loadUserBranchList();
-            }
-            if(err){
-				$scope.showNotifications('top', 'center', 'danger', "error in save");
-				$scope.saveMappingLoader = false;
-                
-            }
-        })
+			OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,$scope.selectedBranch,function(response,err){
+				if(response){
+					$scope.saveMappingLoader = false;
+					$scope.showNotifications('top', 'center', 'success', "Buisiness Area are mapped Successfully");
+					$scope.loadUserBranchList();
+				}
+				if(err){
+					$scope.showNotifications('top', 'center', 'danger', "error in save");
+					$scope.saveMappingLoader = false;
+					
+				}
+			});
+			
+		}
     };
 
 	$scope.mappedData = [];
@@ -1172,9 +1193,9 @@ angular.module('timeSheetApp')
                                 $scope.employee.religion !=null &&
                                 $scope.employee.wbsDescription !=null &&
                                 $scope.employee.wbsId !=null &&
-								_.find(documents,{docType:'adhar_card_front'}) &&
-								_.find(documents,{docType:'adhar_card_back'}) && 
-								(($scope.employee.newEmployee &&  _.find(documents,{docType:'bank_passbook_image'}) ||
+								_.find(documents,{docType:'aadharPhotoCopy'}) &&
+								_.find(documents,{docType:'aadharPhotoCopyBack'}) && 
+								(($scope.employee.newEmployee &&  _.find(documents,{docType:'prePrintedStatement'}) ||
 								  !$scope.employee.newEmployee )
 								)
 
