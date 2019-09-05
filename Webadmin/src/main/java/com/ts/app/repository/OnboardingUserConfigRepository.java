@@ -32,16 +32,16 @@ public interface OnboardingUserConfigRepository extends JpaRepository<Onboarding
     List<OnboardingUserConfig> findElementChildsByUserId(@Param("userId") long userId, @Param("elementParent") String elementParent);
 
 
-	@Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'BRANCH' order by ob.element")
+	@Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'BRANCH' order by ob.element ASC ")
 	List<OnboardingUserConfig> findBranchByUserId(@Param("userId") long userId);
 	
-	@Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' order by ob.element")
+	@Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' order by ob.element ASC")
 	List<OnboardingUserConfig> findProjectByUserId(@Param("userId") long userId);
 	
-	@Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' order by ob.element")
+	@Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' order by ob.element ASC")
 	List<OnboardingUserConfig> findWBSByUserId(@Param("userId") long userId);
 
-    @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' and ob.elementParent = :branchCode order by ob.element")
+    @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'PROJECT' and ob.elementParent = :branchCode order by ob.element ASC")
     List<OnboardingUserConfig> findProjectByBranchId(@Param("userId") long userId, @Param("branchCode") String branchCode );
 
 
@@ -57,6 +57,6 @@ public interface OnboardingUserConfigRepository extends JpaRepository<Onboarding
     @Query("SELECT ob.elementCode from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = :elementType and ob.elementParent in :elementParents " )
     List<String> findElementCodesAndElementParents(@Param("userId") long userId, @Param("elementType") String elementType, @Param("elementParents") List<String> elementParents);
 
-    @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' and ob.elementParent = :projectCode order by ob.element")
+    @Query("SELECT ob from OnboardingUserConfig ob where ob.user.id = :userId and ob.active = 'Y' and ob.elementType = 'WBS' and ob.elementParent = :projectCode order by ob.element ASC")
     List<OnboardingUserConfig> findWBSByProjectId(@Param("userId") long userId, @Param("projectCode") String projectCode);
 }

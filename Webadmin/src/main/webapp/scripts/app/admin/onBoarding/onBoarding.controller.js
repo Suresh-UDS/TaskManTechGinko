@@ -1158,7 +1158,6 @@ angular.module('timeSheetApp')
                                 $scope.employee.maritalStatus !=null &&
                                 $scope.employee.mobile !=null &&
                                 $scope.employee.name !=null &&
-                                $scope.employee.nomineeContactNumber !=null &&
                                 $scope.employee.nomineeName !=null &&
                                 $scope.employee.nomineeRelationship !=null &&
                                 $scope.employee.percentage !=null &&

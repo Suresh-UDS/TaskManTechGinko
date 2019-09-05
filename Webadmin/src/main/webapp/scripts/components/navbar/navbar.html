@@ -80,6 +80,20 @@ Tip 3: you can change the color of the sidebar with data-background-color="white
                             </a>
                         </li>
 
+
+                    </ul>
+                </div>
+            </li>
+
+            <li ui-sref-active="active" has-permission="">
+                <a data-toggle="collapse" data-target="#onBoarding" href="javascript:void(0);">
+                    <i class="material-icons">assignment_ind</i>
+                    <p> On Boarding
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="onBoarding">
+                    <ul class="nav SubNav">
                         <li ui-sref-active="active" has-permission="OnBoarding:List" >
                             <a ui-sref="onBoarding-list" ng-click="dbFilterBtn();">
                                 <i class="material-icons">content_paste</i>
