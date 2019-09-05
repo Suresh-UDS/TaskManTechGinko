@@ -59,7 +59,8 @@ export class NewEmpSiteDetails {
 
           this.siteDetailsForm = this.fb.group({
             projectCode: ['', [Validators.required]],
-            wbsId:['', [Validators.required]]
+            wbsId:['', [Validators.required]],
+            position:['',[Validators.required]]
           });
 
           this.siteDetailsSubscription = this.siteDetailsForm.statusChanges.subscribe(status=>{

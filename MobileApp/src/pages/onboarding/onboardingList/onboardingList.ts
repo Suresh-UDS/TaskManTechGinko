@@ -22,6 +22,7 @@ const searchCriteria = {
   projectCode: null,
   wbsCode:null,
   verified:false,
+  submitted:false,
   list:true,
   employeeEmpId:String,
   name:String
@@ -176,6 +177,7 @@ export class onboardingExistEmployee implements OnInit {
         this.getEmployeesByProjectId(searchCriteria.projectCode);
       }
     } else {
+      searchCriteria.submitted = true;
       this.searchEmployees(searchCriteria);
     }
   }

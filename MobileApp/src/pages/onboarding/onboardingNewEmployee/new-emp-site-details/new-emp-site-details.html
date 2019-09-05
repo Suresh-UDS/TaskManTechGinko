@@ -49,6 +49,11 @@
               </select-searchable>
             </ion-item>
 
+            <ion-item class="border" *ngIf="selectedWBS!=null" >
+                <ion-label  text-capitalize class="client-label" text-left>Designation No. </ion-label>
+                <ion-input formControlName="position" required></ion-input>
+            </ion-item>
+
         </div>
       </form>
     </div>
