@@ -150,10 +150,10 @@
                                         <span style="color: #3C3D3C;">{{employee.wbsDescription}}</span>
                                     </td>
                                     <td class="td-actions text-right">
-                                        <a ui-sref="view-onBoarding ({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <a has-permission="OnBoarding:View" ui-sref="view-onBoarding ({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
                                             <i class="material-icons">remove_red_eye</i>
                                         </a>
-                                        <a ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <a has-permission="OnBoarding:Edit" ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
                                             <i class="material-icons">edit</i>
                                         </a>
                                         <!--                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">-->
