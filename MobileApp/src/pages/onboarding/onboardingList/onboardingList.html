@@ -111,38 +111,40 @@
                     </ion-card-content>
                 </ion-card>
             </div>
-            <ion-card *ngFor="let list of completedEmp | userFilter:completedfilterData; let Cindex= index">
-                <!-- <ion-item>
-                    <h2>Marty</h2>
-                </ion-item> -->
-                <ion-card-content (click)="onboardingUserView(list)">
-                    <ion-row class="margin0">
-                        <ion-col col-4 class="ver-center">
-                            <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''"  onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
-                            </ion-avatar>
-                        </ion-col>
-                        <ion-col col-8 class="padding-left5">
-                            <ion-list>
-                                <ion-item>
-                                    <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
-                                    <h2 class="textColor">{{list['name']}} {{list['lastName']}}</h2>
-                                </ion-item>
-                                <ion-item>
-                                    <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
-                                    {{list['empId']}}
-                                </ion-item>
-                                <ion-item>
-                                    <button ion-button icon-start>
-                                        <ion-icon name="eye"></ion-icon>
-                                        <div>View</div>
-                                    </button>
-                                </ion-item>
-                            </ion-list>
-                        </ion-col>
-                    </ion-row>
-                </ion-card-content>
-            </ion-card>
+            <div *ngIf="completedEmp!=null">
+                <ion-card *ngFor="let list of completedEmp | userFilter:completedfilterData; let Cindex= index">
+                    <!-- <ion-item>
+                        <h2>Marty</h2>
+                    </ion-item> -->
+                    <ion-card-content (click)="onboardingUserView(list)">
+                        <ion-row class="margin0">
+                            <ion-col col-4 class="ver-center">
+                                <ion-avatar item-start class="inlineElement">
+                                    <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''"  onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                                </ion-avatar>
+                            </ion-col>
+                            <ion-col col-8 class="padding-left5">
+                                <ion-list>
+                                    <ion-item>
+                                        <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
+                                        <h2 class="textColor">{{list['name']}} {{list['lastName']}}</h2>
+                                    </ion-item>
+                                    <ion-item>
+                                        <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
+                                        {{list['empId']}}
+                                    </ion-item>
+                                    <ion-item>
+                                        <button ion-button icon-start>
+                                            <ion-icon name="eye"></ion-icon>
+                                            <div>View</div>
+                                        </button>
+                                    </ion-item>
+                                </ion-list>
+                            </ion-col>
+                        </ion-row>
+                    </ion-card-content>
+                </ion-card>
+            </div>
         </div>
     </div>
 </ion-content>

@@ -166,6 +166,9 @@ export class onboardingExistEmployee implements OnInit {
     }
   }
   onSegmentChange() {
+    console.log("Segment changed");
+    console.log(searchCriteria);
+    console.log(this.onBoardingAction);
     if (this.onBoardingAction == 'actionRequired') {
       if(searchCriteria.wbsCode !=null){
         this.getEmployeesByWBSId(searchCriteria.projectCode, searchCriteria.wbsCode);
@@ -173,11 +176,7 @@ export class onboardingExistEmployee implements OnInit {
         this.getEmployeesByProjectId(searchCriteria.projectCode);
       }
     } else {
-      if(searchCriteria.wbsCode !=null){
-        this.searchEmployees(searchCriteria);
-      }else if(searchCriteria.projectCode !=null){
-        this.searchEmployees(searchCriteria);
-      }
+      this.searchEmployees(searchCriteria);
     }
   }
   sortByKey(array, key) {
@@ -228,25 +227,33 @@ export class onboardingExistEmployee implements OnInit {
         let res = response.transactions;
 
 
-        for (var i = 0; i < res.length; i++) {
+        if(res && res !=null){
+          console.log("Response is not null");
+          for (var i = 0; i < res.length; i++) {
 
-          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+            if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
 
-            if(res[i]["submitted"]){
-              localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
+              if(res[i]["submitted"]){
+                localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
+              }
+              else{
+                localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+              }
+
+              this.storage.set('OnBoardingData', localStoragedData);
+
             }
-            else{
-              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
-            }
-
-            this.storage.set('OnBoardingData', localStoragedData);
 
           }
-
         }
         //console.log(onBoardingModel);
         this.actionRequiredEmp = localStoragedData['actionRequired'];
-        this.completedEmp = res;
+        if(res !=null){
+          this.completedEmp = res;
+        }else{
+          this.completedEmp = [];
+        }
+        console.log(this.completedEmp);
         this.component.closeLoader();
       }, err => {
         console.log('onbList3');
