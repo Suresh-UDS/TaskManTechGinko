@@ -34,6 +34,7 @@ import com.ts.app.service.OtaskmanService;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmpDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
 import com.ts.app.web.rest.dto.EmployeeListDTO;
 import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
 import com.ts.app.web.rest.dto.PersonalAreaDTO;
@@ -170,18 +171,20 @@ public class EmployeeServiceResouce {
 
 
 	@RequestMapping(value = "/getEmployeeListByWbs/{wbs}", method = RequestMethod.GET)
-	public List<EmpDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
+	public List<EmployeeDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-		ResponseEntity<List<EmpDTO>> response = restTemplete.exchange(
-				URL_EMPSERVICE+"api/employeesByWbs/" + wbs, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<EmpDTO>>() {
-				});
-		return response.getBody();
+		return employeeService.findActionRequired(true, false, "Y", wbs);
+		
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//
+//		HttpEntity<String> entity = new HttpEntity<String>(headers);
+//
+//		ResponseEntity<List<EmpDTO>> response = restTemplete.exchange(
+//				URL_EMPSERVICE+"api/employeesByWbs/" + wbs, HttpMethod.GET, null,
+//				new ParameterizedTypeReference<List<EmpDTO>>() {
+//				});
+//		return response.getBody();
 	}
  
 

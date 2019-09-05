@@ -153,16 +153,16 @@ angular.module('timeSheetApp')
 
 	var mappingValidation = function(){
 
-		if( _.find( $scope.userDetails.userRole.rolePermissions,{actionName:'Restiction'}) ){
+		// if( _.find( $scope.userDetails.userRole.rolePermissions,{actionName:'Restiction'}) ){
 
-			if($("wbsListCheckBox:checked").length > 4){
+		// 	if($("wbsListCheckBox:checked").length > 4){
  
-				$scope.showNotifications('top','center','danger','We can choose only one WBS for this type of users');
-				return false;
+		// 		$scope.showNotifications('top','center','danger','We can choose only one WBS for this type of users');
+		// 		return false;
 
-			}
+		// 	}
 			
-		}
+		// }
 
 		return true;
 

@@ -109,6 +109,10 @@ public class EmployeeDTO extends BaseDTO {
 
     private String position;
     
+    private String employeeCode;
+    
+    private String aadharNumber;
+    
 /*************************Modified by Vinoth***********************************************************/    
     
 
@@ -1039,4 +1043,21 @@ public class EmployeeDTO extends BaseDTO {
 	public void setSubmittedOn(ZonedDateTime submittedOn) {
 		this.submittedOn = submittedOn;
 	}
+
+	public String getEmployeeCode() {
+		return employeeCode;
+	}
+
+	public void setEmployeeCode(String employeeCode) {
+		this.employeeCode = employeeCode;
+	}
+
+	public String getAadharNumber() {
+		return aadharNumber;
+	}
+
+	public void setAadharNumber(String aadharNumber) {
+		this.aadharNumber = aadharNumber;
+	}
+	
 }
