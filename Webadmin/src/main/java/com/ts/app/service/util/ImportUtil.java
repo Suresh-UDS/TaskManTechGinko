@@ -1836,32 +1836,30 @@ public class ImportUtil {
 
 					Employee employee ;
 					
+					boolean isNewEmployee = false;
 					
-					if((currentRow.getCell(5).getStringCellValue() != null)){
+					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
 						 
-                        employee.setNewEmployee(false);
-						
 					}
 					else {
 						
 						 String empId = currentRow.getCell(32).getStringCellValue().substring(7);
                          log.debug("Employee id not present, entering substirng - "+empId);
                          
-                         employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
+                         employee = isSkipDuplicate(empId);
                          
-                         if(employee==null) {
-                        	 
-
-    						 employee = new Employee();
-    						 employee.setNewEmployee(true);
-                        	 
-                         }
-                         
-                         
+                         isNewEmployee = true;
 								
 					}
+					
+                    if(employee==null) {
+ 						 employee = new Employee();
+					 
+                    }
+                    
+                    employee.setNewEmployee(isNewEmployee);
 			            	
 			            	
 			            	
