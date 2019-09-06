@@ -1961,6 +1961,8 @@ public class ImportUtil {
 							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
 							cellNo = 35;
 							employee.setPosition(getCellValue(currentRow.getCell(35)));
+							cellNo = 36;
+							employee.setGross( Float.parseFloat(getCellValue(currentRow.getCell(36))));
 							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
