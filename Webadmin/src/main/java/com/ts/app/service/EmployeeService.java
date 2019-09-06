@@ -553,10 +553,12 @@ public class    EmployeeService extends AbstractService {
 		try {
 			response = saveEmployeeOnSAP(zempdetailUpdate);
 			returnObject = response.getReturnLog().getItem().get(0);
+			returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
+			
 			if(!returnObject.getType().equals("E")) {
-				
+				 
 //				if(updateEmployee.isVerified()){
-		        	updateEmployee.setEmpId(returnObject.getEmpId());
+		        	updateEmployee.setEmpId( returnObject.getEmpId());
 		            updateEmployee.setVerifiedBy(user);
 		            updateEmployee.setVerified(true);
 		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
@@ -564,6 +566,7 @@ public class    EmployeeService extends AbstractService {
 //		        }
 				
 			}
+			
 		} catch (Exception e) {
 			
 			returnObject = new ZempReturn();

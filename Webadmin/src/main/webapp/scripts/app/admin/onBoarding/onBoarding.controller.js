@@ -62,6 +62,9 @@ angular.module('timeSheetApp')
 	$scope.searchSite = null;
 
 	$scope.searchCriteria = {};
+
+	$scope.saveOnboardingLoader = false;
+	$scope.approveOnboardingLoader = false;
  
 	/** Ui-select scopes **/
 	$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
@@ -1313,20 +1316,21 @@ angular.module('timeSheetApp')
 
     $scope.approveOnBoardingEmployee = function(){
 		
-		$scope.saveLoad = true;
+		$scope.approveOnboardingLoader = true;
 
         OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
 			 
-				$scope.saveLoad = false;
+				$scope.approveOnboardingLoader = false;
 
 				if(data.type!="E"){
 
 					$scope.employee.verified =true;
 					$location.path('/onBoarding-list'); 
-					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId);
+					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId + ". SAP Message [ "+data.message+" ]");
 				}
 				else{
 					
+					$scope.approveOnboardingLoader = false;
 					$scope.success = null;
 					$scope.disable = false;
 					$scope.btnDisable = false;
@@ -1336,7 +1340,7 @@ angular.module('timeSheetApp')
 				}
 
         }).catch(function(response){
-            $scope.saveLoad = false;
+            $scope.approveOnboardingLoader = false;
             $scope.success = null;
             $scope.disable = false;
             $scope.btnDisable = false;
@@ -1347,9 +1351,10 @@ angular.module('timeSheetApp')
 
     $scope.saveOnBoardingEmployeeDetails = function(){
         console.log("Saving employee details");
-        //alert($scope.employee.dob);
+		//alert($scope.employee.dob);
+		$scope.saveOnboardingLoader = true;
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
-
+			$scope.saveOnboardingLoader = false;
             if(data.errorStatus){
                 $scope.saveLoad = false;
                 $scope.success = null;
@@ -1400,7 +1405,7 @@ angular.module('timeSheetApp')
 
 
         }).catch(function(response){
-            $scope.saveLoad = false;
+            $scope.saveOnboardingLoader = false;
             $scope.success = null;
             $scope.disable = false;
             $scope.btnDisable = false;
