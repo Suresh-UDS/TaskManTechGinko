@@ -908,9 +908,9 @@ public class EmployeeResource {
     }
     
     @RequestMapping(value = "/getNomineeRelationship",method=RequestMethod.GET)
-    public ResponseEntity<Iterable<NomineeRelationship>> getNomineeRelationship(){
+    public List<NomineeRelationship> getNomineeRelationship(){
     	 
-    	return new ResponseEntity<Iterable<NomineeRelationship>>(nomineeRelationshipRepository.findAll(),HttpStatus.CREATED);
+    	return nomineeRelationshipRepository.findAll();
     	
     }
     

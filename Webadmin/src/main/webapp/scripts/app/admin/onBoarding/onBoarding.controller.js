@@ -327,7 +327,7 @@ angular.module('timeSheetApp')
 		// $scope.loadAttendances();
 
 		$scope.initRootScope();
-
+		
         $scope.loadUsers();
 	};
 
@@ -1122,7 +1122,8 @@ angular.module('timeSheetApp')
 	};
 
     $scope.loadEmployee = function() {
-    	
+		
+		$scope.loadNomineeDetails();
         if(parseInt($stateParams.id)>0){
             var empId = parseInt($stateParams.id);
             EmployeeComponent.findOne(empId).then(function (data) {
@@ -1248,7 +1249,21 @@ angular.module('timeSheetApp')
         $scope.valid = validation;
         $('#conformationModal').modal();
 
-    }
+	}
+	
+	$scope.relationShipList = [];
+
+	$scope.loadNomineeDetails = function () {
+
+		OnBoardingComponent.getNomineeList().then(function(response){
+ 
+			$scope.relationShipList = response.data;
+
+		}).catch(function(response){
+ 
+		});
+
+	}
     
     $scope.editpage = function(text)
     {
@@ -1624,7 +1639,7 @@ angular.module('timeSheetApp')
 		$scope.init();
 		//$scope.setPage(1);
 
-        $scope.getOldTobeVerifiedEmployees();
+ 
 
     };
 

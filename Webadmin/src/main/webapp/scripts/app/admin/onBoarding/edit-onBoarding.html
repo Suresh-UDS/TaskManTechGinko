@@ -381,7 +381,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" name="empName" ng-pattern='^[a-zA-Z0-9._-]+$' type="text" ng-model="employee.name" required />
+                                <input class="form-control" name="empName"  type="text" ng-model="employee.name" required />
 
                                 <div ng-show="form.$submitted || form.empName.$touched || form.empName.$dirty">
                                     <div ng-show="form.empName.$dirty || form.empName.$invalid">
@@ -405,7 +405,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="empLastName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.lastName" required/>
+                                <input class="form-control" type="text" name="empLastName"   ng-model="employee.lastName" required/>
 
                                 <div ng-show="form.$submitted || form.empLastName.$touched || form.empLastName.$dirty">
                                     <div ng-show="form.empLastName.$dirty || form.empLastName.$invalid">
@@ -451,7 +451,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="fatherName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.fatherName" required />
+                                <input class="form-control" type="text" name="fatherName"  ng-model="employee.fatherName" required />
 
                                 <div ng-show="form.$submitted || form.fatherName.$touched || form.fatherName.$dirty">
                                     <div ng-show="form.fatherName.$dirty || form.fatherName.$invalid">
@@ -475,7 +475,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="motherName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.motherName" />
+                                <input class="form-control" type="text" name="motherName"  ng-model="employee.motherName" />
 
                                 <div ng-show="form.$submitted || form.fatherName.$touched || form.fatherName.$dirty">
                                     <div ng-show="form.fatherName.$dirty || form.fatherName.$invalid">
@@ -737,7 +737,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-pattern='^[a-zA-Z0-9._-]+$' name="nomineeName" ng-model="employee.nomineeName" required />
+                                <input class="form-control" type="text"   name="nomineeName" ng-model="employee.nomineeName" required />
 
                                 <div ng-show="form.$submitted || form.nomineeName.$touched || form.nomineeName.$dirty">
                                     <div ng-show="form.nomineeName.$dirty || form.nomineeName.$invalid">
@@ -761,16 +761,9 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.nomineeRelationship" name="param"  aria-invalid="false" required>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.nomineeRelationship" name="param"  aria-invalid="false" required  >
                                     <option value="" class="" >-- Select Relationship --</option>
-                                    <option value="father">Father</option>
-                                    <option value="mother">Mother</option>
-                                    <option value="husband">Husband</option>
-                                    <option value="wife">Wife</option>
-                                    <option value="son">Son</option>
-                                    <option value="daughter">Daughter</option>
-                                    <option value="brother">Brother</option>
-                                    <option value="sister">Sister</option>
+                                    <option ng-repeat="relationship in relationShipList track by $index" value="{{relationship.title}}">{{relationship.title}}</option> 
                                 </select>
                             </div>
                         </div>

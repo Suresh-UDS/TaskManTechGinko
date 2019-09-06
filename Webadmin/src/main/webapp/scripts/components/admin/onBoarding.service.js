@@ -8,7 +8,11 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-
+            getNomineeList:function(){
+                return $http.get('api/getNomineeRelationship').then(function(response){
+                    return response;
+                });
+            },
             create : function(categoryList,onBoardingUserId,branchCode,callback){
                 var cb = callback || angular.noop;
                 return $http.post('api/saveOnboardingUserConfigList/'+onBoardingUserId+'/'+branchCode,categoryList).then(
