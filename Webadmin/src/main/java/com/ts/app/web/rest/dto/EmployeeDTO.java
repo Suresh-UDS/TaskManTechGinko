@@ -63,6 +63,8 @@ public class EmployeeDTO extends BaseDTO {
     private boolean checkedIn;
 
     private long jobId;
+    
+    private float gross;
 
     private String jobTitle;
 
@@ -1058,6 +1060,14 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setAadharNumber(String aadharNumber) {
 		this.aadharNumber = aadharNumber;
+	}
+
+	public float getGross() {
+		return gross;
+	}
+
+	public void setGross(float gross) {
+		this.gross = gross;
 	}
 	
 }

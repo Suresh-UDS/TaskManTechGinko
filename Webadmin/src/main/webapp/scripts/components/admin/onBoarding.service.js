@@ -8,6 +8,11 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            getDeclarationLanguages:function(){
+                return $http.get('api/getDeclarationForm').then(function (response) {
+                    return response.data;
+                });
+            },
             getNomineeList:function(){
                 return $http.get('api/getNomineeRelationship').then(function(response){
                     return response;

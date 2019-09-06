@@ -64,6 +64,16 @@
                         </div>
 
                     </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Gross<span class="red-star">*</span></label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="number" ng-model="employee.gross" required />
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
         </div>
@@ -282,7 +292,7 @@
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(addressproofImageUrl)" >
                                
-                                    <img ng-if="addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
+                                    <img ng-if="addressproofImageUrl" class="attachImages" ng-src={{addressproofImageUrl}} alt="...">
                                </a> </div>
                             </div>
                         </div>
@@ -352,6 +362,7 @@
                                 <input class="form-control" type="text" ng-model="employee.previousDesignation" />
                             </div>
                         </div>
+
 
                     </div>
                 </div>
@@ -690,7 +701,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(profilepicUrl)" >
-                                        <img ng-if="profilepicUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{profilepicUrl}} alt="...">
+                                        <img ng-if="profilepicUrl" class="attachImages" ng-src={{profilepicUrl}} alt="...">
                                </a> </div>
                             </div>
                             </div>
@@ -871,7 +882,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(bankPassBookImageUrl)" >
-                                        <img ng-if="bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{bankPassBookImageUrl}} alt="...">
+                                        <img ng-if="bankPassBookImageUrl"  class="attachImages" ng-src={{bankPassBookImageUrl}} alt="...">
                                </a> </div>
                             </div>
                         </div>
@@ -920,7 +931,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardFrontUrl)" >
-                                        <img ng-if="adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
+                                        <img ng-if="adharCardFrontUrl" class="attachImages" ng-src={{adharCardFrontUrl}} alt="...">
                                </a> </div>
                             </div>
 
@@ -951,7 +962,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardBackUrl)" >
-                                        <img ng-if="adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
+                                        <img ng-if="adharCardBackUrl" class="attachImages" ng-src={{adharCardBackUrl}} alt="...">
                                </a> </div>
                             </div>
 
@@ -984,7 +995,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintLeftUrl)" >
-                                        <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
+                                        <img ng-if="fingerprintLeftUrl" class="attachImages" ng-src={{fingerprintLeftUrl}} alt="...">
                                </a> </div>
                             </div>
 
@@ -1007,7 +1018,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintrightUrl)" >
-                                        <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
+                                        <img ng-if="fingerprintrightUrl" class="attachImages" ng-src={{fingerprintrightUrl}} alt="...">
                                </a> </div>
                             </div>
 
@@ -1036,7 +1047,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(drivingLicenseUrl)" >
-                                        <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
+                                        <img ng-if="drivingLicenseUrl" class="attachImages" ng-src={{drivingLicenseUrl}} alt="...">
                                </a> </div>
                             </div>
 
@@ -1058,7 +1069,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(voterIdUrl)" >
-                                        <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
+                                        <img ng-if="voterIdUrl" class="attachImages" ng-src={{voterIdUrl}} alt="...">
                               </a>  </div>
                             </div>
 
@@ -1080,7 +1091,7 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
-                                        <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                        <img ng-if="pancardUrl" class="attachImages" ng-src={{pancardUrl}} alt="...">
                                </a> </div>
                             </div>
 

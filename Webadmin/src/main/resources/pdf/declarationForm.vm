@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  
+</head>
+<style type="text/css">
+	.container{
+		padding:15px;
+		font-size:12px;
+		line-height:20px;
+	}
+	table{
+		font-size:12px; 
+	}
+</style>
+<body>
+<div class="container">
+    
+    
+    
+    <table cellpadding="5"  cellspacing="0" border="0" width="100%">
+    	
+    	<tr>
+    		<td colspan="2">$content <br /><br /></td>
+    	</tr>
+    
+    	<tr>
+    		<td width="50%"><b>Date</b> : $employee.createdDate</td>
+    		<td><b>Palce</b> : $employee.presentCity </td>
+    	</tr>
+    	<tr>
+    		<td width="50%"><b>Name</b> : $employee.fullName<br/><br/>
+    		
+    		<img src="$employeeDocuments" width="100" /> </td>
+    		<td></td>
+    	</tr>
+    </table>
+    
+</div>
+</body>
+</html>
