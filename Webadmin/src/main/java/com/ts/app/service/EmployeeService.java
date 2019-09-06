@@ -203,6 +203,60 @@ public class    EmployeeService extends AbstractService {
         return false;
     }
 
+    public List<EmployeeDTO> findActionRequired(boolean imported, boolean submitted, String active, String wbsId) {
+    	
+    	List<Employee> listEmployees = employeeRepository.findByImportedAndSubmittedAndActiveAndWbsId(imported, submitted, active, wbsId);
+    	
+    	List<EmployeeDTO> listEmployeeDto = mapperUtil.toModelList(listEmployees, EmployeeDTO.class);
+    	 
+    	
+    	return listEmployeeDto;
+//    	if(CollectionUtils.isNotEmpty(listEmployeeDto)) {
+//    		
+//    		for( EmployeeDTO employeeDto : listEmployeeDto ) {
+//    			
+//    			EmpDTO empDto = new EmpDTO();
+//    			
+//    			List<BankDetailsDTO> banks = new ArrayList<BankDetailsDTO>();
+//    			BankDetailsDTO bank = new BankDetailsDTO();
+//    			bank.setAccountNo(employeeDto.getAccountNumber());
+//    			bank.setIfsc(employeeDto.getIfscCode());
+//    			
+//    			
+//    			
+//    			
+//    			empDto.setEmployeeCode(employeeDto.getEmpId());
+//    			empDto.setEmployeeName(employeeDto.getName());
+//    			empDto.setFatherName(employeeDto.getFatherName());
+//    			empDto.setMotherName(employeeDto.getMotherName());
+//    			empDto.setGender(employeeDto.getGender());
+//    			empDto.setMaritalStatus(employeeDto.getMaritalStatus());
+//    			empDto.setDateOfBirth(employeeDto.getDob());
+//    			empDto.setDateOfJoining(dateOfJoining);
+//    			empDto.setReligion(religion);
+//    			empDto.setBloodGroup(bloodGroup);
+//    			
+////    			ArrayList<String> identification = new ArrayList<String>();
+////    			identification.add(employeeDto.getPersonalIdentificationMark1());
+////    			identification.add(employeeDto.getPersonalIdentificationMark2());
+////    			
+////    			empDto.setIdentificationMark(identification);
+////    			
+////    			empDto.setM;
+////    			
+////    			empDto.setAadharNumber(employeeDto.getAdharCardNumber());
+////    			empDto.setPosition(position);
+////    			empDto.setProjectId(projectId);
+////    			empDto.setWbsId(wbsId);
+//    			
+//    			
+//    			
+//    		}
+//    		
+//    	}
+    	
+    }
+    
     public EmployeeDTO createEmployeeInformation(EmployeeDTO employeeDto) {
         // log.info("The admin Flag value is " +adminFlag);
         log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
@@ -499,10 +553,12 @@ public class    EmployeeService extends AbstractService {
 		try {
 			response = saveEmployeeOnSAP(zempdetailUpdate);
 			returnObject = response.getReturnLog().getItem().get(0);
+			returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
+			
 			if(!returnObject.getType().equals("E")) {
-				
+				 
 //				if(updateEmployee.isVerified()){
-		        	updateEmployee.setEmpId(returnObject.getEmpId());
+		        	updateEmployee.setEmpId( returnObject.getEmpId());
 		            updateEmployee.setVerifiedBy(user);
 		            updateEmployee.setVerified(true);
 		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
@@ -510,6 +566,7 @@ public class    EmployeeService extends AbstractService {
 //		        }
 				
 			}
+			
 		} catch (Exception e) {
 			
 			returnObject = new ZempReturn();
