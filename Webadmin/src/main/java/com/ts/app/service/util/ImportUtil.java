@@ -1837,15 +1837,16 @@ public class ImportUtil {
 					Employee employee ;
 					
 					boolean isNewEmployee = false;
+					String empId;
 					
 					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
-						 
+						empId  = currentRow.getCell(5).getStringCellValue() ;
 					}
 					else {
 						
-						 String empId = currentRow.getCell(32).getStringCellValue().substring(7);
+						 empId = currentRow.getCell(32).getStringCellValue().substring(7);
                          log.debug("Employee id not present, entering substirng - "+empId);
                          
                          employee = isSkipDuplicate(empId);
@@ -1856,6 +1857,7 @@ public class ImportUtil {
 					
                     if(employee==null) {
  						 employee = new Employee();
+ 						 employee.setEmpId(empId);
 					 
                     }
                     
