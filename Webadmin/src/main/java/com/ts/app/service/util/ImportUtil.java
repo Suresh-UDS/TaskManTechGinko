@@ -1946,7 +1946,7 @@ public class ImportUtil {
 							employee.setOnBoardSource("Import");
 							employee.setUser(null);
 
-                    if((currentRow.getCell(5).getStringCellValue() != null) && (StringUtils.isNotEmpty((currentRow.getCell(5).getStringCellValue())))  &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
+                    if((currentRow.getCell(5).getStringCellValue() != null)){
                         cellNo = 5;
                         employee.setEmpId(getCellValue(currentRow.getCell(5)));
                         employee.setNewEmployee(false);
