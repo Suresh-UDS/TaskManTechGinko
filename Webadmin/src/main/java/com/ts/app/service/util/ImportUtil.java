@@ -1975,7 +1975,12 @@ public class ImportUtil {
 							employee.setUser(null);
  
                             //employeeDTO.setMessage("error.duplicateRecordError");
-                            employeeRepo.saveAndFlush(employee);
+							if(employee.getId()!=null) {
+								employeeRepo.saveAndFlush(employee);
+							}
+							else {
+								employeeRepo.save(employee);
+							}
                       
                     
 					
