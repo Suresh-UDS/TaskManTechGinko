@@ -1193,11 +1193,18 @@ angular.module('timeSheetApp')
                                 $scope.employee.religion !=null &&
                                 $scope.employee.wbsDescription !=null &&
                                 $scope.employee.wbsId !=null &&
-								_.find(documents,{docType:'aadharPhotoCopy'}) &&
+                                ((_.find(documents,{docType:'aadharPhotoCopy'}) &&
 								_.find(documents,{docType:'aadharPhotoCopyBack'}) && 
 								(($scope.employee.newEmployee &&  _.find(documents,{docType:'prePrintedStatement'}) ||
 								  !$scope.employee.newEmployee )
-								)
+								))
+                                ||
+                                (_.find(documents,{docType:'adhar_card_front'}) &&
+                                    _.find(documents,{docType:'adhar_card_back'}) &&
+                                    (($scope.employee.newEmployee &&  _.find(documents,{docType:'bank_passbook_image'}) ||
+                                    !$scope.employee.newEmployee )
+                                ))
+                                )
 
                             ){
                                 $scope.enableApproval = true;
