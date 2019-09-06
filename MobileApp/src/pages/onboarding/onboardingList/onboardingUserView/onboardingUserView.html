@@ -222,7 +222,7 @@
 
     
 
-    <ion-slides pager="true" style="height:60% !important">
+    <ion-slides pager="true" style="height:60% !important" *ngIf="adhar_card_front || adhar_card_back || bank_pass_book || address_proof || driving_license || voter_id || pancard || fingerprint_right || fingerprint_left">
             <ion-slide item-start class="Address Proof" *ngIf="adhar_card_front">
                 <p> Adhar Card Front </p>
                 <img [src]="adhar_card_front" class="image" />
