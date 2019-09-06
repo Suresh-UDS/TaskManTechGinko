@@ -173,6 +173,7 @@ angular.module('timeSheetApp')
 
 	$scope.setSelectedBranch = function(){
  
+		$scope.showCategoriesLoader = true;
 		$scope.selctedSapBusinessCategoriesList = [];
 		$scope.selctedSapBusinessCategoriesList.push(_.find($scope.sapBusinessCategoriesList.rootElements,{elementCode:$scope.selectedBranch}));
 
@@ -181,6 +182,8 @@ angular.module('timeSheetApp')
 		OnBoardingComponent.getElementsByUser($scope.userDetails.id,$scope.selectedBranch).then(function (data) {
 
 			$scope.mappedData = data; 
+
+			$scope.showCategoriesLoader = false;
 			
 			for(var i in $scope.mappedData){
 
@@ -191,6 +194,12 @@ angular.module('timeSheetApp')
 			}
  
 			 
+		}).catch(function(response){
+
+			$scope.showCategoriesLoader = false;
+			
+			$scope.showNotifications('top','center','danger','Please Try Again..');
+
 		});
 
 	}
