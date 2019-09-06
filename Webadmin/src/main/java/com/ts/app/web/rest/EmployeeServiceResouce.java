@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -173,18 +174,27 @@ public class EmployeeServiceResouce {
 	@RequestMapping(value = "/getEmployeeListByWbs/{wbs}", method = RequestMethod.GET)
 	public List<EmployeeDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
 
-		return employeeService.findActionRequired(true, false, "Y", wbs);
+		List<EmployeeDTO> employeeListDto =  employeeService.findActionRequired(true, false, "Y", wbs);
 		
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//
-//		HttpEntity<String> entity = new HttpEntity<String>(headers);
-//
-//		ResponseEntity<List<EmpDTO>> response = restTemplete.exchange(
-//				URL_EMPSERVICE+"api/employeesByWbs/" + wbs, HttpMethod.GET, null,
-//				new ParameterizedTypeReference<List<EmpDTO>>() {
-//				});
-//		return response.getBody();
+		if(CollectionUtils.isEmpty(employeeListDto)) {
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+			HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+			ResponseEntity<List<EmployeeDTO>> response = restTemplete.exchange(
+					URL_EMPSERVICE+"api/employeesByWbs/" + wbs, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<EmployeeDTO>>() {
+					});
+			return response.getBody();
+			
+		}
+		else {
+			
+			return employeeListDto;
+		}
+ 
 	}
  
 
