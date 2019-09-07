@@ -10,6 +10,15 @@
 
 <ion-content >
 
+        <ion-item-group>
+                <ion-item-divider *ngIf="profilePicture">
+                       
+                            <img [src]="profilePicture" class="userProfile" />
+                            <h1>{{userData.name}} {{userData.lastName}}</h1>
+                </ion-item-divider>
+            </ion-item-group>
+
+
     <ion-item-group>
 
         <ion-item-divider *ngIf="userData.projectCode">
@@ -107,13 +116,7 @@
             <ion-label style="text-align: left">{{userData.adharCardNumber}}</ion-label>
         </ion-item-divider>
 
-        <ion-item-divider *ngIf="adhar_card_back">
-                <img [src]="adhar_card_front">
-        </ion-item-divider>
-
-        <ion-item-divider *ngIf="adhar_card_back">
-            <img [src]="adhar_card_back">
-        </ion-item-divider>
+       
 
     </ion-item-group>
 
@@ -159,11 +162,7 @@
         </ion-item-divider>
     </ion-item-group>
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="bank_pass_book">
-            <img [src]="bank_pass_book">
-        </ion-item-divider>
-    </ion-item-group>
+   
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.mobile">
@@ -221,40 +220,55 @@
         </ion-item-divider>
     </ion-item-group>
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="address_proof">
-            <img [src]="address_proof">
-        </ion-item-divider>
-    </ion-item-group>
+    
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="fingerprint_right">
-            <img [src]="fingerprint_right">
-        </ion-item-divider>
-    </ion-item-group>
+    <ion-slides pager="true" style="height:60% !important" *ngIf="adhar_card_front || adhar_card_back || bank_pass_book || address_proof || driving_license || voter_id || pancard || fingerprint_right || fingerprint_left">
+            <ion-slide item-start class="Address Proof" *ngIf="adhar_card_front">
+                <p> Adhar Card Front </p>
+                <img [src]="adhar_card_front" class="image" />
+            </ion-slide>
+            <ion-slide item-start class="Aadhar" *ngIf="adhar_card_back">
+                <p>  Adhar Card Back </p>
+                <img [src]="adhar_card_back" class="image" />
+            </ion-slide>
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="fingerprint_left">
-            <img [src]="fingerprint_left">
-        </ion-item-divider>
-    </ion-item-group>
+            <ion-slide item-start class="Aadhar" *ngIf="bank_pass_book">
+                    <p> Bank Pass Book </p>
+                    <img [src]="bank_pass_book" class="image" />
+                </ion-slide>
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="driving_license">
-            <img [src]="driving_license">
-        </ion-item-divider>
-    </ion-item-group>
+                <ion-slide item-start class="Aadhar" *ngIf="address_proof">
+                        <p> Address Proof </p>
+                        <img [src]="address_proof" class="image" />
+                    </ion-slide>
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="voter_id">
-            <img [src]="voter_id">
-        </ion-item-divider>
-    </ion-item-group>
+                    <ion-slide item-start class="Aadhar" *ngIf="driving_license">
+                            <p> Driving Licence </p>
+                            <img [src]="driving_license" class="image" />
+                        </ion-slide>
 
-    <ion-item-group>
-        <ion-item-divider *ngIf="pancard">
-            <img [src]="pancard">
-        </ion-item-divider>
-    </ion-item-group>
+                        <ion-slide item-start class="Aadhar" *ngIf="voter_id">
+                                <p> Voter Id </p>
+                                <img [src]="voter_id" class="image" />
+                            </ion-slide>
 
+                            <ion-slide item-start class="Aadhar" *ngIf="pancard">
+                                    <p> Pan Card </p>
+                                    <img [src]="pancard" class="image" />
+                                </ion-slide>
+
+                                <ion-slide item-start class="Aadhar" *ngIf="fingerprint_right">
+                                        <p> Finger Print Right </p>
+                                        <img [src]="fingerprint_right" class="image" />
+                                    </ion-slide>
+
+                                    <ion-slide item-start class="Aadhar" *ngIf="fingerprint_left">
+                                            <p> Finger Print Left </p>
+                                            <img [src]="fingerprint_left" class="image" />
+                                        </ion-slide>
+            
+        </ion-slides>
+
+
+    
 </ion-content>

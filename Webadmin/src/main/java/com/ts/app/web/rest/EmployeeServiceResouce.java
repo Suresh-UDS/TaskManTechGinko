@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,6 +49,7 @@ import com.ts.app.repository.SapBusinessCategoriesRepository;
 import com.ts.app.service.EmployeeService;
 import com.ts.app.service.OnboardingDeclarationService;
 import com.ts.app.service.OtaskmanService;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmpDTO;
@@ -261,14 +263,18 @@ public class EmployeeServiceResouce {
 		VelocityContext context = new VelocityContext();
 		 
 		String decalrarionContent = onboardingDeclarationService.getListByLangauge(language).getDeclarationText();
-		
-		
-		
+		 
 		EmployeeDTO employee = employeeService.findByEmpId(empId);
 		
+		
+		
 		if(employee !=null) {
-			context.put("content", decalrarionContent.replace("_______________", String.format("%,.2f",employee.getGross())));
+			
+			String[] declarationContentPart = (decalrarionContent.replace("_______________", (String.format("%,.2f",employee.getGross()))+"/-")).split("\\r?\\n");
+			 
+			context.put("paras", declarationContentPart); 
 			context.put("employee", employee); 
+			context.put("date", DateUtil.formatToDateString(Date.from(employee.getCreatedDate().toInstant()), "dd-MM-yyyy hh:mm a"));
 			EmployeeDocuments documents = employeeDocumentService.findByEmployeeIdAndDocumentType(employee.getId(), "thumbImpressenLeft");
 			context.put("employeeDocuments", documents.getDocUrl());
 			

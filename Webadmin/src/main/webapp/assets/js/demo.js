@@ -1277,12 +1277,11 @@ demo = {
 
         $.notify({
             icon: "notifications",
-            message: msg
-
+            message: msg 
         }, {
             type: type,
             delay: 500,
-            timer: 300000,
+            timer: 3000,
             placement: {
                 from: from,
                 align: align

@@ -8,27 +8,30 @@
 <style type="text/css">
 	.container{
 		padding:15px;
-		font-size:12px;
-		line-height:20px;
+		font-size:16px;
+		line-height:32px;
 	}
 	table{
-		font-size:12px; 
+		font-size:16px; 
+	}
+	p{
+		text-indent: 50px;
 	}
 </style>
 <body>
 <div class="container">
     
+    <h2>Declaration Form</h2>
     
     
-    <table cellpadding="5"  cellspacing="0" border="0" width="100%">
-    	
+	#foreach($para  in $paras)	
+		<p>$para</p>
+	#end
+ 
+    <table cellpadding="5"  cellspacing="0" border="0" width="100%" style="margin-top:50px">
     	<tr>
-    		<td colspan="2">$content <br /><br /></td>
-    	</tr>
-    
-    	<tr>
-    		<td width="50%"><b>Date</b> : $employee.createdDate</td>
-    		<td><b>Palce</b> : $employee.presentCity </td>
+    		<td width="50%"><b>Date</b> : $date</td>
+    		<td style="text-align:right"><b>Place</b> : $employee.onboardedPlace </td>
     	</tr>
     	<tr>
     		<td width="50%"><b>Name</b> : $employee.fullName<br/><br/>
