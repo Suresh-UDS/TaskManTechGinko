@@ -190,6 +190,36 @@ public class    EmployeeService extends AbstractService {
         }
         return employeeDto;
     }
+    
+    private EmployeeDTO prestoredEmployee;
+    
+    public EmployeeDTO getPrestoredEmployee() {
+    	
+    	return prestoredEmployee;
+    	
+    }
+    
+    public List<EmployeeDocumentsDTO> findEmployeeDocumentsByEmpId(String empId) {
+        
+    	Employee employeeDomain = employeeRepository.findByEmpId(empId);
+        
+    	List<EmployeeDocumentsDTO> employeeDocumentsDTO = null; 
+    	
+        if(employeeDomain !=null) {
+        	
+        	prestoredEmployee = mapperUtil.toModel(employeeDomain, EmployeeDTO.class);
+        	
+        	List<EmployeeDocuments> docuemnts = employeeDocumentRepository.findByEmployeeId(employeeDomain.getId());
+        	
+        	employeeDocumentsDTO = mapperUtil.toModelList(docuemnts, EmployeeDocumentsDTO.class);
+        }
+        else {
+        	
+        	prestoredEmployee = null;
+        }
+        
+        return employeeDocumentsDTO;
+    }
 
     public boolean isDuplicate(EmployeeDTO employeeDTO) {
         log.debug("Empid "+employeeDTO.getEmpId());

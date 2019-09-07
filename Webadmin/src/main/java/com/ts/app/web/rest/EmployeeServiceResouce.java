@@ -27,8 +27,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.SapBusinessCategories;
+import com.ts.app.repository.EmployeeDocumentRepository;
 import com.ts.app.repository.SapBusinessCategoriesRepository;
 import com.ts.app.service.EmployeeService;
 import com.ts.app.service.OtaskmanService;
@@ -36,6 +38,7 @@ import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmpDTO;
 import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.EmployeeDocumentsDTO;
 import com.ts.app.web.rest.dto.EmployeeListDTO;
 import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
 import com.ts.app.web.rest.dto.PersonalAreaDTO;
@@ -54,6 +57,9 @@ public class EmployeeServiceResouce {
 
 	@Autowired
 	EmployeeService employeeService;
+	
+	@Autowired 
+	EmployeeDocumentRepository employeeDocumentService;
 
     @Value("${onBoarding.empServe}")
     private String URL_EMPSERVICE;
@@ -187,8 +193,35 @@ public class EmployeeServiceResouce {
 					URL_ORACLE+"getEmployeeListByWbs/" + wbs, HttpMethod.GET, null,
 					new ParameterizedTypeReference<List<EmployeeDTO>>() {
 					});
-			return response.getBody();
 			
+			List<EmployeeDTO> oracleList = response.getBody();
+			
+			if(CollectionUtils.isNotEmpty(oracleList)) {
+				
+				for(int i=0;i<oracleList.size();i++) {
+					
+					List<EmployeeDocumentsDTO> documents = employeeService.findEmployeeDocumentsByEmpId(oracleList.get(i).getEmpId());
+					
+					EmployeeDTO dtoFromLocal =  employeeService.getPrestoredEmployee();
+					
+					if(dtoFromLocal!=null) {
+						
+						oracleList.set(i, dtoFromLocal);
+						
+					}
+					
+					if(documents!=null) {
+						
+						oracleList.get(i).setDocuments(documents);;
+						
+					}
+					
+					
+				}
+				
+			}
+			
+			return oracleList;
 		}
 		else {
 			

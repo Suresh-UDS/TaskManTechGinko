@@ -29,8 +29,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @NotNull
+ 
     @Size(min = 1, max = 10)
     @Column(length = 10, unique = true, nullable = false)
     private String empId;
