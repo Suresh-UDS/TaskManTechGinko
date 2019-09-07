@@ -574,14 +574,9 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.religion"  name="param"  aria-invalid="false" required>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.religion"  name="param"  aria-invalid="false" >
                                     <option value="" class="" selected="selected">Select Religion ..</option>
-                                    <option >Hindu</option>
-                                    <option >Muslim</option>
-                                    <option >Christian</option>
-                                    <option >Buddhism</option>
-                                    <option >Jain</option>
-                                    <option >Sikh</option>
+                                    <option ng-repeat="religion in religionList" value="{{religion.title}}" >{{religion.title}}</option> 
                                 </select>
                             </div>
                         </div>
@@ -593,7 +588,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.bloodGroup"  name="param"  aria-invalid="false" required>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.bloodGroup"  name="param"  aria-invalid="false" >
                                     <option value="" class="" selected="selected">Select Blood Group ..</option>
                                     <option >A+</option>
                                     <option >B+</option>

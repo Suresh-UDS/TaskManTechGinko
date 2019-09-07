@@ -1125,6 +1125,8 @@ angular.module('timeSheetApp')
     $scope.loadEmployee = function() {
 		
 		$scope.loadNomineeDetails();
+		$scope.getReligionList();
+		
         if(parseInt($stateParams.id)>0){
             var empId = parseInt($stateParams.id);
             EmployeeComponent.findOne(empId).then(function (data) {
@@ -1181,8 +1183,7 @@ angular.module('timeSheetApp')
                             if(
 								$scope.employee.accountNumber !=null &&
 								$scope.employee.position !=null &&
-                                $scope.employee.adharCardNumber !=null &&
-								$scope.employee.bloodGroup !=null &&
+                                $scope.employee.adharCardNumber !=null && 
 								$scope.employee.gross !=null &&
                                 $scope.employee.dob !=null &&
                                 $scope.employee.doj !=null &&
@@ -1204,8 +1205,7 @@ angular.module('timeSheetApp')
                                 $scope.employee.presentCity !=null &&
                                 $scope.employee.presentState !=null &&
                                 $scope.employee.projectCode !=null &&
-                                $scope.employee.projectDescription !=null &&
-                                $scope.employee.religion !=null &&
+                                $scope.employee.projectDescription !=null && 
                                 $scope.employee.wbsDescription !=null &&
                                 $scope.employee.wbsId !=null &&
                                 ((_.find(documents,{docType:'aadharPhotoCopy'}) &&
@@ -1271,6 +1271,19 @@ angular.module('timeSheetApp')
 	}
 	
 	$scope.relationShipList = [];
+	$scope.religionList = [];
+
+	$scope.getReligionList = function(){
+
+		OnBoardingComponent.getReligionList().then(function(response){
+ 
+			$scope.religionList = response.data;
+
+		}).catch(function(response){
+ 
+		});
+		
+	}
 
 	$scope.loadNomineeDetails = function () {
 
@@ -1463,7 +1476,10 @@ angular.module('timeSheetApp')
                 if($scope.profilepicImage){
 					requiredUploadingCount ++;
                     $scope.uploadProfilePic($scope.employee.id);
-                }
+				}
+				if(requiredUploadingCount == 0){
+					resultCallback();
+				}
             }
 
 
@@ -1485,10 +1501,8 @@ angular.module('timeSheetApp')
 	var requiredUploadingCount = 0;
 	var uploadingCount = 0;
 
-	var doneUploading = function(){
-
-		uploadingCount++;
-
+	var resultCallback = function(){
+		
 		if(uploadingCount == requiredUploadingCount){
 			
 			$scope.saveOnboardingLoader = false;
@@ -1497,6 +1511,14 @@ angular.module('timeSheetApp')
 
 		}
 
+
+	}
+
+	var doneUploading = function(){
+
+		uploadingCount++;
+
+		resultCallback();
 	}
 
     $scope.uploadAddressProofImage = function(employeeId){

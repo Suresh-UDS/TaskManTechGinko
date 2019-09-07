@@ -18,6 +18,11 @@ angular.module('timeSheetApp')
                     return response;
                 });
             },
+            getReligionList:function(){
+                return $http.get('api/getReligionList').then(function(response){
+                    return response;
+                });
+            },
             create : function(categoryList,onBoardingUserId,branchCode,callback){
                 var cb = callback || angular.noop;
                 return $http.post('api/saveOnboardingUserConfigList/'+onBoardingUserId+'/'+branchCode,categoryList).then(
