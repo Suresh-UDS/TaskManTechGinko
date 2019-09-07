@@ -1,20 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import {ModalController, NavController} from 'ionic-angular';
-import { PopoverController } from 'ionic-angular';
-import { Network } from "@ionic-native/network";
-import { onboardingNewEmployee } from '../onboardingNewEmployee/onboardingNewEmployee';
-import { onboardingEmpStatus } from '../onboardingEmpStatus/onboardingEmpStatus';
-import { onboardingUserView } from '../onboardingList/onboardingUserView/onboardingUserView';
-import { onboardingListFilter } from '../onboardingList/onboardingListFilter/onboardingListFilter';
-import { OnboardingService } from '../../service/onboarding.service';
-import { componentService } from '../../service/componentService';
+import {Component, OnInit} from '@angular/core';
+import {ModalController, NavController, PopoverController} from 'ionic-angular';
+import {Network} from "@ionic-native/network";
+import {onboardingNewEmployee} from '../onboardingNewEmployee/onboardingNewEmployee';
+import {onboardingEmpStatus} from '../onboardingEmpStatus/onboardingEmpStatus';
+import {onboardingUserView} from '../onboardingList/onboardingUserView/onboardingUserView';
+import {OnboardingService} from '../../service/onboarding.service';
+import {componentService} from '../../service/componentService';
 
-
-import { Storage } from '@ionic/storage';
-import { onBoardingModel } from './onboarding';
-import { onBoardingDataModel } from './onboardingDataModel';
+import {Storage} from '@ionic/storage';
+import {onBoardingModel} from './onboarding';
 import {AppConfig} from '../../service/app-config';
-import {JobFilter} from "../../jobs/job-filter/job-filter";
 import {OnBoardingEmployeeFilter} from "./on-boarding-employee-filter/on-boarding-employee-filter";
 
 const searchCriteria = {
@@ -26,6 +21,60 @@ const searchCriteria = {
   list:true,
   employeeEmpId:String,
   name:String
+};
+
+const onBoardingNewModel =  {
+
+  adharCardNumber:'',
+  accountNumber:'',
+  bloodGroup:'',
+  boardInstitute:'',
+  dob:'',
+  doj:'',
+  educationalQulification:'',
+  emergencyContactNumber:'',
+  empId:'',
+  fatherName:'',
+  fullName:'',
+  gender:'',
+  ifscCode:'',
+  lastName:'',
+  maritalStatus:'',
+  mobile:'',
+  motherName:'',
+  name:'',
+  nomineeContactNumber:'',
+  nomineeName:'',
+  nomineeRelationship:'',
+  onBoardSource:'',
+  onBoardedFrom:'',
+  panCard:'',
+  percentage:'',
+  permanentAddress:'',
+  permanentCity:'',
+  permanentState:'',
+  personalIdentificationMark1:'',
+  personalIdentificationMark2:'',
+  phone:'',
+  presentAddress:'',
+  presentCity:'',
+  presentState:'',
+  previousDesignation:'',
+  projectCode:'',
+  projectDescription:'',
+  religion:'',
+  wbsDescription:'',
+  wbsId:'',
+  position:'',
+  submitted:false,
+  kycDetails: {
+    aadharPhotoCopy: 'assets/imgs/placeholder.png',
+    employeeSignature: 'assets/imgs/placeholder.png',
+    profilePicture: 'assets/imgs/placeholder.png',
+    thumbImpressenRight:'assets/imgs/placeholder.png',
+    thumbImpressenLeft:'assets/imgs/placeholder.png',
+    prePrintedStatement: 'assets/imgs/placeholder.png',
+  },
 };
 
 @Component({
@@ -63,6 +112,21 @@ export class onboardingExistEmployee implements OnInit {
   ionViewWillEnter() {
     //  this.component.showLoader("Updating....");
     this.getNomineeRelationships();
+
+  }
+
+  getEmployeeDocuments (empDocDetails,docType){
+
+    // let docuemntObject = _.find(empDocDetails,{"docType":docType});
+
+    if(empDocDetails) {
+      for (var i = 0; i < empDocDetails.length; i++) {
+        if (empDocDetails[i].docType === docType) {
+          return empDocDetails[i].docUrl;
+        }
+      }
+    }
+    return 'assets/imgs/placeholder.png';
 
   }
 
@@ -135,6 +199,8 @@ export class onboardingExistEmployee implements OnInit {
       console.log(this.actionRequiredEmp[i]);
       for (let list in onBoardingModel) {
         for (let key in onBoardingModel[list]) {
+          console.log(this.actionRequiredEmp[i][key]);
+          console.log(onBoardingModel[list][key]);
           onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
         }
         objectkeys = Object.keys(onBoardingModel[list]);
@@ -153,18 +219,14 @@ export class onboardingExistEmployee implements OnInit {
       console.log(Math.floor(objectPercentage / 7));
     }
   }
-  findSavedDuplication(empdt, key) {
+  static findSavedDuplication(empdt, key) {
     let count = 0;
     for (let list of empdt) {
       if (list['employeeCode'] == key) {
         count = count + 1;
       }
     }
-    if (count == 0) {
-      return false;
-    } else {
-      return true;
-    }
+    return count != 0;
   }
   onSegmentChange() {
     console.log("Segment changed");
@@ -217,8 +279,6 @@ export class onboardingExistEmployee implements OnInit {
 
       localStoragedData["completed"] = [];
 
-
-
       this.onboardingService.searchOnBoardingEmployees(searchCriteria).subscribe(response => {
         let objectsKeys;
         let objectsValues;
@@ -233,7 +293,7 @@ export class onboardingExistEmployee implements OnInit {
           console.log("Response is not null");
           for (var i = 0; i < res.length; i++) {
 
-            if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+            if (!onboardingExistEmployee.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
 
               if(res[i]["submitted"]){
                 localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
@@ -286,7 +346,7 @@ export class onboardingExistEmployee implements OnInit {
 
         for (var i = 0; i < res.length; i++) {
 
-          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+          if (!onboardingExistEmployee.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
 
             if(res[i]["submitted"]){
               localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
@@ -346,18 +406,91 @@ export class onboardingExistEmployee implements OnInit {
       this.onboardingService.getEmployeeListByWbs(wbsId).subscribe(res => {
         let objectsKeys;
         let objectsValues;
-
-
+        let employeeData = [];
 
         for (var i = 0; i < res.length; i++) {
 
-          if (!this.findSavedDuplication(localStoragedData['actionRequired'], res[i]['employeeCode'])) {
+          if (!onboardingExistEmployee.findSavedDuplication(localStoragedData['actionRequired'], res[i]['empId'])) {
 
             if(res[i]["submitted"]){
+              console.log("PRofile image");
+              if(res[i]['documents']){
+                console.log(res[i].documents.find(x=>x.doctype === "profilePicture"))
+
+              }
               localStoragedData['completed'][localStoragedData['completed'].length] = res[i];
             }
             else{
-              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = res[i];
+             // employeeData[i] = onBoardingReferenceModel;
+              employeeData[i]={};
+              employeeData[i]['employeeName']=res[i].name;
+              employeeData[i]['employeeCode']=res[i].empId;
+              employeeData[i]['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
+              employeeData[i]['siteDetails'] = {};
+              employeeData[i]['siteDetails']['projectCode'] = res[i].projectCode;
+              employeeData[i]['siteDetails']['projectDescription'] = res[i].projectDescription;
+              employeeData[i]['siteDetails']['wbsId'] = res[i].wbsId;
+              employeeData[i]['siteDetails']['wbsDescription'] = res[i].wbsDescription;
+              employeeData[i]['siteDetails']['position'] = res[i].position;
+              employeeData[i]['siteDetails']['grossSal'] = res[i].gross;
+              employeeData[i]['personalDetails'] = {};
+              employeeData[i]['personalDetails']['employeeCode'] = res[i].empId;
+              employeeData[i]['personalDetails']['employeeName'] = res[i].name;
+              employeeData[i]['personalDetails']['relationshipDetails'] = [{
+                name: res[i].fatherName,
+                relationship: 'Father',
+                contactNumber: ''
+              }, {name: res[i].motherName, relationship: 'Mother', contactNumber: ''}];
+              employeeData[i]['personalDetails']['gender'] = res[i].gender;
+              employeeData[i]['personalDetails']['maritalStatus'] = res[i].maritalStatus;
+              employeeData[i]['personalDetails']['dateOfBirth'] = res[i].dob;
+              employeeData[i]['personalDetails']['dateOfJoining'] = res[i].doj;
+              employeeData[i]['personalDetails']['religion'] = res[i].religion;
+              employeeData[i]['personalDetails']['bloodGroup'] = res[i].bloodGroup;
+              employeeData[i]['personalDetails']['identificationMark'] = [{identificationMark: res[i].personalIdentificationMark1}, {identificationMark: res[i].personalIdentificationMark2}];
+              employeeData[i]['personalDetails']['identificationMark1'] = res[i].personalIdentificationMark1;
+              employeeData[i]['personalDetails']['identificationMark2'] = res[i].personalIdentificationMark2;
+              employeeData[i]['contactDetails'] = {};
+              employeeData[i]['contactDetails']['contactNumber'] = res[i].mobile;
+              employeeData[i]['contactDetails']['emergencyConatctNo'] = res[i].emergencyContactNumber;
+              let communicationAddress = [{address:res[i].presentAddress,city:res[i].presentCity, state:res[i].presentState}];
+              let permanentAddress = [{address:res[i].permanentAddress,city:res[i].permanentCity, state:res[i].permanentState}];
+              employeeData[i]['contactDetails']['communicationAddress'] = communicationAddress;
+              employeeData[i]['contactDetails']['permanentAddress'] = permanentAddress;
+              res[i].addressProof? employeeData[i]['contactDetails']['addressProof'] = res[i].addressProof : employeeData[i]['contactDetails']['addressProof'] = 'assets/imgs/placeholder.png';
+              employeeData[i]['familyAcademicDetails'] = {};
+              employeeData[i]['familyAcademicDetails']['educationQualification'] = [{
+                qualification: res[i].educationalQulification,
+                institute: res[i].boardInstitute
+              }];
+              employeeData[i]['familyAcademicDetails']['nomineeDetail'] = [{
+                name: res[i].nomineeName,
+                relationship: res[i].nomineeRelationship,
+                contactNumber: res[i].nomineeContactNumber,
+                nominePercentage: res[i].percentage
+              }];
+              employeeData[i]['employmentDetails'] = {};
+              employeeData[i]['employmentDetails']['previousEmployee'] = [{
+                name: res[i].employer,
+                designation: res[i].previousDesignation
+              }];
+              employeeData[i]['kycDetails'] = {};
+              employeeData[i]['kycDetails']['aadharNumber'] = res[i].adharCardNumber;
+              employeeData[i]['kycDetails']['bankDetails'] = [{accountNo:res[i].accountNumber, ifsc:res[i].ifscCode}];
+              employeeData[i]['kycDetails']['aadharPhotoCopy'] =this.getEmployeeDocuments(res[i].documents,'aadharPhotoCopy') ;
+              employeeData[i]['kycDetails']['employeeSignature'] = this.getEmployeeDocuments(res[i].documents,'employeeSignature') ;
+              employeeData[i]['kycDetails']['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
+              employeeData[i]['kycDetails']['thumbImpressenRight'] = this.getEmployeeDocuments(res[i].documents,'thumbImpressenRight') ;
+              employeeData[i]['kycDetails']['thumbImpressenLeft'] = this.getEmployeeDocuments(res[i].documents,'thumbImpressenLeft') ;
+              employeeData[i]['kycDetails']['prePrintedStatement'] = this.getEmployeeDocuments(res[i].documents,'prePrintedStatement') ;
+              employeeData[i]['kycDetails']['addressProof'] = this.getEmployeeDocuments(res[i].documents,'addressProof') ;
+              employeeData[i]['kycDetails']['pancardCopy'] = this.getEmployeeDocuments(res[i].documents,'pancardCopy') ;
+              employeeData[i]['kycDetails']['voterId'] = this.getEmployeeDocuments(res[i].documents,'voterId') ;
+              employeeData[i]['kycDetails']['aadharPhotoCopyBack'] = this.getEmployeeDocuments(res[i].documents,'aadharPhotoCopyBack') ;
+              employeeData[i]['kycDetails']['drivingLicense'] = this.getEmployeeDocuments(res[i].documents,'drivingLicense') ;
+              employeeData[i]['declaration']={};
+              employeeData[i]['declaration']['agreeTermsAndConditions'] = false;
+              localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = employeeData[i];
             }
 
             this.storage.set('OnBoardingData', localStoragedData);

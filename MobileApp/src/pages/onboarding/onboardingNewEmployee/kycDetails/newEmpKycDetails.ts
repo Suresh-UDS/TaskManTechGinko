@@ -294,77 +294,24 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       console.log('kyc_storedIndex ' + this.storedIndex);
-      if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('aadharNumber')) {
+      if (localStoragedData['actionRequired'][this.storedIndex]['kycDetails'].hasOwnProperty('aadharNumber')) {
         console.log('KYCdatta all === ' + JSON.stringify(localStoragedData['actionRequired']));
-        console.log('KYCdatta viewinit === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+        console.log('KYCdatta viewinit === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']));
 
-        this.userAllKYCData['aadharPhotoCopy'] = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopy'];
-        if (this.userAllKYCData['aadharPhotoCopy'] != null &&
-          this.userAllKYCData['aadharPhotoCopy'].includes('aadharPhotoCopy')) {
-          this.userAllKYCData['aadharPhotoCopy'] = this.IMG_BASE_URL + this.userAllKYCData['aadharPhotoCopy'];
-        }
-
-
-        this.userAllKYCData['aadharPhotoCopyBack'] = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopyBack'];
-        if (this.userAllKYCData['aadharPhotoCopyBack'] != null &&
-          this.userAllKYCData['aadharPhotoCopyBack'].includes('aadharPhotoCopyBack')) {
-          this.userAllKYCData['aadharPhotoCopyBack'] = this.IMG_BASE_URL + this.userAllKYCData['aadharPhotoCopyBack'];
-        }
-
-
-        this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];
-        if (this.userAllKYCData['employeeSignature'] !== null &&
-          this.userAllKYCData['employeeSignature'].includes('employeeSignature')) {
-          this.userAllKYCData['employeeSignature'] = this.IMG_BASE_URL + this.userAllKYCData['employeeSignature'];
-        }
-        this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['profilePicture'];
-        if (this.userAllKYCData['profilePicture'] !== null && this.userAllKYCData['profilePicture'].includes('profilePicture')) {
-          this.userAllKYCData['profilePicture'] = this.IMG_BASE_URL + this.userAllKYCData['profilePicture'];
-        }
-
-        this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['prePrintedStatement'];
-        if (this.userAllKYCData['prePrintedStatement'] !== null && this.userAllKYCData['prePrintedStatement'].includes('prePrintedStatement')) {
-          this.userAllKYCData['prePrintedStatement'] = this.IMG_BASE_URL + this.userAllKYCData['prePrintedStatement'];
-        }
-        this.userAllKYCData['thumbImpressenRight'] = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenRight'];
-        if (this.userAllKYCData['thumbImpressenRight'] !== null &&
-          this.userAllKYCData['thumbImpressenRight'].includes('thumbImpressenRight')) {
-          this.userAllKYCData['thumbImpressenRight'] = this.IMG_BASE_URL + this.userAllKYCData['thumbImpressenRight'];
-        }
-
-        this.userAllKYCData['thumbImpressenLeft'] = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
-        if (this.userAllKYCData['thumbImpressenLeft'] !== null &&
-          this.userAllKYCData['thumbImpressenLeft'].includes('thumbImpressenLeft')) {
-          this.userAllKYCData['thumbImpressenLeft'] = this.IMG_BASE_URL + this.userAllKYCData['thumbImpressenLeft'];
-          console.log('kyc=aadhaar' + this.userAllKYCData['thumbImpressenLeft']);
-        }
-
-
-        this.userAllKYCData['voterId'] = localStoragedData['actionRequired'][this.storedIndex]['voterId'];
-        if (this.userAllKYCData['voterId'] !== null &&
-          this.userAllKYCData['voterId'].includes('voterId')) {
-          this.userAllKYCData['voterId'] = this.IMG_BASE_URL + this.userAllKYCData['voterId'];
-        }
-
-
-        this.userAllKYCData['pancardCopy'] = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
-        if (this.userAllKYCData['pancardCopy'] !== null &&
-          this.userAllKYCData['pancardCopy'].includes('pancardCopy')) {
-          this.userAllKYCData['pancardCopy'] = this.IMG_BASE_URL + this.userAllKYCData['pancardCopy'];
-        }
-
-
-        this.userAllKYCData['drivingLicense'] = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
-        if (this.userAllKYCData['drivingLicense'] !== null &&
-          this.userAllKYCData['drivingLicense'].includes('drivingLicense')) {
-          this.userAllKYCData['drivingLicense'] = this.IMG_BASE_URL + this.userAllKYCData['drivingLicense'];
-        }
-
-
-        this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['aadharNumber']);
+        this.userAllKYCData['aadharPhotoCopy'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopy'];
+        this.userAllKYCData['aadharPhotoCopyBack'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopyBack'];
+        this.userAllKYCData['employeeSignature'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['employeeSignature'];
+        this.userAllKYCData['profilePicture'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['profilePicture'];
+        this.userAllKYCData['prePrintedStatement'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['prePrintedStatement'];
+        this.userAllKYCData['thumbImpressenRight'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenRight'];
+        this.userAllKYCData['thumbImpressenLeft'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenLeft'];
+        this.userAllKYCData['voterId'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['voterId'];
+        this.userAllKYCData['pancardCopy'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['pancardCopy'];
+        this.userAllKYCData['drivingLicense'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['drivingLicense'];
+        this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']);
         console.log('kyc=aadhaar2' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
         //this.onboardingKYCForm.patchValue();
-        this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+        this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']);
         this.sendValidationMessage();
       }
     });

@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Alert } from 'ionic-angular';
+import {OnboardingService} from "../../../service/onboarding.service";
 
 @Component({
   selector: 'page-personalDetails-new',
@@ -18,17 +19,24 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   today;
   minAge;
   maxAge;
+  religionList:any[];
   // setMinDate: any;
   formActionStatus: any;
   pipe = new DatePipe('en-US');
 
-  constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
+  constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService, private onBoardingService: OnboardingService) { }
   ngOnInit() {
     this.storage.get('onboardingCurrentIndex').then(data => {
       console.log(data);
       console.log(data['index']);
       this.storedIndex = data['index'];
       this.formActionStatus = data['action'];
+    })
+
+    this.onBoardingService.getReligionList().subscribe(data=>{
+      if(data){
+        this.religionList = data;
+      }
     })
 
     this.today = new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toJSON().split('T')[0];
@@ -132,7 +140,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       if (localStoragedData['actionRequired'][this.storedIndex]) {      
         if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('employeeName')) {
           console.log('PERSONAL - ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-          this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+          this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']);
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
           // this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
           // }'DD-MM-YYYY').format('YYYY-MM-DD');

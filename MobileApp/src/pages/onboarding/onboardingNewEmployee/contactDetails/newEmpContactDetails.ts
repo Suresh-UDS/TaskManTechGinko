@@ -59,7 +59,7 @@ export class newEmpContactDetails implements OnInit {
     { name: 'Uttarakhand', key: 'uttarakhand' },
     { name: 'Uttar Pradesh', key: 'uttar pradesh' },
     { name: 'West Bengal', key: 'west bengal' },
-  ]
+  ];
   constructor(private fb: FormBuilder, private actionSheetCtrl: ActionSheetController, private file: File,
     private storage: Storage, private filePath: FilePath, private camera: Camera, private messageService: onBoardingDataService) { }
   ngOnInit() {
@@ -75,14 +75,13 @@ export class newEmpContactDetails implements OnInit {
       permanentAddress: this.fb.array([this.addPermanentAddress()])
     });
     this.onboardingContactDetailsForm.setValidators([this.validateNumberMinLength(), this.validateAreNotEqual()]);
-    //this.onboardingContactDetailsForm.setValidators(this.validateAreNotEqual());
 
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
         this.onboardingContactDetailsForm.reset();
         this.addressProof = null;
       }
-    })
+    });
 
     this.onboardingContactDetailsSubscription = this.onboardingContactDetailsForm.statusChanges.subscribe(status => {
       console.log('emp_contact2 '+ this.onboardingContactDetailsForm.value);
@@ -147,7 +146,6 @@ export class newEmpContactDetails implements OnInit {
     });
   }
 
-
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'choose image from',
@@ -188,7 +186,7 @@ export class newEmpContactDetails implements OnInit {
 
       this.filePath.resolveNativePath(imageURI)
         .then(imageURI => {
-          console.log(' get file path -- ' + imageURI)
+          console.log(' get file path -- ' + imageURI);
 
           this.addressProof = imageURI;
           this.addressProofImage = true;
@@ -197,12 +195,6 @@ export class newEmpContactDetails implements OnInit {
         });
     })
   }
-
-
-  // addEmployee(){
-  //   let fg = this.onboardingContactDetailsForm. (new Employee());
-  //   this.empFormArray.push(fg);	  
-  // }
 
   get permAddrForm() {
     return this.onboardingContactDetailsForm.get('permanentAddress') as FormArray
@@ -291,23 +283,23 @@ export class newEmpContactDetails implements OnInit {
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex]) {
 
-        if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('contactNumber')) {
+        if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails'].hasOwnProperty('contactNumber')) {
 
-          console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+          console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']));
 
-          this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
+          this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'];
           console.log(' - address - ' + this.addressProof);
 
           if (this.addressProof !== null && this.addressProof.includes('addressProof')) {
             this.addressProof = this.IMG_BASE_URL + this.addressProof;
           }
 
-          console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']));
+          console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']));
 
-          this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
-          if (localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'] !== null) {
+          this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']);
+          if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'] !== null) {
             this.onboardingContactDetailsForm.controls['emergencyConatctNo']
-              .setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
+              .setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']);
           }
         }
       }

@@ -30,9 +30,9 @@
                         <ion-item>
                             <ion-label class="label-text trequired" stacked>Gender</ion-label>
                             <ion-select interface="popover" formControlName="gender">
-                                <ion-option value="male">Male</ion-option>
-                                <ion-option value="female">Female</ion-option>
-                                <ion-option value="others">Others</ion-option>
+                                <ion-option value="MALE">Male</ion-option>
+                                <ion-option value="FEMALE">Female</ion-option>
+                                <ion-option value="OTHERS">Others</ion-option>
                             </ion-select>
                         </ion-item>
                         <!-- <label class="control-label">Gender</label>
@@ -70,13 +70,8 @@
                         <ion-item>
                             <ion-label class="label-text" stacked>Religion</ion-label>
                             <ion-select interface="popover" formControlName="religion">
-                                <ion-option value="hindu">Hindu</ion-option>
-                                <ion-option value="muslim">Muslim</ion-option>
-                                <ion-option value="christian">Christian</ion-option>
-                                <ion-option value="sikh">Sikh</ion-option>
-                                <ion-option value="jain">Jain</ion-option>
-                                <ion-option value="buddhism">Buddhism</ion-option>
-                                <ion-option value="others">Other</ion-option>
+                                <ion-option *ngFor="let religion of religionList;let i=index" [value]="religion.title" > {{religion.title}}</ion-option>
+
                             </ion-select>
                         </ion-item>
 

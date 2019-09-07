@@ -50,7 +50,7 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />                  
+                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">
@@ -127,7 +127,7 @@
                                 <ion-list>
                                     <ion-item>
                                         <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
-                                        <h2 class="textColor">{{list['name']}} {{list['lastName']}}</h2>
+                                        <h2 class="textColor">{{list['name']}} </h2>
                                     </ion-item>
                                     <ion-item>
                                         <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->

@@ -1,44 +1,50 @@
 
-export const onBoardingModel =  {
+export const onBoardingReferenceModel =  {
+      employeeName:'',
+      employeeCode:'',
+      percentage:0,
 
       siteDetails:{
             projectCode:'',
             wbsId:'',
             projectDescription:'',
             wbsDescription:'',
-            position:''
+            position:'',
+            grossSal:0.00
 
       },
 
       personalDetails: {
             employeeCode:  '',
             employeeName: '',
-            relationshipDetails: '',
+            relationshipDetails: [],
             gender: '',
             maritalStatus: '',
             dateOfBirth: '',
             dateOfJoining: '',
             religion: '',
             bloodGroup: '',
-            identificationMark: ''
+            identificationMark: [],
+            identificationMark1:'',
+            identificationMark2:''
       },
       contactDetails: {
             contactNumber: '',
             emergencyConatctNo: '',
-            communicationAddress: '',
-            permanentAddress: '',
+            communicationAddress: {},
+            permanentAddress: {},
             addressProof: 'assets/imgs/placeholder.png'
       },
       familyAcademicDetails: {
-            educationQualification: '',
-            nomineeDetail: '',
+            educationQualification: {},
+            nomineeDetail: {},
       },
       employmentDetails: {
-            previousEmployee : '',
+            previousEmployee : {},
       },
       kycDetails: {
             aadharNumber: '',
-            bankDetails: '',
+            bankDetails: [],
             aadharPhotoCopy: 'assets/imgs/placeholder.png',
             employeeSignature: 'assets/imgs/placeholder.png',
             profilePicture: 'assets/imgs/placeholder.png',

@@ -17,8 +17,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { Jsonp } from '../../../../node_modules/@angular/http';
 import { onBoardingDataModel } from '../onboardingList/onboardingDataModel';
 
-
-import * as _ from 'underscore';
 import { declaration} from '../../../pages/onboarding/onboardingNewEmployee/declaration/declaration';
 import {NewEmpSiteDetails} from "./new-emp-site-details/new-emp-site-details";
 //import{ declaration} from '../../declaration/declaration';
@@ -69,13 +67,14 @@ export class onboardingNewEmployee {
 
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         console.log('projectId TYPES123 ' + JSON.stringify(data));
+        console.log(data)
 
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
           console.log('no projectId');
 
           // }}
-          this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);
+          this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 7) * 100);
         } else {
           Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
           this.storage.set('OnBoardingData', localStoragedData);
@@ -309,175 +308,172 @@ export class onboardingNewEmployee {
     var tempIndex;
     this.storeFormData(this.currentFormValues).then(data => {
       console.log(' store resolve ' + data);
-      if (data == 'success') {
-        this.storage.get('OnBoardingData').then((localStoragedData) => {
-
-          localStoragedData['actionRequired'][this.storedIndex]["submitted"] = true;
-
-          let empCode = localStoragedData['actionRequired'][this.storedIndex]["employeeCode"];
-
-          tempIndex = _.findIndex(localStoragedData['completed'],{employeeCode:empCode});
-
-          if(tempIndex == -1){
-
-            tempIndex = localStoragedData['completed'].length;
-
-            console.log("Completed List ",localStoragedData['completed']);
-
-            console.log("loading ========" + empCode);
-
-            console.log("loading ========" + tempIndex);
-
-            console.log("loading ========" + JSON.stringify(localStoragedData['completed'][tempIndex]));
-
-          }
-          
-
-          //if (this.network.type != 'none') {
-          // this.componentService.showLoader("Loading OnBoarding");
-          console.log(localStoragedData['actionRequired'][this.storedIndex]);
-          console.log(localStoragedData['actionRequired'][this.storedIndex]['projectCode']);
-          console.log(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]);
-          console.log(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo']);
-          var employeeDetails = {
-            adharCardNumber:null,
-            accountNumber:null,
-            bloodGroup:null,
-            boardInstitute:null,
-            dob:null,
-            doj:null,
-            educationalQulification:null,
-            emergencyContactNumber:null,
-            empId:null,
-            fatherName:null,
-            fullName:null,
-            gender:null,
-            ifscCode:null,
-            lastName:null,
-            maritalStatus:null,
-            mobile:null,
-            motherName:null,
-            name:null,
-            nomineeContactNumber:null,
-            nomineeName:null,
-            nomineeRelationship:null,
-            onBoardSource:null,
-            onBoardedFrom:null,
-            panCard:null,
-            percentage:null,
-            permanentAddress:null,
-            permanentCity:null,
-            permanentState:null,
-            personalIdentificationMark1:null,
-            personalIdentificationMark2:null,
-            phone:null,
-            presentAddress:null,
-            presentCity:null,
-            presentState:null,
-            previousDesignation:null,
-            projectCode:null,
-            projectDescription:null,
-            religion:null,
-            wbsDescription:null,
-            wbsId:null,
-            position:null,
-            submitted:false
-
-
-          };
-          employeeDetails.adharCardNumber = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
-          employeeDetails.mobile = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
-          employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
-          employeeDetails.bloodGroup = localStoragedData['actionRequired'][this.storedIndex]['bloodGroup'];
-          employeeDetails.boardInstitute = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['institute'];
-          employeeDetails.educationalQulification = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['qualification'];
-          employeeDetails.educationalQulification = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['qualification'];
-          employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
-          employeeDetails.doj = localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'];
-          employeeDetails.emergencyContactNumber = localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0];
-          employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]["name"] ;
-          employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]["name"] ;
-          employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['religion'];
-          employeeDetails.gender = localStoragedData['actionRequired'][this.storedIndex]['gender'];
-          employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
-          employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
-          employeeDetails.nomineeContactNumber = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['contactNumber'];
-          employeeDetails.nomineeName = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['name'];
-          employeeDetails.nomineeRelationship = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['relationship'];
-          employeeDetails.percentage = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nominePercentage'];
-          employeeDetails.onBoardSource = 'Mobile';
-          employeeDetails.onBoardedFrom = 'Mobile';
-          employeeDetails.panCard = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
-          employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
-          employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
-          employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
-          employeeDetails.personalIdentificationMark1 = localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0];
-          employeeDetails.personalIdentificationMark2 = localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1];
-          employeeDetails.phone = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
-          if(localStoragedData['actionRequired'][this.storedIndex]['presentAddress']){
-            employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
-            employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
-            employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
-          }else{
-            employeeDetails.presentAddress = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
-            employeeDetails.presentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
-            employeeDetails.presentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
-          }
-          if(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['isEmploymentEarlier'])   {
-            // employeeDetails.previousDesignation = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
-          }
-          employeeDetails.projectCode = localStoragedData['actionRequired'][this.storedIndex]['projectCode'];
-          employeeDetails.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['projectDescription'];
-          employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['religion'];
-          employeeDetails.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['wbsDescription'];
-          employeeDetails.position = localStoragedData['actionRequired'][this.storedIndex]['position'];
-          employeeDetails.wbsId = localStoragedData['actionRequired'][this.storedIndex]['wbsId'];
-          let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
-          employeeDetails.name = name.split(" ")[0];
-          employeeDetails.lastName = name.split(" ")[1];
-          employeeDetails.fullName = name;
-          let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
-          employeeDetails.empId = adharNumber.toString().substring(5);
-          console.log("employee details");
-          console.log(employeeDetails);
-
-          this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
-            console.log("Sucessfully saved employees");
-            console.log(res);
-
-            localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
-            //localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-
-            console.log("res =======" + JSON.stringify(res));
-
-            localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];
-            console.log("res id=======" + res['id']);
-
-
-
-            this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
-
-              console.log('res_image_api ' + JSON.stringify(res));
-              //localStoragedData['completed'].splice(tempIndex, 1);
-              localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-              this.storage.set('OnBoardingData', localStoragedData);
-              // cg
-              this.navCtrl.setRoot(onboardingExistEmployee);
-              this.componentService.showToastMessage("Employee saved successfully ", "center");
-            }, err => {
-              this.componentService.showToastMessage("Error in saving Employee ", "center");
-
-            })
-
-
-          },err=>{
-            console.log("Error in saving employee");
-            console.log(err);
-            this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
-
-          })
-        });
-      }
+      // if (data == 'success') {
+      //   this.storage.get('OnBoardingData').then((localStoragedData) => {
+      //
+      //     localStoragedData['actionRequired'][this.storedIndex]["submitted"] = true;
+      //
+      //     let empCode = localStoragedData['actionRequired'][this.storedIndex]["employeeCode"];
+      //
+      //     tempIndex = _.findIndex(localStoragedData['completed'],{employeeCode:empCode});
+      //
+      //     if(tempIndex == -1){
+      //
+      //       tempIndex = localStoragedData['completed'].length;
+      //
+      //       console.log("Completed List ",localStoragedData['completed']);
+      //
+      //       console.log("loading ========" + empCode);
+      //
+      //       console.log("loading ========" + tempIndex);
+      //
+      //       console.log("loading ========" + JSON.stringify(localStoragedData['completed'][tempIndex]));
+      //
+      //     }
+      //
+      //     console.log(localStoragedData['actionRequired'][this.storedIndex]);
+      //     console.log(localStoragedData['actionRequired'][this.storedIndex]['projectCode']);
+      //     console.log(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]);
+      //     console.log(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo']);
+      //     var employeeDetails = {
+      //       adharCardNumber:null,
+      //       accountNumber:null,
+      //       bloodGroup:null,
+      //       boardInstitute:null,
+      //       dob:null,
+      //       doj:null,
+      //       educationalQulification:null,
+      //       emergencyContactNumber:null,
+      //       empId:null,
+      //       fatherName:null,
+      //       fullName:null,
+      //       gender:null,
+      //       ifscCode:null,
+      //       lastName:null,
+      //       maritalStatus:null,
+      //       mobile:null,
+      //       motherName:null,
+      //       name:null,
+      //       nomineeContactNumber:null,
+      //       nomineeName:null,
+      //       nomineeRelationship:null,
+      //       onBoardSource:null,
+      //       onBoardedFrom:null,
+      //       panCard:null,
+      //       percentage:null,
+      //       permanentAddress:null,
+      //       permanentCity:null,
+      //       permanentState:null,
+      //       personalIdentificationMark1:null,
+      //       personalIdentificationMark2:null,
+      //       phone:null,
+      //       presentAddress:null,
+      //       presentCity:null,
+      //       presentState:null,
+      //       previousDesignation:null,
+      //       projectCode:null,
+      //       projectDescription:null,
+      //       religion:null,
+      //       wbsDescription:null,
+      //       wbsId:null,
+      //       position:null,
+      //       submitted:false
+      //
+      //
+      //     };
+      //     employeeDetails.adharCardNumber = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
+      //     employeeDetails.mobile = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
+      //     employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
+      //     employeeDetails.bloodGroup = localStoragedData['actionRequired'][this.storedIndex]['bloodGroup'];
+      //     employeeDetails.boardInstitute = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['institute'];
+      //     employeeDetails.educationalQulification = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['qualification'];
+      //     employeeDetails.educationalQulification = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['qualification'];
+      //     employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
+      //     employeeDetails.doj = localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'];
+      //     employeeDetails.emergencyContactNumber = localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0];
+      //     employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]["name"] ;
+      //     employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]["name"] ;
+      //     employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['religion'];
+      //     employeeDetails.gender = localStoragedData['actionRequired'][this.storedIndex]['gender'];
+      //     employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
+      //     employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
+      //     employeeDetails.nomineeContactNumber = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['contactNumber'];
+      //     employeeDetails.nomineeName = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['name'];
+      //     employeeDetails.nomineeRelationship = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['relationship'];
+      //     employeeDetails.percentage = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nominePercentage'];
+      //     employeeDetails.onBoardSource = 'Mobile';
+      //     employeeDetails.onBoardedFrom = 'Mobile';
+      //     employeeDetails.panCard = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
+      //     employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
+      //     employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
+      //     employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
+      //     employeeDetails.personalIdentificationMark1 = localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0];
+      //     employeeDetails.personalIdentificationMark2 = localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1];
+      //     employeeDetails.phone = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
+      //     if(localStoragedData['actionRequired'][this.storedIndex]['presentAddress']){
+      //       employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
+      //       employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
+      //       employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
+      //     }else{
+      //       employeeDetails.presentAddress = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
+      //       employeeDetails.presentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
+      //       employeeDetails.presentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
+      //     }
+      //     if(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['isEmploymentEarlier'])   {
+      //       // employeeDetails.previousDesignation = localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
+      //     }
+      //     employeeDetails.projectCode = localStoragedData['actionRequired'][this.storedIndex]['projectCode'];
+      //     employeeDetails.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['projectDescription'];
+      //     employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['religion'];
+      //     employeeDetails.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['wbsDescription'];
+      //     employeeDetails.position = localStoragedData['actionRequired'][this.storedIndex]['position'];
+      //     employeeDetails.wbsId = localStoragedData['actionRequired'][this.storedIndex]['wbsId'];
+      //     let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+      //     employeeDetails.name = name.split(" ")[0];
+      //     employeeDetails.lastName = name.split(" ")[1];
+      //     employeeDetails.fullName = name;
+      //     let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
+      //     employeeDetails.empId = adharNumber.toString().substring(5);
+      //     console.log("employee details");
+      //     console.log(employeeDetails);
+      //
+      //     this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
+      //       console.log("Sucessfully saved employees");
+      //       console.log(res);
+      //
+      //       localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
+      //       //localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+      //
+      //       console.log("res =======" + JSON.stringify(res));
+      //
+      //       localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];
+      //       console.log("res id=======" + res['id']);
+      //
+      //
+      //
+      //       this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
+      //
+      //         console.log('res_image_api ' + JSON.stringify(res));
+      //         //localStoragedData['completed'].splice(tempIndex, 1);
+      //         localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+      //         this.storage.set('OnBoardingData', localStoragedData);
+      //         // cg
+      //         this.navCtrl.setRoot(onboardingExistEmployee);
+      //         this.componentService.showToastMessage("Employee saved successfully ", "center");
+      //       }, err => {
+      //         this.componentService.showToastMessage("Error in saving Employee ", "center");
+      //
+      //       })
+      //
+      //
+      //     },err=>{
+      //       console.log("Error in saving employee");
+      //       console.log(err);
+      //       this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
+      //
+      //     })
+      //   });
+      // }
     });
   }
 

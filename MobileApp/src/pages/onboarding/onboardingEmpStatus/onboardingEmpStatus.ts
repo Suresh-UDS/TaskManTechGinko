@@ -66,9 +66,11 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
           console.log("key data");
           console.log(this.onboardingFormStatus[i]['key']);
           for (let key in onBoardingModel[keyData]) {
-            console.log(localStoragedData['actionRequired'][currentIndex][key]);
-            console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][key]);
-            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][key];
+            console.log("Key - "+key);
+            console.log("KeyData - "+keyData);
+            console.log(localStoragedData['actionRequired'][currentIndex][keyData][key]);
+            console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][keyData][key]);
+            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][keyData][key];
           }
 
           objectkeys = Object.keys(onBoardingModel[keyData]);
