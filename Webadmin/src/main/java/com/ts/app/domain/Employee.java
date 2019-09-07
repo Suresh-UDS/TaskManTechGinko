@@ -240,6 +240,10 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private boolean syncToSAP;
 
     private boolean newEmployee;
+    
+    private float gross;
+    
+    private String onboardedPlace;
 
     @OneToOne(fetch = FetchType.LAZY,optional=true,cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
@@ -255,7 +259,18 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     }
 
 
-    public String getFatherName() {
+    public String getOnboardedPlace() {
+		return onboardedPlace;
+	}
+
+
+	public void setOnboardedPlace(String onboardedPlace) {
+		this.onboardedPlace = onboardedPlace;
+	}
+
+
+
+	public String getFatherName() {
 		return fatherName;
 	}
 
@@ -922,6 +937,16 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
 	public void setSubmittedOn(ZonedDateTime submittedOn) {
 		this.submittedOn = submittedOn;
+	}
+
+
+	public float getGross() {
+		return gross;
+	}
+
+
+	public void setGross(float gross) {
+		this.gross = gross;
 	}
 	
 }

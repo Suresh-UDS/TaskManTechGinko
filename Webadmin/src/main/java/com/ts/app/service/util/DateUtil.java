@@ -117,6 +117,15 @@ public class DateUtil {
 
 	}
 
+	public static String formatToDateString(ZonedDateTime date,String format) {
+		if(date != null) {
+	        DateFormat dtFormat = new SimpleDateFormat(format);
+	        String strDate = dtFormat.format(date);
+	        return strDate;
+		}
+		return StringUtils.EMPTY;
+	}
+	
 	public static String formatToDateString(Date date,String format) {
 		if(date != null) {
 	        DateFormat dtFormat = new SimpleDateFormat(format);

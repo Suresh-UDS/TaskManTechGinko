@@ -40,6 +40,7 @@
                                 <td class="col-sm-8">{{employee.wbsId}}</td>
 
                             </tr>
+                            
                             <tr>
 
                                 <td class="col-sm-4">Description <span class="red-star">*</span></td>
@@ -50,6 +51,13 @@
 
                                 <td class="col-sm-4">Designation No<span class="red-star">*</span></td>
                                 <td class="col-sm-8">{{employee.position  }}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="col-sm-4">Gross<span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.gross}}</td>
 
                             </tr>
 
@@ -388,12 +396,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
-                <h5 class="modal-title" id="myModalLabel">Job Photo</h5>
+                <h5 class="modal-title" id="myModalLabel">Photo</h5>
             </div>
             <div class="modal-body">
 
                 <div class="txt-align-center">
-                    <img id="photoStart" style="width:100%; height:100%" />
+                    <img id="photoStart" width="100%" />
                 </div>
 
 
@@ -527,21 +535,35 @@
         </div>
     </div>
 </div>
-    <p ng-if="!employee.verified && !enableApproval" class="txt-align-rgt">Please enter all mandatory fields and upload mandatory images to approve employee</p>
-
-</div>
-
-<div class="txt-align-rgt">
-
-    <button class="btn btn-default close-button-right b10" type="button" ng-click="conform('back')" id="close-button-right">
-        Back
-    </button>
-
-    <button has-permission="OnBoarding:Approve" class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval" ng-click="conform('approve')" id="close-button-right"  ng-disabled="approveOnboardingLoader" >
-        <span  ng-show="approveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Approve Employee
-    </button>
     
-    <button has-permission="OnBoarding:Edit" class="btn btn-success ld ld-over-inverse" type ="button" ng-click="editpage('edit')" id="close-button-right">Edit
-    </button>
 
 </div>
+
+<div class="row">
+
+    <div class="col-lg-7">
+        <p   class="txt-align-lft">Download Declaration Forms for below languages</p>
+
+        <button ng-if="fingerprintLeftUrl || fingerprintRightUrl" class="btn btn-primary close-button-right b10" type="button" ng-repeat="declaration in declarationTypes" ng-click="downloadDeclarationForm(declaration.language)"><i class="fas fa-download"></i> &nbsp;{{declaration.language}}</button>
+
+    </div>
+
+    <div class="col-lg-5 txt-align-rgt" ng-init="loadDeclarionLanguages()">
+
+        <p ng-if="!employee.verified && !enableApproval" class="txt-align-rgt">Please enter all mandatory fields and upload mandatory images to approve employee</p>
+
+        <button class="btn btn-default close-button-right b10" type="button" ng-click="conform('back')" id="close-button-right">
+            Back
+        </button>
+    
+        <button has-permission="OnBoarding:Approve" class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval" ng-click="conform('approve')" id="close-button-right"  ng-disabled="approveOnboardingLoader" >
+            <span  ng-show="approveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Approve Employee
+        </button>
+        
+        <button has-permission="OnBoarding:Edit" class="btn btn-success ld ld-over-inverse" type ="button" ng-click="editpage('edit')" id="close-button-right">Edit
+        </button>
+
+    </div>
+
+</div>
+ 

@@ -27,4 +27,11 @@ public class OnboardingDeclarationService {
 		List<OnboardingDeclarationDTO> declarationList = mapperUtil.toModelList(declarationModel, OnboardingDeclarationDTO.class);
 		return declarationList;
 	}
+	
+	public OnboardingDeclarationDTO getListByLangauge(String language){
+		
+		OnboardingDeclaration declarationModel = onboardingDeclarationRepository.findByLanguageAndActive(language, "Y");
+		OnboardingDeclarationDTO declarationList = mapperUtil.toModel(declarationModel, OnboardingDeclarationDTO.class);
+		return declarationList;
+	}
 }

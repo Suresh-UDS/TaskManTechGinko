@@ -63,6 +63,8 @@ public class EmployeeDTO extends BaseDTO {
     private boolean checkedIn;
 
     private long jobId;
+    
+    private float gross;
 
     private String jobTitle;
 
@@ -230,6 +232,7 @@ public class EmployeeDTO extends BaseDTO {
 
     private String projectDescription;
 
+    private String onboardedPlace;
 
     public String getFatherName() {
 		return fatherName;
@@ -1059,5 +1062,22 @@ public class EmployeeDTO extends BaseDTO {
 	public void setAadharNumber(String aadharNumber) {
 		this.aadharNumber = aadharNumber;
 	}
+
+	public float getGross() {
+		return gross;
+	}
+
+	public void setGross(float gross) {
+		this.gross = gross;
+	}
+
+	public String getOnboardedPlace() {
+		return onboardedPlace;
+	}
+
+	public void setOnboardedPlace(String onboardedPlace) {
+		this.onboardedPlace = onboardedPlace;
+	}
+	
 	
 }
