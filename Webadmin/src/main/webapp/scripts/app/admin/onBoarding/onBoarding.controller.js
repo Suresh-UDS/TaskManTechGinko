@@ -1126,7 +1126,7 @@ angular.module('timeSheetApp')
 		
 		$scope.loadNomineeDetails();
 		$scope.getReligionList();
-		
+
         if(parseInt($stateParams.id)>0){
             var empId = parseInt($stateParams.id);
             EmployeeComponent.findOne(empId).then(function (data) {
@@ -1212,14 +1212,7 @@ angular.module('timeSheetApp')
 								_.find(documents,{docType:'aadharPhotoCopyBack'}) && 
 								(($scope.employee.newEmployee &&  _.find(documents,{docType:'prePrintedStatement'}) ||
 								  !$scope.employee.newEmployee )
-								))
-                                ||
-                                (_.find(documents,{docType:'adhar_card_front'}) &&
-                                    _.find(documents,{docType:'adhar_card_back'}) &&
-                                    (($scope.employee.newEmployee &&  _.find(documents,{docType:'bank_passbook_image'}) ||
-                                    !$scope.employee.newEmployee )
-                                ))
-                                )
+								)) )
 
                             ){
                                 $scope.enableApproval = true;
@@ -1388,7 +1381,9 @@ angular.module('timeSheetApp')
 				if(data.type!="E"){
 
 					$scope.employee.verified =true;
-					$location.path('/onBoarding-list'); 
+					$scope.employee.empId = data.empId ;
+					$scope.enableApproval = false;
+					//$location.path('/onBoarding-list'); 
 					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId + ". SAP Message [ "+data.message+" ]");
 				}
 				else{
