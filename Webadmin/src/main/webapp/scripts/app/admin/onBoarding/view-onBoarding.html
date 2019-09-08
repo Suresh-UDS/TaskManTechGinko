@@ -558,9 +558,9 @@
 
     <div class="col-lg-5 txt-align-rgt" ng-init="loadDeclarionLanguages()">
 
-        <p ng-if="!employee.verified && !enableApproval && employee.submitted" class="txt-align-rgt">Please enter all mandatory fields and upload mandatory images to approve employee</p>
+        <p ng-if="!employee.verified && !enableApproval && employee.submitted" class="txt-align-rgt text-danger">Please enter all mandatory fields and upload mandatory images to approve employee</p>
 
-        <p ng-if="!employee.submitted">Imported Employee details are not submitted. so only can view</p>
+        <p ng-if="!employee.submitted" class="text-danger">Imported Employee details are not submitted. so only can view</p>
 
         <p ng-if="enableApproval" >&nbsp;</p>
         

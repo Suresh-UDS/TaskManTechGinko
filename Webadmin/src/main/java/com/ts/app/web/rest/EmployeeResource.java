@@ -13,9 +13,12 @@ import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.NomineeRelationship;
 import com.ts.app.domain.Religion;
 import com.ts.app.domain.Ticket;
+import com.ts.app.domain.User;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -101,6 +104,9 @@ public class EmployeeResource {
 
     @Inject
     private ImportService importService;
+    
+    @Value("${onBoarding.dummyUser}")
+    private String dummyUser;
 
     @Inject
     public EmployeeResource(EmployeeService employeeService) {
@@ -168,8 +174,8 @@ public class EmployeeResource {
     @RequestMapping(value = "/editOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> editOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
-        long userId = SecurityUtils.getCurrentUserId();
-        employeeDTO.setUserId(userId);
+        User user = userRepository.findByLogin(dummyUser);
+        if(employeeDTO.getUserId() == 0) { employeeDTO.setUserId(user.getId()); }
         try {
                 employeeDTO = employeeService.editOnBoardingEmployeeInfo(employeeDTO);
         }catch(Exception e) {
@@ -181,8 +187,8 @@ public class EmployeeResource {
     @RequestMapping(value = "/verifyOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ZempReturn verifyOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
-        long userId = SecurityUtils.getCurrentUserId();
-        employeeDTO.setUserId(userId);
+    	User user = userRepository.findByLogin(dummyUser);
+        if(employeeDTO.getUserId() == 0) {employeeDTO.setUserId(user.getId());}
         ZempReturn sapReturn = new ZempReturn();
         try {
         	sapReturn = employeeService.verifyOnBoardingEmployeeInfo(employeeDTO);

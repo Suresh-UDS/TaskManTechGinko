@@ -43,8 +43,10 @@ import com.ts.app.domain.AbstractAuditingEntity;
 import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.FeedbackMapping;
+import com.ts.app.domain.GeneralSettings;
 import com.ts.app.domain.SapBusinessCategories;
 import com.ts.app.repository.EmployeeDocumentRepository;
+import com.ts.app.repository.GeneralSettingsRepository;
 import com.ts.app.repository.SapBusinessCategoriesRepository;
 import com.ts.app.service.EmployeeService;
 import com.ts.app.service.OnboardingDeclarationService;
@@ -79,6 +81,9 @@ public class EmployeeServiceResouce {
 	
 	@Autowired
 	OnboardingDeclarationService onboardingDeclarationService;
+	
+	@Autowired
+	GeneralSettingsRepository generalSettingsRepository; 
 
     @Value("${onBoarding.empServe}")
     private String URL_EMPSERVICE;
@@ -215,26 +220,32 @@ public class EmployeeServiceResouce {
 			
 			List<EmployeeDTO> oracleList = response.getBody();
 			
-			if(CollectionUtils.isNotEmpty(oracleList)) {
-				
-				for(int i=0;i<oracleList.size();i++) {
+			GeneralSettings generalSetting = generalSettingsRepository.findBySettingName("LoadSapWithTaskman");
+			
+			if(generalSetting.isSwitchedOn()) {
+			
+				if(CollectionUtils.isNotEmpty(oracleList)) {
 					
-					List<EmployeeDocumentsDTO> documents = employeeService.findEmployeeDocumentsByEmpId(oracleList.get(i).getEmpId());
-					
-					EmployeeDTO dtoFromLocal =  employeeService.getPrestoredEmployee();
-					
-					if(dtoFromLocal!=null) {
+					for(int i=0;i<oracleList.size();i++) {
 						
-						oracleList.set(i, dtoFromLocal);
+						List<EmployeeDocumentsDTO> documents = employeeService.findEmployeeDocumentsByEmpId(oracleList.get(i).getEmpId());
+						
+						EmployeeDTO dtoFromLocal =  employeeService.getPrestoredEmployee();
+						
+						if(dtoFromLocal!=null) {
+							
+							oracleList.set(i, dtoFromLocal);
+							
+						}
+						
+						if(documents!=null) {
+							
+							oracleList.get(i).setDocuments(documents);;
+							
+						}
+						
 						
 					}
-					
-					if(documents!=null) {
-						
-						oracleList.get(i).setDocuments(documents);;
-						
-					}
-					
 					
 				}
 				
@@ -275,7 +286,7 @@ public class EmployeeServiceResouce {
 			context.put("paras", declarationContentPart); 
 			context.put("employee", employee); 
 			context.put("date", DateUtil.formatToDateString(Date.from(employee.getCreatedDate().toInstant()), "dd-MM-yyyy hh:mm a"));
-			EmployeeDocuments documents = employeeDocumentService.findByEmployeeIdAndDocumentType(employee.getId(), "thumbImpressenLeft");
+			EmployeeDocuments documents = employeeDocumentService.findByEmployeeIdAndDocumentType(employee.getId(), "thumbImpressenRight");
 			context.put("employeeDocuments", documents.getDocUrl());
 			
 		}

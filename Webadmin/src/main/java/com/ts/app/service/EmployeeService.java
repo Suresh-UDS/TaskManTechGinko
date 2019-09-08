@@ -370,6 +370,7 @@ public class    EmployeeService extends AbstractService {
         Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
         employee.setUser(null);
         employee.setActive(Employee.ACTIVE_YES);
+        employee.setSubmittedOn(ZonedDateTime.now());
         employee = employeeRepository.save(employee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
     	return employeeDTO;
@@ -378,8 +379,8 @@ public class    EmployeeService extends AbstractService {
     public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findOne(employeeDTO.getId());
         employeeDTO.setVerifiedBy(null);
-        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
         employee.setUser(null);
+        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
         employee = employeeRepository.saveAndFlush(updateEmployee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;
