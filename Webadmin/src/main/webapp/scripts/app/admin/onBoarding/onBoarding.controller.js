@@ -1224,7 +1224,8 @@ angular.module('timeSheetApp')
                                 $scope.employee.presentState !=null &&
                                 $scope.employee.projectCode !=null &&
                                 $scope.employee.projectDescription !=null && 
-                                $scope.employee.wbsDescription !=null &&
+								$scope.employee.wbsDescription !=null &&
+								$scope.employee.submitted &&
                                 $scope.employee.wbsId !=null &&
                                 ((_.find(documents,{docType:'aadharPhotoCopy'}) &&
 								_.find(documents,{docType:'aadharPhotoCopyBack'}) && 

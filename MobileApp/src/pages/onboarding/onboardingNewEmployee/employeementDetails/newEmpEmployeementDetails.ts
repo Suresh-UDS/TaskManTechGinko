@@ -134,9 +134,9 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     //let curretScope = this;
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex]) {
-        if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('previousEmployee')) {
+        if (localStoragedData['actionRequired'][this.storedIndex]['employmentDetails'].hasOwnProperty('previousEmployee')) {
 
-          this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+          this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']);
 
           console.log('EMPfromTo_dt2--'+JSON.stringify(localStoragedData['actionRequired']
           [this.storedIndex]['previousEmployee']['fromEmployed']));

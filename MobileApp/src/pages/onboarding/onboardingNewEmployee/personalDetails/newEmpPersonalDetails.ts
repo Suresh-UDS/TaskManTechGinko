@@ -5,14 +5,12 @@ import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { Alert } from 'ionic-angular';
+import {OnboardingService} from "../../../service/onboarding.service";
 
 @Component({
   selector: 'page-personalDetails-new',
   templateUrl: 'newEmpPersonalDetails.html',
 })
-
-
-
 export class newEmpPersonalDetail implements OnInit, AfterViewInit {
 
   onboardingPersonalDetailsForm: FormGroup;
@@ -21,22 +19,13 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   today;
   minAge;
   maxAge;
-  minAgedoj;
-  maxAgedoj;
+  religionList:any[];
   // setMinDate: any;
   formActionStatus: any;
   pipe = new DatePipe('en-US');
-  
 
-  constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) {
-
-    
-
-   }
+  constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService, private onBoardingService: OnboardingService) { }
   ngOnInit() {
-
-   
-
     this.storage.get('onboardingCurrentIndex').then(data => {
       console.log(data);
       console.log(data['index']);
@@ -44,35 +33,32 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       this.formActionStatus = data['action'];
     })
 
-  
+    this.onBoardingService.getReligionList().subscribe(data=>{
+      if(data){
+        this.religionList = data;
+      }
+    })
 
     this.today = new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toJSON().split('T')[0];
     
     var today = new Date();
     var minAge = 18;
     var maxAge = 58;
-    var minAgedoj = 0;
    this.minAge = new Date(today.getFullYear() - minAge,  today.getMonth(), today.getDate());
    this.maxAge = new Date(today.getFullYear() - maxAge,  today.getMonth(), today.getDate());
 
-    this.minAgedoj = new Date(today.getFullYear() - minAgedoj, today.getMonth(), today.getDate());
-    this.maxAgedoj = new Date(today.getFullYear() - maxAge,  today.getMonth(), today.getDate());
- 
-    
+  
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
-     //employeeName: ['', employeeName],
-    employeeName: ['', [ Validators.pattern('[a-zA-Z ]*'), Validators.required]],
+      employeeName: ['', [Validators.required]],
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
       dateOfJoining: ['', [Validators.required]],
       religion: [''],
       bloodGroup: [''],
-      identificationMark1: [''],
-      identificationMark2: [''],
-      //identificationMark1: ['', [Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
-      //identificationMark2: ['', [ Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+      identificationMark1: ['', [Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+      identificationMark2: ['', [ Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
       relationshipDetails: this.fb.array([
         this.fb.group({
           name: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
@@ -83,9 +69,6 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           relationship: 'Mother', contactNumber: '',
         })
       ])
-
-     
-     
     });
 
     this.onboardingPersonalDetailsForm.controls['dateOfBirth'].valueChanges.subscribe(value => {
@@ -130,14 +113,6 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     });
   }
 
-//   eventHandler(keyCode){
-// if(keyCode){
-//   alert('data');
-
-// }
-   
-//   }
-
   get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
 
 
@@ -164,11 +139,8 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     this.storage.get('OnBoardingData').then(localStoragedData => {    
       if (localStoragedData['actionRequired'][this.storedIndex]) {      
         if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('employeeName')) {
-
-
-        
           console.log('PERSONAL - ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-          this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+          this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']);
           // for (let list in localStoragedData['actionRequired'][this.storedIndex]) {
           // this.onboardingPersonalDetailsForm.controls[list].setValue(localStoragedData['actionRequired'][this.storedIndex][list]);
           // }'DD-MM-YYYY').format('YYYY-MM-DD');
@@ -194,14 +166,4 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   }
 
 
-
-
-}
-
- export function employeeName(ctrl: FormControl): any {
-  if (ctrl.value === null || ctrl.value === undefined) {
-      return {
-          "required": true
-       };
-  }
 }

@@ -350,4 +350,12 @@ export class OnboardingService implements AutoCompleteService {
                 return Observable.throw(err.json());
         })
     }
+
+    getReligionList():Observable<any>{
+        return this.http.get(this.config.Url+'api/getReligionList').map(response=>{
+            return response.json();
+        }).catch(err=>{
+            return Observable.throw(err.json());
+        })
+    }
 }

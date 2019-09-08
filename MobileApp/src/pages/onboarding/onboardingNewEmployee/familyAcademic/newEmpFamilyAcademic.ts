@@ -35,9 +35,9 @@ export class newEmpFamilyAndAcademic implements OnInit {
       this.storage.get('OnBoardingData').then(localStoragedData => {
         console.log('empfamily data ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         if (localStoragedData['actionRequired'][this.storedIndex]) {
-          if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')
-            && localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'] != null) {
-            getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
+          if (localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'].hasOwnProperty('nomineeDetail')
+            && localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'] != null) {
+            getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'].length;
             console.log('empfamily ' + getEpfCount);
             if (getEpfCount > 0) {
               for (let i = 0; i < getEpfCount; i++) {
@@ -76,7 +76,7 @@ export class newEmpFamilyAndAcademic implements OnInit {
       for (let i = 0; i < this.nomineeForms.length; i++) {
         console.log('nominee_length_per= ' + JSON.stringify(this.nomineeForms.controls[i]['controls']['nominePercentage'].value));
         if (this.nomineeForms.controls[i]['controls']['nominePercentage'].value !== null) {
-          totPercent = totPercent + this.nomineeForms.controls[i]['controls']['nominePercentage'].value;;
+          totPercent = totPercent + this.nomineeForms.controls[i]['controls']['nominePercentage'].value;
           console.log('nominee_length_perrr ' + JSON.stringify(totPercent));
         }
         if (totPercent > 100) {
@@ -127,9 +127,9 @@ export class newEmpFamilyAndAcademic implements OnInit {
 
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('educationQualification')) {
+      if (localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'].hasOwnProperty('educationQualification')) {
         console.log('fam_datta === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-        this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+        this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']);
       }
     });
   }

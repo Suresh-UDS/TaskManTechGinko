@@ -16,6 +16,7 @@
               <select-searchable class="searchable-select"
                                  item-content
                                  [items]="branches"
+                                 formControlName="branchCode"
                                  itemValueField="elementCode"
                                  itemTextField="element"
                                  [canSearch]="true"
@@ -52,6 +53,11 @@
             <ion-item class="border" *ngIf="selectedWBS!=null" >
                 <ion-label  text-capitalize class="client-label" text-left>Designation No. </ion-label>
                 <ion-input formControlName="position" required></ion-input>
+            </ion-item>
+
+            <ion-item class="border" *ngIf="selectedWBS!=null" >
+                <ion-label  text-capitalize class="client-label" text-left>Gross </ion-label>
+                <ion-input formControlName="gross" required></ion-input>
             </ion-item>
 
         </div>

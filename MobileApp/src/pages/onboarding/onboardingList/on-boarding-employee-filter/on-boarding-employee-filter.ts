@@ -3,6 +3,7 @@ import {NavController, NavParams, ViewController} from "ionic-angular";
 import {OnboardingService} from "../../../service/onboarding.service";
 import {SelectSearchableComponent} from "ionic-select-searchable";
 import {componentService} from "../../../service/componentService";
+import {Storage} from "@ionic/storage";
 
 /**
  * Generated class for the OnBoardingEmployeeFilter page.
@@ -34,7 +35,7 @@ export class OnBoardingEmployeeFilter {
     name:any
   };
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
-                        public onBoardingService: OnboardingService, public cs:componentService
+              private storage: Storage, public onBoardingService: OnboardingService, public cs:componentService
   ) {
 
     this.selectedBranch = null;
@@ -74,6 +75,7 @@ export class OnBoardingEmployeeFilter {
   }){
     this.cs.showLoader("Loading Projects for Branch - "+event.value.element);
     this.selectedBranch = event.value;
+    this.storage.set('branchDetails',this.selectedBranch);
     this.onBoardingService.getProjectsByBranch(event.value.elementCode).subscribe(response=>{
       this.cs.closeLoader();
       console.log("Getting projects");
@@ -81,7 +83,7 @@ export class OnBoardingEmployeeFilter {
       this.projects = response;
     },err=>{
       this.cs.closeAll();
-    })
+    });
   }
 
   getWBSByProject(event:{
