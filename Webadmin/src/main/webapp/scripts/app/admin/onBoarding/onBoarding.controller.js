@@ -302,16 +302,18 @@ angular.module('timeSheetApp')
 
 	}
 
-	$scope.newEmployee = false;
-	$scope.existingEmployee = false;
+	$scope.newEmployee = 0;
+	$scope.existingEmployee = 0;
+	$scope.importedEmployee = 0;
 
 	$scope.setListType = function(type){
 
 		$rootScope.onBoardingFilter.employee.type = type;
 		
-		$scope.newEmployee = type;
-		$scope.existingEmployee = !type; 
-
+		$scope.newEmployee = type[0];
+		$scope.existingEmployee = type[1]; 
+		$scope.importedEmployee = type[2];
+ 
 	}
 
 	$scope.LoadEmpListByType = function(type){
@@ -422,9 +424,10 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.initFilters = function(){
-
-
-
+		
+		$scope.searchEmployeeId = $rootScope.onBoardingFilter.employee.empId ;
+		$scope.searchEmployeeName = $rootScope.onBoardingFilter.employee.name ;
+		 
 		if($rootScope.onBoardingFilter.branches.list.length > 0){
 
 			$scope.branchSpin = $scope.clientFilterDisable = $scope.regionSpin = false;
@@ -440,11 +443,8 @@ angular.module('timeSheetApp')
             $scope.selectedBranchDetails = $scope.client.selected;
             $scope.selectedProjectDetails = $scope.regionsListOne.selected;
             $scope.selectedWBSDetails = $scope.branchsListOne.selected;
-			$scope.searchEmployeeId = $scope.onBoardingFilter.employee.empId ;
-			$scope.searchEmployeeName = $scope.onBoardingFilter.employee.name ;
-
-
-			$scope.pages.currPage = $scope.onBoardingFilter.employee.page;
+ 
+			$scope.pages.currPage = $rootScope.onBoardingFilter.employee.page;
 
 			$scope.setListType($rootScope.onBoardingFilter.employee.type);
 
@@ -452,7 +452,7 @@ angular.module('timeSheetApp')
 
 		}
 		else{
-			$rootScope.onBoardingFilter.employee.type = 1;
+			$rootScope.onBoardingFilter.employee.type = [1,0,0];
 		    $scope.clearFilterKeys();
             $scope.getBranchList();
 			$scope.search();
@@ -945,7 +945,27 @@ angular.module('timeSheetApp')
 		}
 
 		$scope.searchCriteria.currPage = currPageVal;
-		$scope.searchCriteria.newEmployee = $scope.newEmployee;  
+
+		if($scope.newEmployee){
+
+			$scope.searchCriteria.newEmployee = 1;
+			$scope.searchCriteria.submitted = 1;
+ 
+		}
+
+		if($scope.existingEmployee){
+
+			$scope.searchCriteria.newEmployee = 0;
+			$scope.searchCriteria.submitted = 1;
+ 
+		}
+
+		if($scope.importedEmployee){
+			 
+			$scope.searchCriteria.imported = 1;
+			$scope.searchCriteria.submitted = 0;
+		}
+ 
 		/* Root scope (search criteria) start*/
 
 		if($rootScope.searchFilterCriteria.isDashboard){
@@ -1071,9 +1091,7 @@ angular.module('timeSheetApp')
    
 		$scope.searchCriteria.wbsCode = $scope.branchsListOne.selected ? $scope.branchsListOne.selected.elementCode : null;
   	
-		$scope.searchCriteria.verified = false;
-		$scope.searchCriteria.submitted = true;
-		$scope.searchCriteria.newemployee = false;
+		 
 		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
@@ -1383,6 +1401,7 @@ angular.module('timeSheetApp')
 					$scope.employee.verified =true;
 					$scope.employee.empId = data.empId ;
 					$scope.enableApproval = false;
+					$rootScope.onBoardingFilter.employee.empId = "";
 					//$location.path('/onBoarding-list'); 
 					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId + ". SAP Message [ "+data.message+" ]");
 				}

@@ -67,6 +67,10 @@ public class EmployeeSpecification implements Specification<Employee> {
         	predicates.add(builder.equal(root.get("element"), searchCriteria.getElement()));
         }
         
+        if(searchCriteria.isImported() ) {
+        	predicates.add(builder.equal(root.get("imported"), searchCriteria.isImported()));
+        }
+        
         if(StringUtils.isNotEmpty(searchCriteria.getElementCode())) {
         	predicates.add(builder.equal(root.get("elementCode"), searchCriteria.getElementCode()));
         }
@@ -156,11 +160,15 @@ public class EmployeeSpecification implements Specification<Employee> {
             
         	
         }
-
-        if(searchCriteria.isNewEmployee()){
-            predicates.add(builder.equal(root.get("newEmployee"),true));
-        }else{
-            predicates.add(builder.equal(root.get("newEmployee"),false));
+ 
+        if(searchCriteria.isSubmitted()){
+        
+	        if(searchCriteria.isNewEmployee()){
+	            predicates.add(builder.equal(root.get("newEmployee"),true));
+	        }else{
+	            predicates.add(builder.equal(root.get("newEmployee"),false));
+	        }
+	        
         }
 
         if(searchCriteria.getFromDate() != null) {

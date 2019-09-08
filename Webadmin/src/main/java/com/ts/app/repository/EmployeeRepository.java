@@ -25,6 +25,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
 	@Query("SELECT e FROM Employee e WHERE e.empId = :empId and e.active='Y'")
 	Employee findByEmpId(@Param("empId") String empId);
+	
+	
 
 /****************************************Modified by Vinoth*********************************************************************************************/	
 	

@@ -277,6 +277,8 @@ public class SearchCriteria extends Paginator {
 	
 	private boolean submitted;
 	
+	private boolean imported;
+	
 	private String elementCode;
 	
 	private String element;
@@ -1534,4 +1536,14 @@ public class SearchCriteria extends Paginator {
     public void setNewEmployee(boolean newEmployee) {
         this.newEmployee = newEmployee;
     }
+
+	public boolean isImported() {
+		return imported;
+	}
+
+	public void setImported(boolean imported) {
+		this.imported = imported;
+	}
+    
+    
 }
