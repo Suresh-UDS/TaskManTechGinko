@@ -161,7 +161,7 @@ public class EmployeeSpecification implements Specification<Employee> {
         	
         }
  
-        if(searchCriteria.isSubmitted()){
+        if(searchCriteria.isNewEmployee() != null){
         
 	        if(searchCriteria.isNewEmployee()){
 	            predicates.add(builder.equal(root.get("newEmployee"),true));

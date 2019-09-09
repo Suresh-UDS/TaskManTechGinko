@@ -962,6 +962,7 @@ angular.module('timeSheetApp')
 
 			$scope.searchCriteria.newEmployee = 1;
 			$scope.searchCriteria.submitted = 1;
+			$scope.searchCriteria.imported = null;
  
 		}
 
@@ -969,13 +970,14 @@ angular.module('timeSheetApp')
 
 			$scope.searchCriteria.newEmployee = 0;
 			$scope.searchCriteria.submitted = 1;
- 
+			$scope.searchCriteria.imported = null;
 		}
 
 		if($scope.importedEmployee){
 			 
 			$scope.searchCriteria.imported = 1;
 			$scope.searchCriteria.submitted = 0;
+			$scope.searchCriteria.newEmployee = null;
 		}
  
 		/* Root scope (search criteria) start*/

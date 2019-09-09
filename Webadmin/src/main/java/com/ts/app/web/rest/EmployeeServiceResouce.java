@@ -269,7 +269,7 @@ public class EmployeeServiceResouce {
 		vm.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 		vm.init();
 		
-		Template t = vm.getTemplate("pdf/declarationForm.vm");
+		Template t = vm.getTemplate("pdf/declarationForm.vm","UTF-8");
 		
 		VelocityContext context = new VelocityContext();
 		 
