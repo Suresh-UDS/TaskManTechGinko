@@ -470,6 +470,8 @@ angular.module('timeSheetApp')
 		console.log("clear filter keys");
 		$scope.setListType($rootScope.onBoardingFilter.employee.type);
 
+		$rootScope.onBoardingFilter.branches.list = [];
+
 		$scope.client.selected = null;
 		$scope.regionsListOne.selected =  null ;
 		$scope.branchsListOne.selected =  null;
