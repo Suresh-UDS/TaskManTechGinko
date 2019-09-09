@@ -474,6 +474,9 @@ angular.module('timeSheetApp')
 		$rootScope.onBoardingFilter.projects.selected = null;
 		$rootScope.onBoardingFilter.wbs.selected  = null;
 
+		$rootScope.onBoardingFilter.employee.empId = null;
+		$rootScope.onBoardingFilter.employee.name = null;
+
 		$scope.client.selected = null;
 		$scope.regionsListOne.selected =  null ;
 		$scope.branchsListOne.selected =  null;
