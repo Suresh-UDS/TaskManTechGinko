@@ -377,11 +377,14 @@ public class    EmployeeService extends AbstractService {
     }
 
     public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
-        Employee employee = employeeRepository.findOne(employeeDTO.getId());
-        employeeDTO.setVerifiedBy(null);
-        employee.setUser(null);
-        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
-        employee = employeeRepository.saveAndFlush(updateEmployee);
+        Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
+        employeeDTO.setId(employee.getId());
+        Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
+
+        updateEmployeeDTO.setVerifiedBy(null);
+       // Employee updateEmployee = mapperUtil.toEntity(updateEmployeeDTO,Employee.class);
+//        updateEmployee.setUser(null);
+        employee = employeeRepository.saveAndFlush(updateEmployeeDTO);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;
     }
@@ -2161,7 +2164,77 @@ public class    EmployeeService extends AbstractService {
     }
 
 /******************************Modified by Vinoth**********************************************************/
-    
+private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
+    empDto.setId(employee.getId());
+    empDto.setEmpId(employee.getEmpId());
+    empDto.setName(employee.getName());
+    empDto.setFullName(employee.getFullName());
+    empDto.setLastName(employee.getLastName());
+    empDto.setPhone(employee.getPhone());
+    empDto.setEmail(employee.getEmail());
+    empDto.setActive(employee.getActive());
+    empDto.setAccountNumber(employee.getAccountNumber());
+//         empDto.setAddressProofImage(employee.getAddressProofImage());
+//         empDto.setAdharBackImage(employee.getAdharBackImage());
+    empDto.setAdharCardNumber(employee.getAdharCardNumber());
+//         empDto.setAdharFrontImage(employee.getAdharFrontImage());
+//         empDto.setBankPassbookImage(employee.getBankPassbookImage());
+    empDto.setBloodGroup(employee.getBloodGroup());
+    empDto.setBoardInstitute(employee.getBoardInstitute());
+    empDto.setClientDescription(employee.getClientDescription());
+    empDto.setClientName(employee.getClientName());
+    empDto.setCode(employee.getCode());
+    empDto.setDesignation(employee.getDesignation());
+    empDto.setDob(employee.getDob());
+    empDto.setDoj(employee.getDoj());
+    //empDto.setDrivingLicense(employee.getDrivingLicense());
+    empDto.setEducationalQulification(employee.getEducationalQulification());
+    empDto.setEmergencyContactNumber(employee.getEmergencyContactNumber());
+    empDto.setEmployer(employee.getEmployer());
+    empDto.setFatherName(employee.getFatherName());
+//         empDto.setFingerPrintLeft(employee.getFingerPrintLeft());
+//         empDto.setFingerPrintRight(employee.getFingerPrintRight());
+    empDto.setGender(employee.getGender());
+    empDto.setIfscCode(employee.getIfscCode());
+    empDto.setMaritalStatus(employee.getMaritalStatus());
+    empDto.setMobile(employee.getMobile());
+    empDto.setMotherName(employee.getMotherName());
+    empDto.setNomineeContactNumber(employee.getNomineeContactNumber());
+    empDto.setNomineeName(employee.getNomineeName());
+    empDto.setNomineeRelationship(employee.getNomineeRelationship());
+    //empDto.setPanCard(employee.getPanCard());
+    empDto.setPercentage(employee.getPercentage());
+    empDto.setPermanentAddress(employee.getPermanentAddress());
+    empDto.setPermanentCity(employee.getPermanentCity());
+    empDto.setPermanentState(employee.getPermanentState());
+    empDto.setPersonalIdentificationMark1(employee.getPersonalIdentificationMark1());
+    empDto.setPersonalIdentificationMark2(employee.getPersonalIdentificationMark2());
+    empDto.setPresentAddress(employee.getPresentAddress());
+    empDto.setPresentCity(employee.getPresentCity());
+    empDto.setPresentState(employee.getPresentState());
+    empDto.setPreviousDesignation(employee.getPreviousDesignation());
+    empDto.setReligion(employee.getReligion());
+    //empDto.setVoterId(employee.getVoterId());
+    empDto.setWbsDescription(employee.getWbsDescription());
+    empDto.setWbsId(employee.getWbsId());
+    empDto.setProjectCode(employee.getProjectCode());
+    empDto.setProjectDescription(employee.getProjectDescription());
+    empDto.setActive(employee.getActive());
+    empDto.setPosition(employee.getPosition());
+    empDto.setImported(employee.isImported());
+    empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
+
+    if(empDto.isVerified()){
+       // empDto.setVerifiedBy(employee.getVerifiedBy());
+    }
+    if(employee.getVerifiedDate() != null) {
+        empDto.setVerifiedDate(employee.getVerifiedDate());
+    }
+    empDto.setCreatedBy(SecurityUtils.getCurrentUser().getUsername());
+    empDto.setCreatedDate(ZonedDateTime.now());
+    return empDto;
+}
+
     private EmployeeDTO mapToModelOnBoarding(Employee employee) {
     	EmployeeDTO empDto = new EmployeeDTO();
         empDto.setId(employee.getId());
