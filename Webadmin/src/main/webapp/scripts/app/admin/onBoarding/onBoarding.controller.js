@@ -470,7 +470,12 @@ angular.module('timeSheetApp')
 		console.log("clear filter keys");
 		$scope.setListType($rootScope.onBoardingFilter.employee.type);
 
-		$rootScope.onBoardingFilter.branches.list = [];
+		$rootScope.onBoardingFilter.branches.selected = null;
+		$rootScope.onBoardingFilter.projects.selected = null;
+		$rootScope.onBoardingFilter.wbs.selected  = null;
+
+		$rootScope.onBoardingFilter.employee.empId = null;
+		$rootScope.onBoardingFilter.employee.name = null;
 
 		$scope.client.selected = null;
 		$scope.regionsListOne.selected =  null ;
@@ -498,10 +503,12 @@ angular.module('timeSheetApp')
     $scope.getProjectListByBranch = function(branchCode){
 
 		$rootScope.onBoardingFilter.branches.selected = $scope.client.selected;
+		$rootScope.onBoardingFilter.projects.selected = null;
+		$rootScope.onBoardingFilter.wbs.selected  = null;
 
         $scope.selectedBranchCode = branchCode.elementCode;
         $scope.selectedBranchDetails = branchCode;
-        $scope.siteSpin = true;
+        $scope.regionSpin = true;
         console.log(branchCode.elementCode);
         OnBoardingComponent.getProjectListByBranchCode(branchCode.elementCode).then(function (projectList) {
             console.log("Getting project list by branch code");
@@ -509,13 +516,16 @@ angular.module('timeSheetApp')
 			$scope.projectList = projectList;
 			$rootScope.onBoardingFilter.projects.list = projectList;
             $scope.siteFilterDisable = false;
-            $scope.siteSpin = false;
-        })
+            $scope.regionSpin = false;
+        }).catch(function(response){
+			$scope.regionSpin = false;
+		})
     };
 
     $scope.getWBSListByProject = function(projectCode){
-
+ 
 		$rootScope.onBoardingFilter.projects.selected = $scope.regionsListOne.selected;
+		$rootScope.onBoardingFilter.wbs.selected  = null;
 
         $scope.selectedProjectCode = projectCode.elementCode;
         $scope.selectedProjectDetails = projectCode;
@@ -1774,9 +1784,9 @@ angular.module('timeSheetApp')
 		var page = args[0];
 
 
-		if (page < 1 || page > $scope.pager.totalPages) {
-			return;
-		}
+		// if (page < 1 || page > $scope.pager.totalPages) {
+		// 	return;
+		// }
 		//alert(page);
 		$scope.pages.currPage = page;
 
