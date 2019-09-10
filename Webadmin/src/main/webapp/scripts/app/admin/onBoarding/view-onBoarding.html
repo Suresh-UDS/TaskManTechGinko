@@ -572,7 +572,7 @@
             <span  ng-show="approveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp;<i class="fas fa-check"></i>&nbsp; Approve Employee
         </button>
         
-        <button has-permission="OnBoarding:Edit" class="btn btn-success ld ld-over-inverse" type ="button" ng-click="editpage('edit')" ng-if="employee.submitted" id="close-button-right"><i class="fas fa-pencil-alt"></i> &nbsp;Edit
+        <button has-permission="OnBoarding:Edit" class="btn btn-success ld ld-over-inverse" type ="button" ng-click="editpage('edit')" ng-if="employee.submitted && !employee.verified" id="close-button-right"><i class="fas fa-pencil-alt"></i> &nbsp;Edit
         </button>
 
     </div>

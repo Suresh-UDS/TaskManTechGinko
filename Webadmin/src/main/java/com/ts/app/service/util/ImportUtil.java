@@ -2411,23 +2411,25 @@ public class ImportUtil {
 
     private String getCellValue(Cell cell) {
 		String value = null;
-		switch(cell.getCellType()) {
-			case HSSFCell.CELL_TYPE_BLANK:
-	        case HSSFCell.CELL_TYPE_ERROR:
-	            // ignore all blank or error cells
-	            break;
-	        case HSSFCell.CELL_TYPE_NUMERIC:
-	        		value = Long.toString((long)cell
-	                    .getNumericCellValue());
-	            break;
-	        case HSSFCell.CELL_TYPE_BOOLEAN:
-	        	value = Boolean.toString(cell
-	                    .getBooleanCellValue());
-	            break;
-	        case HSSFCell.CELL_TYPE_STRING:
-	        default:
-	        	value = cell.getStringCellValue();
-	            break;
+		if(cell != null) {
+			switch(cell.getCellType()) {
+				case HSSFCell.CELL_TYPE_BLANK:
+		        case HSSFCell.CELL_TYPE_ERROR:
+		            // ignore all blank or error cells
+		            break;
+		        case HSSFCell.CELL_TYPE_NUMERIC:
+		        		value = Long.toString((long)cell
+		                    .getNumericCellValue());
+		            break;
+		        case HSSFCell.CELL_TYPE_BOOLEAN:
+		        	value = Boolean.toString(cell
+		                    .getBooleanCellValue());
+		            break;
+		        case HSSFCell.CELL_TYPE_STRING:
+		        default:
+		        	value = cell.getStringCellValue();
+		            break;
+			}
 		}
 		currentCell ++;
 		return value;
