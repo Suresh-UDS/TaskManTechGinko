@@ -133,20 +133,24 @@ public class JobSpecification implements Specification<Job> {
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	if(searchCriteria.getCheckInDateTimeTo() != null) {
 			        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
-			        	}else {
-			        		checkInDateTo.setTime(checkInDate);
-			        	}
+			            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+			            	checkInDateTo.set(Calendar.MINUTE,59);
+			            	checkInDateTo.set(Calendar.SECOND,0);
+			            	Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
+			            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
+			        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
+			        	} 
+		            	else {
+		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedStartTime"), fromDt));
+		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedEndTime"), fromDt));
+		            		
+		            	}
 
-		            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
-		            	checkInDateTo.set(Calendar.MINUTE,59);
-		            	checkInDateTo.set(Calendar.SECOND,0);
-		            	Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
 		            	//String toDt = DateUtil.formatUTCToIST(checkInDateTo);
 
-		            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
-//		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
-		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
-		        		predicates.add(builder.between(root.get("plannedEndTime"), fromDt,toDt));
+//		        		predicates.add(builder.between(root.set, root.get("plannedStartTime"),root.get("plannedEndTime")));
+//		        		predicates.add(builder.between(, fromDt,toDt));
+//		            	predicates.add(builder.gt(root.get("plannedStartTime"), fromDt))
 	            	}
 	        	}
 
