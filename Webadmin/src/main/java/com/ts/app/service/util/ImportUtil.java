@@ -1844,12 +1844,7 @@ public class ImportUtil {
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
 						empId  = currentRow.getCell(5).getStringCellValue() ;
-						
-						if(employee.isSubmitted() && !employee.isVerified()) {
-							
-							skipSave = true;
-							
-						}
+						 
 						
 					}
 					else {
@@ -1859,11 +1854,7 @@ public class ImportUtil {
                          
                          employee = isSkipDuplicate(empId);
                          
-                         if(employee.isSubmitted() && !employee.isVerified()) {
- 							
- 							skipSave = true;
- 							
- 						}
+                         
                          
                          isNewEmployee = true;
 								
@@ -1874,14 +1865,21 @@ public class ImportUtil {
  						 employee.setEmpId(empId);
 					 
                     }
+                    else {
+                    	
+                    	if(employee.isSubmitted() && !employee.isVerified()) {
+ 							
+ 							skipSave = true;
+ 							
+ 						}
+
+                    }
                     
                     
                     if(skipSave == false) {
                      
                     		employee.setNewEmployee(isNewEmployee);
-			            	
-			            	
-			            	
+			            	 
 							cellNo = 0;
 							employee.setProjectCode(getCellValue(currentRow.getCell(0)));
 							cellNo = 1;
