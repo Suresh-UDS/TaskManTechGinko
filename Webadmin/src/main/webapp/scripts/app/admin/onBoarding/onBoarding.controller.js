@@ -1416,7 +1416,7 @@ angular.module('timeSheetApp')
 					$scope.employee.verified =true;
 					$scope.employee.empId = data.empId ;
 					$scope.enableApproval = false;
-					if($rootScope.onBoardingFilter.employee)$rootScope.onBoardingFilter.employee.empId = "";
+					if($rootScope.onBoardingFilter)$rootScope.onBoardingFilter.employee.empId = "";
 					//$location.path('/onBoarding-list'); 
 					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId + ". SAP Message [ "+data.message+" ]");
 				}
@@ -1436,7 +1436,7 @@ angular.module('timeSheetApp')
             $scope.success = null;
             $scope.disable = false;
             $scope.btnDisable = false;
-            $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.message);
+            $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.errorMessage);
             $scope.error = 'ERROR';
         });
     };
