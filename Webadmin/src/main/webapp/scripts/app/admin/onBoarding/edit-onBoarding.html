@@ -441,7 +441,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-disabled="!employee.newEmployee" type="text" name="empCode" ng-model="employee.empId" required />
+                                <input class="form-control" ng-disabled="true" type="text" name="empCode" ng-model="employee.empId" required readonly />
 
                                 <div ng-show="form.$submitted || form.empCode.$touched || form.empCode.$dirty">
                                     <div ng-show="form.empCode.$dirty || form.empCode.$invalid">
@@ -801,7 +801,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
 
