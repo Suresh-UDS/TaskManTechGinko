@@ -327,9 +327,11 @@ angular.module('timeSheetApp')
                          $scope.showNotifications('top','center','danger','Item group already exists!');
                          $scope.loadMaterialItmGroup();
                     }else{
+                    	$scope.loadingStop();
 	                	 $scope.materialItemGroup = "";
 	                     $scope.showNotifications('top','center','success','Item group has been added Successfully!');
 	                     $scope.loadMaterialItmGroup();
+	                     
                     }
 
                 }).catch(function(){
