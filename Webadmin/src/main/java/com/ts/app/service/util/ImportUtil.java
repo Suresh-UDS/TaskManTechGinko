@@ -1834,15 +1834,23 @@ public class ImportUtil {
 					cellNo = 2;
 					cellNo = 0;
 
-					Employee employee ;
+					Employee employee = null;
 					
 					boolean isNewEmployee = false;
 					String empId;
+					boolean skipSave = false; 
 					
 					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
 						empId  = currentRow.getCell(5).getStringCellValue() ;
+						
+						if(employee.isSubmitted() && !employee.isVerified()) {
+							
+							skipSave = true;
+							
+						}
+						
 					}
 					else {
 						
@@ -1850,6 +1858,12 @@ public class ImportUtil {
                          log.debug("Employee id not present, entering substirng - "+empId);
                          
                          employee = isSkipDuplicate(empId);
+                         
+                         if(employee.isSubmitted() && !employee.isVerified()) {
+ 							
+ 							skipSave = true;
+ 							
+ 						}
                          
                          isNewEmployee = true;
 								
@@ -1861,7 +1875,10 @@ public class ImportUtil {
 					 
                     }
                     
-                    employee.setNewEmployee(isNewEmployee);
+                    
+                    if(skipSave == false) {
+                     
+                    		employee.setNewEmployee(isNewEmployee);
 			            	
 			            	
 			            	
@@ -1977,7 +1994,8 @@ public class ImportUtil {
 							employee.setOnBoardedFrom("Web");
 							employee.setOnBoardSource("Import");
 							employee.setUser(null);
- 
+							employee.setSubmitted(false);
+							employee.setVerified(false);
                             //employeeDTO.setMessage("error.duplicateRecordError");
 							if(employee.getId()!=null) {
 								employeeRepo.saveAndFlush(employee);
@@ -1987,7 +2005,7 @@ public class ImportUtil {
 							}
                       
                     
-					
+                    }
 					
 //					cellNo = 5;
 //					if(currentRow.getCell(5).getStringCellValue() != null) {

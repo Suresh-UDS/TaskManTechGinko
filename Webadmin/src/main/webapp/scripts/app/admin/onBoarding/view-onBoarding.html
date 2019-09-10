@@ -126,16 +126,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-4">
+                        <div class=" col-sm-12">
                             <label>Address Proof Image <span class="red-star">*</span></label>
-                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                                <div class="fileinput-new ">
+                            <div>
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(addressproofImageUrl)" >
                                
                                         <img ng-if="addressproofImageUrl" class="attachImages" style=" border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
                                    </a>
                                    <img ng-if="!addressproofImageUrl"  class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
-                                </div>
+                                 
                             </div>
                         </div>
                     </div>
@@ -259,12 +258,12 @@
                             </tr>
 
                             <tr>
-                                <td class="col-sm-6">Education Qualification <span class="red-star">*</span></td>
+                                <td class="col-sm-6">Education Qualification </td>
                                 <td class="col-sm-6">{{employee.educationalQulification}}</td>
                             </tr>
 
                             <tr>
-                                <td class="col-sm-6">Board / Institute <span class="red-star">*</span></td>
+                                <td class="col-sm-6">Board / Institute </td>
                                 <td class="col-sm-6">{{employee.boardInstitute}}</td>
                             </tr>
 
@@ -321,7 +320,7 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="col-sm-4">Contact No. <span class="red-star">*</span> </td>
+                                        <td class="col-sm-4">Contact No.  </td>
                                         <td class="col-sm-8">{{employee.nomineeContactNumber}}</td>
                                     </tr>
 

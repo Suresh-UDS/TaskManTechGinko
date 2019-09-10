@@ -1168,9 +1168,9 @@ angular.module('timeSheetApp')
 
                 $scope.employee = data;
                 if($scope.employee){
-                    $scope.employee.mobile = parseInt($scope.employee.mobile);
-                    $scope.employee.emergencyContactNumber= parseInt($scope.employee.emergencyContactNumber);
-                    $scope.employee.nomineeContactNumber = parseInt($scope.employee.nomineeContactNumber);
+                    $scope.employee.mobile = ($scope.employee.mobile);
+                    $scope.employee.emergencyContactNumber= ($scope.employee.emergencyContactNumber);
+                    $scope.employee.nomineeContactNumber = ($scope.employee.nomineeContactNumber);
 
 					console.log($scope.employee.newEmployee);
 
@@ -1219,7 +1219,7 @@ angular.module('timeSheetApp')
 								$scope.employee.gross !=null &&
                                 $scope.employee.dob !=null &&
                                 $scope.employee.doj !=null &&
-                                $scope.employee.educationalQulification !=null &&
+                                // $scope.employee.educationalQulification !=null &&
                                 $scope.employee.empId !=null &&
                                 $scope.employee.fatherName !=null &&
                                 $scope.employee.gender !=null &&
