@@ -2226,15 +2226,10 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setSubmitted(true);
     empDto.setSubmittedBy(SecurityUtils.getCurrentUser().getUsername());
     empDto.setSubmittedOn(ZonedDateTime.now());
-
-    if(empDto.isVerified()){
-       // empDto.setVerifiedBy(employee.getVerifiedBy());
-    }
-    if(employee.getVerifiedDate() != null) {
-        empDto.setVerifiedDate(employee.getVerifiedDate());
-    }
-//    empDto.setCreatedBy(SecurityUtils.getCurrentUser().getUsername());
-//    empDto.setCreatedDate(ZonedDateTime.now());
+    empDto.setVerified(false);
+    empDto.setVerifiedBy(null);
+    empDto.setVerifiedDate(null);
+    
     return empDto;
 }
 
