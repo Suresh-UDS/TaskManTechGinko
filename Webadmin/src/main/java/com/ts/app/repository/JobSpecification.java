@@ -146,7 +146,7 @@ public class JobSpecification implements Specification<Job> {
 		            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
 //		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
-		        		predicates.add(builder.between(root.get("plannedEndTime"), fromDt,toDt));
+		        		//predicates.add(builder.between(root.get("plannedEndTime"), fromDt,toDt));
 	            	}
 	        	}
 
