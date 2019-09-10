@@ -68,7 +68,7 @@ public class ExportUtil {
 			"FATHER NAME", "MOTHER NAME", "GENDER", "MARTIAL STATUS", "DOB", "DOJ", "RELIGION", "BLOOD GROUP", "PERSONAL IDENTIFICATION MARK 1", "PERSONAL IDENTIFICATION MARK 2", 
 			"MOBILE NUMBER", "EMERGENCY CONTACT NUMBER", "PRESENT ADDRESS", "PRESENT CITY", "PRESENT STATE", "PERMANENT ADDRESS", "PERMANENT CITY", "PERMANENT STATE", "HIGHEST EDUCATION QUALIFICATION",
 			"BOARD/INSTITUTE", "NOMINEE NAME", "RELATIONSHIP", "CONTACT NUMBER", "PERCENTAGE", "EMPLOYED EARLIER - EMPLOYER NAME", "EMPLOYED EARLIER - DESIGNATION", 
-			"AADHAR CARD NUMBER", "BANK ACCOUNT NUMBER", "IFSC NUMBER", "STATUS", "POSITION", "IMPORTED", "ON BOARDED FROM", "VERIFIED BY", "VERIFIED DATE", "CREATED BY", "CREATED DATE"};
+			"AADHAR CARD NUMBER", "BANK ACCOUNT NUMBER", "IFSC NUMBER", "STATUS", "POSITION", "IMPORTED", "ON BOARDED FROM", "VERIFIED BY", "VERIFIED DATE", "CREATED BY", "CREATED DATE","GROSS"};
 //JOB HEADER WITH RELIEVER INFO
 //	private String[] JOB_HEADER = { "CLIENT", "SITE", "LOCATION", "JOB ID", "TITLE", "DESCRIPTION", "TICKET ID", "TICKET TITLE", "EMPLOYEE", "TYPE", "PLANNED START TIME", "COMPLETED TIME",
 //			"STATUS", "CHECKLIST ITEMS", "CHECKLIST STATUS", "CHECKLIST REMARKS","CHECKLIST IMAGE LINK", "RELIEVER", "RELIEVER ID", "RELIEVER NAME" };
@@ -2108,16 +2108,16 @@ public class ExportUtil {
 
 					Row dataRow = xssfSheet.createRow(rowNum++);
 
-					dataRow.createCell(0).setCellValue(transaction.getProjectCode());
-					dataRow.createCell(1).setCellValue(transaction.getProjectDescription());
-					dataRow.createCell(2).setCellValue(transaction.getWbsId());
-					dataRow.createCell(3).setCellValue(transaction.getWbsDescription());
-					dataRow.createCell(4).setCellValue(transaction.getFullName());
-					dataRow.createCell(5).setCellValue(transaction.getEmpId());
-					dataRow.createCell(6).setCellValue(transaction.getFatherName());
-					dataRow.createCell(7).setCellValue(transaction.getMotherName());
-					dataRow.createCell(8).setCellValue(transaction.getGender());
-					dataRow.createCell(9).setCellValue(transaction.getMaritalStatus());
+					String projectId = StringUtils.isNotEmpty(transaction.getProjectCode()) ? transaction.getProjectCode() : "";
+					String projectDesc = StringUtils.isNotEmpty(transaction.getProjectDescription()) ? transaction.getProjectDescription() : "";
+					String wbsId = StringUtils.isNotEmpty(transaction.getWbsId()) ? transaction.getWbsId() : "";
+					String wbsDesc = StringUtils.isNotEmpty(transaction.getWbsDescription()) ? transaction.getWbsDescription() : "";
+					String empName = StringUtils.isNotEmpty(transaction.getFullName()) ? transaction.getFullName() : "";
+					String empId = StringUtils.isNotEmpty(transaction.getEmpId()) ? transaction.getEmpId() : "";
+					String fatherName = StringUtils.isNotEmpty(transaction.getFatherName()) ? transaction.getFatherName() : "";
+					String motherName = StringUtils.isNotEmpty(transaction.getMotherName()) ? transaction.getMotherName() : "";
+					String gender = StringUtils.isNotEmpty(transaction.getGender()) ? transaction.getGender() : "";
+					String maritalStatus = StringUtils.isNotEmpty(transaction.getMaritalStatus()) ? transaction.getMaritalStatus() : "";
 					
 					Date now = transaction.getDob();
 			        String pattern = "dd-MM-yyyy";
@@ -2129,35 +2129,79 @@ public class ExportUtil {
 			        SimpleDateFormat formatter1 = new SimpleDateFormat(pattern1);
 			        String dojDate = formatter1.format(now1);
 			        
+			        dobDate = StringUtils.isNotEmpty(dobDate) ? dobDate : "";
+				    dojDate = StringUtils.isNotEmpty(dojDate) ? dojDate : "";
+				   
+				    
+					String region = StringUtils.isNotEmpty(transaction.getRegion()) ? transaction.getRegion() : "";
+					String bloodGroup = StringUtils.isNotEmpty(transaction.getBloodGroup()) ? transaction.getBloodGroup() : "";
+					String personalIdentificationMark1 = StringUtils.isNotEmpty(transaction.getPersonalIdentificationMark1()) ? transaction.getPersonalIdentificationMark1() : "";
+					String personalIdentificationMark2 = StringUtils.isNotEmpty(transaction.getPersonalIdentificationMark2()) ? transaction.getPersonalIdentificationMark2() : "";
+					String mobile = StringUtils.isNotEmpty(transaction.getMobile()) ? transaction.getMobile() : "";
+					String emergencyContactNumber = StringUtils.isNotEmpty(transaction.getEmergencyContactNumber()) ? transaction.getEmergencyContactNumber() : "";
+					String presentAddress = StringUtils.isNotEmpty(transaction.getPresentAddress()) ? transaction.getPresentAddress() : "";
+					String presentCity = StringUtils.isNotEmpty(transaction.getPresentCity()) ? transaction.getPresentCity() : "";
+					String presentState = StringUtils.isNotEmpty(transaction.getPresentState()) ? transaction.getPresentState() : "";
+					String permanentAddress = StringUtils.isNotEmpty(transaction.getRegion()) ? transaction.getRegion() : "";
+					String permanentCity = StringUtils.isNotEmpty(transaction.getPermanentCity()) ? transaction.getPermanentCity() : "";
+					String permanentState = StringUtils.isNotEmpty(transaction.getPermanentState()) ? transaction.getPermanentState() : "";
+					String educationalQulification = StringUtils.isNotEmpty(transaction.getEducationalQulification()) ? transaction.getEducationalQulification() : "";
+					String boardInstitute = StringUtils.isNotEmpty(transaction.getBoardInstitute()) ? transaction.getBoardInstitute() : "";
+					String nomineeName = StringUtils.isNotEmpty(transaction.getNomineeName()) ? transaction.getNomineeName() : "";
+					String nomineeRelationship = StringUtils.isNotEmpty(transaction.getNomineeRelationship()) ? transaction.getNomineeRelationship() : "";
+					String nomineeContactNumber = StringUtils.isNotEmpty(transaction.getNomineeContactNumber()) ? transaction.getNomineeContactNumber() : "";					
+					String employer = StringUtils.isNotEmpty(transaction.getEmployer()) ? transaction.getEmployer() : "";
+					String designation = StringUtils.isNotEmpty(transaction.getDesignation()) ? transaction.getDesignation() : "";
+					String adharCardNumber = StringUtils.isNotEmpty(transaction.getAdharCardNumber()) ? transaction.getAdharCardNumber() : "";
+					String accountNumber = StringUtils.isNotEmpty(transaction.getAccountNumber()) ? transaction.getAccountNumber() : "";
+					String ifscCode = StringUtils.isNotEmpty(transaction.getIfscCode()) ? transaction.getIfscCode() : "";
+					String active = StringUtils.isNotEmpty(transaction.getActive()) ? transaction.getActive() : "";
+					String position = StringUtils.isNotEmpty(transaction.getPosition()) ? transaction.getPosition() : "";
+					String onBoardedFrom = StringUtils.isNotEmpty(transaction.getOnBoardedFrom()) ? transaction.getOnBoardedFrom() : "";
+	
+					dataRow.createCell(0).setCellValue(projectId);
+					dataRow.createCell(1).setCellValue(projectDesc);
+					dataRow.createCell(2).setCellValue(wbsId);
+					dataRow.createCell(3).setCellValue(wbsDesc);
+					dataRow.createCell(4).setCellValue(empName);
+					dataRow.createCell(5).setCellValue(empId);
+					dataRow.createCell(6).setCellValue(fatherName);
+					dataRow.createCell(7).setCellValue(motherName);
+					dataRow.createCell(8).setCellValue(gender);
+					dataRow.createCell(9).setCellValue(maritalStatus);
 					dataRow.createCell(10).setCellValue(dobDate);
 					dataRow.createCell(11).setCellValue(dojDate);
-					dataRow.createCell(12).setCellValue(transaction.getRegion());
-					dataRow.createCell(13).setCellValue(transaction.getBloodGroup());
-					dataRow.createCell(14).setCellValue(transaction.getPersonalIdentificationMark1());
-					dataRow.createCell(15).setCellValue(transaction.getPersonalIdentificationMark2());
-					dataRow.createCell(16).setCellValue(transaction.getMobile());
-					dataRow.createCell(17).setCellValue(transaction.getEmergencyContactNumber());
-					dataRow.createCell(18).setCellValue(transaction.getPresentAddress());
-					dataRow.createCell(19).setCellValue(transaction.getPresentCity());
-					dataRow.createCell(20).setCellValue(transaction.getPresentState());
-					dataRow.createCell(21).setCellValue(transaction.getPermanentAddress());
-					dataRow.createCell(22).setCellValue(transaction.getPermanentCity());
-					dataRow.createCell(23).setCellValue(transaction.getPermanentState());
-					dataRow.createCell(24).setCellValue(transaction.getEducationalQulification());
-					dataRow.createCell(25).setCellValue(transaction.getBoardInstitute());
-					dataRow.createCell(26).setCellValue(transaction.getNomineeName());
-					dataRow.createCell(27).setCellValue(transaction.getNomineeRelationship());
-					dataRow.createCell(28).setCellValue(transaction.getNomineeContactNumber());
+					dataRow.createCell(12).setCellValue(region);
+					dataRow.createCell(13).setCellValue(bloodGroup);
+					dataRow.createCell(14).setCellValue(personalIdentificationMark1);
+					dataRow.createCell(15).setCellValue(personalIdentificationMark2);
+					dataRow.createCell(16).setCellValue(mobile);
+					dataRow.createCell(17).setCellValue(emergencyContactNumber);
+					dataRow.createCell(18).setCellValue(presentAddress);
+					dataRow.createCell(19).setCellValue(presentCity);
+					dataRow.createCell(20).setCellValue(presentState);
+					dataRow.createCell(21).setCellValue(permanentAddress);
+					dataRow.createCell(22).setCellValue(permanentCity);
+					dataRow.createCell(23).setCellValue(permanentState);
+					dataRow.createCell(24).setCellValue(educationalQulification);
+					dataRow.createCell(25).setCellValue(boardInstitute);					
+					dataRow.createCell(26).setCellValue(nomineeName);
+					dataRow.createCell(27).setCellValue(nomineeRelationship);
+					dataRow.createCell(28).setCellValue(nomineeContactNumber);
+					if(transaction.getPercentage() > 0.0) {
 					dataRow.createCell(29).setCellValue(transaction.getPercentage());
-					dataRow.createCell(30).setCellValue(transaction.getEmployer());
-					dataRow.createCell(31).setCellValue(transaction.getDesignation());
-					dataRow.createCell(32).setCellValue(transaction.getAdharCardNumber());
-					dataRow.createCell(33).setCellValue(transaction.getAccountNumber());
-					dataRow.createCell(34).setCellValue(transaction.getIfscCode());
-					dataRow.createCell(35).setCellValue(transaction.getActive());
-					dataRow.createCell(36).setCellValue(transaction.getPosition());
+					}
+					dataRow.createCell(30).setCellValue(employer);
+					dataRow.createCell(31).setCellValue(designation);
+					dataRow.createCell(32).setCellValue(adharCardNumber);
+					dataRow.createCell(33).setCellValue(accountNumber);
+					dataRow.createCell(34).setCellValue(ifscCode);
+					dataRow.createCell(35).setCellValue(active);
+					dataRow.createCell(36).setCellValue(position);
+					if(transaction.isImported()) {
 					dataRow.createCell(37).setCellValue(transaction.isImported());
-					dataRow.createCell(38).setCellValue(transaction.getOnBoardedFrom());
+					}
+					dataRow.createCell(38).setCellValue(onBoardedFrom);
 					if(transaction.isVerified()) {
 					dataRow.createCell(39).setCellValue(transaction.getVerifiedBy());
 					}
@@ -2165,7 +2209,61 @@ public class ExportUtil {
 					dataRow.createCell(40).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getVerifiedDate().toInstant())));
 					}
 					dataRow.createCell(41).setCellValue(transaction.getCreatedBy());
+					if(transaction.getCreatedDate() != null) {
 					dataRow.createCell(42).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
+					}
+					if(transaction.getGross() > 0.0) {
+					dataRow.createCell(43).setCellValue(transaction.getGross());
+					}
+					
+//					dataRow.createCell(0).setCellValue(transaction.getProjectCode());
+//					dataRow.createCell(1).setCellValue(transaction.getProjectDescription());
+//					dataRow.createCell(2).setCellValue(transaction.getWbsId());
+//					dataRow.createCell(3).setCellValue(transaction.getWbsDescription());
+//					dataRow.createCell(4).setCellValue(transaction.getFullName());
+//					dataRow.createCell(5).setCellValue(transaction.getEmpId());
+//					dataRow.createCell(6).setCellValue(transaction.getFatherName());
+//					dataRow.createCell(7).setCellValue(transaction.getMotherName());
+//					dataRow.createCell(8).setCellValue(transaction.getGender());
+//					dataRow.createCell(9).setCellValue(transaction.getMaritalStatus());
+//					dataRow.createCell(10).setCellValue(dobDate);
+//					dataRow.createCell(11).setCellValue(dojDate);
+//					dataRow.createCell(12).setCellValue(transaction.getRegion());
+//					dataRow.createCell(13).setCellValue(transaction.getBloodGroup());
+//					dataRow.createCell(14).setCellValue(transaction.getPersonalIdentificationMark1());
+//					dataRow.createCell(15).setCellValue(transaction.getPersonalIdentificationMark2());
+//					dataRow.createCell(16).setCellValue(transaction.getMobile());
+//					dataRow.createCell(17).setCellValue(transaction.getEmergencyContactNumber());
+//					dataRow.createCell(18).setCellValue(transaction.getPresentAddress());
+//					dataRow.createCell(19).setCellValue(transaction.getPresentCity());
+//					dataRow.createCell(20).setCellValue(transaction.getPresentState());
+//					dataRow.createCell(21).setCellValue(transaction.getPermanentAddress());
+//					dataRow.createCell(22).setCellValue(transaction.getPermanentCity());
+//					dataRow.createCell(23).setCellValue(transaction.getPermanentState());
+//					dataRow.createCell(24).setCellValue(transaction.getEducationalQulification());
+//					dataRow.createCell(25).setCellValue(transaction.getBoardInstitute());
+//					dataRow.createCell(26).setCellValue(transaction.getNomineeName());
+//					dataRow.createCell(27).setCellValue(transaction.getNomineeRelationship());
+//					dataRow.createCell(28).setCellValue(transaction.getNomineeContactNumber());
+//					dataRow.createCell(29).setCellValue(transaction.getPercentage());
+//					dataRow.createCell(30).setCellValue(transaction.getEmployer());
+//					dataRow.createCell(31).setCellValue(transaction.getDesignation());
+//					dataRow.createCell(32).setCellValue(transaction.getAdharCardNumber());
+//					dataRow.createCell(33).setCellValue(transaction.getAccountNumber());
+//					dataRow.createCell(34).setCellValue(transaction.getIfscCode());
+//					dataRow.createCell(35).setCellValue(transaction.getActive());
+//					dataRow.createCell(36).setCellValue(transaction.getPosition());
+//					dataRow.createCell(37).setCellValue(transaction.isImported());
+//					dataRow.createCell(38).setCellValue(transaction.getOnBoardedFrom());
+//					if(transaction.isVerified()) {
+//					dataRow.createCell(39).setCellValue(transaction.getVerifiedBy());
+//					}
+//					if(transaction.getVerifiedDate() != null) {
+//					dataRow.createCell(40).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getVerifiedDate().toInstant())));
+//					}
+//					dataRow.createCell(41).setCellValue(transaction.getCreatedBy());
+//					dataRow.createCell(42).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
+//					dataRow.createCell(43).setCellValue(transaction.getGross());		        
 				}
 
 //				for (int i = 0; i < EMP_HEADER.length; i++) {

@@ -2229,6 +2229,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setVerified(false);
     empDto.setVerifiedBy(null);
     empDto.setVerifiedDate(null);
+    empDto.setGross(employee.getGross());
     
     return empDto;
 }
