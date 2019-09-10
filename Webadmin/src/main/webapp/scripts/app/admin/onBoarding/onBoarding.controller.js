@@ -1436,7 +1436,7 @@ angular.module('timeSheetApp')
             $scope.success = null;
             $scope.disable = false;
             $scope.btnDisable = false;
-            $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.message);
+            $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.message);
             $scope.error = 'ERROR';
         });
     };
