@@ -1906,7 +1906,7 @@ public class ImportUtil {
 								
 							}
 							
-							employee.setFullName(getCellValue(currentRow.getCell(4)));;
+							employee.setFullName(getCellValue(currentRow.getCell(4)));
 
 							cellNo = 6;
 							employee.setFatherName(getCellValue(currentRow.getCell(6)));

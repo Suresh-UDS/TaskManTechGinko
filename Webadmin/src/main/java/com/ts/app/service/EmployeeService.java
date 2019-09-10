@@ -368,6 +368,7 @@ public class    EmployeeService extends AbstractService {
     
     public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
+        employee.setFullName(employee.getName()+" "+employee.getLastName());
         employee.setUser(null);
         employee.setActive(Employee.ACTIVE_YES);
         employee.setSubmittedOn(ZonedDateTime.now());
@@ -379,6 +380,7 @@ public class    EmployeeService extends AbstractService {
     public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
         employeeDTO.setId(employee.getId());
+        employeeDTO.setFullName(employeeDTO.getName()+" "+employeeDTO.getLastName());
         Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
 
         updateEmployeeDTO.setVerifiedBy(null);
@@ -2174,6 +2176,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setEmail(employee.getEmail());
     empDto.setActive(employee.getActive());
     empDto.setAccountNumber(employee.getAccountNumber());
+    empDto.setGross(employee.getGross());
 //         empDto.setAddressProofImage(employee.getAddressProofImage());
 //         empDto.setAdharBackImage(employee.getAdharBackImage());
     empDto.setAdharCardNumber(employee.getAdharCardNumber());
@@ -2229,6 +2232,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setVerified(false);
     empDto.setVerifiedBy(null);
     empDto.setVerifiedDate(null);
+    empDto.setOnboardedPlace(employee.getOnboardedPlace());
     
     return empDto;
 }
