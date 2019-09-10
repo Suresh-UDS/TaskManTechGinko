@@ -2176,7 +2176,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setEmail(employee.getEmail());
     empDto.setActive(employee.getActive());
     empDto.setAccountNumber(employee.getAccountNumber());
-    empDto.setGross(employee.getGross());
+    
 //         empDto.setAddressProofImage(employee.getAddressProofImage());
 //         empDto.setAdharBackImage(employee.getAdharBackImage());
     empDto.setAdharCardNumber(employee.getAdharCardNumber());
@@ -2231,8 +2231,9 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setSubmittedOn(ZonedDateTime.now());
     empDto.setVerified(false);
     empDto.setVerifiedBy(null);
-    empDto.setVerifiedDate(null);
-    empDto.setOnboardedPlace(employee.getOnboardedPlace());
+    empDto.setVerifiedDate(null); 
+    empDto.setOnboardedPlace(employee.getOnboardedPlace()); 
+    empDto.setGross(employee.getGross());
     
     return empDto;
 }
