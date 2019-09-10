@@ -2212,9 +2212,9 @@ public class ExportUtil {
 					if(transaction.getCreatedDate() != null) {
 					dataRow.createCell(42).setCellValue(DateUtil.formatToDateTimeString(Date.from(transaction.getCreatedDate().toInstant())));
 					}
-					if(transaction.getGross() > 0.0) {
+					//if(transaction.getGross() > 0.0) {
 					dataRow.createCell(43).setCellValue(transaction.getGross());
-					}
+					//}
 					
 //					dataRow.createCell(0).setCellValue(transaction.getProjectCode());
 //					dataRow.createCell(1).setCellValue(transaction.getProjectDescription());
