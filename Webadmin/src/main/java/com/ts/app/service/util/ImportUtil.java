@@ -658,6 +658,12 @@ public class ImportUtil {
 						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
 						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
 						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
+						//jobDto.setPlannedHours((int)(startTime.getTime() - endTime.getTime()));
+						long diff = endTime.getTime() - startTime.getTime();
+						long diffHours = diff / (60 * 60 * 1000) % 24;
+						jobDto.setPlannedHours((int)(diffHours));
+						
+						//jobDto.setPlannedHours((int)(endTime.getTime() - startTime.getTime()));
 						cellNo++;
 						if(currentRow.getCell(12)!=null){
 	                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
