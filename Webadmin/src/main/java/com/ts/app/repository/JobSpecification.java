@@ -124,16 +124,16 @@ public class JobSpecification implements Specification<Job> {
 
 		            	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	checkInDateFrom.setTime(checkInDate);
-
+		            	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
+		            	checkInDateFrom.set(Calendar.MINUTE,0);
+		            	checkInDateFrom.set(Calendar.SECOND,0);
+		            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
 		            	
 		            	
 		            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	if(searchCriteria.getCheckInDateTimeTo() != null) {
-		            		checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
-			            	checkInDateFrom.set(Calendar.MINUTE,0);
-			            	checkInDateFrom.set(Calendar.SECOND,0);
-			            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
+		            		
 			            	checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
 			            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
 			            	checkInDateTo.set(Calendar.MINUTE,59);
@@ -143,7 +143,7 @@ public class JobSpecification implements Specification<Job> {
 			        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 			        	} 
 		            	else {
-		            		Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
+ 
 		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedStartTime"), fromDt));
 		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedEndTime"), fromDt));
 		            		
