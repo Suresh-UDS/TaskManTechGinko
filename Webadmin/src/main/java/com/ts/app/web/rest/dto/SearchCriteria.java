@@ -36,10 +36,20 @@ public class SearchCriteria extends Paginator {
 	private Date toDate;
 
 	private JobStatus jobStatus;
+	
+	private List<JobStatus> jobStatusList;
 
 	private long locationId;
 
 	private long siteId;
+
+	public List<JobStatus> getJobStatusList() {
+		return jobStatusList;
+	}
+
+	public void setJobStatusList(List<JobStatus> jobStatusList) {
+		this.jobStatusList = jobStatusList;
+	}
 
 	private String siteName;
 
