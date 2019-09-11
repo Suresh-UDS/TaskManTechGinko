@@ -4,12 +4,14 @@ import {OnboardingService} from '../../../service/onboarding.service';
 import {ActionSheetController, AlertController, Events, Item, ItemSliding, LoadingController, ModalController,NavController, NavParams, Platform} from 'ionic-angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {onBoardingDataService} from "../onboarding.messageData.service";
-import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import {LocationProvider} from "../../../../providers/location-provider";
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { Storage } from '@ionic/storage';
-
-
+import {
+  NativeGeocoder,
+  NativeGeocoderOptions, NativeGeocoderReverseResult
+} from '@ionic-native/native-geocoder';
+import { componentService } from '../../../service/componentService';
 @Component({
   selector: 'page-declaration',
   templateUrl: 'declaration.html',
@@ -22,63 +24,34 @@ export class declaration  {
   location:any;
   declarationForm: FormGroup;
   declarationSubscription;
-  grossSal:any;
+  gross:any;
   storedIndex:any;
   thumbImpression:any;
   employeeName:any;
 
 constructor(public navCtrl: NavController, private onBoardingService: OnboardingService, public navParams: NavParams, public fb: FormBuilder, private messageService: onBoardingDataService,
-            private nativeGeoCoder: NativeGeocoder, private locationProvider: LocationProvider, private backgroundGeolocation: BackgroundGeolocation, private storage: Storage) {
+             private nativeGeocoder: NativeGeocoder,private locationProvider: LocationProvider, private backgroundGeolocation: BackgroundGeolocation, private storage: Storage, private cs:componentService) {
       this.currentDate = new Date();
-      // this.getLocation();
+      // this.getAddress();
+
+
       this.storage.get('onboardingCurrentIndex').then(data => {
         this.storedIndex = data['index'];
       });
       this.storage.get('OnBoardingData').then(localStoragedData => {
-      this.grossSal = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['grossSal'];
-      this.thumbImpression = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenLeft'];
-      this.employeeName = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+      this.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
+          this.employeeName = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+
+          this.thumbImpression = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
+
+
       })
     }
 
-  getLocation(){
-    this.locationProvider.startTracking();
-
-    let options: NativeGeocoderOptions = {
-      useLocale: true,
-      maxResults: 5
-    };
-
-    let config = {
-      desiredAccuracy: 0,
-      stationaryRadius: 20,
-      distanceFilter: 10,
-      debug: false,
-      // interval: 2000,
-      stopOnTerminate:true
-    };
-
-    this.backgroundGeolocation.configure(config).subscribe((response) => {
-      console.log("Location provider response");
-      console.log(response);
-      this.nativeGeoCoder.reverseGeocode(response.latitude,response.longitude).then((result:NativeGeocoderResult[])=>{
-        console.log("response ");
-        console.log(result[0]);
-        this.location = result[0];
-      });
-      this.locationProvider.stopTracking();
-
-    });
-  }
 
   ngOnInit() {
   console.log("Getting declaration");
-
-    let options: NativeGeocoderOptions = {
-      useLocale: true,
-      maxResults: 5
-    };
-
+    this.getLocation();
     this.onBoardingService.getDeclarationList().subscribe(res=>{
       console.log("response");
       console.log(res);
@@ -88,7 +61,8 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
 
     this.declarationForm = this.fb.group(
         {
-          agreeTermsAndConditions: [false,[Validators.required]]
+          agreeTermsAndConditions: [false,[Validators.required]],
+            onboardedPlace:['']
         }
     );
 
@@ -98,17 +72,66 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
           status: true,
           data: this.declarationForm.value
         };
+          this.storage.get('OnBoardingData').then(localStoragedData => {
+              localStoragedData['actionRequired'][this.storedIndex]['declaration']['agreeTermsAndConditions'] = formStatusValues['data']['agreeTermsAndConditions'];
+              localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = formStatusValues['data']['onboardedPlace'];
+              this.storage.set('OnBoardingData',localStoragedData);
+          });
         this.messageService.formDataMessage(formStatusValues);
       }
     })
   }
+
   getDeclarationList(declarationContent){
 
     let text='_______________';
-    declarationContent = declarationContent.replace(text, parseFloat(this.grossSal).toFixed(2) );
+    declarationContent = declarationContent.replace(text, parseFloat(this.gross).toFixed(2) );
     this.declationText=declarationContent;
 
  }
+
+  getLocation(){
+    this.cs.showLoader("Getting Location");
+    this.locationProvider.startTracking();
+    let TIME_IN_MS = 2000;
+    setTimeout( () => {
+         this.cs.closeAll();
+    }, TIME_IN_MS);
+    let config = {
+      desiredAccuracy: 0,
+      stationaryRadius: 100,
+      distanceFilter: 10,
+      debug: false,
+      // interval: 2000,
+      stopOnTerminate:true
+    };
+
+    this.backgroundGeolocation.configure(config).subscribe((response) => {
+      console.log("Location provider response");
+      console.log(response);
+      this.cs.closeLoader();
+      this.cs.showLoader("Getting City");
+      this.nativeGeocoder.reverseGeocode(response.latitude, response.longitude)
+          .then((result: NativeGeocoderReverseResult[])=>{
+//...       
+            this.cs.closeLoader();
+            console.log("Native geocoder response");
+            console.log(result);
+            this.location = result[0].locality;
+
+              this.storage.get('OnBoardingData').then(localStoragedData => {
+                  localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = this.location?this.location:'';
+              });
+
+              this.locationProvider.stopTracking();
+
+          }).catch((error: any) => {
+            this.cs.closeLoader();
+          this.locationProvider.stopTracking();
+          console.log(error)});
+
+    });
+  }
   
 
 }

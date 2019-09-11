@@ -18,6 +18,7 @@ export class newEmpContactDetails implements OnInit {
   onboardingContactDetailsSubscription;
   formStatusValues: any = {};
   storedIndex;
+  formActionStatus;
   IMG_BASE_URL = 'https://s3zappyweb.s3.ap-south-1.amazonaws.com/uat/expenseDocuments/';
   mobnumPattern = "^((\\+91-?)|0)?[0-9]{10}$";
   PhoneNumberErrorMessage;
@@ -66,6 +67,7 @@ export class newEmpContactDetails implements OnInit {
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      this.formActionStatus = data['action'];
     });
     this.onboardingContactDetailsForm = this.fb.group({
       checkSameAsPresent: [false],
@@ -91,6 +93,22 @@ export class newEmpContactDetails implements OnInit {
           status: true,
           data: this.onboardingContactDetailsForm.getRawValue()
         }
+
+        this.storage.get('OnBoardingData').then(localStoragedData => {
+          if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['contactDetails']){
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['checkSameAsPresent'] = this.formStatusValues['data']['checkSameAsPresent'] ? this.formStatusValues['data']['checkSameAsPresent'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['checkSameAsPresent'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['contactNumber'] = this.formStatusValues['data']['contactNumber'] ? this.formStatusValues['data']['contactNumber'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['contactNumber'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'] = this.formStatusValues['data']['emergencyConatctNo'] ? this.formStatusValues['data']['emergencyConatctNo'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['address'] = this.formStatusValues['data']['communicationAddress'][0]['address'] ? this.formStatusValues['data']['communicationAddress'][0]['address'] :  localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['address'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['city'] = this.formStatusValues['data']['communicationAddress'][0]['city'] ? this.formStatusValues['data']['communicationAddress'][0]['city'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['city'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['state'] = this.formStatusValues['data']['communicationAddress'][0]['state'] ? this.formStatusValues['data']['communicationAddress'][0]['state'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['state'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'] = this.formStatusValues['data']['permanentAddress'][0]['address'] ? this.formStatusValues['data']['permanentAddress'][0]['address'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'] = this.formStatusValues['data']['permanentAddress'][0]['city'] ? this.formStatusValues['data']['permanentAddress'][0]['city'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'];
+            localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['state'] = this.formStatusValues['data']['permanentAddress'][0]['state'] ? this.formStatusValues['data']['permanentAddress'][0]['state'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['state'];
+            this.storage.set('OnBoardingData',localStoragedData);
+          }
+        });
+
       } else {
         this.formStatusValues = {
           status: false,
@@ -281,28 +299,47 @@ export class newEmpContactDetails implements OnInit {
   }
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      if (localStoragedData['actionRequired'][this.storedIndex]) {
+        if (localStoragedData['actionRequired'][this.storedIndex]) {
 
-        if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails'].hasOwnProperty('contactNumber')) {
+          if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails']    && localStoragedData['actionRequired'][this.storedIndex]['contactDetails'].hasOwnProperty('contactNumber')) {
 
-          console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']));
 
-          this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'];
-          console.log(' - address - ' + this.addressProof);
+              console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']));
 
-          if (this.addressProof !== null && this.addressProof.includes('addressProof')) {
-            this.addressProof = this.IMG_BASE_URL + this.addressProof;
-          }
+              localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'] = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
+              this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'];
+              console.log(' - address - ' + this.addressProof);
 
-          console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']));
 
-          this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']);
-          if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'] !== null) {
-            this.onboardingContactDetailsForm.controls['emergencyConatctNo']
-              .setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']);
+              console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']));
+
+              this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']);
+              if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'] !== null) {
+                this.onboardingContactDetailsForm.controls['emergencyConatctNo']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']);
+              }
+
+          }else {
+            console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]  ));
+
+            localStoragedData['actionRequired'][this.storedIndex]  ['addressProof'] = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
+            this.addressProof = localStoragedData['actionRequired'][this.storedIndex]  ['addressProof'];
+            console.log(' - address - ' + this.addressProof);
+
+            if (this.addressProof !== null && this.addressProof.includes('addressProof')) {
+              this.addressProof = this.IMG_BASE_URL + this.addressProof;
+            }
+
+            console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]  ['emergencyConatctNo']));
+
+            this.onboardingContactDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]  );
+            if (localStoragedData['actionRequired'][this.storedIndex]  ['emergencyConatctNo'] !== null) {
+              this.onboardingContactDetailsForm.controls['emergencyConatctNo']
+                  .setValue(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo']);
+            }
           }
         }
-      }
+
     });
   }
 

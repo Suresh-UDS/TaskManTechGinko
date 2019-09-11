@@ -13,7 +13,7 @@ export const onBoardingModel =  {
       personalDetails: {
             employeeCode:  '',
             employeeName: '',
-            relationshipDetails: '',
+            relationshipDetails: [{name:'',relationship:'',contactNumber:''},{name:'',relationship:'',contactNumber:''}],
             gender: '',
             maritalStatus: '',
             dateOfBirth: '',
@@ -25,29 +25,30 @@ export const onBoardingModel =  {
       contactDetails: {
             contactNumber: '',
             emergencyConatctNo: '',
-            communicationAddress: '',
-            permanentAddress: '',
-            addressProof: 'assets/imgs/placeholder.png'
+            communicationAddress: [{address:'',city:'',state:''}],
+            permanentAddress: [{address:'',city:'',state:''}],
+            addressProof: ''
       },
       familyAcademicDetails: {
-            educationQualification: '',
-            nomineeDetail: '',
+            educationQualification: [{qualification:'',institute:''}],
+            nomineeDetail: [{name:'', relationship:'',contactNumber:'',nominePercentage:0}],
       },
       employmentDetails: {
-            previousEmployee : '',
+            previousEmployee : [{isEmploymentEarlier:'',name:'',designation:''}],
       },
       kycDetails: {
             aadharNumber: '',
-            bankDetails: '',
-            aadharPhotoCopy: 'assets/imgs/placeholder.png',
-            employeeSignature: 'assets/imgs/placeholder.png',
-            profilePicture: 'assets/imgs/placeholder.png',
-            thumbImpressenRight:'assets/imgs/placeholder.png',
-            thumbImpressenLeft:'assets/imgs/placeholder.png',
-            prePrintedStatement: 'assets/imgs/placeholder.png',
+            bankDetails: [{accountNo:'',ifsc:''}],
+            aadharPhotoCopy: '',
+            employeeSignature: '',
+            profilePicture: '',
+            thumbImpressenRight:'',
+            thumbImpressenLeft:'',
+            prePrintedStatement: '',
       },
 
       declaration:{
-            agreeTermsAndConditions:false
+            agreeTermsAndConditions:false,
+            onboardedPlace:''
       }
 };

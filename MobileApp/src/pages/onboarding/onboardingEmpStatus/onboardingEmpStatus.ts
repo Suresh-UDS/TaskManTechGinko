@@ -40,9 +40,9 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
     this.storage.get('onboardingCurrentIndex').then(currentIndex => {
 
       currentIndex = currentIndex['index'];
-      console.log('index = ' + currentIndex);
+      //console.log('index = ' + currentIndex);
 
-      console.log(currentIndex);
+      //console.log(currentIndex);
 
       let objectPercentage = 0;
       let keyPercentage = 0;
@@ -52,8 +52,8 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
 
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         //obj[this.wizardObj[this.currentIndex]['key']] = data['data'];
-        console.log(localStoragedData);
-        console.log(localStoragedData['actionRequired']);
+        //console.log(localStoragedData);
+        //console.log(localStoragedData['actionRequired']);
         this.employeeName = localStoragedData['actionRequired'][currentIndex]['employeeName'];
         this.employeeCode = localStoragedData['actionRequired'][currentIndex]['employeeCode'];
         // for (let list in localStoragedData['actionRequired'][currentIndex]) {
@@ -63,14 +63,25 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
         for (let i = 0; i < data.length; i++) {
 
           let keyData = this.onboardingFormStatus[i]['key'];
-          console.log("key data");
-          console.log(this.onboardingFormStatus[i]['key']);
+          //console.log("key data");
+          //console.log(this.onboardingFormStatus[i]['key']);
           for (let key in onBoardingModel[keyData]) {
-            console.log("Key - "+key);
-            console.log("KeyData - "+keyData);
-            console.log(localStoragedData['actionRequired'][currentIndex][keyData][key]);
-            console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][keyData][key]);
-            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][keyData][key];
+            // console.log("Key - "+key);
+            // console.log("KeyData - "+keyData);
+            // console.log(localStoragedData['actionRequired'][currentIndex][keyData][key]);
+            // console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][keyData][key]);
+            
+            if()
+
+            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][keyData][key]?
+            localStoragedData['actionRequired'][currentIndex][keyData][key]:
+            localStoragedData['actionRequired'][currentIndex][key];
+
+            console.log("Data assigned");
+            console.log(onBoardingModel[keyData][key]);
+            console.log(localStoragedData['actionRequired'][currentIndex][keyData][key]?
+            localStoragedData['actionRequired'][currentIndex][keyData][key]:
+            localStoragedData['actionRequired'][currentIndex][key]);
           }
 
           objectkeys = Object.keys(onBoardingModel[keyData]);
@@ -88,18 +99,18 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
           this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
 
 
-          console.log('key_1', this.onboardingFormStatus[i]['status']);
+          //console.log('key_1', this.onboardingFormStatus[i]['status']);
           this.storage.set('PageStatus',this.onboardingFormStatus);
           
           
           // localStoragedData['actionRequired'][currentIndex]['pageStatus'][i] = Math.floor(keyPercentage);
-          // console.log('key2 EmpStatus ' +   localStoragedData['actionRequired'][currentIndex]['pageStatus'][i]);        
+          // //console.log('key2 EmpStatus ' +   localStoragedData['actionRequired'][currentIndex]['pageStatus'][i]);        
           // this.storage.set('OnBoardingData', localStoragedData);
           // let keyPercentage = 0
           // let objectFormattedValues = [];
           // let objectkeys1 = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
           // let objectValues1 = Object['values'](localStoragedData['actionRequired'][currentIndex][this.onboardingFormStatus[i]['key']]);
-          // console.log('value 1 ' +  ' / ' + objectkeys1);
+          // //console.log('value 1 ' +  ' / ' + objectkeys1);
           // objectFormattedValues = objectValues.filter((data) => {
           //   if (data) {
           //     return data;
@@ -155,3 +166,4 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
 
 
 }
+

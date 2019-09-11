@@ -73,6 +73,10 @@
     </select-searchable>
   </ion-item>
 
+  <p style="color:red" *ngIf="showError">
+    {{errorMessage}}
+  </p>
+
   <p >
     <ion-badge  *ngIf="selectedBranch !=null">Selected Branch:  {{selectedBranch.element}}</ion-badge><br>
   </p>

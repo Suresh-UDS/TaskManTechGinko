@@ -25,12 +25,14 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
   setMinDate;
   // filteredMinDate;
   pipe = new DatePipe('en-US');
-
+  formActionStatus;
   constructor(private fb: FormBuilder, public componentService: componentService, private storage: Storage, private camera: Camera, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      this.formActionStatus = data['action'];
+
     });
 
     this.onboardingEmployeeMentForm = this.fb.group({
@@ -50,7 +52,19 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
           status: true,
           data: this.onboardingEmployeeMentForm.value
         }
-        this.messageService.formDataMessage(this.formStatusValues);
+        this.storage.get('OnBoardingData').then(localStoragedData => {
+          if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']){
+            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['isEmploymentEarlier'] = this.formStatusValues['data']['employmentDetails'] ? this.formStatusValues['data']['employmentDetails'][0]['isEmploymentEarlier']: '';
+            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] = 
+            this.formStatusValues['data']['employmentDetails'] ? 
+            this.formStatusValues['data']['employmentDetails'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'];
+            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] = this.formStatusValues['data']['employmentDetails'] ? this.formStatusValues['data']['employmentDetails'][0]['designation'] : localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] ;
+            this.storage.set('OnBoardingData',localStoragedData);
+            
+          }
+        });
+
+          this.messageService.formDataMessage(this.formStatusValues);
       } else {
         this.formStatusValues = {
           status: false,
@@ -134,21 +148,24 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
     //let curretScope = this;
     this.storage.get('OnBoardingData').then(localStoragedData => {
       if (localStoragedData['actionRequired'][this.storedIndex]) {
-        if (localStoragedData['actionRequired'][this.storedIndex]['employmentDetails'].hasOwnProperty('previousEmployee')) {
+        if (localStoragedData['actionRequired'][this.storedIndex]['employmentDetails'] && localStoragedData['actionRequired'][this.storedIndex]['employmentDetails'].hasOwnProperty('previousEmployee')) {
+          if (localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']) {
+            
+            console.log('EMPfromTo_dt2--' + JSON.stringify(localStoragedData['actionRequired']
+            [this.storedIndex]['previousEmployee']));
 
-          this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']);
+            this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']  );
 
-          console.log('EMPfromTo_dt2--'+JSON.stringify(localStoragedData['actionRequired']
-          [this.storedIndex]['previousEmployee']['fromEmployed']));
+          }else{
+            this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]  );
 
-          let fromempDate = localStoragedData['actionRequired'][this.storedIndex]['previousEmployee']['fromEmployed'];
-          let toEmpDate = localStoragedData['actionRequired'][this.storedIndex]['previousEmployee']['toEmployed'];
+            console.log('EMPfromTo_dt2--' + JSON.stringify(localStoragedData['actionRequired']
+            [this.storedIndex]));
 
-          console.log('EMPfromTo Date--', fromempDate + ' - ' + toEmpDate);
+            // this.nomineeForms.controls[0]['controls']['fromEmployed'].setValue(fromempDate);
+            // this.nomineeForms.controls[0]['controls']['toEmployed'].setValue(toEmpDate);
 
-          // this.nomineeForms.controls[0]['controls']['fromEmployed'].setValue(fromempDate);
-          // this.nomineeForms.controls[0]['controls']['toEmployed'].setValue(toEmpDate);
-
+          }
         }
       }
       this.SetEarlierEmp();

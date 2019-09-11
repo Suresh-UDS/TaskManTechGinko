@@ -25,7 +25,8 @@ export class OnBoardingEmployeeFilter {
   selectedWBS:any;
   empNameSearch:any;
   empCodeSearch:any;
-
+  showError:any;
+  errorMessage:any;
 
   filterData:{
     branch:any,
@@ -41,6 +42,12 @@ export class OnBoardingEmployeeFilter {
     this.selectedBranch = null;
     this.selectedProject = null;
     this.selectedWBS = null;
+    this.showError = false;
+
+    this.storage.get('filterDetails').then(filterData=>{
+      console.log("Filter data");
+      console.log(filterData);
+    });
 
     this.filterData = {
         branch: null,
@@ -118,20 +125,36 @@ export class OnBoardingEmployeeFilter {
   filterEmployees(){
     if(this.selectedBranch && this.selectedBranch.element){
       this.filterData.branch = this.selectedBranch;
+      if(this.selectedProject && this.selectedProject.element){
+        this.filterData.projectCode = this.selectedProject.elementCode;
+        if(this.selectedWBS && this.selectedWBS.element){
+          this.filterData.wbsCode = this.selectedWBS.elementCode;
+            this.filterData.employeeEmpId = this.empCodeSearch;
+            this.filterData.name = this.empNameSearch;
+            this.showError = false;
+            let filterDetails = {
+              branch:this.selectedBranch,
+              project:this.selectedProject,
+              wbs:this.selectedWBS,
+              name:this.empNameSearch,
+              empId: this.empCodeSearch
+            }
+            this.storage.set('filterDetails',filterDetails);
+            this.viewCtrl.dismiss(this.filterData);
+
+        }else{
+            this.showError= true;
+            this.errorMessage = "Please Select WBS";
+        }
+      }else{
+        this.showError = true;
+        this.errorMessage = "Please Select Project";
+      }
+    }else{
+      this.showError = true;
+        this.errorMessage = "Please Select Branch";
     }
-    if(this.selectedProject && this.selectedProject.element){
-      this.filterData.projectCode = this.selectedProject.elementCode;
-    }
-    if(this.selectedWBS && this.selectedWBS.element){
-      this.filterData.wbsCode = this.selectedWBS.elementCode;
-    }
-    if(this.empCodeSearch){
-      this.filterData.employeeEmpId = this.empCodeSearch;
-    }
-    if(this.empNameSearch){
-      this.filterData.name = this.empNameSearch;
-    }
-    this.viewCtrl.dismiss(this.filterData);
+   
   }
 
 }
