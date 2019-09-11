@@ -45,7 +45,7 @@
                 <!-- <ion-item>
                     <h2>Marty</h2>
                 </ion-item> -->
-                <ion-card-content (click)="updateEmployeeDetails(index)">
+                <ion-card-content (click)="updateEmployeeDetails(index)" *ngIf="list.filtered">
                     
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">

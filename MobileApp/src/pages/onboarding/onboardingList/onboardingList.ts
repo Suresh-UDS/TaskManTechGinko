@@ -235,9 +235,10 @@ export class onboardingExistEmployee implements OnInit {
     if (this.onBoardingAction == 'actionRequired') {
       if(searchCriteria.wbsCode !=null){
         this.getEmployeesByWBSId(searchCriteria.projectCode, searchCriteria.wbsCode);
-      }else if(searchCriteria.projectCode !=null){
-        this.getEmployeesByProjectId(searchCriteria.projectCode);
       }
+      // }else if(searchCriteria.projectCode !=null){
+      //   this.getEmployeesByProjectId(searchCriteria.projectCode);
+      // }
     } else {
       searchCriteria.submitted = true;
       this.searchEmployees(searchCriteria);
@@ -423,6 +424,7 @@ export class onboardingExistEmployee implements OnInit {
             else{
              // employeeData[i] = onBoardingReferenceModel;
               employeeData[i]={};
+              employeeData[i]['filtered']=true;
               employeeData[i]['employeeName']=res[i].name;
               employeeData[i]['employeeCode']=res[i].empId;
               employeeData[i]['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
@@ -501,6 +503,7 @@ export class onboardingExistEmployee implements OnInit {
         //console.log(onBoardingModel);
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
+        this.applyNameAndIdFilter();
         this.getPercentage();
         this.component.closeAll();
       }, err => {
@@ -508,6 +511,7 @@ export class onboardingExistEmployee implements OnInit {
         this.actionRequiredEmp = localStoragedData['actionRequired'];
         this.completedEmp = localStoragedData["completed"];
         this.getPercentage();
+        this.applyNameAndIdFilter();
         this.component.closeAll();
         this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
       });
@@ -515,6 +519,29 @@ export class onboardingExistEmployee implements OnInit {
       this.component.showToastMessage('Server Unreachable ' + err, 'bottom');
       this.component.closeAll();
     });
+  }
+
+  applyNameAndIdFilter(){
+
+     if(searchCriteria.employeeEmpId){
+
+        for(let i in this.actionRequiredEmp){
+
+          if(this.actionRequiredEmp[i].employeeCode.indexOf(searchCriteria.employeeEmpId) > -1){
+
+            this.actionRequiredEmp[i].filtered = true;
+
+          }
+          else{
+
+            this.actionRequiredEmp[i].filtered = false;
+
+          }
+          
+        }
+
+     }
+
   }
 
   getNomineeRelationships(){
