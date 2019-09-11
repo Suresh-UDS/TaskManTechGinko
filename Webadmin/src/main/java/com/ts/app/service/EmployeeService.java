@@ -2303,7 +2303,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
          empDto.setImported(employee.isImported());
          empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
          empDto.setGross(employee.getGross());
-         
+         empDto.setOnboardedPlace(employee.getOnboardedPlace());
          if(empDto.isVerified()){
         	 empDto.setVerifiedBy(employee.getVerifiedBy().getFirstName());
          }
