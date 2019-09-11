@@ -3,14 +3,15 @@ export const onBoardingReferenceModel =  {
       employeeName:'',
       employeeCode:'',
       percentage:0,
-
+      id:0,
+      submitted:false,
       siteDetails:{
             projectCode:'',
             wbsId:'',
             projectDescription:'',
             wbsDescription:'',
             position:'',
-            grossSal:0.00
+            gross:0.00
 
       },
 
@@ -54,6 +55,7 @@ export const onBoardingReferenceModel =  {
       },
 
       declaration:{
-            agreeTermsAndConditions:false
+            agreeTermsAndConditions:false,
+            onboardedPlace: ''
       }
 };

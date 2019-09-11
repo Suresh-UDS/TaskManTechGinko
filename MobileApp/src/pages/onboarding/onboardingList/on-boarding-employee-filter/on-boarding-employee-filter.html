@@ -74,6 +74,9 @@
     <ion-label  text-capitalize class="client-label" text-left>Employee Code</ion-label>
     <ion-input [(ngModel)]="empCodeSearch"></ion-input>
   </ion-item>
+  <p style="color:red" *ngIf="showError">
+    {{errorMessage}}
+  </p>
 
   <p >
     <ion-badge  *ngIf="selectedBranch !=null">Selected Branch:  {{selectedBranch.element}}</ion-badge><br>

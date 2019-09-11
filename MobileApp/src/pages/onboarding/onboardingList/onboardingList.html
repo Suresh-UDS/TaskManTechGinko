@@ -4,11 +4,19 @@
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>On Boarding List</ion-title>
+
+        <ion-buttons right >
+            <button ion-button class="fnt-black" icon-only (click)="addNewEmpyoee()">
+                <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-buttons>
+
         <ion-buttons right >
             <button ion-button class="fnt-black" icon-only (click)="userFilter()">
                 <ion-icon name="funnel"></ion-icon>
             </button>
         </ion-buttons>
+
     </ion-navbar>
     <ion-segment [(ngModel)]="onBoardingAction" (ionChange)="onSegmentChange()">
         <ion-segment-button value="actionRequired">
@@ -21,13 +29,6 @@
 </ion-header>
 
 <ion-content>
-    <!-- <button (click)="updateEmployeeDetails()" ion-button icon-start>
-        <ion-icon name="refresh"></ion-icon>
-        <div>Update</div>
-    </button> -->
-    <ion-fab bottom right (click)="addNewEmpyoee()">
-        <button ion-button color="primary">New Employee</button>
-    </ion-fab>
     <div [ngSwitch]="onBoardingAction">
         <div *ngSwitchCase="'actionRequired'">
             <div *ngIf="!actionRequiredEmp['length']">
@@ -50,7 +51,7 @@
                     <ion-row class="margin0">
                         <ion-col col-4 class="ver-center">
                             <ion-avatar item-start class="inlineElement">
-                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:AppConfig.s3Bucket+list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
+                                <img [src]="list['profilePicture']!=null?(list['profilePicture'].includes('file:///')?list['profilePicture']:list['profilePicture']):''" onError="src = 'assets/imgs/placeholder.png'" class="mdImage" />
                             </ion-avatar>
                         </ion-col>
                         <ion-col col-8 class="padding-left5">

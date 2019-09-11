@@ -31,12 +31,22 @@ export class NewEmpSiteDetails {
   selectedProject:any;
   selectedWBS:any;
   formActionStatus: any;
+  showSelectedDetails:any;
+
+  branchCode:any;
+  branchDescription:any;
+  projectCode:any;
+  projectDescription:any;
+  wbsCode:any;
+  wbsDescription:any;
+
   pipe = new DatePipe('en-US');
   constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, private storage: Storage, private onBoardingService: OnboardingService, private messageService: onBoardingDataService) {
 
     this.selectedBranch = null;
     this.selectedProject = null;
     this.selectedWBS = null;
+    this.showSelectedDetails = false;
   }
 
   ionViewDidLoad() {
@@ -55,13 +65,14 @@ export class NewEmpSiteDetails {
             console.log(data['index']);
             this.storedIndex = data['index'];
             this.formActionStatus = data['action'];
-          })
+          });
 
           this.siteDetailsForm = this.fb.group({
-            branchCode:['',[Validators.required]],
+            branchCode:[''],
             projectCode: ['', [Validators.required]],
             wbsId:['', [Validators.required]],
-            position:['',[Validators.required]]
+            position:['',[Validators.required]],
+            gross:['',[Validators.required]]
           });
 
           this.siteDetailsSubscription = this.siteDetailsForm.statusChanges.subscribe(status=>{
@@ -77,6 +88,17 @@ export class NewEmpSiteDetails {
               fromStatusValues['data']['wbsId'] = wbsDetails['elementCode'];
               fromStatusValues['data']['projectDescription'] = projectDetails['element'];
               fromStatusValues['data']['wbsDescription'] = wbsDetails['element'];
+                this.storage.get('OnBoardingData').then(localStoragedData => {
+                  if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['siteDetails']){
+                    localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'] = fromStatusValues['data']['projectCode']  ? fromStatusValues['data']['projectCode'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'];
+                    localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'] = fromStatusValues['data']['wbsId']  ? fromStatusValues['data']['wbsId'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'];
+                    localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'] = fromStatusValues['data']['projectDescription'] ? fromStatusValues['data']['projectDescription'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'] ;
+                    localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'] = fromStatusValues['data']['wbsDescription']  ? fromStatusValues['data']['wbsDescription']  : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'];
+                    localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] =  fromStatusValues['data']['position'] ? fromStatusValues['data']['position'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'];
+                    localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] =  fromStatusValues['data']['gross'] ?  fromStatusValues['data']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'];
+                    this.storage.set('OnBoardingData', localStoragedData);
+                  }
+                });
               this.messageService.formDataMessage(fromStatusValues);
             }
           })
@@ -130,36 +152,50 @@ export class NewEmpSiteDetails {
   ngAfterViewInit() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
           if (localStoragedData['actionRequired'][this.storedIndex]) {
-            if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('employeeName')) {
+            if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('siteDetails')) {
+              if(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']){
+
               console.log('PERSONAL - ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
               this.siteDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']);
-              this.selectedBranch = this.storage.get('branchDetails');
-              this.onBoardingService.getProjectsByBranch(this.selectedBranch.elementCode).subscribe(response=>{
-                console.log("Getting projects");
-                console.log(response);
-                let projectDetails={};
-                let wbsDetails ={};
-                for(let project of response){
-                  if(project['elementCode'] === localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode']){
-                    console.log("project code matches");
-                    projectDetails = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'];
-                    this.selectedProject = projectDetails;
-                    this.onBoardingService.getWBSByProject(this.selectedProject.elementCode).subscribe(response=>{
-                      console.log("Wbs codes");
-                      console.log(response);
-                      if(project['elementCode'] === localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsCode']){
-                        wbsDetails = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsCode'];
-                      }
-                    })
-                  }
-                }
-                this.siteDetailsForm.controls['projectCode'].setValue(projectDetails);
-                this.siteDetailsForm.controls['wbsCode'].setValue(wbsDetails);
-                this.siteDetailsForm.controls['branchCode'].setValue(this.selectedBranch);
-                this.siteDetailsForm.controls['gross'].setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross']);
-              })
+              let branchDetails = this.storage.get('branchDetails');
+              this.branchCode = branchDetails['elementCode'];
+              this.branchDescription = branchDetails['element'];
+              this.projectCode = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'];
+              this.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'];
+              this.wbsCode = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'];
+              this.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'];
+              this.showSelectedDetails = true;
+              this.siteDetailsForm.controls['projectCode']
+                  .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode']);
+              this.siteDetailsForm.controls['wbsId']
+                  .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId']);
+              this.siteDetailsForm.controls['position']
+                  .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position']);
+              this.siteDetailsForm.controls['gross']
+                  .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross']);
+            }else{
+                console.log('PERSONAL - ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
+                this.siteDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+                let branchDetails = this.storage.get('branchDetails');
+                this.branchCode = branchDetails['elementCode'];
+                this.branchDescription = branchDetails['element'];
+                this.projectCode = localStoragedData['actionRequired'][this.storedIndex]['projectCode'];
+                this.projectDescription = localStoragedData['actionRequired'][this.storedIndex] ['projectDescription'];
+                this.wbsCode = localStoragedData['actionRequired'][this.storedIndex] ['wbsId'];
+                this.wbsDescription = localStoragedData['actionRequired'][this.storedIndex] ['wbsDescription'];
+                this.showSelectedDetails = true;
+                this.siteDetailsForm.controls['projectCode']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex] ['projectCode']);
+                this.siteDetailsForm.controls['wbsId']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex] ['wbsId']);
+                this.siteDetailsForm.controls['position']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex] ['position']);
+                this.siteDetailsForm.controls['gross']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex] ['gross']);
+              }
             }
           }
+
         }
     );
   }

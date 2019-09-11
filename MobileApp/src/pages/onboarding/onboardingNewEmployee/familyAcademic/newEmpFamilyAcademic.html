@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row from-group">
+                <!-- <div class="row from-group">
                     <div class="col-md-12 col-xs-12 col-sm-12">
                         <div class="pull-right" *ngIf="nomineeForms.length !== 3">
                             <button ion-button class="nominee"  (click)="addNominees()">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     
-                </div>
+                </div> -->
                 <div formArrayName="nomineeDetail">
                     <div class="boxShadowContent padding5" *ngFor="let list of nomineeForms.controls; let i=index"
                         [formGroupName]="i">

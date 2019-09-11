@@ -2302,6 +2302,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
          empDto.setPosition(employee.getPosition());
          empDto.setImported(employee.isImported());
          empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
+         empDto.setGross(employee.getGross());
          
          if(empDto.isVerified()){
         	 empDto.setVerifiedBy(employee.getVerifiedBy().getFirstName());

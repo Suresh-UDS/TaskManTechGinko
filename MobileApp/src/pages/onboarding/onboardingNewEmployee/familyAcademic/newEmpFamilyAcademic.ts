@@ -18,6 +18,7 @@ export class newEmpFamilyAndAcademic implements OnInit {
   remainTotal = 100;
   nomineeTotalPercentage;
   private relationships: any;
+  formActionStatus:any;
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService) { }
 
   ngOnInit() {
@@ -32,12 +33,24 @@ export class newEmpFamilyAndAcademic implements OnInit {
     let getEpfCount;
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      this.formActionStatus = data['action'];
       this.storage.get('OnBoardingData').then(localStoragedData => {
         console.log('empfamily data ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         if (localStoragedData['actionRequired'][this.storedIndex]) {
-          if (localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'].hasOwnProperty('nomineeDetail')
+          if (localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'] && localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'].hasOwnProperty('nomineeDetail')
             && localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'] != null) {
             getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'].length;
+            console.log('empfamily ' + getEpfCount);
+            if (getEpfCount > 0) {
+              for (let i = 0; i < getEpfCount; i++) {
+                this.addNominees();
+              }
+              this.updateFormData();
+            } else {
+              getEpfCount = undefined;
+            }
+          }else if(localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('nomineeDetail')){
+            getEpfCount = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'].length;
             console.log('empfamily ' + getEpfCount);
             if (getEpfCount > 0) {
               for (let i = 0; i < getEpfCount; i++) {
@@ -91,8 +104,24 @@ export class newEmpFamilyAndAcademic implements OnInit {
         let formStatusValues = {
           status: true,
           data: this.onboardingFamilyAcademicForm.value
-        }
-        //formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
+        };
+
+        this.storage.get('OnBoardingData').then(localStoragedData => {
+          if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']){
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification'] =  formStatusValues['data']['educationQualification'][0]['qualification'] ? formStatusValues['data']['educationQualification'][0]['qualification'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification']  ;
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['institute'] = 
+            formStatusValues['data']['educationQualification'][0]['institute'] ?
+             formStatusValues['data']['educationQualification'][0]['institute']: 
+             localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['institute'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'] =  formStatusValues['data']['nomineeDetail'][0]['name'] ?  formStatusValues['data']['nomineeDetail'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'];
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'] = formStatusValues['data']['nomineeDetail'][0]['relationship'] ? formStatusValues['data']['nomineeDetail'][0]['relationship']: localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'];
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'] = formStatusValues['data']['nomineeDetail'][0]['contactNumber'] ? formStatusValues['data']['nomineeDetail'][0]['contactNumber'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'];
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'] = formStatusValues['data']['nomineeDetail'][0]['nominePercentage'] ? formStatusValues['data']['nomineeDetail'][0]['nominePercentage'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'];
+            this.storage.set('OnBoardingData',localStoragedData);
+          }
+        });
+
+          //formStatusValues['data']['totalNomiee'] = this.nomineeList.length;
 
         this.messageService.formDataMessage(formStatusValues);
       } else {
@@ -127,9 +156,12 @@ export class newEmpFamilyAndAcademic implements OnInit {
 
   updateFormData() {
     this.storage.get('OnBoardingData').then(localStoragedData => {
-      if (localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'].hasOwnProperty('educationQualification')) {
+      if (localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'] && localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails'].hasOwnProperty('educationQualification')) {
         console.log('fam_datta === ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
         this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']);
+      }else{
+        this.onboardingFamilyAcademicForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
+
       }
     });
   }
