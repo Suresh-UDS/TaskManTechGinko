@@ -112,6 +112,7 @@ export class onboardingExistEmployee implements OnInit {
   ionViewWillEnter() {
     //  this.component.showLoader("Updating....");
     this.getNomineeRelationships();
+    this.getLocalData();
 
   }
 
@@ -141,7 +142,7 @@ export class onboardingExistEmployee implements OnInit {
     this.storage.get('OnBoardingData').then((data) => {
       if (data) {
         this.actionRequiredEmp = data['actionRequired'];
-        this.completedEmp = data["completed"];
+        // this.completedEmp = data["completed"];
         this.getPercentage();
       }
       // this.component.closeLoader();
@@ -165,8 +166,8 @@ export class onboardingExistEmployee implements OnInit {
 
       index: index,
       action: 'update'
-    }
-    this.storage.set('onboardingCurrentIndex', obj)
+    };
+    this.storage.set('onboardingCurrentIndex', obj);
     //window.localStorage.setItem('onboardingCurrentIndex', index);
     this.navCtrl.push(onboardingEmpStatus);
   }
@@ -183,7 +184,9 @@ export class onboardingExistEmployee implements OnInit {
       searchCriteria.projectCode = data.projectCode;
       searchCriteria.employeeEmpId = data.employeeEmpId;
       searchCriteria.name = data.name;
-      this.onSegmentChange()
+      if(searchCriteria.wbsCode){
+        this.onSegmentChange()
+      }
     });
   }
 
@@ -201,7 +204,10 @@ export class onboardingExistEmployee implements OnInit {
         for (let key in onBoardingModel[list]) {
           console.log(this.actionRequiredEmp[i][key]);
           console.log(onBoardingModel[list][key]);
-          onBoardingModel[list][key] = this.actionRequiredEmp[i][key];
+          if(this.actionRequiredEmp[i][list] && this.actionRequiredEmp[i][list][key]){
+            onBoardingModel[list][key] = this.actionRequiredEmp[i][list][key];
+
+          }
         }
         objectkeys = Object.keys(onBoardingModel[list]);
         objectValues = Object['values'](onBoardingModel[list]);
@@ -425,6 +431,8 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]={};
               employeeData[i]['employeeName']=res[i].name;
               employeeData[i]['employeeCode']=res[i].empId;
+              employeeData[i]['id'] = res[i].id;
+              employeeData[i]['isSync'] = true;
               employeeData[i]['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
               employeeData[i]['siteDetails'] = {};
               employeeData[i]['siteDetails']['projectCode'] = res[i].projectCode;
@@ -432,7 +440,7 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['siteDetails']['wbsId'] = res[i].wbsId;
               employeeData[i]['siteDetails']['wbsDescription'] = res[i].wbsDescription;
               employeeData[i]['siteDetails']['position'] = res[i].position;
-              employeeData[i]['siteDetails']['grossSal'] = res[i].gross;
+              employeeData[i]['siteDetails']['gross'] = res[i].gross;
               employeeData[i]['personalDetails'] = {};
               employeeData[i]['personalDetails']['employeeCode'] = res[i].empId;
               employeeData[i]['personalDetails']['employeeName'] = res[i].name;
@@ -447,7 +455,7 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['personalDetails']['dateOfJoining'] = res[i].doj;
               employeeData[i]['personalDetails']['religion'] = res[i].religion;
               employeeData[i]['personalDetails']['bloodGroup'] = res[i].bloodGroup;
-              employeeData[i]['personalDetails']['identificationMark'] = [{identificationMark: res[i].personalIdentificationMark1}, {identificationMark: res[i].personalIdentificationMark2}];
+              employeeData[i]['personalDetails']['identificationMark'] = [res[i].personalIdentificationMark1, res[i].personalIdentificationMark2];
               employeeData[i]['personalDetails']['identificationMark1'] = res[i].personalIdentificationMark1;
               employeeData[i]['personalDetails']['identificationMark2'] = res[i].personalIdentificationMark2;
               employeeData[i]['contactDetails'] = {};
@@ -490,6 +498,8 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['kycDetails']['drivingLicense'] = this.getEmployeeDocuments(res[i].documents,'drivingLicense') ;
               employeeData[i]['declaration']={};
               employeeData[i]['declaration']['agreeTermsAndConditions'] = false;
+              employeeData[i]['declaration']['onboardedPlace'] = '';
+              employeeData[i]['submitted']=res[i].submitted;
               localStoragedData['actionRequired'][localStoragedData['actionRequired'].length] = employeeData[i];
             }
 

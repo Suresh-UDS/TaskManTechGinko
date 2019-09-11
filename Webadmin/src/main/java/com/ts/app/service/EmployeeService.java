@@ -504,13 +504,17 @@ public class    EmployeeService extends AbstractService {
 		
 		tableOfZempEduDet.getItem().add(zempEduDet);
 		
-		ZempFamilyDet zempFamilyDetMother = new ZempFamilyDet();
+		if( StringUtils.isNotEmpty( employee.getMotherName())) {
 		
-		zempFamilyDetMother.setEmpId(employee.getEmpId());
-		zempFamilyDetMother.setFamMemName(employee.getMotherName());
-		zempFamilyDetMother.setFamMemRelNo("12");
-
-		tableOfZempFamilyDet.getItem().add(zempFamilyDetMother);
+			ZempFamilyDet zempFamilyDetMother = new ZempFamilyDet();
+		
+			zempFamilyDetMother.setEmpId(employee.getEmpId());
+			zempFamilyDetMother.setFamMemName(employee.getMotherName());
+			zempFamilyDetMother.setFamMemRelNo("12");
+	
+			tableOfZempFamilyDet.getItem().add(zempFamilyDetMother);
+			
+		}
 		
 		ZempFamilyDet zempFamilyDetFather = new ZempFamilyDet();
 		
