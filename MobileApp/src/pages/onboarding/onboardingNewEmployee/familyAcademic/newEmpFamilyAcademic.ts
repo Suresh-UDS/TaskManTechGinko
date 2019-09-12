@@ -108,15 +108,13 @@ export class newEmpFamilyAndAcademic implements OnInit {
 
         this.storage.get('OnBoardingData').then(localStoragedData => {
           if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']){
-            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification'] =  formStatusValues['data']['educationQualification'][0]['qualification'] ? formStatusValues['data']['educationQualification'][0]['qualification'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification']  ;
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification'] =  formStatusValues['data']['educationQualification'][0]['qualification'] ;
             localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['institute'] = 
-            formStatusValues['data']['educationQualification'][0]['institute'] ?
-             formStatusValues['data']['educationQualification'][0]['institute']: 
-             localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['institute'] ;
-            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'] =  formStatusValues['data']['nomineeDetail'][0]['name'] ?  formStatusValues['data']['nomineeDetail'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'];
-            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'] = formStatusValues['data']['nomineeDetail'][0]['relationship'] ? formStatusValues['data']['nomineeDetail'][0]['relationship']: localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'];
-            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'] = formStatusValues['data']['nomineeDetail'][0]['contactNumber'] ? formStatusValues['data']['nomineeDetail'][0]['contactNumber'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'];
-            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'] = formStatusValues['data']['nomineeDetail'][0]['nominePercentage'] ? formStatusValues['data']['nomineeDetail'][0]['nominePercentage'] : localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'];
+            formStatusValues['data']['educationQualification'][0]['institute'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'] =  formStatusValues['data']['nomineeDetail'][0]['name'];
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'] = formStatusValues['data']['nomineeDetail'][0]['relationship'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'] = formStatusValues['data']['nomineeDetail'][0]['contactNumber'];
+            localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'] = formStatusValues['data']['nomineeDetail'][0]['nominePercentage'];
             this.storage.set('OnBoardingData',localStoragedData);
           }
         });

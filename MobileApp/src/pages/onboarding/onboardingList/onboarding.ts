@@ -20,7 +20,7 @@ export const onBoardingModel =  {
             dateOfJoining: '',
             religion: '',
             bloodGroup: '',
-            identificationMark: ''
+            identificationMark: '',
       },
       contactDetails: {
             contactNumber: '',

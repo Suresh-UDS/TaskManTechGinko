@@ -102,6 +102,18 @@ export class OnboardingService implements AutoCompleteService {
         })
     }
 
+    editOnBoardingUser(object) {
+
+        return this.http.post(this.config.Url+'api/editOnBoardingEmployee',object).map(
+            response=>{
+                console.log(response.json());
+                return response.json();
+            }).catch(err=>{
+            console.log(err);
+            return Observable.throw(err.json());
+        })
+    }
+
     getAllOnboardingUser(): Observable<any> {
         return this.http.get(this.config.Url+'assets/data/project.json').map(
             response => {
@@ -269,7 +281,7 @@ export class OnboardingService implements AutoCompleteService {
                     employeeId: id,
                     document_type: key
                 }
-            }
+            };
 
             fileTransfer.upload(filename, this.config.Url + 'api/onBoarding/document_image/upload', options)
                 .then((data) => {

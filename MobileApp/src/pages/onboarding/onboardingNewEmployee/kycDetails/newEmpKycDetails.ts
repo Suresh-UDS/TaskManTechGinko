@@ -94,18 +94,19 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.storage.get('OnBoardingData').then(localStoragedData => {
           if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['kycDetails']){
             localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] = this.formStatusValues['data']['aadharNumber'];
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopy'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['aadharPhotoCopy']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopyBack'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['aadharPhotoCopyBack']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['employeeSignature'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['employeeSignature']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['profilePicture'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['profilePicture']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['prePrintedStatement'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['prePrintedStatement']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenRight'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['thumbImpressenRight']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenLeft'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['thumbImpressenLeft']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['voterId'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['voterId']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['pancardCopy'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['pancardCopy']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['drivingLicense'] = this.userAllKYCData['aadharPhotoCopy'] ? this.userAllKYCData['drivingLicense']: 'assets/imgs/placeholder.png' ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] : this.formStatusValues['data']['bankDetails'][0]['accountNo'];
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] : this.formStatusValues['data']['bankDetails'][0]['ifsc'];
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopy'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharPhotoCopyBack'] = this.userAllKYCData['aadharPhotoCopy'];
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['employeeSignature'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['profilePicture'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['prePrintedStatement'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenRight'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['thumbImpressenLeft'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['voterId'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['pancardCopy'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['drivingLicense'] = this.userAllKYCData['aadharPhotoCopy'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['declaration']['agreeTermsAndConditions'] = false;
             this.storage.set('OnBoardingData',localStoragedData);
           
         }

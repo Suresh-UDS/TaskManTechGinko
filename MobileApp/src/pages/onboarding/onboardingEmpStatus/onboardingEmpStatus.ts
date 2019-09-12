@@ -94,21 +94,24 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
             // if (data && JSON.stringify(data) !== '{}') {
             //   return data;
             // }
-            if(data){
+           let dataValue = objectValues[obv];
+            if(dataValue){
 
-              if(Array.isArray(data)){
+              if(Array.isArray(dataValue)){
 
-                  let subDataLength = data.length;
+                  let subDataLength = dataValue.length;
                   let subDataValueLength = 0;
 
-                  for(let j in data){
+                  for(let j in dataValue){
+                      
+                    if(dataValue[j]){
 
-                      let subSeccondLevelKeysLength =  Object.keys(data[j]).length;
+                      let subSeccondLevelKeysLength = Array.isArray(dataValue[j]) ? dataValue[j].length :  Object.keys(dataValue[j]).length;
                       let subSeccondLevelValues = 0;
 
-                      for(let h in data[j]){
+                      for(let h in dataValue[j]){
 
-                        if(data[j][h]){
+                        if(dataValue[j][h]){
 
                           subSeccondLevelValues ++;
 
@@ -117,7 +120,7 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
                       }
 
                       subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
-
+                    }
                   }
 
                   objectFormattedValuesLength += subDataValueLength / subDataLength 

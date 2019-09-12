@@ -230,22 +230,23 @@ export class onboardingExistEmployee implements OnInit {
                   let subDataValueLength = 0;
 
                   for(let j in dataValues){
+                    
+                    // if(dataValues[j]){
+                    //   let subSeccondLevelKeysLength = Array.isArray(dataValues[j]) ? dataValues[j].length :  Object.keys(dataValues[j]).length;
+                    //   let subSeccondLevelValues = 0;
 
-                      let subSeccondLevelKeysLength =  Object.keys(dataValues[j]).length;
-                      let subSeccondLevelValues = 0;
+                    //   for(let h in dataValues[j]){
 
-                      for(let h in dataValues[j]){
+                    //     if(dataValues[j][h]){
 
-                        if(dataValues[j][h]){
+                    //       subSeccondLevelValues ++;
 
-                          subSeccondLevelValues ++;
+                    //     }
 
-                        }
+                    //   }
 
-                      }
-
-                      subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
-
+                    //   subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
+                    // }
                   }
 
                   objectFormattedValuesLength += subDataValueLength / subDataLength 
@@ -500,6 +501,7 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['personalDetails']['dateOfJoining'] = res[i].doj;
               employeeData[i]['personalDetails']['religion'] = res[i].religion;
               employeeData[i]['personalDetails']['bloodGroup'] = res[i].bloodGroup;
+              employeeData[i]['personalDetails']['id'] = res[i].id;
               employeeData[i]['personalDetails']['identificationMark'] = [res[i].personalIdentificationMark1, res[i].personalIdentificationMark2];
               employeeData[i]['personalDetails']['identificationMark1'] = res[i].personalIdentificationMark1;
               employeeData[i]['personalDetails']['identificationMark2'] = res[i].personalIdentificationMark2;
