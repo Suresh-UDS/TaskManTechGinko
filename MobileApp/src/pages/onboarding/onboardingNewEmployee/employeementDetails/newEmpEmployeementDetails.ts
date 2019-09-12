@@ -54,11 +54,11 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
         }
         this.storage.get('OnBoardingData').then(localStoragedData => {
           if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']){
-            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['isEmploymentEarlier'] = this.formStatusValues['data']['employmentDetails'] ? this.formStatusValues['data']['employmentDetails'][0]['isEmploymentEarlier']: '';
+            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['isEmploymentEarlier'] = 
+            this.formStatusValues['data']['previousEmployee'][0]['isEmploymentEarlier'];
             localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] = 
-            this.formStatusValues['data']['employmentDetails'] ? 
-            this.formStatusValues['data']['employmentDetails'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'];
-            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] = this.formStatusValues['data']['employmentDetails'] ? this.formStatusValues['data']['employmentDetails'][0]['designation'] : localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] ;
+            this.formStatusValues['data']['previousEmployee'][0]['name'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] = this.formStatusValues['data']['previousEmployee'][0]['designation'] ;
             this.storage.set('OnBoardingData',localStoragedData);
             
           }

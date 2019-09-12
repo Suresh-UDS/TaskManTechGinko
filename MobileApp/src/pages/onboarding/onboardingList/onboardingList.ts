@@ -230,22 +230,23 @@ export class onboardingExistEmployee implements OnInit {
                   let subDataValueLength = 0;
 
                   for(let j in dataValues){
+                    
+                    // if(dataValues[j]){
+                    //   let subSeccondLevelKeysLength = Array.isArray(dataValues[j]) ? dataValues[j].length :  Object.keys(dataValues[j]).length;
+                    //   let subSeccondLevelValues = 0;
 
-                      let subSeccondLevelKeysLength =  Object.keys(dataValues[j]).length;
-                      let subSeccondLevelValues = 0;
+                    //   for(let h in dataValues[j]){
 
-                      for(let h in dataValues[j]){
+                    //     if(dataValues[j][h]){
 
-                        if(dataValues[j][h]){
+                    //       subSeccondLevelValues ++;
 
-                          subSeccondLevelValues ++;
+                    //     }
 
-                        }
+                    //   }
 
-                      }
-
-                      subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
-
+                    //   subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
+                    // }
                   }
 
                   objectFormattedValuesLength += subDataValueLength / subDataLength 

@@ -71,7 +71,16 @@ export class onboardingNewEmployee {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         console.log('projectId TYPES123 ' + JSON.stringify(data));
         console.log(data)
+        data.filterd = true;
+        data.siteDetails ={
+          projectCode:'',
+          wbsId:'',
+          projectDescription:'',
+          wbsDescription:'',
+          position:''
 
+        };
+        let onboardingData =  onBoardingModel;
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
           console.log('no projectId');
@@ -79,7 +88,9 @@ export class onboardingNewEmployee {
           // }}
           this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 7) * 100);
         } else {
-          Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+          console.log(data)
+          // Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+          localStoragedData['actionRequired'].push(data);
           this.storage.set('OnBoardingData', localStoragedData);
         }
       });

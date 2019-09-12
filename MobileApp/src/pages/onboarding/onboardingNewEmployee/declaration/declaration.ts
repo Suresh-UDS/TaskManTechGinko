@@ -33,28 +33,25 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
              private nativeGeocoder: NativeGeocoder,private locationProvider: LocationProvider, private backgroundGeolocation: BackgroundGeolocation, private storage: Storage, private cs:componentService) {
       this.currentDate = new Date();
       // this.getAddress();
-
+      this.location = "Chennai";
 
       this.storage.get('onboardingCurrentIndex').then(data => {
         this.storedIndex = data['index'];
       });
       this.storage.get('OnBoardingData').then(localStoragedData => {
-      this.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
+          this.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
           this.employeeName = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
-
           this.thumbImpression = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
-
-
       })
     }
 
 
   ngOnInit() {
   console.log("Getting declaration");
-    this.getLocation();
     this.onBoardingService.getDeclarationList().subscribe(res=>{
       console.log("response");
       console.log(res);
+      this.getLocation();
       this.searchFieldBranchList=res;
 
     });
@@ -67,19 +64,24 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
     );
 
     this.declarationSubscription = this.declarationForm.statusChanges.subscribe(status=>{
-      if(status === 'VALID'){
+      if(status === 'VALID' && this.declarationForm.value.agreeTermsAndConditions){
         let formStatusValues ={
           status: true,
           data: this.declarationForm.value
         };
           this.storage.get('OnBoardingData').then(localStoragedData => {
               localStoragedData['actionRequired'][this.storedIndex]['declaration']['agreeTermsAndConditions'] = formStatusValues['data']['agreeTermsAndConditions'];
-              localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = formStatusValues['data']['onboardedPlace'];
+              localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = formStatusValues['data']['onboardedPlace'] ;
               this.storage.set('OnBoardingData',localStoragedData);
           });
         this.messageService.formDataMessage(formStatusValues);
       }
     })
+  }
+
+  ionViewDidLoad(){
+    console.log("declaration form did load");
+    
   }
 
   getDeclarationList(declarationContent){
@@ -91,6 +93,8 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
  }
 
   getLocation(){
+    this.declarationForm.controls['onboardedPlace']
+    .setValue(this.location);
     this.cs.showLoader("Getting Location");
     this.locationProvider.startTracking();
     let TIME_IN_MS = 2000;
@@ -119,9 +123,8 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
             console.log(result);
             this.location = result[0].locality;
 
-              this.storage.get('OnBoardingData').then(localStoragedData => {
-                  localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = this.location?this.location:'';
-              });
+            this.declarationForm.controls['onboardedPlace']
+            .setValue(this.location);
 
               this.locationProvider.stopTracking();
 
