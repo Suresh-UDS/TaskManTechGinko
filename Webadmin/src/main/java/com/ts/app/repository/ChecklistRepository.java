@@ -26,6 +26,6 @@ public interface ChecklistRepository extends JpaRepository<Checklist, Long> {
 	@Query("SELECT cl FROM Checklist cl WHERE cl.project.id = :projectId and cl.active='Y'")
 	Page<Checklist> findByProjectId(@Param("projectId") long projectId, Pageable pageRequest);
 
-	@Query("SELECT cl FROM Checklist cl WHERE cl.name = :name and cl.active='Y'")
+	@Query("SELECT cl FROM Checklist cl WHERE cl.name = :name and cl.active='Y' ")
 	Page<Checklist> findByName(@Param("name") String name, Pageable pageRequest);
 }

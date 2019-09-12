@@ -22,7 +22,7 @@
                         <label class=" col-sm-4 onBoarding-label-on-left">Project Code <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
-                                <input disabled  class="form-control" type="text" ng-model="employee.projectCode"/>
+                                <input class="form-control" type="text" ng-model="employee.projectCode"/>
                             </div>
                         </div>
 
@@ -30,7 +30,7 @@
                     <div class="row">
                         <label class="col-sm-4 onBoarding-label-on-left">Project Description <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
-                            <input disabled  class="form-control" type="text" ng-model="employee.projectDescription"/>
+                            <input class="form-control" type="text" ng-model="employee.projectDescription"/>
                         </div>
 
                     </div>
@@ -39,7 +39,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input  disabled class="form-control" type="text" ng-model="employee.wbsId" />
+                                <input class="form-control" type="text" ng-model="employee.wbsId" />
                             </div>
                         </div>
 
@@ -49,7 +49,27 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input disabled class="form-control" type="text" ng-model="employee.wbsDescription" />
+                                <input class="form-control" type="text" ng-model="employee.wbsDescription" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Designation No <span class="red-star">*</span></label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" ng-model="employee.position" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Gross<span class="red-star">*</span></label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="number" ng-model="employee.gross" required />
                             </div>
                         </div>
 
@@ -270,8 +290,10 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="addressproofImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(addressproofImageUrl)" >
+                               
+                                    <img ng-if="addressproofImageUrl" class="attachImages" ng-src={{addressproofImageUrl}} alt="...">
+                               </a> </div>
                             </div>
                         </div>
                     </div>
@@ -280,7 +302,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group label-floating" >
-                                <label>Address proof Image <span class="red-star">*</span> </label>
+                                <label>Address proof Image  </label>
                                 <div class="pdng-top13" >
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
@@ -341,6 +363,7 @@
                             </div>
                         </div>
 
+
                     </div>
                 </div>
 
@@ -369,7 +392,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" name="empName" ng-pattern='^[a-zA-Z0-9._-]+$' type="text" ng-model="employee.name" required />
+                                <input class="form-control" name="empName"  type="text" ng-model="employee.name" required />
 
                                 <div ng-show="form.$submitted || form.empName.$touched || form.empName.$dirty">
                                     <div ng-show="form.empName.$dirty || form.empName.$invalid">
@@ -393,7 +416,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="empLastName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.lastName" required/>
+                                <input class="form-control" type="text" name="empLastName"   ng-model="employee.lastName" required/>
 
                                 <div ng-show="form.$submitted || form.empLastName.$touched || form.empLastName.$dirty">
                                     <div ng-show="form.empLastName.$dirty || form.empLastName.$invalid">
@@ -418,7 +441,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-disabled="!employee.newEmployee" type="text" name="empCode" ng-model="employee.empId" required />
+                                <input class="form-control" ng-disabled="true" type="text" name="empCode" ng-model="employee.empId" required readonly />
 
                                 <div ng-show="form.$submitted || form.empCode.$touched || form.empCode.$dirty">
                                     <div ng-show="form.empCode.$dirty || form.empCode.$invalid">
@@ -439,7 +462,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="fatherName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.fatherName" required />
+                                <input class="form-control" type="text" name="fatherName"  ng-model="employee.fatherName" required />
 
                                 <div ng-show="form.$submitted || form.fatherName.$touched || form.fatherName.$dirty">
                                     <div ng-show="form.fatherName.$dirty || form.fatherName.$invalid">
@@ -463,7 +486,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="motherName" ng-pattern='^[a-zA-Z0-9._-]+$' ng-model="employee.motherName" />
+                                <input class="form-control" type="text" name="motherName"  ng-model="employee.motherName" />
 
                                 <div ng-show="form.$submitted || form.fatherName.$touched || form.fatherName.$dirty">
                                     <div ng-show="form.fatherName.$dirty || form.fatherName.$invalid">
@@ -511,19 +534,32 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
+                    
+                    
+                    
+                 <!--    <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label">Acquired Date</label>
+                                                                                    <span class="form-control-feedback calender-icon"><i class="material-icons">date_range</i></span>
+                                                                                    <input type="text" class="form-control datepicker" onkeydown="return false" id="acquiredDate" placeholder="{{acquiredDate | date:'dd/MMM/yyyy'}}" tabindex="12" />
 
+                                                                                </div>
+
+                                                                            </div> -->
+                                                                            
+                                                                            
+                    
                     <div class="row">
                         <label class=" col-sm-4 onBoarding-label-on-left">D.O.B <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input type="text" class="form-control datepicker" ng-model="employee.dob" id="dateOfBirth"  required />
+                                <input type="text" class="form-control datepicker" ng-model="employee.dob" onkeydown="return false" id="dateOfBirth"  required />
                             </div>
                         </div>
 
-                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 8% !important;">D.O.J <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 10% !important;">D.O.J <span class="red-star">*</span> </label>
                         <div class="col-sm-3">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -534,18 +570,13 @@
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Religion <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Religion  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.religion"  name="param"  aria-invalid="false" required>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.religion"  name="param"  aria-invalid="false" >
                                     <option value="" class="" selected="selected">Select Religion ..</option>
-                                    <option >Hindu</option>
-                                    <option >Muslim</option>
-                                    <option >Christian</option>
-                                    <option >Buddhism</option>
-                                    <option >Jain</option>
-                                    <option >Sikh</option>
+                                    <option ng-repeat="religion in religionList" value="{{religion.title}}" >{{religion.title}}</option> 
                                 </select>
                             </div>
                         </div>
@@ -553,11 +584,11 @@
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Blood Group <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Blood Group  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.bloodGroup"  name="param"  aria-invalid="false" required>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.bloodGroup"  name="param"  aria-invalid="false" >
                                     <option value="" class="" selected="selected">Select Blood Group ..</option>
                                     <option >A+</option>
                                     <option >B+</option>
@@ -596,7 +627,7 @@
                     </div>
 
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Education Qualification <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Education Qualification  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -657,6 +688,35 @@
                         </div>
 
                     </div>
+                    
+                    
+                    <div class = "row">
+                        <div class="col-md-3 col-sm-3">
+                        <label>Profile Picture</label>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(profilepicUrl)" >
+                                        <img ng-if="profilepicUrl" class="attachImages" ng-src={{profilepicUrl}} alt="...">
+                               </a> </div>
+                            </div>
+                            </div>
+                             </div>
+
+                 <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group label-floating" >
+                            
+                                <div class="pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="profilepicImage"
+                                           name="profilepicImage" tabindex="9"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -683,7 +743,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-pattern='^[a-zA-Z0-9._-]+$' name="nomineeName" ng-model="employee.nomineeName" required />
+                                <input class="form-control" type="text"   name="nomineeName" ng-model="employee.nomineeName" required />
 
                                 <div ng-show="form.$submitted || form.nomineeName.$touched || form.nomineeName.$dirty">
                                     <div ng-show="form.nomineeName.$dirty || form.nomineeName.$invalid">
@@ -707,49 +767,45 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.nomineeRelationship" name="param"  aria-invalid="false" required>
+                                <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.nomineeRelationship" name="param"  aria-invalid="false" required  >
                                     <option value="" class="" >-- Select Relationship --</option>
-                                    <option value="father">Father</option>
-                                    <option value="mother">Mother</option>
-                                    <option value="husband">Husband</option>
-                                    <option value="wife">Wife</option>
-                                    <option value="son">Son</option>
-                                    <option value="daughter">Daughter</option>
-                                    <option value="brother">Brother</option>
-                                    <option value="sister">Sister</option>
+                                    <option ng-repeat="relationship in relationShipList track by $index" value="{{relationship.title}}">{{relationship.title}}</option> 
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Contact No.  <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Contact No.   </label>
                         <div class="col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
                                 <input class="form-control" type="number" name="nomineeContactNumber" ng-maxlength="10" ng-minlength="10" ng-model="employee.nomineeContactNumber" />
+
+                                <div ng-show="form.$submitted || form.nomineeContactNumber.$touched || form.nomineeContactNumber.$dirty">
+                                    <div ng-show="form.nomineeContactNumber.$dirty || form.nomineeContactNumber.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.nomineeContactNumber.$error.required">
+                                            Contact No is required.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                           ng-show="form.nomineeContactNumber.$error.minlength">
+                                            Contact No is required to be at least 10 character.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                           ng-show="form.nomineeContactNumber.$error.maxlength">
+                                            Contact No cannot be longer than 10 characters.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.nomineeContactNumber.$error.pattern">
+                                            Contact No can only contain number.
+                                        </p>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div ng-show="form.$submitted || form.nomineeContactNumber.$touched || form.nomineeContactNumber.$dirty">
-                            <div ng-show="form.nomineeContactNumber.$dirty || form.nomineeContactNumber.$invalid">
-                                <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
-                                   ng-show="form.nomineeContactNumber.$error.required">
-                                    Contact No is required.
-                                </p>
-                                <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
-                                   ng-show="form.nomineeContactNumber.$error.minlength">
-                                    Contact No is required to be at least 10 character.
-                                </p>
-                                <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
-                                   ng-show="form.nomineeContactNumber.$error.maxlength">
-                                    Contact No cannot be longer than 10 characters.
-                                </p>
-                                <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                   ng-show="form.nomineeContactNumber.$error.pattern">
-                                    Contact No can only contain number.
-                                </p>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="row">
 
@@ -823,8 +879,9 @@
                             <label>Bank Passbook Image</label>
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="bankPassBookImageUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{bankPassBookImageUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(bankPassBookImageUrl)" >
+                                        <img ng-if="bankPassBookImageUrl"  class="attachImages" ng-src={{bankPassBookImageUrl}} alt="...">
+                               </a> </div>
                             </div>
                         </div>
                     </div>
@@ -871,11 +928,12 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="adharCardFrontUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardFrontUrl)" >
+                                        <img ng-if="adharCardFrontUrl" class="attachImages" ng-src={{adharCardFrontUrl}} alt="...">
+                               </a> </div>
                             </div>
 
-                            <legend>Adhar Card Front Image <span class="red-star">*</span> </legend>
+                            <legend>Adhar Card Front Image  </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -901,11 +959,12 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="adharCardBackUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardBackUrl)" >
+                                        <img ng-if="adharCardBackUrl" class="attachImages" ng-src={{adharCardBackUrl}} alt="...">
+                               </a> </div>
                             </div>
 
-                            <legend>Adhar Card Back Image <span class="red-star">*</span> </legend>
+                            <legend>Adhar Card Back Image  </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -933,11 +992,12 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="fingerprintLeftUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintLeftUrl)" >
+                                        <img ng-if="fingerprintLeftUrl" class="attachImages" ng-src={{fingerprintLeftUrl}} alt="...">
+                               </a> </div>
                             </div>
 
-                            <legend>Fingerprint Left <span class="red-star">*</span></legend>
+                            <legend>Fingerprint Left </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -955,11 +1015,12 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="fingerprintrightUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintrightUrl)" >
+                                        <img ng-if="fingerprintrightUrl" class="attachImages" ng-src={{fingerprintrightUrl}} alt="...">
+                               </a> </div>
                             </div>
 
-                            <legend>Fingerprint Right <span class="red-star">*</span></legend>
+                            <legend>Fingerprint Right </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -974,17 +1035,21 @@
 
                 </div>
                 <hr>
+
+            
+
                 <div class="row">
 
                     <div  >
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="drivingLicenseUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(drivingLicenseUrl)" >
+                                        <img ng-if="drivingLicenseUrl" class="attachImages" ng-src={{drivingLicenseUrl}} alt="...">
+                               </a> </div>
                             </div>
 
-                            <legend>Driving License <span class="red-star">*</span></legend>
+                            <legend>Driving License </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -1001,11 +1066,12 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="voterIdUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(voterIdUrl)" >
+                                        <img ng-if="voterIdUrl" class="attachImages" ng-src={{voterIdUrl}} alt="...">
+                              </a>  </div>
                             </div>
 
-                            <legend>Voter Id <span class="red-star">*</span></legend>
+                            <legend>Voter Id </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -1022,11 +1088,12 @@
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
-                                    <img ng-if="pancardUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{pancardUrl}} alt="...">
-                                </div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
+                                        <img ng-if="pancardUrl" class="attachImages" ng-src={{pancardUrl}} alt="...">
+                               </a> </div>
                             </div>
 
-                            <legend>Pancard <span class="red-star">*</span></legend>
+                            <legend>Pancard </legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
@@ -1038,6 +1105,28 @@
                             </div>
                         </div>
                     </div>
+                    
+                     <!-- <div  >
+                        <div class="col-md-3 col-sm-3">
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(profilepicUrl)" >
+                                        <img ng-if="profilepicUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{profilepicUrl}} alt="...">
+                               </a> </div>
+                            </div>
+
+                            <legend>Profile Picture </legend>
+                            <div class="form-group label-floating" >
+                                <div class="pdng-top13" >
+                                    <input type="file"
+                                           class="form-control" style="opacity:100;position:relative" file-model
+                                           ng-model="profilepicImage"
+                                           name="profilepicImage" tabindex="9"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
 
 
                 </div>
@@ -1056,10 +1145,35 @@
     </button>
 
     <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
-    type="submit" id="form-button-save" ng-disabled="form.$invalid || btnDisable" tabindex="33" >
-        Save
+    type="submit" id="form-button-save" ng-if="!employee.verified" ng-disabled="form.$invalid || btnDisable || saveOnboardingLoader" tabindex="33" >
+        <span  ng-show="saveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Save 
     </button>
 
 </div>
 
 </form>
+    <!---------------------modified by suresh-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-notice" style="width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                    <h5 class="modal-title" id="myModalLabel">Photo</h5>
+                </div>
+                <div class="modal-body">
+    
+                    <div class="txt-align-center">
+                        <img id="photoStart" width="100%" />
+                    </div>
+    
+    
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-danger btn-round" data-dismiss="modal">close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!---------------------------------->

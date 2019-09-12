@@ -2520,6 +2520,11 @@ span.AppliedFilterTxtCon span.label-info{
     position: initial !important;
     pointer-events: fill !important;
 }
+img.attachImages {
+    height: 200px!important;
+    width: 200px!important;
+    border-radius: 0!important;
+}
 /*
 
 

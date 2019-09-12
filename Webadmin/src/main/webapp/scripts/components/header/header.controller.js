@@ -19,6 +19,9 @@ angular.module('timeSheetApp')
             Idle.unwatch();
             $scope.started = false;
 
+            // clear root scope
+            $rootScope.onBoardingFilter = {branches:{list:[],selected:{}},projects:{list:[],selected:{}},wbs:{list:[],selected:{}},employee:{name:null,empId:null,page:1,type:1}};
+
         };
 
         $scope.init = function() {

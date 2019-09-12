@@ -1,44 +1,34 @@
 package com.ts.app.web.rest;
 
-import com.ts.app.domain.OnboardingUserConfig;
-import com.ts.app.domain.SapBusinessCategories;
-import com.ts.app.web.rest.dto.*;
-import org.json.JSONException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import com.codahale.metrics.annotation.Timed;
-import com.ts.app.security.SecurityUtils;
-import com.ts.app.service.OnboardingUserConfigService;
-import com.ts.app.web.rest.errors.TimesheetException;
-
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
+import com.ts.app.domain.OnboardingUserConfig;
+import com.ts.app.domain.SapBusinessCategories;
+import com.ts.app.security.SecurityUtils;
+import com.ts.app.service.OnboardingUserConfigService;
+import com.ts.app.web.rest.dto.EmployeeDocumentsDTO;
+import com.ts.app.web.rest.dto.OnboardingUserConfigDTO;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 @RestController
 @RequestMapping("/api")
@@ -65,13 +55,13 @@ public class OnboardingUserCofigResource {
 	return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
-    @RequestMapping(value = "/saveOnboardingUserConfigList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/saveOnboardingUserConfigList/{userId}/{branchCode}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> saveOnboardingUserConfigList(@Valid @RequestBody List<OnboardingUserConfigDTO> onboardingUserConfigDTO,HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> saveOnboardingUserConfigList(@PathVariable("userId") long userId,@PathVariable("branchCode") String branchCode, @Valid @RequestBody List<OnboardingUserConfigDTO> onboardingUserConfigDTO,HttpServletRequest httpServletRequest){
         List<OnboardingUserConfig> createdUserlist = null;
         try {
 //            onboardingUserConfigDTO.setUserId(SecurityUtils.getCurrentUserId());
-            createdUserlist = onboardingUserConfigService.saveOnBoardingUserConfigList(onboardingUserConfigDTO);
+            createdUserlist = onboardingUserConfigService.saveOnBoardingUserConfigList(onboardingUserConfigDTO,userId,branchCode);
         }catch(Exception cve){
             String msg = "Error while creating Onboarding user,Please check the information";
 //            throw new TimesheetException(cve,onboardingUserConfigDTO);
@@ -89,15 +79,15 @@ public class OnboardingUserCofigResource {
         return onboardingUserConfigService.getOnBoardingConfigDetails();
     }
 
-    @RequestMapping(value = "/onBoardingConfig/getUserDetails/{id}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/onBoardingConfig/getUserDetails/{id}/branch/{branch}",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser (@PathVariable ("id") long id) throws JSONException {
-        return onboardingUserConfigService.getOnBoardingConfigDetailsForUser(id);
+    public List<OnboardingUserConfigDTO> getOnBoardingConfigDetailsForUser (@PathVariable ("id") long id,@PathVariable ("branch") String branch) throws JSONException {
+        return onboardingUserConfigService.getOnBoardingConfigDetailsForUser(id,branch);
     }
 
-    @RequestMapping(value = "/getBranchListForUser", method = RequestMethod.GET)
-    public List<OnboardingUserConfigDTO> getBranchListForUser(){
-        long userId = SecurityUtils.getCurrentUserId();
+    @RequestMapping(value = "/getBranchListForUser/{id}", method = RequestMethod.GET)
+    public List<OnboardingUserConfigDTO> getBranchListForUser(@PathVariable ("id") long id){
+        long userId = ( id == 0 ? SecurityUtils.getCurrentUserId() : id );
         List<OnboardingUserConfigDTO> branchList = null;
         try {
         branchList = onboardingUserConfigService.findBranchListByUserId(userId);

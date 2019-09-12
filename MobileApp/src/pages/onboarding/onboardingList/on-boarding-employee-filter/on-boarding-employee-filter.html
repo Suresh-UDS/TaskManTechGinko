@@ -27,6 +27,8 @@
     <button (click)="filterEmployees()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
   </ion-fab>
 
+  
+
   <ion-item class="border">
     <ion-label  text-capitalize class="client-label" text-left>Branch:</ion-label>
     <select-searchable class="searchable-select"
@@ -63,4 +65,32 @@
     </select-searchable>
   </ion-item>
 
+  <ion-item class="border" *ngIf="selectedWBS !=null">
+    <ion-label  text-capitalize class="client-label" text-left>Employee Name</ion-label>
+    <ion-input [(ngModel)]="empNameSearch"></ion-input>
+  </ion-item>
+
+  <ion-item class="border" *ngIf="selectedWBS !=null">
+    <ion-label  text-capitalize class="client-label" text-left>Employee Code</ion-label>
+    <ion-input [(ngModel)]="empCodeSearch"></ion-input>
+  </ion-item>
+  <p style="color:red" *ngIf="showError">
+    {{errorMessage}}
+  </p>
+
+  <p >
+    <ion-badge  *ngIf="selectedBranch !=null">Selected Branch:  {{selectedBranch.element}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="selectedProject !=null">Selected Project:  {{selectedProject.element}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="selectedWBS !=null">Selected WBS:  {{selectedWBS.element}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="empCodeSearch !=null">Employee Code:  {{empCodeSearch}}</ion-badge><br>
+  </p>
+  <p>
+    <ion-badge *ngIf="empNameSearch !=null">Employee Name: {{empNameSearch}}</ion-badge>
+  </p>
 </ion-content>

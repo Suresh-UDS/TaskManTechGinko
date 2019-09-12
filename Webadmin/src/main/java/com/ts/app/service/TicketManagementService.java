@@ -305,9 +305,11 @@ public class TicketManagementService extends AbstractService {
 
             if(ticketDTO.isPendingAtUDS()){
                 ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
+                ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
             }
 
             if(ticketDTO.isPendingAtClient()){
+            	ticket.setPendingAtUDS(ticketDTO.isPendingAtUDS());
                 ticket.setPendingAtClient(ticketDTO.isPendingAtClient());
             }
 

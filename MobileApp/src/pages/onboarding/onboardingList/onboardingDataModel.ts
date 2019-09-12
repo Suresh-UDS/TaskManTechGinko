@@ -63,6 +63,12 @@ export const onBoardingDataModel =
             ]
         }
     ],
+    siteDetails:{
+      wbsId:"",
+      wbsDescription:"",
+      projectCode:"",
+      projectDescription:""
+    },
     uanno: "",
     esino: "",
     addressProof: "",

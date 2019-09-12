@@ -67,6 +67,10 @@ public class EmployeeSpecification implements Specification<Employee> {
         	predicates.add(builder.equal(root.get("element"), searchCriteria.getElement()));
         }
         
+        if(searchCriteria.isImported() ) {
+        	predicates.add(builder.equal(root.get("imported"), searchCriteria.isImported()));
+        }
+        
         if(StringUtils.isNotEmpty(searchCriteria.getElementCode())) {
         	predicates.add(builder.equal(root.get("elementCode"), searchCriteria.getElementCode()));
         }
@@ -126,9 +130,45 @@ public class EmployeeSpecification implements Specification<Employee> {
         if (searchCriteria.getWbsCode()!=null && StringUtils.isNotEmpty(searchCriteria.getWbsCode())){
             predicates.add(builder.equal(root.get("wbsId"),searchCriteria.getWbsCode()));
         }
+        
+        List<String> empty = new ArrayList<String>();
+		empty.add("-");
 
-        if(searchCriteria.getProjectCodes()!=null && CollectionUtils.isNotEmpty(searchCriteria.getProjectCodes())){
-            predicates.add(root.get("projectCode").in(searchCriteria.getProjectCodes()));
+        if(searchCriteria.getProjectCodes()!=null){
+        	
+        	if(CollectionUtils.isEmpty(searchCriteria.getProjectCodes())) {
+        		predicates.add(root.get("projectCode").in(empty));
+        	}
+        	else {
+        		predicates.add(root.get("projectCode").in(searchCriteria.getProjectCodes()));
+        	}
+        }
+
+        if(searchCriteria.getWbsCodes()!=null ){
+           
+            	if(CollectionUtils.isEmpty(searchCriteria.getWbsCodes())) {
+            		 
+            		predicates.add(root.get("wbsId").in(empty));
+            		
+            	}
+            	else {
+            		
+            		predicates.add(root.get("wbsId").in(searchCriteria.getWbsCodes()));
+            		
+            	}
+                
+            
+        	
+        }
+ 
+        if(searchCriteria.isNewEmployee() != null){
+        
+	        if(searchCriteria.isNewEmployee()){
+	            predicates.add(builder.equal(root.get("newEmployee"),true));
+	        }else{
+	            predicates.add(builder.equal(root.get("newEmployee"),false));
+	        }
+	        
         }
 
         if(searchCriteria.getFromDate() != null) {
@@ -156,6 +196,12 @@ public class EmployeeSpecification implements Specification<Employee> {
             predicates.add(builder.equal(root.get("verified"),true));
         }else{
             predicates.add(builder.equal(root.get("verified"),false));
+        }
+        
+        if(searchCriteria.isSubmitted()){
+            predicates.add(builder.equal(root.get("submitted"),true));
+        }else{
+            predicates.add(builder.equal(root.get("submitted"),false));
         }
 
         query.orderBy(builder.desc(root.get("createdDate")));

@@ -14,11 +14,17 @@
                   
                 </ion-item>
                 
-    <p style="padding:50px"> {{declationText}} </p>
+    <p style="padding:10px; text-align: justify;"> {{declationText}} </p>
 
-    <div *ngIf="declationText" style="padding:50px">
+    <div *ngIf="declationText" style="padding-top:20px">
         <form [formGroup]="declarationForm" novalidate>
-        <ion-checkbox formControlName="agreeTermsAndConditions"> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
+
+            <ion-label style="font-size:10px">Date: <span>{{currentDate | date}}</span></ion-label><br>
+            <ion-label style="font-size:10px">Place: <span>{{location}}</span></ion-label><br>
+            <img [src]="thumbImpression" style="width:50% !important" onError="src = 'assets/imgs/placeholder.png'"
+                 class="mdImage" /><br>
+            <ion-label style="font-size:10px"><span>{{employeeName}}</span></ion-label><br>
+            <ion-checkbox formControlName="agreeTermsAndConditions"> </ion-checkbox><ion-label class="label-text trequired" > I Agree and Accepted </ion-label>
 
         </form>
     <!-- <form [formGroup]="declarationForm" novalidate>

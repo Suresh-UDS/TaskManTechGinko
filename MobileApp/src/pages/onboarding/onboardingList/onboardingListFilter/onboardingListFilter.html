@@ -1,34 +1,3 @@
-<!-- <form #userFilterForm="ngForm">
-
-    <ion-list>
-        <ion-item>
-            <ion-label class="label-text trequired" stacked>Select Field</ion-label>
-            <ion-select name="searchField" interface="popover" [(ngModel)]="searchField" (ionChange)="userFilterKeyFn(searchField)">
-                <ion-option value="employeeName">Employee Name</ion-option>
-                <ion-option value="employeeCode">Employee Code</ion-option>
-                <ion-option value="gender">Gender</ion-option>
-                <ion-option value="maritalStatus">Marital Status</ion-option>
-               
-            </ion-select>
-        </ion-item>
-
-    </ion-list>
-    <ion-searchbar [(ngModel)]="searchData" name="userSearchData" placeholder="Search">
-    </ion-searchbar>
-   
-    <div class="row">
-        <div class="col-md-6 col-sm-6 col-xs-6">
-            <button ion-button outline (click)="closePopOver()">
-                Clear
-            </button>
-        </div>
-        <div class="col-md-6 col-sm-6 col-xs-6">
-            <button ion-button outline [disabled]="userFilterForm.form.invalid"  (click)="submitPopOver()" id="clear-filter">
-                Submit
-            </button>
-        </div>
-    </div>
-</form> --> 
 
 <form #userFilterForm="ngForm" >
 
@@ -46,40 +15,6 @@
            <ion-label>WBS List</ion-label>
            <ion-auto-complete [dataProvider]="getWBSListService"></ion-auto-complete>
 
-             <!-- <ion-item>
-                    <ion-label class="label-text trequired" stacked>Branch List</ion-label>
-                    <ion-select name="searchFieldBranchList" interface="popover" [(ngModel)]="searchField" (ionChange)="getBranchList(searchField)">
-                        
-                        <ion-option *ngFor="let branch of searchFieldBranchList"  value="branch.element">
-                            {{branch.element}}
-                        </ion-option>
-                       
-                    </ion-select>
-                </ion-item>
-        
-                <ion-item>
-                    <ion-label class="label-text trequired" stacked>Project List</ion-label>
-                    <ion-select name="searchFieldProjectList" interface="popover" [(ngModel)]="searchFieldProject" (ionChange)="getProjectList(searchFieldProject)">
-                       
-                        <ion-option *ngFor="let project of searchFieldProjectList"  value="project">
-                            {{project.element}}
-                        </ion-option>
-                    </ion-select>
-                </ion-item>
-
-                <ion-item>
-                    <ion-label class="label-text trequired" stacked>WBS List</ion-label>
-                    <ion-select name="searchFieldWBSList" interface="popover" [(ngModel)]="searchFieldWbs" (ionChange)="getWBSList(searchFieldWbs)">
-                        
-                        <ion-option *ngFor="let wbs of searchFieldWBSList"  value="element">
-                            {{wbs.element}}
-                        </ion-option>
-                    </ion-select>
-                </ion-item>  -->
-
-                <!-- <ion-label>Employee Name</ion-label>
-                <ion-auto-complete [dataProvider]="employeeService"></ion-auto-complete> -->
- 
                     <ion-label class="label-text trequired" stacked>Employee Name</ion-label>
                     <ion-searchbar [(ngModel)]="searchDataEmployeeName" name="userSearchData" placeholder="Search">
                         </ion-searchbar>

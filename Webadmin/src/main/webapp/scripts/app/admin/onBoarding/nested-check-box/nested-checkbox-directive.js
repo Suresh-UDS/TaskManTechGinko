@@ -11,14 +11,22 @@ angular.module('timeSheetApp')
         templateUrl: 'scripts/app/admin/onBoarding/nested-check-box/nested-checkbox-tpl.html',
         link: function (scope, element, attrs) {
             
-            if (angular.isArray(scope.item[0].childElements)) {
-                element.append("<ul style='display:none'><nested-check-box ng-repeat='childItem in item[0].childElements' item='[childItem,item[1]]' ></nested-check-box></ul>");
+            scope.parentItem = scope.$parent.curItem; 
+             
+            if (angular.isArray(scope.parentItem.childElements)) {
+                element.append("<ul style='display:none'><nested-check-box ng-repeat='curItem in parentItem.childElements' item='[curItem,item[1]]' ></nested-check-box></ul>");
                 $compile(element.contents())(scope)
             }
-  
+      
+            scope.$watch('item[1]', function(newValue, oldValue) {
+
+                console.log(newValue);
+
+            });
+
             if(_.find(scope.item[1],{'elementCode':scope.item[0].elementCode})){
- 
-                scope.item[0].checked = true;
+  
+                scope.$parent.curItem.checked = true;
  
             }
         

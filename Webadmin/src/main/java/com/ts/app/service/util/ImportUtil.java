@@ -656,8 +656,14 @@ public class ImportUtil {
 						cellNo++;
 						Date endTime = currentRow.getCell(11).getDateCellValue();
 						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
-						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
 						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
+						//jobDto.setPlannedHours((int)(startTime.getTime() - endTime.getTime()));
+						long diff = endTime.getTime() - startTime.getTime();
+						long diffHours = diff / (60 * 60 * 1000) % 24;
+						jobDto.setPlannedHours((int)(diffHours));
+						
+						//jobDto.setPlannedHours((int)(endTime.getTime() - startTime.getTime()));
 						cellNo++;
 						if(currentRow.getCell(12)!=null){
 	                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
@@ -1834,7 +1840,52 @@ public class ImportUtil {
 					cellNo = 2;
 					cellNo = 0;
 
-			            	Employee employee = new Employee();
+					Employee employee = null;
+					
+					boolean isNewEmployee = false;
+					String empId;
+					boolean skipSave = false; 
+					
+					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
+						
+						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
+						empId  = currentRow.getCell(5).getStringCellValue() ;
+						 
+						
+					}
+					else {
+						
+						 empId = currentRow.getCell(32).getStringCellValue().substring(7);
+                         log.debug("Employee id not present, entering substirng - "+empId);
+                         
+                         employee = isSkipDuplicate(empId);
+                         
+                         
+                         
+                         isNewEmployee = true;
+								
+					}
+					
+                    if(employee==null) {
+ 						 employee = new Employee();
+ 						 employee.setEmpId(empId);
+					 
+                    }
+                    else {
+                    	
+                    	if(employee.isSubmitted() && !employee.isVerified()) {
+ 							
+ 							skipSave = true;
+ 							
+ 						}
+
+                    }
+                    
+                    
+                    if(skipSave == false) {
+                     
+                    		employee.setNewEmployee(isNewEmployee);
+			            	 
 							cellNo = 0;
 							employee.setProjectCode(getCellValue(currentRow.getCell(0)));
 							cellNo = 1;
@@ -1843,10 +1894,25 @@ public class ImportUtil {
 							employee.setWbsId(getCellValue(currentRow.getCell(2)));
 							cellNo = 3;
 							employee.setWbsDescription(getCellValue(currentRow.getCell(3)));
-							cellNo = 4;
-							employee.setName(getCellValue(currentRow.getCell(4)));
+							cellNo = 4; 
+							
+							String[] fullName = getCellValue(currentRow.getCell(4)).split(" ");
+							
+							if(fullName.length > 1) {
+ 								
+								employee.setName(Arrays.stream(fullName).limit(fullName.length-1).collect(Collectors.joining(" ")));
+								
+								employee.setLastName(fullName[fullName.length-1]);
+								
+							}
+							else {
+								
+								employee.setName(fullName[0]);
+								employee.setLastName("");
+								
+							}
+							
 							employee.setFullName(getCellValue(currentRow.getCell(4)));
-							employee.setLastName("");
 
 							cellNo = 6;
 							employee.setFatherName(getCellValue(currentRow.getCell(6)));
@@ -1914,6 +1980,11 @@ public class ImportUtil {
 							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
 							cellNo = 34;
 							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
+							cellNo = 35;
+							employee.setPosition(getCellValue(currentRow.getCell(35)));
+							cellNo = 36;
+							employee.setGross( Float.parseFloat(getCellValue(currentRow.getCell(36))));
+							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 							employee.setCreatedDate(zdt);
@@ -1926,32 +1997,19 @@ public class ImportUtil {
 							employee.setImported(true);
 							employee.setOnBoardedFrom("Web");
 							employee.setOnBoardSource("Import");
-
-                    if((currentRow.getCell(5).getStringCellValue() != null) && (StringUtils.isNotEmpty((currentRow.getCell(5).getStringCellValue())))  &&  (currentRow.getCell(2).getStringCellValue() != null) && (currentRow.getCell(0).getStringCellValue() != null)){
-                        cellNo = 5;
-                        employee.setEmpId(getCellValue(currentRow.getCell(5)));
-                        employee.setNewEmployee(false);
-                        if(isSkipDuplicate((currentRow.getCell(5).getStringCellValue().trim()),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
-                            EmployeeDTO employeeDTO = new EmployeeDTO();
-                            employeeDTO.setMessage("error.duplicateRecordError");
-                        }else {
-                            employeeRepo.save(employee);
-			            }
-					}else{
-                        cellNo = 5;
-                        String empId = currentRow.getCell(32).getStringCellValue().substring(7);
-                        log.debug("Employee id not present, entering substirng - "+empId);
-                        employee.setNewEmployee(true);
-                        if(isSkipDuplicate(empId.trim(),(currentRow.getCell(2).getStringCellValue().trim()),(currentRow.getCell(0).getStringCellValue().trim()))) {
-                            EmployeeDTO employeeDTO = new EmployeeDTO();
-                            employeeDTO.setMessage("error.duplicateRecordError");
-                        }else {
-                            employee.setEmpId(empId);
-                            employeeRepo.save(employee);
-                        }
-
+							employee.setUser(null);
+							employee.setSubmitted(false);
+							employee.setVerified(false);
+                            //employeeDTO.setMessage("error.duplicateRecordError");
+							if(employee.getId()!=null) {
+								employeeRepo.saveAndFlush(employee);
+							}
+							else {
+								employeeRepo.save(employee);
+							}
+                      
+                    
                     }
-					
 					
 //					cellNo = 5;
 //					if(currentRow.getCell(5).getStringCellValue() != null) {
@@ -2116,16 +2174,18 @@ public class ImportUtil {
 
 	
 
-	public boolean isSkipDuplicate(String empId,String wbsId,String projId) {
+	public Employee isSkipDuplicate(String empId) {
 		
-		Employee existingEmployeeWbs = employeeRepo.findByEmpIdandWbsId(empId,wbsId);
-		Employee exsistingEmployeeProjId = employeeRepo.findByEmpIdandProjId(empId,projId);
-		if(existingEmployeeWbs != null || exsistingEmployeeProjId != null) {
-			return true;
-		}else {
-			return false;
-		}
-	    }
+		return employeeRepo.findByEmpId(empId);
+		
+//		Employee existingEmployeeWbs = employeeRepo.findByEmpIdandWbsId(empId,wbsId);
+//		Employee exsistingEmployeeProjId = employeeRepo.findByEmpIdandProjId(empId,projId);
+//		if(existingEmployeeWbs != null || exsistingEmployeeProjId != null) {
+//			return true;
+//		}else {
+//			return false;
+//		}
+	 }
 	
 /**************************************************************************************************************************************/
 	
@@ -2373,23 +2433,25 @@ public class ImportUtil {
 
     private String getCellValue(Cell cell) {
 		String value = null;
-		switch(cell.getCellType()) {
-			case HSSFCell.CELL_TYPE_BLANK:
-	        case HSSFCell.CELL_TYPE_ERROR:
-	            // ignore all blank or error cells
-	            break;
-	        case HSSFCell.CELL_TYPE_NUMERIC:
-	        		value = Long.toString((long)cell
-	                    .getNumericCellValue());
-	            break;
-	        case HSSFCell.CELL_TYPE_BOOLEAN:
-	        	value = Boolean.toString(cell
-	                    .getBooleanCellValue());
-	            break;
-	        case HSSFCell.CELL_TYPE_STRING:
-	        default:
-	        	value = cell.getStringCellValue();
-	            break;
+		if(cell != null) {
+			switch(cell.getCellType()) {
+				case HSSFCell.CELL_TYPE_BLANK:
+		        case HSSFCell.CELL_TYPE_ERROR:
+		            // ignore all blank or error cells
+		            break;
+		        case HSSFCell.CELL_TYPE_NUMERIC:
+		        		value = Long.toString((long)cell
+		                    .getNumericCellValue());
+		            break;
+		        case HSSFCell.CELL_TYPE_BOOLEAN:
+		        	value = Boolean.toString(cell
+		                    .getBooleanCellValue());
+		            break;
+		        case HSSFCell.CELL_TYPE_STRING:
+		        default:
+		        	value = cell.getStringCellValue();
+		            break;
+			}
 		}
 		currentCell ++;
 		return value;

@@ -4,8 +4,14 @@ import {OnboardingService} from '../../../service/onboarding.service';
 import {ActionSheetController, AlertController, Events, Item, ItemSliding, LoadingController, ModalController,NavController, NavParams, Platform} from 'ionic-angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {onBoardingDataService} from "../onboarding.messageData.service";
-
-
+import {LocationProvider} from "../../../../providers/location-provider";
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { Storage } from '@ionic/storage';
+import {
+  NativeGeocoder,
+  NativeGeocoderOptions, NativeGeocoderReverseResult
+} from '@ionic-native/native-geocoder';
+import { componentService } from '../../../service/componentService';
 @Component({
   selector: 'page-declaration',
   templateUrl: 'declaration.html',
@@ -14,19 +20,38 @@ import {onBoardingDataService} from "../onboarding.messageData.service";
 export class declaration  {
   searchFieldBranchList;
   declationText:string;
-
+  currentDate:any;
+  location:any;
   declarationForm: FormGroup;
   declarationSubscription;
+  gross:any;
+  storedIndex:any;
+  thumbImpression:any;
+  employeeName:any;
+
+constructor(public navCtrl: NavController, private onBoardingService: OnboardingService, public navParams: NavParams, public fb: FormBuilder, private messageService: onBoardingDataService,
+             private nativeGeocoder: NativeGeocoder,private locationProvider: LocationProvider, private backgroundGeolocation: BackgroundGeolocation, private storage: Storage, private cs:componentService) {
+      this.currentDate = new Date();
+      // this.getAddress();
 
 
-  
+      this.storage.get('onboardingCurrentIndex').then(data => {
+        this.storedIndex = data['index'];
+      });
+      this.storage.get('OnBoardingData').then(localStoragedData => {
+      this.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
+          this.employeeName = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
 
-constructor(public navCtrl: NavController, private onBoardingService: OnboardingService, public navParams: NavParams, public fb: FormBuilder, private messageService: onBoardingDataService) {
+          this.thumbImpression = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
 
-  }
+
+      })
+    }
+
 
   ngOnInit() {
   console.log("Getting declaration");
+    this.getLocation();
     this.onBoardingService.getDeclarationList().subscribe(res=>{
       console.log("response");
       console.log(res);
@@ -36,7 +61,8 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
 
     this.declarationForm = this.fb.group(
         {
-          agreeTermsAndConditions: ['',[Validators.required]]
+          agreeTermsAndConditions: [false,[Validators.required]],
+            onboardedPlace:['']
         }
     );
 
@@ -46,19 +72,66 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
           status: true,
           data: this.declarationForm.value
         };
+          this.storage.get('OnBoardingData').then(localStoragedData => {
+              localStoragedData['actionRequired'][this.storedIndex]['declaration']['agreeTermsAndConditions'] = formStatusValues['data']['agreeTermsAndConditions'];
+              localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = formStatusValues['data']['onboardedPlace'];
+              this.storage.set('OnBoardingData',localStoragedData);
+          });
         this.messageService.formDataMessage(formStatusValues);
       }
     })
   }
-  getDeclarationList(branch){
 
-    var text='Rs';
-    console.log(branch);
-    var strinReplace= branch;
-    var newReplace = strinReplace.replace(text, "Rs. 10000 \n \n \r \r\n \n \r \r");
-    this.declationText=newReplace;
+  getDeclarationList(declarationContent){
+
+    let text='_______________';
+    declarationContent = declarationContent.replace(text, parseFloat(this.gross).toFixed(2) );
+    this.declationText=declarationContent;
 
  }
+
+  getLocation(){
+    this.cs.showLoader("Getting Location");
+    this.locationProvider.startTracking();
+    let TIME_IN_MS = 2000;
+    setTimeout( () => {
+         this.cs.closeAll();
+    }, TIME_IN_MS);
+    let config = {
+      desiredAccuracy: 0,
+      stationaryRadius: 100,
+      distanceFilter: 10,
+      debug: false,
+      // interval: 2000,
+      stopOnTerminate:true
+    };
+
+    this.backgroundGeolocation.configure(config).subscribe((response) => {
+      console.log("Location provider response");
+      console.log(response);
+      this.cs.closeLoader();
+      this.cs.showLoader("Getting City");
+      this.nativeGeocoder.reverseGeocode(response.latitude, response.longitude)
+          .then((result: NativeGeocoderReverseResult[])=>{
+//...       
+            this.cs.closeLoader();
+            console.log("Native geocoder response");
+            console.log(result);
+            this.location = result[0].locality;
+
+              this.storage.get('OnBoardingData').then(localStoragedData => {
+                  localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = this.location?this.location:'';
+              });
+
+              this.locationProvider.stopTracking();
+
+          }).catch((error: any) => {
+            this.cs.closeLoader();
+          this.locationProvider.stopTracking();
+          console.log(error)});
+
+    });
+  }
   
 
 }

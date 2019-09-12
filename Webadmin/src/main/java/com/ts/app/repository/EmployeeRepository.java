@@ -25,6 +25,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
 	@Query("SELECT e FROM Employee e WHERE e.empId = :empId and e.active='Y'")
 	Employee findByEmpId(@Param("empId") String empId);
+	
+	
 
 /****************************************Modified by Vinoth*********************************************************************************************/	
 	
@@ -215,4 +217,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 
     @Query("SELECT e FROM Employee e join e.projectSites ps WHERE e.id NOT IN (:empIds) and ps.site.id  IN (:siteIds) and e.active='Y' order by e.name")
     List<Employee> findWithoutLeftEmp(@Param("empIds") List<Long> empIds,@Param("siteIds") List<Long> siteIds);
+    
+    List<Employee> findByImportedAndSubmittedAndActiveAndWbsId(@Param("imported") boolean imported,@Param("submitted") boolean submitted,@Param("active") String active,@Param("wbsId") String wbsId);
 }

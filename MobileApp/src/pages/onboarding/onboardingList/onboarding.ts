@@ -1,41 +1,54 @@
- 
- export const onBoardingModel =  {
-     
-    personalDetails: {
-        employeeCode:  '',
-        employeeName: '',
-        relationshipDetails: '',
-        gender: '',
-        maritalStatus: '',
-        dateOfBirth: '',
-        dateOfJoining: '',
-        religion: '',
-        bloodGroup: '',
-        identificationMark: ''
-    },
-    contactDetails: {
-        contactNumber: '',
-        emergencyConatctNo: '',
-        communicationAddress: '',
-        permanentAddress: '',
-        addressProof: 'assets/imgs/placeholder.png'
-    },
-    familyAcademicDetails: {
-        educationQualification: '',
-        nomineeDetail: '',
-    },
-    employmentDetails: {
-        previousEmployee : '',
-    },
-    kycDetails: {
-        aadharNumber: '',
-        
-        bankDetails: '',
-        aadharPhotoCopy: 'assets/imgs/placeholder.png',
-        employeeSignature: 'assets/imgs/placeholder.png',
-        profilePicture: 'assets/imgs/placeholder.png',
-        thumbImpressenRight:'assets/imgs/placeholder.png',
-        thumbImpressenLeft:'assets/imgs/placeholder.png',
-        prePrintedStatement: 'assets/imgs/placeholder.png',
-    }
-}
+
+export const onBoardingModel =  {
+
+      siteDetails:{
+            projectCode:'',
+            wbsId:'',
+            projectDescription:'',
+            wbsDescription:'',
+            position:''
+
+      },
+
+      personalDetails: {
+            employeeCode:  '',
+            employeeName: '',
+            relationshipDetails: [{name:'',relationship:'',contactNumber:''},{name:'',relationship:'',contactNumber:''}],
+            gender: '',
+            maritalStatus: '',
+            dateOfBirth: '',
+            dateOfJoining: '',
+            religion: '',
+            bloodGroup: '',
+            identificationMark: ''
+      },
+      contactDetails: {
+            contactNumber: '',
+            emergencyConatctNo: '',
+            communicationAddress: [{address:'',city:'',state:''}],
+            permanentAddress: [{address:'',city:'',state:''}],
+            addressProof: ''
+      },
+      familyAcademicDetails: {
+            educationQualification: [{qualification:'',institute:''}],
+            nomineeDetail: [{name:'', relationship:'',contactNumber:'',nominePercentage:0}],
+      },
+      employmentDetails: {
+            previousEmployee : [{isEmploymentEarlier:'',name:'',designation:''}],
+      },
+      kycDetails: {
+            aadharNumber: '',
+            bankDetails: [{accountNo:'',ifsc:''}],
+            aadharPhotoCopy: '',
+            employeeSignature: '',
+            profilePicture: '',
+            thumbImpressenRight:'',
+            thumbImpressenLeft:'',
+            prePrintedStatement: '',
+      },
+
+      declaration:{
+            agreeTermsAndConditions:false,
+            onboardedPlace:''
+      }
+};

@@ -8,10 +8,24 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
-
-            create : function(categoryList,onBoardingUserId,callback){
+            getDeclarationLanguages:function(){
+                return $http.get('api/getDeclarationForm').then(function (response) {
+                    return response.data;
+                });
+            },
+            getNomineeList:function(){
+                return $http.get('api/getNomineeRelationship').then(function(response){
+                    return response;
+                });
+            },
+            getReligionList:function(){
+                return $http.get('api/getReligionList').then(function(response){
+                    return response;
+                });
+            },
+            create : function(categoryList,onBoardingUserId,branchCode,callback){
                 var cb = callback || angular.noop;
-                return $http.post('api/saveOnboardingUserConfigList',categoryList).then(
+                return $http.post('api/saveOnboardingUserConfigList/'+onBoardingUserId+'/'+branchCode,categoryList).then(
                     function (response) {
                         return cb(response,null);
                     }).catch(
@@ -22,8 +36,8 @@ angular.module('timeSheetApp')
 
             },
 
-            getElementsByUser: function(userId){
-                return $http.get('api/onBoardingConfig/getUserDetails/'+userId).then(function (response) {
+            getElementsByUser: function(userId,branch){
+                return $http.get('api/onBoardingConfig/getUserDetails/'+userId+'/branch/'+branch).then(function (response) {
                     console.log(response.data);
                     return response.data;
                 })
@@ -65,8 +79,8 @@ angular.module('timeSheetApp')
 
             },
 
-            getBranchList: function () {
-                return $http.get('api/getBranchListForUser').then(function (response) {
+            getBranchList: function (id) {
+                return $http.get('api/getBranchListForUser/'+id).then(function (response) {
                     console.log(response.data);
                     return response.data;
                 })
@@ -85,7 +99,31 @@ angular.module('timeSheetApp')
                     return response.data;
                 })
             },
-
+ 
+/*************************************Modified by Vinoth************************************************************************************/           
+            
+//            exportAllData: function(searchCriteria) {
+//            	alert("Export service");
+//                return $http.post('api/employeeOnboarding/export', searchCriteria).then(function (response) {
+//                	alert("Export service after");
+//                    console.log("Emp - Export------>"+JSON.stringify(response));
+//                    return response.data;
+//                });
+//            },
+//            exportStatus: function(fileName) {
+//                return $http.get('api/employeeOnboarding/export/'+fileName+"/status").then(function (response) {
+//                    return response.data;
+//                });
+//            },
+//
+//            getExportFile: function(fileName) {
+//                return $http.get('api/employeeOnboarding/export/'+fileName).then(function (response) {
+//                    return response.data;
+//                });
+//            },
+            
+/****************************************************************************************************************************************/
+            
             searchEmployees: function(searchCriteria) {
                 return $http.post('api/onBoarding/employee/search', searchCriteria).then(function (response) {
                     return response.data;
