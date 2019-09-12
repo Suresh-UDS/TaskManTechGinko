@@ -163,6 +163,7 @@ public class JobManagementService extends AbstractService {
          
         mapperUtil.toModelList( job.getChecklistItems() , JobChecklistDTO.class );
         
+        //mapperUtil.toModel(job.getEmployee(), EmployeeDTO.class);
         
         return jobDto;
       

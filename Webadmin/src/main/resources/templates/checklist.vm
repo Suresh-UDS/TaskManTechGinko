@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,10 +36,12 @@
 
   <div class="container">
 
+    <img src="http://uds.in/images/logo.jpg" width="150" />
+
     <h2>$jobCheckListName</h2>
     <h4>Client Name : <span class="valueField">SONY</span></h4>
 
-    <table cellpadding="5" cellspacing="0" border="0">
+    <table cellpadding="7" cellspacing="0" border="0">
 
       <tr>
         
@@ -58,6 +59,14 @@
 
 
       </tr>
+      
+      <tr >
+      
+         <td class="textLeft"><span class="valueField">Scheduled</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="valueField">Oncall</span></td>
+            <td class="textRight"></td>
+
+
+      </tr>
 
     </table>
 
@@ -66,28 +75,60 @@
  <table cellpadding="5" cellspacing="0" border="1">
 
 
-  	<tr>
-        	<td >SNo</td>
-        <td >Name </td>
-        <td>Status </td>
-        <td >Remarks </td>
+    <tr>
+        <th style="width: 30px;" valign="top">SNo</th>
+        <th >Name </th>
+        <th style="width: 100px;" valign="top">Status </th>
+        
      </tr>
      
      
        #foreach( $checklistItems in $jobCheckList)
   
-<tr>
-
-	<td>1</td>
-       <td> $checklistItems.getChecklistItemName()</td>   
-       <td> $checklistItems.isCompleted() </td>
-       <td> $checklistItems.getRemarks()</td>
+  <tr>
+  
+       <td valign="top" class="textRight">$foreach.count</td>
+       <td><p>$checklistItems.getChecklistItemName()<br/><br/> <span class="valueField">Remarks :</span> #if($checklistItems.getRemarks())$checklistItems.getRemarks()#{else}Nill#end </p></td>   
+       <td valign="top" >#if($checklistItems.isCompleted())<span class="valueField">Completed</span>#{else}Uncompleted#end</td>
+        
        
-	 </tr>
+   </tr>
           
-	 #end
+   #end
  
  </table> 
+
+ <table width="100%" cellpadding="5" cellspacing="0" border="0" style="margin-top:25px">
+
+   <tr>
+     
+     <td colspan="2"><p><span class="valueField">Remarks :</span><br/><br/><br/></p></td>
+
+   </tr>
+
+   <tr>
+     
+     <td><span class="valueField">GRE Name : </span></td>
+
+   </tr>
+
+   <tr>
+     
+     <td><span class="valueField">Signature: </span> </td>
+     <td><span class="valueField">Signature: </span></td>
+
+   </tr>
+
+ </table>
+
+ <table width="100%" cellpadding="5" cellspacing="0" border="0" style="margin-top:25px">
+   <tr>
+      <td colspan="2"><p><span class="valueField">Note</span> This is a computer-generated document</p></td>
+   </tr>
+
+ </table>
+
+
 
 
 
@@ -95,7 +136,3 @@
 
 </body>
 </html>
-
-
-
-

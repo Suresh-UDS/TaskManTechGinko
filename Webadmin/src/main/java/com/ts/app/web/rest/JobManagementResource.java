@@ -530,10 +530,10 @@ public class JobManagementResource {
     @RequestMapping(value="/job/genpdf/{jobid}",method=RequestMethod.GET)
 	public HttpEntity<byte[]> createPdf(@PathVariable("jobid") long jobId ) throws NullPointerException {
 	
-	     String filename  = "test.pdf";
+	     
 //	     String path = UriComponentsBuilder.fromPath("D:\\CheckListPdf").build().toUriString();
 	     
-	     final URI path = ServletUriComponentsBuilder.fromCurrentServletMapping().path("D:/CheckListPdf").build().toUri();
+	 //    final URI path = ServletUriComponentsBuilder.fromCurrentServletMapping().path("D:/CheckListPdf").build().toUri();
          
 	     VelocityEngine ve = new VelocityEngine();
 		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -549,6 +549,9 @@ public class JobManagementResource {
 		/*
 		 * JobChecklist jobs=jobService.findJobCheckListStatus(jobId, searchCriteria);
 		 */
+		
+		String filename  = "job_"+String.valueOf(job.getId())+".pdf";
+		
 		if(job !=null ) {
 			
 			context.put("job", job);
@@ -592,7 +595,7 @@ public class JobManagementResource {
 	                   "attachment;  filename=" + filename.replace(" ", "_"));
 		
 	    header.setContentLength(baos.toByteArray().length);
-        header.setLocation(path);
+        //header.setLocation(path);
 	    return new HttpEntity<byte[]>(baos.toByteArray(), header);
 	}
 	
