@@ -402,7 +402,8 @@ export class onboardingNewEmployee {
             pancardCopy:null,
             drivingLicense:null
           };
-
+          
+          employeeDetails.id = localStoragedData['actionRequired'][this.storedIndex]['id'] ? localStoragedData['actionRequired'][this.storedIndex]['id'] : 0;
           employeeDetails.projectCode = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'] : localStoragedData['actionRequired'][this.storedIndex]['projectCode'];
           employeeDetails.wbsId = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'] : localStoragedData['actionRequired'][this.storedIndex]['wbsId'];
           employeeDetails.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'] : localStoragedData['actionRequired'][this.storedIndex]['projectDescription'];
@@ -510,13 +511,12 @@ export class onboardingNewEmployee {
           employeeDetails.name = name.split(" ")[0];
           employeeDetails.lastName = name.split(" ")[1];
           employeeDetails.fullName = name;
-          if(employeeDetails.empId && employeeDetails.empId !=null && employeeDetails.empId!=''){
+          
+          if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] || localStoragedData['actionRequired'][this.storedIndex]['employeeCode']){
             employeeDetails.empId = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'];
-          }else{
-            let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
-            employeeDetails.empId = adharNumber.toString().substring(5);
-            employeeDetails.newEmployee = true;
           }
+            
+          
           console.log("employee details");
           console.log(employeeDetails);
 
@@ -561,6 +561,11 @@ export class onboardingNewEmployee {
 
 
           }else{
+
+            let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
+            employeeDetails.empId = adharNumber.toString().substring(5);
+            employeeDetails.newEmployee = true;
+
             this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
               console.log("Sucessfully saved employees");
               console.log(res);

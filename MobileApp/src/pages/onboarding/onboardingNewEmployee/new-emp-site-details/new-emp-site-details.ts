@@ -153,7 +153,7 @@ export class NewEmpSiteDetails {
     this.storage.get('OnBoardingData').then(localStoragedData => {
           if (localStoragedData['actionRequired'][this.storedIndex]) {
             if (localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('siteDetails')) {
-              if(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']){
+              if(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode']){
 
               console.log('PERSONAL - ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
               this.siteDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']);
