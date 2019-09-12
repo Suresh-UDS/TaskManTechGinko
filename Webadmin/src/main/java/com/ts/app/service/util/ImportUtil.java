@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -654,8 +656,14 @@ public class ImportUtil {
 						cellNo++;
 						Date endTime = currentRow.getCell(11).getDateCellValue();
 						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
-						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
 						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
+						//jobDto.setPlannedHours((int)(startTime.getTime() - endTime.getTime()));
+						long diff = endTime.getTime() - startTime.getTime();
+						long diffHours = diff / (60 * 60 * 1000) % 24;
+						jobDto.setPlannedHours((int)(diffHours));
+						
+						//jobDto.setPlannedHours((int)(endTime.getTime() - startTime.getTime()));
 						cellNo++;
 						if(currentRow.getCell(12)!=null){
 	                        jobDto.setFrequency(currentRow.getCell(12).getStringCellValue());
@@ -1822,213 +1830,300 @@ public class ImportUtil {
 			FileInputStream excelFile = new FileInputStream(new File(path));
 			Workbook workbook = new XSSFWorkbook(excelFile);
 			Sheet datatypeSheet = workbook.getSheetAt(0);
-			//Iterator<Row> iterator = datatypeSheet.iterator();
 			int lastRow = datatypeSheet.getLastRowNum();
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
 				try {
-
-					/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
-					log.debug("Employee obj =" + existingEmployee);
-					&& existingEmployee.getActive().equals(Employee.ACTIVE_NO
-					if(existingEmployee!=null){
-						log.debug("*************Existing Employee");
-
-					}
-					else {*/
+					cellNo = 5;
 					cellNo = 2;
-					if(currentRow.getCell(2).getStringCellValue() != null) {
-						Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
-						if(existingEmployee != null) {
-							List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
-							cellNo = 0;
-							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-							cellNo = 1;
-							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-							EmployeeProjectSite projectSite = new EmployeeProjectSite();
-							/*
-							projectSite.setProjectId(newProj.getId());
-							projectSite.setProjectName(newProj.getName());
-							projectSite.setSiteId(newSite.getId());
-							projectSite.setSiteName(newSite.getName());
-							*/
-							projectSite.setProject(newProj);
-							projectSite.setSite(newSite);
-							projectSite.setEmployee(existingEmployee);
+					cellNo = 0;
 
-							if(CollectionUtils.isNotEmpty(projSites)) {
-								projSites.add(projectSite);
-							}
-							employeeRepo.save(existingEmployee);
-							log.debug("Update Employee Information with new site info: {}");
-						}else {
-							Employee employee = new Employee();
+					Employee employee = null;
+					
+					boolean isNewEmployee = false;
+					String empId;
+					boolean skipSave = false; 
+					
+					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
+						
+						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
+						empId  = currentRow.getCell(5).getStringCellValue() ;
+						 
+						
+					}
+					else {
+						
+						 empId = currentRow.getCell(32).getStringCellValue().substring(7);
+                         log.debug("Employee id not present, entering substirng - "+empId);
+                         
+                         employee = isSkipDuplicate(empId);
+                         
+                         
+                         
+                         isNewEmployee = true;
+								
+					}
+					
+                    if(employee==null) {
+ 						 employee = new Employee();
+ 						 employee.setEmpId(empId);
+					 
+                    }
+                    else {
+                    	
+                    	if(employee.isSubmitted() && !employee.isVerified()) {
+ 							
+ 							skipSave = true;
+ 							
+ 						}
+
+                    }
+                    
+                    
+                    if(skipSave == false) {
+                     
+                    		employee.setNewEmployee(isNewEmployee);
+			            	 
 							cellNo = 0;
-							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+							employee.setProjectCode(getCellValue(currentRow.getCell(0)));
 							cellNo = 1;
-							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+							employee.setProjectDescription(getCellValue(currentRow.getCell(1)));
 							cellNo = 2;
-							employee.setEmpId(getCellValue(currentRow.getCell(2)));
+							employee.setWbsId(getCellValue(currentRow.getCell(2)));
 							cellNo = 3;
-							employee.setName(getCellValue(currentRow.getCell(3)));
-							employee.setFullName(getCellValue(currentRow.getCell(3)));
-							cellNo = 4;
-							employee.setLastName(getCellValue(currentRow.getCell(4)));
-							cellNo = 5;
-							employee.setPhone(getCellValue(currentRow.getCell(5)));
+							employee.setWbsDescription(getCellValue(currentRow.getCell(3)));
+							cellNo = 4; 
+							
+							String[] fullName = getCellValue(currentRow.getCell(4)).split(" ");
+							
+							if(fullName.length > 1) {
+ 								
+								employee.setName(Arrays.stream(fullName).limit(fullName.length-1).collect(Collectors.joining(" ")));
+								
+								employee.setLastName(fullName[fullName.length-1]);
+								
+							}
+							else {
+								
+								employee.setName(fullName[0]);
+								employee.setLastName("");
+								
+							}
+							
+							employee.setFullName(getCellValue(currentRow.getCell(4)));
+
 							cellNo = 6;
-							employee.setEmail(getCellValue(currentRow.getCell(6)));
+							employee.setFatherName(getCellValue(currentRow.getCell(6)));
 							cellNo = 7;
-							employee.setDesignation(getCellValue(currentRow.getCell(7)));
-							// email, phone number missing
+							employee.setMotherName(getCellValue(currentRow.getCell(7)));
+							cellNo = 8;
+							employee.setGender(getCellValue(currentRow.getCell(8)));
+							cellNo = 9;
+							employee.setMaritalStatus(getCellValue(currentRow.getCell(9)));
+							cellNo = 10;
+							Date dobDate = currentRow.getCell(10) != null ? currentRow.getCell(10).getDateCellValue(): null;
+							if (dobDate != null) {
+								employee.setDob(DateUtil.convertToSQLDate(dobDate));
+							} 
+							cellNo = 11;
+							Date dojDate = currentRow.getCell(11) != null ? currentRow.getCell(11).getDateCellValue(): null;
+							if (dojDate != null) {
+								employee.setDoj(DateUtil.convertToSQLDate(dojDate));
+							}
+							cellNo = 12;
+							employee.setReligion(getCellValue(currentRow.getCell(12)));
+							cellNo = 13;
+							employee.setBloodGroup(getCellValue(currentRow.getCell(13)));
+							cellNo = 14;
+							employee.setPersonalIdentificationMark1(getCellValue(currentRow.getCell(14)));
+							cellNo = 15;
+							employee.setPersonalIdentificationMark2(getCellValue(currentRow.getCell(15)));
+							cellNo = 16;
+							employee.setMobile(getCellValue(currentRow.getCell(16)));
+							cellNo = 17;
+							employee.setEmergencyContactNumber(getCellValue(currentRow.getCell(17)));
+							cellNo = 18;
+							employee.setPresentAddress(getCellValue(currentRow.getCell(18)));
+							cellNo = 19;
+							employee.setPresentCity(getCellValue(currentRow.getCell(19)));
+							cellNo = 20;
+							employee.setPresentState(getCellValue(currentRow.getCell(20)));
+							cellNo = 21;
+							employee.setPermanentAddress(getCellValue(currentRow.getCell(21)));
+							cellNo = 22;
+							employee.setPermanentCity(getCellValue(currentRow.getCell(22)));
+							cellNo = 23;
+							employee.setPermanentState(getCellValue(currentRow.getCell(23)));
+							cellNo =24;
+							employee.setEducationalQulification(getCellValue(currentRow.getCell(24)));
+							cellNo = 25;
+							employee.setBoardInstitute(getCellValue(currentRow.getCell(25)));
+							cellNo = 26;
+							employee.setNomineeName(getCellValue(currentRow.getCell(26)));
+							cellNo = 27;
+							employee.setNomineeRelationship(getCellValue(currentRow.getCell(27)));
+							cellNo = 28;
+							employee.setNomineeContactNumber(getCellValue(currentRow.getCell(28)));
+							cellNo = 29;
+							String per = getCellValue(currentRow.getCell(29));
+							Double perDob = Double.parseDouble(per);
+							employee.setPercentage(perDob);
+							cellNo = 30;
+							employee.setEmployer(getCellValue(currentRow.getCell(30)));
+							cellNo = 31;
+							employee.setDesignation(getCellValue(currentRow.getCell(31)));
+							cellNo = 32;
+							employee.setAdharCardNumber(getCellValue(currentRow.getCell(32)));
+							cellNo = 33;
+							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
+							cellNo = 34;
+							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
+							cellNo = 35;
+							employee.setPosition(getCellValue(currentRow.getCell(35)));
+							cellNo = 36;
+							employee.setGross( Float.parseFloat(getCellValue(currentRow.getCell(36))));
+							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
 							employee.setCreatedDate(zdt);
 							employee.setActive(Employee.ACTIVE_YES);
-							cellNo = 8;
-							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
-								Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
-								employee.setManager(manager);
-					        }
-							List<Project> projects = new ArrayList<Project>();
-							projects.add(newProj);
-							List<Site> sites = new ArrayList<Site>();
-							sites.add(newSite);
 							employee.setFaceAuthorised(false);
 							employee.setFaceIdEnrolled(false);
 							employee.setLeft(false);
 							employee.setRelieved(false);
 							employee.setReliever(false);
-							List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
-							EmployeeProjectSite projectSite = new EmployeeProjectSite();
-							/*
-							projectSite.setProjectId(newProj.getId());
-							projectSite.setProjectName(newProj.getName());
-							projectSite.setSiteId(newSite.getId());
-							projectSite.setSiteName(newSite.getName());
-							*/
-							projectSite.setProject(newProj);
-							projectSite.setSite(newSite);
-							projectSite.setEmployee(employee);
-							projectSites.add(projectSite);
-							employee.setProjectSites(projectSites);
-
-							//employeeRepo.save(employee);
-							//create user if opted.
-							cellNo = 9;
-							String createUser = getCellValue(currentRow.getCell(9));
-							cellNo = 10;
-							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
-
-/*******************************************Modified By Vinoth***********************************************************************************/
-                            cellNo = 11;
-                            employee.setFatherName(getCellValue(currentRow.getCell(11)));
-                            cellNo = 12;
-                            employee.setFatherName(getCellValue(currentRow.getCell(12)));
-                            cellNo = 13;
-                            employee.setMotherName(getCellValue(currentRow.getCell(13)));
-                            cellNo = 14;
-                            employee.setGender(getCellValue(currentRow.getCell(14)));
-                            cellNo = 15;
-                            employee.setMaritalStatus(getCellValue(currentRow.getCell(15)));
-                            cellNo = 16;
-                            
-                            
-                            Date dobDate = currentRow.getCell(16) != null ? currentRow.getCell(16).getDateCellValue() : null;
-        					if(dobDate != null) {
-        						employee.setDob(DateUtil.convertToSQLDate(dobDate));
-        						//employee.setDob(dobDate);
-        					}else{
-        						employee.setDob(null);
-        					}
-                            
-                            cellNo = 17;
-                            
-                         
-                            Date dojDate = currentRow.getCell(17) != null ? currentRow.getCell(17).getDateCellValue() : null;
-                            if(dojDate != null) {
-                            	employee.setDoj(DateUtil.convertToSQLDate(dojDate));
-                            	//employee.setDoj(dojDate);
-                            }else {
-                            	employee.setDoj(null);
-                            }
-                            
-                            cellNo = 18;
-                            employee.setReligion(getCellValue(currentRow.getCell(18)));
-                            cellNo = 19;
-                            employee.setBloodGroup(getCellValue(currentRow.getCell(19)));
-                            cellNo = 20;
-                            employee.setPersonalIdentificationMark1(getCellValue(currentRow.getCell(20)));
-                            cellNo = 21;
-                            employee.setPersonalIdentificationMark2(getCellValue(currentRow.getCell(21)));
-                            cellNo = 22;
-                            employee.setMobile(getCellValue(currentRow.getCell(22)));
-                            cellNo = 23;
-                            employee.setEmergencyContactNumber(getCellValue(currentRow.getCell(23)));
-                            cellNo = 24;
-                            employee.setPresentAddress(getCellValue(currentRow.getCell(24)));
-                            cellNo = 25;
-                            employee.setPresentCity(getCellValue(currentRow.getCell(25)));
-                            cellNo = 26;
-                            employee.setPresentState(getCellValue(currentRow.getCell(26)));
-                            cellNo = 27;
-                            employee.setPermanentAddress(getCellValue(currentRow.getCell(27)));
-                            cellNo = 28;
-                            employee.setPermanentCity(getCellValue(currentRow.getCell(28)));
-                            cellNo = 29;
-                            employee.setPermanentState(getCellValue(currentRow.getCell(29)));
-                            cellNo = 30;
-                            employee.setEducationalQulification(getCellValue(currentRow.getCell(30)));
-                            cellNo = 31;
-                            employee.setBoardInstitute(getCellValue(currentRow.getCell(31)));
-                            cellNo = 32;
-                            employee.setNomineeName(getCellValue(currentRow.getCell(32)));
-                            cellNo = 33;
-                            employee.setNomineeRelationship(getCellValue(currentRow.getCell(33)));
-                            cellNo = 34;
-                            String per = getCellValue(currentRow.getCell(34));
-                            Double perDob = Double.parseDouble(per);
-                            employee.setPercentage(perDob);
-                            cellNo = 35;
-                            employee.setEmployer(getCellValue(currentRow.getCell(35)));
-                            cellNo = 36;
-                            employee.setDesignation(getCellValue(currentRow.getCell(36)));
-                            cellNo = 37;
-                            employee.setAdharCardNumber(getCellValue(currentRow.getCell(37)));
-                            cellNo = 38;
-                            employee.setAccountNumber(getCellValue(currentRow.getCell(38)));
-                            cellNo = 39;
-                            employee.setIfscCode(getCellValue(currentRow.getCell(39)));
-                            cellNo = 40;
-                            employee.setWbsId(getCellValue(currentRow.getCell(40)));
-                            cellNo = 41;
-                            employee.setWbsDescription(getCellValue(currentRow.getCell(41)));
-                            
-                            employeeRepo.save(employee);
-/************************************************************************************************************************************************/ 
-							UserDTO user = new UserDTO();
-							if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
-								user.setLogin(employee.getEmpId());
-								user.setPassword(employee.getEmpId());
-								user.setFirstName(employee.getName());
-								user.setLastName(employee.getLastName());
-								user.setAdminFlag("N");
-								user.setUserRoleId(userRoleId);
-								user.setEmployeeId(employee.getId());
-								user.setActivated(true);
-								cellNo = 6;
-								user.setEmail(currentRow.getCell(6).getStringCellValue());
-								user = userService.createUserInformation(user);
-								User userObj = userRepository.findOne(user.getId());
-								employee.setUser(userObj);
+							employee.setImported(true);
+							employee.setOnBoardedFrom("Web");
+							employee.setOnBoardSource("Import");
+							employee.setUser(null);
+							employee.setSubmitted(false);
+							employee.setVerified(false);
+                            //employeeDTO.setMessage("error.duplicateRecordError");
+							if(employee.getId()!=null) {
+								employeeRepo.saveAndFlush(employee);
+							}
+							else {
 								employeeRepo.save(employee);
 							}
-							log.debug("Created Information for Employee: {}" + employee.getId());
-
-						}
-					}
+                      
+                    
+                    }
+					
+//					cellNo = 5;
+//					if(currentRow.getCell(5).getStringCellValue() != null) {
+//						Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(5).getStringCellValue().trim());
+//						if(existingEmployee != null) {
+//							List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
+//							cellNo = 0;
+//							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
+//							cellNo = 1;
+//							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
+//							EmployeeProjectSite projectSite = new EmployeeProjectSite();
+//							projectSite.setProject(newProj);
+//							projectSite.setSite(newSite);
+//							projectSite.setEmployee(existingEmployee);
+//
+//							if(CollectionUtils.isNotEmpty(projSites)) {
+//								projSites.add(projectSite);
+//							}
+//							employeeRepo.save(existingEmployee);
+//							log.debug("Update Employee Information with new site info: {}");
+//						}else {
+//							Employee employee = new Employee();
+//							cellNo = 0;
+//							employee.setProjectId(getCellValue(currentRow.getCell(0)));
+//							cellNo = 1;
+//							employee.setProjectDescription(getCellValue(currentRow.getCell(1)));
+//							cellNo = 2;
+//							employee.setWbsId(getCellValue(currentRow.getCell(2)));
+//							cellNo = 3;
+//							employee.setWbsDescription(getCellValue(currentRow.getCell(3)));
+//							cellNo = 4;
+//							employee.setName(getCellValue(currentRow.getCell(4)));
+//							employee.setFullName(getCellValue(currentRow.getCell(4)));
+//							employee.setLastName(getCellValue(currentRow.getCell(4)));
+//							cellNo = 5;
+//							employee.setEmpId(getCellValue(currentRow.getCell(5)));
+//							cellNo = 6;
+//							employee.setFatherName(getCellValue(currentRow.getCell(6)));
+//							cellNo = 7;
+//							employee.setMotherName(getCellValue(currentRow.getCell(7)));
+//							cellNo = 8;
+//							employee.setGender(getCellValue(currentRow.getCell(8)));
+//							cellNo = 9;
+//							employee.setMaritalStatus(getCellValue(currentRow.getCell(9)));
+//							cellNo = 10;
+//							Date dobDate = currentRow.getCell(10) != null ? currentRow.getCell(10).getDateCellValue(): null;
+//							if (dobDate != null) {
+//								employee.setDob(DateUtil.convertToSQLDate(dobDate));
+//							} 
+//							cellNo = 11;
+//							Date dojDate = currentRow.getCell(11) != null ? currentRow.getCell(11).getDateCellValue(): null;
+//							if (dojDate != null) {
+//								employee.setDoj(DateUtil.convertToSQLDate(dojDate));
+//							}
+//							cellNo = 12;
+//							employee.setReligion(getCellValue(currentRow.getCell(12)));
+//							cellNo = 13;
+//							employee.setBloodGroup(getCellValue(currentRow.getCell(13)));
+//							cellNo = 14;
+//							employee.setPersonalIdentificationMark1(getCellValue(currentRow.getCell(14)));
+//							cellNo = 15;
+//							employee.setPersonalIdentificationMark2(getCellValue(currentRow.getCell(15)));
+//							cellNo = 16;
+//							employee.setMobile(getCellValue(currentRow.getCell(16)));
+//							cellNo = 17;
+//							employee.setEmergencyContactNumber(getCellValue(currentRow.getCell(17)));
+//							cellNo = 18;
+//							employee.setPresentAddress(getCellValue(currentRow.getCell(18)));
+//							cellNo = 19;
+//							employee.setPresentCity(getCellValue(currentRow.getCell(19)));
+//							cellNo = 20;
+//							employee.setPresentState(getCellValue(currentRow.getCell(20)));
+//							cellNo = 21;
+//							employee.setPermanentAddress(getCellValue(currentRow.getCell(21)));
+//							cellNo = 22;
+//							employee.setPermanentCity(getCellValue(currentRow.getCell(22)));
+//							cellNo = 23;
+//							employee.setPermanentState(getCellValue(currentRow.getCell(23)));
+//							cellNo =24;
+//							employee.setEducationalQulification(getCellValue(currentRow.getCell(24)));
+//							cellNo = 25;
+//							employee.setBoardInstitute(getCellValue(currentRow.getCell(25)));
+//							cellNo = 26;
+//							employee.setNomineeName(getCellValue(currentRow.getCell(26)));
+//							cellNo = 27;
+//							employee.setNomineeRelationship(getCellValue(currentRow.getCell(27)));
+//							cellNo = 28;
+//							employee.setNomineeContactNumber(getCellValue(currentRow.getCell(28)));
+//							cellNo = 29;
+//							String per = getCellValue(currentRow.getCell(29));
+//							Double perDob = Double.parseDouble(per);
+//							employee.setPercentage(perDob);
+//							cellNo = 30;
+//							employee.setEmployer(getCellValue(currentRow.getCell(30)));
+//							cellNo = 31;
+//							employee.setDesignation(getCellValue(currentRow.getCell(31)));
+//							cellNo = 32;
+//							employee.setAdharCardNumber(getCellValue(currentRow.getCell(32)));
+//							cellNo = 33;
+//							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
+//							cellNo = 34;
+//							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
+//							ZoneId  zone = ZoneId.of("Asia/Singapore");
+//							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+//							employee.setCreatedDate(zdt);
+//							employee.setActive(Employee.ACTIVE_YES);
+//							employee.setFaceAuthorised(false);
+//							employee.setFaceIdEnrolled(false);
+//							employee.setLeft(false);
+//							employee.setRelieved(false);
+//							employee.setReliever(false);
+//                            employeeRepo.save(employee);
+//						}
+//					}
 				} catch (IllegalStateException | NumberFormatException formatEx) {
 					throw formatEx;
 				} catch (Exception e) {
@@ -2045,10 +2140,6 @@ public class ImportUtil {
 					statusMap.put(fileKey, importResult);
 					throw new Exception(response.toString());
 				}
-
-
-
-			/*}*/
 			}
 
 		} catch (IOException e) {
@@ -2080,6 +2171,21 @@ public class ImportUtil {
 		}
 		return response.toString();
 	}
+
+	
+
+	public Employee isSkipDuplicate(String empId) {
+		
+		return employeeRepo.findByEmpId(empId);
+		
+//		Employee existingEmployeeWbs = employeeRepo.findByEmpIdandWbsId(empId,wbsId);
+//		Employee exsistingEmployeeProjId = employeeRepo.findByEmpIdandProjId(empId,projId);
+//		if(existingEmployeeWbs != null || exsistingEmployeeProjId != null) {
+//			return true;
+//		}else {
+//			return false;
+//		}
+	 }
 	
 /**************************************************************************************************************************************/
 	
@@ -2327,23 +2433,25 @@ public class ImportUtil {
 
     private String getCellValue(Cell cell) {
 		String value = null;
-		switch(cell.getCellType()) {
-			case HSSFCell.CELL_TYPE_BLANK:
-	        case HSSFCell.CELL_TYPE_ERROR:
-	            // ignore all blank or error cells
-	            break;
-	        case HSSFCell.CELL_TYPE_NUMERIC:
-	        		value = Long.toString((long)cell
-	                    .getNumericCellValue());
-	            break;
-	        case HSSFCell.CELL_TYPE_BOOLEAN:
-	        	value = Boolean.toString(cell
-	                    .getBooleanCellValue());
-	            break;
-	        case HSSFCell.CELL_TYPE_STRING:
-	        default:
-	        	value = cell.getStringCellValue();
-	            break;
+		if(cell != null) {
+			switch(cell.getCellType()) {
+				case HSSFCell.CELL_TYPE_BLANK:
+		        case HSSFCell.CELL_TYPE_ERROR:
+		            // ignore all blank or error cells
+		            break;
+		        case HSSFCell.CELL_TYPE_NUMERIC:
+		        		value = Long.toString((long)cell
+		                    .getNumericCellValue());
+		            break;
+		        case HSSFCell.CELL_TYPE_BOOLEAN:
+		        	value = Boolean.toString(cell
+		                    .getBooleanCellValue());
+		            break;
+		        case HSSFCell.CELL_TYPE_STRING:
+		        default:
+		        	value = cell.getStringCellValue();
+		            break;
+			}
 		}
 		currentCell ++;
 		return value;

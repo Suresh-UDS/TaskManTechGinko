@@ -1,158 +1,274 @@
-<ion-header>
+<ion-header no-border>
     <ion-navbar>
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
+        <ion-title>Employee Detail</ion-title>
     </ion-navbar>
+
 </ion-header>
-<ion-content id="userProgileMainContainer">
-    <ion-card class="profileCard">
-        <ion-card-content>
-            <ion-avatar item-start class="profileContainer">
-                <img [src]="AppConfig.s3Bucket+userData['profilePicture']" class="userProfile" />
-                <h1>{{userData['employeeName']}}</h1>
-            </ion-avatar>
 
-        </ion-card-content>
-    </ion-card>
-    <ion-card>
-        <ion-card-content class="listContainer">
-            <ion-list>
-                <ion-list-header>
-                    Basic Details
-                </ion-list-header>
-                <ion-item *ngFor="let list of userData['relationshipDetails']">
-                    <p item-start class="text-left">{{list.relationship}} Name</p>
-                    <p item-end class="text-right">{{list.name}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">Gender</p>
-                    <p item-end class="text-right">{{userData['gender']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">Marital Status</p>
-                    <p item-end class="text-right">{{userData['maritalStatus']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">Date Of Birth</p>
-                    <p item-end class="text-right">{{userData['dateOfBirth']}}</p>
-                </ion-item>
+<ion-content >
 
-                <ion-item>
-                    <p item-start class="text-left">Date Of Joining</p>
-                    <p item-end class="text-right">{{userData['dateOfJoining']}}</p>
-                </ion-item>
-
-                <ion-item *ngIf="userData.bloodGroup !== null && userData.bloodGroup!=''">
-                    <p item-start class="text-left">Blood Group</p>
-                    <p item-end class="text-right">{{userData['bloodGroup']}}</p>
-                </ion-item>
-                <ion-item *ngIf="userData.identificationMark !== null && userData.identificationMark!=''">
-                    <p item-start class="text-left">identificationMark</p>
-                    <p item-end class="text-right">{{userData['identificationMark'][0]}}</p>
-                </ion-item>
+        <ion-item-group>
+                <ion-item-divider *ngIf="profilePicture">
+                       
+                            <img [src]="profilePicture" class="userProfile" />
+                            <h1>{{userData.name}} {{userData.lastName}}</h1>
+                </ion-item-divider>
+            </ion-item-group>
 
 
-                <ion-list-header>
-                    Contact Details
-                </ion-list-header>
-                <ion-item>
-                    <p item-start class="text-left">Mobile Number</p>
-                    <p item-end class="text-right">+91 <span>{{userData['contactNumber']}}</span></p>
-                </ion-item>
-                <ion-item *ngIf="userData.emergencyConatctNo !== null && userData.emergencyConatctNo!=''">
-                    <p item-start class="text-left">Emergency Contact Number</p>
-                    <p item-end class="text-right">{{userData['emergencyConatctNo'][0]}}</p>
-                </ion-item>
+    <ion-item-group>
 
-                <ion-item *ngIf="userData.communicationAddress !== null && userData.communicationAddress!=''">
-                    <p item-start class="text-left">Address</p>
-                    <p item-end class="text-right">{{userData['communicationAddress'][0]['address']}}
-                        <br>{{userData['communicationAddress'][0]['city']}}<br>{{userData['communicationAddress'][0]['state']}}</p>
-                </ion-item>
-                <ion-item *ngIf="userData.permanentAddress !== null && userData.permanentAddress != ''">
-                    <p item-start class="text-left">permanentAddress</p>
-                    <p item-end class="text-right">{{userData['permanentAddress'][0]['address']}}
-                        <br>{{userData['permanentAddress'][0]['city']}}
-                        <br>{{userData['permanentAddress'][0]['state']}}</p>
-                </ion-item>
+        <ion-item-divider *ngIf="userData.projectCode">
+            <ion-label style="text-align: right">Project Code</ion-label>
+            <ion-label style="text-align: left">{{userData.projectCode}}</ion-label>
+        </ion-item-divider>
 
-                <ion-list-header>
-                    Education and Employeement
-                </ion-list-header>
-                <ion-item>
-                    <p item-start class="text-left">Qualification</p>
-                    <p item-end class="text-right">{{userData['educationQualification'][0]['qualification']}}</p>
-                </ion-item>
+        <ion-item-divider *ngIf="userData.projectDescription">
+            <ion-label style="text-align: right">Description</ion-label>
+            <ion-label style="text-align: left">{{userData.projectDescription}}</ion-label>
+        </ion-item-divider>
 
-                <ion-item>
-                    <p item-start class="text-left">Institute</p>
-                    <p item-end class="text-right">{{userData['educationQualification'][0]['institute']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">previousEmployee </p>
-                    <p item-end class="text-right">{{userData['previousEmployee'][0]['name']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">designation</p>
-                    <p item-end class="text-right">{{userData['previousEmployee'][0]['designation']}}</p>
-                </ion-item>
+        <ion-item-divider *ngIf="userData.wbsId">
+            <ion-label style="text-align: right">WBS Id </ion-label>
+            <ion-label style="text-align: left">{{userData.wbsId}}</ion-label>
+        </ion-item-divider>
 
+        <ion-item-divider *ngIf="userData.wbsDescription">
+            <ion-label style="text-align: right">WBS Description </ion-label>
+            <ion-label style="text-align: left">{{userData.wbsDescription}}</ion-label>
+        </ion-item-divider>
 
-                <ion-list-header>
-                    Bank Details and Documents
-                </ion-list-header>
-                <ion-item>
-                    <p item-start class="text-left">Bank AccountNo</p>
-                    <p item-end class="text-right">{{userData['bankDetails'][0]['accountNo']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">IFSC</p>
-                    <p item-end class="text-right">{{userData['bankDetails'][0]['ifsc']}}</p>
-                </ion-item>
-                <ion-item>
-                    <p item-start class="text-left">Aadhar Number</p>
-                    <p item-end class="text-right">{{userData['aadharNumber']}}</p>
-                </ion-item>
-                <ion-slides pager="true">
-                    <ion-slide item-start class="Address Proof">
-                        <p> AddressProof </p>
-                        <img [src]="AppConfig.s3Bucket+userData['addressProof']" class="image" />
+        <ion-item-divider *ngIf="userData.position">
+            <ion-label style="text-align: right">Designation No. </ion-label>
+            <ion-label style="text-align: left">{{userData.position}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.name">
+            <ion-label style="text-align: right">Name</ion-label>
+            <ion-label style="text-align: left">{{userData.name}} {{userData.lastName}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.fatherName">
+            <ion-label style="text-align: right">Father Name</ion-label>
+            <ion-label style="text-align: left">{{userData.fatherName}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.motherName">
+            <ion-label style="text-align: right">Mother Name</ion-label>
+            <ion-label style="text-align: left">{{userData.motherName}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.gender">
+            <ion-label style="text-align: right">Gender</ion-label>
+            <ion-label style="text-align: left">{{userData.gender}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.maritalStatus">
+            <ion-label style="text-align: right">Marital Status</ion-label>
+            <ion-label style="text-align: left">{{userData.maritalStatus}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.dob">
+            <ion-label style="text-align: right">D.O.B</ion-label>
+            <ion-label style="text-align: left">{{userData.dob}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.doj">
+            <ion-label style="text-align: right">D.O.J</ion-label>
+            <ion-label style="text-align: left">{{userData.doj}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.religion">
+            <ion-label style="text-align: right">Religion </ion-label>
+            <ion-label style="text-align: left">{{userData.religion}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.bloodGroup">
+            <ion-label style="text-align: right">Blood Group </ion-label>
+            <ion-label style="text-align: left">{{userData.bloodGroup}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.personalIdentificationMark1">
+            <ion-label style="text-align: right">Personal Identification Mark 1</ion-label>
+            <ion-label style="text-align: left">{{userData.personalIdentificationMark1}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.personalIdentificationMark2">
+            <ion-label style="text-align: right">Personal Identification Mark 2	</ion-label>
+            <ion-label style="text-align: left">{{userData.personalIdentificationMark2}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.educationalQulification">
+            <ion-label style="text-align: right">Education Qualification</ion-label>
+            <ion-label style="text-align: left">{{userData.educationalQulification}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.boardInstitute">
+            <ion-label style="text-align: right">Board / Institute</ion-label>
+            <ion-label style="text-align: left">{{userData.boardInstitute}}</ion-label>
+        </ion-item-divider>
+
+        <ion-item-divider *ngIf="userData.adharCardNumber">
+            <ion-label style="text-align: right">AdharCard Number </ion-label>
+            <ion-label style="text-align: left">{{userData.adharCardNumber}}</ion-label>
+        </ion-item-divider>
+
+       
+
+    </ion-item-group>
+
+    <ion-item-group *ngIf="userData.nomineeName">
+        <ion-item-divider>
+            <ion-label style="text-align: right">Nominee Name</ion-label>
+            <ion-label style="text-align: left">{{userData.nomineeName}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group *ngIf="userData.nomineeRelationship">
+        <ion-item-divider>
+            <ion-label style="text-align: right">Relationship </ion-label>
+            <ion-label style="text-align: left">{{userData.nomineeRelationship}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group *ngIf="userData.percentage">
+        <ion-item-divider>
+            <ion-label style="text-align: right">Percentage </ion-label>
+            <ion-label style="text-align: left">{{userData.percentage}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group *ngIf="userData.nomineeContactNumber">
+        <ion-item-divider>
+            <ion-label style="text-align: right">Contact No.  </ion-label>
+            <ion-label style="text-align: left">{{userData.nomineeContactNumber}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group *ngIf="userData.accountNumber">
+        <ion-item-divider>
+            <ion-label style="text-align: right">Bank Account Number</ion-label>
+            <ion-label style="text-align: left">{{userData.accountNumber}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.ifscCode">
+            <ion-label style="text-align: right">IIFSC Code</ion-label>
+            <ion-label style="text-align: left">{{userData.ifscCode}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+   
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.mobile">
+            <ion-label style="text-align: right">Mobile Number</ion-label>
+            <ion-label style="text-align: left">{{userData.mobile}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.emergencyContactNumber">
+            <ion-label style="text-align: right">Emergency Contact No</ion-label>
+            <ion-label style="text-align: left">{{userData.emergencyContactNumber}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.presentAddress">
+            <ion-label style="text-align: right">Present Address</ion-label>
+            <ion-label style="text-align: left">{{userData.presentAddress}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.presentCity">
+            <ion-label style="text-align: right">City</ion-label>
+            <ion-label style="text-align: left">{{userData.presentCity}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.presentState">
+            <ion-label style="text-align: right">State</ion-label>
+            <ion-label style="text-align: left">{{userData.presentState}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.permanentAddress">
+            <ion-label style="text-align: right">Permenant Address</ion-label>
+            <ion-label style="text-align: left">{{userData.permanentAddress}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.permanentCity">
+            <ion-label style="text-align: right">City</ion-label>
+            <ion-label style="text-align: left">{{userData.permanentCity}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    <ion-item-group>
+        <ion-item-divider *ngIf="userData.permanentState">
+            <ion-label style="text-align: right">State</ion-label>
+            <ion-label style="text-align: left">{{userData.permanentState}}</ion-label>
+        </ion-item-divider>
+    </ion-item-group>
+
+    
+
+    <ion-slides pager="true" style="height:60% !important" *ngIf="adhar_card_front || adhar_card_back || bank_pass_book || address_proof || driving_license || voter_id || pancard || fingerprint_right || fingerprint_left">
+            <ion-slide item-start class="Address Proof" *ngIf="adhar_card_front">
+                <p> Adhar Card Front </p>
+                <img [src]="adhar_card_front" class="image" />
+            </ion-slide>
+            <ion-slide item-start class="Aadhar" *ngIf="adhar_card_back">
+                <p>  Adhar Card Back </p>
+                <img [src]="adhar_card_back" class="image" />
+            </ion-slide>
+
+            <ion-slide item-start class="Aadhar" *ngIf="bank_pass_book">
+                    <p> Bank Pass Book </p>
+                    <img [src]="bank_pass_book" class="image" />
+                </ion-slide>
+
+                <ion-slide item-start class="Aadhar" *ngIf="address_proof">
+                        <p> Address Proof </p>
+                        <img [src]="address_proof" class="image" />
                     </ion-slide>
-                    <ion-slide item-start class="Aadhar">
-                        <p> Aadharcard </p>
-                        <img [src]="AppConfig.s3Bucket+userData['aadharPhotoCopy']" class="image" />
-                    </ion-slide>
-                    <ion-slide item-start class="Employee Signature">
-                        <p> Employee Signature </p>
-                        <img [src]="AppConfig.s3Bucket+userData['employeeSignature']" class="image" />
-                    </ion-slide>
-                    <ion-slide item-start class="Bank Passbook">
-                        <p> Bank Passbook</p>
-                        <img [src]="AppConfig.s3Bucket+userData['prePrintedStatement']" class="image" />
-                    </ion-slide>
-                    <ion-slide item-start class="Thumb Impression Proof">
-                        <p> Thumb Impresssion Left </p>
-                        <img [src]="AppConfig.s3Bucket+userData['thumbImpressenLeft']" class="image" />
-                    </ion-slide>
-                    <ion-slide item-start class="Thumb Impression Proof">
-                        <p> Thumb Impresssion Right </p>
-                        <img [src]="AppConfig.s3Bucket+userData['thumbImpressenRight']" class="image" />
-                    </ion-slide>
-                    <ion-slide *ngIf="userData.pancardCopy !== null && userData.pancardCopy!=''" item-start class="pan card">
-                        <p> Pancard </p>
-                        <img [src]="AppConfig.s3Bucket+userData['pancardCopy']" class="image" />
-                    </ion-slide>
-                    <ion-slide *ngIf="userData.drivingLicense !== null && userData.drivingLicense!=''" item-start class="Driving License">
-                        <p> Driving License </p>
-                        <img [src]="AppConfig.s3Bucket+userData['drivingLicense']" class="image" />
-                    </ion-slide>
-                    <ion-slide *ngIf="userData.voterId !== null && userData.voterId!=''" item-start class="voterId">
-                        <p> Voter Id </p>
-                        <img [src]="AppConfig.s3Bucket+userData['voterId']" class="image" />
-                    </ion-slide>
-                </ion-slides>
-            </ion-list>
-        </ion-card-content>
-    </ion-card>
+
+                    <ion-slide item-start class="Aadhar" *ngIf="driving_license">
+                            <p> Driving Licence </p>
+                            <img [src]="driving_license" class="image" />
+                        </ion-slide>
+
+                        <ion-slide item-start class="Aadhar" *ngIf="voter_id">
+                                <p> Voter Id </p>
+                                <img [src]="voter_id" class="image" />
+                            </ion-slide>
+
+                            <ion-slide item-start class="Aadhar" *ngIf="pancard">
+                                    <p> Pan Card </p>
+                                    <img [src]="pancard" class="image" />
+                                </ion-slide>
+
+                                <ion-slide item-start class="Aadhar" *ngIf="fingerprint_right">
+                                        <p> Finger Print Right </p>
+                                        <img [src]="fingerprint_right" class="image" />
+                                    </ion-slide>
+
+                                    <ion-slide item-start class="Aadhar" *ngIf="fingerprint_left">
+                                            <p> Finger Print Left </p>
+                                            <img [src]="fingerprint_left" class="image" />
+                                        </ion-slide>
+            
+        </ion-slides>
+
+
+    
 </ion-content>

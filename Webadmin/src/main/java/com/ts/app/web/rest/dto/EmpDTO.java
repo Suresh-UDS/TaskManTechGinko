@@ -30,6 +30,12 @@ public class EmpDTO {
 	private String drivingLicense;
 	private String pancardCopy;
 	private String voterId;
+	private String profilePicImg;
+	private String wbsId;
+	private String position;
+	private String projectId;
+	private String fatherName;
+	private String motherName;
 	ArrayList<RelationshipDetailsDTO> relationshipDetails = new ArrayList<>();
 	ArrayList<NomineeDetailDTO> nomineeDetail = new ArrayList<>();
 	ArrayList<String> identificationMark = new ArrayList<>();
@@ -352,5 +358,54 @@ public class EmpDTO {
 	public void setVoterId(String voterId) {
 		this.voterId = voterId;
 	}
+
+	public String getProfilePicImg() {
+		return profilePicImg;
+	}
+
+	public void setProfilePicImg(String profilePicImg) {
+		this.profilePicImg = profilePicImg;
+	}
+
+	public String getWbsId() {
+		return wbsId;
+	}
+
+	public void setWbsId(String wbsId) {
+		this.wbsId = wbsId;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+
+	public String getMotherName() {
+		return motherName;
+	}
+
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
+	}
+	
 	
 }

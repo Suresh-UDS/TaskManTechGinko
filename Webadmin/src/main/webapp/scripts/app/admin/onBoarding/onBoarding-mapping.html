@@ -1,5 +1,5 @@
-<div  ng-init="loadPageTop();loadUsers();loadItems();" >
-    <div class="col-md-6">
+<div  ng-init="loadPageTop();" >
+    <div class="">
         <div >
             <div class="card">
                 <form id="TypeValidation" role="form" class="form-horizontal" ng-submit="getUserDetails(empCode)">
@@ -31,7 +31,13 @@
                 </form>
             </div>
         </div>
-        <div >
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
             <div class="card">
                 <!--            <form id="UserDetails" class="form-horizontal" action="" method="">-->
                 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
@@ -58,7 +64,7 @@
                             <tr>
 
                                 <td>User ID</td>
-                                <td>{{userDetails.id}}</td>
+                                <td>{{userDetails.login}}</td>
 
                             </tr>
                             <tr>
@@ -114,10 +120,46 @@
             </div>
         </div>
 
-    </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Configured Branch List
+                    </div>
+                </div>
 
-   <div class="col-md-6" >
-        <div class="card">
+                <div class="card-content">
+
+                    <div class="row">
+                        <span ng-repeat="branch in userBranchList" class="tag label label-info" style="margin-right: 10px">
+                            {{branch.element}}
+			                </span>
+                    </div>
+
+                    <div ng-show="!showUserBranchesList">
+                        <div class="card card-pricing card-plain">
+                            <div class="content">
+                                <div class="icon">
+                                    <i class="material-icons">devices_other</i>
+                                </div>
+                                <h3 class="card-title">No configures Branches Found</h3>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <!--                <div class="card-footer text-center">-->
+                <!--                    <button type="submit" class="btn btn-rose btn-fill">Validate Inputs</button>-->
+                <!--                </div>-->
+                <!--            </form>-->
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
             <div class="panel panel-default" >
                 <div class="panel-heading">
                     Configure
@@ -128,12 +170,46 @@
 
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div id="onBoarding" class="col-lg-6">
+                            
+                            <div class="col-md-6">
 
-                                    <hierarchy-search dataset="list"></hierarchy-search>
+                                    <label>Branch</label>
+                                    <select class="form-control" name="designations" ng-model="selectedBranch"  ng-change="setSelectedBranch()">
+                                        <option value="">Select Branch</option>
+                                        <option ng-repeat="item in sapBusinessCategoriesList.rootElements track by $index" value="{{item.elementCode}}">{{item.elementName}} - {{item.elementCode}}</option>
+                                    </select>
+                         
+                            </div>
+
+<!--                        commented by karthick, as scope issue prevails-->
+
+<!--                            <div class="col-md-6">
+
+                                    <label>Filter</label>
+                                    <input type="text" class="form-control"  ng-model="wbsFilter"   placeholder="Filter"/>
+
+                            </div>-->
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" ng-hide="showCategoriesLoader">
+                            <div class="row">
+                                <div id="onBoarding" > 
+                                     <ul class="nested-checkbox-list">
+                                        <nested-check-box ng-repeat="curItem in selctedSapBusinessCategoriesList" item="[curItem,sapBusinessCategoriesList.userConfElements,1]" ></nested-check-box> 
+                                     </ul>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="txt-align-center LoaderCon" class="checkboxListContainer"  ng-hide="!showCategoriesLoader">
+
+                                <div class="pad-TB-30">
+                                    <div loader-css="ball-pulse"></div>
+                                    <h3 >Loading, please wait...</h3>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -142,10 +218,9 @@
 
             </div>
             <div class="card-footer text-center">
-                <button type="submit" class="btn btn-rose btn-fill" ng-click="saveDetails()">Save</button>
+                <button type="submit" class="btn btn-rose btn-fill" ng-disabled="saveMappingLoader"  ng-click="saveDetails()"><span  ng-show="saveMappingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Save</button>
                 <div class="ripple-container"></div>
             </div>
-        </div>
     </div>
 
 

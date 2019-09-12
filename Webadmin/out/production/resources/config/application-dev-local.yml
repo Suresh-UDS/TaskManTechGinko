@@ -210,48 +210,49 @@ AWS:
    s3-checkinout-path : checkInOutImages/
    s3-checklist-path : checkListImages/
    s3-locationqr-path : locationQrCodes/
+   s3-expenseDocument-path: expenseDocuments/
+   s3-employeeDocument-path: employeeDocuments/
+
 
 scheduler:
    job:
       creationPolicy: monthly
    dailyJob:
-      enabled: false
+      enabled: true
       creation: monthly
    weeklyJob:
-      enabled: false
+      enabled: true
    monthlyJob:
-      enabled: false
+      enabled: true
    quarterlyJob:
-      enabled: false
+      enabled: true
    yearlyJob:
-      enabled: false
+      enabled: true
       creation: daily
    fortnightlyJob:
-      enabled: false
+      enabled: true
       creation: daily
    halfyearlyJob:
-      enabled: false
+      enabled: true
       creation: yearly
    overdueJob:
       enabled: false
    eodJobReport:
-      enabled: false
+      enabled: true
    attendanceDetailReport:
-      enabled: false
+      enabled: true
    attendanceConsolidatedReport:
-      enabled: false
+      enabled: true
    feedbackreport:
-      enabled: false
+      enabled: true
    attendanceMusterRollReport:
-      enabled: false
+      enabled: true
    dayWiseJobReport:
-      enabled: false
+      enabled: true
    dayWiseTicketReport:
-      enabled: false
+      enabled: true
    dayWiseQuotationReport:
-      enabled: false
-   dayWiseAttendanceReport:
-      enabled: false
+      enabled: true
 
 default.user.password: uds12345
 

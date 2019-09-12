@@ -227,6 +227,13 @@ compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.11'
     //compile group: 'com.squareup.okio', name: 'okio', version: '1.13.0'   
     compile group: 'org.influxdb', name: 'influxdb-java', version: '2.14'
     //compile 'org.influxdb:influxdb-java:2.14'
+    
+	// https://mvnrepository.com/artifact/org.apache.velocity/velocity
+	compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+	compile group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.5.10'
+	compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.11'
+
 }
 
 compileJava.dependsOn(processResources)

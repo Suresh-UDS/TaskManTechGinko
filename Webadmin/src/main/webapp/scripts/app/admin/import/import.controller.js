@@ -27,6 +27,7 @@ angular.module('timeSheetApp')
 			$scope.jobImportStatus = {};
 			$scope.jobImportStatusLoad = false;
 			$scope.empImportStatusLoad = false;
+			$scope.empOnboardingImportStatusLoad = false;
 			$scope.checklistImportStatusLoad = false;
 			$scope.clientImportStatusLoad = false;
 			$scope.siteImportStatusLoad = false;
@@ -234,7 +235,7 @@ angular.module('timeSheetApp')
 			// upload Employee Onboarding File  start
 			$scope.uploadEmployeeOnboardingFile = function(){
 				if($scope.selectedEmployeeOnboardingFile){
-					$scope.empImportStatusLoad = true;
+					$scope.empOnboardingImportStatusLoad = true;
 					//alert("Import File===>"+$scope.selectedEmployeeOnboardingFile);
 					console.log('selected employee onboarding file - ' + $scope.selectedEmployeeOnboardingFile);
 					EmployeeComponent.importEmployeeOnboardingFile($scope.selectedEmployeeOnboardingFile).then(function(data){

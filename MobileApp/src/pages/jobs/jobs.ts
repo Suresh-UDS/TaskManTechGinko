@@ -140,6 +140,7 @@ export class JobsPage {
             console.log(this.scannedBlock);
             searchCriteria={
                 checkInDateTimeFrom:new Date(),
+                jobStatusList:[0,1,2],
                 siteId:this.scannedSiteId,
                 block:this.scannedBlock,
                 floor:this.scannedFloor,
@@ -156,6 +157,7 @@ export class JobsPage {
             console.log("Scanned location Id or block floor zone not available");
             searchCriteria = {
                 checkInDateTimeFrom:new Date(),
+                jobStatusList:[0,1,2],
                 locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId,
                 schedule:"ONCE"
@@ -168,6 +170,7 @@ export class JobsPage {
             this.spinner=false;
             console.log("Todays jobs of current user");
             console.log(response);
+            
                 this.todaysJobs = response.transactions;
                 this.todaysPage= response.currPage;
                 this.todaysTotalPages = response.totalPages;

@@ -29,7 +29,13 @@ angular.module('timeSheetApp')
     $scope.allUsers = [];
     $rootScope.onBoardingAuthorityDetails = {};
     $scope.showUserDetails = false;
+    $scope.showUserBranchesList = false;
+    $scope.userBranchList = [];
+    $scope.addressProofImage;
 	//$timeout(function (){angular.element('[ng-model="name"]').focus();});
+	$scope.sapBusinessCategoriesList = {};
+    $scope.enableApproval= false;
+    //$timeout(function (){angular.element('[ng-model="name"]').focus();});
 
 	$scope.pages = { currPage : 1};
 
@@ -57,6 +63,9 @@ angular.module('timeSheetApp')
 
 	$scope.searchCriteria = {};
 
+	$scope.saveOnboardingLoader = false;
+	$scope.approveOnboardingLoader = false;
+ 
 	/** Ui-select scopes **/
 	$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
 	$scope.client = {};
@@ -74,9 +83,71 @@ angular.module('timeSheetApp')
 	$scope.branchsLists = [];
 	$scope.branchsListOne.selected =  null;
     $scope.userDetails = {};
-    $scope.showUserDetails = false;
+	$scope.showUserDetails = false;
+	$scope.selctedSapBusinessCategoriesList = [];
+	$scope.selectedBranch = "";
 
+    $scope.allBranches = {id:0, element:' -- All Branches --'};
+    $scope.branch={};
+    $scope.branches = [];
+
+    $scope.allProjects = {id:0, element:' -- All Projects --'};
+    $scope.project={};
+    $scope.projects=[];
+
+    $scope.allWBS = {id:0, element:' -- All WBS --'};
+    $scope.wbs = {};
+    $scope.wbsList = [];
+	$scope.declarationTypes = [];
+
+    $scope.selectedBranchCode = null;
+    $scope.selectedProjectCode = null;
+    $scope.selectedWBSCode = null;
+    $scope.selectedBranchDetails={};
+    $scope.selectedWBSDetails={};
+    $scope.selectedProjectDetails={};
+
+    $scope.showCategoriesLoader = false;
 	$scope.now = new Date();
+
+    $scope.totalStates = [
+        { name: 'Assam', key: 'assam' },
+        { name: 'Andhra Pradesh', key: 'andhrapradesh' },
+        { name: 'Odisha', key: 'odisha' },
+        { name: 'Punjab', key: 'punjab' },
+        { name: 'Delhi', key: 'delhi' },
+        { name: 'Gujarat', key: 'gujarat' },
+        { name: 'Karnataka', key: 'karnataka' },
+        { name: 'Haryana', key: 'haryana' },
+        { name: 'Rajasthan', key: 'rajasthan' },
+        { name: 'Himachal Pradesh', key: 'himachalpradesh' },
+        { name: 'Jharkand', key: 'jharkand' },
+        { name: 'Chhattisgarh', key: 'chhattisgarh' },
+        { name: 'Kerala', key: 'kerala' },
+        { name: 'Tamil Nadu', key: 'tamilnadu' },
+        { name: 'Madhya Pradesh', key: 'madhyapradesh' },
+        { name: 'Bihar', key: 'bihar' },
+        { name: 'Maharashtra', key: 'maharashtra' },
+        { name: 'Chandigarh', key: 'chandigarh' },
+        { name: 'Telangana', key: 'telangana' },
+        { name: 'Jammu and Kashmir', key: 'jammu and kashmir' },
+        { name: 'Tripura', key: 'tripura' },
+        { name: 'Meghalaya', key: 'meghalaya' },
+        { name: 'Goa', key: 'goa' },
+        { name: 'Arunachal Pradesh', key: 'arunachalpradesh' },
+        { name: 'Manipur', key: 'manipur' },
+        { name: 'Mizoram', key: 'mizoram' },
+        { name: 'Sikkim', key: 'sikkim' },
+        { name: 'Puduchery', key: 'puduchery' },
+        { name: 'Nagaland', key: 'nagaland' },
+        { name: 'Andaman and Nicobhar', key: 'andaman and nicobhar' },
+        { name: 'Dadra and Nagar Haveli', key: 'dasra and nagarhaveli' },
+        { name: 'Daman and Diu', key: 'daman and diu' },
+        { name: 'Lakshadweep', key: 'lakshadweep' },
+        { name: 'Uttarakhand', key: 'uttarakhand' },
+        { name: 'Uttar Pradesh', key: 'uttar pradesh' },
+        { name: 'West Bengal', key: 'west bengal' },
+    ];
 
 	$scope.initCalender = function(){
 
@@ -84,6 +155,87 @@ angular.module('timeSheetApp')
 
 	};
 
+	var mappingValidation = function(){
+
+		// if( _.find( $scope.userDetails.userRole.rolePermissions,{actionName:'Restiction'}) ){
+
+		// 	if($("wbsListCheckBox:checked").length > 4){
+ 
+		// 		$scope.showNotifications('top','center','danger','We can choose only one WBS for this type of users');
+		// 		return false;
+
+		// 	}
+			
+		// }
+
+		return true;
+
+	}
+
+	$scope.setSelectedBranch = function(){
+ 
+		$scope.showCategoriesLoader = true;
+		$scope.selctedSapBusinessCategoriesList = [];
+		$scope.selctedSapBusinessCategoriesList.push(_.find($scope.sapBusinessCategoriesList.rootElements,{elementCode:$scope.selectedBranch}));
+
+		//console.log(console.log($scope.selctedSapBusinessCategoriesList));
+
+		OnBoardingComponent.getElementsByUser($scope.userDetails.id,$scope.selectedBranch).then(function (data) {
+
+			$scope.mappedData = data; 
+
+			$scope.showCategoriesLoader = false;
+			
+			for(var i in $scope.mappedData){
+
+				console.log(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType);
+
+				$(".ip_"+$scope.mappedData[i].elementCode+"_"+$scope.mappedData[i].elementType).prop("checked",true);
+
+			}
+ 
+			 
+		}).catch(function(response){
+
+			$scope.showCategoriesLoader = false;
+			
+			$scope.showNotifications('top','center','danger','Please Try Again..');
+
+		});
+
+	}
+
+	$scope.loadgetSapBusinessCategories = function(){
+	    $scope.showCategoriesLoader = true;
+
+		OnBoardingComponent.getSapBusinessCategories().then(function(data){
+
+			$scope.sapBusinessCategoriesList.rootElements = JSON.parse(data.elementsJson);
+			$scope.sapBusinessCategoriesList.userConfElements = $scope.mappedData;
+
+            $scope.showCategoriesLoader = false;
+
+			//  $scope.sapBranches = _.map($scope.sapBusinessCategoriesList,_.partialRight(_.pick,['elemetType','elementName']));
+  
+			//  console.log($scope.sapBranches);
+
+		})
+		
+	}
+
+	 $('#dateOfBirth').on('dp.change', function(e){
+		 //alert("inside");
+         $.notifyClose();
+         $scope.employee.dob= $filter('date')(e.date._d, 'yyyy-MM-dd');
+     });
+	 
+	 $('#dateOfJoining').on('dp.change', function(e){
+		 //alert("inside");
+         $.notifyClose();
+         $scope.employee.doj= $filter('date')(e.date._d, 'yyyy-MM-dd');
+     });
+	
+	
 	$('#dateFilterFrom').on('dp.change', function(e){
 		$scope.selectedDateFromSer =new Date(e.date._d);
 		$scope.selectedDateFrom = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -111,6 +263,7 @@ angular.module('timeSheetApp')
 		}
 
 	});
+	
 	$('#dateFilterTo').on('dp.change', function(e){
 		$scope.selectedDateToSer =new Date(e.date._d);
 		$scope.selectedDateTo = $filter('date')(e.date._d, 'dd/MM/yyyy');
@@ -138,9 +291,46 @@ angular.module('timeSheetApp')
 
 	});
 
+
+	$scope.initRootScope = function(){
+
+		if(!$rootScope.onBoardingFilter){ 
+
+			$rootScope.onBoardingFilter = {branches:{list:[],selected:{}},projects:{list:[],selected:{}},wbs:{list:[],selected:{}},employee:{name:null,empId:null,page:1,type:1}};
+
+		}
+
+	}
+
+	$scope.newEmployee = 0;
+	$scope.existingEmployee = 0;
+	$scope.importedEmployee = 0;
+
+	$scope.setListType = function(type){
+
+		$rootScope.onBoardingFilter.employee.type = type;
+		
+		$scope.newEmployee = type[0];
+		$scope.existingEmployee = type[1]; 
+		$scope.importedEmployee = type[2];
+ 
+	}
+
+	$scope.LoadEmpListByType = function(type){
+
+		$scope.setPage(1);
+		$scope.onBoardingEmployees = [];
+		$scope.setListType(type);
+		$scope.search();
+
+	}
+
 	// Init load employees
 	$scope.init = function() {
 		// $scope.loadAttendances();
+
+		$scope.initRootScope();
+		
         $scope.loadUsers();
 	};
 
@@ -189,6 +379,15 @@ angular.module('timeSheetApp')
 	    $scope.showUserDetails = true;
     };
 
+	$scope.loadUserBranchList = function(userDetails){
+		console.log("Load userBranch list");
+		$scope.userBranchList = [];
+        OnBoardingComponent.getBranchList($scope.userDetails.id).then(function (data) {
+            $scope.showUserBranchesList = true;
+            $scope.userBranchList = data;
+        })
+    };
+
 	$scope.clearUsers = function($event){
         $event.stopPropagation();
         $scope.userDetails = null;
@@ -205,7 +404,9 @@ angular.module('timeSheetApp')
 
 	$scope.loadProjects = function () {
 		//console.log("Loading all projects")
-		ProjectComponent.findAll().then(function (data) {
+        OnBoardingComponent.getBranchList().then(function (data) {
+            console.log("Getting branch list ");
+            console.log(data);
 			$scope.projects = data;
 			/** Ui-select scope **/
 			$scope.clients[0] = $scope.allClients;
@@ -222,7 +423,132 @@ angular.module('timeSheetApp')
 		});
 	};
 
-	/** Ui-select function **/
+	$scope.initFilters = function(){
+		
+		$scope.searchEmployeeId = $rootScope.onBoardingFilter.employee.empId ;
+		$scope.searchEmployeeName = $rootScope.onBoardingFilter.employee.name ;
+		 
+		if($rootScope.onBoardingFilter.branches.list.length > 0){
+
+			$scope.branchSpin = $scope.clientFilterDisable = $scope.regionSpin = false;
+
+			$scope.branchList = $rootScope.onBoardingFilter.branches.list;
+			$scope.projectList = $rootScope.onBoardingFilter.projects.list;
+			$scope.wbsList = $rootScope.onBoardingFilter.wbs.list;
+
+			$scope.client.selected = $rootScope.onBoardingFilter.branches.selected ;
+			$scope.regionsListOne.selected = $rootScope.onBoardingFilter.projects.selected ;
+			$scope.branchsListOne.selected = $rootScope.onBoardingFilter.wbs.selected ;
+
+            $scope.selectedBranchDetails = $scope.client.selected;
+            $scope.selectedProjectDetails = $scope.regionsListOne.selected;
+            $scope.selectedWBSDetails = $scope.branchsListOne.selected;
+ 
+			$scope.pages.currPage = $rootScope.onBoardingFilter.employee.page;
+
+			$scope.setListType($rootScope.onBoardingFilter.employee.type);
+
+			$scope.doSearchFilter();
+
+		}
+		else{
+			$rootScope.onBoardingFilter.employee.type = [1,0,0];
+		    $scope.clearFilterKeys();
+            $scope.getBranchList();
+			$scope.search();
+
+		}
+ 
+	};
+
+	$scope.enableTags = function(enable){
+ 
+	    return !!(enable && enable.element);
+    }
+
+	$scope.clearFilterKeys = function(){
+		console.log("clear filter keys");
+		$scope.setListType($rootScope.onBoardingFilter.employee.type);
+
+		$rootScope.onBoardingFilter.branches.selected = null;
+		$rootScope.onBoardingFilter.projects.selected = null;
+		$rootScope.onBoardingFilter.wbs.selected  = null;
+
+		$rootScope.onBoardingFilter.employee.empId = null;
+		$rootScope.onBoardingFilter.employee.name = null;
+
+		$scope.client.selected = null;
+		$scope.regionsListOne.selected =  null ;
+		$scope.branchsListOne.selected =  null;
+		
+        $scope.selectedBranchDetails=null;
+        $scope.selectedWBSDetails=null;
+        $scope.selectedProjectDetails=null;
+        $scope.searchEmployeeId=null;
+        $scope.searchEmployeeName=null;
+    }
+
+    $scope.getBranchList = function(){
+        OnBoardingComponent.getBranchList(0).then(function (branchList) {
+            $scope.branchList = branchList;
+			$rootScope.onBoardingFilter.branches.list = branchList;
+            $scope.branches= branchList;
+            $scope.clientDisable=false;
+            $scope.clientFilterDisable = false;
+            console.log("Getting branch list ");
+            console.log(branchList);
+        })
+    };
+
+    $scope.getProjectListByBranch = function(branchCode){
+
+		$rootScope.onBoardingFilter.branches.selected = $scope.client.selected;
+		$rootScope.onBoardingFilter.projects.selected = null;
+		$rootScope.onBoardingFilter.wbs.selected  = null;
+
+        $scope.selectedBranchCode = branchCode.elementCode;
+        $scope.selectedBranchDetails = branchCode;
+        $scope.regionSpin = true;
+        console.log(branchCode.elementCode);
+        OnBoardingComponent.getProjectListByBranchCode(branchCode.elementCode).then(function (projectList) {
+            console.log("Getting project list by branch code");
+            console.log(projectList);
+			$scope.projectList = projectList;
+			$rootScope.onBoardingFilter.projects.list = projectList;
+            $scope.siteFilterDisable = false;
+            $scope.regionSpin = false;
+        }).catch(function(response){
+			$scope.regionSpin = false;
+		})
+    };
+
+    $scope.getWBSListByProject = function(projectCode){
+ 
+		$rootScope.onBoardingFilter.projects.selected = $scope.regionsListOne.selected;
+		$rootScope.onBoardingFilter.wbs.selected  = null;
+
+        $scope.selectedProjectCode = projectCode.elementCode;
+        $scope.selectedProjectDetails = projectCode;
+        console.log(projectCode.elementCode);
+        $scope.branchSpin = true;
+        OnBoardingComponent.getWBSListByProjectCode(projectCode.elementCode).then(function (wbsList) {
+            console.log("Getting wbs id by project code");
+            console.log(wbsList);
+			$scope.wbsList = wbsList;
+			$rootScope.onBoardingFilter.wbs.list = wbsList;
+            $scope.branchSpin = false;
+            $scope.branchFilterDisable = false;
+        })
+    };
+
+    $scope.selectWBS = function(wbsCode){
+		$rootScope.onBoardingFilter.wbs.selected = $scope.branchsListOne.selected;
+        console.log(wbsCode);
+        $scope.selectedWBSCode = wbsCode.elementCode;
+        $scope.selectedWBSDetails = wbsCode;
+    };
+
+    /** Ui-select function **/
 
 	$scope.loadDepSitesList = function (searchProject) {
 		$scope.siteSpin = true;
@@ -307,6 +633,9 @@ angular.module('timeSheetApp')
 				SiteComponent.getBranchByProject(projectId,$scope.regionsListOne.selected.id).then(function (response) {
 					//console.log(response);
 					$scope.branchList = response;
+
+					
+
 					if($scope.branchList) {
 						$scope.branchsLists = [];
 						$scope.branchsListOne.selected = null;
@@ -363,31 +692,86 @@ angular.module('timeSheetApp')
 		$scope.loadAttendances();
 	};
 
+	$scope.postMapping = [];
+
+	function designInput(elements,elementParentCode){
+
+		for(var i in elements){
+ 
+			if( $(".ip_"+elements[i].elementCode+"_"+elements[i].elemetType).is(":checked") ){
+			//if(elements.checked){
+				$scope.postMapping.push( { 
+											elementParent: elementParentCode,
+											element : elements[i].elementName,
+											elementType : elements[i].elemetType,
+											elementCode : elements[i].elementCode,
+											onBoardingUserId : $scope.userDetails.id,
+											branch : $scope.selectedBranch,
+											userId : null,
+											childElements : []
+										} ); 
+
+				designInput(elements[i].childElements,elements[i].elementCode);
+
+			}
+
+		}
+
+	}
+
+	function initDesignInput(){
+
+		$scope.postMapping = [];
+
+		designInput($scope.selctedSapBusinessCategoriesList,null);
+
+		console.log($scope.postMapping);
+	}
+
+	$scope.saveMappingLoader = false;
+
     $scope.saveDetails = function(){
-        var a = HierarchyNodeService.getSelectedItems();
-        console.log(a);
-        console.log(a.length);
-        console.log($scope.userDetails.id);
-        OnBoardingComponent.create(a,$scope.userDetails.id,function(response,err){
-            if(response){
-                console.log("Successfully saved on boarding user config details");
-                console.log(response);
-            }
-            if(err){
-                console.log("Error in saving on boarding user config details");
-                console.log(err);
-            }
-        })
+
+		if(mappingValidation()){ 
+			// var a = HierarchyNodeService.getSelectedItems();
+			// console.log(a);
+			// console.log(a.length);
+			// console.log($scope.userDetails.id);
+
+			$scope.saveMappingLoader = true;
+			
+			initDesignInput();
+
+
+			OnBoardingComponent.create($scope.postMapping,$scope.userDetails.id,$scope.selectedBranch,function(response,err){
+				if(response){
+					$scope.saveMappingLoader = false;
+					$scope.showNotifications('top', 'center', 'success', "Buisiness Area are mapped Successfully");
+					$scope.loadUserBranchList();
+				}
+				if(err){
+					$scope.showNotifications('top', 'center', 'danger', "error in save");
+					$scope.saveMappingLoader = false;
+					
+				}
+			});
+			
+		}
     };
 
-
-
+	$scope.mappedData = [];
+ 
     $scope.getUserDetails = function(code){
         UserComponent.getUserByCode(code).then(function (data){
-            console.log(data);
+            
             $scope.showUserDetails = true;
-            $scope.userDetails = data;
-            $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
+			$scope.userDetails = data;
+
+			$scope.loadgetSapBusinessCategories();
+
+			$scope.loadUserBranchList();
+
+           // $rootScope.$emit("GetUserConfigDetailsMethod",{userId:data.id});
             // $scope.getUserConfigDetails(data.id);
         })
     };
@@ -431,13 +815,126 @@ angular.module('timeSheetApp')
 		//$scope.loadAttendances();
 	};
 
+	$scope.doSearchFilter = function(){
+ 
+		$scope.search();
+
+	}
 
 	$scope.searchFilter = function () {
+
 		$('.AdvancedFilterModal.in').modal('hide');
+
+		$scope.onBoardingFilter.employee.empId = $scope.searchEmployeeId;
+		$scope.onBoardingFilter.employee.name = $scope.searchEmployeeName;
+		
 		$scope.setPage(1);
-		$scope.search();
+
+	};
+	
+/*******************************************Modified by Vinoth*************************************************************************************/
+	
+	$rootScope.exportStatusObj = {};
+
+	$scope.exportAllData = function(){
+		$('.AdvancedFilterModalexport.in').modal('hide');
+		$rootScope.exportStatusObj = {};
+		$scope.downloaded = false;
+		$scope.downloader=true;
+		$scope.searchCriteria.list = true;
+		$scope.searchCriteria.report = true;
+		$scope.searchCriteria.columnName = "createdDate";
+		$scope.searchCriteria.sortByAsc = false;
+		delete $scope.searchCriteria.newEmployee;
+		delete $scope.searchCriteria.submitted;
+		delete $scope.searchCriteria.imported;
+		if($scope.selectedBranchCode !=null){
+		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
+        }
+
+		if($scope.selectedProjectCode !=null){
+		    $scope.searchCriteria.projectCode = $scope.selectedProjectCode;
+        }
+		if($scope.selectedWBSCode !=null){
+		    $scope.searchCriteria.wbsCode = $scope.selectedWBSCode;
+        }
+		$scope.searchCriteria.verified = false;
+		//alert("before");
+		EmployeeComponent.exportOnboardingAllData($scope.searchCriteria).then(function(data){
+			//alert("after")
+			var result = data.results[0];
+
+
+			//console.log(result);
+			//console.log(result.file + ', ' + result.status + ',' + result.msg);
+
+
+			var exportAllStatus = {
+					fileName : result.file,
+					exportMsg : 'Exporting All...'
+			};
+			$rootScope.exportStatusObj = exportAllStatus;
+			$scope.start();
+
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
+	};
+	
+	
+	
+	$scope.exportStatus = function() {
+
+		//console.log('exportStatusObj -'+$rootScope.exportStatusObj);
+		EmployeeComponent.exportStatus($rootScope.exportStatusObj.fileName).then(function(data) {
+			if(data) {
+				$rootScope.exportStatusObj.exportStatus = data.status;
+				//console.log('exportStatus - '+ $rootScope.exportStatusObj);
+				$rootScope.exportStatusObj.exportMsg = data.msg;
+				$scope.downloader=false;
+				//console.log('exportMsg - '+ $rootScope.exportStatusObj.exportMsg);
+				if($rootScope.exportStatusObj.exportStatus == 'COMPLETED'){
+					$rootScope.exportStatusObj.exportFile = data.file;
+					//console.log('exportFile - '+ $rootScope.exportStatusObj.exportFile);
+
+					$scope.stop();
+				}else if($rootScope.exportStatusObj.exportStatus == 'FAILED'){
+					$scope.stop();
+				}else if(!$rootScope.exportStatusObj.exportStatus){
+					$scope.stop();
+				}else {
+					$rootScope.exportStatusObj.exportFile = '#';
+				}
+			}
+
+		}).catch(function(){
+            $scope.downloader=false;
+            $scope.stop();
+            $scope.showNotifications('top','center','danger','Unable to export file..');
+        });
+
+	}
+
+	$scope.exportFile = function() {
+		return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportFile : '#');
+	}
+
+
+	$scope.exportMsg = function() {
+		return ($rootScope.exportStatusObj ? $rootScope.exportStatusObj.exportMsg : '');
 	};
 
+	$scope.downloaded = false;
+
+	$scope.clsDownload = function(){
+		$scope.downloaded = true;
+		$rootScope.exportStatusObj = {};
+	}
+
+/**************************************************************************************************************************************	*/
+	
 	$scope.searchFilter1 = function () {
 		$scope.clearField = false;
 		$scope.SearchEmployeeId = null;
@@ -447,7 +944,7 @@ angular.module('timeSheetApp')
 		$scope.setPage(1);
 		$scope.search();
 	};
-
+ 
 	$scope.search = function () {
 		$scope.noData = false;
 		//console.log($scope.datePickerDate);
@@ -464,6 +961,28 @@ angular.module('timeSheetApp')
 
 		$scope.searchCriteria.currPage = currPageVal;
 
+		if($scope.newEmployee){
+
+			$scope.searchCriteria.newEmployee = 1;
+			$scope.searchCriteria.submitted = 1;
+			$scope.searchCriteria.imported = null;
+ 
+		}
+
+		if($scope.existingEmployee){
+
+			$scope.searchCriteria.newEmployee = 0;
+			$scope.searchCriteria.submitted = 1;
+			$scope.searchCriteria.imported = null;
+		}
+
+		if($scope.importedEmployee){
+			 
+			$scope.searchCriteria.imported = 1;
+			$scope.searchCriteria.submitted = 0;
+			$scope.searchCriteria.newEmployee = null;
+		}
+ 
 		/* Root scope (search criteria) start*/
 
 		if($rootScope.searchFilterCriteria.isDashboard){
@@ -524,32 +1043,6 @@ angular.module('timeSheetApp')
 
 		}else{
 
-			if($scope.client.selected && $scope.client.selected.id !=0){
-				$scope.searchProject = $scope.client.selected;
-			}else{
-				$scope.searchProject = null;
-			}
-			if($scope.regionsListOne.selected && $scope.regionsListOne.selected.id !=0){
-				$scope.searchRegion = $scope.regionsListOne.selected;
-			}else{
-				$scope.searchRegion = null;
-			}
-			if($scope.branchsListOne.selected && $scope.branchsListOne.selected.id !=0){
-				$scope.searchBranch = $scope.branchsListOne.selected;
-			}else{
-				$scope.searchBranch = null;
-			}
-			if($scope.sitesListOne.selected && $scope.sitesListOne.selected.id !=0){
-				$scope.searchSite = $scope.sitesListOne.selected;
-			}else{
-				$scope.searchSite = null;
-			}
-			if($scope.selectedDateFrom) {
-				$scope.searchCriteria.checkInDateTimeFrom = $scope.selectedDateFromSer;
-			}
-			if($scope.selectedDateTo) {
-				$scope.searchCriteria.checkInDateTimeTo = $scope.selectedDateToSer;
-			}
 
 		}
 
@@ -561,7 +1054,7 @@ angular.module('timeSheetApp')
 		$scope.searchCriteria.report = false;
 		$scope.searchCriteria.isReport = false;
 
-		if(!$scope.searchEmployeeId && !$scope.searchEmployeeName && !$scope.searchSite && !$scope.searchProject) {
+		if(!$scope.searchEmployeeId && !$scope.searchEmployeeName ) {
 			$scope.searchCriteria.findAll = true;
 		}
 
@@ -582,53 +1075,6 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.name = "";
 		}
 
-		if(jQuery.isEmptyObject($scope.searchProject) == false) {
-			//console.log('selected project -' + $scope.searchProject.id);
-			$scope.searchCriteria.projectId = $scope.searchProject.id;
-			$scope.searchCriteria.projectName = $scope.searchProject.name;
-		}else{
-			$scope.searchCriteria.projectId = null;
-			$scope.searchCriteria.projectName = null;
-		}
-
-		if(jQuery.isEmptyObject($scope.searchSite) == false) {
-			//console.log('selected site -' + $scope.searchSite.id);
-			$scope.searchCriteria.siteId = $scope.searchSite.id;
-			$scope.searchCriteria.siteName = $scope.searchSite.name;
-		}else{
-			$scope.searchCriteria.siteId = null;
-			$scope.searchCriteria.siteName = null;
-		}
-
-		if($scope.selectedSite) {
-			$scope.searchCriteria.siteId = $scope.selectedSite.id;
-		}
-
-
-		if($scope.selectedProject) {
-			$scope.searchCriteria.projectId = $scope.selectedProject.id;
-
-		}
-
-		if($scope.searchRegion) {
-			$scope.searchCriteria.regionId = $scope.searchRegion.id;
-			$scope.searchCriteria.region = $scope.searchRegion.name;
-
-		}else {
-			$scope.searchCriteria.regionId = null;
-			$scope.searchCriteria.region = null;
-		}
-
-		if($scope.searchBranch) {
-			$scope.searchCriteria.branchId = $scope.searchBranch.id;
-			$scope.searchCriteria.branch = $scope.searchBranch.name;
-
-		}else {
-			$scope.searchCriteria.branchId = null;
-			$scope.searchCriteria.branch = null;
-		}
-
-
 		console.log('search criterias - ',JSON.stringify($scope.searchCriteria));
 		//-------
 		if($scope.pageSort){
@@ -642,7 +1088,7 @@ angular.module('timeSheetApp')
 
 		}else{
 			$scope.searchCriteria.columnName ="id";
-			$scope.searchCriteria.sortByAsc = true;
+			$scope.searchCriteria.sortByAsc = false;
 		}
 
 		$scope.searchCriteras = $scope.searchCriteria;
@@ -651,8 +1097,19 @@ angular.module('timeSheetApp')
 		$scope.onBoardingEmployees = [];
 		$scope.onBoardingEmployeesLoader = false;
 		$scope.loadPageTop();
-		$scope.searchCriteria.verified= true;
-		EmployeeComponent.search($scope.searchCriteria).then(function (data) {
+		console.log("to be verified");
+		console.log($scope.verified);
+		
+		$scope.searchCriteria.newemployee = $scope.newemployee;
+ 		 
+		$scope.searchCriteria.branchCode = $scope.client.selected ? $scope.client.selected.elementCode : null;
+  
+	    $scope.searchCriteria.projectCode = $scope.regionsListOne.selected ? $scope.regionsListOne.selected.elementCode : null;
+   
+		$scope.searchCriteria.wbsCode = $scope.branchsListOne.selected ? $scope.branchsListOne.selected.elementCode : null;
+  	
+		 
+		OnBoardingComponent.searchEmployees($scope.searchCriteria).then(function (data) {
 		    console.log("on boarding employee list");
 		    console.log(data);
 			$scope.onBoardingEmployees = data.transactions;
@@ -683,7 +1140,7 @@ angular.module('timeSheetApp')
 
 			if($scope.onBoardingEmployees && $scope.onBoardingEmployees.length > 0 ){
 				$scope.showCurrPage = data.currPage;
-				$scope.pageEntries = $scope.projects.length;
+				$scope.pageEntries = $scope.onBoardingEmployees.length;
 				$scope.totalCountPages = data.totalCount;
 				$scope.pageSort = 10;
 				$scope.noData = false;
@@ -695,11 +1152,529 @@ angular.module('timeSheetApp')
 		}).catch(function(){
             $scope.noData = true;
             $scope.onBoardingEmployeesLoader = true;
-            $scope.showNotifications('top','center','danger','Unable to load attendance list..');
+            $scope.showNotifications('top','center','danger','Unable to load Employee list..');
         });
 
 	};
 
+    $scope.loadEmployee = function() {
+		
+		$scope.loadNomineeDetails();
+		$scope.getReligionList();
+
+        if(parseInt($stateParams.id)>0){
+            var empId = parseInt($stateParams.id);
+            EmployeeComponent.findOne(empId).then(function (data) {
+
+                console.log('employee data -');
+                console.log(data);
+
+                $scope.employee = data;
+                if($scope.employee){
+                    $scope.employee.mobile = $scope.employee.mobile ? parseInt($scope.employee.mobile) : "";
+                    $scope.employee.emergencyContactNumber= $scope.employee.emergencyContactNumber ? parseInt($scope.employee.emergencyContactNumber) : "";
+                    $scope.employee.nomineeContactNumber = $scope.employee.nomineeContactNumber ? parseInt($scope.employee.nomineeContactNumber) : "";
+
+					console.log($scope.employee.newEmployee);
+
+                    EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
+                        console.log("Employee documents");
+                        console.log(documents);
+                        if(documents && documents.length>0){
+                            for(var i=0; i<documents.length;i++){
+                                console.log(documents[i].docType);
+                                if(documents[i].docType === "addressProof"  ){
+                                    $scope.addressproofImageUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "prePrintedStatement" ){
+                                    $scope.bankPassBookImageUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "aadharPhotoCopy"  ){
+                                    $scope.adharCardFrontUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "aadharPhotoCopyBack"  ){
+                                    $scope.adharCardBackUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "thumbImpressenLeft"  ){
+                                    $scope.fingerprintLeftUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "thumbImpressenRight"  ){
+                                    $scope.fingerprintrightUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "drivingLicense"  ){
+                                    $scope.drivingLicenseUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "voterId"  ){
+                                    $scope.voterIdUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType === "pancardCopy"  ){
+                                    $scope.pancardUrl = documents[i].docUrl;
+                                }
+                                if(documents[i].docType ==="profilePicture" ){
+                                	$scope.profilepicUrl = documents[i].docUrl;
+                                }
+                            }
+
+                            if(
+								$scope.employee.accountNumber !=null &&
+								$scope.employee.position !=null &&
+                                $scope.employee.adharCardNumber !=null && 
+								$scope.employee.gross !=null &&
+                                $scope.employee.dob !=null &&
+                                $scope.employee.doj !=null &&
+                                // $scope.employee.educationalQulification !=null &&
+                                $scope.employee.empId !=null &&
+                                $scope.employee.fatherName !=null &&
+                                $scope.employee.gender !=null &&
+                                $scope.employee.ifscCode !=null &&
+                                $scope.employee.maritalStatus !=null &&
+                                $scope.employee.mobile !=null &&
+                                $scope.employee.name !=null &&
+                                $scope.employee.nomineeName !=null &&
+                                $scope.employee.nomineeRelationship !=null &&
+                                $scope.employee.percentage !=null &&
+                                $scope.employee.permanentAddress !=null &&
+                                $scope.employee.permanentCity !=null &&
+                                $scope.employee.permanentState !=null &&
+                                $scope.employee.presentAddress !=null &&
+                                $scope.employee.presentCity !=null &&
+                                $scope.employee.presentState !=null &&
+                                $scope.employee.projectCode !=null &&
+                                $scope.employee.projectDescription !=null && 
+								$scope.employee.wbsDescription !=null &&
+								$scope.employee.submitted &&
+                                $scope.employee.wbsId !=null &&
+                                ((_.find(documents,{docType:'aadharPhotoCopy'}) &&
+								_.find(documents,{docType:'aadharPhotoCopyBack'}) && 
+								(($scope.employee.newEmployee &&  _.find(documents,{docType:'prePrintedStatement'}) ||
+								  !$scope.employee.newEmployee )
+								)) )
+
+                            ){
+                                $scope.enableApproval = true;
+                            }
+                        }
+
+                    });
+
+
+
+                }else{
+                    $location.path('/onBoarding-list');
+                }
+                $scope.loadingStop();
+
+            }).catch(function(){
+                $location.path('/onBoarding-list');
+            });
+        }else{
+            $location.path('/onBoarding-list');
+        }
+
+    };
+
+    $scope.conform = function(text,validation)
+    {
+        //console.log($scope.selectedProject)
+        $rootScope.conformText = text;
+        $scope.valid = validation;
+        $('#conformationModal').modal();
+
+	}
+
+	$scope.downloadDeclarationForm = function(language){
+
+		location.href="api/onboard/downloadDeclaration/"+$scope.employee.empId+"/"+language;
+
+	}
+
+	
+
+	$scope.loadDeclarionLanguages = function(){
+
+		OnBoardingComponent.getDeclarationLanguages().then(function(response){
+ 
+			$scope.declarationTypes = response; 
+		});
+
+	}
+	
+	$scope.relationShipList = [];
+	$scope.religionList = [];
+
+	$scope.getReligionList = function(){
+
+		OnBoardingComponent.getReligionList().then(function(response){
+ 
+			$scope.religionList = response.data;
+
+		}).catch(function(response){
+ 
+		});
+		
+	}
+
+	$scope.loadNomineeDetails = function () {
+
+		OnBoardingComponent.getNomineeList().then(function(response){
+ 
+			$scope.relationShipList = response.data;
+
+		}).catch(function(response){
+ 
+		});
+
+	}
+    
+    $scope.editpage = function(text)
+    {
+    	if(text == 'edit'){
+    		 $location.path('edit-onBoarding/'+ $scope.employee.id);
+    	}
+    }
+
+    $rootScope.back = function (text) {
+        if(text == 'cancel' || text == 'back')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $location.path('/onBoarding-list');
+        }
+        else if(text == 'approve')
+        {
+            $scope.approveOnBoardingEmployee();
+        }
+        else if(text == 'update')
+        {
+            /** @reatin - retaining scope value.**/
+            $rootScope.retain=1;
+            $scope.saveOnBoardingEmployeeDetails();
+        }
+    };
+
+    $scope.clearFilter = function() {
+        $scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
+        $scope.client = {};
+        $scope.clients = [];
+        $scope.allSitesVal = {id:0 , name: '-- ALL SITES --'};
+        $scope.sitesListOne = {};
+        $scope.sitesLists = [];
+        $scope.sitesListOne.selected =  null;
+        $scope.allRegions = {id:0 , name: '-- SELECT REGIONS --'};
+        $scope.regionsListOne = {};
+        $scope.regionsLists = [];
+        $scope.regionsListOne.selected =  null;
+        $scope.allBranchs = {id:0 , name: '-- SELECT BRANCHES --'};
+        $scope.branchsListOne = {};
+        $scope.branchsLists = [];
+        $scope.branchsListOne.selected =  null;
+        $scope.userDetails = {};
+        $scope.showUserDetails = false;
+
+        $scope.allBranches = {id:0, element:' -- All Branches --'};
+        $scope.branch={};
+        $scope.branches = [];
+
+        $scope.allProjects = {id:0, element:' -- All Projects --'};
+        $scope.project={};
+        $scope.projects=[];
+
+        $scope.allWBS = {id:0, element:' -- All WBS --'};
+        $scope.wbs = {};
+        $scope.wbsList = [];
+
+        $scope.clearFilterKeys();
+
+        $scope.selectedBranchCode = null;
+        $scope.selectedProjectCode = null;
+        $scope.selectedWBSCode = null;
+        delete $scope.searchCriteria.projectCode;
+        delete $scope.searchCriteria.employeeEmpId;
+        delete $scope.searchCriteria.name;
+
+
+        $scope.pages = {
+            currPage: 1,
+            totalPages: 0
+        }
+        /* Root scope (search criteria) */
+        $rootScope.searchFilterCriteria.isDashboard = false;
+        // $scope.search();
+        $scope.onBoardingEmployees = [];
+ 
+        $scope.LoadEmpListByType($rootScope.onBoardingFilter.employee.type);
+
+    };
+
+    $scope.approveOnBoardingEmployee = function(){
+		
+		$scope.approveOnboardingLoader = true;
+
+        OnBoardingComponent.verifyOnBoardingEmployee($scope.employee).then(function (data) {
+			 
+				$scope.approveOnboardingLoader = false;
+
+				if(data.type!="E"){
+
+					$scope.employee.verified =true;
+					$scope.employee.empId = data.empId ;
+					$scope.enableApproval = false;
+					if($rootScope.onBoardingFilter)$rootScope.onBoardingFilter.employee.empId = "";
+					//$location.path('/onBoarding-list'); 
+					$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully in SAP. SAP ID is "+data.empId + ". SAP Message [ "+data.message+" ]");
+				}
+				else{
+					
+					$scope.approveOnboardingLoader = false;
+					$scope.success = null;
+					$scope.disable = false;
+					$scope.btnDisable = false;
+					$scope.showNotifications('top','center','danger','Error in approving Employee.-> ' + data.message);
+					$scope.error = 'ERROR';
+
+				}
+
+        }).catch(function(response){
+            $scope.approveOnboardingLoader = false;
+            $scope.success = null;
+            $scope.disable = false;
+            $scope.btnDisable = false;
+            $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.errorMessage);
+            $scope.error = 'ERROR';
+        });
+    };
+
+    $scope.saveOnBoardingEmployeeDetails = function(){
+		uploadingCount = 0;
+		requiredUploadingCount = 0;
+        console.log("Saving employee details");
+		//alert($scope.employee.dob);
+		$scope.saveOnboardingLoader = true;
+        OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
+			
+            if(data.errorStatus){
+				$scope.saveOnboardingLoader = false;
+                $scope.saveLoad = false;
+                $scope.success = null;
+                $scope.disable = false;
+                $scope.btnDisable = false;
+                console.log(response);
+                $scope.showNotifications('top','center','danger','Error in updating Employee.' + data.errorMessage);
+                $scope.error = 'ERROR';
+            }else{
+                console.log("on boarding employee successfully saved");
+                console.log(data);
+                
+                //$location.path('/onBoarding-list');
+                
+                $('#dateOfBirth').data('DateTimePicker').clear();
+                $('#dateOfJoining').data('DateTimePicker').clear();
+                if($scope.addressProofImage){
+					requiredUploadingCount ++;
+                    $scope.uploadAddressProofImage($scope.employee.id);
+                }
+                if($scope.bankPassBookImage){
+					requiredUploadingCount ++;
+                    $scope.uploadBankPassbookImage($scope.employee.id);
+                }
+                if($scope.adharCardImageBack){
+					requiredUploadingCount ++;
+                    $scope.uploadAdharCardImageBack($scope.employee.id);
+                }
+                if($scope.adharCardImageFront){
+					requiredUploadingCount ++;
+                    $scope.uploadAdharCardImageFront($scope.employee.id);
+                }
+                if($scope.fingerprintRightImage){
+					requiredUploadingCount ++;
+                    $scope.uploadFingerPrintRight($scope.employee.id);
+                }
+                if($scope.fingerprintLeftImage){
+					requiredUploadingCount ++;
+                    $scope.uploadFingerPrintLeft($scope.employee.id);
+                } 
+                if($scope.drivingLicenseImageFront){
+					requiredUploadingCount ++;
+                    $scope.uploadDrivingLicense($scope.employee.id);
+                }
+                if($scope.voterIdImage){
+					requiredUploadingCount ++;
+                    $scope.uploadVoterId($scope.employee.id);
+                }
+                if($scope.pancardImage){
+					requiredUploadingCount ++;
+                    $scope.uploadPancard($scope.employee.id);
+                }
+                if($scope.profilepicImage){
+					requiredUploadingCount ++;
+                    $scope.uploadProfilePic($scope.employee.id);
+				}
+				if(requiredUploadingCount == 0){
+					resultCallback();
+				}
+            }
+
+
+        }).catch(function(response){
+            $scope.saveOnboardingLoader = false;
+            $scope.success = null;
+            $scope.disable = false;
+            $scope.btnDisable = false;
+            console.log(response);
+            $scope.showNotifications('top','center','danger','Error in updating Employee.' + response.statusText);
+            $scope.error = 'ERROR';
+        });
+
+
+
+
+	};
+	
+	var requiredUploadingCount = 0;
+	var uploadingCount = 0;
+
+	var resultCallback = function(){
+		
+		if(uploadingCount == requiredUploadingCount){
+			
+			$scope.saveOnboardingLoader = false;
+			$scope.showNotifications('top', 'center', 'success', "Employee Saved Successfully ");
+			$location.path('view-onBoarding/'+ $scope.employee.id);
+
+		}
+
+
+	}
+
+	var doneUploading = function(){
+
+		uploadingCount++;
+
+		resultCallback();
+	}
+
+    $scope.uploadAddressProofImage = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.addressProofImage,'addressProof')
+            .then(function (response) {
+                console.log("Address proof image uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Address Proof Failed ");
+        	});
+    };
+
+    $scope.uploadBankPassbookImage = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.bankPassBookImage,'prePrintedStatement')
+            .then(function (response) {
+                console.log("bankPassBookImage uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Bank Passbook Proof Failed ");
+        });
+    };
+
+    $scope.uploadAdharCardImageFront = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.adharCardImageFront,'aadharPhotoCopy')
+            .then(function (response) {
+                console.log("adharCardImageFront uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Adhar CardImage Front Failed ");
+        });
+    };
+
+    $scope.uploadAdharCardImageBack = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.adharCardImageBack,'aadharPhotoCopyBack')
+            .then(function (response) {
+                console.log("adharCardImageBack uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Adhar CardImage Back Failed ");
+        });
+    };
+
+    $scope.uploadFingerPrintLeft = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.fingerprintLeftImage,'thumbImpressenLeft')
+            .then(function (response) {
+                console.log("fingerprintLeftImage uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Finger print Left Image Failed ");
+        });
+    };
+
+    $scope.uploadFingerPrintRight = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.fingerprintRightImage,'thumbImpressenRight')
+            .then(function (response) {
+                console.log("fingerprintRightImage uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Finger print Right Image Failed ");
+        });
+    };
+
+    $scope.uploadDrivingLicense = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.drivingLicenseImageFront,'drivingLicense')
+            .then(function (response) {
+                console.log("drivingLicenseImageFront uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Driving Licence Image Failed ");
+        });
+    };
+
+    $scope.uploadVoterId = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.voterIdImage,'voterId')
+            .then(function (response) {
+                console.log("voterIdImage uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Voter Id Image Failed ");
+        });
+    };
+
+    $scope.uploadPancard = function(employeeId){
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.pancardImage,'pancardCopy')
+            .then(function (response) {
+                console.log("pancardImage uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Pancard Image Failed ");
+        });
+    };
+
+    $scope.uploadProfilePic = function(employeeId){
+    	console.log("UPloading profile pic");
+    	console.log(employeeId);
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.profilepicImage,'profilePicture')
+            .then(function (response) {
+                console.log("profilepicImage uploaded");
+				console.log(response);
+				doneUploading();
+            }).catch(function (response) {
+				$scope.saveOnboardingLoader = false;
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Profile Picture Image Failed ");
+        });
+    };
+    
 	$scope.loadEnrImage = function(enrollId) {
 
 		//Employee Enrolled Image
@@ -730,90 +1705,20 @@ angular.module('timeSheetApp')
 
 	};
 
-	$scope.clearFilter = function() {
-		$('input#dateFilterFrom').data('DateTimePicker').clear();
-		$('input#dateFilterTo').data('DateTimePicker').clear();
-		$scope.noData = false;
-		$scope.clearField = true;
-		$rootScope.exportStatusObj = {};
-		$scope.exportStatusMap = [];
-		$scope.downloader=false;
-		$scope.downloaded = true;
-		$scope.siteFilterDisable = true;
-		$scope.regionFilterDisable = true;
-		$scope.branchFilterDisable = true;
-		$scope.sites = null;
+//****************************modified by suresh */
+	$scope.loadCompletedJob = function(imageUrl) {
+		var eleId = 'photoStart';
+		var ele = document.getElementById(eleId);
+		ele.setAttribute('src',imageUrl);
 
-		/** Ui-select scopes **/
-		$scope.client.selected = null;
-		$scope.sitesLists =  [];
-		$scope.sitesListOne.selected =  null;
-		$scope.regionsLists =  [];
-		$scope.regionsListOne.selected =  null;
-		$scope.branchsLists =  [];
-		$scope.branchsListOne.selected =  null;
-
-		$scope.selectedDateFrom = $filter('date')(new Date(), 'dd/MM/yyyy');
-		$scope.selectedDateTo = $filter('date')(new Date(), 'dd/MM/yyyy');
-		$scope.selectedDateFromSer =  new Date();
-		$scope.selectedDateToSer =  new Date();
-		$('input#dateFilterFrom').val($scope.selectedDateFrom);
-		$('input#dateFilterTo').val($scope.selectedDateTo);
-		$scope.selectedEmployee = null;
-		$scope.selectedProject = null;
-		$scope.selectedSite = null;
-		$scope.searchProject = null;
-		$scope.searchSite = null;
-		$scope.searchEmployeeId = null;
-		$scope.searchEmployeeName = null;
-		$scope.searchCriteria = {};
-		$rootScope.searchCriteriaAttendances   = null;
-		// $scope.selectedDateFrom = null;
-		// $scope.selectedDateTo = null;
-		$scope.filter = true;
-		$scope.siteFilterDisable = true;
-		$scope.pages = {
-				currPage: 1,
-				totalPages: 0
-		}
-		//$scope.search();
 	};
 
+//*********************************************** */
 	function pad(num, size) {
 		var s = num+"";
 		while (s.length < size) s = "0" + s;
 		return s;
 	}
-
-
-	$scope.exportAllData = function(type){
-		$scope.searchCriteria.exportType = type;
-		$rootScope.exportStatusObj = {};
-		$scope.exportStatusMap = [];
-		$scope.downloaded = false;
-		$scope.downloader=true;
-		$scope.searchCriteria.list = true;
-		$scope.searchCriteria.report = true;
-		$scope.searchCriteria.isReport = true;
-		$scope.searchCriteria.columnName = "createdDate";
-		$scope.searchCriteria.sortByAsc = false;
-		AttendanceComponent.exportAllData($scope.searchCriteria).then(function(data){
-			var result = data.results[0];
-			console.log(result);
-			console.log(result.file + ', ' + result.status + ',' + result.msg);
-			var exportAllStatus = {
-					fileName : result.file,
-					exportMsg : 'Exporting All...'
-			};
-			$scope.exportStatusMap[0] = exportAllStatus;
-			console.log('exportStatusMap size - ' + $scope.exportStatusMap.length);
-			$scope.start();
-		}).catch(function(){
-            $scope.downloader=false;
-            $scope.stop();
-            $scope.showNotifications('top','center','danger','Unable to export file..');
-        });
-	};
 
 	// store the interval promise in this variable
 	var promise;
@@ -833,85 +1738,6 @@ angular.module('timeSheetApp')
 		$interval.cancel(promise);
 	};
 
-	$scope.exportStatusMap = [];
-
-
-	$scope.exportStatus = function() {
-		//console.log('empId='+$scope.empId);
-		console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
-		angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-			if(!exportStatusObj.empId) {
-				exportStatusObj.empId = 0;
-			}
-			AttendanceComponent.exportStatus(exportStatusObj.empId,exportStatusObj.fileName).then(function(data) {
-				if(data) {
-					exportStatusObj.exportStatus = data.status;
-					console.log('exportStatus - '+ exportStatusObj);
-					exportStatusObj.exportMsg = data.msg;
-					$scope.downloader=false;
-					console.log('exportMsg - '+ exportStatusObj.exportMsg);
-					if(exportStatusObj.exportStatus == 'COMPLETED'){
-						exportStatusObj.exportFile = data.file;
-						console.log('exportFile - '+ exportStatusObj.exportFile);
-						$scope.stop();
-					}else if(exportStatusObj.exportStatus == 'FAILED'){
-						$scope.stop();
-					}else if(!exportStatusObj.exportStatus){
-						$scope.stop();
-					}else {
-						$rootScope.exportStatusObj.exportFile = '#';
-					}
-				}
-
-			}).catch(function(){
-                $scope.downloader=false;
-                $scope.stop();
-                $scope.showNotifications('top','center','danger','Unable to export file..');
-            });
-		});
-
-	};
-
-	$scope.exportFile = function(empId) {
-		if(empId != 0) {
-			var exportFile = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportFile = exportStatusObj.exportFile;
-					return exportFile;
-				}
-			});
-			return exportFile;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
-		}
-	};
-
-
-	$scope.exportMsg = function(empId) {
-		if(empId != 0) {
-			var exportMsg = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportMsg = exportStatusObj.exportMsg;
-					return exportMsg;
-				}
-			});
-			return exportMsg;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
-		}
-
-	};
-
-	$scope.downloaded = false;
-
-	$scope.clsDownload = function(){
-		$scope.downloaded = true;
-		$rootScope.exportStatusObj = {};
-		$scope.exportStatusMap = [];
-	};
-
 	$scope.showLoader = function(){
 		//console.log("Show Loader");
 		$scope.loading = true;
@@ -925,7 +1751,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.showNotifications= function(position,alignment,color,msg){
-		demo.showNotification(position,alignment,color,msg);
+		demo.showNotificationLonger(position,alignment,color,msg);
 	};
 
 	$scope.initCalender();
@@ -936,9 +1762,18 @@ angular.module('timeSheetApp')
 		$scope.init();
 		//$scope.setPage(1);
 
-        $scope.search();
+ 
 
     };
+
+
+
+    $scope.newempverify = function(type){
+    	$scope.loadPageTop();
+    	 $scope.getNewTobeVerifiedEmployees();
+
+	};
+
 
 
 	/*
@@ -947,14 +1782,27 @@ angular.module('timeSheetApp')
 
 	 */
 
-	$scope.setPage = function (page) {
+	$scope.setPage = function () {
 
-		if (page < 1 || page > $scope.pager.totalPages) {
-			return;
-		}
+		var args = arguments;
+
+		var page = args[0];
+
+
+		// if (page < 1 || page > $scope.pager.totalPages) {
+		// 	return;
+		// }
 		//alert(page);
 		$scope.pages.currPage = page;
-		$scope.search();
+
+		$rootScope.onBoardingFilter.employee.page = page;
+
+		if(args.length == 1){
+ 
+			$scope.search();
+
+		}
+ 
 	};
 
 
@@ -973,78 +1821,6 @@ angular.module('timeSheetApp')
 	// stops the interval
 	$scope.stop = function() {
 		$interval.cancel(promise);
-	};
-
-	$scope.exportStatusMap = [];
-
-
-	$scope.exportStatus = function() {
-		//console.log('empId='+$scope.empId);
-
-		//console.log('exportStatusMap length -'+$scope.exportStatusMap.length);
-		angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-			if(!exportStatusObj.empId) {
-				exportStatusObj.empId = 0;
-			}
-			AttendanceComponent.exportStatus(exportStatusObj.empId,exportStatusObj.fileName).then(function(data) {
-				if(data) {
-					exportStatusObj.exportStatus = data.status;
-					//console.log('exportStatus - '+ exportStatusObj);
-					exportStatusObj.exportMsg = data.msg;
-					$scope.downloader=false;
-					//console.log('exportMsg - '+ exportStatusObj.exportMsg);
-					if(exportStatusObj.exportStatus == 'COMPLETED'){
-						if(exportStatusObj.url) {
-							exportStatusObj.exportFile = exportStatusObj.url;
-						}else {
-							exportStatusObj.exportFile = data.file;
-						}
-						//console.log('exportFile - '+ exportStatusObj.exportFile);
-						$scope.stop();
-					}else if(exportStatusObj.exportStatus == 'FAILED'){
-						$scope.stop();
-					}else if(!exportStatusObj.exportStatus){
-						$scope.stop();
-					}else {
-                        $rootScope.exportStatusObj.exportFile = '#';
-					}
-				}
-
-			});
-		});
-
-	};
-
-	$scope.exportFile = function(empId) {
-		if(empId != 0) {
-			var exportFile = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportFile = exportStatusObj.exportFile;
-					return exportFile;
-				}
-			});
-			return exportFile;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportFile : '#');
-		}
-	};
-
-
-	$scope.exportMsg = function(empId) {
-		if(empId != 0) {
-			var exportMsg = '';
-			angular.forEach($scope.exportStatusMap, function(exportStatusObj, index){
-				if(empId == exportStatusObj.empId){
-					exportMsg = exportStatusObj.exportMsg;
-					return exportMsg;
-				}
-			});
-			return exportMsg;
-		}else {
-			return ($scope.exportStatusMap[empId] ? $scope.exportStatusMap[empId].exportMsg : '');
-		}
-
 	};
 
 

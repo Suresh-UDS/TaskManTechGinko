@@ -2,11 +2,7 @@ package com.ts.app.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "employee_documents")
@@ -17,12 +13,18 @@ public class EmployeeDocuments extends AbstractAuditingEntity implements Seriali
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employeeId", nullable = false)
+    private Employee employee;
+
 	private String docType;
 	
-	private String empId;
-	
 	private String docLocation;
+
+	private String docUrl;
+
+	private String docName;
 
 	public long getId() {
 		return id;
@@ -40,14 +42,6 @@ public class EmployeeDocuments extends AbstractAuditingEntity implements Seriali
 		this.docType = docType;
 	}
 
-	public String getEmpId() {
-		return empId;
-	}
-
-	public void setEmpId(String empId) {
-		this.empId = empId;
-	}
-
 	public String getDocLocation() {
 		return docLocation;
 	}
@@ -55,7 +49,29 @@ public class EmployeeDocuments extends AbstractAuditingEntity implements Seriali
 	public void setDocLocation(String docLocation) {
 		this.docLocation = docLocation;
 	}
-	
-	
 
+
+    public String getDocUrl() {
+        return docUrl;
+    }
+
+    public void setDocUrl(String docUrl) {
+        this.docUrl = docUrl;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public String getDocName() {
+        return docName;
+    }
+
+    public void setDocName(String docName) {
+        this.docName = docName;
+    }
 }

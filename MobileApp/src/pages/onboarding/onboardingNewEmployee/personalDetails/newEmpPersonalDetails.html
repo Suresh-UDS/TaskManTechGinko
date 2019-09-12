@@ -4,8 +4,19 @@
             <form [formGroup]="onboardingPersonalDetailsForm" novalidate>
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        
                         <label class="control-label trequired">Employee Name</label>
-                        <input class="form-control" type="text" formControlName="employeeName">
+                        
+                        <!-- <input class="form-control"  type="text" formControlName="employeeName" [(ngModel)]='employeeName' (keypress)="eventHandler($event)">
+                   -->
+                        <input class="form-control"  type="text" formControlName="employeeName" >
+                   
+                        <ion-item *ngIf="onboardingPersonalDetailsForm.controls.employeeName.dirty && onboardingPersonalDetailsForm.controls.employeeName.invalid">
+                            <p *ngIf="onboardingPersonalDetailsForm.controls.employeeName.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Name required</p>
+                            <p *ngIf="onboardingPersonalDetailsForm.controls.employeeName.errors.employeeName">Invalid Name</p>
+                        </ion-item>
+                        
+
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label">Employee Code</label>
@@ -30,11 +41,20 @@
                         <ion-item>
                             <ion-label class="label-text trequired" stacked>Gender</ion-label>
                             <ion-select interface="popover" formControlName="gender">
-                                <ion-option value="male">Male</ion-option>
-                                <ion-option value="female">Female</ion-option>
-                                <ion-option value="others">Others</ion-option>
+                                <ion-option value="MALE">Male</ion-option>
+                                <ion-option value="FEMALE">Female</ion-option>
+                                <ion-option value="OTHERS">Others</ion-option>
                             </ion-select>
                         </ion-item>
+
+                        
+<ion-item *ngIf="onboardingPersonalDetailsForm.controls.gender.dirty && onboardingPersonalDetailsForm.controls.gender.invalid">
+                            <p *ngIf="onboardingPersonalDetailsForm.controls.gender.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Gender required</p>
+                           
+                        </ion-item>
+
+                        
+
                         <!-- <label class="control-label">Gender</label>
                         <div class="radioBtn" radio-group>
                             <span>Male</span>
@@ -52,16 +72,23 @@
                                 <ion-option ng-selected="" value="Divored">Divorced</ion-option>
                             </ion-select>
                         </ion-item>
+                        <ion-item *ngIf="onboardingPersonalDetailsForm.controls.maritalStatus.dirty && onboardingPersonalDetailsForm.controls.maritalStatus.invalid">
+                            <p *ngIf="onboardingPersonalDetailsForm.controls.maritalStatus.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Marital Status required</p>
+                            </ion-item>
+
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">DOB</label>
-                        <input class="form-control" [max]="today" type="date" formControlName="dateOfBirth">
+                        <input class="form-control"  min="{{maxAge | date:'yyyy-MM-dd'}}" max="{{minAge | date:'yyyy-MM-dd'}}"  type="date" formControlName="dateOfBirth">
                     </div>
+
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">DOJ</label>
-                        <input class="form-control" type="date" min="{{setMinDate}}" formControlName="dateOfJoining">
+                       <!-- <input class="form-control" type="date" min="{{setMinDate}}" formControlName="dateOfJoining">
+                   --> 
+                   <input class="form-control" type="date"  min="{{maxAgedoj | date:'yyyy-MM-dd'}}" max="{{minAgedoj | date:'yyyy-MM-dd'}}" formControlName="dateOfJoining">
                     </div>
                 </div>
                 <div class="row form-group">
@@ -69,13 +96,8 @@
                         <ion-item>
                             <ion-label class="label-text" stacked>Religion</ion-label>
                             <ion-select interface="popover" formControlName="religion">
-                                <ion-option value="hindu">Hindu</ion-option>
-                                <ion-option value="muslim">Muslim</ion-option>
-                                <ion-option value="christian">Christian</ion-option>
-                                <ion-option value="sikh">Sikh</ion-option>
-                                <ion-option value="jain">Jain</ion-option>
-                                <ion-option value="buddhism">Buddhism</ion-option>
-                                <ion-option value="others">Other</ion-option>
+                                <ion-option *ngFor="let religion of religionList;let i=index" [value]="religion.title" > {{religion.title}}</ion-option>
+
                             </ion-select>
                         </ion-item>
 

@@ -1,6 +1,7 @@
 package com.ts.app.repository;
 
 import com.ts.app.domain.Job;
+import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.JobType;
 import com.ts.app.service.util.DateUtil;
 import com.ts.app.web.rest.dto.SearchCriteria;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -65,6 +67,9 @@ public class JobSpecification implements Specification<Job> {
                 predicates.add(builder.equal(root.get("status"),  searchCriteria.getJobStatus()));
             }else {
             	//predicates.add(builder.notEqual(root.get("status"),  JobStatus.COMPLETED));
+            }
+            if( CollectionUtils.isNotEmpty( searchCriteria.getJobStatusList())) {
+            	predicates.add(builder.in(root.get("status")).value(searchCriteria.getJobStatusList())); 
             }
             log.debug("JobSpecification toPredicate - searchCriteria jobTitle -"+ searchCriteria.getJobTitle());
             if(searchCriteria.getJobTitle()!=null){
@@ -124,27 +129,36 @@ public class JobSpecification implements Specification<Job> {
 
 		            	Calendar checkInDateFrom = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	checkInDateFrom.setTime(checkInDate);
-
 		            	checkInDateFrom.set(Calendar.HOUR_OF_DAY, 0);
 		            	checkInDateFrom.set(Calendar.MINUTE,0);
 		            	checkInDateFrom.set(Calendar.SECOND,0);
 		            	Date fromDt = DateUtil.convertUTCToIST(checkInDateFrom);
+		            	
+		            	
 		            	//String fromDt = DateUtil.formatUTCToIST(checkInDateFrom);
 		            	Calendar checkInDateTo = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
 		            	if(searchCriteria.getCheckInDateTimeTo() != null) {
-			        		checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
-			        	}else {
-			        		checkInDateTo.setTime(checkInDate);
-			        	}
+		            		
+			            	checkInDateTo.setTime(searchCriteria.getCheckInDateTimeTo());
+			            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
+			            	checkInDateTo.set(Calendar.MINUTE,59);
+			            	checkInDateTo.set(Calendar.SECOND,0);
+			            	Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
+			            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
+			        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
+			        	} 
+		            	else {
+ 
+		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedStartTime"), fromDt));
+		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedEndTime"), fromDt));
+		            		
+		            	}
 
-		            	checkInDateTo.set(Calendar.HOUR_OF_DAY, 23);
-		            	checkInDateTo.set(Calendar.MINUTE,59);
-		            	checkInDateTo.set(Calendar.SECOND,0);
-		            	Date toDt = DateUtil.convertUTCToIST(checkInDateTo);
 		            	//String toDt = DateUtil.formatUTCToIST(checkInDateTo);
 
-		            	log.debug("search Criteria - checkInDateTimeFrom - "+ fromDt + " , to Date -" + toDt);
-		        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
+//		        		predicates.add(builder.between(root.set, root.get("plannedStartTime"),root.get("plannedEndTime")));
+//		        		predicates.add(builder.between(, fromDt,toDt));
+//		            	predicates.add(builder.gt(root.get("plannedStartTime"), fromDt))
 	            	}
 	        	}
 

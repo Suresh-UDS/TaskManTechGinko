@@ -63,6 +63,8 @@ public class EmployeeDTO extends BaseDTO {
     private boolean checkedIn;
 
     private long jobId;
+    
+    private float gross;
 
     private String jobTitle;
 
@@ -71,6 +73,8 @@ public class EmployeeDTO extends BaseDTO {
     private List<EmployeeLocationDTO> locations;
 
     private List<EmployeeRelieverDTO> relievers;
+
+    private List<EmployeeDocumentsDTO> documents;
 
     private boolean isLeft;
 
@@ -105,17 +109,23 @@ public class EmployeeDTO extends BaseDTO {
 
     private String branch;
 
+    private String position;
+    
+    private String employeeCode;
+    
+    private String aadharNumber;
+    
 /*************************Modified by Vinoth***********************************************************/    
     
-    @Size(min = 1, max = 50)
+
     private String fatherName;
     
     private String motherName;
     
-    @Size(min = 1, max = 10)
+
     private String gender;
     
-    @Size(min =10, max = 50)
+
     private String maritalStatus;
     
     private Date dob;
@@ -126,20 +136,16 @@ public class EmployeeDTO extends BaseDTO {
     
     private String bloodGroup;
     
-    @Size(min = 1, max = 2500)
     private String personalIdentificationMark1;
     
-    @Size(min = 1, max = 2500)
     private String personalIdentificationMark2;
     
     private String educationalQulification;
     
     private String boardInstitute;
     
-    @Size(min = 1, max = 16)
     private String adharCardNumber;
 
-    @Size(min = 1, max =10)
     private String mobile;
     
     private String emergencyContactNumber;
@@ -205,15 +211,29 @@ public class EmployeeDTO extends BaseDTO {
     private boolean imported;
 
     private boolean verified;
+    
+    private boolean submitted;
 
     private boolean syncToSAP;
 
+    private boolean newEmployee;
+
     private String verifiedBy;
 
+    private String submittedBy;
+    
     private ZonedDateTime verifiedDate;
 
-    private String syncedBy;
+    private ZonedDateTime submittedOn;
     
+    private String syncedBy;
+
+    private String projectCode;
+
+    private String projectDescription;
+
+    private String onboardedPlace;
+
     public String getFatherName() {
 		return fatherName;
 	}
@@ -244,6 +264,14 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setMaritalStatus(String maritalStatus) {
 		this.maritalStatus = maritalStatus;
+	}
+
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
 	}
 
 	public Date getDob() {
@@ -962,4 +990,94 @@ public class EmployeeDTO extends BaseDTO {
     public void setSyncedBy(String syncedBy) {
         this.syncedBy = syncedBy;
     }
+
+    public List<EmployeeDocumentsDTO> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<EmployeeDocumentsDTO> documents) {
+        this.documents = documents;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getProjectDescription() {
+        return projectDescription;
+    }
+
+    public void setProjectDescription(String projectDescription) {
+        this.projectDescription = projectDescription;
+    }
+
+    public boolean isNewEmployee() {
+        return newEmployee;
+    }
+
+    public void setNewEmployee(boolean newEmployee) {
+        this.newEmployee = newEmployee;
+    }
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getSubmittedBy() {
+		return submittedBy;
+	}
+
+	public void setSubmittedBy(String submittedBy) {
+		this.submittedBy = submittedBy;
+	}
+
+	public ZonedDateTime getSubmittedOn() {
+		return submittedOn;
+	}
+
+	public void setSubmittedOn(ZonedDateTime submittedOn) {
+		this.submittedOn = submittedOn;
+	}
+
+	public String getEmployeeCode() {
+		return employeeCode;
+	}
+
+	public void setEmployeeCode(String employeeCode) {
+		this.employeeCode = employeeCode;
+	}
+
+	public String getAadharNumber() {
+		return aadharNumber;
+	}
+
+	public void setAadharNumber(String aadharNumber) {
+		this.aadharNumber = aadharNumber;
+	}
+
+	public float getGross() {
+		return gross;
+	}
+
+	public void setGross(float gross) {
+		this.gross = gross;
+	}
+
+	public String getOnboardedPlace() {
+		return onboardedPlace;
+	}
+
+	public void setOnboardedPlace(String onboardedPlace) {
+		this.onboardedPlace = onboardedPlace;
+	}
+	
+	
 }

@@ -7,6 +7,24 @@ import com.ts.app.repository.*;
 import com.ts.app.rule.EmployeeFilter;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.util.*;
+import com.ts.app.soap.classes.TableOfZempDetStr;
+import com.ts.app.soap.classes.TableOfZempEduDet;
+import com.ts.app.soap.classes.TableOfZempFamilyDet;
+import com.ts.app.soap.classes.TableOfZempIdmarkDet;
+import com.ts.app.soap.classes.TableOfZempIdsStr;
+import com.ts.app.soap.classes.TableOfZempPfnominiDet;
+import com.ts.app.soap.classes.TableOfZempPrevempDet;
+import com.ts.app.soap.classes.TableOfZempReturn;
+import com.ts.app.soap.classes.ZempDetStr;
+import com.ts.app.soap.classes.ZempEduDet;
+import com.ts.app.soap.classes.ZempFamilyDet;
+import com.ts.app.soap.classes.ZempIdmarkDet;
+import com.ts.app.soap.classes.ZempIdsStr;
+import com.ts.app.soap.classes.ZempPfnominiDet;
+import com.ts.app.soap.classes.ZempPrevempDet;
+import com.ts.app.soap.classes.ZempReturn;
+import com.ts.app.soap.classes.ZempdetailUpdate;
+import com.ts.app.soap.classes.ZempdetailUpdateResponse;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,18 +33,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,9 +71,18 @@ public class    EmployeeService extends AbstractService {
 
     private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
 
+    @Autowired
+    private RestTemplate restTemplate;
+    
     @Inject
     private AttendanceRepository attendanceRepository;
+    
+    @Inject
+    private NomineeRelationshipRepository nomineeRelationshipRepository ;
 
+    @Inject
+    private ReligionRepository religionRepository ;
+ 
     @Inject
     private EmployeeRepository employeeRepository;
 
@@ -108,6 +144,9 @@ public class    EmployeeService extends AbstractService {
     private JobManagementService jobManagementService;
 
     @Inject
+    private OnboardingUserConfigService onboardingUserConfigService;
+
+    @Inject
     private AttendanceService attendanceService;
 
     @Inject
@@ -118,6 +157,9 @@ public class    EmployeeService extends AbstractService {
 
     @Inject
     private EmployeeRelieverRepository employeeRelieverRepository;
+
+    @Inject
+    private EmployeeDocumentRepository employeeDocumentRepository;
 
     @Inject
     private Environment env;
@@ -136,6 +178,9 @@ public class    EmployeeService extends AbstractService {
 
     @Value("${AWS.s3-enroll-path}")
     private String enrollImagePath;
+    
+    @Value("${onBoarding.empRetrieve}")
+    private String URL_ORACLE;
 
     public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
@@ -144,6 +189,36 @@ public class    EmployeeService extends AbstractService {
             employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
         }
         return employeeDto;
+    }
+    
+    private EmployeeDTO prestoredEmployee;
+    
+    public EmployeeDTO getPrestoredEmployee() {
+    	
+    	return prestoredEmployee;
+    	
+    }
+    
+    public List<EmployeeDocumentsDTO> findEmployeeDocumentsByEmpId(String empId) {
+        
+    	Employee employeeDomain = employeeRepository.findByEmpId(empId);
+        
+    	List<EmployeeDocumentsDTO> employeeDocumentsDTO = null; 
+    	
+        if(employeeDomain !=null) {
+        	
+        	prestoredEmployee = mapperUtil.toModel(employeeDomain, EmployeeDTO.class);
+        	
+        	List<EmployeeDocuments> docuemnts = employeeDocumentRepository.findByEmployeeId(employeeDomain.getId());
+        	
+        	employeeDocumentsDTO = mapperUtil.toModelList(docuemnts, EmployeeDocumentsDTO.class);
+        }
+        else {
+        	
+        	prestoredEmployee = null;
+        }
+        
+        return employeeDocumentsDTO;
     }
 
     public boolean isDuplicate(EmployeeDTO employeeDTO) {
@@ -158,6 +233,60 @@ public class    EmployeeService extends AbstractService {
         return false;
     }
 
+    public List<EmployeeDTO> findActionRequired(boolean imported, boolean submitted, String active, String wbsId) {
+    	
+    	List<Employee> listEmployees = employeeRepository.findByImportedAndSubmittedAndActiveAndWbsId(imported, submitted, active, wbsId);
+    	
+    	List<EmployeeDTO> listEmployeeDto = mapperUtil.toModelList(listEmployees, EmployeeDTO.class);
+    	 
+    	
+    	return listEmployeeDto;
+//    	if(CollectionUtils.isNotEmpty(listEmployeeDto)) {
+//    		
+//    		for( EmployeeDTO employeeDto : listEmployeeDto ) {
+//    			
+//    			EmpDTO empDto = new EmpDTO();
+//    			
+//    			List<BankDetailsDTO> banks = new ArrayList<BankDetailsDTO>();
+//    			BankDetailsDTO bank = new BankDetailsDTO();
+//    			bank.setAccountNo(employeeDto.getAccountNumber());
+//    			bank.setIfsc(employeeDto.getIfscCode());
+//    			
+//    			
+//    			
+//    			
+//    			empDto.setEmployeeCode(employeeDto.getEmpId());
+//    			empDto.setEmployeeName(employeeDto.getName());
+//    			empDto.setFatherName(employeeDto.getFatherName());
+//    			empDto.setMotherName(employeeDto.getMotherName());
+//    			empDto.setGender(employeeDto.getGender());
+//    			empDto.setMaritalStatus(employeeDto.getMaritalStatus());
+//    			empDto.setDateOfBirth(employeeDto.getDob());
+//    			empDto.setDateOfJoining(dateOfJoining);
+//    			empDto.setReligion(religion);
+//    			empDto.setBloodGroup(bloodGroup);
+//    			
+////    			ArrayList<String> identification = new ArrayList<String>();
+////    			identification.add(employeeDto.getPersonalIdentificationMark1());
+////    			identification.add(employeeDto.getPersonalIdentificationMark2());
+////    			
+////    			empDto.setIdentificationMark(identification);
+////    			
+////    			empDto.setM;
+////    			
+////    			empDto.setAadharNumber(employeeDto.getAdharCardNumber());
+////    			empDto.setPosition(position);
+////    			empDto.setProjectId(projectId);
+////    			empDto.setWbsId(wbsId);
+//    			
+//    			
+//    			
+//    		}
+//    		
+//    	}
+    	
+    }
+    
     public EmployeeDTO createEmployeeInformation(EmployeeDTO employeeDto) {
         // log.info("The admin Flag value is " +adminFlag);
         log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
@@ -237,12 +366,263 @@ public class    EmployeeService extends AbstractService {
 
 /******************************Modified by Vinoth**********************************************************/   
     
-    public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) {
+    public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
         Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
+        employee.setFullName(employee.getName()+" "+employee.getLastName());
+        employee.setUser(null);
         employee.setActive(Employee.ACTIVE_YES);
+        employee.setSubmittedOn(ZonedDateTime.now());
         employee = employeeRepository.save(employee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
     	return employeeDTO;
+    }
+
+    public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
+        Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setFullName(employeeDTO.getName()+" "+employeeDTO.getLastName());
+        Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
+
+        updateEmployeeDTO.setVerifiedBy(null);
+       // Employee updateEmployee = mapperUtil.toEntity(updateEmployeeDTO,Employee.class);
+//        updateEmployee.setUser(null);
+        employee = employeeRepository.saveAndFlush(updateEmployeeDTO);
+        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
+        return employeeDTO;
+    }
+    
+    public ZempdetailUpdateResponse saveEmployeeOnSAP(ZempdetailUpdate zempdetailUpdate) throws Exception {
+    	
+    	HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		headers.setContentType( MediaType.APPLICATION_JSON);
+		 
+		HttpEntity<ZempdetailUpdate> request = new HttpEntity<>(zempdetailUpdate,headers);
+
+		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
+				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
+				ZempdetailUpdateResponse.class);
+
+//		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
+//				 "http://localhost:8001/updateEmployeeOnSap" , HttpMethod.POST,  request,
+//				ZempdetailUpdateResponse.class);
+
+		
+		return response.getBody();
+		
+    }
+
+    @SuppressWarnings("finally")
+	public ZempReturn verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
+        Employee employee = employeeRepository.findOne(employeeDTO.getId());
+        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
+        User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
+        
+        ZempdetailUpdate zempdetailUpdate = new ZempdetailUpdate(); 
+		
+		TableOfZempDetStr tableOfZempDetStr = new TableOfZempDetStr();
+		 
+		
+		TableOfZempEduDet tableOfZempEduDet = new TableOfZempEduDet();
+		 
+		
+		TableOfZempFamilyDet tableOfZempFamilyDet = new TableOfZempFamilyDet();
+		 
+		
+		TableOfZempIdmarkDet tableOfZempIdmarkDet = new TableOfZempIdmarkDet();
+		 
+		
+		TableOfZempIdsStr tableOfZempIdsStr = new TableOfZempIdsStr();
+		 
+		
+		TableOfZempPfnominiDet tableOfZempPfnominiDet = new TableOfZempPfnominiDet();
+		 
+		
+		TableOfZempPrevempDet tableOfZempPrevempDet = new TableOfZempPrevempDet();
+		 
+		
+		TableOfZempReturn tableOfZempReturn = new TableOfZempReturn();
+		 
+		
+		ZempDetStr zempDetStr = new ZempDetStr();
+		ZempEduDet zempEduDet = new ZempEduDet();
+
+		ZempIdsStr zempIdsStr = new ZempIdsStr();
+		ZempPfnominiDet zempPfnominiDet = new ZempPfnominiDet();
+		ZempPrevempDet zempPrevempDet = new ZempPrevempDet();
+		ZempReturn zempReturn = new ZempReturn();
+		
+		
+		String employeeId = employee.getEmpId();
+		
+		if(employee.isNewEmployee()) {
+			 
+			zempDetStr.setEmployeeType("N");
+			
+		}
+		
+		zempDetStr.setEmpId(employeeId);
+		zempDetStr.setEmpName(employee.getFullName());
+		zempDetStr.setDesigNo(employee.getPosition());
+		
+		log.info("personal area");
+		log.info(employee.getProjectCode()+"-"+SecurityUtils.getCurrentUserId());
+		
+		zempDetStr.setPersa(onboardingUserConfigService.getParentElementOfProject(employee.getProjectCode(),SecurityUtils.getCurrentUserId()));
+		zempDetStr.setBloodGroup(employee.getBloodGroup());
+		zempDetStr.setDateOfBirth(employee.getDob().toString());
+		zempDetStr.setDateOfJoin(employee.getDoj().toString());
+		zempDetStr.setEmail(employee.getEmail());
+		zempDetStr.setEmpId(employee.getEmpId());
+		zempDetStr.setAcNo(employee.getAccountNumber());
+		zempDetStr.setAddrLi2M((employee.getPresentAddress().length() >= 40 ?  employee.getPresentAddress().substring(0,39) : employee.getPresentAddress() ));
+		zempDetStr.setCityM(employee.getPresentCity());
+		zempDetStr.setStateM(employee.getPresentState());
+		zempDetStr.setAddrLi2P((employee.getPermanentAddress().length() >= 40 ?  employee.getPermanentAddress().substring(0,39) : employee.getPermanentAddress() ));
+		zempDetStr.setCityP(employee.getPermanentCity());
+		zempDetStr.setStateP(employee.getPermanentState());
+		zempDetStr.setAcNo(employee.getAccountNumber());
+		zempDetStr.setBankKey("9100");
+		
+		String gender = employee.getGender().toLowerCase().substring(0,1).equals("m") ? "1" : ( employee.getGender().toLowerCase().substring(0,1).equals("f") ? "2" : "3" ); 
+	 	
+		zempDetStr.setGender(gender);
+		zempDetStr.setIfscCode(employee.getIfscCode());
+		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
+		zempDetStr.setMobileNoM(employee.getMobile());
+		zempDetStr.setMothersName(employee.getMotherName());
+		
+		List<Religion> religion = religionRepository.findByTitle(employee.getReligion());
+		zempDetStr.setReligion(religion.size() > 0 ? religion.get(0).getCode() : "22");
+
+		zempDetStr.setWbs(employee.getWbsId());
+		tableOfZempDetStr.getItem().add(zempDetStr);
+		
+		
+		zempEduDet.setBoardUniv(employee.getBoardInstitute());
+		zempEduDet.setEmpId(employee.getEmpId());
+		
+		tableOfZempEduDet.getItem().add(zempEduDet);
+		
+		if( StringUtils.isNotEmpty( employee.getMotherName())) {
+		
+			ZempFamilyDet zempFamilyDetMother = new ZempFamilyDet();
+		
+			zempFamilyDetMother.setEmpId(employee.getEmpId());
+			zempFamilyDetMother.setFamMemName(employee.getMotherName());
+			zempFamilyDetMother.setFamMemRelNo("12");
+	
+			tableOfZempFamilyDet.getItem().add(zempFamilyDetMother);
+			
+		}
+		
+		ZempFamilyDet zempFamilyDetFather = new ZempFamilyDet();
+		
+		zempFamilyDetFather.setEmpId(employee.getEmpId());
+		zempFamilyDetFather.setFamMemName(employee.getFatherName());
+		zempFamilyDetFather.setFamMemRelNo("11");
+		
+		tableOfZempFamilyDet.getItem().add(zempFamilyDetFather);
+		
+		if(StringUtils.isEmpty(employee.getPersonalIdentificationMark1())){
+			
+			ZempIdmarkDet zempIdmarkDet1 = new ZempIdmarkDet();
+			
+			zempIdmarkDet1.setEmpId(employeeId);
+			zempIdmarkDet1.setIdenmarkText(employee.getPersonalIdentificationMark1());
+			
+			tableOfZempIdmarkDet.getItem().add(zempIdmarkDet1);
+		}
+		if(StringUtils.isEmpty(employee.getPersonalIdentificationMark2())){
+			
+			ZempIdmarkDet zempIdmarkDet2 = new ZempIdmarkDet();
+			
+			zempIdmarkDet2.setEmpId(employeeId);
+			zempIdmarkDet2.setIdenmarkText(employee.getPersonalIdentificationMark2());
+			
+			tableOfZempIdmarkDet.getItem().add(zempIdmarkDet2);
+		}
+
+
+		
+		zempIdsStr.setEmpId(employee.getEmpId());
+		zempIdsStr.setIdCardNo(employee.getAdharCardNumber());
+		zempIdsStr.setIdentityTypeId("11");
+		zempIdsStr.setNameOnCard(employee.getFullName());
+		
+		Date now = new Date();
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        String mysqlDateString = formatter.format(now);
+		
+		zempIdsStr.setDateOfIssue(mysqlDateString);
+		zempIdsStr.setValidDate(mysqlDateString);
+		
+		tableOfZempIdsStr.getItem().add(zempIdsStr);
+		
+		List<NomineeRelationship> relationships = nomineeRelationshipRepository.findByTitle(employee.getNomineeRelationship());
+		
+		zempPfnominiDet.setEmpId(employee.getEmpId());
+		zempPfnominiDet.setNominiName(employee.getNomineeName());
+		zempPfnominiDet.setNominiRel(relationships.size()>0 ? relationships.get(0).getCode() : "1");
+		zempPfnominiDet.setNominiPercen(new BigDecimal("100"));
+		
+		tableOfZempPfnominiDet.getItem().add(zempPfnominiDet);
+		
+		zempPrevempDet.setEmpId(employee.getEmpId());
+		zempPrevempDet.setNamePrevOrg(employee.getEmployer());
+		
+		tableOfZempPrevempDet.getItem().add(zempPrevempDet);
+		
+		zempReturn.setEmpId(employee.getEmpId());
+		
+		tableOfZempReturn.getItem().add(zempReturn);
+		
+		zempdetailUpdate.setEmpDet(tableOfZempDetStr);
+		zempdetailUpdate.setEmpEduDet(tableOfZempEduDet);
+		zempdetailUpdate.setEmpFamilyDet(tableOfZempFamilyDet);
+		zempdetailUpdate.setEmpIdentityProof(tableOfZempIdsStr);
+		zempdetailUpdate.setEmpIdmarkDet(tableOfZempIdmarkDet);
+		zempdetailUpdate.setEmpPfnominiDet(tableOfZempPfnominiDet);
+		zempdetailUpdate.setEmpPrevempDet(tableOfZempPrevempDet);
+		zempdetailUpdate.setReturnLog(tableOfZempReturn);
+		
+		ZempdetailUpdateResponse response;
+		ZempReturn returnObject = new ZempReturn();;
+		
+		try {
+			response = saveEmployeeOnSAP(zempdetailUpdate);
+			returnObject = response.getReturnLog().getItem().get(0);
+			returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
+			
+			if(!returnObject.getType().equals("E")) {
+				 
+//				if(updateEmployee.isVerified()){
+		        	updateEmployee.setEmpId( returnObject.getEmpId());
+		            updateEmployee.setVerifiedBy(user);
+		            updateEmployee.setVerified(true);
+		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
+		            employee = employeeRepository.saveAndFlush(updateEmployee);
+//		        }
+				
+			}
+			
+		} catch (Exception e) {
+			
+			returnObject = new ZempReturn();
+			returnObject.setType("E");
+			returnObject.setMessage(e.getMessage());
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			return returnObject;
+		}
+		
+		
+		 
+        
     }
 
 
@@ -1508,6 +1888,96 @@ public class    EmployeeService extends AbstractService {
         return result;
     }
 
+    public SearchResult<EmployeeDTO> findOnBoardingBySearchCrieria(SearchCriteria searchCriteria) {
+        User user = userRepository.findOne(searchCriteria.getUserId());
+        SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
+        if(searchCriteria != null) {
+
+            Pageable pageRequest = null;
+            List<Employee> allEmpsList = new ArrayList<>();
+            Page<Employee> page = null;
+            List<EmployeeDTO> transactions = null;
+
+            if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" + sort);
+                if(searchCriteria.isList()) {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+                }else {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                }
+            } else {
+                if(searchCriteria.isList()) {
+                    Sort sort = new Sort(Sort.Direction.ASC , "name");
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+                }else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
+            }
+
+
+            if(StringUtils.isNotEmpty(searchCriteria.getBranchCode())){
+
+
+                if(StringUtils.isNotEmpty(searchCriteria.getProjectCode())){
+
+                    if(StringUtils.isEmpty(searchCriteria.getWbsCode())){
+                        searchCriteria.setWbsCodes(onboardingUserConfigService.findWbsCodesByProjectAndBranch(user.getId(),searchCriteria.getBranchCode(),searchCriteria.getProjectCode()));
+                    }
+
+                }else{
+
+                    searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByBranch(user.getId(),searchCriteria.getBranchCode()));
+                    searchCriteria.setWbsCodes(onboardingUserConfigService.findWBSByProjectCodes(user.getId(),searchCriteria.getProjectCodes()));
+
+
+                }
+
+            }else{
+                searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByUser(user.getId()));
+                searchCriteria.setWbsCodes(onboardingUserConfigService.findWBSCodesByUser(user.getId()));
+            }
+
+
+            log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+
+            boolean isClient = false;
+
+            UserRole role = null;
+
+            if(user != null) {
+                role = user.getUserRole();
+            }
+
+            if(role != null) {
+                isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+            }
+                searchCriteria.setAdmin(true);
+                page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, true),pageRequest);
+                allEmpsList.addAll(page.getContent());
+
+
+            if(CollectionUtils.isNotEmpty(allEmpsList)) {
+                //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+                if(transactions == null) {
+                    transactions = new ArrayList<EmployeeDTO>();
+                }
+                List<Employee> empList =  allEmpsList;
+                if(CollectionUtils.isNotEmpty(empList)) {
+                    for(Employee emp : empList) {
+                        User empUser = emp.getUser();
+
+                            transactions.add(mapToModelOnBoarding(emp));
+                    }
+                }
+                if(CollectionUtils.isNotEmpty(transactions)) {
+                    buildSearchResult(searchCriteria, page, transactions,result);
+                }
+            }
+        }
+        return result;
+    }
+
     public SearchResult<EmployeeShiftDTO> findEmpShiftBySearchCriteria(SearchCriteria searchCriteria) {
         User user = userRepository.findOne(searchCriteria.getUserId());
         SearchResult<EmployeeShiftDTO> result = new SearchResult<EmployeeShiftDTO>();
@@ -1640,6 +2110,32 @@ public class    EmployeeService extends AbstractService {
     public byte[] getExportFile(String fileName) {
         return exportUtil.readEmployeeExportExcelFile(fileName);
     }
+    
+//*******************************************Modified by Vinoth***********************************************************************
+ 
+    public ExportResult exportOnboarding(List<EmployeeDTO> transactions) {
+        //return exportUtil.writeToCsvFile(transactions, null);
+        log.debug("ready to EXPORT EXCEL-------->");
+        return exportUtil.writeToOnboardingExcelFile(transactions,null);
+    }
+    
+    public ExportResult getOnboardingExportStatus(String fileId) {
+        ExportResult er = new ExportResult();
+        fileId += ".xlsx";
+        if(!StringUtils.isEmpty(fileId)) {
+            String status = exportUtil.getExportStatus(fileId);
+            er.setFile(fileId);
+            //er.setEmpId(empId);
+            er.setStatus(status);
+        }
+        return er;
+    }
+    
+    public byte[] getOnboardingExportFile(String fileName) {
+        return exportUtil.readOnboardingEmployeeExportExcelFile(fileName);
+    }
+    
+//************************************************************************************************************************************
 
 
     public List<DesignationDTO> findAllDesignations() {
@@ -1669,14 +2165,93 @@ public class    EmployeeService extends AbstractService {
         empDto.setRelieved(employee.isRelieved());
         empDto.setProjectName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getProject().getName() : "");
         empDto.setSiteName(CollectionUtils.isNotEmpty(employee.getProjectSites()) ? employee.getProjectSites().get(0).getSite().getName() : "");
-        empDto.setClient(employee.isClient());       
+        empDto.setClient(employee.isClient());
         return empDto;
     }
 
 /******************************Modified by Vinoth**********************************************************/
+private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
+    empDto.setId(employee.getId());
+    empDto.setEmpId(employee.getEmpId());
+    empDto.setName(employee.getName());
+    empDto.setFullName(employee.getFullName());
+    empDto.setLastName(employee.getLastName());
+    empDto.setPhone(employee.getPhone());
+    empDto.setEmail(employee.getEmail());
+    empDto.setActive(employee.getActive());
+    empDto.setAccountNumber(employee.getAccountNumber());
     
+//         empDto.setAddressProofImage(employee.getAddressProofImage());
+//         empDto.setAdharBackImage(employee.getAdharBackImage());
+    empDto.setAdharCardNumber(employee.getAdharCardNumber());
+//         empDto.setAdharFrontImage(employee.getAdharFrontImage());
+//         empDto.setBankPassbookImage(employee.getBankPassbookImage());
+    empDto.setBloodGroup(employee.getBloodGroup());
+    empDto.setBoardInstitute(employee.getBoardInstitute());
+    empDto.setClientDescription(employee.getClientDescription());
+    empDto.setClientName(employee.getClientName());
+    empDto.setCode(employee.getCode());
+    empDto.setDesignation(employee.getDesignation());
+    empDto.setDob(employee.getDob());
+    empDto.setDoj(employee.getDoj());
+    //empDto.setDrivingLicense(employee.getDrivingLicense());
+    empDto.setEducationalQulification(employee.getEducationalQulification());
+    empDto.setEmergencyContactNumber(employee.getEmergencyContactNumber());
+    empDto.setEmployer(employee.getEmployer());
+    empDto.setFatherName(employee.getFatherName());
+//         empDto.setFingerPrintLeft(employee.getFingerPrintLeft());
+//         empDto.setFingerPrintRight(employee.getFingerPrintRight());
+    empDto.setGender(employee.getGender());
+    empDto.setIfscCode(employee.getIfscCode());
+    empDto.setMaritalStatus(employee.getMaritalStatus());
+    empDto.setMobile(employee.getMobile());
+    empDto.setMotherName(employee.getMotherName());
+    empDto.setNomineeContactNumber(employee.getNomineeContactNumber());
+    empDto.setNomineeName(employee.getNomineeName());
+    empDto.setNomineeRelationship(employee.getNomineeRelationship());
+    //empDto.setPanCard(employee.getPanCard());
+    empDto.setPercentage(employee.getPercentage());
+    empDto.setPermanentAddress(employee.getPermanentAddress());
+    empDto.setPermanentCity(employee.getPermanentCity());
+    empDto.setPermanentState(employee.getPermanentState());
+    empDto.setPersonalIdentificationMark1(employee.getPersonalIdentificationMark1());
+    empDto.setPersonalIdentificationMark2(employee.getPersonalIdentificationMark2());
+    empDto.setPresentAddress(employee.getPresentAddress());
+    empDto.setPresentCity(employee.getPresentCity());
+    empDto.setPresentState(employee.getPresentState());
+    empDto.setPreviousDesignation(employee.getPreviousDesignation());
+    empDto.setReligion(employee.getReligion());
+    //empDto.setVoterId(employee.getVoterId());
+    empDto.setWbsDescription(employee.getWbsDescription());
+    empDto.setWbsId(employee.getWbsId());
+    empDto.setProjectCode(employee.getProjectCode());
+    empDto.setProjectDescription(employee.getProjectDescription());
+    empDto.setActive(employee.getActive());
+    empDto.setPosition(employee.getPosition());
+    empDto.setImported(employee.isImported());
+    empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
+    empDto.setSubmitted(true);
+    empDto.setSubmittedBy(SecurityUtils.getCurrentUser().getUsername());
+    empDto.setSubmittedOn(ZonedDateTime.now());
+    empDto.setVerified(false);
+    empDto.setVerifiedBy(null);
+    empDto.setVerifiedDate(null); 
+    empDto.setOnboardedPlace(employee.getOnboardedPlace()); 
+    empDto.setGross(employee.getGross());
+    
+    return empDto;
+}
+
     private EmployeeDTO mapToModelOnBoarding(Employee employee) {
     	EmployeeDTO empDto = new EmployeeDTO();
+        empDto.setId(employee.getId());
+        empDto.setEmpId(employee.getEmpId());
+        empDto.setName(employee.getName());
+        empDto.setFullName(employee.getFullName());
+        empDto.setLastName(employee.getLastName());
+        empDto.setPhone(employee.getPhone());
+        empDto.setEmail(employee.getEmail());
+        empDto.setActive(employee.getActive());
     	 empDto.setAccountNumber(employee.getAccountNumber());
 //         empDto.setAddressProofImage(employee.getAddressProofImage());
 //         empDto.setAdharBackImage(employee.getAdharBackImage());
@@ -1721,6 +2296,22 @@ public class    EmployeeService extends AbstractService {
          //empDto.setVoterId(employee.getVoterId());
          empDto.setWbsDescription(employee.getWbsDescription());
          empDto.setWbsId(employee.getWbsId());
+         empDto.setProjectCode(employee.getProjectCode());
+         empDto.setProjectDescription(employee.getProjectDescription());
+         empDto.setActive(employee.getActive());
+         empDto.setPosition(employee.getPosition());
+         empDto.setImported(employee.isImported());
+         empDto.setOnBoardedFrom(employee.getOnBoardedFrom());
+         empDto.setGross(employee.getGross());
+         empDto.setOnboardedPlace(employee.getOnboardedPlace());
+         if(empDto.isVerified()){
+        	 empDto.setVerifiedBy(employee.getVerifiedBy().getFirstName());
+         }
+         if(employee.getVerifiedDate() != null) {
+         empDto.setVerifiedDate(employee.getVerifiedDate());
+         }
+         empDto.setCreatedBy(employee.getCreatedBy());
+         empDto.setCreatedDate(employee.getCreatedDate());
     	return empDto;
     }
     
@@ -1905,5 +2496,10 @@ public class    EmployeeService extends AbstractService {
         Employee employee = employeeRepository.findOne(employeeId);
         List<Ticket> tickets = ticketRepository.findEmployeeUnClosedTickets(employee.getId());
         return tickets;
+    }
+
+    public List<EmployeeDocuments> getEmployeeDocuments(long employeeId){
+        List<EmployeeDocuments> documents = employeeDocumentRepository.findByEmployeeId(employeeId);
+        return  documents;
     }
 }

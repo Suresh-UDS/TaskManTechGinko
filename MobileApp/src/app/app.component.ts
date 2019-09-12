@@ -50,6 +50,10 @@ import {DatabaseProvider} from "../providers/database-provider";
 import {Network} from "@ionic-native/network";
 import {DashboardPage} from "../pages/dashboard/dashboard";
 import {OfflineOnlineLanding} from "../pages/Offline-Online-Landing/offline-online-landing";
+//import {Declaration} from "../pages/declaration/declaration";
+
+
+
 
 @Component({
     templateUrl: 'app.html'
@@ -69,7 +73,7 @@ export class MyApp {
     constructor(public platform: Platform, private ionicApp: IonicApp, public menuCtrl: MenuController, private backgroundMode: BackgroundMode,
         public statusBar: StatusBar, public component: componentService, public toastCtrl: ToastController,
         public splashScreen: SplashScreen, private oneSignal: OneSignal, public events: Events, private batteryStatus: BatteryStatus,
-              private appVersion:AppVersion, private authService:authService, private databaseProvider:DatabaseProvider, private network: Network) {
+              private appVersion:AppVersion, private authService:authService, private databaseProvider:DatabaseProvider, private network: Network, public toastController: ToastController) {
         this.initializeApp();
 
         //
@@ -146,17 +150,18 @@ export class MyApp {
             { title: 'Site', component: SitePage, active: false, icon: 'device_hub', permission: 'SiteList' },
             // { title: 'Client', component: CustomerDetailPage,active:false,icon:'person'},
             // { title: 'Employee', component: EmployeeListPage,active:false,icon:'people',permission:'EmployeeList'},
-      { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobList'},
-      { title: 'Assets', component: AssetList,active:false,icon:'assessment',permission:'AssetList'},
-      { title: 'Tickets', component: Ticket,active:false,icon:'tab',permission:'TicketList'},
+            { title: 'Jobs', component: JobsPage,active:false,icon:'description',permission:'JobList'},
+            { title: 'Assets', component: AssetList,active:false,icon:'assessment',permission:'AssetList'},
+            { title: 'Tickets', component: Ticket,active:false,icon:'tab',permission:'TicketList'},
             { title: 'Attendance', component: SiteListPage, active: false, icon: 'content_paste', permission: 'AttendanceList' },
             // { title: 'Rate Card', component: RateCardPage,active:false,icon:'description',permission:'RateCardList'},
             { title: 'Quotation', component: QuotationPage, active: false, icon: 'receipt', permission: 'QuotationList' },
-            { title: 'OnBoarding', component: onboardingExistEmployee, active: false, icon: 'person_add', permission: 'DashboardList' },
+            { title: 'OnBoarding', component: onboardingExistEmployee, active: false, icon: 'person_add', permission: 'OnBoardingList' },
             // { title: 'Expense', component: ExpensePage, active: false, icon: 'pie_chart', permission: 'AttendanceList' },
             // { title: 'InventoryMaster', component: InventoryMaster, active: false, icon: 'widgets', permission: 'FeedbackList' },
             // { title: 'Indent', component: Indent, active: false, icon: 'build', permission: 'TicketsList' },
             // { title: 'IndentList', component: IndentList, active: false, icon: 'shopping_cart', permission: 'AttendanceList' },
+           // { title: 'Declaration', component: Declaration, active: false, icon: 'person_add', permission: 'FeedbackList' },
             { title: 'Feedback', component: InitFeedbackPage, active: false, icon: 'feedback', permission: 'FeedbackList' },
             { title: 'ChangePassword', component: ChangePassword, active: false, icon: 'lock', permission: 'FeedbackList' }
             // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
@@ -234,7 +239,11 @@ export class MyApp {
         // watch network for a disconnection
         let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
             console.log('network was disconnected :-(');
-            this.nav.push(OfflineOnlineLanding);
+            if(this.nav.getViews()[0]['component']['name'] && (this.nav.getViews()[0]['component']['name']).includes('DashboardPage')){
+                this.nav.push(OfflineOnlineLanding);
+            }else{
+                this.component.presentToast('Network was disconnected :-(');
+            }
             console.log("Current page name");
         });
 
@@ -245,7 +254,14 @@ export class MyApp {
         // watch network for a connection
         let connectSubscription = this.network.onConnect().subscribe(() => {
             console.log('network connected!');
-            this.nav.push(OfflineOnlineLanding);
+            console.log(this.nav.getViews()[0]);
+            console.log(this.nav.getViews()[0]['component']);
+            console.log(this.nav.getViews()[0]['component']['name']);
+            if(this.nav.getViews()[0]['component']['name'] && (this.nav.getViews()[0]['component']['name']).includes('DashboardPage')){
+                this.nav.push(OfflineOnlineLanding);
+            }else{
+                this.component.presentToast('Network connected!, woohoo');
+            }
             // We just got a connection but we need to wait briefly
             // before we determine the connection type. Might need to wait.
             // prior to doing any api requests as well.

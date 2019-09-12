@@ -1,12 +1,22 @@
 package com.ts.app.web.rest;
 
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,15 +35,28 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Employee;
+import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.FeedbackMapping;
+import com.ts.app.domain.GeneralSettings;
 import com.ts.app.domain.SapBusinessCategories;
+import com.ts.app.repository.EmployeeDocumentRepository;
+import com.ts.app.repository.GeneralSettingsRepository;
 import com.ts.app.repository.SapBusinessCategoriesRepository;
 import com.ts.app.service.EmployeeService;
+import com.ts.app.service.OnboardingDeclarationService;
 import com.ts.app.service.OtaskmanService;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.web.rest.dto.BaseDTO;
 import com.ts.app.web.rest.dto.EmpDTO;
+import com.ts.app.web.rest.dto.EmployeeDTO;
+import com.ts.app.web.rest.dto.EmployeeDocumentsDTO;
 import com.ts.app.web.rest.dto.EmployeeListDTO;
 import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
 import com.ts.app.web.rest.dto.PersonalAreaDTO;
@@ -52,6 +75,15 @@ public class EmployeeServiceResouce {
 
 	@Autowired
 	EmployeeService employeeService;
+	
+	@Autowired 
+	EmployeeDocumentRepository employeeDocumentService;
+	
+	@Autowired
+	OnboardingDeclarationService onboardingDeclarationService;
+	
+	@Autowired
+	GeneralSettingsRepository generalSettingsRepository; 
 
     @Value("${onBoarding.empServe}")
     private String URL_EMPSERVICE;
@@ -170,20 +202,155 @@ public class EmployeeServiceResouce {
 
 
 	@RequestMapping(value = "/getEmployeeListByWbs/{wbs}", method = RequestMethod.GET)
-	public List<EmpDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
+	public List<EmployeeDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		List<EmployeeDTO> employeeListDto =  employeeService.findActionRequired(true, false, "Y", wbs);
+		
+		if(CollectionUtils.isEmpty(employeeListDto)) {
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
+			HttpEntity<String> entity = new HttpEntity<String>(headers);
 
-		ResponseEntity<List<EmpDTO>> response = restTemplete.exchange(
-				URL_EMPSERVICE+"api/employeesByWbs/" + wbs, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<EmpDTO>>() {
-				});
-		return response.getBody();
+			ResponseEntity<List<EmployeeDTO>> response = restTemplete.exchange(
+					URL_ORACLE+"getEmployeeListByWbs/" + wbs, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<EmployeeDTO>>() {
+					});
+			
+			List<EmployeeDTO> oracleList = response.getBody();
+			
+			GeneralSettings generalSetting = generalSettingsRepository.findBySettingName("LoadSapWithTaskman");
+			
+			if(generalSetting.isSwitchedOn()) {
+			
+				if(CollectionUtils.isNotEmpty(oracleList)) {
+					
+					for(int i=0;i<oracleList.size();i++) {
+						
+						List<EmployeeDocumentsDTO> documents = employeeService.findEmployeeDocumentsByEmpId(oracleList.get(i).getEmpId());
+						
+						EmployeeDTO dtoFromLocal =  employeeService.getPrestoredEmployee();
+						
+						if(dtoFromLocal!=null) {
+							
+							oracleList.set(i, dtoFromLocal);
+							
+						}
+						
+						if(documents!=null) {
+							
+							oracleList.get(i).setDocuments(documents);;
+							
+						}
+						
+						
+					}
+					
+				}
+				
+			}
+			
+			return oracleList;
+		}
+		else {
+			
+			return employeeListDto;
+		}
+ 
 	}
  
+	@RequestMapping(value = "/downloadDeclaration/{empId}/{langauge}", method = RequestMethod.GET)
+	public HttpEntity<byte[]> downloadDeclarationPdf(@PathVariable("empId") String empId,@PathVariable("langauge") String language){
+		
+		VelocityEngine vm = new VelocityEngine();
+		
+		vm.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+		vm.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		vm.init();
+		
+		Template t = vm.getTemplate("pdf/declarationForm.vm","UTF-8");
+		
+		VelocityContext context = new VelocityContext();
+		 
+		String decalrarionContent = onboardingDeclarationService.getListByLangauge(language).getDeclarationText();
+		 
+		EmployeeDTO employee = employeeService.findByEmpId(empId);
+		
+		
+		
+		if(employee !=null) {
+			
+			String[] declarationContentPart = (decalrarionContent.replace("_______________", (String.format("%,.2f",employee.getGross()))+"/-")).split("\\r?\\n");
+			 
+			context.put("paras", declarationContentPart); 
+			context.put("employee", employee); 
+			context.put("date", DateUtil.formatToDateString(Date.from(employee.getCreatedDate().toInstant()), "dd-MM-yyyy hh:mm a"));
+			EmployeeDocuments documents = employeeDocumentService.findByEmployeeIdAndDocumentType(employee.getId(), "thumbImpressenRight");
+			context.put("employeeDocuments", documents.getDocUrl());
+			
+		}
+		 
+		
+		/* now render the template into a StringWriter */
+		StringWriter writer = new StringWriter();
+		t.merge(context, writer);
+		/* show the World */
+		System.out.println(writer.toString());
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+		baos = generatePdf(writer.toString());
+
+		HttpHeaders header = new HttpHeaders();
+	    header.setContentType(MediaType.parseMediaType("application/pdf"));
+	    header.set(HttpHeaders.CONTENT_DISPOSITION,
+	                   "attachment; filename="+employee.getName().replace(" ", "_")+".pdf" );
+	    header.setContentLength(baos.toByteArray().length);
+
+	    return new HttpEntity<byte[]>(baos.toByteArray(), header);
+		
+	}
+	
+	public ByteArrayOutputStream generatePdf(String html) {
+
+		String pdfFilePath = "";
+		PdfWriter pdfWriter = null;
+
+		// create a new document
+		Document document = new Document();
+		try {
+
+			document = new Document();
+			// document header attributes
+			document.addAuthor("Kiran Dhongade");
+			document.addCreationDate();
+			document.addProducer();
+			document.addCreator("kinns123.github.io");
+			document.addTitle("HTML to PDF using itext");
+			document.setPageSize(PageSize.LETTER);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PdfWriter.getInstance(document, baos);
+
+			// open document
+			document.open();
+
+			XMLWorkerHelper xmlWorkerHelper = XMLWorkerHelper.getInstance();
+			xmlWorkerHelper.getDefaultCssResolver(true);
+			xmlWorkerHelper.parseXHtml(pdfWriter, document, new StringReader(
+					html));
+			// close the document
+			document.close();
+			System.out.println("PDF generated successfully");
+
+			return baos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 
 	@RequestMapping(value = "/getEmployeeListByProjectId/{projectId}", method = RequestMethod.GET)
 	public List<EmpDTO> getEmployeeListByProjectId(@PathVariable("projectId") String projectId) {

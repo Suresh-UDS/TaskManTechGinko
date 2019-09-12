@@ -29,8 +29,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @NotNull
+ 
     @Size(min = 1, max = 10)
     @Column(length = 10, unique = true, nullable = false)
     private String empId;
@@ -63,7 +62,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     //@NotNull
     @Size(min = 1, max = 50)
     private String designation;
-
 
     @OneToMany(mappedBy="employee",cascade={CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<EmployeeProjectSite> projectSites;
@@ -101,35 +99,43 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 /*************************Modified by Vinoth***********************************************************/    
     
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
+    private String projectCode;
+    
+    @NotNull
+    @Size(max = 2500)
+    private String projectDescription;
+    
+    @NotNull
+    @Size(max = 50)
     private String fatherName;
     
     private String motherName;
     
     @NotNull
-    @Size(min = 1, max = 10)
+    @Size(max = 10)
     @Column(length = 10, nullable = true)
     private String gender;
     
     @NotNull
-    @Size(min =1, max = 50)
+    @Size(max = 50)
     @Column(length = 50, nullable = true)
     private String maritalStatus;
     
-    //@NotNull
+    @NotNull
     private Date dob;
     
-    //@NotNull
+    @NotNull
     private Date doj;
     
     private String religion;
     
     private String bloodGroup;
     
-    @Size(min = 1, max = 2500)
+    @Size( max = 2500)
     private String personalIdentificationMark1;
     
-    @Size(min = 1, max = 2500)
+    @Size(max = 2500)
     private String personalIdentificationMark2;
     
     private String educationalQulification;
@@ -137,11 +143,11 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private String boardInstitute;
     
     @NotNull
-    @Size(min = 1, max = 16)
+    @Size(max = 16)
     private String adharCardNumber;
 
     @NotNull
-    @Size(min = 1, max =10)
+    @Size(max =10)
     private String mobile;
     
     private String emergencyContactNumber;
@@ -157,6 +163,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     @NotNull
     private String presentAddress;
+    
+    private String position;
     
     @NotNull
     private String presentCity;
@@ -223,10 +231,23 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean verified;
 
+    private boolean submitted;
+    
+    private String submittedBy;
+    
+    private ZonedDateTime submittedOn;
+    
     private boolean syncToSAP;
 
-    @Column(name = "verified_by", length = 50)
-    private String verifiedBy;
+    private boolean newEmployee;
+    
+    private float gross;
+    
+    private String onboardedPlace;
+
+    @OneToOne(fetch = FetchType.LAZY,optional=true,cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
+    private User verifiedBy;
 
     @Column(name = "verified_date")
     private ZonedDateTime verifiedDate;
@@ -238,7 +259,18 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     }
 
 
-    public String getFatherName() {
+    public String getOnboardedPlace() {
+		return onboardedPlace;
+	}
+
+
+	public void setOnboardedPlace(String onboardedPlace) {
+		this.onboardedPlace = onboardedPlace;
+	}
+
+
+
+	public String getFatherName() {
 		return fatherName;
 	}
 
@@ -574,6 +606,23 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 		this.wbsDescription = wbsDescription;
 	}
 
+	public String getProjectCode() {
+		return projectCode;
+	}
+
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
+	}
+
+	public String getProjectDescription() {
+		return projectDescription;
+	}
+
+	public void setProjectDescription(String projectDescription) {
+		this.projectDescription = projectDescription;
+	}
+
+
 /*********************************************************************************************************/
     public Long getId() {
         return id;
@@ -811,14 +860,6 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
         this.verified = verified;
     }
 
-    public String getVerifiedBy() {
-        return verifiedBy;
-    }
-
-    public void setVerifiedBy(String verifiedBy) {
-        this.verifiedBy = verifiedBy;
-    }
-
     public boolean isSyncToSAP() {
         return syncToSAP;
     }
@@ -842,4 +883,70 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     public ZonedDateTime getVerifiedDate(){
         return verifiedDate;
     }
+
+    public User getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(User verifiedBy) {
+        this.verifiedBy = verifiedBy;
+    }
+
+    public boolean isNewEmployee() {
+        return newEmployee;
+    }
+
+    public void setNewEmployee(boolean newEmployee) {
+        this.newEmployee = newEmployee;
+    }
+
+
+	public String getPosition() {
+		return position;
+	}
+
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
+	}
+
+
+	public String getSubmittedBy() {
+		return submittedBy;
+	}
+
+
+	public void setSubmittedBy(String submittedBy) {
+		this.submittedBy = submittedBy;
+	}
+
+
+	public ZonedDateTime getSubmittedOn() {
+		return submittedOn;
+	}
+
+
+	public void setSubmittedOn(ZonedDateTime submittedOn) {
+		this.submittedOn = submittedOn;
+	}
+
+
+	public float getGross() {
+		return gross;
+	}
+
+
+	public void setGross(float gross) {
+		this.gross = gross;
+	}
+	
 }

@@ -36,10 +36,20 @@ public class SearchCriteria extends Paginator {
 	private Date toDate;
 
 	private JobStatus jobStatus;
+	
+	private List<JobStatus> jobStatusList;
 
 	private long locationId;
 
 	private long siteId;
+
+	public List<JobStatus> getJobStatusList() {
+		return jobStatusList;
+	}
+
+	public void setJobStatusList(List<JobStatus> jobStatusList) {
+		this.jobStatusList = jobStatusList;
+	}
 
 	private String siteName;
 
@@ -275,6 +285,10 @@ public class SearchCriteria extends Paginator {
 
 	private boolean verified;
 	
+	private boolean submitted;
+	
+	private boolean imported;
+	
 	private String elementCode;
 	
 	private String element;
@@ -282,6 +296,8 @@ public class SearchCriteria extends Paginator {
 	private String elementType;
 	
 	private String elementParent;
+
+	private Boolean newEmployee;
 
 	public String getElementCode() {
 		return elementCode;
@@ -314,6 +330,16 @@ public class SearchCriteria extends Paginator {
 	public void setElementParent(String elementParent) {
 		this.elementParent = elementParent;
 	}
+
+	private String projectCode;
+
+	private String wbsCode;
+
+	private String branchCode;
+
+    private List<String> projectCodes;
+
+	private List<String> wbsCodes;
 
 	public String getModule() {
 		return module;
@@ -1463,4 +1489,71 @@ public class SearchCriteria extends Paginator {
     public void setVerified(boolean verified) {
         this.verified = verified;
     }
+
+    public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
+	}
+
+	public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
+    }
+
+
+    public List<String> getProjectCodes() {
+        return projectCodes;
+    }
+
+    public void setProjectCodes(List<String> projectCodes) {
+        this.projectCodes = projectCodes;
+    }
+
+    public List<String> getWbsCodes() {
+        return wbsCodes;
+    }
+
+    public void setWbsCodes(List<String> wbsCodes) {
+        this.wbsCodes = wbsCodes;
+    }
+
+    public String getWbsCode() {
+        return wbsCode;
+    }
+
+    public void setWbsCode(String wbsCode) {
+        this.wbsCode = wbsCode;
+    }
+
+    public Boolean isNewEmployee() {
+        return newEmployee;
+    }
+
+    public void setNewEmployee(Boolean newEmployee) {
+        this.newEmployee = newEmployee;
+    }
+
+	public boolean isImported() {
+		return imported;
+	}
+
+	public void setImported(boolean imported) {
+		this.imported = imported;
+	}
+    
+    
 }

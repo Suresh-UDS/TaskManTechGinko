@@ -7,9 +7,17 @@ import {Inject, Injectable} from "@angular/core";
 import {LoadingController, ToastController} from "ionic-angular";
 import {AppConfig, ApplicationConfig, MY_CONFIG_TOKEN} from "./app-config";
 import {ObserveOnMessage} from "rxjs/operators/observeOn";
+import {AutoCompleteService} from 'ionic2-auto-complete';
+import 'rxjs/add/operator/map';
 
 @Injectable()
-export class EmployeeService {
+
+export class EmployeeService implements AutoCompleteService {
+    leaddetails: any;
+    labelAttribute = "element";
+   
+    formValueAttribute = "numericCode";
+    element: any;
     constructor(private http: HttpClient, private https: Http, public loadingCtrl: LoadingController, @Inject(MY_CONFIG_TOKEN) private config: ApplicationConfig) {
 
     }
@@ -26,6 +34,22 @@ export class EmployeeService {
                 return Observable.throw(error.json());
         })
     }
+
+    getResults(keyword:string):Observable<any>{
+      // return this.http.get(this.config.Url+'api/employee').map(
+        return this.http.get('http://localhost:8088/api/getWBSListByProjectId').map(   
+            result =>
+            {
+              return result.json()
+                .filter(item => item.element.toLowerCase() )
+            }).catch(error=>{
+                console.log("Error in getting Employees");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
+    }
+
+    
 
     searchEmployees(searchCriteria):Observable<any>{
         return this.http.post(this.config.Url+'api/employee/search',searchCriteria).map(

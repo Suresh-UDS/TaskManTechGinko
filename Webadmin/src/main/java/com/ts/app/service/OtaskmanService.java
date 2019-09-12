@@ -27,7 +27,7 @@ public class OtaskmanService {
 	@Autowired
 	RestTemplate restTemplete;
 
-    @Value("${onBoarding.empRetrieve}")
+	@Value("${onBoarding.empRetrieve}")
     private String URL_ORACLE;
 
 	public String getBranchProjectWbs() {

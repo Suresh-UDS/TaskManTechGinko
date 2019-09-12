@@ -17,7 +17,13 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { Jsonp } from '../../../../node_modules/@angular/http';
 import { onBoardingDataModel } from '../onboardingList/onboardingDataModel';
 
-import * as _ from 'underscore';
+import { declaration} from '../../../pages/onboarding/onboardingNewEmployee/declaration/declaration';
+import {NewEmpSiteDetails} from "./new-emp-site-details/new-emp-site-details";
+import { onBoardingModel } from '../onboardingList/onboarding';
+//import{ declaration} from '../../declaration/declaration';
+
+declare  var demo;
+
 
 const imageUploadModal = {
   aadharPhotoCopy: String,
@@ -29,8 +35,9 @@ const imageUploadModal = {
   thumbImpressenLeft: String,
   drivingLicense: String,
   pancardCopy: String,
-  voterId: String
-}
+  voterId: String,
+  aadharPhotoCopyBack:String
+};
 
 @Component({
   selector: 'page-onboarding-new',
@@ -38,6 +45,7 @@ const imageUploadModal = {
 })
 export class onboardingNewEmployee {
 
+ 
   onboardingNewEmpData: any = {};
   navPreviousData: any;
   currentIndex = 0;
@@ -45,6 +53,7 @@ export class onboardingNewEmployee {
   allFormValues = {};
   currentFormValues = {};
   formLoadingProgress: any = 'pie0';
+  formActionStatus:any;
   @ViewChild('container', { read: ViewContainerRef }) viewContainer: ViewContainerRef;
   constructor(private network: Network, private transfer: FileTransfer, private onBoardingService: OnboardingService,
     public componentService: componentService, private storage: Storage, private messageService: onBoardingDataService,
@@ -55,20 +64,33 @@ export class onboardingNewEmployee {
 
     this.storage.get('onboardingCurrentIndex').then(data => {
       this.storedIndex = data['index'];
+      this.formActionStatus = data['action'];
       console.log('projectId TYPESc ' + data['projectId']);
 
 
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         console.log('projectId TYPES123 ' + JSON.stringify(data));
+        console.log(data)
+        data.filterd = true;
+        data.siteDetails ={
+          projectCode:'',
+          wbsId:'',
+          projectDescription:'',
+          wbsDescription:'',
+          position:''
 
+        };
+        let onboardingData =  onBoardingModel;
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
           console.log('no projectId');
 
           // }}
-          this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 5) * 100);
+          this.formLoadingProgress = 'pie' + ((Object.keys(localStoragedData['actionRequired'][this.storedIndex]).length / 7) * 100);
         } else {
-          Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+          console.log(data)
+          // Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
+          localStoragedData['actionRequired'].push(data);
           this.storage.set('OnBoardingData', localStoragedData);
         }
       });
@@ -80,15 +102,22 @@ export class onboardingNewEmployee {
     } else {
       this.navPreviousData = '';
     }
+
+    this.getNomineeRelationships();
   }
 
   wizardObj = [
+   
     // { title: 'OnBoarding Screen', description: 'OnBoarding Screen details', index: 1, component: newEmpOnboardingDetails },
-    { title: 'Personal Details', key: 'personalDetails', index: 1, component: newEmpPersonalDetail, formStatus: false },
-    { title: 'Contact Details', key: 'contactDetails', index: 2, component: newEmpContactDetails, formStatus: false },
-    { title: 'Nominee & Academic', key: 'familyAcademicDetails', index: 3, component: newEmpFamilyAndAcademic, formStatus: false },
-    { title: 'Employment Details', key: 'employmentDetails', index: 4, component: newEmpEmployeementDetails, formStatus: false },
-    { title: 'KYC Details', key: 'kycDetails', index: 5, component: newEmpKycDetails, formStatus: false }
+   
+    { title: 'Site Details', key: 'siteDetails', index: 1, component: NewEmpSiteDetails, formStatus: false },
+    { title: 'Personal Details', key: 'personalDetails', index: 2, component: newEmpPersonalDetail, formStatus: false },
+    { title: 'Contact Details', key: 'contactDetails', index:3, component: newEmpContactDetails, formStatus: false },
+    { title: 'Nominee & Academic', key: 'familyAcademicDetails', index: 4, component: newEmpFamilyAndAcademic, formStatus: false },
+    { title: 'Employment Details', key: 'employmentDetails', index: 5, component: newEmpEmployeementDetails, formStatus: false },
+    { title: 'KYC Details', key: 'kycDetails', index: 6, component: newEmpKycDetails, formStatus: false },
+    { title: 'Declaration', key: 'declaration', index: 7, component: declaration, formStatus: false }
+
   ];
   ionViewDidLoad() {
     // this.viewContainer.clear();
@@ -122,7 +151,11 @@ export class onboardingNewEmployee {
     }
     this.loadComponent(this.wizardObj[index]['component']);
 
-  }
+    this.storage.get('OnBoardingData').then((localStoragedData) => {
+      console.log(localStoragedData['actionRequired'][this.storedIndex]);
+    })
+
+    }
   nextWizard(index) {
     console.log('next');
 
@@ -136,7 +169,7 @@ export class onboardingNewEmployee {
 
           if(!localStoragedData["actionRequired"][this.storedIndex]){
 
-            localStoragedData["actionRequired"][this.storedIndex] = onBoardingDataModel;
+            localStoragedData["actionRequired"][this.storedIndex] = onBoardingModel;
             delete onBoardingDataModel['id'];
             this.storage.set('OnBoardingData', localStoragedData); 
             
@@ -296,77 +329,320 @@ export class onboardingNewEmployee {
 
           let empCode = localStoragedData['actionRequired'][this.storedIndex]["employeeCode"];
 
-          tempIndex = _.findIndex(localStoragedData['completed'],{employeeCode:empCode});
+          // tempIndex = _.findIndex(localStoragedData['completed'],{employeeCode:empCode});
+          //
+          // if(tempIndex == -1){
+          //
+          //   tempIndex = localStoragedData['completed'].length;
+          //
+          //   console.log("Completed List ",localStoragedData['completed']);
+          //
+          //   console.log("loading ========" + empCode);
+          //
+          //   console.log("loading ========" + tempIndex);
+          //
+          //   console.log("loading ========" + JSON.stringify(localStoragedData['completed'][tempIndex]));
+          //
+          // }
 
-          if(tempIndex == -1){
+          // console.log(localStoragedData['actionRequired'][this.storedIndex]);
+          // console.log(localStoragedData['actionRequired'][this.storedIndex]['projectCode']);
+          // console.log(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]);
+          // console.log(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo']);
+          var employeeDetails = {
+            adharCardNumber:null,
+            accountNumber:null,
+            bloodGroup:null,
+            boardInstitute:null,
+            dob:null,
+            doj:null,
+            educationalQulification:null,
+            emergencyContactNumber:null,
+            empId:null,
+            fatherName:null,
+            fullName:null,
+            gender:null,
+            ifscCode:null,
+            lastName:null,
+            maritalStatus:null,
+            mobile:null,
+            motherName:null,
+            name:null,
+            nomineeContactNumber:null,
+            nomineeName:null,
+            nomineeRelationship:null,
+            onBoardSource:null,
+            onBoardedFrom:null,
+            panCard:null,
+            percentage:null,
+            permanentAddress:null,
+            permanentCity:null,
+            permanentState:null,
+            personalIdentificationMark1:null,
+            personalIdentificationMark2:null,
+            phone:null,
+            presentAddress:null,
+            presentCity:null,
+            presentState:null,
+            previousDesignation:null,
+            projectCode:null,
+            projectDescription:null,
+            religion:null,
+            wbsDescription:null,
+            wbsId:null,
+            position:null,
+            submitted:true,
+            onBoardedPlace:null,
+            gross:null,
+            employer:null,
+            designation:null,
+            newEmployee:false,
+            active:'Y',
+              id:0
+          };
 
-            tempIndex = localStoragedData['completed'].length;
-
-            console.log("Completed List ",localStoragedData['completed']);
-
-            console.log("loading ========" + empCode);
-
-            console.log("loading ========" + tempIndex);
-
-            console.log("loading ========" + JSON.stringify(localStoragedData['completed'][tempIndex]));
-
+          var employeeDocuments = {
+            aadharPhotoCopy:null,
+            aadharPhotoCopyBack:null,
+            employeeSignature:null,
+            profilePicture:null,
+            prePrintedStatement:null,
+            thumbImpressenRight:null,
+            thumbImpressenLeft:null,
+            voterId:null,
+            pancardCopy:null,
+            drivingLicense:null
+          };
+          
+          employeeDetails.id = localStoragedData['actionRequired'][this.storedIndex]['id'] ? localStoragedData['actionRequired'][this.storedIndex]['id'] : 0;
+          employeeDetails.projectCode = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'] : localStoragedData['actionRequired'][this.storedIndex]['projectCode'];
+          employeeDetails.wbsId = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'] : localStoragedData['actionRequired'][this.storedIndex]['wbsId'];
+          employeeDetails.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'] : localStoragedData['actionRequired'][this.storedIndex]['projectDescription'];
+          employeeDetails.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'] : localStoragedData['actionRequired'][this.storedIndex]['wbsDescription'];
+          employeeDetails.position = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] : localStoragedData['actionRequired'][this.storedIndex]['position'];
+          employeeDetails.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
+          employeeDetails.name = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName']: localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+          employeeDetails.gender = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender']: localStoragedData['actionRequired'][this.storedIndex]['gender'];
+          employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus']: localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
+          employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
+          employeeDetails.doj = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'];
+          if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]){
+            employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'];
+          employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][1]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][1]['name'] : localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'];
+          }else{
+            employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'] :'';
+            employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'] : '';
           }
           
+          employeeDetails.religion = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['religion'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['religion']: localStoragedData['actionRequired'][this.storedIndex]['religion'];
+          employeeDetails.bloodGroup = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['bloodGroup'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['bloodGroup'] : localStoragedData['actionRequired'][this.storedIndex]['bloodGroup'];
+          employeeDetails.personalIdentificationMark1 = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark1'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark1'] : localStoragedData['actionRequired'][this.storedIndex]['identificationMark1'];
+          employeeDetails.personalIdentificationMark2 = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark2'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark2'] : localStoragedData['actionRequired'][this.storedIndex]['identificationMark2'];
+          employeeDetails.mobile = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['contactNumber'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['contactNumber'] : localStoragedData['actionRequired'][this.storedIndex]['contactNumber'];
+          if(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'] && localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'][0] ){
+            employeeDetails.emergencyContactNumber = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo'][0];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'] && localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0]){
+            employeeDetails.emergencyContactNumber = localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0] ? localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0] : localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'] ){
+            employeeDetails.emergencyContactNumber = localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0] ? localStoragedData['actionRequired'][this.storedIndex]['emergencyConatctNo'][0]: 0
+          }
+          if(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]){
+            employeeDetails.presentAddress = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['address'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['address'] : localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]['address'];
+            employeeDetails.presentCity = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['city'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['city'] : localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]['city'];
+            employeeDetails.presentState = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['state'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['communicationAddress'][0]['state'] : localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]['state'];
+          }else if( localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]){
+            employeeDetails.presentAddress =  localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]['address'];
+            employeeDetails.presentCity =  localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]['city'];
+            employeeDetails.presentState =  localStoragedData['actionRequired'][this.storedIndex]['communicationAddress'][0]['state'];
+          }
 
-          //if (this.network.type != 'none') {
-          this.componentService.showLoader("Loading OnBoarding");
-          console.log("loading ========" + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-          //   alert(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]));
-          //gopicg
-          //localStoragedData['actionRequired'][this.storedIndex]['projectId']
-          this.onBoardingService.saveOnboardingUser(localStoragedData['actionRequired'][this.storedIndex])
-            .subscribe((res) => {
+          if(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]){
+            employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'] : localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
+            employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'];
+            employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['state'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['state'] : localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]){
+            employeeDetails.permanentAddress =  localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
+            employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['city'];
+            employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
+          }
+
+          if(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]){
+            employeeDetails.educationalQulification = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification'] ? localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['qualification'] : localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['qualification'];
+            employeeDetails.boardInstitute = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['institute'] ? localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['educationQualification'][0]['institute'] : localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['institute'];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]){
+            employeeDetails.educationalQulification = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['qualification'];
+            employeeDetails.boardInstitute = localStoragedData['actionRequired'][this.storedIndex]['educationQualification'][0]['institute'];
+          }
+
+          if(localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]){
+            employeeDetails.nomineeName = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['name'];
+            employeeDetails.nomineeRelationship = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'] ? localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['relationship'] : localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['relationship'];
+            employeeDetails.nomineeContactNumber = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'] ? localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['contactNumber'] : localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['contactNumber'];
+            employeeDetails.percentage = localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'] ? localStoragedData['actionRequired'][this.storedIndex]['familyAcademicDetails']['nomineeDetail'][0]['nominePercentage'] : localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nominePercentage'];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]){
+            employeeDetails.nomineeName =  localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['name'];
+            employeeDetails.nomineeRelationship =  localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['relationship'];
+            employeeDetails.nomineeContactNumber = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['contactNumber'];
+            employeeDetails.percentage = localStoragedData['actionRequired'][this.storedIndex]['nomineeDetail'][0]['nominePercentage'];
+          }
+
+          if(localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]){
+            employeeDetails.employer = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['name'];
+            employeeDetails.designation = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] ? localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] : localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['designation'];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]){
+            employeeDetails.employer = localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['name'];
+            employeeDetails.designation =  localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['designation'];
+          }
+          
+          employeeDetails.adharCardNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
+          employeeDocuments.aadharPhotoCopy = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopy'];
+          employeeDocuments.aadharPhotoCopyBack = localStoragedData['actionRequired'][this.storedIndex]['aadharPhotoCopyBack'];
+          employeeDocuments.employeeSignature = localStoragedData['actionRequired'][this.storedIndex]['employeeSignature'];
+          employeeDocuments.profilePicture = localStoragedData['actionRequired'][this.storedIndex]['profilePicture'];
+          employeeDocuments.prePrintedStatement = localStoragedData['actionRequired'][this.storedIndex]['prePrintedStatement'];
+          employeeDocuments.thumbImpressenRight = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenRight'];
+          employeeDocuments.thumbImpressenLeft = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
+          employeeDocuments.voterId = localStoragedData['actionRequired'][this.storedIndex]['voterId'];
+          employeeDocuments.pancardCopy = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
+          employeeDocuments.drivingLicense = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
+          if(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]){
+            employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] : localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
+            employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] : localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
+          }else if(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]){
+            employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
+            employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
+          }
+          
+          employeeDetails.onBoardedPlace = localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] ? localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace']: localStoragedData['actionRequired'][this.storedIndex]['onboardedPlace'];
+          employeeDetails.onBoardSource = 'Mobile';
+          employeeDetails.onBoardedFrom = 'Mobile';
+          employeeDetails.active = 'Y';
+
+          let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+          employeeDetails.name = name.split(" ")[0];
+          employeeDetails.lastName = name.split(" ")[1];
+          employeeDetails.fullName = name;
+          
+          if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] || localStoragedData['actionRequired'][this.storedIndex]['employeeCode']){
+            employeeDetails.empId = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'];
+          }
+            
+          
+          console.log("employee details");
+          console.log(employeeDetails);
+
+          if(this.formActionStatus && this.formActionStatus === 'update'&& employeeDetails.id){
+            console.log("Update");
+
+            this.onBoardingService.editOnBoardingUser(employeeDetails).subscribe((res)=>{
+              console.log("Sucessfully saved employees");
+              console.log(res);
+
               localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
               //localStoragedData['actionRequired'].splice(this.storedIndex, 1);
-              
+
               console.log("res =======" + JSON.stringify(res));
 
-              localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];  
+              localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];
               console.log("res id=======" + res['id']);
 
-              this.saveImages(localStoragedData['completed'][tempIndex], res['id']).then(res => {
-                this.componentService.closeAll();
+
+
+              this.saveImages(employeeDocuments, res['id']).then(res => {
+
                 console.log('res_image_api ' + JSON.stringify(res));
                 //localStoragedData['completed'].splice(tempIndex, 1);
                 localStoragedData['actionRequired'].splice(this.storedIndex, 1);
                 this.storage.set('OnBoardingData', localStoragedData);
                 // cg
                 this.navCtrl.setRoot(onboardingExistEmployee);
+                this.componentService.showToastMessage("Employee saved successfully ", "center");
               }, err => {
+                this.componentService.showToastMessage("Error in saving Employee ", "center");
 
               })
-            }, (error) => {
-              // alert(JSON.stringify(error));
-              this.componentService.closeAll();
-              this.componentService.showToastMessage('Server Unreachable', 'bottom');
-              this.navCtrl.setRoot(onboardingExistEmployee);
+
+
+            },err=>{
+              console.log("Error in saving employee");
+              console.log(err);
+              this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
+
             })
-          // } else {
-          //   localStoragedData['completed'][tempIndex]['isSync'] = false;
-          //   this.storage.set('OnBoardingData', localStoragedData);
-          //   this.navCtrl.setRoot(onboardingExistEmployee);
-          // }
+
+
+          }else{
+
+            let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
+            employeeDetails.empId = adharNumber.toString().substring(5);
+            employeeDetails.newEmployee = true;
+
+            this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
+              console.log("Sucessfully saved employees");
+              console.log(res);
+
+              localStoragedData['completed'][tempIndex] = localStoragedData['actionRequired'][this.storedIndex];
+              //localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+
+              console.log("res =======" + JSON.stringify(res));
+
+              localStoragedData['actionRequired'][this.storedIndex]['id'] =res['id'];
+              console.log("res id=======" + res['id']);
+
+
+
+              this.saveImages(employeeDocuments, res['id']).then(res => {
+
+                console.log('res_image_api ' + JSON.stringify(res));
+                //localStoragedData['completed'].splice(tempIndex, 1);
+                localStoragedData['actionRequired'].splice(this.storedIndex, 1);
+                this.storage.set('OnBoardingData', localStoragedData);
+                // cg
+                this.navCtrl.setRoot(onboardingExistEmployee);
+                this.componentService.showToastMessage("Employee saved successfully ", "center");
+              }, err => {
+                this.componentService.showToastMessage("Error in saving Employee ", "center");
+
+              })
+
+
+            },err=>{
+              console.log("Error in saving employee");
+              console.log(err);
+              this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
+
+            })
+          }
+
+
         });
       }
     });
   }
 
+
+  
   saveImages(array, id) {
+    console.log("Images arrya");
+    console.log(id);
+    console.log(array);
     let promise = new Promise((resolve, reject) => {
       let imageUpload = Object.keys(imageUploadModal);
 
       for (var i = 0; i < imageUpload.length; i++) {
-        this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
-          .then(function (res) {
-            console.log('image upload ' + res);
-          }, function (err) {
-            console.log(err);
-          })
+        console.log("Image upload");
+        console.log(imageUpload[i]);
+        console.log(array[imageUpload[i]]);
+        if(array[imageUpload[i]] && array[imageUpload[i]] != 'assets/imgs/placeholder.png'){
+          console.log("Uploading images");
+          this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
+              .then(function (res) {
+                console.log('image upload ' + res);
+              }, function (err) {
+                console.log(err);
+              })
+        }
+
       }
       if (i == imageUpload.length) {
         resolve('success')
@@ -424,5 +700,13 @@ export class onboardingNewEmployee {
   }
   clearForm() {
     this.messageService.formClearMessage('clear');
+  }
+
+  getNomineeRelationships(){
+    this.onBoardingService.getNomineeRelationships().subscribe(relationships=>{
+      console.log("Nominee relationships from server");
+      console.log(relationships);
+      this.storage.set('nomineeRelationships',relationships);
+    })
   }
 }

@@ -796,7 +796,7 @@ angular.module('timeSheetApp')
 					$scope.tickets.title = $scope.tickets.title;
 					$scope.title = $scope.tickets.title;
 					$scope.tickets.description = $scope.tickets.description;
-					$scope.tickets.pendingAtUDS = true;
+					//$scope.tickets.pendingAtUDS = true;
 					$scope.selectedSite = {id : data.siteId,name : data.siteName};
 					$scope.selectedEmployee = {id : data.assignedToId,name : data.assignedToName};
 					$scope.tickets.severity = $scope.tickets.severity;
@@ -946,6 +946,18 @@ angular.module('timeSheetApp')
 				$scope.tickets.siteId = $scope.selectedSite.id;
 				$scope.tickets.siteName = $scope.selectedSite.name;
 			}
+			
+			//if($scope.tickets.pendingStatus){
+				//alert($scope.tickets.pendingStatus);
+			if($scope.tickets.pendingStatus === "pendingAtUDS"){
+			 $scope.tickets.pendingAtUDS = true;
+			 $scope.tickets.pendingAtClient = false;
+			}else if($scope.tickets.pendingStatus === "pendingAtClient"){
+				 $scope.tickets.pendingAtUDS = false;
+				 $scope.tickets.pendingAtClient = true;
+			}
+			//}
+			
 			//console.log('selected employee - ' + JSON.stringify($scope.selectedEmployee));
 			if($scope.selectedEmployee) {
 				$scope.tickets.employeeId = $scope.selectedEmployee.id;

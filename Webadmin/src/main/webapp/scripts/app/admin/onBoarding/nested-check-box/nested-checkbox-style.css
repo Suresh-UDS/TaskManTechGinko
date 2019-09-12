@@ -1,0 +1,25 @@
+ul.nested-checkbox-list li{
+
+    padding: 5px 0 0 40px;
+
+}
+
+ul.nested-checkbox-list li{
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+ul.nested-checkbox-list li li{
+
+    font-size: 11px;
+}
+
+ul.nested-checkbox-list li li li{
+
+    font-size: 9px;
+}
+
+.elementText{
+    cursor: pointer;
+}

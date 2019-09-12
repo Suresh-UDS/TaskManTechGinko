@@ -1,0 +1,580 @@
+<div ng-init="loadEmployee()" >
+    <div class="col-md-5">
+<!--        Client Details Card-->
+        <div class="card">
+            <form id="TypeValidation" class="form-horizontal" action="" method="">
+<!--                <div class="card-header card-header-text" data-background-color="rose">-->
+<!--                    <h4 class="card-title">Employee Details</h4>-->
+<!--                </div>-->
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Client Details
+                    </div>
+                </div>
+
+
+
+                <div class="card-content">
+                    <div class="table-responsive">
+                        <table class="table">
+
+                            <tbody>
+
+                            <tr>
+
+                                <td class="col-sm-4">Project Code<span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.projectCode}}</td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="col-sm-4">Description <span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.projectDescription  }}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="col-sm-4">WBS Id <span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.wbsId}}</td>
+
+                            </tr>
+                            
+                            <tr>
+
+                                <td class="col-sm-4">Description <span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.wbsDescription  }}</td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="col-sm-4">Designation No<span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.position  }}</td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td class="col-sm-4">Gross<span class="red-star">*</span></td>
+                                <td class="col-sm-8">{{employee.gross}}</td>
+
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+<!--        Address Details Card-->
+        <div class="card">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Address Details
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+                        <div class="table-responsive">
+                            <table class="table">
+                            <tbody class="">
+                                <tr>
+                                    <td class="col-sm-4">Mobile Number <span class="red-star">*</span></td>
+                                    <td class="col-sm-8">{{employee.mobile}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">Emergency Contact No.</td>
+                                    <td class="col-sm-8">{{employee.emergencyContactNumber}}</td>
+                                </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Present Address <span class="red-star">*</span></td>
+                                        <td class="col-sm-8">{{employee.presentAddress}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">City <span class="red-star">*</span></td>
+                                        <td class="col-sm-8">{{employee.presentCity}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">State <span class="red-star">*</span></td>
+                                        <td class="col-sm-8">{{employee.presentState}}</td>
+                                    </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">Permanent Address <span class="red-star">*</span></td>
+                                    <td class="col-sm-8">{{employee.permanentAddress}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">City <span class="red-star">*</span></td>
+                                    <td class="col-sm-8">{{employee.permanentCity}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">State <span class="red-star">*</span></td>
+                                    <td class="col-sm-8">{{employee.permanentState}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-sm-12">
+                            <label>Address Proof Image <span class="red-star">*</span></label>
+                            <div>
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(addressproofImageUrl)" >
+                               
+                                        <img ng-if="addressproofImageUrl" class="attachImages" style=" border-radius: 0px" ng-src={{addressproofImageUrl}} alt="...">
+                                   </a>
+                                   <img ng-if="!addressproofImageUrl"  class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                 
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+
+<!--        Previous Employer Details Card-->
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Previous Employer Details
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="row" style="margin-top: 15px">
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody class="">
+                            <tr>
+                                <td class="col-sm-4">Employer</td>
+                                <td class="col-sm-8">{{employee.employer}}</td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-4">Designation</td>
+                                <td class="col-sm-8">{{employee.previousDesignation}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         </div>
+        </div>
+    </div>
+
+
+<div>
+    <div class="col-md-7">
+<!--        Employee Details Card-->
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Employee Details
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="row" style="margin-top: 15px">
+                <div class="col-sm-8">
+                
+               
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody class="">
+                            <tr>
+                                <td class="col-sm-6">Name <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.name}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Last Name <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.lastName}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Code <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.empId}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Father Name <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.fatherName}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Mother Name</td>
+                                <td class="col-sm-6">{{employee.motherName}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Gender <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.gender}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Marital Status <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.maritalStatus}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">D.O.B <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.dob}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">D.O.J <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.doj}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Religion </td>
+                                <td class="col-sm-8">{{employee.religion}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-4">Blood Group </td>
+                                <td class="col-sm-8">{{employee.bloodGroup}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Personal Identification Mark 1</td>
+                                <td class="col-sm-6">{{employee.personalIdentificationMark1}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Personal Identification Mark 2</td>
+                                <td class="col-sm-6">{{employee.personalIdentificationMark2}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Education Qualification </td>
+                                <td class="col-sm-6">{{employee.educationalQulification}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Board / Institute </td>
+                                <td class="col-sm-6">{{employee.boardInstitute}}</td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-sm-6">Adhar Card Number <span class="red-star">*</span></td>
+                                <td class="col-sm-6">{{employee.adharCardNumber}}</td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                     </div>
+                    <div class="col-md-4 col-sm-4">
+                       
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput" >
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)"  ng-if="profilepicUrl" data-target="#myModal"  data-dismiss="#myModal" ng-click="loadCompletedJob(profilepicUrl)" >
+                                    <img ng-if="profilepicUrl" class="attachImages" style=" height:150px !important; border-radius: 0px" ng-src={{profilepicUrl}} alt="...">
+                                
+                            </a>
+                            <img ng-if="!profilepicUrl" class="attachImages" style=" height:150px !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+<!--        Nominee Details Card -->
+        <div class="card">
+
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Nominee Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody class="">
+                                    <tr>
+                                        <td class="col-sm-4">Nominee Name <span class="red-star">*</span></td>
+                                        <td class="col-sm-8">{{employee.nomineeName}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Relationship <span class="red-star">*</span></td>
+                                        <td class="col-sm-8">{{employee.nomineeRelationship}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Contact No.  </td>
+                                        <td class="col-sm-8">{{employee.nomineeContactNumber}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-sm-4">Percentage <span class="red-star">*</span></td>
+                                        <td class="col-sm-8">{{employee.percentage}}</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+<!--        Bank Details Card-->
+        <div class="card">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        Bank Details
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="row" style="margin-top: 15px">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody class="">
+                                <tr>
+                                    <td class="col-sm-4">Account Number <span class="red-star">*</span></td>
+                                    <td class="col-sm-8">{{employee.accountNumber}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="col-sm-4">IFSC Code <span class="red-star">*</span></td>
+                                    <td class="col-sm-8">{{employee.ifscCode}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <label>Bank Passbook Image <span ng-if="employee.newEmployee" class="red-star">*</span></label>
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail">
+                                      <!-----------------modiffed by suresh-->
+                                        <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(bankPassBookImageUrl)" >
+                                       
+                                            <img ng-if="bankPassBookImageUrl" class="attachImages" ng-src="{{bankPassBookImageUrl}}" alt="...">
+                                      
+                                        </a>
+                                        <img  ng-if="!bankPassBookImageUrl" class="attachImages"  style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" style=" border-radius: 0px">
+
+
+                                       <!----------------------------------------->
+                                         </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" *ngIf="voterIdUrl" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice" style="width: 600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <h5 class="modal-title" id="myModalLabel">Photo</h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="txt-align-center">
+                    <img id="photoStart" width="100%" />
+                </div>
+
+
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-danger btn-round" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+<!--    Documents upload Card-->
+    <div class="col-md-12">
+        <div class="card">
+            <div class="panel panel-default" >
+                <div class="panel-heading">
+                    Documents
+                </div>
+            </div>
+
+            <div class="card-content">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <label>Adharcard Front Image <span class="red-star">*</span></label><BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardFrontUrl)" >
+                             
+                              <img ng-if="adharCardFrontUrl" class="attachImages" style=" border-radius: 0px" ng-src={{adharCardFrontUrl}} alt="...">
+                             </a>
+<img ng-if="!adharCardFrontUrl" style=" border-radius: 0px" class="attachImages" src="../../assets/img/image_placeholder.jpg" alt="...">
+                          
+
+                               </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Adharcard Back Image <span class="red-star">*</span></label> <BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(adharCardBackUrl)" >
+                               
+                                    <img ng-if="adharCardBackUrl" class="attachImages" style=" border-radius: 0px" ng-src={{adharCardBackUrl}} alt="...">
+                                   </a>
+                                   <img ng-if="!adharCardBackUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                               
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Fingerprint Left Image </label><BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintLeftUrl)" >
+                               
+
+                                    <img ng-if="fingerprintLeftUrl" class="attachImages"  style=" border-radius: 0px" ng-src={{fingerprintLeftUrl}} alt="...">
+                                     </a>
+                                     <img ng-if="!fingerprintLeftUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                         
+
+                                  </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Fingerprint Right Image </label><BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput" class="attachImages" >
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintrightUrl)" >
+                                    <img ng-if="fingerprintrightUrl" class="attachImages" style=" border-radius: 0px" ng-src={{fingerprintrightUrl}} alt="...">
+                                </a> 
+                                <img ng-if="!fingerprintrightUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                           
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3">
+                        <label>Driving License Image </label><BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(drivingLicenseUrl)" >
+                                    <img ng-if="drivingLicenseUrl" class="attachImages" style=" border-radius: 0px" ng-src={{drivingLicenseUrl}} alt="...">
+                                 </a>
+                                 <img ng-if="!drivingLicenseUrl"  class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                           
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Voter Id Image </label> <BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(voterIdUrl)" >
+                                    
+                                    <img ng-if="voterIdUrl" class="attachImages" style=" border-radius: 0px" ng-src={{voterIdUrl}} alt="...">
+                                </a>
+                                <img ng-if="!voterIdUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-3">
+                        <label>Pancard Image </label><BR>
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
+                                    <img ng-if="pancardUrl" class="attachImages" style=" border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                </a>
+                                <img ng-if="!pancardUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="col-md-3 col-sm-3">
+                        <label>Profile Picture Image 
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                                <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(profilepicUrl)" >
+                                    <img ng-if="profilepicUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" ng-src={{profilepicUrl}} alt="...">
+                                <img ng-if="!profilepicUrl" style="width: 100% !important; height: 100% !important; border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </a></div>
+                        </div>
+                    </div> -->
+                </div>
+
+
+        </div>
+    </div>
+</div>
+    
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-7">
+        <p   class="txt-align-lft" ng-if="fingerprintLeftUrl || fingerprintRightUrl">Download Declaration Forms for below languages</p>
+
+        <button ng-if="fingerprintLeftUrl || fingerprintRightUrl" class="btn btn-primary close-button-right b10" type="button" ng-repeat="declaration in declarationTypes track by $index" ng-disabled="$index > 0" ng-click="downloadDeclarationForm(declaration.language)"><i class="fas fa-download"></i> &nbsp;{{declaration.language}}</button>
+
+    </div>
+
+    <div class="col-lg-5 txt-align-rgt" ng-init="loadDeclarionLanguages()">
+
+        <p ng-if="!employee.verified && !enableApproval && employee.submitted" class="txt-align-rgt text-danger">Please enter all mandatory fields and upload mandatory images to approve employee</p>
+
+        <p ng-if="!employee.submitted" class="text-danger">Imported Employee details are not submitted. so only can view</p>
+
+        <p ng-if="enableApproval" >&nbsp;</p>
+        
+        <button class="btn btn-default close-button-right b10" type="button" ng-click="conform('back')" id="close-button-right">
+            <i class="fas fa-arrow-left"></i> &nbsp; Back
+        </button>
+     
+        <button has-permission="OnBoarding:Approve" class="btn btn-success ld ld-over-inverse" type="button" ng-if="!employee.verified && enableApproval && employee.submitted"  ng-click="conform('approve')" id="close-button-right"  ng-disabled="approveOnboardingLoader" >
+            <span  ng-show="approveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp;<i class="fas fa-check"></i>&nbsp; Approve Employee
+        </button>
+        
+        <button has-permission="OnBoarding:Edit" class="btn btn-success ld ld-over-inverse" type ="button" ng-click="editpage('edit')" ng-if="employee.submitted && !employee.verified" id="close-button-right"><i class="fas fa-pencil-alt"></i> &nbsp;Edit
+        </button>
+
+    </div>
+
+</div>
+ 

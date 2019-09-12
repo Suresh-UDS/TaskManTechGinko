@@ -5,7 +5,7 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
     'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
      'infinite-scroll', 'App.filters','uiGmapgoogle-maps','checklist-model','ui.select', 'ngSanitize' ,
      'alexjoffroy.angular-loaders','chart.js','jkAngularRatingStars',
-     'angular-star-rating-new','paginations','excelGrid','confirmMsg','ngIdle', 'ui.tree', 'ui.bootstrap'
+     'angular-star-rating-new','paginations','excelGrid','confirmMsg','ngIdle', 'ui.bootstrap'
      //,'spring-security-csrf-token-interceptor'
      ])
 
@@ -212,6 +212,11 @@ angular.module('timeSheetApp', ['LocalStorageModule','storageService','angular.f
         $rootScope.filterModal2 = function()
         {
             $('#advancedFilter').modal();
+        }
+        
+        $rootScope.filterModalOnboarding = function()
+        {
+            $('#OnbordingFilterExport').modal();
         }
 
 
