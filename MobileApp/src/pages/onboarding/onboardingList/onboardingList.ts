@@ -211,12 +211,55 @@ export class onboardingExistEmployee implements OnInit {
         }
         objectkeys = Object.keys(onBoardingModel[list]);
         objectValues = Object['values'](onBoardingModel[list]);
-        objectFormattedValues = objectValues.filter((data) => {
-          if (data && JSON.stringify(data) !== '{}') {
-            return data;
-          }
-        });
-        keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100
+        
+
+
+        let objectFormattedValuesLength = 0;
+        let objectFormattedKeysLength = 0;
+
+          for(let obv in objectValues){
+            // if (data && JSON.stringify(data) !== '{}') {
+            //   return data;
+            // }
+            let dataValues = objectValues[obv]
+            if(dataValues){
+
+              if(Array.isArray(dataValues)){
+
+                  let subDataLength = dataValues.length;
+                  let subDataValueLength = 0;
+
+                  for(let j in dataValues){
+
+                      let subSeccondLevelKeysLength =  Object.keys(dataValues[j]).length;
+                      let subSeccondLevelValues = 0;
+
+                      for(let h in dataValues[j]){
+
+                        if(dataValues[j][h]){
+
+                          subSeccondLevelValues ++;
+
+                        }
+
+                      }
+
+                      subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
+
+                  }
+
+                  objectFormattedValuesLength += subDataValueLength / subDataLength 
+
+              }
+              else{
+                objectFormattedValuesLength ++;
+              }
+            }
+
+          };
+
+
+        keyPercentage = (objectFormattedValuesLength / objectkeys.length) * 100
         objectPercentage += keyPercentage;
 
       }
