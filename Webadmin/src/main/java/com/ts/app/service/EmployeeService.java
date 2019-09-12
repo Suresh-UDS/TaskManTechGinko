@@ -1887,6 +1887,98 @@ public class    EmployeeService extends AbstractService {
             }
         return result;
     }
+//******************************************Modified by Vinoth*******************************************************************************
+    public SearchResult<EmployeeDTO> findExportOnBoardingBySearchCrieria(SearchCriteria searchCriteria) {
+        User user = userRepository.findOne(searchCriteria.getUserId());
+        SearchResult<EmployeeDTO> result = new SearchResult<EmployeeDTO>();
+        if(searchCriteria != null) {
+
+            Pageable pageRequest = null;
+            List<Employee> allEmpsList = new ArrayList<>();
+            Page<Employee> page = null;
+            List<EmployeeDTO> transactions = null;
+
+            if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
+                Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
+                log.debug("Sorting object" + sort);
+                if(searchCriteria.isList()) {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+                }else {
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), searchCriteria.getSort(), sort);
+                }
+            } else {
+                if(searchCriteria.isList()) {
+                    Sort sort = new Sort(Sort.Direction.ASC , "name");
+                    pageRequest = createPageSort(searchCriteria.getCurrPage(), sort);
+                }else {
+                    pageRequest = createPageRequest(searchCriteria.getCurrPage());
+                }
+            }
+
+
+            if(StringUtils.isNotEmpty(searchCriteria.getBranchCode())){
+
+
+                if(StringUtils.isNotEmpty(searchCriteria.getProjectCode())){
+
+                    if(StringUtils.isEmpty(searchCriteria.getWbsCode())){
+                        searchCriteria.setWbsCodes(onboardingUserConfigService.findWbsCodesByProjectAndBranch(user.getId(),searchCriteria.getBranchCode(),searchCriteria.getProjectCode()));
+                    }
+
+                }else{
+
+                    searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByBranch(user.getId(),searchCriteria.getBranchCode()));
+                    searchCriteria.setWbsCodes(onboardingUserConfigService.findWBSByProjectCodes(user.getId(),searchCriteria.getProjectCodes()));
+
+
+                }
+
+            }else{
+                searchCriteria.setProjectCodes(onboardingUserConfigService.findProjectCodesByUser(user.getId()));
+                searchCriteria.setWbsCodes(onboardingUserConfigService.findWBSCodesByUser(user.getId()));
+            }
+
+
+            log.debug("findBySearchCriteria - "+searchCriteria.getSiteId() +", "+searchCriteria.getEmployeeId() +", "+searchCriteria.getProjectId());
+
+            boolean isClient = false;
+
+            UserRole role = null;
+
+            if(user != null) {
+                role = user.getUserRole();
+            }
+
+            if(role != null) {
+                isClient = role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue());
+            }
+                searchCriteria.setAdmin(true);
+                page = employeeRepository.findAll(new EmployeeExportSpecification(searchCriteria, true),pageRequest);
+                allEmpsList.addAll(page.getContent());
+
+
+            if(CollectionUtils.isNotEmpty(allEmpsList)) {
+                //transactions = mapperUtil.toModelList(page.getContent(), EmployeeDTO.class);
+                if(transactions == null) {
+                    transactions = new ArrayList<EmployeeDTO>();
+                }
+                List<Employee> empList =  allEmpsList;
+                if(CollectionUtils.isNotEmpty(empList)) {
+                    for(Employee emp : empList) {
+                        User empUser = emp.getUser();
+
+                            transactions.add(mapToModelOnBoarding(emp));
+                    }
+                }
+                if(CollectionUtils.isNotEmpty(transactions)) {
+                    buildSearchResult(searchCriteria, page, transactions,result);
+                }
+            }
+        }
+        return result;
+    }
+/******************************************************************************************************************************************/
+
 
     public SearchResult<EmployeeDTO> findOnBoardingBySearchCrieria(SearchCriteria searchCriteria) {
         User user = userRepository.findOne(searchCriteria.getUserId());

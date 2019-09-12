@@ -587,7 +587,7 @@ public class EmployeeResource {
         if(searchCriteria != null) {
             log.debug("Emp - control comes here....");
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
-            SearchResult<EmployeeDTO> result = employeeService.findOnBoardingBySearchCrieria(searchCriteria);
+            SearchResult<EmployeeDTO> result = employeeService.findExportOnBoardingBySearchCrieria(searchCriteria);
             log.debug("Everything is FINE------->");
             List<EmployeeDTO> results = result.getTransactions();
             log.debug("VALUES OF RESULTS --------->"+results);
