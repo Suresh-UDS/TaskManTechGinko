@@ -71,7 +71,6 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
             // console.log(localStoragedData['actionRequired'][currentIndex][keyData][key]);
             // console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][keyData][key]);
             
-            if()
 
             onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][keyData][key]?
             localStoragedData['actionRequired'][currentIndex][keyData][key]:
@@ -88,14 +87,51 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
           objectValues = Object['values'](onBoardingModel[keyData]);
           console.log('value_1 ' +  ' / ' + objectkeys + ' / '+ objectValues);
 
-          objectFormattedValues = objectValues.filter((data) => {
-            if (data && JSON.stringify(data) !== '{}') {
-              return data;
+          let objectFormattedValuesLength = 0;
+          let objectFormattedKeysLength = 0;
+
+          for(let obv in objectValues){
+            // if (data && JSON.stringify(data) !== '{}') {
+            //   return data;
+            // }
+            if(data){
+
+              if(Array.isArray(data)){
+
+                  let subDataLength = data.length;
+                  let subDataValueLength = 0;
+
+                  for(let j in data){
+
+                      let subSeccondLevelKeysLength =  Object.keys(data[j]).length;
+                      let subSeccondLevelValues = 0;
+
+                      for(let h in data[j]){
+
+                        if(data[j][h]){
+
+                          subSeccondLevelValues ++;
+
+                        }
+
+                      }
+
+                      subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
+
+                  }
+
+                  objectFormattedValuesLength += subDataValueLength / subDataLength 
+
+              }
+              else{
+                objectFormattedValuesLength ++;
+              }
             }
-          });
+
+          };
 
 
-          keyPercentage = (objectFormattedValues.length / objectkeys.length) * 100
+          keyPercentage = (objectFormattedValuesLength / objectkeys.length) * 100
           this.onboardingFormStatus[i]['status'] = Math.floor(keyPercentage) + '%';
 
 
