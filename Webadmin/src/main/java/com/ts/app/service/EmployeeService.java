@@ -366,7 +366,7 @@ public class    EmployeeService extends AbstractService {
 
 /******************************Modified by Vinoth**********************************************************/   
     
-    public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) {
+    public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
         Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
         employee.setFullName(employee.getName()+" "+employee.getLastName());
         employee.setUser(null);
@@ -377,7 +377,7 @@ public class    EmployeeService extends AbstractService {
     	return employeeDTO;
     }
 
-    public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
+    public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
         Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
         employeeDTO.setId(employee.getId());
         employeeDTO.setFullName(employeeDTO.getName()+" "+employeeDTO.getLastName());

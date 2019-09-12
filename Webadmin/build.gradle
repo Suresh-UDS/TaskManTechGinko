@@ -211,6 +211,17 @@ dependencies {
     compile 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'  
     
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.163' 
+    // https://mvnrepository.com/artifact/org.apache.velocity/velocity
+compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+compile group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+// https://mvnrepository.com/artifact/com.itextpdf.tool/xmlworker
+compile group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.5.10'
+// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.11'
+
+
+    
     
     //compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.11.0' 
     //compile group: 'com.squareup.okio', name: 'okio', version: '1.13.0'   

@@ -54,7 +54,8 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private LocationRepository locationRepository;
-
+ 	
+	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
@@ -133,7 +134,6 @@ public class JobManagementService extends AbstractService {
     @Inject
     private JobChecklistRepository jobChecklistRepository;
 
-
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
 		if(!StringUtils.isEmpty(toBeJobStatus) &&
@@ -153,6 +153,31 @@ public class JobManagementService extends AbstractService {
         List<CheckInOutDTO> result = mapperUtil.toModelList(dtoList,CheckInOutDTO.class);
         return result;
     }
+  
+    public JobDTO findJobCheckList( long jobId ){
+    	
+        Job job = jobRepository.getOne(jobId);
+       
+        
+        JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+         
+        mapperUtil.toModelList( job.getChecklistItems() , JobChecklistDTO.class );
+        
+        
+        return jobDto;
+      
+    }
+    
+	/*
+	 * @SuppressWarnings("unlikely-arg-type") public JobChecklist
+	 * findJobCheckListStatus( long jobId,SearchCriteria searchCriteria ){
+	 * 
+	 * JobChecklist jobs = jobChecklistRepository.getOne(jobId);
+	 * if(searchCriteria.isCompletedStatus()==false) {
+	 * mapperUtil.equals(jobs.isCompleted()); } return jobs;
+	 * 
+	 * }
+	 */
 
 	public SearchResult<JobDTO> findBySearchCrieria(SearchCriteria searchCriteria, boolean isAdmin) {
 		SearchResult<JobDTO> result = new SearchResult<JobDTO>();
@@ -1339,21 +1364,21 @@ public class JobManagementService extends AbstractService {
 				JobChecklist checklist = mapToChecklistEntity(jobclDto);
 				if(checklist.getImage_1() != null) {
 					long jobId = job.getId();
-					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
+					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemId(), jobId, "image_1");
 					String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_1(fileName);
 					jobclDto.setImageUrl_1(Imageurl_1);
 				}
 				if(checklist.getImage_2() != null) {
                     long jobId = job.getId();
-					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), jobId, "image_2");
+					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemId(), jobId, "image_2");
 					String Imageurl_2 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_2(fileName);
 					jobclDto.setImageUrl_2(Imageurl_2);
 				}
 				if(checklist.getImage_3() != null) {
                     long jobId = job.getId();
-					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), jobId, "image_3");
+					String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemId(), jobId, "image_3");
 					String Imageurl_3 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
 					checklist.setImage_3(fileName);
 					jobclDto.setImageUrl_3(Imageurl_3);
@@ -1750,21 +1775,21 @@ public class JobManagementService extends AbstractService {
         JobChecklist checklist = mapToChecklistEntity(jobChecklistDTO);
         if(checklist.getImage_1() != null) {
             long jobId = jobChecklistDTO.getJobId();
-            String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), jobId, "image_1");
+            String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemId(), jobId, "image_1");
             String Imageurl_1 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
             checklist.setImage_1(fileName);
             jobChecklistDTO.setImageUrl_1(Imageurl_1);
         }
         if(checklist.getImage_2() != null) {
             long jobId = jobChecklistDTO.getJobId();
-            String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), jobId, "image_2");
+            String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemId(), jobId, "image_2");
             String Imageurl_2 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
             checklist.setImage_2(fileName);
             jobChecklistDTO.setImageUrl_2(Imageurl_2);
         }
         if(checklist.getImage_3() != null) {
             long jobId = jobChecklistDTO.getJobId();
-            String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), jobId, "image_3");
+            String fileName = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemId(), jobId, "image_3");
             String Imageurl_3 = cloudFrontUrl + bucketEnv + checkListpath + fileName;
             checklist.setImage_3(fileName);
             jobChecklistDTO.setImageUrl_3(Imageurl_3);
@@ -2369,7 +2394,7 @@ public class JobManagementService extends AbstractService {
 						boolean isBase64 = Base64.isBase64(base64String);
 						JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
 						if(isBase64){
-							String image1 = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemName(), checklist.getJobId(), "image_1");
+							String image1 = amazonS3utils.uploadCheckListImage(checklist.getImage_1(), checklist.getChecklistItemId(), checklist.getJobId(), "image_1");
 							jobChecklist.setImage_1(image1);
 						}
 					}
@@ -2380,7 +2405,7 @@ public class JobManagementService extends AbstractService {
 						boolean isBase64 = Base64.isBase64(base64String);
 						JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
 						if(isBase64){
-							String image2 = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemName(), checklist.getJobId(), "image_2");
+							String image2 = amazonS3utils.uploadCheckListImage(checklist.getImage_2(), checklist.getChecklistItemId(), checklist.getJobId(), "image_2");
 							jobChecklist.setImage_2(image2);
 						}
 					}
@@ -2391,7 +2416,7 @@ public class JobManagementService extends AbstractService {
 						boolean isBase64 = Base64.isBase64(base64String);
 						JobChecklistDTO checklist = mapperUtil.toModel(jobChecklist, JobChecklistDTO.class);
 						if(isBase64){
-							String image3 = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemName(), checklist.getJobId(), "image_3");
+							String image3 = amazonS3utils.uploadCheckListImage(checklist.getImage_3(), checklist.getChecklistItemId(), checklist.getJobId(), "image_3");
 							jobChecklist.setImage_3(image3);
 						}
 					}
@@ -2459,4 +2484,8 @@ public class JobManagementService extends AbstractService {
 		}
 		return jobDTO;
 	}
+
+	
+
+	
 }
