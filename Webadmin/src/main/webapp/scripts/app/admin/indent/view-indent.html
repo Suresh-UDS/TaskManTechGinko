@@ -109,7 +109,7 @@
                                     <td>{{material.quantity}}</td>
                                     <td>{{material.issuedQuantity ? material.issuedQuantity : "Nil"}}</td>
                                     <td width="10%">
-                                        <input type="number" class="form-control" name="issue_qty"  min = 0 ng-disabled="material.pendingQuantity === 0" ng-model="material.currentQuantity" ng-blur="validate(material, material.currentQuantity)" aria-required="true" aria-invalid="true">
+                                        <input type="number" class="form-control" name="issue_qty"  min = 0 ng-disabled="material.pendingQuantity === 0" ng-model="material.currentQuantity" ng-blur="validate(material, material.currentQuantity)" aria-required="true" aria-invalid="true" readonly>
                                     </td>
                                     <td>{{material.pendingQuantity}}</td>
                                 </tr>
