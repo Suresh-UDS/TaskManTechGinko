@@ -12,7 +12,6 @@ import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
-import com.ts.app.domain.Users;
 import com.ts.app.repository.JobChecklistRepository;
 import com.ts.app.repository.JobRepository;
 import com.ts.app.security.SecurityUtils;
