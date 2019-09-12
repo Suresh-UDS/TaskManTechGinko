@@ -83,6 +83,12 @@ angular.module('timeSheetApp')
 			$scope.SelectClients = [];
 			$scope.SelectSite = {};
 			$scope.SelectSites = [];
+			
+		    $scope.downloadPdf = function(){
+
+				location.href = "/api/job/genpdf/"+$scope.job.id;
+
+			}
 
 			/*
 			 **
@@ -1028,6 +1034,7 @@ angular.module('timeSheetApp')
 					$scope.editJob()
 				}else {
 					$scope.job = {};
+					
 					$scope.job.scheduleDailyExcludeWeekend = true;
 					$scope.job.schedule = 'ONCE';
 					$scope.job.active = 'Y';
