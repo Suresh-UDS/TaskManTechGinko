@@ -54,7 +54,8 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private LocationRepository locationRepository;
-
+ 	
+	
 	@Inject
 	private MapperUtil<AbstractAuditingEntity, BaseDTO> mapperUtil;
 
@@ -133,7 +134,6 @@ public class JobManagementService extends AbstractService {
     @Inject
     private JobChecklistRepository jobChecklistRepository;
 
-
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
 		if(!StringUtils.isEmpty(toBeJobStatus) &&
@@ -153,6 +153,31 @@ public class JobManagementService extends AbstractService {
         List<CheckInOutDTO> result = mapperUtil.toModelList(dtoList,CheckInOutDTO.class);
         return result;
     }
+  
+    public JobDTO findJobCheckList( long jobId ){
+    	
+        Job job = jobRepository.getOne(jobId);
+       
+        
+        JobDTO jobDto = mapperUtil.toModel(job, JobDTO.class);
+         
+        mapperUtil.toModelList( job.getChecklistItems() , JobChecklistDTO.class );
+        
+        
+        return jobDto;
+      
+    }
+    
+	/*
+	 * @SuppressWarnings("unlikely-arg-type") public JobChecklist
+	 * findJobCheckListStatus( long jobId,SearchCriteria searchCriteria ){
+	 * 
+	 * JobChecklist jobs = jobChecklistRepository.getOne(jobId);
+	 * if(searchCriteria.isCompletedStatus()==false) {
+	 * mapperUtil.equals(jobs.isCompleted()); } return jobs;
+	 * 
+	 * }
+	 */
 
 	public SearchResult<JobDTO> findBySearchCrieria(SearchCriteria searchCriteria, boolean isAdmin) {
 		SearchResult<JobDTO> result = new SearchResult<JobDTO>();
@@ -2459,4 +2484,8 @@ public class JobManagementService extends AbstractService {
 		}
 		return jobDTO;
 	}
+
+	
+
+	
 }

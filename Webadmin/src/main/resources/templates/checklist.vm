@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Insert title here</title>
+<style type="text/css">
+
+
+  html,body{
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+  }
+  .valueField{
+    font-weight: bold;
+  }
+  table{
+    width: 100%;
+    font-size: 12px;
+  }
+  .textRight{
+    text-align: right;
+  }
+  .textLeft{
+    text-align: left;
+  }
+  .container{
+    padding: 25px;
+  }
+  h2,h3,h4{
+    text-align: center;
+  }
+</style>
+</head>
+<body> 
+
+  <div class="container">
+
+    <h2>$jobCheckListName</h2>
+    <h4>Client Name : <span class="valueField">SONY</span></h4>
+
+    <table cellpadding="5" cellspacing="0" border="0">
+
+      <tr>
+        
+         <td>Job Id : <span class="valueField">$job.getId()</span></td>
+        
+         <td class="textRight"> Job Duration <span class="valueField"></span> </td>
+       
+
+      </tr>
+
+      <tr >
+      
+         <td class="textLeft">Job Name : <span class="valueField">$job.getTitle()</span></td>
+            <td class="textRight">Start Time :<span class="valueField">$actualStartTime to $actualEndTime</span></td>
+
+
+      </tr>
+
+    </table>
+
+<h2>List Items</h2>
+
+ <table cellpadding="5" cellspacing="0" border="1">
+
+
+  	<tr>
+        	<td >SNo</td>
+        <td >Name </td>
+        <td>Status </td>
+        <td >Remarks </td>
+     </tr>
+     
+     
+       #foreach( $checklistItems in $jobCheckList)
+  
+<tr>
+
+	<td>1</td>
+       <td> $checklistItems.getChecklistItemName()</td>   
+       <td> $checklistItems.isCompleted() </td>
+       <td> $checklistItems.getRemarks()</td>
+       
+	 </tr>
+          
+	 #end
+ 
+ </table> 
+
+
+
+  </div>
+
+</body>
+</html>
+
+
+
+

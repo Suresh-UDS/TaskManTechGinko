@@ -1,30 +1,64 @@
 package com.ts.app.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.ts.app.domain.AbstractAuditingEntity;
+import com.ts.app.domain.Checklist;
+import com.ts.app.domain.ChecklistItem;
+import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
 import com.ts.app.domain.User;
+import com.ts.app.domain.Users;
+import com.ts.app.repository.JobChecklistRepository;
+import com.ts.app.repository.JobRepository;
 import com.ts.app.security.SecurityUtils;
 import com.ts.app.service.*;
 import com.ts.app.service.util.CacheUtil;
+import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.MapperUtil;
 import com.ts.app.service.util.ReportUtil;
 import com.ts.app.web.rest.dto.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URI;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.*;
 
 /**
@@ -130,6 +164,7 @@ public class JobManagementResource {
         if(response != null) {
         		if(StringUtils.isEmpty(response.getErrorMessage())) {
 	            long siteId = response.getSiteId();
+	          
 	            List<User> users = userService.findUsers(siteId);
 	            if(CollectionUtils.isNotEmpty(users)) {
 	                if (StringUtils.isNotEmpty(response.getStatus())
@@ -493,5 +528,110 @@ public class JobManagementResource {
 
     }
 
+    @RequestMapping(value="/job/genpdf/{jobid}",method=RequestMethod.GET)
+	public HttpEntity<byte[]> createPdf(@PathVariable("jobid") long jobId ) throws NullPointerException {
+	
+	     String filename  = "test.pdf";
+//	     String path = UriComponentsBuilder.fromPath("D:\\CheckListPdf").build().toUriString();
+	     
+	     final URI path = ServletUriComponentsBuilder.fromCurrentServletMapping().path("D:/CheckListPdf").build().toUri();
+         
+	     VelocityEngine ve = new VelocityEngine();
+		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+		ve.setProperty("classpath.resource.loader.class",
+				ClasspathResourceLoader.class.getName());
+		ve.init();
+		Template t = ve.getTemplate("templates/checklist.vm");
+	
+		VelocityContext context = new VelocityContext();
+	 
+	
+		JobDTO job =  jobService.findJobCheckList(jobId);
+		/*
+		 * JobChecklist jobs=jobService.findJobCheckListStatus(jobId, searchCriteria);
+		 */
+		if(job !=null ) {
+			
+			context.put("job", job);
+			
+			if(job.getActualEndTime()!=null) {
+
+				context.put("actualStartTime", DateUtil.formatToDateString(job.getActualStartTime(), "dd-MM-yyyy hh:mm a "));
+				context.put("actualEndTime", DateUtil.formatToDateString(job.getActualEndTime(), "dd-MM-yyyy hh:mm a "));
+			}
+			else {
+				
+				context.put("actualStartTime", DateUtil.formatToDateString(job.getPlannedStartTime(), "dd-MM-yyyy hh:mm a "));
+				context.put("actualEndTime", DateUtil.formatToDateString(job.getPlannedEndTime(), "dd-MM-yyyy hh:mm a"));
+			}
+			
+		} /*
+			 * file:///C:/Users/nivetha.m/Downloads/
+			 */		
+		if(job.getChecklistItems()!=null) {
+			
+			context.put("jobCheckListName",job.getChecklistItems().get(0).getChecklistName()); 
+			context.put("jobCheckList", job.getChecklistItems());
+			
+		}
+		/*
+		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {
+		 * context.put("Jobstatus", "Pending"); }
+		 */
+		StringWriter writer = new StringWriter();
+		t.merge(context, writer);
+	
+		System.out.println(writer.toString());
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+		baos = generatePdf(writer.toString());
+
+		HttpHeaders header = new HttpHeaders();
+	    header.setContentType(MediaType.parseMediaType("application/pdf"));
+	    header.set(HttpHeaders.CONTENT_DISPOSITION,
+	                   "attachment;  filename=" + filename.replace(" ", "_"));
+		
+	    header.setContentLength(baos.toByteArray().length);
+        header.setLocation(path);
+	    return new HttpEntity<byte[]>(baos.toByteArray(), header);
+	}
+	
+
+	public ByteArrayOutputStream generatePdf(String html) {
+
+		String pdfFilePath = "";
+		PdfWriter pdfWriter = null;
+
+		// create a new document
+		Document document = new Document();
+		try {
+
+			document = new Document();
+		
+		
+			document.setPageSize(PageSize.LETTER);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PdfWriter.getInstance(document, baos);
+
+			// open document
+			document.open();
+
+			XMLWorkerHelper xmlWorkerHelper = XMLWorkerHelper.getInstance();
+			xmlWorkerHelper.getDefaultCssResolver(true);
+			xmlWorkerHelper.parseXHtml(pdfWriter, document, new StringReader(
+					html));
+			// close the document
+			document.close();
+			System.out.println("PDF generated successfully");
+
+			return baos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 
 }
