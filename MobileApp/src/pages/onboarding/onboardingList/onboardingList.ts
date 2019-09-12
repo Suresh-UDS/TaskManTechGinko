@@ -457,6 +457,7 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['personalDetails']['dateOfJoining'] = res[i].doj;
               employeeData[i]['personalDetails']['religion'] = res[i].religion;
               employeeData[i]['personalDetails']['bloodGroup'] = res[i].bloodGroup;
+              employeeData[i]['personalDetails']['id'] = res[i].id;
               employeeData[i]['personalDetails']['identificationMark'] = [res[i].personalIdentificationMark1, res[i].personalIdentificationMark2];
               employeeData[i]['personalDetails']['identificationMark1'] = res[i].personalIdentificationMark1;
               employeeData[i]['personalDetails']['identificationMark2'] = res[i].personalIdentificationMark2;
