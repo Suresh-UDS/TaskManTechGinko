@@ -2202,7 +2202,7 @@ public class ExportUtil {
 					dataRow.createCell(37).setCellValue(transaction.isImported());
 					}
 					dataRow.createCell(38).setCellValue(onBoardedFrom);
-					if(transaction.isVerified()) {
+					if(transaction.isVerified() || (transaction.getVerifiedDate() != null)) {
 					dataRow.createCell(39).setCellValue(transaction.getVerifiedBy());
 					}
 					if(transaction.getVerifiedDate() != null) {
