@@ -105,6 +105,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
 
         this.storage.get('OnBoardingData').then(localStoragedData => {
           if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['personalDetails']){
+          localStoragedData['actionRequired'][this.storedIndex]['filtered'] = true;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] = fromStatusValues['data']['employeeCode'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] = fromStatusValues['data']['employeeName'];
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] =  fromStatusValues['data']['gender']  ;

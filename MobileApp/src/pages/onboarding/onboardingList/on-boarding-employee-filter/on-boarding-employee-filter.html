@@ -23,9 +23,9 @@
 
 <ion-content padding>
 
-  <ion-fab right bottom>
+  <!-- <ion-fab right bottom>
     <button (click)="filterEmployees()" ion-fab><ion-icon name="checkmark"></ion-icon></button>
-  </ion-fab>
+  </ion-fab> -->
 
   
 
@@ -37,6 +37,7 @@
                        itemValueField="elementCode"
                        itemTextField="element"
                        [canSearch]="true"
+                       [(ngModel)]="selectedBranch"
                        (onChange)="getProjectByBranch($event)">
     </select-searchable>
   </ion-item>
@@ -49,6 +50,7 @@
                        itemValueField="elementCode"
                        itemTextField="element"
                        [canSearch]="true"
+                       [(ngModel)]="selectedProject"
                        (onChange)="getWBSByProject($event)">
     </select-searchable>
   </ion-item>
@@ -61,14 +63,15 @@
                        itemValueField="elementCode"
                        itemTextField="element"
                        [canSearch]="true"
+                       [(ngModel)]="selectedWBS"
                        (onChange)="getEmployees($event)">
     </select-searchable>
   </ion-item>
 
-  <ion-item class="border" *ngIf="selectedWBS !=null">
+   <ion-item class="border" *ngIf="selectedWBS !=null">
     <ion-label  text-capitalize class="client-label" text-left>Employee Name</ion-label>
     <ion-input [(ngModel)]="empNameSearch"></ion-input>
-  </ion-item>
+  </ion-item> 
 
   <ion-item class="border" *ngIf="selectedWBS !=null">
     <ion-label  text-capitalize class="client-label" text-left>Employee Code</ion-label>
@@ -88,9 +91,22 @@
     <ion-badge *ngIf="selectedWBS !=null">Selected WBS:  {{selectedWBS.element}}</ion-badge><br>
   </p>
   <p>
-    <ion-badge *ngIf="empCodeSearch !=null">Employee Code:  {{empCodeSearch}}</ion-badge><br>
+    <ion-badge *ngIf="empCodeSearch">Employee Code:  {{empCodeSearch}}</ion-badge><br>
   </p>
   <p>
-    <ion-badge *ngIf="empNameSearch !=null">Employee Name: {{empNameSearch}}</ion-badge>
+    <ion-badge *ngIf="empNameSearch">Employee Name: {{empNameSearch}}</ion-badge>
   </p>
 </ion-content>
+
+
+<ion-footer>
+
+  <ion-toolbar class="align-right" padding-left padding-right >
+    <button class="btn btn-warning center pull-left width42" (click)="clearFilter()">
+      Clear Filter
+    </button>
+    <button class="btn btn-success center pull-right" (click)="filterEmployees()">
+       Filter Employees
+    </button>
+  </ion-toolbar>
+</ion-footer>

@@ -67,9 +67,11 @@
                         <ion-item>
                             <ion-label class="label-text trequired" stacked>Marital Status</ion-label>
                             <ion-select interface="popover" formControlName="maritalStatus">
+                                <ion-option value="Single">Single</ion-option>
                                 <ion-option value="Married">Married</ion-option>
-                                <ion-option value="Unmarried">Unmarried</ion-option>
-                                <ion-option ng-selected="" value="Divored">Divorced</ion-option>
+                                <ion-option value="Widow">Widow</ion-option>
+                                <ion-option value="Divorced">Divorced</ion-option>
+                                <ion-option value="Seperated">Seperated</ion-option>
                             </ion-select>
                         </ion-item>
                         <ion-item *ngIf="onboardingPersonalDetailsForm.controls.maritalStatus.dirty && onboardingPersonalDetailsForm.controls.maritalStatus.invalid">
@@ -109,16 +111,16 @@
                         <ion-item>
                             <ion-label class="label-text" stacked>Blood Group</ion-label>
                             <ion-select interface="popover" formControlName="bloodGroup">
-                                <ion-option value="a Positive">A+</ion-option>
-                                <ion-option value="b Positive">B+</ion-option>
-                                <ion-option value="a Negative">A-</ion-option>
-                                <ion-option value="b Negative">B-</ion-option>
-                                <ion-option value="ab Positive">AB+</ion-option>
-                                <ion-option value="ab Negative">AB-</ion-option>
-                                <ion-option value="a1b Positive">A1B+</ion-option>
-                                <ion-option value="a1b Negative">A1B-</ion-option>
-                                <ion-option value="o Positive">o+</ion-option>
-                                <ion-option value="o Negative">o-</ion-option>
+                                <ion-option value="A+">A+</ion-option>
+                                <ion-option value="B+">B+</ion-option>
+                                <ion-option value="A-">A-</ion-option>
+                                <ion-option value="B-">B-</ion-option>
+                                <ion-option value="AB+">AB+</ion-option>
+                                <ion-option value="AB-">AB-</ion-option>
+                                <ion-option value="A1B+">A1B+</ion-option>
+                                <ion-option value="A1B-">A1B-</ion-option>
+                                <ion-option value="O+">O+</ion-option>
+                                <ion-option value="O-">O-</ion-option>
                             </ion-select>
                         </ion-item>
                     </div>

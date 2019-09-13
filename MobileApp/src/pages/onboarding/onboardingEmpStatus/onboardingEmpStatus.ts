@@ -119,11 +119,19 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
 
                       }
 
-                      subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
+                      let total = (subSeccondLevelValues/subSeccondLevelKeysLength);
+
+                      total = (isNaN(total) || !isFinite(total)) ? 0 :total;
+
+                      subDataValueLength += total;
                     }
                   }
 
-                  objectFormattedValuesLength += subDataValueLength / subDataLength 
+                  let total = (subDataValueLength / subDataLength);
+
+                  total = (isNaN(total) || !isFinite(total)) ? 0 :total;
+
+                  objectFormattedValuesLength += total; 
 
               }
               else{
