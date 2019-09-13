@@ -71,15 +71,7 @@ export class onboardingNewEmployee {
       this.storage.get('OnBoardingData').then((localStoragedData) => {
         console.log('projectId TYPES123 ' + JSON.stringify(data));
         console.log(data)
-        data.filterd = true;
-        data.siteDetails ={
-          projectCode:'',
-          wbsId:'',
-          projectDescription:'',
-          wbsDescription:'',
-          position:''
-
-        };
+        data.filtered = true;
         let onboardingData =  onBoardingModel;
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
@@ -90,8 +82,11 @@ export class onboardingNewEmployee {
         } else {
           console.log(data)
           // Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
-          localStoragedData['actionRequired'].push(data);
-          this.storage.set('OnBoardingData', localStoragedData);
+          if(!localStoragedData['actionRequired'][data.index].hasOwnProperty['siteDetails']){
+            localStoragedData['actionRequired'].push(data);
+            this.storage.set('OnBoardingData', localStoragedData);
+          }
+          
         }
       });
     })
@@ -392,7 +387,7 @@ export class onboardingNewEmployee {
             wbsId:null,
             position:null,
             submitted:true,
-            onBoardedPlace:null,
+            onboardedPlace:null,
             gross:null,
             employer:null,
             designation:null,
@@ -402,16 +397,17 @@ export class onboardingNewEmployee {
           };
 
           var employeeDocuments = {
-            aadharPhotoCopy:null,
-            aadharPhotoCopyBack:null,
-            employeeSignature:null,
-            profilePicture:null,
-            prePrintedStatement:null,
-            thumbImpressenRight:null,
-            thumbImpressenLeft:null,
-            voterId:null,
-            pancardCopy:null,
-            drivingLicense:null
+            aadharPhotoCopy: String,
+            profilePicture: String,
+            employeeSignature: String,
+            prePrintedStatement: String,
+            addressProof: String,
+            thumbImpressenRight: String,
+            thumbImpressenLeft: String,
+            drivingLicense: String,
+            pancardCopy: String,
+            voterId: String,
+            aadharPhotoCopyBack:String
           };
           
           employeeDetails.id = localStoragedData['actionRequired'][this.storedIndex]['id'] ? localStoragedData['actionRequired'][this.storedIndex]['id'] : 0;
@@ -427,8 +423,8 @@ export class onboardingNewEmployee {
           employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
           employeeDetails.doj = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'];
           if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]){
-            employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'];
-          employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][1]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][1]['name'] : localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'];
+            employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'];
+          employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][1] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][1]['name'] : localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'];
           }else{
             employeeDetails.fatherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][0]['name'] :'';
             employeeDetails.motherName = localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['relationshipDetails'][1]['name'] : '';
@@ -457,7 +453,7 @@ export class onboardingNewEmployee {
           }
 
           if(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]){
-            employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'] : localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
+            employeeDetails.permanentAddress = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['address'] : localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['address'];
             employeeDetails.permanentCity = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'] : localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['city'];
             employeeDetails.permanentState = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['state'] ? localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['permanentAddress'][0]['state'] : localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]['state'];
           }else if(localStoragedData['actionRequired'][this.storedIndex]['permanentAddress'][0]){
@@ -487,11 +483,11 @@ export class onboardingNewEmployee {
           }
 
           if(localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]){
-            employeeDetails.employer = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] ? localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['name'];
-            employeeDetails.designation = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] ? localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] : localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['designation'];
+            employeeDetails.employer = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0] ? localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['name'] : localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['name'];
+            employeeDetails.previousDesignation = localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0] ? localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']['previousEmployee'][0]['designation'] : localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['designation'];
           }else if(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]){
             employeeDetails.employer = localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['name'];
-            employeeDetails.designation =  localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['designation'];
+            employeeDetails.previousDesignation =  localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'][0]['designation'];
           }
           
           employeeDetails.adharCardNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'];
@@ -505,6 +501,7 @@ export class onboardingNewEmployee {
           employeeDocuments.voterId = localStoragedData['actionRequired'][this.storedIndex]['voterId'];
           employeeDocuments.pancardCopy = localStoragedData['actionRequired'][this.storedIndex]['pancardCopy'];
           employeeDocuments.drivingLicense = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
+          employeeDocuments.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
           if(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]){
             employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] : localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
             employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] : localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
@@ -513,19 +510,21 @@ export class onboardingNewEmployee {
             employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
           }
           
-          employeeDetails.onBoardedPlace = localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] ? localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace']: localStoragedData['actionRequired'][this.storedIndex]['onboardedPlace'];
+          employeeDetails.onboardedPlace = localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] ? localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace']: localStoragedData['actionRequired'][this.storedIndex]['onboardedPlace'];
           employeeDetails.onBoardSource = 'Mobile';
           employeeDetails.onBoardedFrom = 'Mobile';
           employeeDetails.active = 'Y';
 
           let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
-          employeeDetails.name = name.split(" ")[0];
-          employeeDetails.lastName = name.split(" ")[1];
-          employeeDetails.fullName = name;
+          employeeDetails.name = name
+          employeeDetails.lastName = employeeDetails.fatherName;
+          employeeDetails.fullName = name + employeeDetails.lastName;
           
           if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] || localStoragedData['actionRequired'][this.storedIndex]['employeeCode']){
             employeeDetails.empId = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'];
           }
+          
+          if(employeeDetails.emergencyContactNumber ===0){ delete employeeDetails.emergencyContactNumber;}
             
           
           console.log("employee details");
@@ -574,8 +573,8 @@ export class onboardingNewEmployee {
           }else{
 
             let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
-            employeeDetails.empId = adharNumber.toString().substring(5);
-            employeeDetails.newEmployee = true;
+            employeeDetails.empId = employeeDetails.empId ? employeeDetails.empId : adharNumber.toString().substring(5);
+            employeeDetails.newEmployee = employeeDetails.empId ? false : true;
 
             this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
               console.log("Sucessfully saved employees");
@@ -609,7 +608,7 @@ export class onboardingNewEmployee {
             },err=>{
               console.log("Error in saving employee");
               console.log(err);
-              this.componentService.showToastMessage("Error in saving Employee "+err.messsage, "center");
+              this.componentService.showToastMessage("Error in saving Employee "+ err.description, "center");
 
             })
           }

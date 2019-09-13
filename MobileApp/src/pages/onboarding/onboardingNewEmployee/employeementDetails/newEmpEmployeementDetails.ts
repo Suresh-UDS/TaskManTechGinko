@@ -157,7 +157,7 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
             this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['employmentDetails']  );
 
           }else{
-            this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]  );
+            this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'] );
 
             console.log('EMPfromTo_dt2--' + JSON.stringify(localStoragedData['actionRequired']
             [this.storedIndex]));
@@ -166,6 +166,12 @@ export class newEmpEmployeementDetails implements OnInit, AfterViewInit {
             // this.nomineeForms.controls[0]['controls']['toEmployed'].setValue(toEmpDate);
 
           }
+        }else{
+            this.onboardingEmployeeMentForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['previousEmployee'] );
+            console.log('EMPfromTo_dt2--' + JSON.stringify(localStoragedData['actionRequired']
+            [this.storedIndex]));
+            // this.nomineeForms.controls[0]['controls']['fromEmployed'].setValue(fromempDate);
+            // this.nomineeForms.controls[0]['controls']['toEmployed'].setValue(toEmpDate);
         }
       }
       this.SetEarlierEmp();

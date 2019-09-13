@@ -113,6 +113,19 @@ export class onboardingExistEmployee implements OnInit {
     //  this.component.showLoader("Updating....");
     this.getNomineeRelationships();
     this.getLocalData();
+    // delete draft
+
+    this.storage.get('OnBoardingData').then((data) => {
+       
+      if(!data['actionRequired'][data['actionRequired'].length - 1]['personalDetails']['employeeName']){
+
+          delete data['actionRequired'][data['actionRequired'].length - 1];
+
+      }
+
+      console.log(data['actionRequired']);
+
+    });
 
   }
 
@@ -231,25 +244,33 @@ export class onboardingExistEmployee implements OnInit {
 
                   for(let j in dataValues){
                     
-                    // if(dataValues[j]){
-                    //   let subSeccondLevelKeysLength = Array.isArray(dataValues[j]) ? dataValues[j].length :  Object.keys(dataValues[j]).length;
-                    //   let subSeccondLevelValues = 0;
+                    if(dataValues[j]){
+                      let subSeccondLevelKeysLength = Array.isArray(dataValues[j]) ? dataValues[j].length :  Object.keys(dataValues[j]).length;
+                      let subSeccondLevelValues = 0;
 
-                    //   for(let h in dataValues[j]){
+                      for(let h in dataValues[j]){
 
-                    //     if(dataValues[j][h]){
+                        if(dataValues[j][h]){
 
-                    //       subSeccondLevelValues ++;
+                          subSeccondLevelValues ++;
 
-                    //     }
+                        }
 
-                    //   }
+                      }
 
-                    //   subDataValueLength += (subSeccondLevelValues/subSeccondLevelKeysLength);
-                    // }
+                      let total = (subSeccondLevelValues/subSeccondLevelKeysLength);
+
+                      total = (isNaN(total) || !isFinite(total)) ? 0 :total;
+
+                      subDataValueLength += total;
+                    }
                   }
 
-                  objectFormattedValuesLength += subDataValueLength / subDataLength 
+                  let total = (subDataValueLength / subDataLength);
+
+                  total = (isNaN(total) || !isFinite(total)) ? 0 :total;
+
+                  objectFormattedValuesLength += total; 
 
               }
               else{
@@ -439,20 +460,31 @@ export class onboardingExistEmployee implements OnInit {
     this.storage.get('OnBoardingData').then((localStoragedData) => {
 
       localStoragedData["completed"] = [];
-
+      let deleteIndexes = [];
       console.log("Local storage");
       console.log(localStoragedData);
-      for(let i=0;i<localStoragedData.length;i++){
+      if(localStoragedData["actionRequired"]){
+        for(let i=0;i<localStoragedData["actionRequired"].length;i++){
 
-        console.log(localStoragedData[i]);
-        if(localStoragedData[i].isSync){
-          delete localStoragedData[i];
-        }
+         
+          if(localStoragedData["actionRequired"][i].isSync){
+          // delete localStoragedData[i];
+            deleteIndexes.push(i);
+          }
 
-        if(i+1 == localStoragedData.length){
-          this.storage.set('OnBoardingData', localStoragedData);
+          // if(i+1 == localStoragedData.length){
+          //   this.storage.set('OnBoardingData', localStoragedData);
+          // }
         }
       }
+      for (var i = deleteIndexes.length -1; i >= 0; i--){
+
+        localStoragedData["actionRequired"].splice(deleteIndexes[i],1);
+
+      }
+     
+      this.storage.set('OnBoardingData', localStoragedData);
+       
 
       this.onboardingService.getEmployeeListByWbs(wbsId).subscribe(res => {
         let objectsKeys;
@@ -582,7 +614,7 @@ export class onboardingExistEmployee implements OnInit {
 
         for(let i in this.actionRequiredEmp){
 
-          if(this.actionRequiredEmp[i].employeeCode.indexOf(searchCriteria.employeeEmpId) > -1){
+          if(this.actionRequiredEmp[i].employeeCode && this.actionRequiredEmp[i].employeeCode.indexOf(searchCriteria.employeeEmpId) > -1){
 
             this.actionRequiredEmp[i].filtered = true;
 
@@ -596,6 +628,25 @@ export class onboardingExistEmployee implements OnInit {
         }
 
      }
+
+     if(searchCriteria.name){
+
+      for(let i in this.actionRequiredEmp){
+
+        if(this.actionRequiredEmp[i].employeeName && this.actionRequiredEmp[i].employeeName.toLowerCase().indexOf(String(searchCriteria.name).toLowerCase()) > -1){
+
+          this.actionRequiredEmp[i].filtered = true;
+
+        }
+        else{
+
+          this.actionRequiredEmp[i].filtered = false;
+
+        }
+        
+      }
+
+   }
 
   }
 
