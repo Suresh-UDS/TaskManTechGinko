@@ -488,7 +488,38 @@ public class    EmployeeService extends AbstractService {
 	 	
 		zempDetStr.setGender(gender);
 		zempDetStr.setIfscCode(employee.getIfscCode());
-		zempDetStr.setMaritalStatus((employee.getMaritalStatus().toLowerCase().equals("married") ? "2" : "1"));
+		
+		String maritalStatus = "0";
+		
+		if(employee.getMaritalStatus()!=null) {
+			
+			switch(employee.getMaritalStatus().toLowerCase()) {
+			
+				case "single":
+					maritalStatus = "0";
+				break;
+				
+				case "married":
+					maritalStatus = "1";
+				break;
+				
+				case "widow":
+					maritalStatus = "2";
+				break;
+
+				case "divorced":
+					maritalStatus = "3";
+				break;
+				
+				case "seperated":
+					maritalStatus = "5";
+				break;
+
+			}
+			
+		}
+		
+		zempDetStr.setMaritalStatus(maritalStatus);
 		zempDetStr.setMobileNoM(employee.getMobile());
 		zempDetStr.setMothersName(employee.getMotherName());
 		
