@@ -392,6 +392,11 @@
 						<div class="form-group">
 							<div class="col-sm-12 txt-align-rgt">
 
+                                <button ng-if="job.status == 'COMPLETED'" class="btn btn-primary " type="button"
+									ng-click="downloadPdf()" id="cancel-button">
+									<i class="fas fa-download"></i> Download Pdf
+                                </button>
+                                
 								<button class="btn btn-default " type="button"
 									ng-click="back('cancel')" id="cancel-button">
 									<i class=""></i> Back

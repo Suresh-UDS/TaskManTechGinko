@@ -845,9 +845,14 @@ angular.module('timeSheetApp')
 		$scope.searchCriteria.report = true;
 		$scope.searchCriteria.columnName = "createdDate";
 		$scope.searchCriteria.sortByAsc = false;
+//		$scope.searchCriteria.newEmployee = 1;
+//		$scope.searchCriteria.submitted = 1;
+//		$scope.searchCriteria.imported = 1;
+//		$scope.searchCriteria.verified = 1;
 		delete $scope.searchCriteria.newEmployee;
 		delete $scope.searchCriteria.submitted;
 		delete $scope.searchCriteria.imported;
+		delete $scope.searchCriteria.verified;
 		if($scope.selectedBranchCode !=null){
 		    $scope.searchCriteria.branchCode = $scope.selectedBranchCode;
         }

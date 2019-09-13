@@ -65,6 +65,57 @@ public class MailService {
     private SettingsRepository settingsRepository;
 
     @Async
+    public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName, boolean pdf) {
+        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            isMultipart, isHtml, to, subject, content);
+
+        log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+        Properties props = javaMailSender.getJavaMailProperties();
+        Enumeration<Object> keys = props.keys();
+        while(keys.hasMoreElements()) {
+        		String key = (String)keys.nextElement();
+        		log.debug(key + ", "+ props.getProperty(key));
+        }
+        //split the to address if more than 1
+        //trim leading and traling ','
+        StringBuilder sb = new StringBuilder(to);
+        if(to.startsWith(",")) {
+        		sb = sb.replace(0, 1, "");
+        		to = sb.toString();
+        }
+        if(to.endsWith(",")) {
+        		int ind = to.lastIndexOf(",");
+        		sb.replace(ind, ind+1, "");
+        }
+        to = sb.toString();
+        String[] toEmails = null;
+        if(!StringUtils.isEmpty(to)) {
+        		toEmails = to.split(",");
+        }
+        // Prepare message using a Spring helper
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setTo(toEmails);
+            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
+            message.setSubject(subject);
+            message.setText(content, isHtml);
+            if(isMultipart){
+            	if(!StringUtils.isEmpty(fileName)) {
+	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
+	                message.addAttachment(file.getFilename(),file, "text/html");
+	              //  message.addAttachment()
+            	}
+            }
+            javaMailSender.send(mimeMessage);
+            log.debug("Sent e-mail to User '{}'", to);
+        } catch (Exception e) {
+//        	e.printStackTrace();
+            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+        }
+    }
+    
+    @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
             isMultipart, isHtml, to, subject, content);

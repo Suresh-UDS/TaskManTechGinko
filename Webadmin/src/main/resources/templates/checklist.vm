@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Insert title here</title>
+<style type="text/css">
+
+
+  html,body{
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+  }
+  .valueField{
+    font-weight: bold;
+  }
+  table{
+    width: 100%;
+    font-size: 12px;
+  }
+  .textRight{
+    text-align: right;
+  }
+  .textLeft{
+    text-align: left;
+  }
+  .container{
+    padding: 25px;
+  }
+  h2,h3,h4{
+    text-align: center;
+  }
+</style>
+</head>
+<body> 
+
+  <div class="container">
+
+    <img src="http://uds.in/images/logo.jpg" width="150" />
+
+    <h2>$jobCheckListName</h2>
+    <h4>Client Name : <span class="valueField">SONY</span></h4>
+
+    <table cellpadding="7" cellspacing="0" border="0">
+
+      <tr>
+        
+         <td>Job Id : <span class="valueField">$job.getId()</span></td>
+        
+         <td class="textRight"> Job Duration <span class="valueField"></span> </td>
+       
+
+      </tr>
+
+      <tr >
+      
+         <td class="textLeft">Job Name : <span class="valueField">$job.getTitle()</span></td>
+            <td class="textRight">Start Time :<span class="valueField">$actualStartTime to $actualEndTime</span></td>
+
+
+      </tr>
+      
+      <tr >
+      
+         <td class="textLeft"><span class="valueField">Scheduled</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="valueField">Oncall</span></td>
+            <td class="textRight"></td>
+
+
+      </tr>
+
+    </table>
+
+<h2>List Items</h2>
+
+ <table cellpadding="5" cellspacing="0" border="1">
+
+
+    <tr>
+        <th style="width: 30px;" valign="top">SNo</th>
+        <th >Name </th>
+        <th style="width: 100px;" valign="top">Status </th>
+        
+     </tr>
+     
+     
+       #foreach( $checklistItems in $jobCheckList)
+  
+  <tr>
+  
+       <td valign="top" class="textRight">$foreach.count</td>
+       <td><p>$checklistItems.getChecklistItemName()<br/><br/> <span class="valueField">Remarks :</span> #if($checklistItems.getRemarks())$checklistItems.getRemarks()#{else}Nill#end </p></td>   
+       <td valign="top" >#if($checklistItems.isCompleted())<span class="valueField">Completed</span>#{else}Uncompleted#end</td>
+        
+       
+   </tr>
+          
+   #end
+ 
+ </table> 
+
+ <table width="100%" cellpadding="5" cellspacing="0" border="0" style="margin-top:25px">
+
+   <tr>
+     
+     <td colspan="2"><p><span class="valueField">Remarks :</span><br/><br/><br/></p></td>
+
+   </tr>
+
+   <tr>
+     
+     <td><span class="valueField">GRE Name : </span></td>
+
+   </tr>
+
+   <tr>
+     
+     <td><span class="valueField">Signature: </span> </td>
+     <td><span class="valueField">Signature: </span></td>
+
+   </tr>
+
+ </table>
+
+ <table width="100%" cellpadding="5" cellspacing="0" border="0" style="margin-top:25px">
+   <tr>
+      <td colspan="2"><p><span class="valueField">Note</span> This is a computer-generated document</p></td>
+   </tr>
+
+ </table>
+
+
+
+
+
+  </div>
+
+</body>
+</html>
