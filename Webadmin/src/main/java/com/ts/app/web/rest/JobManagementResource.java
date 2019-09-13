@@ -527,8 +527,8 @@ public class JobManagementResource {
 
     }
 
-    @RequestMapping(value="/job/genpdf/{jobid}",method=RequestMethod.GET)
-	public HttpEntity<byte[]> createPdf(@PathVariable("jobid") long jobId ) throws NullPointerException {
+    
+	public ByteArrayOutputStream createJobPdf(long jobId ) throws NullPointerException {
 	
 	     
 //	     String path = UriComponentsBuilder.fromPath("D:\\CheckListPdf").build().toUriString();
@@ -550,7 +550,7 @@ public class JobManagementResource {
 		 * JobChecklist jobs=jobService.findJobCheckListStatus(jobId, searchCriteria);
 		 */
 		
-		String filename  = "job_"+String.valueOf(job.getId())+".pdf";
+		
 		
 		if(job !=null ) {
 			
@@ -585,10 +585,19 @@ public class JobManagementResource {
 	
 		System.out.println(writer.toString());
 		
+		return generatePdf(writer.toString());
+		
+	}
+	
+	@RequestMapping(value="/job/genpdf/{jobid}",method=RequestMethod.GET)
+	public HttpEntity<byte[]> createPdf(@PathVariable("jobid") long jobId ) throws NullPointerException {
+ 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-		baos = generatePdf(writer.toString());
-
+ 
+		baos = createJobPdf(jobId);
+		
+		String filename  = "job_"+String.valueOf(jobId)+".pdf";
+		
 		HttpHeaders header = new HttpHeaders();
 	    header.setContentType(MediaType.parseMediaType("application/pdf"));
 	    header.set(HttpHeaders.CONTENT_DISPOSITION,
