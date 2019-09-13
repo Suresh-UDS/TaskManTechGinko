@@ -69,10 +69,14 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
           status: true,
           data: this.declarationForm.value
         };
+        
           this.storage.get('OnBoardingData').then(localStoragedData => {
+            if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['declaration']){
               localStoragedData['actionRequired'][this.storedIndex]['declaration']['agreeTermsAndConditions'] = formStatusValues['data']['agreeTermsAndConditions'];
               localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] = formStatusValues['data']['onboardedPlace'] ;
               this.storage.set('OnBoardingData',localStoragedData);
+            }
+              
           });
         this.messageService.formDataMessage(formStatusValues);
       }

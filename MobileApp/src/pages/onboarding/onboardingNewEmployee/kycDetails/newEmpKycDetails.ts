@@ -104,8 +104,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
             localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['voterId'] = this.userAllKYCData['aadharPhotoCopy'] ;
             localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['pancardCopy'] = this.userAllKYCData['aadharPhotoCopy'] ;
             localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['drivingLicense'] = this.userAllKYCData['aadharPhotoCopy'] ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] ;
-            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] = this.formStatusValues['data']['bankDetails'][0]['accountNo'] ;
+            localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] = this.formStatusValues['data']['bankDetails'][0]['ifsc'] ;
             localStoragedData['actionRequired'][this.storedIndex]['declaration']['agreeTermsAndConditions'] = false;
             this.storage.set('OnBoardingData',localStoragedData);
           
