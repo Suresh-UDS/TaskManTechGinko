@@ -666,7 +666,7 @@ public class EmployeeServiceResouce {
 	}
     
     @RequestMapping(value = "/getPositionsWithGrossByWBSID/{wbsId}", method = RequestMethod.GET)
-    public ResponseEntity<List<PositionDTO>> getPositionsWithGrossByWBSID(@RequestParam("wbsId") String wbsId) {
+    public ResponseEntity<List<PositionDTO>> getPositionsWithGrossByWBSID(@PathVariable("wbsId") String wbsId) {
     	try {
     		return new ResponseEntity<List<PositionDTO>>( oTaskmanService.getPositionsWithGrossByWBSID(wbsId), HttpStatus.OK);
     	}
