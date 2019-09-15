@@ -60,10 +60,12 @@ import com.ts.app.web.rest.dto.EmployeeDocumentsDTO;
 import com.ts.app.web.rest.dto.EmployeeListDTO;
 import com.ts.app.web.rest.dto.ExpenseDocumentDTO;
 import com.ts.app.web.rest.dto.PersonalAreaDTO;
+import com.ts.app.web.rest.dto.PositionDTO;
 import com.ts.app.web.rest.dto.ProjectListDTO;
 import com.ts.app.web.rest.dto.SapBusinessCategoriesDTO;
 import com.ts.app.web.rest.dto.SiteListDTO;
 import com.ts.app.web.rest.dto.WbsByEmpDTO;
+import com.ts.app.web.rest.errors.TimesheetException;
 
 
 @RequestMapping("/api/onboard")
@@ -662,5 +664,17 @@ public class EmployeeServiceResouce {
         return new ResponseEntity<>(HttpStatus.OK);
         
 	}
+    
+    @RequestMapping(value = "/getPositionsWithGrossByWBSID/{wbsId}", method = RequestMethod.GET)
+    public ResponseEntity<List<PositionDTO>> getPositionsWithGrossByWBSID(@PathVariable("wbsId") String wbsId) {
+    	try {
+    		return new ResponseEntity<List<PositionDTO>>( oTaskmanService.getPositionsWithGrossByWBSID(wbsId), HttpStatus.OK);
+    	}
+    	catch(Exception ex) {
+    		
+    		throw new TimesheetException(ex, ex.getMessage());
+    	}
+    	
+    }
 
 }

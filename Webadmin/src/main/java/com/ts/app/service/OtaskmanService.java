@@ -1,6 +1,7 @@
 package com.ts.app.service;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.ts.app.web.rest.dto.EmpDTO;
+import com.ts.app.web.rest.dto.PositionDTO;
 
 
 @Service
@@ -44,4 +46,16 @@ public class OtaskmanService {
 		
 	}
 	
+	public List<PositionDTO> getPositionsWithGrossByWBSID(String wbsId) throws Exception{
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+		HttpEntity<String> entity = new HttpEntity<String>(new String(), headers);
+		
+		ResponseEntity<List<PositionDTO>> response = restTemplete.exchange(URL_ORACLE+"getPositionsWithGrossByWBSID/"+wbsId,
+				HttpMethod.GET, entity, new ParameterizedTypeReference<List<PositionDTO>>() {});
+		
+		return response.getBody();
+	}
 }
