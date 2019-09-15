@@ -94,6 +94,14 @@ public class SettingsDTO extends BaseDTO implements Serializable {
     private long ticketEmailsId;
 
     private List<String> ticketEmailIds;
+    
+    private long jobCheckListEmailAlertId;
+
+    private boolean jobCheckListEmailAlert;
+    
+    private long jobCheckListEmailsId;
+
+    private List<String> jobCheckListEmailIds;
 
     private long readingEmailsId;
 
@@ -810,5 +818,38 @@ public class SettingsDTO extends BaseDTO implements Serializable {
 		this.value = value;
 	}
 
+	public long getJobCheckListEmailAlertId() {
+		return jobCheckListEmailAlertId;
+	}
+
+	public void setJobCheckListEmailAlertId(long jobCheckListEmailAlertId) {
+		this.jobCheckListEmailAlertId = jobCheckListEmailAlertId;
+	}
+
+	public boolean isJobCheckListEmailAlert() {
+		return jobCheckListEmailAlert;
+	}
+
+	public void setJobCheckListEmailAlert(boolean jobCheckListEmailAlert) {
+		this.jobCheckListEmailAlert = jobCheckListEmailAlert;
+	}
+
+	public long getJobCheckListEmailsId() {
+		return jobCheckListEmailsId;
+	}
+
+	public void setJobCheckListEmailsId(long jobCheckListEmailsId) {
+		this.jobCheckListEmailsId = jobCheckListEmailsId;
+	}
+
+	public List<String> getJobCheckListEmailIds() {
+		return jobCheckListEmailIds;
+	}
+
+	public void setJobCheckListEmailIds(List<String> jobCheckListEmailIds) {
+		this.jobCheckListEmailIds = jobCheckListEmailIds;
+	}
+	
+	
 
 }
