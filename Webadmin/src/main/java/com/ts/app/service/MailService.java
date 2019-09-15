@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -65,11 +66,13 @@ public class MailService {
     private SettingsRepository settingsRepository;
 
     @Async
-    public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName, boolean pdf) {
-        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-            isMultipart, isHtml, to, subject, content);
+    public void sendEmail(String to, String subject, String content, boolean isHtml,String fileName, ByteArrayResource pdfContent) {
+        
+    	log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            isHtml, to, subject, content);
 
         log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+        
         Properties props = javaMailSender.getJavaMailProperties();
         Enumeration<Object> keys = props.keys();
         while(keys.hasMoreElements()) {
@@ -95,18 +98,18 @@ public class MailService {
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
             message.setTo(toEmails);
             message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
             message.setSubject(subject);
             message.setText(content, isHtml);
-            if(isMultipart){
-            	if(!StringUtils.isEmpty(fileName)) {
-	                FileSystemResource file =new FileSystemResource(exportPath+"/" +fileName+".xlsx");
-	                message.addAttachment(file.getFilename(),file, "text/html");
-	              //  message.addAttachment()
-            	}
+         
+            if(!StringUtils.isEmpty(fileName)) {
+ 
+	                message.addAttachment(fileName,pdfContent, "text/pdf");
+	         	
             }
+         
             javaMailSender.send(mimeMessage);
             log.debug("Sent e-mail to User '{}'", to);
         } catch (Exception e) {
