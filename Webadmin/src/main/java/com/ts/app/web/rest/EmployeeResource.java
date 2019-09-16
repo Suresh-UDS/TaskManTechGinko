@@ -473,6 +473,24 @@ public class EmployeeResource {
         return result;
     }
 
+    @RequestMapping(value = "/employee/dashboard/count",method = RequestMethod.POST)
+    public long getOnboardingEmployeeCounts(@RequestBody SearchCriteria searchCriteria) {
+    	
+    	long result = 0;
+    	
+    	if(searchCriteria != null) {
+            log.debug("search criteria - " + searchCriteria.getEmployeeEmpId() + " , " + searchCriteria.getProjectId() + " , " + searchCriteria.getSiteId());
+            searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
+        } 
+        if(searchCriteria != null) {
+            result = employeeService.findBySearchCrieria(searchCriteria).getTotalCount();
+        }
+        return result;
+    	
+    	
+    }
+    
+    
     @RequestMapping(value = "/onBoarding/employee/search",method = RequestMethod.POST)
     public SearchResult<EmployeeDTO> findOnBoardingBySearchCrieria(@RequestBody SearchCriteria searchCriteria) {
         if(searchCriteria != null) {

@@ -1064,6 +1064,40 @@ angular.module('timeSheetApp')
 
         }
 
+        $scope.onboardingCount = {verified:0,submitted:0};
+
+        $scope.verifiedOnboardingLoader = $scope.submittedOnboardingLoader = false;
+
+        $scope.getEmployeeVerifiedCount = function(){
+
+            var searchCriteria = {};
+            searchCriteria.submitted = true;
+            searchCriteria.verified = true;
+            searchCriteria.list = true; 
+            $scope.submittedOnboardingLoader = true;
+            EmployeeComponent.getOnboardingSubmitedCount(searchCriteria).then(function(data){
+                $scope.submittedOnboardingLoader = false;
+                $scope.onboardingCount.verified = data;
+
+            })
+
+        }
+
+        $scope.getEmployeeSubmittedCount = function(){
+
+            var searchCriteria = {};
+            searchCriteria.submitted = true;
+            searchCriteria.verified = false;
+            searchCriteria.list = true; 
+            $scope.verifiedOnboardingLoader = true;
+            EmployeeComponent.getOnboardingSubmitedCount(searchCriteria).then(function(data){
+                $scope.verifiedOnboardingLoader = false;
+                $scope.onboardingCount.submitted = data;
+
+            })
+
+        }
+
         $scope.loadAllProjects = function(){
             $scope.clientFilterDisable = true;
             DashboardComponent.loadAllProjects().then(function(data){

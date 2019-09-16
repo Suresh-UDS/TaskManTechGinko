@@ -108,6 +108,67 @@
         </div>
         <!-- Filters end -->
 
+        <DIV class="panel-group" id="accordion2" role="tablist"  has-permission="OnBoarding:List" aria-multiselectable="true">
+
+
+            <!-- Main panel start -->
+            <div class="panel panel-default" ng-init="getEmployeeVerifiedCount()">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion2"
+                       data-target="#collapseONB" aria-expanded="true"
+                       aria-controls="collapseOne" class="collapsed">
+                        <h4 class="panel-title">
+                            Onboarding  
+                        </h4>
+                    </a>
+                </div>
+
+                <div id="collapseONB"
+                     class="panel-collapse collapse collapseOne in" role="tabpanel"
+                     aria-labelledby="headingOne" aria-expanded="true">
+                    <div class="panel-body">
+
+                        <div class="row">
+
+
+                            <div class="col-md-2 col-lg-2 col-sm-2" ng-init="getEmployeeSubmittedCount()">
+                                <a  ui-sref="projects" ng-click="dbdFilter();">
+                                    <div class="card blueBg cardWithbg">
+                                        <div class="card-header">
+                                            <i class="fas fa-paste" style="font-size: 50px "></i>
+                                        </div>
+                                        <div class="card-content">
+                                            <h4>Submitted</h4>
+                                            
+                                            <h3><span  ng-show="submittedOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span><span ng-show="!submittedOnboardingLoader">{{onboardingCount.submitted}}</span></h3>
+                                        </div>
+                                    </div>
+                                </a>
+    
+                            </div>
+
+                            <div class="col-md-2 col-lg-2 col-sm-2" ng-init="getEmployeeVerifiedCount()">
+                                <a  ui-sref="projects" ng-click="dbdFilter();">
+                                    <div class="card greenBg cardWithbg">
+                                        <div class="card-header">
+                                            <i class="fas fa-check" style="font-size: 50px "></i>
+                                        </div>
+                                        <div class="card-content">
+                                            <h4>Verified</h4>
+                                            <h3><span  ng-show="verifiedOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span><span ng-show="!verifiedOnboardingLoader">{{onboardingCount.verified}}</span></h3>
+                                        </div>
+                                    </div>
+                                </a>
+    
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </DIV>
+
         <!-- Accordion Gauge Container start -->
 
         <div class="panel-group" id="accordion" role="tablist" has-permission="Asset:List"

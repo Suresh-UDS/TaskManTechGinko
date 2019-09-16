@@ -345,7 +345,12 @@ angular.module('timeSheetApp')
                     return response.data;
                 })                
             },
-            
+            getOnboardingSubmitedCount: function(searchCriteria){
+                return $http.post('api/employee/dashboard/count',searchCriteria).then(function(response){
+                    return response.data;
+                });
+            },
+             
 /***********************************Modified By Vinoth***************************************************************************************/
 
             importEmployeeOnboardingFile: function(file) {
