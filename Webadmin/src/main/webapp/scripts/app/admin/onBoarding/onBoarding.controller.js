@@ -316,6 +316,29 @@ angular.module('timeSheetApp')
  
 	}
 
+	$scope.positionLoaderDisable = false;
+
+	$scope.loadPositions = function(wbsId){
+
+		$scope.positionLoaderDisable = true;
+
+		EmployeeComponent.getPositionsWithGrossByWBSID(wbsId).then(function(response){
+			$scope.positionLoaderDisable = false;
+			$scope.positionList = response;
+
+			if($scope.employee.position){
+				var designation = _.find(response,{positionId:$scope.employee.position});
+				if(designation){
+					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.grossAmount;
+				}
+			}
+
+		}).catch(function(response){
+			$scope.positionLoaderDisable = false;
+		})
+
+	}
+
 	$scope.LoadEmpListByType = function(type){
 
 		$scope.setPage(1);
@@ -1182,6 +1205,8 @@ angular.module('timeSheetApp')
 
 					console.log($scope.employee.newEmployee);
 
+					$scope.loadPositions($scope.employee.wbsId);
+
                     EmployeeComponent.getEmployeeDocuments(data.id).then(function (documents) {
                         console.log("Employee documents");
                         console.log(documents);
@@ -1889,7 +1914,7 @@ angular.module('timeSheetApp')
 					$scope.branchsLists[i+1] = $scope.branchList[i];
 				}
 				/* if($scope.branchList) {
-	                 		for(var i = 0; i < $scope.branchList.length; i++) {
+	  ;               		for(var i = 0; i < $scope.branchList.length; i++) {
 	                 			$scope.uiBranch.push($scope.branchList[i].name);
 	                 		}*/
 				$scope.branchSpin = false;
@@ -1905,6 +1930,16 @@ angular.module('timeSheetApp')
 
 		})
 	};
+
+	$scope.getGross = function(selectedElement){
+
+		var currentDesignation = _.find($scope.positionList,{positionId:$scope.employee.position});
+
+		$scope.employee.gross = parseFloat(currentDesignation.grossAmount);
+
+	}
+ 
+  
 
 	$scope.getSitesBYRegionOrBranch = function (projectId, region, branch) {
 		if(branch){
@@ -1990,6 +2025,12 @@ angular.module('timeSheetApp')
 		$scope.sitesListOne.selected = undefined;
 		$scope.branchFilterDisable = true;
 		$scope.siteFilterDisable = true;
+	};
+
+	$scope.clearPosition = function($event) {
+		$event.stopPropagation();
+		$scope.employee.position.selected = null;
+		$scope.employee.gross = 0;
 	};
 
 	$scope.clearBranch = function($event) {

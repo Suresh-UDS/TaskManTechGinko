@@ -340,6 +340,11 @@ angular.module('timeSheetApp')
                     return response.data;
                 });
             },
+            getPositionsWithGrossByWBSID: function(wbsId){
+                return $http.get('api/onboard/getPositionsWithGrossByWBSID/'+wbsId).then(function(response){
+                    return response.data;
+                })                
+            },
             
 /***********************************Modified By Vinoth***************************************************************************************/
 
