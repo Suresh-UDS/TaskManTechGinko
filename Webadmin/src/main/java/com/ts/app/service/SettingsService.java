@@ -65,7 +65,11 @@ public class SettingsService extends AbstractService {
 	public static final String EMAIL_NOTIFICATION_TICKET = "email.notification.ticket";
 
 	public static final String EMAIL_NOTIFICATION_TICKET_EMAILS = "email.notification.ticket.emails";
-
+	
+	public static final String EMAIL_NOTIFICATION_JOBCHECKLIST = "email.notification.jobCheckList";
+	
+	public static final String EMAIL_NOTIFICATION_JOBCHECKLIST_EMAILS = "email.notification.jobCheckList.emails";
+	
 	public static final String EMAIL_NOTIFICATION_READING = "email.notification.reading";
 
 	public static final String EMAIL_NOTIFICATION_READING_EMAILS = "email.notification.reading.emails";
@@ -403,6 +407,41 @@ public class SettingsService extends AbstractService {
 		ticketEmailsSetting.setSiteId(settingsDto.getSiteId());
 		ticketEmailsSetting.setSiteName(settingsDto.getSiteName());
 		ticketEmailsSetting.setActive("Y");
+		
+/***********************************Modified by Vinoth***********************************************************************/
+   
+		Setting jobCheckListAlertSetting = null;
+		if(settingsDto.getJobCheckListEmailAlertId() > 0) {
+			jobCheckListAlertSetting = settingsRepository.findOne(settingsDto.getJobCheckListEmailAlertId());
+		}else {
+			jobCheckListAlertSetting = new Setting();
+		}
+		jobCheckListAlertSetting.setSettingKey(EMAIL_NOTIFICATION_JOBCHECKLIST);
+		jobCheckListAlertSetting.setSettingValue(String.valueOf(settingsDto.isJobCheckListEmailAlert()));
+		jobCheckListAlertSetting.setProjectId(settingsDto.getProjectId());
+		jobCheckListAlertSetting.setProjectName(settingsDto.getProjectName());
+		jobCheckListAlertSetting.setSiteId(settingsDto.getSiteId());
+		jobCheckListAlertSetting.setSiteName(settingsDto.getSiteName());
+		jobCheckListAlertSetting.setActive("Y");
+
+		Setting jobCheckListEmailsSetting = null;
+		if(settingsDto.getJobCheckListEmailsId() > 0) {
+			jobCheckListEmailsSetting = settingsRepository.findOne(settingsDto.getJobCheckListEmailsId());
+		}else {
+			jobCheckListEmailsSetting = new Setting();
+		}
+		jobCheckListEmailsSetting.setSettingKey(EMAIL_NOTIFICATION_JOBCHECKLIST_EMAILS);
+		if(CollectionUtils.isNotEmpty(settingsDto.getJobCheckListEmailIds())) {
+			jobCheckListEmailsSetting.setSettingValue(CommonUtil.convertToString(settingsDto.getJobCheckListEmailIds()));
+		}
+		jobCheckListEmailsSetting.setProjectId(settingsDto.getProjectId());
+		jobCheckListEmailsSetting.setProjectName(settingsDto.getProjectName());
+		jobCheckListEmailsSetting.setSiteId(settingsDto.getSiteId());
+		jobCheckListEmailsSetting.setSiteName(settingsDto.getSiteName());
+		jobCheckListEmailsSetting.setActive("Y");
+		
+		
+/****************************************************************************************************************************/
 
 		Setting readingAlertSetting = null;
 		if(settingsDto.getReadingEmailAlertId() > 0) {
@@ -789,6 +828,12 @@ public class SettingsService extends AbstractService {
 		if(StringUtils.isNotEmpty(musterEmailsSetting.getSettingValue())) {
 			settingList.add(musterEmailsSetting);
 		}
+		if(StringUtils.isNotEmpty(jobCheckListAlertSetting.getSettingValue())) {
+			settingList.add(jobCheckListAlertSetting);
+		}
+		if(StringUtils.isNotEmpty(jobCheckListEmailsSetting.getSettingValue())) {
+			settingList.add(jobCheckListEmailsSetting);
+		}
 
 		settingsRepository.save(settingList);
 
@@ -869,7 +914,17 @@ public class SettingsService extends AbstractService {
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_TICKET_EMAILS)) {
 					settingDto.setTicketEmailsId(setting.getId());
 					settingDto.setTicketEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
-				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_READING)) {
+				}
+				
+				else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_JOBCHECKLIST)) {
+					settingDto.setJobCheckListEmailAlertId(setting.getId()); 
+					settingDto.setJobCheckListEmailAlert(Boolean.valueOf(setting.getSettingValue()));
+				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_JOBCHECKLIST_EMAILS)) {
+					settingDto.setJobCheckListEmailsId(setting.getId());
+					settingDto.setJobCheckListEmailIds(CommonUtil.convertToList(setting.getSettingValue(), ","));
+				}
+				
+				else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_READING)) {
 					settingDto.setReadingEmailAlertId(setting.getId());
 					settingDto.setReadingEmailAlert(Boolean.valueOf(setting.getSettingValue()));
 				}else if(setting.getSettingKey().equalsIgnoreCase(EMAIL_NOTIFICATION_READING_EMAILS)) {

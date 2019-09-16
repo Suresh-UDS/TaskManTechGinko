@@ -987,7 +987,62 @@
 
                         </div>
                     </div>
+<!-- **********************************Modified by Vinoth***************************************************************************** -->
 
+<div class="checkbox">
+                        <label>
+                            Job Check List Alert <input type="checkbox" name="terms" ng-model="settings.jobCheckListEmailAlert">
+                        </label>
+                    </div>
+
+                    <div class="MailList">
+                        <div class="row">
+
+                            <div class="col-md-9">
+
+                                <div class="form-group pdng-top15">
+                                    <label class="control-label">Job Check List Email List</label>
+                                    <input type="text" class="form-control" ng-model="jobCheckListEmail">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <button class="btn btn-success margn-top30" ng-click="addjobCheckListEmail()">
+                                <span class="btn-label">
+                                    <i class="material-icons">add</i>
+                                </span>
+                                    Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row addedActionList">
+
+                            <div class="col-md-9">
+                                <div class="form-group">
+
+                                    <label class="">Email ids</label>
+
+                                    <ul class="listOfActions list-group">
+
+                                        <li class="list-group-item justify-content-between" ng-repeat=" emailId in settings.jobCheckListEmailIds" ng-bind-html-unsafe="emailId">
+                                            {{emailId}}
+                                            <span class="badge badge-default badge-pill" ng-click="removejobChecListEmail($index)"><i class="material-icons">remove_circle</i></span>
+                                        </li>
+
+
+                                    </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+<!-- ******************************************************************************************************************** -->
 
                 </div>
             </div>

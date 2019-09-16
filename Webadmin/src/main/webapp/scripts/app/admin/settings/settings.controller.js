@@ -36,7 +36,8 @@ angular.module('timeSheetApp')
 			warrantyEmailIds: [],
 			dayWiseReportEmailIds: [],
 			musterRollEmailIds : [],
-            purchaseReqEmailIds : []
+            purchaseReqEmailIds : [],
+	        jobCheckListEmailIds : []
 	};
 
 
@@ -705,6 +706,48 @@ angular.module('timeSheetApp')
         $scope.removePurchaseReqEmail = function(ind) {
             $scope.settings.purchaseReqEmailIds.splice(ind,1);
         };
+        
+/*********************************Modified By Vinoth********************************************************************************/
+
+        $scope.addjobCheckListEmail = function() {
+            var email = $scope.jobCheckListEmail;
+            if(!email){
+                alert("Please fill out the field..!!");
+                return false;
+            }else{
+                if(!regex.test(email)){
+                    alert("Please enter valid email..!!");
+                    return false;
+                }else{
+                    if(email.length > 50){
+                        alert("Email cannot be longer than 50 characters.");
+                        return false;
+                    }
+                }
+            }
+            if($scope.settings.jobCheckListEmailIds){
+                if($scope.settings.jobCheckListEmailIds.length > 0){
+                    for(var i=0; i < $scope.settings.jobCheckListEmailIds.length;i++){
+                        if($scope.settings.jobCheckListEmailIds[i] == email){
+                            alert("Email is already exist..!!");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            if(!$scope.settings.jobCheckListEmailIds) {
+                $scope.settings.jobCheckListEmailIds = [];
+            }
+            $scope.settings.jobCheckListEmailIds.push(email);
+            $scope.jobCheckListEmail = '';
+        };
+
+        $scope.removejobChecListEmail = function(ind) {
+            $scope.settings.jobCheckListEmailIds.splice(ind,1);
+        };
+        
+/***********************************************************************************************************************************/
 
 	$scope.loadProjects = function () {
 		console.log("Loading all projects")
@@ -749,6 +792,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.saveSettings = function() {
+		alert("HI");
         $scope.saveLoad = true;
 		$scope.showLoader();
 		if($scope.selectedProject) {
@@ -761,6 +805,7 @@ angular.module('timeSheetApp')
 			$scope.settings.siteName = $scope.selectedSite.name;
 		}
 		console.log('settings - ' + JSON.stringify($scope.settings));
+		alert("Setting===>" + JSON.stringify($scope.settings));
 		SettingsComponent.saveSettings($scope.settings).then(function() {
 			$scope.hideLoader();
             $scope.saveLoad = false;
