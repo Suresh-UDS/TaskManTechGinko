@@ -86,7 +86,7 @@ public class OtaskmanService {
 				newPosition.setGrossAmount(positon.getGrossAmount());
 				newPosition.setPositionDesc(positon.getPositionDesc());
 				newPosition.setPositionId(positon.getPositionId());
-				
+				newPosition.setWbsId(positon.getWbsId());
 				positionsRepository.save(newPosition); 
 				
 				
