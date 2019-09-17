@@ -44,6 +44,7 @@ import com.ts.app.domain.Employee;
 import com.ts.app.domain.EmployeeDocuments;
 import com.ts.app.domain.FeedbackMapping;
 import com.ts.app.domain.GeneralSettings;
+import com.ts.app.domain.Positions;
 import com.ts.app.domain.SapBusinessCategories;
 import com.ts.app.repository.EmployeeDocumentRepository;
 import com.ts.app.repository.GeneralSettingsRepository;
@@ -666,9 +667,23 @@ public class EmployeeServiceResouce {
 	}
     
     @RequestMapping(value = "/getPositionsWithGrossByWBSID/{wbsId}", method = RequestMethod.GET)
-    public ResponseEntity<List<PositionDTO>> getPositionsWithGrossByWBSID(@PathVariable("wbsId") String wbsId) {
+    public ResponseEntity<List<Positions>> getPositionsWithGrossByWBSID(@PathVariable("wbsId") String wbsId) {
     	try {
-    		return new ResponseEntity<List<PositionDTO>>( oTaskmanService.getPositionsWithGrossByWBSID(wbsId), HttpStatus.OK);
+    		return new ResponseEntity<List<Positions>>( oTaskmanService.getPositionsWithGrossByWBSID(wbsId), HttpStatus.OK);
+    	}
+    	catch(Exception ex) {
+    		
+    		throw new TimesheetException(ex, ex.getMessage());
+    	}
+    	
+    }
+    
+    @RequestMapping(value = "/sybcPositionsWithGross", method = RequestMethod.GET)
+    public ResponseEntity<?> syncPositionsWithGross() {
+    	try {
+    		
+    		oTaskmanService.syncPositionsWithGross();
+    		return new ResponseEntity( HttpStatus.OK);
     	}
     	catch(Exception ex) {
     		
