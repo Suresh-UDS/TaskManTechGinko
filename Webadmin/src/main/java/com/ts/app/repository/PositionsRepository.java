@@ -14,4 +14,6 @@ public interface PositionsRepository extends JpaRepository<Positions, Long> {
  
 	List<Positions> findByWbsId(@Param("wbsId") String wbsId);
 	
+	Positions findByWbsIdAndPositionId(@Param("wbsId") String wbsId,@Param("positionId") String positionId);
+	
 }

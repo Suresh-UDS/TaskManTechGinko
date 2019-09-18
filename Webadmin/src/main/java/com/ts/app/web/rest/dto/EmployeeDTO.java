@@ -64,7 +64,7 @@ public class EmployeeDTO extends BaseDTO {
 
     private long jobId;
     
-    private float gross;
+    private double gross;
 
     private String jobTitle;
 
@@ -1063,11 +1063,11 @@ public class EmployeeDTO extends BaseDTO {
 		this.aadharNumber = aadharNumber;
 	}
 
-	public float getGross() {
+	public double getGross() {
 		return gross;
 	}
 
-	public void setGross(float gross) {
+	public void setGross(double gross) {
 		this.gross = gross;
 	}
 
