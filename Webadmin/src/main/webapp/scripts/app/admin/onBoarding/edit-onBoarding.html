@@ -664,7 +664,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
+                                <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" onKeyPress="if(this.value.length==12) return false;" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
 
                                 <div ng-show="form.$submitted || form.adharCardNumber.$touched || form.adharCardNumber.$dirty">
                                     <div ng-show="form.adharCardNumber.$dirty || form.adharCardNumber.$invalid">
@@ -870,7 +870,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-minlength="11" ng-maxlength="11" type="text" ng-disabled="!employee.newEmployee" name = "ifscCode" ng-model="employee.ifscCode" required/>
+                                <input class="form-control" ng-minlength="11" ng-maxlength="11" type="text" onKeyPress="if(this.value.length==11) return false;" ng-disabled="!employee.newEmployee" name = "ifscCode" ng-model="employee.ifscCode" required/>
                                 <!-- <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required /> -->
                                  <div ng-show="form.$submitted || form.ifscCode.$touched || form.ifscCode.$dirty">
                                     <div ng-show="form.ifscCode.$dirty || form.ifscCode.$invalid">
@@ -880,11 +880,11 @@
                                         </p>
                                         <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
                                            ng-show="form.ifscCode.$error.minlength">
-                                            Ifsc Card number is required to be at least 12 character.
+                                            Ifsc Card number is required to be at least 11 character.
                                         </p>
                                         <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                            ng-show="form.ifscCode.$error.maxlength">
-                                            Ifsc Card number cannot be longer than 12 characters.
+                                            Ifsc Card number cannot be longer than 11 characters.
                                         </p>
                                         <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                            ng-show="form.ifscCode.$error.pattern">
