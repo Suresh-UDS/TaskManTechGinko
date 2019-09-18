@@ -1,7 +1,18 @@
-package com.ts.app.web.rest.dto;
+package com.ts.app.domain;
 
-public class PositionDTO {
-	 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "sap_positions")
+public class Positions {
+ 
+	@Id
+	@GeneratedValue
+	private long id;
+	
 	private String positionDesc;
 	
 	private String positionId;
@@ -41,6 +52,6 @@ public class PositionDTO {
 	public void setWbsId(String wbsId) {
 		this.wbsId = wbsId;
 	}
-	 
+	
 	
 }
