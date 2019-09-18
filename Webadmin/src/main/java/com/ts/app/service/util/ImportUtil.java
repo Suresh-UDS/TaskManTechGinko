@@ -1850,7 +1850,7 @@ public class ImportUtil {
 					String empId;
 					boolean skipSave = false; 
 					
-					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
+					if( currentRow.getCell(5) !=null && StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
 						empId  = currentRow.getCell(5).getStringCellValue() ;
