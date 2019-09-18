@@ -515,9 +515,9 @@
                                 <label class="control-label"></label>
                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.gender" name="param"  aria-invalid="false" required>
                                     <option value="" class="" >Select Gender ..</option>
-                                    <option >FEMALE</option>
-                                    <option >MALE</option>
-                                    <option >OTHERS</option>
+                                    <option value="MALE" >FEMALE</option>
+                                    <option value="MALE" >MALE</option>
+                                    <option value="MALE" >OTHERS</option>
                                 </select>
                             </div>
                         </div>
@@ -530,9 +530,11 @@
                                 <label class="control-label"></label>
                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.maritalStatus"  name="param"  aria-invalid="false" required>
                                     <option value="" class="" selected="selected">-- Select Status --</option>
-                                    <option >Married</option>
-                                    <option >Un Married</option>
-                                    <option >Divorced</option>
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Widow">Widow</option>
+                                    <option value="Divorced">Divorced</option>
+                                    <option value="Seperated">Seperated</option>
                                 </select>
                             </div>
                         </div>
