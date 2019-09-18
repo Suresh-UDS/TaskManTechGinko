@@ -309,7 +309,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="addressProofImage"
-                                           name="addressProofImage" tabindex="9"
+                                           name="addressProofImage" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
 
@@ -664,7 +664,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-minlength="12" ng-maxlength="16" type="text" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
+                                <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
 
                                 <div ng-show="form.$submitted || form.adharCardNumber.$touched || form.adharCardNumber.$dirty">
                                     <div ng-show="form.adharCardNumber.$dirty || form.adharCardNumber.$invalid">
@@ -678,7 +678,7 @@
                                         </p>
                                         <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
                                            ng-show="form.adharCardNumber.$error.maxlength">
-                                            Aadhar Card number cannot be longer than 16 characters.
+                                            Aadhar Card number cannot be longer than 12 characters.
                                         </p>
                                         <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                            ng-show="form.adharCardNumber.$error.pattern">
@@ -713,7 +713,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="profilepicImage"
-                                           name="profilepicImage" tabindex="9"
+                                           name="profilepicImage" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
                             </div>
@@ -870,7 +870,29 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-disabled="!employee.newEmployee" ng-model="employee.ifscCode"  required/>
+                                <input class="form-control" ng-minlength="11" ng-maxlength="11" type="text" ng-disabled="!employee.newEmployee" name = "ifscCode" ng-model="employee.ifscCode" required/>
+                                <!-- <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required /> -->
+                                 <div ng-show="form.$submitted || form.ifscCode.$touched || form.ifscCode.$dirty">
+                                    <div ng-show="form.ifscCode.$dirty || form.ifscCode.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.ifscCode.$error.required">
+                                            Ifsc Card number is required.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                           ng-show="form.ifscCode.$error.minlength">
+                                            Ifsc Card number is required to be at least 12 character.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                           ng-show="form.ifscCode.$error.maxlength">
+                                            Ifsc Card number cannot be longer than 12 characters.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.ifscCode.$error.pattern">
+                                            Ifsc Card number can only contain number.
+                                        </p>
+                                    </div>
+                                </div>
+                                
                             </div>
                         </div>
 
@@ -896,7 +918,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="bankPassBookImage"
-                                           name="bankPassBookImage" tabindex="9"
+                                           name="bankPassBookImage" accept="image/png, image/jpeg" tabindex="9"
                                            ng-disabled="!employee.newEmployee"
                                     />
                                 </div>
@@ -941,7 +963,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="adharCardImageFront"
-                                           name="adharCardImageFront" tabindex="9"
+                                           name="adharCardImageFront" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
 
@@ -972,10 +994,10 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="adharCardImageBack"
-                                           name="adharCardImageBack" tabindex="9"
+                                           name="adharCardImageBack" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
-
+                               
                                 <div ng-show="form.$submitted || form.adharCardImageBack.$touched || form.adharCardImageBack.$dirty">
                                     <div ng-show="form.adharCardImageBack.$dirty || form.adharCardImageBack.$invalid">
                                         <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -1005,7 +1027,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="fingerprintLeftImage"
-                                           name="fingerprintLeftImage" tabindex="9"
+                                           name="fingerprintLeftImage" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
 
@@ -1028,7 +1050,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="fingerprintRightImage"
-                                           name="fingerprintRightImage" tabindex="9"
+                                           name="fingerprintRightImage" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
                             </div>
@@ -1057,7 +1079,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="drivingLicenseImageFront"
-                                           name="drivingLicenseImageFront" tabindex="9"
+                                           name="drivingLicenseImageFront" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
                             </div>
@@ -1079,7 +1101,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="voterIdImage"
-                                           name="voterIdImage" tabindex="9"
+                                           name="voterIdImage" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
                             </div>
@@ -1101,7 +1123,7 @@
                                     <input type="file"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="pancardImage"
-                                           name="pancardImage" tabindex="9"
+                                           name="pancardImage" accept="image/png, image/jpeg" tabindex="9"
                                     />
                                 </div>
                             </div>
