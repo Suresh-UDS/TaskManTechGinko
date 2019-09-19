@@ -665,7 +665,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" onKeyPress="if(this.value.length==12) return false;" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
+                                <input class="form-control" ng-minlength="12" ng-maxlength="12" type="text" ng-pattern="onlyNumbers" onKeyPress="if(this.value.length==12) return false;" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required />
 
                                 <div ng-show="form.$submitted || form.adharCardNumber.$touched || form.adharCardNumber.$dirty">
                                     <div ng-show="form.adharCardNumber.$dirty || form.adharCardNumber.$invalid">

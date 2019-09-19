@@ -1185,6 +1185,8 @@ angular.module('timeSheetApp')
 
 	};
 
+	$scope.onlyNumbers = /^\d+$/;
+
     $scope.loadEmployee = function() {
 		
 		$scope.loadNomineeDetails();
