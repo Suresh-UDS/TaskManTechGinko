@@ -241,7 +241,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
     private boolean newEmployee;
     
-    private float gross;
+    private double gross;
     
     private String onboardedPlace;
 
@@ -940,12 +940,12 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	}
 
 
-	public float getGross() {
+	public double getGross() {
 		return gross;
 	}
 
 
-	public void setGross(float gross) {
+	public void setGross(double gross) {
 		this.gross = gross;
 	}
 	

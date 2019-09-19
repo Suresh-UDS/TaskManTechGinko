@@ -124,6 +124,9 @@ public class ImportUtil {
 
 	@Inject
 	private ImportLogRepository importLogRepository;
+	
+	@Inject
+	private PositionsRepository positionsRepository;
 
 	public ImportResult importJobData(MultipartFile file, long dateTime)  {
         String fileName = dateTime + ".xlsx";
@@ -1850,7 +1853,7 @@ public class ImportUtil {
 					String empId;
 					boolean skipSave = false; 
 					
-					if( StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
+					if( currentRow.getCell(5) !=null && StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
 						empId  = currentRow.getCell(5).getStringCellValue() ;
@@ -1984,10 +1987,21 @@ public class ImportUtil {
 							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
 							cellNo = 34;
 							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
-							cellNo = 35;
+							cellNo = 35; 
 							employee.setPosition(getCellValue(currentRow.getCell(35)));
 							cellNo = 36;
-							employee.setGross( Float.parseFloat(getCellValue(currentRow.getCell(36))));
+							
+							String position,wbsId;
+							position = getCellValue(currentRow.getCell(35));
+							wbsId = getCellValue(currentRow.getCell(2));
+							
+							Positions positionOb = positionsRepository.findByWbsIdAndPositionId(wbsId, position);
+							
+							double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
+							
+							
+							
+							employee.setGross( gorss);
 							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
