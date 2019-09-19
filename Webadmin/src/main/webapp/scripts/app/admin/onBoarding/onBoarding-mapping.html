@@ -130,12 +130,11 @@
 
                 <div class="card-content">
 
-                    <div class="row">
-                        <span ng-repeat="branch in userBranchList" class="tag label label-info" style="margin-right: 10px">
-                            {{branch.element}}
-			                </span>
+                    <div>
+                    <div ng-repeat="branch in userBranchList" class="tag label label-info" style="margin-right: 10px; display: inline-table">
+                        {{branch.element}}
                     </div>
-
+                    </div>
                     <div ng-show="!showUserBranchesList">
                         <div class="card card-pricing card-plain">
                             <div class="content">

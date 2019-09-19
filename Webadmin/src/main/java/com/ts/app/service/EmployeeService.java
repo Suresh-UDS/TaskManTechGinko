@@ -2360,6 +2360,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setVerifiedDate(null); 
     empDto.setOnboardedPlace(employee.getOnboardedPlace()); 
     empDto.setGross(employee.getGross()); 
+    empDto.setNewEmployee(employee.isNewEmployee());
     
     return empDto;
 }
