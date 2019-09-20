@@ -1681,7 +1681,7 @@ public class ImportUtil {
 							log.debug("Update Employee Information with new site info: {} " + existingEmployee.getEmpId() );
 
 							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(5)))) {
-								Employee manager =  employeeRepo.findByEmpId(getCellValue(currentRow.getCell(5)));
+								Employee manager =  employeeRepo.findByEmpId(currentRow.getCell(5).getStringCellValue().trim());
 								if(manager !=null){
                                     existingEmployee.setManager(manager);
                                 }
