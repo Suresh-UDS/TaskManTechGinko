@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,6 +128,9 @@ public class ImportUtil {
 	
 	@Inject
 	private PositionsRepository positionsRepository;
+
+    @Value("${onBoarding.dummyUser}")
+    private String dummyUser;
 
 	public ImportResult importJobData(MultipartFile file, long dateTime)  {
         String fileName = dateTime + ".xlsx";
@@ -1660,15 +1664,6 @@ public class ImportUtil {
 				log.debug("Current Row number -" + r);
 				Row currentRow = datatypeSheet.getRow(r);
 				try {
-
-					/*Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
-					log.debug("Employee obj =" + existingEmployee);
-					&& existingEmployee.getActive().equals(Employee.ACTIVE_NO
-					if(existingEmployee!=null){
-						log.debug("*************Existing Employee");
-
-					}
-					else {*/
 					cellNo = 2;
 					if(currentRow.getCell(2).getStringCellValue() != null) {
 						Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(2).getStringCellValue().trim());
@@ -1679,97 +1674,47 @@ public class ImportUtil {
 							cellNo = 1;
 							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
 							EmployeeProjectSite projectSite = new EmployeeProjectSite();
-							/*
-							projectSite.setProjectId(newProj.getId());
-							projectSite.setProjectName(newProj.getName());
-							projectSite.setSiteId(newSite.getId());
-							projectSite.setSiteName(newSite.getName());
-							*/
 							projectSite.setProject(newProj);
 							projectSite.setSite(newSite);
 							projectSite.setEmployee(existingEmployee);
+                            existingEmployee.getProjectSites().add(projectSite);
+							log.debug("Update Employee Information with new site info: {} " + existingEmployee.getEmpId() );
 
-							if(CollectionUtils.isNotEmpty(projSites)) {
-								projSites.add(projectSite);
-							}
-							employeeRepo.save(existingEmployee);
-							log.debug("Update Employee Information with new site info: {}");
-						}else {
-							Employee employee = new Employee();
-							cellNo = 0;
-							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-							cellNo = 1;
-							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-							cellNo = 2;
-							employee.setEmpId(getCellValue(currentRow.getCell(2)));
-							cellNo = 3;
-							employee.setName(getCellValue(currentRow.getCell(3)));
-							employee.setFullName(getCellValue(currentRow.getCell(3)));
-							cellNo = 4;
-							employee.setLastName(getCellValue(currentRow.getCell(4)));
-							cellNo = 5;
-							employee.setPhone(getCellValue(currentRow.getCell(5)));
-							cellNo = 6;
-							employee.setEmail(getCellValue(currentRow.getCell(6)));
-							cellNo = 7;
-							employee.setDesignation(getCellValue(currentRow.getCell(7)));
-							// email, phone number missing
-							ZoneId  zone = ZoneId.of("Asia/Singapore");
-							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-							employee.setCreatedDate(zdt);
-							employee.setActive(Employee.ACTIVE_YES);
-							cellNo = 8;
-							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(8)))) {
-								Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(8))));
-								employee.setManager(manager);
+							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(5)))) {
+								Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(5))));
+                                existingEmployee.setManager(manager);
 					        }
-							List<Project> projects = new ArrayList<Project>();
-							projects.add(newProj);
-							List<Site> sites = new ArrayList<Site>();
-							sites.add(newSite);
-							employee.setFaceAuthorised(false);
-							employee.setFaceIdEnrolled(false);
-							employee.setLeft(false);
-							employee.setRelieved(false);
-							employee.setReliever(false);
-							List<EmployeeProjectSite> projectSites = new ArrayList<EmployeeProjectSite>();
-							EmployeeProjectSite projectSite = new EmployeeProjectSite();
-							/*
-							projectSite.setProjectId(newProj.getId());
-							projectSite.setProjectName(newProj.getName());
-							projectSite.setSiteId(newSite.getId());
-							projectSite.setSiteName(newSite.getName());
-							*/
-							projectSite.setProject(newProj);
-							projectSite.setSite(newSite);
-							projectSite.setEmployee(employee);
-							projectSites.add(projectSite);
-							employee.setProjectSites(projectSites);
+                            existingEmployee.setFaceAuthorised(false);
+                            existingEmployee.setFaceIdEnrolled(false);
+                            existingEmployee.setLeft(false);
+                            existingEmployee.setRelieved(false);
+                            existingEmployee.setReliever(false);
 
-							employeeRepo.save(employee);
+							employeeRepo.save(existingEmployee);
 							//create user if opted.
-							cellNo = 9;
-							String createUser = getCellValue(currentRow.getCell(9));
-							cellNo = 10;
-							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(10)));
+							cellNo = 3;
+							String createUser = getCellValue(currentRow.getCell(3));
+							cellNo = 4;
+							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(4)));
 							UserDTO user = new UserDTO();
 							if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
-								user.setLogin(employee.getEmpId());
-								user.setPassword(employee.getEmpId());
-								user.setFirstName(employee.getName());
-								user.setLastName(employee.getLastName());
-								user.setAdminFlag("N");
-								user.setUserRoleId(userRoleId);
-								user.setEmployeeId(employee.getId());
-								user.setActivated(true);
-								cellNo = 6;
-								user.setEmail(currentRow.getCell(6).getStringCellValue());
-								user = userService.createUserInformation(user);
-								User userObj = userRepository.findOne(user.getId());
-								employee.setUser(userObj);
-								employeeRepo.save(employee);
+							    if((existingEmployee.getUser() == null) || (existingEmployee.getUser() !=null && StringUtils.equals(existingEmployee.getUser().getLogin(),dummyUser))){
+                                    user.setLogin(existingEmployee.getEmpId());
+                                    user.setPassword(existingEmployee.getEmpId());
+                                    user.setFirstName(existingEmployee.getName());
+                                    user.setLastName(existingEmployee.getLastName());
+                                    user.setAdminFlag("N");
+                                    user.setUserRoleId(userRoleId);
+                                    user.setEmployeeId(existingEmployee.getId());
+                                    user.setActivated(true);
+                                    user = userService.createUserInformation(user);
+                                    User userObj = userRepository.findOne(user.getId());
+                                    existingEmployee.setUser(userObj);
+                                    employeeRepo.save(existingEmployee);
+                                }
+
 							}
-							log.debug("Created Information for Employee: {}" + employee.getId());
+							log.debug("Created Information for Employee: {}" + existingEmployee.getId());
 
 						}
 					}
