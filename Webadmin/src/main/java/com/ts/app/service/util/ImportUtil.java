@@ -1677,6 +1677,7 @@ public class ImportUtil {
 							projectSite.setProject(newProj);
 							projectSite.setSite(newSite);
 							projectSite.setEmployee(existingEmployee);
+                            existingEmployee.getProjectSites().clear();
                             existingEmployee.getProjectSites().add(projectSite);
 							log.debug("Update Employee Information with new site info: {} " + existingEmployee.getEmpId() );
 

@@ -1756,6 +1756,7 @@ public class    EmployeeService extends AbstractService {
             List<Employee> allEmpsList = new ArrayList<>();
             Page<Employee> page = null;
             List<EmployeeDTO> transactions = null;
+            searchCriteria.setOnBoarded(true);
 
             if (!StringUtils.isEmpty(searchCriteria.getColumnName())) {
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
