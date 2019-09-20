@@ -78,6 +78,9 @@ public class    EmployeeService extends AbstractService {
     private AttendanceRepository attendanceRepository;
     
     @Inject
+    private SiteListRepository siteListRepository;
+    
+    @Inject
     private NomineeRelationshipRepository nomineeRelationshipRepository ;
 
     @Inject
@@ -477,10 +480,12 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setAcNo(employee.getAccountNumber());
 		zempDetStr.setAddrLi2M((employee.getPresentAddress().length() >= 40 ?  employee.getPresentAddress().substring(0,39) : employee.getPresentAddress() ));
 		zempDetStr.setCityM(employee.getPresentCity());
-		zempDetStr.setStateM(employee.getPresentState());
+		StateList presentState = siteListRepository.findByName(employee.getPresentState());
+		zempDetStr.setStateM(presentState!=null?presentState.getCode():"010");
 		zempDetStr.setAddrLi2P((employee.getPermanentAddress().length() >= 40 ?  employee.getPermanentAddress().substring(0,39) : employee.getPermanentAddress() ));
 		zempDetStr.setCityP(employee.getPermanentCity());
-		zempDetStr.setStateP(employee.getPermanentState());
+		StateList permanentState = siteListRepository.findByName(employee.getPermanentState());
+		zempDetStr.setStateP(permanentState !=null ? permanentState.getCode() : "010");
 		zempDetStr.setAcNo(employee.getAccountNumber());
 		zempDetStr.setBankKey("9100");
 		
