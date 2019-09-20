@@ -11,13 +11,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.TemporalType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.temporal.Temporal;
 import java.util.*;
 
 public class JobSpecification implements Specification<Job> {
@@ -150,10 +154,13 @@ public class JobSpecification implements Specification<Job> {
 			        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 			        	} 
 		            	else {
- 
-		            		predicates.add(builder.lessThanOrEqualTo( builder.function("DATE", String.class, root.get("plannedStartTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  ));
-		            		predicates.add(builder.greaterThanOrEqualTo(builder.function("DATE", String.class, root.get("plannedEndTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  )  );
-		            		
+		            		 
+		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedStartTime"),fromDt));
+		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedEndTime"),fromDt));
+//		            		
+//		            		predicates.add(builder.lessThanOrEqualTo( builder.function("DATE", String.class, root.get("plannedStartTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  , TemporalType.DATE  ));
+//		            		predicates.add(builder.greaterThanOrEqualTo(builder.function("DATE", String.class, root.get("plannedEndTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  , TemporalType.DATE  ));
+//		            		
 		            	}
 
 		            	//String toDt = DateUtil.formatUTCToIST(checkInDateTo);
