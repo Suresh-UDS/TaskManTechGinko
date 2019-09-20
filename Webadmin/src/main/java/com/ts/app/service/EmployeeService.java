@@ -46,6 +46,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -405,7 +406,13 @@ public class    EmployeeService extends AbstractService {
 		headers.setContentType( MediaType.APPLICATION_JSON);
 		 
 		HttpEntity<ZempdetailUpdate> request = new HttpEntity<>(zempdetailUpdate,headers);
-
+ 
+		HttpComponentsClientHttpRequestFactory clientRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		// set the read timeot, this value is in miliseconds
+		clientRequestFactory.setReadTimeout(1000*10);
+		
+		restTemplate = new RestTemplate(clientRequestFactory);
+		
 		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
 				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
 				ZempdetailUpdateResponse.class);
@@ -641,7 +648,7 @@ public class    EmployeeService extends AbstractService {
 		            updateEmployee.setVerifiedBy(user);
 		            updateEmployee.setVerified(true);
 		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
-		          
+		            updateEmployee.setNewEmployee(false);
 		            
 		            // update login
 		            
