@@ -1681,8 +1681,10 @@ public class ImportUtil {
 							log.debug("Update Employee Information with new site info: {} " + existingEmployee.getEmpId() );
 
 							if(StringUtils.isNotEmpty(getCellValue(currentRow.getCell(5)))) {
-								Employee manager =  employeeRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(5))));
-                                existingEmployee.setManager(manager);
+								Employee manager =  employeeRepo.findByEmpId(getCellValue(currentRow.getCell(5)));
+								if(manager !=null){
+                                    existingEmployee.setManager(manager);
+                                }
 					        }
                             existingEmployee.setFaceAuthorised(false);
                             existingEmployee.setFaceIdEnrolled(false);
@@ -1925,7 +1927,7 @@ public class ImportUtil {
 							cellNo = 30;
 							employee.setEmployer(getCellValue(currentRow.getCell(30)));
 							cellNo = 31;
-							employee.setDesignation(getCellValue(currentRow.getCell(31)));
+							employee.setPreviousDesignation(getCellValue(currentRow.getCell(31)));
 							cellNo = 32;
 							employee.setAdharCardNumber(getCellValue(currentRow.getCell(32)));
 							cellNo = 33;
