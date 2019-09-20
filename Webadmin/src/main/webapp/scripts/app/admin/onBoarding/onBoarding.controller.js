@@ -1204,7 +1204,7 @@ angular.module('timeSheetApp')
                     $scope.employee.mobile = $scope.employee.mobile ? parseInt($scope.employee.mobile) : "";
                     $scope.employee.emergencyContactNumber= $scope.employee.emergencyContactNumber ? parseInt($scope.employee.emergencyContactNumber) : "";
 					$scope.employee.nomineeContactNumber = $scope.employee.nomineeContactNumber ? parseInt($scope.employee.nomineeContactNumber) : "";
-					$scope.employee.adharCardNumber = $scope.employee.adharCardNumber ? parseInt($scope.employee.adharCardNumber) : "";
+					$scope.employee.adharCardNumber = $scope.employee.adharCardNumber ? Number($scope.employee.adharCardNumber) : "";
 
 					console.log($scope.employee.newEmployee);
 
