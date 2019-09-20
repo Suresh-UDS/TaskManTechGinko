@@ -659,7 +659,11 @@ public class    EmployeeService extends AbstractService {
 		            	User empUser = userRepository.findOne(updateEmployee.getUser().getId());
 		            	
 		            	if(!empUser.getLogin().equals(dummyUser)) {
-		            		updateEmployee.getUser().setLogin(returnObject.getEmpId());
+		            		 
+		            		empUser.setLogin(updateEmployee.getEmpId());
+		            		userRepository.saveAndFlush(empUser);
+		            		
+		            		updateEmployee.setUser(empUser);
 		            	}
 		            	
 		            }
