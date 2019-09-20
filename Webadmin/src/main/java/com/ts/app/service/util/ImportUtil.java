@@ -1677,6 +1677,7 @@ public class ImportUtil {
 							projectSite.setProject(newProj);
 							projectSite.setSite(newSite);
 							projectSite.setEmployee(existingEmployee);
+                            existingEmployee.getProjectSites().clear();
                             existingEmployee.getProjectSites().add(projectSite);
 							log.debug("Update Employee Information with new site info: {} " + existingEmployee.getEmpId() );
 
@@ -1700,7 +1701,8 @@ public class ImportUtil {
 							long userRoleId = Long.parseLong(getCellValue(currentRow.getCell(4)));
 							UserDTO user = new UserDTO();
 							if(StringUtils.isNotEmpty(createUser) && createUser.equalsIgnoreCase("Y") && userRoleId > 0) {
-							    if((existingEmployee.getUser() == null) || (existingEmployee.getUser() !=null && StringUtils.equals(existingEmployee.getUser().getLogin(),dummyUser))){
+							    User existingUser = userRepository.findByEmployee(existingEmployee.getId());
+							    if((existingUser == null) || (existingUser !=null && StringUtils.equals(existingUser.getLogin(),dummyUser))){
                                     user.setLogin(existingEmployee.getEmpId());
                                     user.setPassword(existingEmployee.getEmpId());
                                     user.setFirstName(existingEmployee.getName());
@@ -1712,6 +1714,10 @@ public class ImportUtil {
                                     user = userService.createUserInformation(user);
                                     User userObj = userRepository.findOne(user.getId());
                                     existingEmployee.setUser(userObj);
+                                    employeeRepo.save(existingEmployee);
+                                }else{
+                                    User userObj = userRepository.findOne(existingUser.getId());
+							        existingEmployee.setUser(userObj);
                                     employeeRepo.save(existingEmployee);
                                 }
 
