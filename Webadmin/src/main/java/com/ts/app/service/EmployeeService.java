@@ -184,6 +184,10 @@ public class    EmployeeService extends AbstractService {
     
     @Value("${onBoarding.empRetrieve}")
     private String URL_ORACLE;
+    
+    @Value("${onBoarding.dummyUser}")
+    private String dummyUser;
+
 
     public EmployeeDTO findByEmpId(String empId) {
         Employee employee = employeeRepository.findByEmpId(empId);
@@ -481,11 +485,11 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setAddrLi2M((employee.getPresentAddress().length() >= 40 ?  employee.getPresentAddress().substring(0,39) : employee.getPresentAddress() ));
 		zempDetStr.setCityM(employee.getPresentCity());
 		StateList presentState = siteListRepository.findByName(employee.getPresentState());
-		zempDetStr.setStateM(presentState!=null?presentState.getCode():"010");
+		zempDetStr.setStateM(presentState!=null?presentState.getCode().substring(1):"10");
 		zempDetStr.setAddrLi2P((employee.getPermanentAddress().length() >= 40 ?  employee.getPermanentAddress().substring(0,39) : employee.getPermanentAddress() ));
 		zempDetStr.setCityP(employee.getPermanentCity());
 		StateList permanentState = siteListRepository.findByName(employee.getPermanentState());
-		zempDetStr.setStateP(permanentState !=null ? permanentState.getCode() : "010");
+		zempDetStr.setStateP(permanentState !=null ? permanentState.getCode().substring(1) : "10");
 		zempDetStr.setAcNo(employee.getAccountNumber());
 		zempDetStr.setBankKey("9100");
 		
@@ -632,14 +636,22 @@ public class    EmployeeService extends AbstractService {
 			returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
 			
 			if(!returnObject.getType().equals("E")) {
-				 
-//				if(updateEmployee.isVerified()){
+				  
 		        	updateEmployee.setEmpId( returnObject.getEmpId());
 		            updateEmployee.setVerifiedBy(user);
 		            updateEmployee.setVerified(true);
 		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
+		          
+		            
+		            // update login
+		            
+		            if(updateEmployee.getUser()!=null && !updateEmployee.getUser().getLogin().equals(dummyUser)) {
+		            	
+		            	updateEmployee.getUser().setLogin(returnObject.getEmpId());
+		            	
+		            }
+		            
 		            employee = employeeRepository.saveAndFlush(updateEmployee);
-//		        }
 				
 			}
 			

@@ -16,6 +16,8 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import java.text.DateFormat;
 import java.util.*;
 
 public class JobSpecification implements Specification<Job> {
@@ -149,8 +151,8 @@ public class JobSpecification implements Specification<Job> {
 			        	} 
 		            	else {
  
-		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedStartTime"), fromDt));
-		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedEndTime"), fromDt));
+		            		predicates.add(builder.lessThanOrEqualTo( builder.function("DATE", String.class, root.get("plannedStartTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  ));
+		            		predicates.add(builder.greaterThanOrEqualTo(builder.function("DATE", String.class, root.get("plannedEndTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  )  );
 		            		
 		            	}
 
