@@ -47,6 +47,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -407,12 +408,12 @@ public class    EmployeeService extends AbstractService {
 		 
 		HttpEntity<ZempdetailUpdate> request = new HttpEntity<>(zempdetailUpdate,headers);
  
-		HttpComponentsClientHttpRequestFactory clientRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		// set the read timeot, this value is in miliseconds
-		clientRequestFactory.setReadTimeout(1000*10);
+		SimpleClientHttpRequestFactory rf =
+			    (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
 		
-		restTemplate = new RestTemplate(clientRequestFactory);
-		
+		rf.setConnectTimeout(1000 * 120);
+		rf.setReadTimeout(1000 * 120);
+	
 		ResponseEntity<ZempdetailUpdateResponse> response = restTemplate.exchange(
 				URL_ORACLE + "updateEmployeeOnSap" , HttpMethod.POST,  request,
 				ZempdetailUpdateResponse.class);
@@ -640,10 +641,11 @@ public class    EmployeeService extends AbstractService {
 		try {
 			response = saveEmployeeOnSAP(zempdetailUpdate);
 			returnObject = response.getReturnLog().getItem().get(0);
-			returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
+			
 			
 			if(!returnObject.getType().equals("E")) {
-				  
+					
+					returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
 		        	updateEmployee.setEmpId( returnObject.getEmpId());
 		            updateEmployee.setVerifiedBy(user);
 		            updateEmployee.setVerified(true);
@@ -652,9 +654,13 @@ public class    EmployeeService extends AbstractService {
 		            
 		            // update login
 		            
-		            if(updateEmployee.getUser()!=null && !updateEmployee.getUser().getLogin().equals(dummyUser)) {
+		            if(updateEmployee.getUser()!=null) {
 		            	
-		            	updateEmployee.getUser().setLogin(returnObject.getEmpId());
+		            	User empUser = userRepository.findOne(updateEmployee.getUser().getId());
+		            	
+		            	if(!empUser.getLogin().equals(dummyUser)) {
+		            		updateEmployee.getUser().setLogin(returnObject.getEmpId());
+		            	}
 		            	
 		            }
 		            

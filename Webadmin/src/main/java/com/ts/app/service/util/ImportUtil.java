@@ -1962,7 +1962,7 @@ public class ImportUtil {
 							employee.setImported(true);
 							employee.setOnBoardedFrom("Web");
 							employee.setOnBoardSource("Import");
-							employee.setUser(null);
+							if(employee.getUser()==null) {employee.setUser(null);}
 							employee.setSubmitted(false);
 							employee.setVerified(false);
                             //employeeDTO.setMessage("error.duplicateRecordError");
