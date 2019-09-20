@@ -72,6 +72,54 @@ export class onboardingNewEmployee {
         console.log('projectId TYPES123 ' + JSON.stringify(data));
         console.log(data)
         data.filtered = true;
+        data.siteDetails = {
+            projectCode:'',
+            wbsId:'',
+            projectDescription:'',
+            wbsDescription:'',
+            position:''
+        }
+        data.personalDetails = {
+          employeeCode:  '',
+            employeeName: '',
+            relationshipDetails: [{name:'',relationship:'',contactNumber:''},{name:'',relationship:'',contactNumber:''}],
+            gender: '',
+            maritalStatus: '',
+            dateOfBirth: '',
+            dateOfJoining: '',
+            religion: '',
+            bloodGroup: '',
+            identificationMark: ''
+        }
+        data.contactDetails = {
+          contactNumber: '',
+            emergencyConatctNo: '',
+            communicationAddress: [{address:'',city:'',state:''}],
+            permanentAddress: [{address:'',city:'',state:''}],
+            addressProof: ''
+        }
+        data.familyAcademicDetails = {
+          educationQualification: [{qualification:'',institute:''}],
+          nomineeDetail: [{name:'', relationship:'',contactNumber:'',nominePercentage:0}]
+        }
+        data.employmentDetails = {
+          previousEmployee : [{isEmploymentEarlier:'',name:'',designation:''}],
+        }
+        data.kycDetails = {
+          aadharNumber: '',
+            bankDetails: [{accountNo:'',ifsc:''}],
+            aadharPhotoCopy: '',
+            employeeSignature: '',
+            profilePicture: '',
+            thumbImpressenRight:'',
+            thumbImpressenLeft:'',
+            prePrintedStatement: ''
+        }
+        data.declaration = {
+            agreeTermsAndConditions:false,
+            onboardedPlace:''
+        }
+        data.newEmployee = true;
         let onboardingData =  onBoardingModel;
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
@@ -82,7 +130,9 @@ export class onboardingNewEmployee {
         } else {
           console.log(data)
           // Object.assign(localStoragedData['actionRequired'][this.storedIndex], data);
-          if(!localStoragedData['actionRequired'][data.index].hasOwnProperty['siteDetails']){
+          if(localStoragedData['actionRequired'][data.index] && localStoragedData['actionRequired'][data.index].hasOwnProperty['siteDetails']){
+            console.log("Site details available so skip creating new details")
+          }else{
             localStoragedData['actionRequired'].push(data);
             this.storage.set('OnBoardingData', localStoragedData);
           }
@@ -418,6 +468,7 @@ export class onboardingNewEmployee {
           employeeDetails.position = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] : localStoragedData['actionRequired'][this.storedIndex]['position'];
           employeeDetails.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
           employeeDetails.name = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName']: localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+          employeeDetails.lastName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName']: localStoragedData['actionRequired'][this.storedIndex]['lastName'];
           employeeDetails.gender = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender']: localStoragedData['actionRequired'][this.storedIndex]['gender'];
           employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus']: localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
           employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
@@ -517,7 +568,7 @@ export class onboardingNewEmployee {
 
           let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
           employeeDetails.name = name
-          employeeDetails.lastName = employeeDetails.fatherName;
+          
           employeeDetails.fullName = name + employeeDetails.lastName;
           
           if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] || localStoragedData['actionRequired'][this.storedIndex]['employeeCode']){
@@ -526,13 +577,14 @@ export class onboardingNewEmployee {
           
           if(employeeDetails.emergencyContactNumber ===0){ delete employeeDetails.emergencyContactNumber;}
             
-          
+          employeeDetails.newEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
           console.log("employee details");
           console.log(employeeDetails);
 
           if(this.formActionStatus && this.formActionStatus === 'update'&& employeeDetails.id){
             console.log("Update");
 
+            
             this.onBoardingService.editOnBoardingUser(employeeDetails).subscribe((res)=>{
               console.log("Sucessfully saved employees");
               console.log(res);
@@ -574,7 +626,7 @@ export class onboardingNewEmployee {
 
             let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
             employeeDetails.empId = employeeDetails.empId ? employeeDetails.empId : adharNumber.toString().substring(5);
-            employeeDetails.newEmployee = employeeDetails.empId ? false : true;
+            employeeDetails.newEmployee = true;
 
             this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
               console.log("Sucessfully saved employees");

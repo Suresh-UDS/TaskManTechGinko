@@ -80,6 +80,8 @@ export class OnBoardingEmployeeFilter {
     this.selectedProject = null;
     this.selectedWBS = null;
     this.showError = false;
+    this.empNameSearch = null;
+    this.empCodeSearch = null;
 
     this.filterData = {
       branch: null,
@@ -100,10 +102,11 @@ export class OnBoardingEmployeeFilter {
         name:null
       }
 
-      this.selectedBranch = null;
-      this.selectedProject = null;
-      this.selectedWBS = null;
-      this.showError = false;
+    this.storage.remove('initBranches').then(result=>{
+      console.log("Branches removed from storage");
+    })
+
+      
 
     },err=>{
       console.log("Error in clearing storage");

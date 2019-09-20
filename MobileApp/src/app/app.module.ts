@@ -177,6 +177,9 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 import {GetProjectService} from '../pages/service/getProjectService';
 import { GetWBSListService} from '../pages/service/getWBSListService';
 import {NewEmpSiteDetails} from "../pages/onboarding/onboardingNewEmployee/new-emp-site-details/new-emp-site-details";
+
+import { NativeGeocoder} from '@ionic-native/native-geocoder';
+
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
@@ -485,12 +488,13 @@ import {NewEmpSiteDetails} from "../pages/onboarding/onboardingNewEmployee/new-e
     PurchaseRequisitionService,
     DatabaseProvider,
     Base64,
+
     /* Onboarding Servive */ 
     OnboardingService,
     onBoardingDataService,
     GetProjectService,
     GetWBSListService,
-    
+    NativeGeocoder,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     { provide: MY_CONFIG_TOKEN, useValue: AppConfig }
   ]

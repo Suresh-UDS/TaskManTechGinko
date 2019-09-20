@@ -28,6 +28,7 @@ export class declaration  {
   storedIndex:any;
   thumbImpression:any;
   employeeName:any;
+  lastName:any;
 
 constructor(public navCtrl: NavController, private onBoardingService: OnboardingService, public navParams: NavParams, public fb: FormBuilder, private messageService: onBoardingDataService,
              private nativeGeocoder: NativeGeocoder,private locationProvider: LocationProvider, private backgroundGeolocation: BackgroundGeolocation, private storage: Storage, private cs:componentService) {
@@ -41,6 +42,7 @@ constructor(public navCtrl: NavController, private onBoardingService: Onboarding
       this.storage.get('OnBoardingData').then(localStoragedData => {
           this.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
           this.employeeName = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
+          this.lastName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName'] : '';
           this.thumbImpression = localStoragedData['actionRequired'][this.storedIndex]['thumbImpressenLeft'];
       })
     }

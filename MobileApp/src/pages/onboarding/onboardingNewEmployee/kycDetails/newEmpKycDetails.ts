@@ -29,6 +29,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
   storedIndex;
   isenabled:boolean=false;
   formActionStatus:any;
+  isNewEmployee:boolean;
   // kycdata = [
   //   { name: 'Driving License' },
   //   { name: 'PAN Card' },
@@ -39,11 +40,11 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
     private storage: Storage, private camera: Camera,
     private actionSheetCtrl: ActionSheetController, private messageService: onBoardingDataService, private file: File, private ele:ElementRef) { 
 
-     
 
     }
 
   ngOnInit() {
+
 
     this.onboardingKYCForm = this.fb.group({
       aadharNumber: ['', [Validators.required]],
@@ -167,6 +168,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
       destinationType: this.camera.DestinationType.FILE_URI,
       mediaType: this.camera.MediaType.PICTURE,
       encodingType: this.camera.EncodingType.JPEG,
+      cameraDirection:0,
       correctOrientation: true
     };
     if (imageType == 'album') {
@@ -332,6 +334,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
           this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']);
           console.log('kyc=aadhaar2' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
           //this.onboardingKYCForm.patchValue();
+          this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
           this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']);
           this.sendValidationMessage();
       }else{
@@ -351,6 +354,7 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]  ['aadharNumber']);
         console.log('kyc=aadhaar2' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
         //this.onboardingKYCForm.patchValue();
+        this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
         this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]  );
         this.sendValidationMessage();
       }

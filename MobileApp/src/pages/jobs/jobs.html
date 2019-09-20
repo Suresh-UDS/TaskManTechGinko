@@ -9,7 +9,7 @@
           <ion-icon name="funnel"></ion-icon>
         </button>
         <button color="primary" ion-button clear has-permission="JobCreate" class="add-btn" (click)="addJob()" ><ion-icon name="add"></ion-icon></button>
-
+        <button color="primary" ion-button clear  (click)="scanQR()" ><i style="color: #ff9800" class="fa fa-qrcode fnt-24"></i></button>
         </ion-buttons>
     </ion-navbar>
     <ion-segment [(ngModel)]="categories" class="segmnt margin-auto" color="#ff9800">
@@ -27,9 +27,9 @@
 
 <ion-content>
 
-    <ion-fab  bottom right (click)="scanQR()" >
+    <!-- <ion-fab  bottom left (click)="scanQR()" >
         <button ion-fab color="primary" ><i class="fa fa-qrcode clr-white fnt-24"></i></button>
-    </ion-fab>
+    </ion-fab> -->
 
     <!--<ion-fab top right edge >-->
     <!--<button has-permission="JobCreate" (click)="addJob()" ion-fab><ion-icon name="add"></ion-icon></button>-->

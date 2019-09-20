@@ -51,7 +51,7 @@ import {Network} from "@ionic-native/network";
 import {DashboardPage} from "../pages/dashboard/dashboard";
 import {OfflineOnlineLanding} from "../pages/Offline-Online-Landing/offline-online-landing";
 //import {Declaration} from "../pages/declaration/declaration";
-
+import {Storage} from "@ionic/storage";
 
 
 
@@ -73,7 +73,7 @@ export class MyApp {
     constructor(public platform: Platform, private ionicApp: IonicApp, public menuCtrl: MenuController, private backgroundMode: BackgroundMode,
         public statusBar: StatusBar, public component: componentService, public toastCtrl: ToastController,
         public splashScreen: SplashScreen, private oneSignal: OneSignal, public events: Events, private batteryStatus: BatteryStatus,
-              private appVersion:AppVersion, private authService:authService, private databaseProvider:DatabaseProvider, private network: Network, public toastController: ToastController) {
+              private appVersion:AppVersion, private authService:authService, private databaseProvider:DatabaseProvider, private network: Network, public toastController: ToastController, public storage : Storage) {
         this.initializeApp();
 
         //
@@ -282,6 +282,7 @@ export class MyApp {
         this.nav.setRoot(LoginPage);
         window.localStorage.clear();
         this.databaseProvider.dropAllTables();
+        this.storage.clear();
     }
 
 

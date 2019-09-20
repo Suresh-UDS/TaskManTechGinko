@@ -4,8 +4,11 @@
             <form [formGroup]="onboardingKYCForm" novalidate>
                 <div class="row form-group">
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <fieldset [disabled]="!isNewEmployee">
                         <label class="control-label trequired">Aadhar card no</label>
                         <input class="form-control" type="number" formControlName="aadharNumber" required>
+                        </fieldset>
+                        <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
                     </div>
                     <!-- <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                         <label class="control-label trequired">Name as on aadhar</label>
@@ -45,12 +48,12 @@
                             <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                                 <label class="control-label trequired" >  Account Number </label>
 <!--                                <input class="form-control"   disabled="list['value']['ifsc'] !==''" type="number" minlength="5" maxlength="20" formControlName="accountNo">-->
-                                <input class="form-control"   type="number" minlength="5" maxlength="20" formControlName="accountNo">
+                                <input class="form-control"    type="number" minlength="5" maxlength="20" formControlName="accountNo">
                             </div>
                             <div   class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
                                 <label class="control-label trequired" > IFSC Number</label>
                               
-                                <input class="form-control" type="text" formControlName="ifsc" minlength="11" maxlength="11">
+                                <input class="form-control" disabled="{{!isNewEmployee}}" type="text" formControlName="ifsc" minlength="11" maxlength="11">
                             </div>
                         </div>
                     </div> 

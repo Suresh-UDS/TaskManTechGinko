@@ -3,23 +3,32 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <form [formGroup]="onboardingPersonalDetailsForm" novalidate>
                 <div class="row form-group">
+                    <fieldset [disabled]="!isNewEmployee">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        
-                        <label class="control-label trequired">Employee Name</label>
-                        
-                        <!-- <input class="form-control"  type="text" formControlName="employeeName" [(ngModel)]='employeeName' (keypress)="eventHandler($event)">
-                   -->
-                        <input class="form-control"  type="text" formControlName="employeeName" >
-                   
+                        <label class="control-label trequired">First Name</label>
+                        <input class="form-control"   type="text" formControlName="employeeName" >
                         <ion-item *ngIf="onboardingPersonalDetailsForm.controls.employeeName.dirty && onboardingPersonalDetailsForm.controls.employeeName.invalid">
                             <p *ngIf="onboardingPersonalDetailsForm.controls.employeeName.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Name required</p>
                             <p *ngIf="onboardingPersonalDetailsForm.controls.employeeName.errors.employeeName">Invalid Name</p>
                         </ion-item>
-                        
-
                     </div>
+
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label">Employee Code</label>
+                        
+                        <label class="control-label trequired">Last Name</label>
+                        <input class="form-control"  type="text" formControlName="lastName" >
+                        <ion-item *ngIf="onboardingPersonalDetailsForm.controls.lastName.dirty && onboardingPersonalDetailsForm.controls.lastName.invalid">
+                            <p *ngIf="onboardingPersonalDetailsForm.controls.lastName.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Name required</p>
+                            <p *ngIf="onboardingPersonalDetailsForm.controls.lastName.errors.lastName">Invalid Last Name</p>
+                        </ion-item>
+                    </div>
+                    </fieldset>
+                    <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                        <label class="control-label" *ngIf="onboardingPersonalDetailsForm.value.employeeCode">Employee Code - {{onboardingPersonalDetailsForm.value.employeeCode}} </label>
+                        <label class="control-label" *ngIf="!onboardingPersonalDetailsForm.value.employeeCode">Reference Code - {{onboardingPersonalDetailsForm.value.employeeCode}}</label>
                         <input class="form-control" type="text" formControlName="employeeCode" disabled>
                     </div>
                 </div>
@@ -27,14 +36,19 @@
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0" *ngFor="let list of onboardingPersonalDetailsForm.get('relationshipDetails').controls; let i = index;"
                         formArrayName="relationshipDetails">
                         <div *ngIf="i==0" [formGroupName]="i">
+                            <fieldset [disabled]="!isNewEmployee">
                             <label class="control-label trequired">{{list['value']['relationship']}} Name</label>
                             <input class="form-control" type="text" formControlName="name">
+                            </fieldset>
                         </div>
                         <div *ngIf="i%2" [formGroupName]="i">
+                            <fieldset [disabled]="!isNewEmployee">
                             <label class="control-label ">{{list['value']['relationship']}} Name</label>
                             <input class="form-control" type="text" formControlName="name">
+                            </fieldset>
                         </div>
                     </div>
+                    <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
@@ -43,12 +57,11 @@
                             <ion-select interface="popover" formControlName="gender">
                                 <ion-option value="MALE">Male</ion-option>
                                 <ion-option value="FEMALE">Female</ion-option>
-                                <ion-option value="OTHERS">Others</ion-option>
                             </ion-select>
                         </ion-item>
 
                         
-<ion-item *ngIf="onboardingPersonalDetailsForm.controls.gender.dirty && onboardingPersonalDetailsForm.controls.gender.invalid">
+                        <ion-item *ngIf="onboardingPersonalDetailsForm.controls.gender.dirty && onboardingPersonalDetailsForm.controls.gender.invalid">
                             <p *ngIf="onboardingPersonalDetailsForm.controls.gender.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Gender required</p>
                            
                         </ion-item>
@@ -81,17 +94,23 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">DOB</label>
-                        <input class="form-control"  min="{{maxAge | date:'yyyy-MM-dd'}}" max="{{minAge | date:'yyyy-MM-dd'}}"  type="date" formControlName="dateOfBirth">
-                    </div>
+                    
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                            <fieldset [disabled]="!isNewEmployee">
+                            <label class="control-label trequired">DOB</label>
+                            <input class="form-control"  min="{{maxAge | date:'yyyy-MM-dd'}}" max="{{minAge | date:'yyyy-MM-dd'}}"  type="date" formControlName="dateOfBirth">
+                            </fieldset>
+                        </div>
 
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">DOJ</label>
-                       <!-- <input class="form-control" type="date" min="{{setMinDate}}" formControlName="dateOfJoining">
-                   --> 
-                   <input class="form-control" type="date"  min="{{maxAgedoj | date:'yyyy-MM-dd'}}" max="{{minAgedoj | date:'yyyy-MM-dd'}}" formControlName="dateOfJoining">
-                    </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
+                            <fieldset [disabled]="!isNewEmployee">
+                            <label class="control-label trequired">DOJ</label>
+                        <!-- <input class="form-control" type="date" min="{{setMinDate}}" formControlName="dateOfJoining">
+                    --> 
+                            <input class="form-control" type="date"  min="{{maxAgedoj | date:'yyyy-MM-dd'}}" max="{{minAgedoj | date:'yyyy-MM-dd'}}" formControlName="dateOfJoining">
+                        </fieldset>
+                        </div>
+                    <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">

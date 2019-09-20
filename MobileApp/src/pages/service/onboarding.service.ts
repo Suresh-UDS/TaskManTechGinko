@@ -370,4 +370,16 @@ export class OnboardingService implements AutoCompleteService {
             return Observable.throw(err.json());
         })
     }
+
+    getPositionWithGrossByWBSId(wbsId):Observable<any>{
+        return this.http.get(this.config.Url+'api/onboard/getPositionsWithGrossByWBSID/'+wbsId).map(
+            response=>{
+                console.log("Position with Gross by WBS Id - ");
+                console.log(response);
+                return response.json();
+            }).catch(err=>{
+                return Observable.throw(err.json());
+            }
+        )
+    }
 }

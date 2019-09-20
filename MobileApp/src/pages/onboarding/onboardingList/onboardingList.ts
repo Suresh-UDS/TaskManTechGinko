@@ -117,14 +117,18 @@ export class onboardingExistEmployee implements OnInit {
 
     this.storage.get('OnBoardingData').then((data) => {
        
-      if(!data['actionRequired'][data['actionRequired'].length - 1]['personalDetails']['employeeName']){
-
-          delete data['actionRequired'][data['actionRequired'].length - 1];
-
+      if(data['actionRequired'][data['actionRequired'].length - 1] && data['actionRequired'][data['actionRequired'].length - 1]['personalDetails'] && data['actionRequired'][data['actionRequired'].length - 1]['personalDetails']['employeeName']){
+        console.log("Data available cannot delete data");
+      }else{
+        console.log("Action required count - "+data['actionRequired'].length);
+        let count = (data['actionRequired'].length)-1;
+        if(count !== -1){
+          data['actionRequired'].pop();
+          console.log(data['actionRequired']);
+        }
+        
+        this.storage.set('OnBoardingData',data);
       }
-
-      console.log(data['actionRequired']);
-
     });
 
   }
@@ -511,6 +515,7 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['employeeCode']=res[i].empId;
               employeeData[i]['id'] = res[i].id;
               employeeData[i]['isSync'] = true;
+              employeeData[i]['newEmployee'] = res[i].newEmployee;
               employeeData[i]['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
               employeeData[i]['siteDetails'] = {};
               employeeData[i]['siteDetails']['projectCode'] = res[i].projectCode;
@@ -522,6 +527,7 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['personalDetails'] = {};
               employeeData[i]['personalDetails']['employeeCode'] = res[i].empId;
               employeeData[i]['personalDetails']['employeeName'] = res[i].name;
+              employeeData[i]['personalDetails']['lastName'] = res[i].lastName;
               employeeData[i]['personalDetails']['relationshipDetails'] = [{
                 name: res[i].fatherName,
                 relationship: 'Father',
@@ -622,7 +628,7 @@ export class onboardingExistEmployee implements OnInit {
           else{
 
             this.actionRequiredEmp[i].filtered = false;
-
+              
           }
           
         }

@@ -53,8 +53,8 @@ export class newEmpContactDetails implements OnInit {
     { name: 'Sikkim', key: 'sikkim' },
     { name: 'Puduchery', key: 'puduchery' },
     { name: 'Nagaland', key: 'nagaland' },
-    { name: 'Andaman and Nicobhar', key: 'andaman and nicobhar' },
-    { name: 'Dadra and Nagar Haveli', key: 'dasra and nagarhaveli' },
+    { name: 'Andaman and Nico.In.', key: 'andaman and nicobhar' },
+    { name: 'Dadra and Nagar Hav.', key: 'dasra and nagarhaveli' },
     { name: 'Daman and Diu', key: 'daman and diu' },
     { name: 'Lakshadweep', key: 'lakshadweep' },
     { name: 'Uttarakhand', key: 'uttarakhand' },
@@ -301,15 +301,13 @@ export class newEmpContactDetails implements OnInit {
     this.storage.get('OnBoardingData').then(localStoragedData => {
         if (localStoragedData['actionRequired'][this.storedIndex]) {
 
-          if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails']    && localStoragedData['actionRequired'][this.storedIndex]['contactDetails'].hasOwnProperty('contactNumber')) {
-
+          if (localStoragedData['actionRequired'][this.storedIndex]['contactDetails'] && localStoragedData['actionRequired'][this.storedIndex]['contactDetails'].hasOwnProperty('contactNumber')) {
 
               console.log(JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']));
 
               localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'] = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
               this.addressProof = localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['addressProof'];
               console.log(' - address - ' + this.addressProof);
-
 
               console.log('EmpCont3 ' + JSON.stringify(localStoragedData['actionRequired'][this.storedIndex]['contactDetails']['emergencyConatctNo']));
 
