@@ -1874,7 +1874,7 @@ public class    EmployeeService extends AbstractService {
 //            }else {
                 if(role.getName().equalsIgnoreCase(UserRoleEnum.ADMIN.toValue())) {
 //                    page = employeeRepository.findAll(pageRequest);
-                    page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
+                    page = employeeRepository.findAll(new EmpSpecification(searchCriteria, isClient),pageRequest);
                 	allEmpsList.addAll(page.getContent());
                 }else {
 //                    if(CollectionUtils.isNotEmpty(siteIds)) {
@@ -1889,7 +1889,7 @@ public class    EmployeeService extends AbstractService {
 //                            page = employeeRepository.findAllByEmpIds(subEmpList, isClient, pageRequest);
 //                        }
 //                    }
-                    page = employeeRepository.findAll(new EmployeeSpecification(searchCriteria, isClient),pageRequest);
+                    page = employeeRepository.findAll(new EmpSpecification(searchCriteria, isClient),pageRequest);
                     allEmpsList.addAll(page.getContent());
 
                 }
