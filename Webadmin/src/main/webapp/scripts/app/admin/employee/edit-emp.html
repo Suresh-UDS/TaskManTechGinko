@@ -165,7 +165,7 @@
                                                         </div>
                                                     </div>
                                                 </div> -->
-                                            <div class="row">
+                                           <!--  <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group ">
                                                         <label class="control-label">Name<span class="red-star">*</span></label>
@@ -284,47 +284,14 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
+                                            
+                                            
 
                                         </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                Role
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label">User Role <span class="red-star">*</span> </label>
-                                                            <!--<input type="text" class="form-control"-->
-                                                            <!--ng-model="selectedRole"-->
-                                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
-                                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
-                                                            <!--required >-->
-                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                            <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles | orderBy:'name' track by role.name" name="UserRole" ng-disabled="true" required tabindex="3">
-                                                                <option value="">Select role...</option>
-                                                            </select>
-
-                                                            <div ng-show="form.$submitted || form.UserRole.$touched || form.UserRole.$dirty">
-                                                                <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
-                                                                    <p class="help-block" style="color: maroon"
-                                                                       ng-show="form.UserRole.$error.required">User Role is
-                                                                        required.</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
+                                <div class="col-md-12">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">Reporting hierarchy</div>
                                             <div class="panel-body">
@@ -356,12 +323,49 @@
                                             </div>
                                         </div>
                                     </div>
+                                
                                 </div>
-
+                                
                             </div>
-                        </div>
-                        <div class="row" >
                             <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Role
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label">User Role <span class="red-star">*</span> </label>
+                                                            <!--<input type="text" class="form-control"-->
+                                                            <!--ng-model="selectedRole"-->
+                                                            <!--uib-typeahead="role as role.name for role in userRoles | filter:$viewValue | limitTo:5"-->
+                                                            <!--name="UserRole" ng-minlength="5" ng-maxlength="50" autofocus-->
+                                                            <!--required >-->
+                                                            <span class="form-control-feedback d-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                            <select class="form-control " ng-model="selectedRole"  ng-options="role as role.name for role in userRoles | orderBy:'name' track by role.name" name="UserRole" required tabindex="3">
+                                                                <option value="">Select role...</option>
+                                                            </select>
+
+                                                            <div ng-show="form.$submitted || form.UserRole.$touched || form.UserRole.$dirty">
+                                                                <div ng-show="form.UserRole.$dirty || form.UserRole.$invalid">
+                                                                    <p class="help-block" style="color: maroon"
+                                                                       ng-show="form.UserRole.$error.required">User Role is
+                                                                        required.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                     <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         Client Info<span class="red-star">*</span>
@@ -463,6 +467,13 @@
                                     </div>
                                 </div>
                             </div>
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row" >
+                           
                             <div class="col-md-6">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">

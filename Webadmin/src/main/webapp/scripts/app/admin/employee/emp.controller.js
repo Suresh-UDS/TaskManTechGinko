@@ -2039,6 +2039,7 @@ angular.module('timeSheetApp')
 
 		/* Localstorage (Retain old values while edit page to list) end */
 
+		$scope.searchCriteras.onBoarded = true;
         var EmpSearch = $scope.empStatus == 'Absent' ? EmployeeComponent.searchAbsent($scope.searchCriteras):EmployeeComponent.search($scope.searchCriteras);
         EmpSearch.then(function (data) {
 			$scope.employees = data.transactions;

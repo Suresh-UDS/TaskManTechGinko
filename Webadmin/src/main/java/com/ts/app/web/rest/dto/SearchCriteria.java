@@ -298,6 +298,19 @@ public class SearchCriteria extends Paginator {
 	private String elementParent;
 
 	private Boolean newEmployee;
+	
+	private String onBoardedFrom;
+	
+	private boolean onBoarded;
+
+	
+	public boolean isOnBoarded() {
+		return onBoarded;
+	}
+
+	public void setOnBoarded(boolean onBoarded) {
+		this.onBoarded = onBoarded;
+	}
 
 	public String getElementCode() {
 		return elementCode;
@@ -1554,6 +1567,13 @@ public class SearchCriteria extends Paginator {
 	public void setImported(boolean imported) {
 		this.imported = imported;
 	}
-    
-    
+
+	public String getOnBoardedFrom() {
+		return onBoardedFrom;
+	}
+
+	public void setOnBoardedFrom(String onBoardedFrom) {
+		this.onBoardedFrom = onBoardedFrom;
+	}
+  
 }
