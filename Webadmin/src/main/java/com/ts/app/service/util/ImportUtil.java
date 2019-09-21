@@ -1092,13 +1092,16 @@ public class ImportUtil {
 					log.debug("cell type =" + currentRow.getCell(0).getStringCellValue()+"\t"+currentRow.getCell(1).getStringCellValue());
 					ChecklistDTO checklistDTO = new ChecklistDTO();
 					List<ChecklistItemDTO> checkListItems = new ArrayList<ChecklistItemDTO>();
-					StringTokenizer items = new StringTokenizer(currentRow.getCell(1).getStringCellValue(), ",");
-					while(items.hasMoreTokens()){
-						String itemName = items.nextToken();
-						log.debug("Items -"+itemName);
+//					StringTokenizer items = new StringTokenizer(currentRow.getCell(1).getStringCellValue(), ",");
+//					while(items.hasMoreTokens()){
+					String[] items = currentRow.getCell(1).getStringCellValue().split(",");	
+					for(String item : items) {
+//						String itemName = items.nextToken();
+//						log.debug("Items -"+itemName);
 						ChecklistItemDTO checkListItemDTO = new ChecklistItemDTO();
 						//checkListItemDTO.setId(i);
-						checkListItemDTO.setName(itemName);
+//						checkListItemDTO.setName(itemName);
+						checkListItemDTO.setName(item);
 						checkListItems.add(checkListItemDTO);
 					}
 					checklistDTO.setName(currentRow.getCell(0).getStringCellValue());

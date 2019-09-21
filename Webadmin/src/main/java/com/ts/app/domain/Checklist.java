@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,14 +37,25 @@ public class Checklist extends AbstractAuditingEntity implements Serializable {
 
 	@OneToMany(mappedBy = "checklist", cascade = {CascadeType.ALL}, orphanRemoval=true)
 	@OrderBy("id ASC")
-	private Set<ChecklistItem> items;
+	
+	private List<ChecklistItem> items;
+	
+	//private Set<ChecklistItem> items;
 
 	
-	public Set<ChecklistItem> getItems() {
+//	public Set<ChecklistItem> getItems() {
+//		return items;
+//	}
+//
+//	public void setItems(Set<ChecklistItem> items) {
+//		this.items = items;
+//	}
+
+	public List<ChecklistItem> getItems() {
 		return items;
 	}
 
-	public void setItems(Set<ChecklistItem> items) {
+	public void setItems(List<ChecklistItem> items) {
 		this.items = items;
 	}
 
