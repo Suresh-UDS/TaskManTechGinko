@@ -377,7 +377,7 @@ public class    EmployeeService extends AbstractService {
     
     public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
         Employee employee = mapperUtil.toEntity(employeeDTO, Employee.class);
-        employee.setFullName(employee.getName()+" "+employee.getLastName());
+        employee.setFullName(employee.getName());
         employee.setUser(null);
         employee.setActive(Employee.ACTIVE_YES);
         employee.setSubmittedOn(ZonedDateTime.now());
@@ -393,7 +393,7 @@ public class    EmployeeService extends AbstractService {
     public EmployeeDTO editOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
         Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
         employeeDTO.setId(employee.getId());
-        employeeDTO.setFullName(employeeDTO.getName()+" "+employeeDTO.getLastName());
+        employeeDTO.setFullName(employeeDTO.getName());
         Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
 
         updateEmployeeDTO.setProjectDescription( onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getProjectCode()) );
