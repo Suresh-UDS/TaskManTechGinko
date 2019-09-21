@@ -352,6 +352,7 @@ export class AssetList {
               this.qrScanner.hide();
               scanSub.unsubscribe();
               window.document.querySelector('ion-app').classList.add('transparentBody');
+              this.navCtrl.pop();
               this.navCtrl.push(AssetView);
           });
           if(status.authorized){

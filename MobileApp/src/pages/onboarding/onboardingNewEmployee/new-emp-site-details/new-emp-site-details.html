@@ -35,6 +35,22 @@
             <label class="control-label">{{wbsDescription}}</label>
         </div>
 
+        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+            <label class="control-label">Position</label>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+            <label class="control-label">{{position}}</label>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+            <label class="control-label">Gross Amount</label>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6 padding0">
+            <label class="control-label">{{gross}}</label>
+        </div>
+
     </div>
 
   <div class="row" >
@@ -42,18 +58,10 @@
       <form [formGroup]="siteDetailsForm" novalidate>
         <div class="row form-group">
 
-            <div class="col-md-6 col-sm-6 col-xs-6 padding0" >
-                <label class="control-label">Designation No. </label>
-                <input class="form-control" type="text" formControlName="position">
-            </div>
+            
 
-            <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-                <label class="control-label">Gross. </label>
-                <input class="form-control" type="text" formControlName="gross">
-            </div>
-
-               <ion-item class="border" >
-                   <ion-label  text-capitalize class="client-label" text-left>Branch:</ion-label>
+               <ion-item class="border" *ngIf="isNewEmployee" >
+                   <ion-label  text-capitalize class="client-label trequired" text-left>Branch:</ion-label>
                    <select-searchable class="searchable-select"
                                       item-content
                                       [items]="branches"
@@ -66,7 +74,7 @@
                </ion-item>
 
                <ion-item class="border" *ngIf="selectedBranch !=null">
-                   <ion-label  text-capitalize class="client-label" text-left>Project:</ion-label>
+                   <ion-label  text-capitalize class="client-label trequired" text-left>Project:</ion-label>
                    <select-searchable class="searchable-select"
                                       item-content
                                       formControlName="projectCode"
@@ -79,7 +87,7 @@
                </ion-item>
 
                <ion-item class="border" *ngIf="selectedProject!=null">
-                   <ion-label  text-capitalize class="client-label" text-left>WBS:</ion-label>
+                   <ion-label  text-capitalize class="client-label trequired" text-left>WBS:</ion-label>
                    <select-searchable class="searchable-select"
                                       item-content
                                       formControlName="wbsId"
@@ -90,6 +98,35 @@
                                       (onChange)="getEmployees($event)">
                    </select-searchable>
                </ion-item>
+
+                <!-- <div class="col-md-12 col-sm-12 col-xs-12 padding0" *ngIf="selectedWBS!=null" >
+                    <ion-item>
+                        <ion-label class="label-text trequired" stacked>Position</ion-label>
+                        <ion-select interface="popover" (onChange)="pgOnChange($event)" formControlName="position">
+                            <ion-option *ngFor="let pg of positionAndGrossList;let i=index"   [value]="pg.positionId" > {{pg.positionId}} - {{pg.positionDesc}} - {{pg.grossAmount}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </div> -->
+
+                <ion-item class="border" *ngIf="selectedWBS!=null">
+                    <ion-label  text-capitalize class="client-label trequired" text-left>Position:</ion-label>
+                    <select-searchable class="searchable-select"
+                                       item-content
+                                       formControlName="position"
+                                       [items]="positionAndGrossList"
+                                       itemValueField="positionId"
+                                       itemTextField="positionDesc"
+                                       [canSearch]="true"
+                                       (onChange)="pgOnChange($event)">
+                    </select-searchable>
+                </ion-item>
+
+                <div class="col-md-12 col-sm-12 col-xs-12 padding0" *ngIf="selectedWBS!=null" >
+                    <ion-item>
+                        <p>Gross Amount: {{gross}}</p>
+                    </ion-item>
+                </div>
+
            </div>
       </form>
     </div>

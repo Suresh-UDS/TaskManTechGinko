@@ -43,9 +43,11 @@ export class ScanQRAsset {
                     scanSub.unsubscribe();
                     if(this.offline)
                     {
+                        this.navCtrl.pop();
                         this.navCtrl.setRoot(OfflineAssetList,{text:text})
                     }
                     else {
+                        this.navCtrl.pop();
                         this.navCtrl.setRoot(AssetList,{text:text})
                     }
 

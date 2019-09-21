@@ -72,15 +72,10 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
             // console.log('key EmpStatus ' + key + ' - ' + localStoragedData['actionRequired'][currentIndex][keyData][key]);
             
 
-            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][keyData][key]?
-            localStoragedData['actionRequired'][currentIndex][keyData][key]:
-            localStoragedData['actionRequired'][currentIndex][key];
+            onBoardingModel[keyData][key] = localStoragedData['actionRequired'][currentIndex][key] ? localStoragedData['actionRequired'][currentIndex][key] : localStoragedData['actionRequired'][currentIndex][keyData][key];
 
             console.log("Data assigned");
             console.log(onBoardingModel[keyData][key]);
-            console.log(localStoragedData['actionRequired'][currentIndex][keyData][key]?
-            localStoragedData['actionRequired'][currentIndex][keyData][key]:
-            localStoragedData['actionRequired'][currentIndex][key]);
           }
 
           objectkeys = Object.keys(onBoardingModel[keyData]);

@@ -22,10 +22,12 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   religionList:any[];
   // setMinDate: any;
   formActionStatus: any;
+  isNewEmployee :boolean;
   pipe = new DatePipe('en-US');
 
   constructor(private fb: FormBuilder, private storage: Storage, private messageService: onBoardingDataService, private onBoardingService: OnboardingService) { }
   ngOnInit() {
+    this.isNewEmployee = true;
     this.storage.get('onboardingCurrentIndex').then(data => {
       console.log(data);
       console.log(data['index']);
@@ -51,6 +53,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],
+      lastName:['',[Validators.required]],
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
@@ -108,6 +111,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           localStoragedData['actionRequired'][this.storedIndex]['filtered'] = true;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] = fromStatusValues['data']['employeeCode'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] = fromStatusValues['data']['employeeName'];
+          localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName'] = fromStatusValues['data']['lastName'];
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] =  fromStatusValues['data']['gender']  ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] = fromStatusValues['data']['maritalStatus'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] =  fromStatusValues['data']['dateOfJoining']; 
@@ -139,8 +143,10 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     });
   }
 
-  get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
+  ionViewDidLoad() {
+  }
 
+  get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
 
 
   setMinValidation(value) {
@@ -173,6 +179,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
             this.onboardingPersonalDetailsForm.controls['identificationMark2']
                 .setValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark'][1]);
             this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
+            this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
           }else{
             this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
             this.onboardingPersonalDetailsForm.controls['identificationMark1']
@@ -180,6 +187,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
             this.onboardingPersonalDetailsForm.controls['identificationMark2']
                 .setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);
             this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
+            this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
           }
 
         }
