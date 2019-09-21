@@ -154,9 +154,10 @@ public class JobSpecification implements Specification<Job> {
 			        		predicates.add(builder.between(root.get("plannedStartTime"), fromDt,toDt));
 			        	} 
 		            	else {
-		            		 
-		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedStartTime"),fromDt));
-		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedEndTime"),fromDt));
+		            		  
+ 
+		            		predicates.add(builder.lessThanOrEqualTo(root.get("plannedStartTime").as(java.sql.Date.class), new java.sql.Date( fromDt.getTime())  ));
+		            		predicates.add(builder.greaterThanOrEqualTo(root.get("plannedEndTime").as(java.sql.Date.class), new java.sql.Date( fromDt.getTime())));
 //		            		
 //		            		predicates.add(builder.lessThanOrEqualTo( builder.function("DATE", String.class, root.get("plannedStartTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  , TemporalType.DATE  ));
 //		            		predicates.add(builder.greaterThanOrEqualTo(builder.function("DATE", String.class, root.get("plannedEndTime")) , DateUtil.formatToDateString(fromDt,"yyyy-MM-dd")  , TemporalType.DATE  ));
