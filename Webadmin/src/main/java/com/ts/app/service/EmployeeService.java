@@ -430,7 +430,7 @@ public class    EmployeeService extends AbstractService {
     @SuppressWarnings("finally")
 	public ZempReturn verifyOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findOne(employeeDTO.getId());
-        Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
+       // Employee updateEmployee = mapperUtil.toEntity(employeeDTO,Employee.class);
         User user = userRepository.findOne(SecurityUtils.getCurrentUserId());
         
         ZempdetailUpdate zempdetailUpdate = new ZempdetailUpdate(); 
@@ -646,29 +646,30 @@ public class    EmployeeService extends AbstractService {
 			if(!returnObject.getType().equals("E")) {
 					
 					returnObject.setEmpId( returnObject.getEmpId().replaceFirst("^0+(?!$)", "") ); 
-		        	updateEmployee.setEmpId( returnObject.getEmpId());
-		            updateEmployee.setVerifiedBy(user);
-		            updateEmployee.setVerified(true);
-		            updateEmployee.setVerifiedDate(ZonedDateTime.now());
-		            updateEmployee.setNewEmployee(false);
+					employee.setEmpId( returnObject.getEmpId());
+					employee.setVerifiedBy(user);
+					employee.setVerified(true);
+					employee.setVerifiedDate(ZonedDateTime.now());
+					employee.setNewEmployee(false);
 		            
 		            // update login
 		            
-		            if(updateEmployee.getUser()!=null) {
+		            employee = employeeRepository.saveAndFlush(employee);
+		            
+		            if(employee.getUser()!=null) {
 		            	
-		            	User empUser = userRepository.findOne(updateEmployee.getUser().getId());
+		            	User empUser = userRepository.findOne(employee.getUser().getId());
 		            	
 		            	if(!empUser.getLogin().equals(dummyUser)) {
 		            		 
-		            		empUser.setLogin(updateEmployee.getEmpId());
+		            		empUser.setLogin(employee.getEmpId());
 		            		userRepository.saveAndFlush(empUser);
-		            		
-		            		updateEmployee.setUser(empUser);
+		            		 
 		            	}
 		            	
 		            }
 		            
-		            employee = employeeRepository.saveAndFlush(updateEmployee);
+		            
 				
 			}
 			
