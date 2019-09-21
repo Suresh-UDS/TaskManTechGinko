@@ -4,16 +4,22 @@ import com.ts.app.config.Constants;
 import com.ts.app.domain.*;
 import com.ts.app.repository.SettingsRepository;
 import com.ts.app.service.util.PagingUtil;
+import com.ts.app.web.rest.JobManagementResource;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import javax.inject.Inject;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +34,12 @@ public abstract class AbstractService {
 	
 	@Inject
 	private MailService mailService;
+	
+//	@Inject
+//	private JobManagementService jobManagementService;
+	
+//	@Inject
+//	private JobManagementResource jobManagementResource;
 	
 	protected Pageable createPageRequest(int page) {
 		if(page == 0) {
@@ -146,7 +158,49 @@ public abstract class AbstractService {
     		}
 	}
 
-	protected void sendJobCompletionNotifications(Employee ticketOwner, Employee assignedTo, Employee currentUserEmp, Job job, Ticket ticket, Site site, boolean isNew, Map<String, String> env) {
+//	protected void sendJobCompletionNotifications(Employee ticketOwner, Employee assignedTo, Employee currentUserEmp, Job job, Ticket ticket, Site site, boolean isNew,Map<String, String> env) {
+//		Hibernate.initialize(assignedTo.getUser());
+//		User assignedToUser = assignedTo.getUser();
+//		Hibernate.initialize(ticketOwner.getUser());
+//		User ticketOwnerUser = ticketOwner.getUser();
+//		
+//		String ticketUrl = env.get("url.ticket-view");
+//		ticketUrl +=  ticket.getId();
+//		String jobUrl = env.get("url.job-view");
+//		jobUrl +=  job.getId();
+//		Setting ticketReports = null;
+//		List<Setting> settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET, site.getId(), site.getProject().getId());
+//		if(CollectionUtils.isNotEmpty(settings)) {
+//			ticketReports = settings.get(0);
+//		}
+//		Setting ticketReportEmails = null;
+//		if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
+//			settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
+//			if(CollectionUtils.isNotEmpty(settings)) {
+//				ticketReportEmails = settings.get(0);
+//			}
+//		}
+//		
+//	    String assignedToEmail = (assignedToUser != null ? (StringUtils.isNotEmpty(assignedToUser.getEmail()) ? assignedToUser.getEmail() : "") : "");
+//	    String ticketOwnerEmail = (ticketOwnerUser != null ? "," + (StringUtils.isNotEmpty(ticketOwnerUser.getEmail()) ? ticketOwnerUser.getEmail() : "") : "");
+//	    String ticketEmails = ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
+//		assignedToEmail += Constants.COMMA_SEPARATOR + ticketEmails;
+//		ticketOwnerEmail += Constants.COMMA_SEPARATOR + ticketEmails;
+//
+//	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (job.getStatus().equals(JobStatus.COMPLETED))) {
+//    			if(assignedTo != null) {
+//			    mailService.sendJobCompletionMail(ticketUrl,jobUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+//	        				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), job.getStatus().name(), job.getId(), job.getTitle());
+//    			}
+//    			
+//		    mailService.sendJobCompletionMail(ticketUrl,jobUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
+//    				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), job.getStatus().name(), job.getId(), job.getTitle());
+//    		}
+//	}
+
+//******************************************Modified by Vinoth***********************************************************************
+
+	protected void sendJobCompletionNotifications(Employee ticketOwner, Employee assignedTo, Employee currentUserEmp, Job job, Ticket ticket, Site site, boolean isNew,String subject,String content,String filename, boolean isHtml,ByteArrayOutputStream pdfContent, Map<String, String> env) {
 		Hibernate.initialize(assignedTo.getUser());
 		User assignedToUser = assignedTo.getUser();
 		Hibernate.initialize(ticketOwner.getUser());
@@ -168,19 +222,44 @@ public abstract class AbstractService {
 				ticketReportEmails = settings.get(0);
 			}
 		}
+		
+		Setting jobCheckList = null;
+		settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_JOBCHECKLIST, site.getId(), site.getProject().getId());
+		if(CollectionUtils.isNotEmpty(settings)) {
+			jobCheckList = settings.get(0);
+		}
+		Setting jobCheckListEmails = null;
+		if(jobCheckList != null && jobCheckList.getSettingValue().equalsIgnoreCase("true")) {
+		settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_JOBCHECKLIST_EMAILS, site.getId(), site.getProject().getId());
+		if(CollectionUtils.isNotEmpty(settings)) {
+			jobCheckListEmails = settings.get(0);
+		}
+		}
+				
 	    String assignedToEmail = (assignedToUser != null ? (StringUtils.isNotEmpty(assignedToUser.getEmail()) ? assignedToUser.getEmail() : "") : "");
 	    String ticketOwnerEmail = (ticketOwnerUser != null ? "," + (StringUtils.isNotEmpty(ticketOwnerUser.getEmail()) ? ticketOwnerUser.getEmail() : "") : "");
 	    String ticketEmails = ticketReportEmails != null ? ticketReportEmails.getSettingValue() : "";
+	    String jobEmails = jobCheckListEmails != null ? jobCheckListEmails.getSettingValue() : "";
 		assignedToEmail += Constants.COMMA_SEPARATOR + ticketEmails;
 		ticketOwnerEmail += Constants.COMMA_SEPARATOR + ticketEmails;
+		
+		assignedToEmail += Constants.COMMA_SEPARATOR + jobEmails;
+		ticketOwnerEmail += Constants.COMMA_SEPARATOR + jobEmails;
 	    if(StringUtils.isNotEmpty(ticket.getStatus()) && (job.getStatus().equals(JobStatus.COMPLETED))) {
     			if(assignedTo != null) {
 			    mailService.sendJobCompletionMail(ticketUrl,jobUrl,assignedTo.getUser(),assignedToEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
 	        				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), job.getStatus().name(), job.getId(), job.getTitle());
+			   // mailService.sendJobCheckListEmail(assignedToEmail, subject, content, isHtml, filename, pdfContent);
+			   // mailService.sendEmail(assignedToEmail, subject, content, isHtml, filename, pdfContent);
     			}
     			
 		    mailService.sendJobCompletionMail(ticketUrl,jobUrl,ticketOwner.getUser(),ticketOwnerEmail,site.getName(),ticket.getId(), String.valueOf(ticket.getId()),
     				assignedToUser.getFirstName(), assignedTo.getName(), currentUserEmp.getName(), currentUserEmp.getEmpId(), ticket.getTitle(),ticket.getDescription(), job.getStatus().name(), job.getId(), job.getTitle());
+		    mailService.sendJobCheckListEmail(assignedToEmail, subject, content, isHtml, filename, pdfContent);
+		   //mailService.sendEmail(assignedToEmail, subject, content, isHtml, filename, pdfContent);
     		}
 	}
+	
+//*******************************************************************************************************************************************	
+
 }

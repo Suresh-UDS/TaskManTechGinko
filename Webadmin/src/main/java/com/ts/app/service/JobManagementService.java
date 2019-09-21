@@ -1,6 +1,10 @@
 package com.ts.app.service;
 
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.security.SecurityUtils;
@@ -8,6 +12,11 @@ import com.ts.app.service.util.*;
 import com.ts.app.web.rest.dto.*;
 import com.ts.app.web.rest.errors.TimesheetException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.hibernate.Hibernate;
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
@@ -29,6 +38,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.*;
 
 /**
@@ -1123,7 +1136,11 @@ public class JobManagementService extends AbstractService {
 		if(assetPpmScheduleDTO.getChecklistId() > 0)
 		{
 			Checklist checkList = checkListRepository.findOne(assetPpmScheduleDTO.getChecklistId());
-			Set<ChecklistItem> checkListItemset = checkList.getItems();
+
+//**********************************Modified by Vinoth*********************************************
+			List<ChecklistItem> checkListItemset = checkList.getItems();
+//*************************************************************************************************			
+//			Set<ChecklistItem> checkListItemset = checkList.getItems();
 			List<JobChecklist> jobCheckLists = new ArrayList<JobChecklist>();
 			for(ChecklistItem checkListItem : checkListItemset)
 			{
@@ -1720,6 +1737,8 @@ public class JobManagementService extends AbstractService {
 			job.setActualHours(totalHours);
 			jobRepository.save(job);
 			//send notifications if a ticket is raised
+			
+			
 			if(job.getTicket() != null) {
 				Ticket ticket = job.getTicket();
 				Map<String, String> data = new HashMap<String, String>();
@@ -1727,8 +1746,17 @@ public class JobManagementService extends AbstractService {
 				data.put("url.ticket-view", ticketUrl);
 				String jobUrl = env.getProperty("url.job-view");
 				data.put("url.job-view", jobUrl);
+				
+				Long jobId = job.getId();
+				ByteArrayOutputStream pdfContent = new ByteArrayOutputStream();
+				pdfContent= createJobPdf(jobId);
+				String subject = "TaskMan Job CheckList PDF";
+				String content = "PDF file for Taskman Job";
+				String filename  = "job_"+String.valueOf(jobId)+".pdf";
+		        boolean isHtml = true;
 
-				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+		        sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
+				//sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 			}
 			jobDTO = mapperUtil.toModel(job, JobDTO.class);
 		}else { //if the job is in the future
@@ -1761,7 +1789,16 @@ public class JobManagementService extends AbstractService {
 				String jobUrl = env.getProperty("url.job-view");
 				data.put("url.job-view", jobUrl);
 
-				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+				Long jobId = job.getId();
+				ByteArrayOutputStream pdfContent = new ByteArrayOutputStream();
+				pdfContent= createJobPdf(jobId);
+				String subject = "TaskMan Job CheckList PDF";
+				String content = "PDF file for Taskman Job";
+				String filename  = "job_"+String.valueOf(jobId)+".pdf";
+		        boolean isHtml = true;
+		        
+				sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
+				//sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 			}
 			jobDTO = mapperUtil.toModel(job, JobDTO.class);
 		}else {
@@ -1847,7 +1884,15 @@ public class JobManagementService extends AbstractService {
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
 
-			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+			Long jobId = job.getId();
+			ByteArrayOutputStream pdfContent = new ByteArrayOutputStream();
+			pdfContent= createJobPdf(jobId);
+			String subject = "TaskMan Job Completed CheckList PDF";
+			String content = "Dear Customer";
+			String filename  = "job_"+String.valueOf(jobId)+".pdf";
+	        boolean isHtml = true;
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
+			//sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
@@ -1877,7 +1922,16 @@ public class JobManagementService extends AbstractService {
 			data.put("url.ticket-view", ticketUrl);
 			String jobUrl = env.getProperty("url.job-view");
 			data.put("url.job-view", jobUrl);
-			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+			
+			Long jobId = job.getId();
+			ByteArrayOutputStream pdfContent = new ByteArrayOutputStream();
+			pdfContent= createJobPdf(jobId);
+			String subject = "TaskMan Job CheckList PDF";
+			String content = "PDF file for Taskman Job";
+			String filename  = "job_"+String.valueOf(jobId)+".pdf";
+	        boolean isHtml = true;
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
+			//sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
@@ -2140,7 +2194,107 @@ public class JobManagementService extends AbstractService {
 
 
     }
+    
+//****************************************Modified by Vinoth*****************************************************************************
 
+	public ByteArrayOutputStream createJobPdf(long jobId ) throws NullPointerException {
+		
+	     
+//	     String path = UriComponentsBuilder.fromPath("D:\\CheckListPdf").build().toUriString();
+	     
+	 //    final URI path = ServletUriComponentsBuilder.fromCurrentServletMapping().path("D:/CheckListPdf").build().toUri();
+        
+	     VelocityEngine ve = new VelocityEngine();
+		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+		ve.setProperty("classpath.resource.loader.class",
+				ClasspathResourceLoader.class.getName());
+		ve.init();
+		Template t = ve.getTemplate("templates/checklist.vm");
+	
+		VelocityContext context = new VelocityContext();
+	 
+	
+		JobDTO job =  findJobCheckList(jobId);
+		/*
+		 * JobChecklist jobs=jobService.findJobCheckListStatus(jobId, searchCriteria);
+		 */
+		
+		
+		
+		if(job !=null ) {
+			
+			context.put("job", job);
+			
+			if(job.getActualEndTime()!=null) {
+
+				context.put("actualStartTime", DateUtil.formatToDateString(job.getActualStartTime(), "dd-MM-yyyy hh:mm a "));
+				context.put("actualEndTime", DateUtil.formatToDateString(job.getActualEndTime(), "dd-MM-yyyy hh:mm a "));
+			}
+			else {
+				
+				context.put("actualStartTime", DateUtil.formatToDateString(job.getPlannedStartTime(), "dd-MM-yyyy hh:mm a "));
+				context.put("actualEndTime", DateUtil.formatToDateString(job.getPlannedEndTime(), "dd-MM-yyyy hh:mm a"));
+			}
+			
+		} /*
+			 * file:///C:/Users/nivetha.m/Downloads/
+			 */		
+		if(job.getChecklistItems()!=null) {
+			
+			context.put("jobCheckListName",job.getChecklistItems().get(0).getChecklistName()); 
+			context.put("jobCheckList", job.getChecklistItems());
+			
+		}
+		/*
+		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {
+		 * context.put("Jobstatus", "Pending"); }
+		 */
+		StringWriter writer = new StringWriter();
+		t.merge(context, writer);
+	
+		System.out.println(writer.toString());
+		
+		return generatePdf(writer.toString());
+		
+	}
+	
+	public ByteArrayOutputStream generatePdf(String html) {
+
+		String pdfFilePath = "";
+		PdfWriter pdfWriter = null;
+
+		// create a new document
+		Document document = new Document();
+		try {
+
+			document = new Document();
+		
+		
+			document.setPageSize(PageSize.LETTER);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PdfWriter.getInstance(document, baos);
+
+			// open document
+			document.open();
+
+			XMLWorkerHelper xmlWorkerHelper = XMLWorkerHelper.getInstance();
+			xmlWorkerHelper.getDefaultCssResolver(true);
+			xmlWorkerHelper.parseXHtml(pdfWriter, document, new StringReader(
+					html));
+			// close the document
+			document.close();
+			System.out.println("PDF generated successfully");
+
+			return baos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+    
+//************************************************************************************************************************************    
 
     public void deleteJobsForEmployee(EmployeeDTO employee, Date fromDate){
 
@@ -2327,7 +2481,11 @@ public class JobManagementService extends AbstractService {
 		if(assetAMCScheduleDTO.getChecklistId() > 0)
 		{
 			Checklist checkList = checkListRepository.findOne(assetAMCScheduleDTO.getChecklistId());
-			Set<ChecklistItem> checkListItemset = checkList.getItems();
+
+//**********************************Modified by Vinoth*********************************************
+			List<ChecklistItem> checkListItemset = checkList.getItems();
+//*************************************************************************************************			
+//			Set<ChecklistItem> checkListItemset = checkList.getItems();
 			List<JobChecklist> jobCheckLists = new ArrayList<JobChecklist>();
 			for(ChecklistItem checkListItem : checkListItemset)
 			{

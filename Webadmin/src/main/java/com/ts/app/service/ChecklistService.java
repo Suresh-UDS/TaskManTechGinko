@@ -60,9 +60,18 @@ public class ChecklistService extends AbstractService {
 				item.setChecklist(checklist);
 				items.add(item);
 			}
-			Set<ChecklistItem> itemsSet = new HashSet<ChecklistItem>();
-			itemsSet.addAll(items);
-			checklist.setItems(itemsSet);
+//			Set<ChecklistItem> itemsSet = new HashSet<ChecklistItem>();
+//			itemsSet.addAll(items);
+//			checklist.setItems(itemsSet);
+			
+//*****************Modified by Vinoth******************************************************************
+
+			List<ChecklistItem> itemList = new ArrayList<ChecklistItem>();
+			itemList.addAll(items);
+			checklist.setItems(itemList);
+			
+//******************************************************************************************************			
+			
 			if(checklistDto.getProjectId() > 0) {
 				Project project = projectRepository.findOne(checklistDto.getProjectId());
 				checklist.setProject(project);
@@ -90,7 +99,12 @@ public class ChecklistService extends AbstractService {
 		//checklistUpdate = checklistRepository.save(checklistUpdate);
 		List<ChecklistItemDTO> itemDtos = checklist.getItems();
 		List<ChecklistItem> items = new ArrayList<ChecklistItem>();
-		Set<ChecklistItem> itemEntities = checklistUpdate.getItems();
+		
+//**********************************Modified by Vinoth***************************************************************	
+		List<ChecklistItem> itemEntities = checklistUpdate.getItems();
+		
+//*******************************************************************************************************************		
+//		Set<ChecklistItem> itemEntities = checklistUpdate.getItems();
 		Iterator<ChecklistItem> itemsItr = itemEntities.iterator();
 		while(itemsItr.hasNext()) {
 			boolean itemFound = false;

@@ -8,6 +8,7 @@ import com.ts.app.service.util.DateUtil;
 import com.ts.app.service.util.Sendgrid;
 import com.ts.app.web.rest.dto.UserDTO;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -26,6 +28,9 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.*;
@@ -64,15 +69,24 @@ public class MailService {
 
     @Inject
     private SettingsRepository settingsRepository;
+    
+    @Async
+    public void sendJobCheckListEmail(String to, String subject, String content, boolean isHtml,String fileName, ByteArrayOutputStream pdfContent) {
+        //log.debug("Sending job export report e-mail to '{}'", emailIds);
+        Locale locale = Locale.forLanguageTag("en-US");
+        Context context = new Context(locale);
+        String content1 = templateEngine.process("jobCheckListCompleted", context);
+        String subject1 = messageSource.getMessage("email.job.checklist.alert.title", null, locale);
+        sendEmail(to, subject1, content1, isHtml, fileName,pdfContent);
+    }
 
     @Async
-    public void sendEmail(String to, String subject, String content, boolean isHtml,String fileName, ByteArrayResource pdfContent) {
+    public void sendEmail(String to, String subject1, String content1, boolean isHtml,String fileName, ByteArrayOutputStream pdfContent) {
         
     	log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-            isHtml, to, subject, content);
-
-        log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
-        
+            isHtml, to, subject1, content1, fileName);
+    	log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+       
         Properties props = javaMailSender.getJavaMailProperties();
         Enumeration<Object> keys = props.keys();
         while(keys.hasMoreElements()) {
@@ -101,22 +115,90 @@ public class MailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
             message.setTo(toEmails);
             message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
-            message.setSubject(subject);
-            message.setText(content, isHtml);
+            message.setSubject(subject1);
+            message.setText(content1, isHtml);
          
             if(!StringUtils.isEmpty(fileName)) {
  
-	                message.addAttachment(fileName,pdfContent, "text/pdf");
-	         	
+	                //message.addAttachment(fileName,(InputStreamSource) pdfContent, "text/pdf");
+	                
+	                
+	              //byte[] -> InputStream
+	              ByteArrayInputStream pdfContent1 = new ByteArrayInputStream( pdfContent.toByteArray());
+	                
+	                message.addAttachment(fileName,
+	                	    new ByteArrayResource(IOUtils.toByteArray(pdfContent1),"text/pdf"));
             }
          
             javaMailSender.send(mimeMessage);
             log.debug("Sent e-mail to User '{}'", to);
         } catch (Exception e) {
 //        	e.printStackTrace();
+        	System.out.println("PDF===>"+e.getMessage());
             log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
-    }
+    } 
+    
+    
+//    @Async
+//    public void sendEmail(String to, String subject, String content, boolean isHtml,String fileName, ByteArrayOutputStream pdfContent) {
+//        
+//    	log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+//            isHtml, to, subject, content);
+//
+//        log.debug(javaMailSender.getHost() +" , " + javaMailSender.getPort() + ", " + javaMailSender.getUsername() + " , " + javaMailSender.getPassword());
+//        
+//        Properties props = javaMailSender.getJavaMailProperties();
+//        Enumeration<Object> keys = props.keys();
+//        while(keys.hasMoreElements()) {
+//        		String key = (String)keys.nextElement();
+//        		log.debug(key + ", "+ props.getProperty(key));
+//        }
+//        //split the to address if more than 1
+//        //trim leading and traling ','
+//        StringBuilder sb = new StringBuilder(to);
+//        if(to.startsWith(",")) {
+//        		sb = sb.replace(0, 1, "");
+//        		to = sb.toString();
+//        }
+//        if(to.endsWith(",")) {
+//        		int ind = to.lastIndexOf(",");
+//        		sb.replace(ind, ind+1, "");
+//        }
+//        to = sb.toString();
+//        String[] toEmails = null;
+//        if(!StringUtils.isEmpty(to)) {
+//        		toEmails = to.split(",");
+//        }
+//        // Prepare message using a Spring helper
+//        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+//        try {
+//            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, CharEncoding.UTF_8);
+//            message.setTo(toEmails);
+//            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom()));
+//            message.setSubject(subject);
+//            message.setText(content, isHtml);
+//         
+//            if(!StringUtils.isEmpty(fileName)) {
+// 
+//	                //message.addAttachment(fileName,(InputStreamSource) pdfContent, "text/pdf");
+//	                
+//	                
+//	              //byte[] -> InputStream
+//	              ByteArrayInputStream pdfContent1 = new ByteArrayInputStream( pdfContent.toByteArray());
+//	                
+//	                message.addAttachment(fileName,
+//	                	    new ByteArrayResource(IOUtils.toByteArray(pdfContent1),"text/pdf"));
+//            }
+//         
+//            javaMailSender.send(mimeMessage);
+//            log.debug("Sent e-mail to User '{}'", to);
+//        } catch (Exception e) {
+////        	e.printStackTrace();
+//        	System.out.println("PDF===>"+e.getMessage());
+//            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+//        }
+//    }
     
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileName) {
