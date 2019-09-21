@@ -12,9 +12,6 @@ import java.util.List;
  */
 public interface ChecklistItemRepository extends JpaRepository<ChecklistItem, Long> {
 
-	@Query("SELECT ch FROM ChecklistItem ch WHERE ch.checklist.id = :checklistId")
+	@Query("SELECT ch FROM ChecklistItem ch WHERE ch.checklist.id = :checklistId order by id asc")
 	List<ChecklistItem> findByChecklistId(@Param("checklistId") long checklistId);
-
-
-
 }
