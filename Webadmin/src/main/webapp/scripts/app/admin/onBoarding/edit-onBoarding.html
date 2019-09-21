@@ -470,30 +470,7 @@
                         </div>
 
                     </div>
-                    <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Last Name <span class="red-star">*</span>  </label>
-                        <div class=" col-sm-8">
-                            <div class="form-group label-floating">
-                                <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-disabled="!employee.newEmployee" name="empLastName"   ng-model="employee.lastName" required/>
-
-                                <div ng-show="form.$submitted || form.empLastName.$touched || form.empLastName.$dirty">
-                                    <div ng-show="form.empLastName.$dirty || form.empLastName.$invalid">
-                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
-                                           ng-show="form.empLastName.$error.required">
-                                            Employee Last Name is required.
-                                        </p>
-
-                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
-                                           ng-show="form.empLastName.$error.pattern">
-                                            Employee Last name can only contain alphabets.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+ 
 
                     <div class="row">
                         <label class=" col-sm-4 onBoarding-label-on-left"><span ng-if="employee.newEmployee" >Refference</span><span ng-if="!employee.newEmployee">Employee</span> Code <span class="red-star">*</span> </label>

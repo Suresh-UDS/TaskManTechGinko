@@ -204,6 +204,8 @@ public class EmployeeSpecification implements Specification<Employee> {
             predicates.add(builder.equal(root.get("submitted"),false));
         }
 
+        predicates.add(builder.isNotNull( root.get("onBoardedFrom") ));
+        
         query.orderBy(builder.desc(root.get("createdDate")));
 
         query.distinct(true);
