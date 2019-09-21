@@ -381,6 +381,10 @@ public class    EmployeeService extends AbstractService {
         employee.setUser(null);
         employee.setActive(Employee.ACTIVE_YES);
         employee.setSubmittedOn(ZonedDateTime.now());
+        
+        employee.setProjectDescription( onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getProjectCode()) );
+        employee.setWbsDescription(onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getWbsId()) );
+        
         employee = employeeRepository.save(employee);
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
     	return employeeDTO;
@@ -392,6 +396,10 @@ public class    EmployeeService extends AbstractService {
         employeeDTO.setFullName(employeeDTO.getName()+" "+employeeDTO.getLastName());
         Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
 
+        updateEmployeeDTO.setProjectDescription( onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getProjectCode()) );
+        updateEmployeeDTO.setWbsDescription(onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getWbsId()) );
+
+        
         updateEmployeeDTO.setVerifiedBy(null);
        // Employee updateEmployee = mapperUtil.toEntity(updateEmployeeDTO,Employee.class);
 //        updateEmployee.setUser(null);

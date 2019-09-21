@@ -103,6 +103,19 @@ public class OnboardingUserConfigService extends AbstractService {
 	    return mapperUtil.toModelList(projectList, OnboardingUserConfigDTO.class);
     }
 
+	public String findDescription(long userId,String elementCode) {
+		OnboardingUserConfig onboardingUserConfig = onboardingUserConfigRepository.findByUserIdAndElementCode(userId, elementCode);
+		
+		if(onboardingUserConfig!=null) {
+			
+			return onboardingUserConfig.getElement();
+			
+		}
+		
+		return null;
+
+	}
+	
     public List<String> findProjectCodesByBranch(long userId, String branchCode){
         return onboardingUserConfigRepository.findElementCodesAndElementParent(userId, "PROJECT",branchCode);
     }
