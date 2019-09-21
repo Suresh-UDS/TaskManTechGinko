@@ -483,7 +483,7 @@ public class EmployeeResource {
             searchCriteria.setUserId(SecurityUtils.getCurrentUserId());
         } 
         if(searchCriteria != null) {
-            result = employeeService.findBySearchCrieria(searchCriteria).getTotalCount();
+            result = employeeService.findOnBoardingBySearchCrieria(searchCriteria).getTotalCount();
         }
         return result;
     	
