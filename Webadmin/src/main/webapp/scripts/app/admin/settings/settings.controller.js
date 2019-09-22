@@ -792,7 +792,7 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.saveSettings = function() {
-		alert("HI");
+		//alert("HI");
         $scope.saveLoad = true;
 		$scope.showLoader();
 		if($scope.selectedProject) {
@@ -805,7 +805,7 @@ angular.module('timeSheetApp')
 			$scope.settings.siteName = $scope.selectedSite.name;
 		}
 		console.log('settings - ' + JSON.stringify($scope.settings));
-		alert("Setting===>" + JSON.stringify($scope.settings));
+		//alert("Setting===>" + JSON.stringify($scope.settings));
 		SettingsComponent.saveSettings($scope.settings).then(function() {
 			$scope.hideLoader();
             $scope.saveLoad = false;
