@@ -329,7 +329,7 @@ angular.module('timeSheetApp')
 			
 
 			if($scope.employee.position){
-				var designation = _.find(response,{positionId:$scope.employee.position,activity:employee.activity});
+				var designation = _.find(response,{positionId:$scope.employee.position,activity:$scope.employee.activity});
 				if(designation){
 					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
 				}
@@ -1943,9 +1943,9 @@ angular.module('timeSheetApp')
 
 	$scope.getGross = function(){
  
-		$scope.employee.gross = parseFloat(employee.positionOb.grossAmount);
+		$scope.employee.gross = parseFloat($scope.employee.positionOb.grossAmount);
 
-		$scope.employee.activity = employee.positionOb.activity;
+		$scope.employee.activity = $scope.employee.positionOb.activity;
 
 	}
  
