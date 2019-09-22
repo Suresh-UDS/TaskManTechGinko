@@ -95,6 +95,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     private boolean client;
 
     private String faceId;
+    
+    private String activity;
 
 /*************************Modified by Vinoth***********************************************************/    
     
@@ -948,5 +950,17 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	public void setGross(double gross) {
 		this.gross = gross;
 	}
+
+
+	public String getActivity() {
+		return activity;
+	}
+
+
+	public void setActivity(String activity) {
+		this.activity = activity;
+	}
+	
+	
 	
 }

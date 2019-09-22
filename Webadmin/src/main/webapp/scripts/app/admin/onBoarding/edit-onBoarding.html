@@ -100,7 +100,7 @@
                         <label class=" col-sm-4 onBoarding-label-on-left">Designation <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                     
-                            <select ng-model="employee.position" ng-disabled="!employee.newEmployee" name="designation" ng-options="position.positionId as (position.positionDesc+' - '+position.positionId+' - '+position.grossAmount) for position in positionList" ng-change="getGross()" class="form-control" required>
+                            <select ng-model="employee.position" ng-disabled="!employee.newEmployee" name="designation" ng-options="position.positionId as (position.positionDesc+' - '+position.positionId+' - '+position.activity+' - '+position.grossAmount) for position in positionList" ng-change="getGross()" class="form-control" required>
                                 <option>Select Position</option>
                                  
                             </select>

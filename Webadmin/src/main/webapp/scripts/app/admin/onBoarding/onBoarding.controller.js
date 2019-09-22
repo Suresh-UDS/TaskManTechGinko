@@ -329,7 +329,7 @@ angular.module('timeSheetApp')
 			if($scope.employee.position){
 				var designation = _.find(response,{positionId:$scope.employee.position});
 				if(designation){
-					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.grossAmount;
+					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
 				}
 			}
 
@@ -1934,11 +1934,13 @@ angular.module('timeSheetApp')
 		})
 	};
 
-	$scope.getGross = function(selectedElement){
+	$scope.getGross = function(){
 
 		var currentDesignation = _.find($scope.positionList,{positionId:$scope.employee.position});
 
 		$scope.employee.gross = parseFloat(currentDesignation.grossAmount);
+
+		$scope.employee.activity = currentDesignation.activity;
 
 	}
  

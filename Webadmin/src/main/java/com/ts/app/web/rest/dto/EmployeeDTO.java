@@ -180,6 +180,8 @@ public class EmployeeDTO extends BaseDTO {
 
     private String ifscCode;
     
+    private String activity;
+    
 //    private String bankPassbookImage;
 //    
 //    private String adharFrontImage;
@@ -1078,6 +1080,13 @@ public class EmployeeDTO extends BaseDTO {
 	public void setOnboardedPlace(String onboardedPlace) {
 		this.onboardedPlace = onboardedPlace;
 	}
-	
-	
+
+	public String getActivity() {
+		return activity;
+	}
+
+	public void setActivity(String activity) {
+		this.activity = activity;
+	}
+	 
 }

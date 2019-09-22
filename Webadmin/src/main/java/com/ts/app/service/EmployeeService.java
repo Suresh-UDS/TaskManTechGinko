@@ -2405,6 +2405,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setOnboardedPlace(employee.getOnboardedPlace()); 
     empDto.setGross(employee.getGross()); 
     empDto.setNewEmployee(employee.isNewEmployee());
+    empDto.setActivity(employee.getActivity());
     
     return empDto;
 }
