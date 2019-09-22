@@ -392,9 +392,9 @@
 						<div class="form-group">
 							<div class="col-sm-12 txt-align-rgt">
 
-                                <button ng-if="job.status == 'COMPLETED'" class="btn btn-primary " type="button"
+                                <button ng-if="job.status == 'COMPLETED' && job.checklistItems.length>0" class="btn btn-primary " type="button"
 									ng-click="downloadPdf()" id="cancel-button">
-									<i class="fas fa-download"></i> Download Pdf
+									<i class="fas fa-download"></i> Download Pdf 
                                 </button>
                                 
 								<button class="btn btn-default " type="button"
