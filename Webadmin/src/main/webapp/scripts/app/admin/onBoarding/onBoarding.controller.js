@@ -333,7 +333,7 @@ angular.module('timeSheetApp')
 				if(designation){
 					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
 				}
-				$scope.positionOb = designation;
+				$scope.employee.positionOb = designation;
 			}
 
 		}).catch(function(response){
@@ -1487,8 +1487,8 @@ angular.module('timeSheetApp')
 		//alert($scope.employee.dob);
 		$scope.saveOnboardingLoader = true;
 		
-		$scope.employee.activity = $scope.positionOb.activity;
-		$scope.employee.position = $scope.positionOb.positionId;
+		$scope.employee.activity = $scope.employee.positionOb.activity;
+		$scope.employee.position = $scope.employee.positionOb.positionId;
 
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
 			
