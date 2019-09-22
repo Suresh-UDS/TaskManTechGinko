@@ -1794,7 +1794,8 @@ public class    EmployeeService extends AbstractService {
                 }
             }
 
-//            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+//            Calendar startCal = Calendar.getIns
+//            tance(TimeZone.getTimeZone("Asia/Kolkata"));
 //            if(searchCriteria.getFromDate() != null) {
 //                startCal.setTime(searchCriteria.getFromDate());
 //            }
