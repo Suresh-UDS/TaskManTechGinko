@@ -326,11 +326,14 @@ angular.module('timeSheetApp')
 			$scope.positionLoaderDisable = false;
 			$scope.positionList = response;
 
+			
+
 			if($scope.employee.position){
-				var designation = _.find(response,{positionId:$scope.employee.position});
+				var designation = _.find(response,{positionId:$scope.employee.position,activity:employee.activity});
 				if(designation){
 					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
 				}
+				$scope.positionOb = designation;
 			}
 
 		}).catch(function(response){
@@ -1483,6 +1486,10 @@ angular.module('timeSheetApp')
         console.log("Saving employee details");
 		//alert($scope.employee.dob);
 		$scope.saveOnboardingLoader = true;
+		
+		$scope.employee.activity = $scope.positionOb.activity;
+		$scope.employee.position = $scope.positionOb.positionId;
+
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
 			
             if(data.errorStatus){
