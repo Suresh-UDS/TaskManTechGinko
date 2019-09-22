@@ -1942,12 +1942,10 @@ angular.module('timeSheetApp')
 	};
 
 	$scope.getGross = function(){
+ 
+		$scope.employee.gross = parseFloat(employee.positionOb.grossAmount);
 
-		var currentDesignation = _.find($scope.positionList,{positionId:$scope.employee.position});
-
-		$scope.employee.gross = parseFloat(currentDesignation.grossAmount);
-
-		$scope.employee.activity = currentDesignation.activity;
+		$scope.employee.activity = employee.positionOb.activity;
 
 	}
  
