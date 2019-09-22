@@ -1863,9 +1863,9 @@ public class ImportUtil {
 							
 							if(fullName.length > 1) {
  								
-								employee.setName(Arrays.stream(fullName).limit(fullName.length-1).collect(Collectors.joining(" ")));
+								employee.setName(getCellValue(currentRow.getCell(4)));
 								
-								employee.setLastName(fullName[fullName.length-1]);
+								employee.setLastName("");
 								
 							}
 							else {
@@ -1947,11 +1947,13 @@ public class ImportUtil {
 							employee.setPosition(getCellValue(currentRow.getCell(35)));
 							cellNo = 36;
 							
-							String position,wbsId;
+							String position,wbsId,activity;
 							position = getCellValue(currentRow.getCell(35));
+							activity = getCellValue(currentRow.getCell(36));
 							wbsId = getCellValue(currentRow.getCell(2));
+							employee.setActivity(activity);
 							
-							Positions positionOb = positionsRepository.findByWbsIdAndPositionId(wbsId, position);
+							Positions positionOb = positionsRepository.findByWbsIdAndPositionIdAndActivity(wbsId, position,activity);
 							
 							double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
 							
@@ -1975,6 +1977,7 @@ public class ImportUtil {
 							employee.setSubmitted(false);
 							employee.setVerified(false);
                             //employeeDTO.setMessage("error.duplicateRecordError");
+							
 							if(employee.getId()!=null) {
 								employeeRepo.saveAndFlush(employee);
 							}

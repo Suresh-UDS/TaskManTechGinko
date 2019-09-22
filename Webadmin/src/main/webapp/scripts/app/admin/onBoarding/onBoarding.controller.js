@@ -326,11 +326,14 @@ angular.module('timeSheetApp')
 			$scope.positionLoaderDisable = false;
 			$scope.positionList = response;
 
+			
+
 			if($scope.employee.position){
-				var designation = _.find(response,{positionId:$scope.employee.position});
+				var designation = _.find(response,{positionId:$scope.employee.position,activity:$scope.employee.activity});
 				if(designation){
-					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.grossAmount;
+					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
 				}
+				$scope.employee.positionOb = designation;
 			}
 
 		}).catch(function(response){
@@ -1483,6 +1486,10 @@ angular.module('timeSheetApp')
         console.log("Saving employee details");
 		//alert($scope.employee.dob);
 		$scope.saveOnboardingLoader = true;
+		
+		$scope.employee.activity = $scope.employee.positionOb.activity;
+		$scope.employee.position = $scope.employee.positionOb.positionId;
+
         OnBoardingComponent.editOnBoardingEmployee($scope.employee).then(function (data) {
 			
             if(data.errorStatus){
@@ -1934,11 +1941,11 @@ angular.module('timeSheetApp')
 		})
 	};
 
-	$scope.getGross = function(selectedElement){
+	$scope.getGross = function(){
+ 
+		$scope.employee.gross = parseFloat($scope.employee.positionOb.grossAmount);
 
-		var currentDesignation = _.find($scope.positionList,{positionId:$scope.employee.position});
-
-		$scope.employee.gross = parseFloat(currentDesignation.grossAmount);
+		$scope.employee.activity = $scope.employee.positionOb.activity;
 
 	}
  

@@ -1794,7 +1794,8 @@ public class    EmployeeService extends AbstractService {
                 }
             }
 
-//            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Kolkata"));
+//            Calendar startCal = Calendar.getIns
+//            tance(TimeZone.getTimeZone("Asia/Kolkata"));
 //            if(searchCriteria.getFromDate() != null) {
 //                startCal.setTime(searchCriteria.getFromDate());
 //            }
@@ -2405,6 +2406,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setOnboardedPlace(employee.getOnboardedPlace()); 
     empDto.setGross(employee.getGross()); 
     empDto.setNewEmployee(employee.isNewEmployee());
+    empDto.setActivity(employee.getActivity());
     
     return empDto;
 }

@@ -9,6 +9,8 @@ public class PositionDTO {
 	private double grossAmount;
 	
 	private String wbsId;
+	
+	private String activity;
 
 	public String getPositionDesc() {
 		return positionDesc;
@@ -41,6 +43,15 @@ public class PositionDTO {
 	public void setWbsId(String wbsId) {
 		this.wbsId = wbsId;
 	}
+
+	public String getActivity() {
+		return activity;
+	}
+
+	public void setActivity(String activity) {
+		this.activity = activity;
+	}
 	 
+
 	
 }
