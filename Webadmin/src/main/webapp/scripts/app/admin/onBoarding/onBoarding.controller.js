@@ -329,11 +329,16 @@ angular.module('timeSheetApp')
 			
 
 			if($scope.employee.position){
+				
 				var designation = _.find(response,{positionId:$scope.employee.position,activity:$scope.employee.activity});
+				
 				if(designation){
 					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
 				}
 				$scope.employee.positionOb = designation;
+				
+				$scope.getGross();
+
 			}
 
 		}).catch(function(response){
