@@ -215,7 +215,11 @@
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
                                 <input class="form-control" type="text" maxlength="40" ng-model="employee.presentAddress" name="presentAddress" required />
-
+								 <p class="help-block" ng-if="employee.presentAddress.length >=40" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                        >
+                                         Address cannot be longer than 40 characters.
+                                     </p> 
+                                     
                                 <div ng-show="form.$submitted || form.presentAddress.$touched || form.presentAddress.$dirty">
                                     <div ng-show="form.presentAddress.$dirty || form.presentAddress.$invalid">
                                         <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -285,7 +289,10 @@
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
                                 <input class="form-control" type="text" maxlength="40" ng-model="employee.permanentAddress" name="permanentAddress" required />
-
+							 <p class="help-block" ng-if="employee.permanentAddress.length >=40" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                        >
+                                         Address cannot be longer than 40 characters.
+                                     </p> 
                                 <div ng-show="form.$submitted || form.permanentAddress.$touched || form.permanentAddress.$dirty">
                                     <div ng-show="form.permanentAddress.$dirty || form.permanentAddress.$invalid">
                                         <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
