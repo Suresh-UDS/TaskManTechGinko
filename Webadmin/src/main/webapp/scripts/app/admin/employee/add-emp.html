@@ -29,6 +29,9 @@
                 <!--</div>-->
 				<div class="form-container table-container">
                     <label><span class="red-star">*</span> Mandatory Field</label>
+                    <label style='float:right;'><i class="material-icons" style='color:red;'>
+                            warning </i> The Employee Create Applicable for only Non UDS Employees</label>
+                
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('save')"
                           confirm-on-exit class="form-horizontal">
@@ -43,9 +46,13 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Employee ID<span class="red-star">*</span></label>
-                                                    <input id='employeeEmpId' ng-model="employee.empId" class='form-control InputTxtCapsAll'
+                                                    <!-- <input id='employeeEmpId' ng-model="employee.empId" class='form-control InputTxtCapsAll'
                                                            name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[A-Za-z0-9]*$/" autofocus required ng-blur="getEmployeeByEmpId()" tabindex="1"/>
-                                                    <div ng-show="form.$submitted || form.employeeEmpId.$touched || form.employeeEmpId.$dirty">
+                                                            -->
+                                                           <input id='employeeEmpId' ng-model="employee.empId" class='form-control InputTxtCapsAll'
+                                                           name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" autofocus required ng-blur="getEmployeeByEmpId()" tabindex="1"/>
+                                                           
+                                                           <div ng-show="form.$submitted || form.employeeEmpId.$touched || form.employeeEmpId.$dirty">
                                                         <div ng-show="form.employeeEmpId.$dirty || form.employeeEmpId.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.required">
@@ -63,6 +70,9 @@
                                                                ng-show="form.employeeEmpId.$error.pattern">
                                                                 Id can only contain letters and digits.
                                                             </p>
+                                                           
+                                                           
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -106,7 +116,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Name<span class="red-star">*</span></label>
@@ -217,7 +227,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -257,39 +267,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                Reporting hierarchy
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group " >
-                                                            <label class="control-label">Manager<span class="red-star"></span></label>
-                                                            <div class="dropdown">
-                                                                <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
-                                                                <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
-                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
-
-                                                                <span ng-show="mangSpin && !allManagers"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
-                                                                <span ng-show="!mangSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name + '-' + manager.empId group by manager.designation for manager in allManagers | orderBy:'name'" name="manager" tabindex="11">
-                                                                    <option value="">Select Manager...</option>
-                                                                </select>
-                                                                <div ng-show="form.$submitted || form.manager.$touched || form.manager.$dirty">
-                                                                    <div ng-show="form.manager.$dirty || form.manager.$invalid">
-                                                                        <p class="help-block" style="color:maroon"
-                                                                           ng-show="form.manager.$error.required">
-                                                                            Manager is required.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         <!--<div class="form-group"  >-->
                                         <!--<label class="col-sm-3 control-label"> Photo Code </label>-->
                                         <!--<div class="col-sm-4">-->
@@ -344,6 +322,40 @@
                          </div>
                        <div class="row" >
                             <div class="col-md-6">
+
+                                    <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Reporting hierarchy
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group " >
+                                                            <label class="control-label">Manager<span class="red-star"></span></label>
+                                                            <div class="dropdown">
+                                                                <!--<input ng-focus="loadAllManagers()" type="text" class="form-control" ng-model="selectedManager" name="manager"-->
+                                                                <!--uib-typeahead="employee as employee.name for employee in allManagers | filter:$viewValue | limitTo:10"-->
+                                                                <!--ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s]*$/"  autocomplete="off" />-->
+
+                                                                <span ng-show="mangSpin && !allManagers"  class="form-control-feedback d-sm-arrow-icon orange-color"><i class="ld ld-ring ld-spin" ></i></span>
+                                                                <span ng-show="!mangSpin" class="form-control-feedback d-sm-arrow-icon "><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                <select class=" form-control " ng-model="selectedManager"  ng-options="manager as manager.name + '-' + manager.empId group by manager.designation for manager in allManagers | orderBy:'name'" name="manager" tabindex="11">
+                                                                    <option value="">Select Manager...</option>
+                                                                </select>
+                                                                <div ng-show="form.$submitted || form.manager.$touched || form.manager.$dirty">
+                                                                    <div ng-show="form.manager.$dirty || form.manager.$invalid">
+                                                                        <p class="help-block" style="color:maroon"
+                                                                           ng-show="form.manager.$error.required">
+                                                                            Manager is required.
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         Client Info<span class="red-star">*</span>
