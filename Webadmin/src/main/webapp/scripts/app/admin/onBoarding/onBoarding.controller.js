@@ -333,7 +333,7 @@ angular.module('timeSheetApp')
 				var designation = _.find(response,{positionId:$scope.employee.position,activity:$scope.employee.activity});
 				
 				if(designation){
-					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.activity+" - "+designation.grossAmount;
+					$scope.designationName = designation.positionDesc+" - "+designation.positionId+" - "+designation.grossAmount;
 				}
 				$scope.employee.positionOb = designation;
 				

@@ -22,7 +22,7 @@
                         <label class=" col-sm-4 onBoarding-label-on-left">Project Code <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
-                                <input class="form-control" type="text" ng-model="employee.projectCode" name="projectCode" ng-disabled="!employee.newEmployee" required/>
+                                <input class="form-control" type="text" ng-model="employee.projectCode" name="projectCode" disabled required/>
                             
                              <div ng-show="form.$submitted || form.projectCode.$touched || form.projectCode.$dirty">
                                     <div ng-show="form.projectCode.$dirty || form.projectCode.$invalid">
@@ -41,7 +41,7 @@
                     <div class="row">
                         <label class="col-sm-4 onBoarding-label-on-left">Project Description <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
-                            <input class="form-control" type="text" name="description" ng-model="employee.projectDescription" ng-disabled="!employee.newEmployee" required/>
+                            <input class="form-control" type="text" name="description" ng-model="employee.projectDescription" disabled required/>
                         <div ng-show="form.$submitted || form.description.$touched || form.description.$dirty">
                                 <div ng-show="form.description.$dirty || form.description.$invalid">
                                     <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -61,7 +61,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.wbsId" name="webid" ng-disabled="!employee.newEmployee" required/>
+                                <input class="form-control" type="text" ng-model="employee.wbsId" name="webid" disabled required/>
                          <div ng-show="form.$submitted || form.webid.$touched || form.webid.$dirty">
                                     <div ng-show="form.webid.$dirty || form.webid.$invalid">
                                         <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -81,7 +81,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" ng-model="employee.wbsDescription" ng-disabled="!employee.newEmployee" name="wbsdescription" required />
+                                <input class="form-control" type="text" ng-model="employee.wbsDescription" disabled name="wbsdescription" required />
                             <div ng-show="form.$submitted || form.wbsdescription.$touched || form.wbsdescription.$dirty">
                                     <div ng-show="form.wbsdescription.$dirty || form.wbsdescription.$invalid">
                                         <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -100,7 +100,7 @@
                         <label class=" col-sm-4 onBoarding-label-on-left">Designation <span class="red-star">*</span></label>
                         <div class=" col-sm-8">
                     
-                            <select ng-model="employee.positionOb" ng-disabled="!employee.newEmployee" name="designation" ng-options="position as (position.positionDesc+' - '+position.positionId+' - '+position.activity+' - '+position.grossAmount) for position in positionList" ng-change="getGross()" class="form-control" required>
+                            <select ng-model="employee.positionOb" ng-disabled="!employee.newEmployee" name="designation" ng-options="position as (position.positionDesc+' - '+position.positionId+' - '+position.grossAmount) for position in positionList" ng-change="getGross()" class="form-control" required>
                                 <option>Select Position</option>
                                  
                             </select>
@@ -674,14 +674,26 @@
                                 <label class="control-label"></label>
                                 <select class="form-control ng-pristine ng-valid ng-touched" ng-model="employee.bloodGroup"  name="param"  aria-invalid="false" >
                                     <option value="" class="" selected="selected">Select Blood Group ..</option>
-                                    <option >A+</option>
-                                    <option >B+</option>
-                                    <option >A-</option>
-                                    <option >B-</option>
-                                    <option >AB+</option>
-                                    <option >AB-</option>
-                                    <option >O+</option>
-                                    <option >O-</option>
+                                    <option>A+</option>
+                                    <option>A-</option>
+                                    <option>A1+</option>
+                                    <option>A1-</option>
+                                    <option>A2+</option>
+                                    <option>A2-</option>
+                                    <option>AB+</option>
+                                    <option>AB-</option>
+                                    <option>A1B+</option>
+                                    <option>A1B-</option>
+                                    <option>A2B+</option>
+                                    <option>A2B-</option>
+                                    <option>B+</option>
+                                    <option>B-</option>
+                                    <option>B1+</option>
+                                    <option>B1-</option>
+                                    <option>O+</option>
+                                    <option>O-</option>
+                                    <option>OB+</option>
+                                    <option>OB-</option>
                                 </select>
                             </div>
                         </div>
