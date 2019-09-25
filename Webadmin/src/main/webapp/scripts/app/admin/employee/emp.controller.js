@@ -1315,7 +1315,8 @@ angular.module('timeSheetApp')
 
 				$scope.employee = data;
 				if($scope.employee){
-					$scope.title = $scope.employee.name +' '+ $scope.employee.lastName;
+					//$scope.title = $scope.employee.name +' '+ $scope.employee.lastName ? $scope.employee.lastName: '';
+					$scope.title = $scope.employee.name;
 					$scope.projectSiteList = $scope.employee.projectSites;
 					$scope.locationList = $scope.employee.locations;
 					$scope.employee.code = pad($scope.employee.code , 4);

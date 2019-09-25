@@ -28,8 +28,8 @@
 				<div class="form-container table-container" >
                     
                            
-                           <label style='float:right;'><i class="material-icons" style='color:red;'>
-                                warning </i> The Employee update applicable for only Non UDS Employees</label>
+                           <label style='float:right; color:red;'><i class="material-icons" style='color:red;'>
+                                warning </i> You can edit and update the Details for this Non-UDS Employee</label>
                     <label><span class="red-star">*</span> Mandatory Field</label>
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('update')" confirm-on-exit class="form-horizontal">
@@ -326,8 +326,110 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Location
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group ">
+                                                                <label class="control-label">Block<span class="red-star"></span> </label>
+                                                                <div class="dropdown">
+                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                    <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks" name="block" tabindex="12">
+                                                                        <option value="">Select Block...</option>
+                                                                    </select>
+                                                                    <div ng-show="form.$submitted || form.block.$touched || form.block.$dirty">
+                                                                        <div
+                                                                            ng-show="form.block.$dirty || form.block.$invalid">
+                                                                            <p class="help-block" style="color: maroon"
+                                                                               ng-show="form.block.$error.required">Block
+                                                                                is required.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+            
+                                                        <div class="col-md-4">
+                                                            <div class="form-group ">
+                                                                <label class="control-label">Floor<span class="red-star"></span> </label>
+                                                                <div class="dropdown">
+                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                    <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors" name="floor" tabindex="13">
+                                                                        <option value="">Select Floor...</option>
+                                                                    </select>
+                                                                    <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
+                                                                        <div
+                                                                            ng-show="form.floor.$dirty || form.floor.$invalid">
+                                                                            <p class="help-block" style="color: maroon"
+                                                                               ng-show="form.floor.$error.required">Floor
+                                                                                is required.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+            
+                                                        <div class="col-md-4">
+                                                            <div class="form-group ">
+                                                                <label class="control-label">Zone<span class="red-star"></span> </label>
+                                                                <div class="dropdown">
+                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                    <select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones" name="zone" tabindex="14">
+                                                                        <option value="">Select Zone...</option>
+                                                                    </select>
+                                                                    <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
+                                                                        <div
+                                                                            ng-show="form.zone.$dirty || form.zone.$invalid">
+                                                                            <p class="help-block" style="color: maroon"
+                                                                               ng-show="form.zone.$error.required">Zone
+                                                                                is required.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+            
+                                                        <div class="col-md-3">
+            
+                                                            <button class="btn btn-success" style="margin-top:0;" type="button" ng-disabled="!blocks || !floors || !zones" ng-click="addLocation()" tabindex="15">
+                                                                <span class="btn-label">
+                                                                    <i class="material-icons">add</i>
+                                                                </span>
+                                                                Add
+                                                            </button>
+            
+                                                        </div>
+            
+            
+                                                        <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(locationList.length > 0)">
+            
+            
+                                                            <div class="form-group">
+            
+                                                                <label class="">Location List</label>
+            
+                                                                <ul class="listOfActions list-group">
+            
+                                                                    <li class="list-group-item justify-content-between" ng-repeat="loc in locationList" ng-bind-html-unsafe="loc.text">
+                                                                        {{loc.block | uppercase}}  -  {{loc.floor | uppercase}} - {{loc.zone | uppercase}}
+                                                                        <span class="badge badge-default badge-pill" ng-click="removeLocation($index)"><i class="material-icons">remove_circle</i></span>
+                                                                    </li>
+            
+                                                                </ul>
+            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+            
+                                                </div>
+                                            </div>
+                                            
                                     </div>
-                                
+                                    
                                 </div>
                                 
                             </div>
@@ -367,113 +469,110 @@
                                                 
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                     <div class="col-md-12">
 
-                                            <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        Location
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <div class="form-group ">
-                                                                    <label class="control-label">Block<span class="red-star"></span> </label>
-                                                                    <div class="dropdown">
-                                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                        <select class="form-control " ng-model="selectedBlock" ng-change="loadFloors()"  ng-options="block as (block | uppercase) for  block in  blocks" name="block" tabindex="12">
-                                                                            <option value="">Select Block...</option>
-                                                                        </select>
-                                                                        <div ng-show="form.$submitted || form.block.$touched || form.block.$dirty">
-                                                                            <div
-                                                                                ng-show="form.block.$dirty || form.block.$invalid">
-                                                                                <p class="help-block" style="color: maroon"
-                                                                                   ng-show="form.block.$error.required">Block
-                                                                                    is required.</p>
-                                                                            </div>
+                                        <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Client Info<span class="red-star">*</span>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Client</label>
+                                                                <div class="dropdown">
+            
+                                                                    <!-- <input type="text" class="form-control" ng-model="selectedProject.name" name="projectName" ng-value="selectedProject.name"
+                                                                           uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
+                                                                           ng-blur="loadSites()"
+                                                                           ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" /> -->
+                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                    <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.name" name="projectName" ng-required="empLocation" tabindex="3">
+                                                                        <option value="">Select Client...</option>
+                                                                    </select>
+                                                                    <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
+                                                                        <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
+                                                                            <p class="help-block" style="color:maroon"
+                                                                               ng-show="form.projectName.$error.required">
+                                                                                Client name is required.
+                                                                            </p>
+            
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                
-                                                            <div class="col-md-4">
-                                                                <div class="form-group ">
-                                                                    <label class="control-label">Floor<span class="red-star"></span> </label>
-                                                                    <div class="dropdown">
-                                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                        <select class="form-control " ng-model="selectedFloor" ng-change="loadZones()"  ng-options="floor as (floor | uppercase) for floor in floors" name="floor" tabindex="13">
-                                                                            <option value="">Select Floor...</option>
-                                                                        </select>
-                                                                        <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
-                                                                            <div
-                                                                                ng-show="form.floor.$dirty || form.floor.$invalid">
-                                                                                <p class="help-block" style="color: maroon"
-                                                                                   ng-show="form.floor.$error.required">Floor
-                                                                                    is required.</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                
-                                                            <div class="col-md-4">
-                                                                <div class="form-group ">
-                                                                    <label class="control-label">Zone<span class="red-star"></span> </label>
-                                                                    <div class="dropdown">
-                                                                        <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                        <select class="form-control " ng-model="selectedZone"  ng-options="zone as (zone | uppercase) for zone in zones" name="zone" tabindex="14">
-                                                                            <option value="">Select Zone...</option>
-                                                                        </select>
-                                                                        <div ng-show="form.$submitted || form.floor.$touched || form.floor.$dirty">
-                                                                            <div
-                                                                                ng-show="form.zone.$dirty || form.zone.$invalid">
-                                                                                <p class="help-block" style="color: maroon"
-                                                                                   ng-show="form.zone.$error.required">Zone
-                                                                                    is required.</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                
-                                                            <div class="col-md-3">
-                
-                                                                <button class="btn btn-success" style="margin-top:0;" type="button" ng-disabled="!blocks || !floors || !zones" ng-click="addLocation()" tabindex="15">
-                                                                    <span class="btn-label">
-                                                                        <i class="material-icons">add</i>
-                                                                    </span>
-                                                                    Add
-                                                                </button>
-                
-                                                            </div>
-                
-                
-                                                            <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(locationList.length > 0)">
-                
-                
-                                                                <div class="form-group">
-                
-                                                                    <label class="">Location List</label>
-                
-                                                                    <ul class="listOfActions list-group">
-                
-                                                                        <li class="list-group-item justify-content-between" ng-repeat="loc in locationList" ng-bind-html-unsafe="loc.text">
-                                                                            {{loc.block | uppercase}}  -  {{loc.floor | uppercase}} - {{loc.zone | uppercase}}
-                                                                            <span class="badge badge-default badge-pill" ng-click="removeLocation($index)"><i class="material-icons">remove_circle</i></span>
-                                                                        </li>
-                
-                                                                    </ul>
-                
                                                                 </div>
                                                             </div>
                                                         </div>
-                
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Site</label>
+                                                                <div class="dropdown" >
+                                                                    <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
+                                                                    <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
+                                                                    <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
+                                                                    <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
+                                                                    <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" name="siteName" ng-required="empLocation" ng-change="loadBlocks()" tabindex="4">
+                                                                        <option value="">Select Site...</option>
+                                                                    </select>
+            
+                                                                    <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
+                                                                        <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
+                                                                            <p class="help-block" style="color:maroon"
+                                                                               ng-show="form.siteName.$error.required">
+                                                                                Site name is required.
+                                                                            </p>
+            
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+            
+                                                        <div class="col-md-4">
+            
+                                                            <button class="btn btn-success margn-top20"
+                                                                    type="button" ng-click="addProjectSite()" ng-disabled="!selectedProject && !selectedSite" tabindex="5">
+                                                                <span class="btn-label">
+                                                                    <i class="material-icons">add</i>
+                                                                </span>
+                                                                Add
+                                                            </button>
+            
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+            
+                                                        <div class="col-md-12">
+                                                            <div
+                                                                ng-show="empLocation">
+                                                                <p class="help-block" style="color: maroon">Client info is required</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(projectSiteList.length > 0)">
+            
+            
+                                                            <div class="form-group">
+            
+                                                                <label class="">Site List</label>
+            
+                                                                <ul class="listOfActions list-group">
+            
+                                                                    <li class="list-group-item justify-content-between" ng-repeat="projSite in projectSiteList" ng-bind-html-unsafe="projSite.text">
+                                                                        {{projSite.projectName}}  -  {{projSite.siteName}}
+                                                                        <span class="badge badge-default badge-pill" ng-click="removeProjectSite($index)"><i class="material-icons">remove_circle</i></span>
+                                                                    </li>
+            
+                                                                </ul>
+            
+                                                            </div>
+                                                        </div>
+            
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                
-                            </div>
+                                    </div>
+                                   
                                     
                                 </div>
 
@@ -481,108 +580,7 @@
                         </div>
                         <div class="row" >
                            
-                            <div class="col-md-6">
-                                    <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                Client Info<span class="red-star">*</span>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Client</label>
-                                                            <div class="dropdown">
-        
-                                                                <!-- <input type="text" class="form-control" ng-model="selectedProject.name" name="projectName" ng-value="selectedProject.name"
-                                                                       uib-typeahead="project as project.name for project in projects | filter:$viewValue | limitTo:5"
-                                                                       ng-blur="loadSites()"
-                                                                       ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" /> -->
-                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                <select class=" form-control " ng-model="selectedProject" ng-change="loadSites()" ng-options="project as project.name for project in projects track by project.name" name="projectName" ng-required="empLocation" tabindex="3">
-                                                                    <option value="">Select Client...</option>
-                                                                </select>
-                                                                <div ng-show="form.$submitted || form.projectName.$touched || form.projectName.$dirty">
-                                                                    <div ng-show="form.projectName.$dirty || form.projectName.$invalid">
-                                                                        <p class="help-block" style="color:maroon"
-                                                                           ng-show="form.projectName.$error.required">
-                                                                            Client name is required.
-                                                                        </p>
-        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Site</label>
-                                                            <div class="dropdown" >
-                                                                <!--<input ng-focus="loadSites()" type="text" class="form-control"  ng-model="selectedSite" name="siteName" ng-value="selectedSite.name"-->
-                                                                <!--uib-typeahead="site as site.name for site in sites | filter:$viewValue | limitTo:5"-->
-                                                                <!--ng-minlength=2 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9\s&-/]*$/"  autocomplete="off" />-->
-                                                                <span class="form-control-feedback d-sm-arrow-icon"><i class="material-icons">keyboard_arrow_down</i></span>
-                                                                <select class="form-control " ng-model="selectedSite"  ng-options="site as site.name for site in sites track by site.id" name="siteName" ng-required="empLocation" ng-change="loadBlocks()" tabindex="4">
-                                                                    <option value="">Select Site...</option>
-                                                                </select>
-        
-                                                                <div ng-show="form.$submitted || form.siteName.$touched || form.siteName.$dirty">
-                                                                    <div ng-show="form.siteName.$dirty || form.siteName.$invalid">
-                                                                        <p class="help-block" style="color:maroon"
-                                                                           ng-show="form.siteName.$error.required">
-                                                                            Site name is required.
-                                                                        </p>
-        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-        
-                                                    <div class="col-md-4">
-        
-                                                        <button class="btn btn-success margn-top20"
-                                                                type="button" ng-click="addProjectSite()" ng-disabled="!selectedProject && !selectedSite" tabindex="5">
-                                                            <span class="btn-label">
-                                                                <i class="material-icons">add</i>
-                                                            </span>
-                                                            Add
-                                                        </button>
-        
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-        
-                                                    <div class="col-md-12">
-                                                        <div
-                                                            ng-show="empLocation">
-                                                            <p class="help-block" style="color: maroon">Client info is required</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12 addedActionList pdng-top15" ng-hide="!(projectSiteList.length > 0)">
-        
-        
-                                                        <div class="form-group">
-        
-                                                            <label class="">Site List</label>
-        
-                                                            <ul class="listOfActions list-group">
-        
-                                                                <li class="list-group-item justify-content-between" ng-repeat="projSite in projectSiteList" ng-bind-html-unsafe="projSite.text">
-                                                                    {{projSite.projectName}}  -  {{projSite.siteName}}
-                                                                    <span class="badge badge-default badge-pill" ng-click="removeProjectSite($index)"><i class="material-icons">remove_circle</i></span>
-                                                                </li>
-        
-                                                            </ul>
-        
-                                                        </div>
-                                                    </div>
-        
-                                                </div>
-                                            </div>
-                                        </div>
-                            </div>
+                           
 
                         </div>
 
