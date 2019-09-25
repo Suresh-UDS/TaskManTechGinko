@@ -1204,6 +1204,14 @@ angular.module('timeSheetApp')
 		$scope.getReligionList();
 
         if(parseInt($stateParams.id)>0){
+			$rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
+				//assign the "from" parameter to something
+				if(from.name){
+					$scope.previousState = from.name;
+				}else{
+					$scope.previousState = "";
+				}
+			 });
             var empId = parseInt($stateParams.id);
             EmployeeComponent.findOne(empId).then(function (data) {
 
@@ -1381,8 +1389,12 @@ angular.module('timeSheetApp')
         if(text == 'cancel' || text == 'back')
         {
             /** @reatin - retaining scope value.**/
-            $rootScope.retain=1;
-            $location.path('/onBoarding-list');
+			$rootScope.retain=1;
+			if($scope.previousState && $scope.previousState === "employees"){
+				$location.path('/employees');
+			}else{
+				$location.path('/onBoarding-list');
+			}
         }
         else if(text == 'approve')
         {
