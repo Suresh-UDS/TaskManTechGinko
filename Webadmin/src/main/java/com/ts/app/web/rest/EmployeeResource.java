@@ -127,7 +127,8 @@ public class EmployeeResource {
         try {
             if(!employeeService.isDuplicate(employeeDTO)) {
                 log.debug(">>> going to create <<<");
-                employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
+               // employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
+                employeeDTO = employeeService.createNonUDSEmployeeInformation(employeeDTO);
             }else {
                 log.debug(">>> duplicate <<<");
                 employeeDTO.setMessage("error.duplicateRecordError");

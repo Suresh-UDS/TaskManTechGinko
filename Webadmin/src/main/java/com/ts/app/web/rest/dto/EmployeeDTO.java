@@ -240,7 +240,7 @@ public class EmployeeDTO extends BaseDTO {
     
     private boolean rejected;
     
-    //private boolean nonUdsEmployee;
+    private boolean nonUdsEmployee;
 
     public String getFatherName() {
 		return fatherName;
@@ -1095,13 +1095,13 @@ public class EmployeeDTO extends BaseDTO {
 		this.activity = activity;
 	}
 
-//	public boolean isNonUdsEmployee() {
-//		return nonUdsEmployee;
-//	}
-//
-//	public void setNonUdsEmployee(boolean nonUdsEmployee) {
-//		this.nonUdsEmployee = nonUdsEmployee;
-//	}
+	public boolean isNonUdsEmployee() {
+		return nonUdsEmployee;
+	}
+
+	public void setNonUdsEmployee(boolean nonUdsEmployee) {
+		this.nonUdsEmployee = nonUdsEmployee;
+	}
 
 	public String getRemarks() {
 		return remarks;
