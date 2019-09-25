@@ -112,6 +112,14 @@ angular.module('timeSheetApp')
 
     $scope.showCategoriesLoader = false;
 	$scope.now = new Date();
+	$scope.today=null;
+  $scope.minAge=null;
+  $scope.maxAge=null;
+  $scope.min=null;
+  $scope.max=null;
+  $scope.mindoj=null;
+  $scope.maxdoj=null;
+
 
     $scope.totalStates = [
         { name: 'Assam', key: 'assam' },
@@ -157,6 +165,24 @@ angular.module('timeSheetApp')
 		demo.initFormExtendedDatetimepickers();
 
 	};
+
+
+	$scope.today = new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toJSON().split('T')[0];
+	$scope.currentDate=new Date(new Date().setFullYear(new Date().getFullYear() - 14)).toJSON().split('T')[0];
+	let currentDate=new Date();
+	let min=18;
+	let max=58;
+	$scope.min = new Date(currentDate.getFullYear() - min,  currentDate.getMonth(), currentDate.getDate());
+	$scope.max = new Date(currentDate.getFullYear() - max,  currentDate.getMonth(), currentDate.getDate());
+
+	let mindoj=0;
+	let maxdoj=2;
+	$scope.mindoj = new Date(currentDate.getFullYear() - mindoj,  currentDate.getMonth(), currentDate.getDate());
+	$scope.maxdoj = new Date(currentDate.getFullYear(),  currentDate.getMonth() - maxdoj, currentDate.getDate());
+
+	
+
+
 
 	var mappingValidation = function(){
 
@@ -1235,7 +1261,8 @@ angular.module('timeSheetApp')
                     $scope.employee.emergencyContactNumber= $scope.employee.emergencyContactNumber ? parseInt($scope.employee.emergencyContactNumber) : "";
 					$scope.employee.nomineeContactNumber = $scope.employee.nomineeContactNumber ? parseInt($scope.employee.nomineeContactNumber) : "";
 					$scope.employee.adharCardNumber = $scope.employee.adharCardNumber ? Number($scope.employee.adharCardNumber) : "";
-
+					$scope.employee.doj = $scope.employee.doj ? new Date($scope.employee.doj): new Date();
+					$scope.employee.dob = $scope.employee.dob ? new Date($scope.employee.dob): new Date();
 					console.log($scope.employee.newEmployee);
 
 					$scope.loadPositions($scope.employee.wbsId);
@@ -1561,8 +1588,8 @@ angular.module('timeSheetApp')
                 
                 //$location.path('/onBoarding-list');
                 
-                $('#dateOfBirth').data('DateTimePicker').clear();
-                $('#dateOfJoining').data('DateTimePicker').clear();
+               // $('#dateOfBirth').data('DateTimePicker').clear();
+               // $('#dateOfJoining').data('DateTimePicker').clear();
                 if($scope.addressProofImage){
 					requiredUploadingCount ++;
                     $scope.uploadAddressProofImage($scope.employee.id);
