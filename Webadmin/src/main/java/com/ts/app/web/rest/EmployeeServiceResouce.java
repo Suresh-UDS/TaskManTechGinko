@@ -207,8 +207,10 @@ public class EmployeeServiceResouce {
 	@RequestMapping(value = "/getEmployeeListByWbs/{wbs}", method = RequestMethod.GET)
 	public List<EmployeeDTO> getEmployeeListByWbs(@PathVariable("wbs") String wbs) {
 
-		List<EmployeeDTO> employeeListDto =  employeeService.findActionRequired(true, false, "Y", wbs);
+		List<EmployeeDocumentsDTO> documents;
 		
+		List<EmployeeDTO> employeeListDto =  employeeService.findActionRequired(true, false, "Y", wbs);
+		 
 		if(CollectionUtils.isEmpty(employeeListDto)) {
 			
 			HttpHeaders headers = new HttpHeaders();
@@ -231,7 +233,7 @@ public class EmployeeServiceResouce {
 					
 					for(int i=0;i<oracleList.size();i++) {
 						
-						List<EmployeeDocumentsDTO> documents = employeeService.findEmployeeDocumentsByEmpId(oracleList.get(i).getEmpId());
+						documents = employeeService.findEmployeeDocumentsByEmpId(oracleList.get(i).getEmpId());
 						
 						EmployeeDTO dtoFromLocal =  employeeService.getPrestoredEmployee();
 						
