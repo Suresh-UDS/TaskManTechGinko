@@ -567,7 +567,7 @@
             <span  ng-show="approveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp;<i class="fas fa-check"></i>&nbsp; Approve 
         </button>
 
-        <button has-permission="OnBoarding:Reject" class="btn btn-warning ld ld-over-inverse" type="button" href="javascript:void(0);" id="remarks"  onClick="$('#remarksModal').modal()" data-target="#remarksModal" data-dismiss="#remarksModal" ng-disabled="rejectOnBoardingLoader" >
+        <button ng-if="!employee.rejected"  has-permission="OnBoarding:Reject" class="btn btn-warning ld ld-over-inverse" type="button" href="javascript:void(0);" id="remarks"  onClick="$('#remarksModal').modal()" data-target="#remarksModal" data-dismiss="#remarksModal" ng-disabled="rejectOnBoardingLoader" >
             <span  ng-show="rejectOnBoardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp;<i class="fas fa-check"></i>&nbsp; Reject         
         </button>
         
