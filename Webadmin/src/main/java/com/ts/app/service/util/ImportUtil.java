@@ -1831,7 +1831,7 @@ public class ImportUtil {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+(r-1)+" Failed!! Given Project Id "+projectCode+" is not valid or not mapped for current user " );
+						message.add(  "Row No : "+(r+1)+" Failed!! Given Project Id "+projectCode+" is not valid or not mapped for current user " );
 						
 					}
 					
@@ -1839,7 +1839,7 @@ public class ImportUtil {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+(r-1)+" Failed!! Given Wbs Id "+wbsId+" is not valid or not accosiated with Project Id "+projectCode+" or mapped both for current user " );
+						message.add(  "Row No : "+(r+1)+" Failed!! Given Wbs Id "+wbsId+" is not valid or not accosiated with Project Id "+projectCode+" or mapped both for current user " );
 						
 					}
 					 
@@ -1847,7 +1847,7 @@ public class ImportUtil {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+(r-1)+" Failed!! Given Position Id "+position+" is not associated with "+wbsId );
+						message.add(  "Row No : "+(r+1)+" Failed!! Given Position Id "+position+" is not associated with "+wbsId );
 						
 					}
 					
@@ -1883,7 +1883,7 @@ public class ImportUtil {
  							
                     		if(skipSave == false) {
                     			
-                    			message.add(  "Row No : "+(r-1)+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
+                    			message.add(  "Row No : "+(r+1)+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
  							
                     		}
  							
