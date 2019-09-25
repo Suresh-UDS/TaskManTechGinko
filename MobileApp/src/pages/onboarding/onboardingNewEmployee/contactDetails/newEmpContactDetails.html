@@ -1,7 +1,7 @@
 <div padding>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <form [formGroup]="onboardingContactDetailsForm" novalidate>
+            <form [formGroup]="onboardingContactDetailsForm" novalidate name="form" role="form">
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <label class="control-label trequired">Mobile Number</label>
@@ -26,7 +26,21 @@
                         <div class="row form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                                 <label class="control-label trequired">Address</label>
-                                <input class="form-control" type="text" formControlName="address">
+                                <input class="form-control" type="text" formControlName="address" maxlength='40' name='address' onKeyPress="if(this.value.length==40) return false;">
+                                <div ng-show="form.$submitted || form.address.$touched || form.address.$dirty">
+                                    <div ng-show="form.address.$dirty || form.address.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.address.$error.required">
+                                           Address is required.
+                                        </p>
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                        ng-show="form.address.$error.maxlength">
+                                        Address cannot be longer than 40 characters.
+                                     </p>
+                             
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -78,7 +92,29 @@
                         <div class="row form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
                                 <label class="control-label">Address</label>
-                                <input class="form-control" type="text" formControlName="address">
+                                <input class="form-control" type="text" formControlName="address" minlength="2" maxlength='40' name='addres' onKeyPress="if(this.value.length==40) return false;">
+
+                                <div ng-show="form.$submitted || form.addres.$touched || form.addres.$dirty">
+                                    <div ng-show="form.addres.$dirty || form.addres.$invalid">
+                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                           ng-show="form.addres.$error.required">
+                                           Address is required.
+                                        </p>
+
+                                        <p class="help-block" style="width:100%;z-index:960;background:#fff;color:maroon"
+                                                               ng-show="form.addres.$error.minlength">
+                                                                Address is required to be at least 1 character.
+                                                            </p>
+
+                                        <p class="help-block" style="width:100%;z-index:980;background:#fff;color:maroon"
+                                        ng-show="form.addres.$error.maxlength">
+                                        Address cannot be longer than 40 characters.
+                                     </p>
+                             
+
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
