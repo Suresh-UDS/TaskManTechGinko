@@ -1217,8 +1217,13 @@ angular.module('timeSheetApp')
         if(parseInt($stateParams.id)>0){
 			$rootScope.$on('$stateChangeSuccess', function (ev, to, toParams, from, fromParams) {
 				//assign the "from" parameter to something
+				console.log("Previous state");
+				console.log(from);
+				console.log(from.name);
 				if(from.name){
+					console.log("Previous state available");
 					$scope.previousState = from.name;
+					console.log($scope.previousState);
 				}else{
 					$scope.previousState = "";
 				}
@@ -1401,7 +1406,12 @@ angular.module('timeSheetApp')
         {
             /** @reatin - retaining scope value.**/
 			$rootScope.retain=1;
+			console.log("Employees ")
+			console.log($scope.previousState);
 			if($scope.previousState && $scope.previousState === "employees"){
+				console.log("Employees ")
+				console.log($scope.previousState);
+				
 				$location.path('/employees');
 			}else{
 				$location.path('/onBoarding-list');

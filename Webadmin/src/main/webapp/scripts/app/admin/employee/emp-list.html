@@ -663,11 +663,20 @@
                                             <i class="material-icons">remove_red_eye</i>
                                         </button> -->
 
-                <div class="" style="float:left;">
-                    <button data-dismiss="modal" ng-click="getEmployeeDetails(employee.id);getRelieversDetails(employee.id);"
+                <!-- <div class="" style="float:left;" ng-show = "employee.nonUdsEmployee">
+                    <button data-dismiss="modal" ng-click="getEmployeeDetails(employee.id);getRelieversDetails(employee.id);" 
                             class="btn btn-default close-button-right b10" type="button"
                             id="close-button-right" style="background-color:green;" data-toggle="modal"
                             data-target="#viewModalonboardingEmployee">
+                        View Full Details &raquo;
+                    </button>
+                </div> -->
+                
+                <div class="" style="float:left;" ng-if = "!employee.nonUdsEmployee">
+                    <button data-dismiss="modal" ng-click="redirectToView(employee.id);" 
+                            class="btn btn-default close-button-right b10" type="button"
+                            id="close-button-right" style="background-color:green;" data-toggle="modal"
+                           >
                         View Full Details &raquo;
                     </button>
                 </div>
