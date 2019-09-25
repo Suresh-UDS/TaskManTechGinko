@@ -4,8 +4,8 @@
             <form [formGroup]="onboardingPersonalDetailsForm" novalidate>
                 <div class="row form-group">
                     <fieldset [disabled]="!isNewEmployee">
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        <label class="control-label trequired">First Name</label>
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label trequired">Employee Name</label>
                         <input class="form-control"   type="text" formControlName="employeeName" >
                         <ion-item *ngIf="onboardingPersonalDetailsForm.controls.employeeName.dirty && onboardingPersonalDetailsForm.controls.employeeName.invalid">
                             <p *ngIf="onboardingPersonalDetailsForm.controls.employeeName.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Name required</p>
@@ -13,15 +13,6 @@
                         </ion-item>
                     </div>
 
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">
-                        
-                        <label class="control-label trequired">Last Name</label>
-                        <input class="form-control"  type="text" formControlName="lastName" >
-                        <ion-item *ngIf="onboardingPersonalDetailsForm.controls.lastName.dirty && onboardingPersonalDetailsForm.controls.lastName.invalid">
-                            <p *ngIf="onboardingPersonalDetailsForm.controls.lastName.errors.required" style="color:red; font-size:12px !important; text-transform: none !important">Name required</p>
-                            <p *ngIf="onboardingPersonalDetailsForm.controls.lastName.errors.lastName">Invalid Last Name</p>
-                        </ion-item>
-                    </div>
                     </fieldset>
                     <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
                 </div>
@@ -42,10 +33,8 @@
                             </fieldset>
                         </div>
                         <div *ngIf="i%2" [formGroupName]="i">
-                            <fieldset [disabled]="!isNewEmployee">
                             <label class="control-label ">{{list['value']['relationship']}} Name</label>
                             <input class="form-control" type="text" formControlName="name">
-                            </fieldset>
                         </div>
                     </div>
                     <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
@@ -131,15 +120,26 @@
                             <ion-label class="label-text" stacked>Blood Group</ion-label>
                             <ion-select interface="popover" formControlName="bloodGroup">
                                 <ion-option value="A+">A+</ion-option>
-                                <ion-option value="B+">B+</ion-option>
                                 <ion-option value="A-">A-</ion-option>
-                                <ion-option value="B-">B-</ion-option>
+                                <ion-option value="A1+">A1+</ion-option>
+                                <ion-option value="A1-">A1-</ion-option>
+                                <ion-option value="A2+">A2+</ion-option>
+                                <ion-option value="A2-">A2-</ion-option>
                                 <ion-option value="AB+">AB+</ion-option>
                                 <ion-option value="AB-">AB-</ion-option>
                                 <ion-option value="A1B+">A1B+</ion-option>
                                 <ion-option value="A1B-">A1B-</ion-option>
+                                <ion-option value="A2B+">A2B+</ion-option>
+                                <ion-option value="A2B-">A2B-</ion-option>
+                                <ion-option value="B+">B+</ion-option>
+                                <ion-option value="B-">B-</ion-option>
+                                <ion-option value="B1+">B1+</ion-option>
+                                <ion-option value="B1-">B1-</ion-option>
                                 <ion-option value="O+">O+</ion-option>
                                 <ion-option value="O-">O-</ion-option>
+                                <ion-option value="OB+">OB+</ion-option>
+                                <ion-option value="OB-">OB-</ion-option>
+
                             </ion-select>
                         </ion-item>
                     </div>
