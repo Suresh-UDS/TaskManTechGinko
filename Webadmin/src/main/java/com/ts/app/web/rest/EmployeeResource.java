@@ -186,7 +186,7 @@ public class EmployeeResource {
  
   //***************************************Modified by Vinoth**********************************************************************************    
     
-    @RequestMapping(value = "/rejecttOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/rejectOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> rejecttOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
         User user = userRepository.findByLogin(dummyUser);
