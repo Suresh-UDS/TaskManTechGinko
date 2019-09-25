@@ -203,6 +203,8 @@ public class EmployeeSpecification implements Specification<Employee> {
         }else{
             predicates.add(builder.equal(root.get("submitted"),false));
         }
+        
+        predicates.add(builder.equal(root.get("rejected"),searchCriteria.isRejected()));
 
         predicates.add(builder.isNotNull( root.get("onBoardedFrom") ));
         

@@ -316,7 +316,7 @@ angular.module('timeSheetApp')
 		$scope.newEmployee = type[0];
 		$scope.existingEmployee = type[1]; 
 		$scope.importedEmployee = type[2];
- 
+		$scope.rejectedEmployee = type[3];
 	}
 
 	$scope.positionLoaderDisable = false;
@@ -1005,6 +1005,7 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.newEmployee = 1;
 			$scope.searchCriteria.submitted = 1;
 			$scope.searchCriteria.imported = null;
+			$scope.searchCriteria.rejected = 0;
  
 		}
 
@@ -1013,6 +1014,7 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.newEmployee = 0;
 			$scope.searchCriteria.submitted = 1;
 			$scope.searchCriteria.imported = null;
+			$scope.searchCriteria.rejected = 0;
 		}
 
 		if($scope.importedEmployee){
@@ -1020,6 +1022,15 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.imported = 1;
 			$scope.searchCriteria.submitted = 0;
 			$scope.searchCriteria.newEmployee = null;
+			$scope.searchCriteria.rejected = 0;
+		}
+		if($scope.rejectedEmployee){
+			 
+			$scope.searchCriteria.imported = 1;
+			$scope.searchCriteria.submitted = 0;
+			$scope.searchCriteria.newEmployee = null;
+			$scope.searchCriteria.rejected = 1;
+ 
 		}
  
 		/* Root scope (search criteria) start*/

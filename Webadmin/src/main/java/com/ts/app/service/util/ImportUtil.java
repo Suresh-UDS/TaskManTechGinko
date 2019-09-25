@@ -1819,7 +1819,7 @@ public class ImportUtil {
 					
 					String position,wbsId,activity,projectCode;
 					position = getCellValue(currentRow.getCell(35));
-					activity = getCellValue(currentRow.getCell(36));
+ 
 					wbsId = getCellValue(currentRow.getCell(2));
 					projectCode = getCellValue(currentRow.getCell(0));
 					
@@ -1831,7 +1831,7 @@ public class ImportUtil {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+r+" Failed!! Given Project Id "+projectCode+" is not valid or not mapped for current user " );
+						message.add(  "Row No : "+(r+1)+" Failed!! Given Project Id "+projectCode+" is not valid or not mapped for current user " );
 						
 					}
 					
@@ -1839,15 +1839,15 @@ public class ImportUtil {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+r+" Failed!! Given Wbs Id "+wbsId+" is not valid or not accosiated with Project Id "+projectCode+" or mapped both for current user " );
+						message.add(  "Row No : "+(r+1)+" Failed!! Given Wbs Id "+wbsId+" is not valid or not accosiated with Project Id "+projectCode+" or mapped both for current user " );
 						
 					}
 					 
-					else if(CollectionUtils.isEmpty(positionsRepository.findByWbsIdAndPositionId(wbsId, position))) {
+					else if(positionsRepository.findTop1ByWbsIdAndPositionId(wbsId, position)==null) {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+r+" Failed!! Given Position Id "+position+" is not associated with "+wbsId );
+						message.add(  "Row No : "+(r+1)+" Failed!! Given Position Id "+position+" is not associated with "+wbsId );
 						
 					}
 					
@@ -1883,7 +1883,7 @@ public class ImportUtil {
  							
                     		if(skipSave == false) {
                     			
-                    			message.add(  "Row No : "+r+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
+                    			message.add(  "Row No : "+(r+1)+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
  							
                     		}
  							
@@ -1995,16 +1995,18 @@ public class ImportUtil {
 							cellNo = 35; 
 							employee.setPosition(getCellValue(currentRow.getCell(35)));
 							cellNo = 36;
+ 
+							Positions positionOb = positionsRepository.findTop1ByWbsIdAndPositionId(wbsId, position);
 							
-
-							
-							Positions positionOb = positionsRepository.findByWbsIdAndPositionIdAndActivity(wbsId, position,activity);
-							
-							double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
-							
-							employee.setActivity(activity);
-							
-							employee.setGross( gorss);
+							if(positionOb!=null) {
+							 
+								double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
+								
+								employee.setActivity(positionOb.getActivity());
+								
+								employee.setGross( gorss);
+								
+							}
 							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);

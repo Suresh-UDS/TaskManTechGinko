@@ -1,6 +1,30 @@
 <div ng-init="loadEmployee()" >
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+                <div class="alert alert-danger " ng-if="employee.rejected">
+
+                        <h4 class="alert-heading"><i class="fas fa-info-circle"></i> Rejected</h4>   
+                        <hr>
+                        {{employee.remarks}}
+                
+                </div>
+        
+
+        </div>
+
+
+    </div>
+
+    <div class="row">
+ 
     <div class="col-md-5">
 <!--        Client Details Card-->
+
+
+
         <div class="card">
             <form id="TypeValidation" class="form-horizontal" action="" method="">
 <!--                <div class="card-header card-header-text" data-background-color="rose">-->
@@ -171,11 +195,10 @@
                 </div>
             </div>
          </div>
-        </div>
+       
     </div>
 
-
-<div>
+ 
     <div class="col-md-7">
 <!--        Employee Details Card-->
         <div class="card">
@@ -384,6 +407,8 @@
 
 
         </div>
+
+    </div>
 
     </div>
 

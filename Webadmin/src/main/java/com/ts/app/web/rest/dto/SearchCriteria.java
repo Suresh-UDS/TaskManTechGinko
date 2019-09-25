@@ -303,6 +303,7 @@ public class SearchCriteria extends Paginator {
 	
 	private boolean onBoarded;
 
+	private boolean rejected;
 	
 	public boolean isOnBoarded() {
 		return onBoarded;
@@ -1575,5 +1576,15 @@ public class SearchCriteria extends Paginator {
 	public void setOnBoardedFrom(String onBoardedFrom) {
 		this.onBoardedFrom = onBoardedFrom;
 	}
+
+	public boolean isRejected() {
+		return rejected;
+	}
+
+	public void setRejected(boolean rejected) {
+		this.rejected = rejected;
+	}
+	
+	
   
 }

@@ -245,8 +245,18 @@ public class    EmployeeService extends AbstractService {
     public List<EmployeeDTO> findActionRequired(boolean imported, boolean submitted, String active, String wbsId) {
     	
     	List<Employee> listEmployees = employeeRepository.findByImportedAndSubmittedAndActiveAndWbsId(imported, submitted, active, wbsId);
-    	
+ 
     	List<EmployeeDTO> listEmployeeDto = mapperUtil.toModelList(listEmployees, EmployeeDTO.class);
+    	
+    	for(EmployeeDTO emp : listEmployeeDto) {
+    		
+        	List<EmployeeDocuments> docuemnts = employeeDocumentRepository.findByEmployeeId(emp.getId());
+        	
+        	List<EmployeeDocumentsDTO> employeeDocumentsDTO = mapperUtil.toModelList(docuemnts, EmployeeDocumentsDTO.class);
+        	
+        	emp.setDocuments(employeeDocumentsDTO);
+        	 
+    	}
     	 
     	
     	return listEmployeeDto;
@@ -415,6 +425,7 @@ public class    EmployeeService extends AbstractService {
         
         employee.setName(name);
         employee.setFullName(name);
+        employee.setLastName("");
         employee.setAccountNumber("NIL");
         employee.setAdharCardNumber("NIL");
         employee.setBloodGroup("NIL");

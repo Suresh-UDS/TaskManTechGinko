@@ -1886,13 +1886,16 @@ public class JobManagementService extends AbstractService {
 
 			Long jobId = job.getId();
 			ByteArrayOutputStream pdfContent = new ByteArrayOutputStream();
+			if(job.getChecklistItems().size() > 0) {
 			pdfContent= createJobPdf(jobId);
 			String subject = "TaskMan Job Completed CheckList PDF";
 			String content = "Dear Customer";
 			String filename  = "job_"+String.valueOf(jobId)+".pdf";
 	        boolean isHtml = true;
-			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
-			//sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
+	        sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
+			}
+			//sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false,subject,content,filename,isHtml,pdfContent,data);
+			sendJobCompletionNotifications(ticket.getEmployee(), ticket.getAssignedTo(), currUserEmp, job, ticket, job.getSite(), false, data);
 		}
 		return mapperUtil.toModel(job, JobDTO.class);
 
@@ -2239,7 +2242,7 @@ public class JobManagementService extends AbstractService {
 		} /*
 			 * file:///C:/Users/nivetha.m/Downloads/
 			 */		
-		if(job.getChecklistItems()!=null) {
+		if(job.getChecklistItems()!=null && job.getChecklistItems().size() > 0) {
 			
 			context.put("jobCheckListName",job.getChecklistItems().get(0).getChecklistName()); 
 			context.put("jobCheckList", job.getChecklistItems());
