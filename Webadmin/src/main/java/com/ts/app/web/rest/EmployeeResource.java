@@ -127,7 +127,8 @@ public class EmployeeResource {
         try {
             if(!employeeService.isDuplicate(employeeDTO)) {
                 log.debug(">>> going to create <<<");
-                employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
+               // employeeDTO = employeeService.createEmployeeInformation(employeeDTO);
+                employeeDTO = employeeService.createNonUDSEmployeeInformation(employeeDTO);
             }else {
                 log.debug(">>> duplicate <<<");
                 employeeDTO.setMessage("error.duplicateRecordError");
@@ -183,7 +184,24 @@ public class EmployeeResource {
         }
         return new ResponseEntity<>(employeeDTO,HttpStatus.CREATED);
     }
+ 
+  //***************************************Modified by Vinoth**********************************************************************************    
+    
+    @RequestMapping(value = "/rejectOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> rejecttOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){
+        User user = userRepository.findByLogin(dummyUser);
+        if(employeeDTO.getUserId() == 0) { employeeDTO.setUserId(user.getId()); }
+        try {
+                employeeDTO = employeeService.rejectOnBoardingEmployeeInfo(employeeDTO);
+        }catch(Exception e) {
+            throw new TimesheetException(e, employeeDTO);
+        }
+        return new ResponseEntity<>(employeeDTO,HttpStatus.CREATED);
+    }
 
+//******************************************************************************************************************************************    
+    
     @RequestMapping(value = "/verifyOnBoardingEmployee",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ZempReturn verifyOnBoardingEmployee(@Valid @RequestBody EmployeeDTO employeeDTO,HttpServletRequest request){

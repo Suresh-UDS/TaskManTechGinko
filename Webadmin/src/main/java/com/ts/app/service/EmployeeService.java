@@ -373,6 +373,147 @@ public class    EmployeeService extends AbstractService {
         return employeeDto;
     }
 
+/******************************Modified by Vinoth**********************************************************/       
+    public EmployeeDTO createNonUDSEmployeeInformation(EmployeeDTO employeeDto) {
+        // log.info("The admin Flag value is " +adminFlag);
+        log.debug("EmployeeService.createEmployeeInformation - userId - "+employeeDto.getUserId());
+        /*Employee existingEmployee = employeeRepository.findByEmpId(employeeDto.getEmpId());
+		if(existingEmployee!=null && existingEmployee.getActive().equals(Employee.ACTIVE_NO)) { //existing employee update and activate
+			employeeDto.setId(existingEmployee.getId());
+		    ZoneId  zone = ZoneId.of("Asia/Singapore");
+		    ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+		    //update and activate the existing employee.
+
+			employeeDto = updateEmployee(employeeDto, true);
+		}else {*/
+        employeeDto.setFullName(employeeDto.getName());
+        Employee employee = mapperUtil.toEntity(employeeDto, Employee.class);
+        log.debug("EmployeeService.createEmployeeInformation - userId - "+employee.getUser().getId());
+        employee.setUser(null);
+        ZoneId  zone = ZoneId.of("Asia/Singapore");
+        ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
+        employee.setCreatedDate(zdt);
+        employee.setActive(Employee.ACTIVE_YES);
+        if(employeeDto.getManagerId() > 0) {
+            Employee manager =  employeeRepository.findOne(employeeDto.getManagerId());
+            employee.setManager(manager);
+        }
+        //employee = employeeRepository.save(employee);
+        Project newProj = projectRepository.findOne(employeeDto.getProjectId());
+        Site newSite = siteRepository.findOne(employeeDto.getSiteId());
+        List<Project> projects = new ArrayList<Project>();
+        projects.add(newProj);
+        List<Site> sites = new ArrayList<Site>();
+        sites.add(newSite);
+        employee.setFaceAuthorised(false);
+        employee.setFaceIdEnrolled(false);
+        employee.setLeft(false);
+        employee.setRelieved(false);
+        employee.setReliever(false);
+        
+        String name = employee.getEmpId().toString();
+        
+        employee.setName(name);
+        employee.setFullName(name);
+        employee.setAccountNumber("NIL");
+        employee.setAdharCardNumber("NIL");
+        employee.setBloodGroup("NIL");
+        employee.setBoardInstitute("NIL");
+        employee.setClientDescription("NIL");
+        employee.setClientName("NIL");
+        
+        long millis=System.currentTimeMillis();  
+        java.sql.Date date=new java.sql.Date(millis);  
+        
+        employee.setDob(date);
+        employee.setDoj(date);
+        employee.setEducationalQulification("NIL");
+        employee.setEmergencyContactNumber("NIL");
+        employee.setEmployer("NIL");
+        employee.setFatherName("NIL");
+        employee.setGender("NIL");
+        employee.setIfscCode("NIL");
+        employee.setImported(false);
+        employee.setMobile("NIL");
+        employee.setMaritalStatus("NIL");
+        employee.setMotherName("NIL");
+        employee.setNomineeContactNumber("NIL");
+        employee.setNomineeName("NIL");
+        employee.setNomineeRelationship("NIL");
+        employee.setOnBoardSource("NIL");
+        employee.setOnBoardedFrom("NIL");
+        employee.setPercentage(0);
+        employee.setPermanentAddress("NIL");
+        employee.setPermanentCity("NIL");
+        employee.setPermanentState("NIL");
+        employee.setPersonalIdentificationMark1("NIL");
+        employee.setPersonalIdentificationMark2("NIl");
+        employee.setPresentAddress("NIL");
+        employee.setPresentCity("NIL");
+        employee.setPresentState("NIL");
+        employee.setPreviousDesignation("NIL");
+        employee.setProjectCode("NIL");
+        employee.setProjectDescription("NIL");
+        employee.setReligion("NIL");
+        employee.setSyncToSAP(false);
+        employee.setSyncedBy("NIL");
+        employee.setVerified(false);
+        employee.setVerifiedDate(null);
+        employee.setWbsDescription("NIL");
+        employee.setWbsId("NIL");
+        employee.setVerifiedBy(null);
+        employee.setNewEmployee(false);
+        employee.setPosition("NIL");
+        employee.setSubmitted(false);
+        employee.setSubmittedBy("NIL");
+        employee.setSubmittedOn(null);
+        employee.setGross(0);
+        employee.setOnboardedPlace("NIL");
+        employee.setActivity("NIL");
+        employee.setNonUdsEmployee(true);
+        
+        List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
+        if(CollectionUtils.isNotEmpty(projectSites)) {
+            for(EmployeeProjectSite projSite : projectSites) {
+                projSite.setEmployee(employee);
+            }
+        }
+        List<EmployeeLocation> locations = employee.getLocations();
+        if(CollectionUtils.isNotEmpty(locations)) {
+            for(EmployeeLocation loc : locations) {
+                loc.setEmployee(employee);
+            }
+        }
+        if(employeeDto.getUserRoleId() > 0) {
+            UserRoleDTO userRoleDTO = userRoleService.findOne(employeeDto.getUserRoleId());
+            if(userRoleDTO.getName().startsWith("Client")) {
+                employee.setClient(true); //mark the employee as client employee
+            }
+        }
+        employee = employeeRepository.save(employee);
+        //create user if opted.
+        if(employeeDto.isCreateUser() && employeeDto.getUserRoleId() > 0) {
+            UserDTO user = new UserDTO();
+            user.setLogin(employee.getEmpId());
+            user.setPassword(employee.getEmpId());
+            user.setFirstName(employee.getName());
+            user.setLastName(employee.getLastName());
+            user.setEmail(employee.getEmail());
+            user.setAdminFlag("N");
+            user.setUserRoleId(employeeDto.getUserRoleId());
+            user.setEmployeeId(employee.getId());
+            user.setActivated(true);
+            userService.createUserInformation(user);
+
+        }
+
+        log.debug("Created Information for Employee: {}", employee);
+        employeeDto = mapperUtil.toModel(employee, EmployeeDTO.class);
+        //}
+        return employeeDto;
+    }
+/**********************************************************************************************************/ 
+    
 /******************************Modified by Vinoth**********************************************************/   
     
     public EmployeeDTO createOnboardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
@@ -407,6 +548,30 @@ public class    EmployeeService extends AbstractService {
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;
     }
+ 
+//***************************************Modified by Vinoth**********************************************************************************
+    
+    public EmployeeDTO rejectOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
+        Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setFullName(employeeDTO.getName());
+        Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
+
+        updateEmployeeDTO.setProjectDescription( onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getProjectCode()) );
+        updateEmployeeDTO.setWbsDescription(onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getWbsId()) );
+
+        updateEmployeeDTO.setRejected(true); 
+        updateEmployeeDTO.setSubmitted(true);
+        updateEmployeeDTO.setVerified(false);
+        updateEmployeeDTO.setVerifiedBy(null);
+       // Employee updateEmployee = mapperUtil.toEntity(updateEmployeeDTO,Employee.class);
+//        updateEmployee.setUser(null);
+        employee = employeeRepository.saveAndFlush(updateEmployeeDTO);
+        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
+        return employeeDTO;
+    }
+    
+//******************************************************************************************************************************************    
     
     public ZempdetailUpdateResponse saveEmployeeOnSAP(ZempdetailUpdate zempdetailUpdate) throws Exception {
     	
@@ -2407,7 +2572,8 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setGross(employee.getGross()); 
     empDto.setNewEmployee(employee.isNewEmployee());
     empDto.setActivity(employee.getActivity());
-    
+    empDto.setRemarks(employee.getRemarks());
+    empDto.setRejected(employee.isRejected());
     return empDto;
 }
 
@@ -2481,6 +2647,8 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
          }
          empDto.setCreatedBy(employee.getCreatedBy());
          empDto.setCreatedDate(employee.getCreatedDate());
+         empDto.setRemarks(employee.getRemarks());
+         empDto.setRejected(employee.isRejected());
     	return empDto;
     }
     
