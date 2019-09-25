@@ -95,9 +95,10 @@
                     <div class="panel panel-default TabsContainer mar10px jobType">
                         <div class="panel-body pad0px" style = "padding-bottom :17px !important">
                             <ul class="nav nav-pills nav-pills-warning mar0px">
-                                    <li ng-click="LoadEmpListByType([1,0,0])" ng-class="{active:newEmployee}" ><a href="#" >New - To Be Verified</a></li>
-                                    <li ng-click="LoadEmpListByType([0,1,0])" ng-class="{active:existingEmployee}"><a href="#" >Existing - To Be Verified</a></li>  
-                                    <li ng-click="LoadEmpListByType([0,0,1])" ng-class="{active:importedEmployee}" ><a href="#" >Imported (Readonly) </a></li>                                      
+                                    <li ng-click="LoadEmpListByType([1,0,0,0])" ng-class="{active:newEmployee}" ><a href="#" >New - To Be Verified</a></li>
+                                    <li ng-click="LoadEmpListByType([0,1,0,0])" ng-class="{active:existingEmployee}"><a href="#" >Existing - To Be Verified</a></li>  
+                                    <li ng-click="LoadEmpListByType([0,0,1,0])" ng-class="{active:importedEmployee}" ><a href="#" >Imported (Readonly) </a></li>
+                                    <li ng-click="LoadEmpListByType([0,0,0,1])" ng-class="{active:rejectedEmployee}" ><a href="#" >Rejected (Readonly) </a></li>                                      
                             </ul>
                         </div>
                     </div>
@@ -153,7 +154,7 @@
                                         <a has-permission="OnBoarding:View" ui-sref="view-onBoarding ({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
                                             <i class="material-icons">remove_red_eye</i>
                                         </a>
-                                        <a has-permission="OnBoarding:Edit" ng-if="!importedEmployee" ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
+                                        <a has-permission="OnBoarding:Edit" ng-if="!importedEmployee && !rejectedEmployee" ui-sref="edit-onBoarding({ id: employee.id })" type="button" rel="tooltip" class="btn btn-info btn-simple">
                                             <i class="material-icons">edit</i>
                                         </a>
                                         <!--                                    <button type="button" rel="tooltip" class="btn btn-danger btn-simple">-->
