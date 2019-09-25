@@ -57,6 +57,13 @@ angular.module('timeSheetApp')
                 })
             },
 
+            rejectOnBoardingEmployee: function(employee){
+                return $http.post('api/rejectOnBoardingEmployee',employee).then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                })
+            },
+
             verifyOnBoardingEmployee: function(employee){
                 return $http.post('api/verifyOnBoardingEmployee',employee).then(function (response) {
                     console.log(response.data);
