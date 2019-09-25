@@ -19,6 +19,9 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
   today;
   minAge;
   maxAge;
+  maxAgedoj;
+  minAgedoj;
+
   religionList:any[];
   // setMinDate: any;
   formActionStatus: any;
@@ -46,14 +49,18 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     var today = new Date();
     var minAge = 18;
     var maxAge = 58;
+    var minAgedoj=0;
+    var maxAgedoj=2;
+
    this.minAge = new Date(today.getFullYear() - minAge,  today.getMonth(), today.getDate());
    this.maxAge = new Date(today.getFullYear() - maxAge,  today.getMonth(), today.getDate());
 
-  
+  this.minAgedoj= new Date(today.getFullYear() - minAgedoj,  today.getMonth(), today.getDate());
+  this.maxAgedoj = new Date(today.getFullYear(),  today.getMonth()-maxAgedoj, today.getDate());
+
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],
-      lastName:['',[Validators.required]],
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
@@ -64,7 +71,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       identificationMark2: ['', [ Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
       relationshipDetails: this.fb.array([
         this.fb.group({
-          name: ['', [Validators.required, Validators.maxLength(50), Validators.pattern('^[a-zA-Z ]*$')]],
+          name: ['', [Validators.required]],
           relationship: 'Father', contactNumber: '',
         }),
         this.fb.group({
@@ -111,7 +118,6 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           localStoragedData['actionRequired'][this.storedIndex]['filtered'] = true;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] = fromStatusValues['data']['employeeCode'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] = fromStatusValues['data']['employeeName'];
-          localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName'] = fromStatusValues['data']['lastName'];
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] =  fromStatusValues['data']['gender']  ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] = fromStatusValues['data']['maritalStatus'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] =  fromStatusValues['data']['dateOfJoining']; 
