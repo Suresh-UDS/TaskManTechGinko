@@ -232,6 +232,8 @@ angular.module('timeSheetApp')
 
 /*************************************************Modified By Vinoth**************************************************************************/
 
+	   	    $scope.importErrors = [];
+
 			// upload Employee Onboarding File  start
 			$scope.uploadEmployeeOnboardingFile = function(){
 				if($scope.selectedEmployeeOnboardingFile){
@@ -248,8 +250,25 @@ angular.module('timeSheetApp')
 						};
 						$scope.employeeOnboardingImportStatus = importStatus;
 						if(result.status == 'COMPLETED') {
-							$scope.showNotification('top','center','success','Employee Onboarding data imported successfuly');
+
+
+							$scope.importErrors = result.msg.split(",");
+
+							if($scope.importErrors.length > 1){
+
+								$("#importErrors").modal();
+
+							}
+							else{
+
+								$scope.showNotification('top','center','success','Employee Onboarding data imported successfuly');
+
+							}
+ 
 							$scope.empOnboardingImportStatusLoad = false;
+
+
+
 						}else if(result.status == 'PROCESSING') {
 							$rootScope.start('employeeOnboarding');
 						}

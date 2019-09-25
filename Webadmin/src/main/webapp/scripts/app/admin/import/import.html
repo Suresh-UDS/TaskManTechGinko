@@ -568,3 +568,23 @@
         </div>
       </div>
 </div>
+
+
+<div class="modal fade " id="importResult"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content"> 
+
+            <h3>Follwing rows are failed to import</h3>
+
+            <ul> 
+                <li ng-repeat="error in importErrors">{{error}}</li>
+            </ul>
+
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal" >Cancel</button>    
+            </div>
+
+        </div>
+
+    </div>
+</div>
