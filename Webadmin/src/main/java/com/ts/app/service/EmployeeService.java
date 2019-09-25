@@ -425,6 +425,7 @@ public class    EmployeeService extends AbstractService {
         
         employee.setName(name);
         employee.setFullName(name);
+        employee.setLastName("");
         employee.setAccountNumber("NIL");
         employee.setAdharCardNumber("NIL");
         employee.setBloodGroup("NIL");
