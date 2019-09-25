@@ -251,13 +251,15 @@ angular.module('timeSheetApp')
 						$scope.employeeOnboardingImportStatus = importStatus;
 						if(result.status == 'COMPLETED') {
 
+							if(result.msg){
 
-							$scope.importErrors = result.msg.split(",");
+								$scope.importErrors = result.msg.split(",");
 
-							if($scope.importErrors.length > 1){
+								if($scope.importErrors.length > 0){
 
-								$("#importErrors").modal();
+									$("#importErrors").modal();
 
+								}
 							}
 							else{
 
