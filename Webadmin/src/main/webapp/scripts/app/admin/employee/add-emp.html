@@ -29,8 +29,8 @@
                 <!--</div>-->
 				<div class="form-container table-container">
                     <label><span class="red-star">*</span> Mandatory Field</label>
-                    <label style='float:right;'><i class="material-icons" style='color:red;'>
-                            warning </i> The Employee Create Applicable for only Non UDS Employees</label>
+                    <label style='float:right; color:red;'><i class="material-icons" style='color:red;'>
+                            warning </i> This Employee Creation is Applicable only for Non UDS Employees</label>
                 
 					<form ng-show="!success" name="form" role="form" novalidate
 						ng-submit="conform('save')"
@@ -69,7 +69,7 @@
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.pattern">
-                                                                Id should contains first character should be an alphabet, at least 1 alphabet and at least 1 number. 
+                                                                Id should contains first character as an alphabet, at least 1 alphabet and at least 1 number. 
                                                             </p>
 
                                                             <!-- <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
@@ -109,7 +109,7 @@
                                                             <!--<a href="javascript:;"  data-toggle="collapse" data-parent="#accordian" data-target="#addDesignation" class="btn btn-round btn-fab btn-fab-mini btn-simple" aria-expanded="false" aria-controls="collapseExample">
                                                                 <i class="material-icons">add</i>
                                                             </a>-->
-                                                            <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addDesignation').modal()" data-target="#addDesignation"><i class="material-icons">add</i><div class="ripple-container" ></div></a>
+                                                            <a  has-permission="" class="btn btn-round btn-fab btn-fab-mini btn-simple"  onClick="$('#addDesignation').modal()" data-target="#addDesignation"><i class="material-icons">add </i><div class="ripple-container" ></div></a>
                                                         </div>
 
 
