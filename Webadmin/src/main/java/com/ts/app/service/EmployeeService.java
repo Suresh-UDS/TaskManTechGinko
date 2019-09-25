@@ -561,9 +561,10 @@ public class    EmployeeService extends AbstractService {
         updateEmployeeDTO.setWbsDescription(onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getWbsId()) );
 
         updateEmployeeDTO.setRejected(true); 
-        updateEmployeeDTO.setSubmitted(true);
+        updateEmployeeDTO.setSubmitted(false);
         updateEmployeeDTO.setVerified(false);
         updateEmployeeDTO.setVerifiedBy(null);
+        updateEmployeeDTO.setImported(true);
        // Employee updateEmployee = mapperUtil.toEntity(updateEmployeeDTO,Employee.class);
 //        updateEmployee.setUser(null);
         employee = employeeRepository.saveAndFlush(updateEmployeeDTO);

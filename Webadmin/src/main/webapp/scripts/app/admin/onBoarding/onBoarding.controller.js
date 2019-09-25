@@ -1499,6 +1499,7 @@ angular.module('timeSheetApp')
 			 
 				$scope.rejectOnBoardingLoader = false;
 				$scope.showNotifications('top', 'center', 'success', "Employee Rejected ");
+				$location.path('/onBoarding-list');
 
         }).catch(function(response){
             $scope.rejectOnBoardingLoader = false;

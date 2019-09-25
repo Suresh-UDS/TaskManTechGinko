@@ -321,7 +321,7 @@ public class ImportUtil {
 			statusMap.put(fileKey, result);
 		}
 		try {
-			importNewFiles("employeeOnboarding",filePath, fileName, targetFilePath);
+			result.setMsg( importNewFiles("employeeOnboarding",filePath, fileName, targetFilePath));
 			result.setFile(fileKey);
 		}catch (Exception e) {
 			log.error("Error while importing employee Onbording data",e);
@@ -446,7 +446,7 @@ public class ImportUtil {
 						importEmployeeFromFile(fileKey, fileObj.getPath());
 						break;
 					case "employeeOnboarding":
-						importEmployeeOnboardingFromFile(fileKey, fileObj.getPath());
+						response = importEmployeeOnboardingFromFile(fileKey, fileObj.getPath());
 						break;
 					case "client" :
 						importClientFromFile(fileKey,fileObj.getPath());
@@ -1835,7 +1835,7 @@ public class ImportUtil {
 						
 					}
 					
-					if(!onboardingUserConfigService.isWbsExistsForUser(SecurityUtils.getCurrentUserId(), projectCode, wbsId)) {
+					else if(!onboardingUserConfigService.isWbsExistsForUser(SecurityUtils.getCurrentUserId(), projectCode, wbsId)) {
 						
 						skipSave = true;
 						
@@ -1843,11 +1843,11 @@ public class ImportUtil {
 						
 					}
 					 
-					if(CollectionUtils.isEmpty(positionsRepository.findByWbsIdAndPositionId(wbsId, position))) {
+					else if(CollectionUtils.isEmpty(positionsRepository.findByWbsIdAndPositionId(wbsId, position))) {
 						
 						skipSave = true;
 						
-						message.add(  "Row No : "+r+" Failed!! Given Position Id "+position+" is associated with "+wbsId );
+						message.add(  "Row No : "+r+" Failed!! Given Position Id "+position+" is not associated with "+wbsId );
 						
 					}
 					
@@ -1881,9 +1881,13 @@ public class ImportUtil {
                     	
                     	if(employee.isSubmitted() && !employee.isVerified()) {
  							
- 							skipSave = true;
+                    		if(skipSave == false) {
+                    			
+                    			message.add(  "Row No : "+r+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
  							
- 							message.add(  "Row No : "+r+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
+                    		}
+ 							
+ 							skipSave = true;
  							
  						}
 
@@ -2076,20 +2080,11 @@ public class ImportUtil {
 			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
-			
-			response.append(SUCCESS_MESSAGE);
-            
+	           
 			if(message.size()>0) {
 				response.append( String.join(",",message) );
 			}
-			
-            if(message.size() == (lastRow - 1)) {
-             
-            	throw new Exception(response.toString());
-            	
-            }
-             
-             
+			  
 		}
 		return response.toString();
 	}
