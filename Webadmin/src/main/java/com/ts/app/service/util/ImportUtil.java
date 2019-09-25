@@ -71,6 +71,9 @@ public class ImportUtil {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private OnboardingUserConfigService onboardingUserConfigService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -1787,13 +1790,17 @@ public class ImportUtil {
 		StringBuffer response = new StringBuffer();
 		int r = 1;
 		int cellNo = 0;
+		int lastRow = 0;
 		ImportResult importResult = statusMap.get(fileKey);
+
+		List<String> message = new ArrayList<String>(); 
+		
 		try {
 
 			FileInputStream excelFile = new FileInputStream(new File(path));
 			Workbook workbook = new XSSFWorkbook(excelFile);
 			Sheet datatypeSheet = workbook.getSheetAt(0);
-			int lastRow = datatypeSheet.getLastRowNum();
+			lastRow = datatypeSheet.getLastRowNum();
 			log.debug("Last Row number -" + lastRow);
 			for (; r <= lastRow; r++) {
 				log.debug("Current Row number -" + r);
@@ -1809,6 +1816,42 @@ public class ImportUtil {
 					String empId;
 					boolean skipSave = false; 
 					
+					
+					String position,wbsId,activity,projectCode;
+					position = getCellValue(currentRow.getCell(35));
+					activity = getCellValue(currentRow.getCell(36));
+					wbsId = getCellValue(currentRow.getCell(2));
+					projectCode = getCellValue(currentRow.getCell(0));
+					
+					
+					// employee filteration
+					
+					
+					if(!onboardingUserConfigService.isProjectExistsForUser(SecurityUtils.getCurrentUserId(), projectCode)) {
+						
+						skipSave = true;
+						
+						message.add(  "Row No : "+r+" Failed!! Given Project Id "+projectCode+" is not valid or not mapped for current user " );
+						
+					}
+					
+					if(!onboardingUserConfigService.isWbsExistsForUser(SecurityUtils.getCurrentUserId(), projectCode, wbsId)) {
+						
+						skipSave = true;
+						
+						message.add(  "Row No : "+r+" Failed!! Given Wbs Id "+wbsId+" is not valid or not accosiated with Project Id "+projectCode+" or mapped both for current user " );
+						
+					}
+					 
+					if(CollectionUtils.isEmpty(positionsRepository.findByWbsIdAndPositionId(wbsId, position))) {
+						
+						skipSave = true;
+						
+						message.add(  "Row No : "+r+" Failed!! Given Position Id "+position+" is associated with "+wbsId );
+						
+					}
+					
+					 
 					if( currentRow.getCell(5) !=null && StringUtils.isNotEmpty( currentRow.getCell(5).getStringCellValue()   )){
 						
 						employee = isSkipDuplicate(currentRow.getCell(5).getStringCellValue().trim());
@@ -1840,6 +1883,8 @@ public class ImportUtil {
  							
  							skipSave = true;
  							
+ 							message.add(  "Row No : "+r+" Failed!! Given Emp Id "+empId+" is already submitted. Util verified you can't Re-import");
+ 							
  						}
 
                     }
@@ -1850,7 +1895,7 @@ public class ImportUtil {
                     		employee.setNewEmployee(isNewEmployee);
 			            	 
 							cellNo = 0;
-							employee.setProjectCode(getCellValue(currentRow.getCell(0)));
+							employee.setProjectCode(projectCode);
 							cellNo = 1;
 							employee.setProjectDescription(getCellValue(currentRow.getCell(1)));
 							cellNo = 2;
@@ -1947,17 +1992,13 @@ public class ImportUtil {
 							employee.setPosition(getCellValue(currentRow.getCell(35)));
 							cellNo = 36;
 							
-							String position,wbsId,activity;
-							position = getCellValue(currentRow.getCell(35));
-							activity = getCellValue(currentRow.getCell(36));
-							wbsId = getCellValue(currentRow.getCell(2));
-							employee.setActivity(activity);
+
 							
 							Positions positionOb = positionsRepository.findByWbsIdAndPositionIdAndActivity(wbsId, position,activity);
 							
 							double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
 							
-							
+							employee.setActivity(activity);
 							
 							employee.setGross( gorss);
 							
@@ -1987,120 +2028,11 @@ public class ImportUtil {
                       
                     
                     }
-					
-//					cellNo = 5;
-//					if(currentRow.getCell(5).getStringCellValue() != null) {
-//						Employee existingEmployee = employeeRepo.findByEmpId(currentRow.getCell(5).getStringCellValue().trim());
-//						if(existingEmployee != null) {
-//							List<EmployeeProjectSite> projSites = existingEmployee.getProjectSites();
-//							cellNo = 0;
-//							Project newProj = projectRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(0))));
-//							cellNo = 1;
-//							Site newSite = siteRepo.findOne(Long.valueOf(getCellValue(currentRow.getCell(1))));
-//							EmployeeProjectSite projectSite = new EmployeeProjectSite();
-//							projectSite.setProject(newProj);
-//							projectSite.setSite(newSite);
-//							projectSite.setEmployee(existingEmployee);
-//
-//							if(CollectionUtils.isNotEmpty(projSites)) {
-//								projSites.add(projectSite);
-//							}
-//							employeeRepo.save(existingEmployee);
-//							log.debug("Update Employee Information with new site info: {}");
-//						}else {
-//							Employee employee = new Employee();
-//							cellNo = 0;
-//							employee.setProjectId(getCellValue(currentRow.getCell(0)));
-//							cellNo = 1;
-//							employee.setProjectDescription(getCellValue(currentRow.getCell(1)));
-//							cellNo = 2;
-//							employee.setWbsId(getCellValue(currentRow.getCell(2)));
-//							cellNo = 3;
-//							employee.setWbsDescription(getCellValue(currentRow.getCell(3)));
-//							cellNo = 4;
-//							employee.setName(getCellValue(currentRow.getCell(4)));
-//							employee.setFullName(getCellValue(currentRow.getCell(4)));
-//							employee.setLastName(getCellValue(currentRow.getCell(4)));
-//							cellNo = 5;
-//							employee.setEmpId(getCellValue(currentRow.getCell(5)));
-//							cellNo = 6;
-//							employee.setFatherName(getCellValue(currentRow.getCell(6)));
-//							cellNo = 7;
-//							employee.setMotherName(getCellValue(currentRow.getCell(7)));
-//							cellNo = 8;
-//							employee.setGender(getCellValue(currentRow.getCell(8)));
-//							cellNo = 9;
-//							employee.setMaritalStatus(getCellValue(currentRow.getCell(9)));
-//							cellNo = 10;
-//							Date dobDate = currentRow.getCell(10) != null ? currentRow.getCell(10).getDateCellValue(): null;
-//							if (dobDate != null) {
-//								employee.setDob(DateUtil.convertToSQLDate(dobDate));
-//							} 
-//							cellNo = 11;
-//							Date dojDate = currentRow.getCell(11) != null ? currentRow.getCell(11).getDateCellValue(): null;
-//							if (dojDate != null) {
-//								employee.setDoj(DateUtil.convertToSQLDate(dojDate));
-//							}
-//							cellNo = 12;
-//							employee.setReligion(getCellValue(currentRow.getCell(12)));
-//							cellNo = 13;
-//							employee.setBloodGroup(getCellValue(currentRow.getCell(13)));
-//							cellNo = 14;
-//							employee.setPersonalIdentificationMark1(getCellValue(currentRow.getCell(14)));
-//							cellNo = 15;
-//							employee.setPersonalIdentificationMark2(getCellValue(currentRow.getCell(15)));
-//							cellNo = 16;
-//							employee.setMobile(getCellValue(currentRow.getCell(16)));
-//							cellNo = 17;
-//							employee.setEmergencyContactNumber(getCellValue(currentRow.getCell(17)));
-//							cellNo = 18;
-//							employee.setPresentAddress(getCellValue(currentRow.getCell(18)));
-//							cellNo = 19;
-//							employee.setPresentCity(getCellValue(currentRow.getCell(19)));
-//							cellNo = 20;
-//							employee.setPresentState(getCellValue(currentRow.getCell(20)));
-//							cellNo = 21;
-//							employee.setPermanentAddress(getCellValue(currentRow.getCell(21)));
-//							cellNo = 22;
-//							employee.setPermanentCity(getCellValue(currentRow.getCell(22)));
-//							cellNo = 23;
-//							employee.setPermanentState(getCellValue(currentRow.getCell(23)));
-//							cellNo =24;
-//							employee.setEducationalQulification(getCellValue(currentRow.getCell(24)));
-//							cellNo = 25;
-//							employee.setBoardInstitute(getCellValue(currentRow.getCell(25)));
-//							cellNo = 26;
-//							employee.setNomineeName(getCellValue(currentRow.getCell(26)));
-//							cellNo = 27;
-//							employee.setNomineeRelationship(getCellValue(currentRow.getCell(27)));
-//							cellNo = 28;
-//							employee.setNomineeContactNumber(getCellValue(currentRow.getCell(28)));
-//							cellNo = 29;
-//							String per = getCellValue(currentRow.getCell(29));
-//							Double perDob = Double.parseDouble(per);
-//							employee.setPercentage(perDob);
-//							cellNo = 30;
-//							employee.setEmployer(getCellValue(currentRow.getCell(30)));
-//							cellNo = 31;
-//							employee.setDesignation(getCellValue(currentRow.getCell(31)));
-//							cellNo = 32;
-//							employee.setAdharCardNumber(getCellValue(currentRow.getCell(32)));
-//							cellNo = 33;
-//							employee.setAccountNumber(getCellValue(currentRow.getCell(33)));
-//							cellNo = 34;
-//							employee.setIfscCode(getCellValue(currentRow.getCell(34)));
-//							ZoneId  zone = ZoneId.of("Asia/Singapore");
-//							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
-//							employee.setCreatedDate(zdt);
-//							employee.setActive(Employee.ACTIVE_YES);
-//							employee.setFaceAuthorised(false);
-//							employee.setFaceIdEnrolled(false);
-//							employee.setLeft(false);
-//							employee.setRelieved(false);
-//							employee.setReliever(false);
-//                            employeeRepo.save(employee);
-//						}
-//					}
+                    
+                     
+                    
+                    
+ 
 				} catch (IllegalStateException | NumberFormatException formatEx) {
 					throw formatEx;
 				} catch (Exception e) {
@@ -2144,7 +2076,20 @@ public class ImportUtil {
 			throw new Exception(response.toString());
 		}
 		if(response.length() == 0) {
+			
 			response.append(SUCCESS_MESSAGE);
+            
+			if(message.size()>0) {
+				response.append( String.join(",",message) );
+			}
+			
+            if(message.size() == (lastRow - 1)) {
+             
+            	throw new Exception(response.toString());
+            	
+            }
+             
+             
 		}
 		return response.toString();
 	}

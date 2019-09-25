@@ -251,7 +251,7 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     private boolean rejected;
     
-   // private boolean nonUdsEmployee;
+    private boolean nonUdsEmployee;
 
     @OneToOne(fetch = FetchType.LAZY,optional=true,cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "verified_by", referencedColumnName = "id", nullable = true)
@@ -968,14 +968,14 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 	}
 
 
-//	public boolean isNonUdsEmployee() {
-//		return nonUdsEmployee;
-//	}
-//
-//
-//	public void setNonUdsEmployee(boolean nonUdsEmployee) {
-//		this.nonUdsEmployee = nonUdsEmployee;
-//	}
+	public boolean isNonUdsEmployee() {
+		return nonUdsEmployee;
+	}
+
+
+	public void setNonUdsEmployee(boolean nonUdsEmployee) {
+		this.nonUdsEmployee = nonUdsEmployee;
+	}
 
 
 	public String getRemarks() {

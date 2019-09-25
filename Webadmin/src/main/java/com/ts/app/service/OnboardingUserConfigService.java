@@ -238,6 +238,32 @@ public class OnboardingUserConfigService extends AbstractService {
 
 
 
-
+    public boolean isWbsExistsForUser(long userId,String projectCode,String wbsCode) {
+    	
+        List<OnboardingUserConfig> config = onboardingUserConfigRepository.checkWbs(userId, projectCode, wbsCode);
+        
+        if(CollectionUtils.isNotEmpty(config)) {
+        	
+        	return true;
+        	
+        }
+    	
+    	return false;
+    	
+    }
+    
+    public boolean isProjectExistsForUser(long userId,String projectCode) {
+    	
+        List<OnboardingUserConfig> config = onboardingUserConfigRepository.checkProject(userId, projectCode);
+        
+        if(CollectionUtils.isNotEmpty(config)) {
+        	
+        	return true;
+        	
+        }
+    	
+    	return false;
+    	
+    }
 
 }

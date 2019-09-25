@@ -50,8 +50,9 @@
                                                            name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[A-Za-z0-9]*$/" autofocus required ng-blur="getEmployeeByEmpId()" tabindex="1"/>
                                                             -->
                                                            <input id='employeeEmpId' ng-model="employee.empId" class='form-control InputTxtCapsAll'
-                                                           name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" autofocus required ng-blur="getEmployeeByEmpId()" tabindex="1"/>
-                                                           
+                                                           name='employeeEmpId' type='text' value="" ng-minlength=1 ng-maxlength=10 ng-pattern="/^[a-z](?=.*\d)[a-z\d]{1,10}$/" autofocus required ng-blur="getEmployeeByEmpId()" onKeyPress="if(this.value.length==10) return false;" tabindex="1" />
+                                                          
+                                            
                                                            <div ng-show="form.$submitted || form.employeeEmpId.$touched || form.employeeEmpId.$dirty">
                                                         <div ng-show="form.employeeEmpId.$dirty || form.employeeEmpId.$invalid">
                                                             <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -68,10 +69,18 @@
                                                             </p>
                                                             <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
                                                                ng-show="form.employeeEmpId.$error.pattern">
-                                                                Id can only contain letters and digits.
+                                                                Id should contains first character should be an alphabet, at least 1 alphabet and at least 1 number. 
                                                             </p>
+
+                                                            <!-- <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                               ng-show="form.employeeEmpId.$error.pattern == null">
+                                                                test2
+                                                            </p> -->
                                                            
-                                                           
+                                                            <!-- <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                                            ng-if="employee.empId != null">
+                                                             testing
+                                                         </p> -->
 
                                                         </div>
                                                     </div>
