@@ -66,6 +66,9 @@ angular.module('timeSheetApp')
 	$scope.saveOnboardingLoader = false;
 	$scope.approveOnboardingLoader = false;
  
+	$scope.rejectOnBoardingLoader = false;
+
+	$scope.remarks = null;
 	/** Ui-select scopes **/
 	$scope.allClients = {id:0 , name: '-- ALL CLIENTS --'};
 	$scope.client = {};
@@ -1481,6 +1484,28 @@ angular.module('timeSheetApp')
             $scope.disable = false;
             $scope.btnDisable = false;
             $scope.showNotifications('top','center','danger','Error in approving Employee.' + response.data.errorMessage);
+            $scope.error = 'ERROR';
+        });
+	};
+	
+	$scope.rejectOnBoardingEmployee = function(){
+		$('#remarksModal').modal('hide');
+		$scope.rejectOnBoardingLoader = true;
+		$scope.employee.remarks = $scope.remarks;
+		console.log("Rejecting employee");
+		console.log($scope.employee);
+
+        OnBoardingComponent.rejectOnBoardingEmployee($scope.employee).then(function (data) {
+			 
+				$scope.rejectOnBoardingLoader = false;
+				$scope.showNotifications('top', 'center', 'success', "Employee Rejected ");
+
+        }).catch(function(response){
+            $scope.rejectOnBoardingLoader = false;
+            $scope.success = null;
+            $scope.disable = false;
+            $scope.btnDisable = false;
+            $scope.showNotifications('top','center','danger','Error in Rejecting Employee.' + response.data.errorMessage);
             $scope.error = 'ERROR';
         });
     };
