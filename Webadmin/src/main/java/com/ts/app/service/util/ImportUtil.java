@@ -1819,7 +1819,7 @@ public class ImportUtil {
 					
 					String position,wbsId,activity,projectCode;
 					position = getCellValue(currentRow.getCell(35));
-					activity = getCellValue(currentRow.getCell(36));
+ 
 					wbsId = getCellValue(currentRow.getCell(2));
 					projectCode = getCellValue(currentRow.getCell(0));
 					
@@ -1843,7 +1843,7 @@ public class ImportUtil {
 						
 					}
 					 
-					else if(CollectionUtils.isEmpty(positionsRepository.findByWbsIdAndPositionId(wbsId, position))) {
+					else if(CollectionUtils.isEmpty(positionsRepository.findTop1ByWbsIdAndPositionId(wbsId, position))) {
 						
 						skipSave = true;
 						
@@ -1995,16 +1995,18 @@ public class ImportUtil {
 							cellNo = 35; 
 							employee.setPosition(getCellValue(currentRow.getCell(35)));
 							cellNo = 36;
+ 
+							Positions positionOb = positionsRepository.findTop1ByWbsIdAndPositionId(wbsId, position);
 							
-
-							
-							Positions positionOb = positionsRepository.findByWbsIdAndPositionIdAndActivity(wbsId, position,activity);
-							
-							double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
-							
-							employee.setActivity(activity);
-							
-							employee.setGross( gorss);
+							if(positionOb!=null) {
+							 
+								double gorss = positionOb!=null ? positionOb.getGrossAmount() : 0d;
+								
+								employee.setActivity(positionOb.getActivity());
+								
+								employee.setGross( gorss);
+								
+							}
 							
 							ZoneId  zone = ZoneId.of("Asia/Singapore");
 							ZonedDateTime zdt   = ZonedDateTime.of(LocalDateTime.now(), zone);
