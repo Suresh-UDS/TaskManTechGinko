@@ -407,6 +407,30 @@ public class    EmployeeService extends AbstractService {
         employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
         return employeeDTO;
     }
+ 
+//***************************************Modified by Vinoth**********************************************************************************
+    
+    public EmployeeDTO rejectOnBoardingEmployeeInfo(EmployeeDTO employeeDTO) throws Exception {
+        Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId());
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setFullName(employeeDTO.getName());
+        Employee updateEmployeeDTO = mapToModelOnBoarding(employeeDTO,employee);
+
+        updateEmployeeDTO.setProjectDescription( onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getProjectCode()) );
+        updateEmployeeDTO.setWbsDescription(onboardingUserConfigService.findDescription(SecurityUtils.getCurrentUserId(), employeeDTO.getWbsId()) );
+
+        updateEmployeeDTO.setRejected(true); 
+        updateEmployeeDTO.setSubmitted(true);
+        updateEmployeeDTO.setVerified(false);
+        updateEmployeeDTO.setVerifiedBy(null);
+       // Employee updateEmployee = mapperUtil.toEntity(updateEmployeeDTO,Employee.class);
+//        updateEmployee.setUser(null);
+        employee = employeeRepository.saveAndFlush(updateEmployeeDTO);
+        employeeDTO = mapperUtil.toModel(employee, EmployeeDTO.class);
+        return employeeDTO;
+    }
+    
+//******************************************************************************************************************************************    
     
     public ZempdetailUpdateResponse saveEmployeeOnSAP(ZempdetailUpdate zempdetailUpdate) throws Exception {
     	
@@ -2407,7 +2431,8 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setGross(employee.getGross()); 
     empDto.setNewEmployee(employee.isNewEmployee());
     empDto.setActivity(employee.getActivity());
-    
+    empDto.setRemarks(employee.getRemarks());
+    empDto.setRejected(employee.isRejected());
     return empDto;
 }
 
@@ -2481,6 +2506,8 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
          }
          empDto.setCreatedBy(employee.getCreatedBy());
          empDto.setCreatedDate(employee.getCreatedDate());
+         empDto.setRemarks(employee.getRemarks());
+         empDto.setRejected(employee.isRejected());
     	return empDto;
     }
     
