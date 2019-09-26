@@ -957,7 +957,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="accountt"  ng-model="employee.accountNumber" />
+                                <input class="form-control" type="text" name="accountt"  ng-model="employee.accountNumber" ng-disabled="!employee.newEmployee"  />
                            
                             <div ng-show="form.$submitted || form.accountt.$touched || form.accountt.$dirty">
                                     <div ng-show="form.accountt.$dirty || form.accountt.$invalid">
@@ -978,7 +978,7 @@
 
                     </div>
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">IFSC Code <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">IFSC Code  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
@@ -1247,7 +1247,7 @@
                             <div class="col-md-3 col-sm-3">
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
-                                        <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
+                                        <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(employeeSignatureUrl)" >
                                             <img ng-if="employeeSignatureUrl" class="attachImages" ng-src={{employeeSignatureUrl}} alt="...">
                                    </a> </div>
                                 </div>
