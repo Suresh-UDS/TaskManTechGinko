@@ -1359,6 +1359,10 @@ angular.module('timeSheetApp')
 	}
 
     $scope.empSpin = false;
+    
+    $scope.redirectToView = function(id){
+    	$location.path('/view-onBoarding/'+id);
+    }
 
 	$scope.getEmployeeDetails = function(id) {
 		if(id>0){

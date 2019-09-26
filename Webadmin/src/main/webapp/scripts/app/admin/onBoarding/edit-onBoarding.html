@@ -612,46 +612,49 @@
 
                                                                             </div> -->
                                                                             
-                                                                            
+                                                                            <div class="row">
+                                                                                    <label class=" col-sm-4 onBoarding-label-on-left">D.O.B <span class="red-star">*</span> </label>
+                                                                                    <div class="col-sm-5">
+                                                                                        <div class="form-group label-floating">
+                                                                                            <label class="control-label"></label>
+                                                                                            <input type="date" class="form-control" min="{{max | date:'yyyy-MM-dd'}}" max="{{min | date:'yyyy-MM-dd'}}" name="dobb" ng-disabled="!employee.newEmployee" ng-model="employee.dob" onkeydown="return false" id="dateOfBirth"  required />
+                                                                                    
+                                                                                          <div ng-show="form.$submitted || form.dobb.$touched || form.dobb.$dirty">
+                                                                                                <div ng-show="form.dobb.$dirty || form.dobb.$invalid">
+                                                                                                    <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                                                                       ng-show="form.dobb.$error.required">
+                                                                                                       Date of Birth is required.
+                                                                                                    </p>
+                                                            
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                            
+                                                                                </div>                                                
                     
-                    <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">D.O.B <span class="red-star">*</span> </label>
-                        <div class="col-sm-3">
-                            <div class="form-group label-floating">
-                                <label class="control-label"></label>
-                                <input type="text" class="form-control datepicker" name="dobb" ng-disabled="!employee.newEmployee" ng-model="employee.dob" onkeydown="return false" id="dateOfBirth"  required />
-                            
-                              <div ng-show="form.$submitted || form.dobb.$touched || form.dobb.$dirty">
-                                    <div ng-show="form.dobb.$dirty || form.dobb.$invalid">
-                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
-                                           ng-show="form.dobb.$error.required">
-                                           Date of Birth is required.
-                                        </p>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label class=" col-sm-4  onBoarding-label-on-left" style="width: 10% !important;">D.O.J <span class="red-star">*</span> </label>
-                        <div class="col-sm-3">
-                            <div class="form-group label-floating">
-                                <label class="control-label"></label>
-                                <input type="text" class="form-control datepicker" name="dojj" ng-disabled="!employee.newEmployee" ng-model="employee.doj"  id="dateOfJoining" required  />
-                           <div ng-show="form.$submitted || form.dojj.$touched || form.dojj.$dirty">
-                                    <div ng-show="form.dojj.$dirty || form.dojj.$invalid">
-                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
-                                           ng-show="form.dojj.$error.required">
-                                           Date of Join is required.
-                                        </p>
-
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-
-                    </div>
+                                                                                <div class="row">
+                                                                                        
+                                                                
+                                                                                        <label class=" col-sm-4  onBoarding-label-on-left" >D.O.J <span class="red-star">*</span> </label>
+                                                                                        <div class="col-sm-5">
+                                                                                            <div class="form-group label-floating">
+                                                                                                <label class="control-label"></label>
+                                                                                                <input type="date" class="form-control" min="{{maxdoj | date:'yyyy-MM-dd'}}" max="{{mindoj | date:'yyyy-MM-dd'}}" name="dojj" ng-disabled="!employee.newEmployee" ng-model="employee.doj"  id="dateOfJoining" required  />
+                                                                                           <div ng-show="form.$submitted || form.dojj.$touched || form.dojj.$dirty">
+                                                                                                    <div ng-show="form.dojj.$dirty || form.dojj.$invalid">
+                                                                                                        <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
+                                                                                                           ng-show="form.dojj.$error.required">
+                                                                                                           Date of Join is required.
+                                                                                                        </p>
+                                                                
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                
+                                                                                            </div>
+                                                                                        </div>
+                                                                
+                                                                                    </div>
 
                     <div class="row">
                         <label class=" col-sm-4 onBoarding-label-on-left">Religion  </label>
