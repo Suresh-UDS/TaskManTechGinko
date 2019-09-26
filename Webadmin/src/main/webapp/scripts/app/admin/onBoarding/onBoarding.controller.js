@@ -1311,7 +1311,7 @@ angular.module('timeSheetApp')
                             }
 
                             if(
-								$scope.employee.accountNumber !=null &&
+								// $scope.employee.accountNumber !=null &&
 								$scope.employee.position !=null &&
                                 $scope.employee.adharCardNumber !=null && 
 								$scope.employee.gross !=null &&
@@ -1321,7 +1321,7 @@ angular.module('timeSheetApp')
                                 $scope.employee.empId !=null &&
                                 $scope.employee.fatherName !=null &&
                                 $scope.employee.gender !=null &&
-                                $scope.employee.ifscCode !=null &&
+                                // $scope.employee.ifscCode !=null &&
                                 $scope.employee.maritalStatus !=null &&
                                 $scope.employee.mobile !=null &&
                                 $scope.employee.name !=null &&
