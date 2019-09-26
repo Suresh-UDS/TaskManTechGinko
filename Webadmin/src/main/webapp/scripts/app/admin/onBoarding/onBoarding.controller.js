@@ -2,7 +2,7 @@
 
 angular.module('timeSheetApp')
 
-.controller('OnBoardingController', function ($rootScope, $scope, $state, $timeout,
+.controller('OnBoardingController', function ($rootScope, $scope, $state, $timeout, $window,
 		ProjectComponent, SiteComponent, EmployeeComponent,AttendanceComponent, UserComponent,$http,
 		$stateParams,$location,$interval,PaginationComponent,$filter,Idle, OnBoardingComponent) {
     Idle.watch();
@@ -1248,6 +1248,7 @@ angular.module('timeSheetApp')
 					console.log("Previous state available");
 					$scope.previousState = from.name;
 					console.log($scope.previousState);
+					
 				}else{
 					$scope.previousState = "";
 				}
@@ -1434,14 +1435,16 @@ angular.module('timeSheetApp')
 			$rootScope.retain=1;
 			console.log("Employees ")
 			console.log($scope.previousState);
-			if($scope.previousState && $scope.previousState === "employees"){
-				console.log("Employees ")
-				console.log($scope.previousState);
-				
-				$location.path('/employees');
-			}else{
-				$location.path('/onBoarding-list');
-			}
+			$window.history.back();
+			
+//			if($scope.previousState && $scope.previousState === "employees"){
+//				console.log("Employees ")
+//				console.log($scope.previousState);
+//				
+//				$location.path('/employees');
+//			}else{
+//				$location.path('/onBoarding-list');
+//			}
         }
         else if(text == 'approve')
         {
