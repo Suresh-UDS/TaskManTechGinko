@@ -683,13 +683,19 @@ public class    EmployeeService extends AbstractService {
 		zempDetStr.setCityP(employee.getPermanentCity());
 		StateList permanentState = siteListRepository.findByName(employee.getPermanentState());
 		zempDetStr.setStateP(permanentState !=null ? permanentState.getCode().substring(1) : "10");
-		zempDetStr.setAcNo(employee.getAccountNumber());
-		zempDetStr.setBankKey("9100");
+		
 		
 		String gender = employee.getGender().toLowerCase().substring(0,1).equals("m") ? "1" : ( employee.getGender().toLowerCase().substring(0,1).equals("f") ? "2" : "3" ); 
 	 	
 		zempDetStr.setGender(gender);
-		zempDetStr.setIfscCode(employee.getIfscCode());
+		
+		if(StringUtils.isNotEmpty(employee.getAccountNumber())) {
+		
+			zempDetStr.setAcNo(employee.getAccountNumber());
+			zempDetStr.setBankKey("9100");
+			zempDetStr.setIfscCode(employee.getIfscCode());
+			
+		}
 		
 		String maritalStatus = "0";
 		

@@ -1137,7 +1137,7 @@ angular.module('timeSheetApp')
 			$scope.searchCriteria.sortByAsc = $scope.isAscOrder;
 
 		}else{
-			$scope.searchCriteria.columnName ="id";
+			$scope.searchCriteria.columnName ="lastModifiedDate";
 			$scope.searchCriteria.sortByAsc = false;
 		}
 
