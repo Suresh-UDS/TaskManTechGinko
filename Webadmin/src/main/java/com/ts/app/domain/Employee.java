@@ -191,10 +191,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     private String previousDesignation;
     
-    @NotNull
     private String accountNumber;
     
-    @NotNull
     private String ifscCode;
     
     //private String bankPassbookImage;
