@@ -552,9 +552,9 @@
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
-                                        <img ng-if="signatureImageUrl" class="attachImages" style=" border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                        <img ng-if="employeeSignatureUrl" class="attachImages" style=" border-radius: 0px" ng-src={{employeeSignatureUrl}} alt="...">
                                     </a>
-                                    <img ng-if="!signatureImageUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                    <img ng-if="!employeeSignatureUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
                                 </div>
                             </div>
                         </div>

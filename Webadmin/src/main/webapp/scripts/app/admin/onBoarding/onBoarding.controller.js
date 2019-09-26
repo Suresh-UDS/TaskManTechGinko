@@ -1308,8 +1308,8 @@ angular.module('timeSheetApp')
                                 if(documents[i].docType ==="profilePicture" ){
                                 	$scope.profilepicUrl = documents[i].docUrl;
 								}
-								if(documents[i].docType ==="signatureImage" ){
-                                	$scope.profilepicUrl = documents[i].docUrl;
+								if(documents[i].docType ==="employeeSignature" ){
+                                	$scope.employeeSignatureUrl = documents[i].docUrl;
 								}
 								
                             }
@@ -1344,10 +1344,9 @@ angular.module('timeSheetApp')
 								$scope.employee.submitted &&
                                 $scope.employee.wbsId !=null &&
                                 (_.find(documents,{docType:'aadharPhotoCopy'}) &&
-								(_.find(documents,{docType:'aadharPhotoCopyBack'}) 
+								(_.find(documents,{docType:'aadharPhotoCopyBack'}) ) ) ) 
 								 
-
-                            ){
+ 							{
                                 $scope.enableApproval = true;
                             }
                         }
@@ -1815,14 +1814,14 @@ angular.module('timeSheetApp')
 	$scope.uploadSignature = function(employeeId){
     	console.log("UPloading profile pic");
     	console.log(employeeId);
-        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.signatureImage,'signatureImage')
+        OnBoardingComponent.uploadDocumentImages(employeeId,$scope.signatureImage,'employeeSignature')
             .then(function (response) {
                 console.log("profilepicImage uploaded");
 				console.log(response);
 				doneUploading();
             }).catch(function (response) {
 				$scope.saveOnboardingLoader = false;
-				$scope.showNotifications('top', 'center', 'danger', "Uploading Profile Picture Image Failed ");
+				$scope.showNotifications('top', 'center', 'danger', "Uploading Profile Employee Signature Image Failed ");
         });
     };
 	 

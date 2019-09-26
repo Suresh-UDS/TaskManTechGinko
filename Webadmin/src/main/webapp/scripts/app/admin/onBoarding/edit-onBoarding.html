@@ -1248,14 +1248,14 @@
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
                                         <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
-                                            <img ng-if="signatureImageUrl" class="attachImages" ng-src={{signatureImageUrl}} alt="...">
+                                            <img ng-if="employeeSignatureUrl" class="attachImages" ng-src={{employeeSignatureUrl}} alt="...">
                                    </a> </div>
                                 </div>
     
                                 <legend>Signature <span class="red-star">*</span></legend>
                                 <div class="form-group label-floating" >
                                     <div class="pdng-top13" >
-                                        <input type="file" ng-required="!signatureImage"
+                                        <input type="file" ng-required="!employeeSignatureUrl"
                                                class="form-control" style="opacity:100;position:relative" file-model
                                                ng-model="signatureImage"
                                                name="signatureImage" accept="image/png, image/jpeg" tabindex="9"
