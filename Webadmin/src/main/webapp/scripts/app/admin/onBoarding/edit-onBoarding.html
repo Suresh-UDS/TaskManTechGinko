@@ -1304,8 +1304,7 @@
     <button class="btn btn-default" type="button"
              ng-click="conform('back')" id="cancel-button" tabindex="34">
         Back
-    </button>
-    {{form.$error}}
+    </button> 
     <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
     type="submit" id="form-button-save" ng-if="!employee.verified" ng-disabled="form.$invalid || btnDisable || saveOnboardingLoader" tabindex="33" >
         <span  ng-show="saveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Save 
