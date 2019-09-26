@@ -617,7 +617,10 @@
                                                                                     <div class="col-sm-5">
                                                                                         <div class="form-group label-floating">
                                                                                             <label class="control-label"></label>
-                                                                                            <input type="date" class="form-control" min="{{max | date:'yyyy-MM-dd'}}" max="{{min | date:'yyyy-MM-dd'}}" name="dobb" ng-disabled="!employee.newEmployee" ng-model="employee.dob" onkeydown="return false" id="dateOfBirth"  required />
+                                                                                            <input type="date" class="form-control" 
+                                                                                            min="{{min | date:'yyyy-MM-dd'}}" 
+                                                                                            max="{{max | date:'yyyy-MM-dd'}}" 
+                                                                                            name="dobb" ng-disabled="!employee.newEmployee" ng-model="employee.dob" onkeydown="return false" id="dateOfBirth"  required />
                                                                                     
                                                                                           <div ng-show="form.$submitted || form.dobb.$touched || form.dobb.$dirty">
                                                                                                 <div ng-show="form.dobb.$dirty || form.dobb.$invalid">
@@ -640,7 +643,7 @@
                                                                                         <div class="col-sm-5">
                                                                                             <div class="form-group label-floating">
                                                                                                 <label class="control-label"></label>
-                                                                                                <input type="date" class="form-control" min="{{maxdoj | date:'yyyy-MM-dd'}}" max="{{mindoj | date:'yyyy-MM-dd'}}" name="dojj" ng-disabled="!employee.newEmployee" ng-model="employee.doj"  id="dateOfJoining" required  />
+                                                                                                <input type="date" class="form-control" min="{{mindoj | date:'yyyy-MM-dd'}}" max="{{maxdoj | date:'yyyy-MM-dd'}}" name="dojj" ng-disabled="!employee.newEmployee" ng-model="employee.doj"  id="dateOfJoining" required  />
                                                                                            <div ng-show="form.$submitted || form.dojj.$touched || form.dojj.$dirty">
                                                                                                     <div ng-show="form.dojj.$dirty || form.dojj.$invalid">
                                                                                                         <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
@@ -1302,7 +1305,7 @@
              ng-click="conform('back')" id="cancel-button" tabindex="34">
         Back
     </button>
-
+    {{form.$error}}
     <button class="btn btn-success ld ld-over-inverse" ng-class="{'running':saveLoad}"
     type="submit" id="form-button-save" ng-if="!employee.verified" ng-disabled="form.$invalid || btnDisable || saveOnboardingLoader" tabindex="33" >
         <span  ng-show="saveOnboardingLoader"><i class="fas fa-circle-notch fa-spin"></i></span>&nbsp; Save 

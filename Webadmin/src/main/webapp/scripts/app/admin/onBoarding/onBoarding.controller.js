@@ -172,13 +172,11 @@ angular.module('timeSheetApp')
 	let currentDate=new Date();
 	let min=18;
 	let max=58;
-	$scope.min = new Date(currentDate.getFullYear() - min,  currentDate.getMonth(), currentDate.getDate());
-	$scope.max = new Date(currentDate.getFullYear() - max,  currentDate.getMonth(), currentDate.getDate());
-
-	let mindoj=0;
-	let maxdoj=2;
-	$scope.mindoj = new Date(currentDate.getFullYear() - mindoj,  currentDate.getMonth(), currentDate.getDate());
-	$scope.maxdoj = new Date(currentDate.getFullYear(),  currentDate.getMonth() - maxdoj, currentDate.getDate());
+	$scope.min = moment().subtract(58, 'year').toDate();
+	$scope.max =  moment().subtract(18, 'year').toDate();
+ 
+	$scope.mindoj =  moment().subtract(2, 'months').toDate();
+	$scope.maxdoj = new Date();
 
 	
 
