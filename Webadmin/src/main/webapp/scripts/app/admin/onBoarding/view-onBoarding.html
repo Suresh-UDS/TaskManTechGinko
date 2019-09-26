@@ -151,7 +151,7 @@
                     </div>
                     <div class="row">
                         <div class=" col-sm-12">
-                            <label>Address Proof Image <span class="red-star">*</span></label>
+                            <label>Address Proof Image </label>
                             <div>
                                     <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(addressproofImageUrl)" >
                                
@@ -372,12 +372,12 @@
                             <table class="table">
                                 <tbody class="">
                                 <tr>
-                                    <td class="col-sm-4">Account Number <span class="red-star">*</span></td>
+                                    <td class="col-sm-4">Account Number </td>
                                     <td class="col-sm-8">{{employee.accountNumber}}</td>
                                 </tr>
 
                                 <tr>
-                                    <td class="col-sm-4">IFSC Code <span class="red-star">*</span></td>
+                                    <td class="col-sm-4">IFSC Code </td>
                                     <td class="col-sm-8">{{employee.ifscCode}}</td>
                                 </tr>
                                 </tbody>
@@ -385,7 +385,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
-                                <label>Bank Passbook Image <span ng-if="employee.newEmployee" class="red-star">*</span></label>
+                                <label>Bank Passbook Image </label>
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
                                       <!-----------------modiffed by suresh-->
@@ -479,7 +479,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <label>Fingerprint Left Image </label><BR>
+                        <label>Fingerprint Left Image <span class="red-star">*</span></label><BR>
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintLeftUrl)" >
@@ -495,7 +495,7 @@
                     </div>
 
                     <div class="col-md-3 col-sm-3">
-                        <label>Fingerprint Right Image </label><BR>
+                        <label>Fingerprint Right Image <span class="red-star">*</span></label><BR>
                         <div class="fileinput fileinput-new text-center" data-provides="fileinput" class="attachImages" >
                             <div class="fileinput-new thumbnail">
                                 <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(fingerprintrightUrl)" >
@@ -546,6 +546,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-3 col-sm-3">
+                            <label>Signature Image <span class="red-star">*</span></label><BR>
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
+                                        <img ng-if="signatureImageUrl" class="attachImages" style=" border-radius: 0px" ng-src={{pancardUrl}} alt="...">
+                                    </a>
+                                    <img ng-if="!signatureImageUrl" class="attachImages" style=" border-radius: 0px" src="../../assets/img/image_placeholder.jpg" alt="...">
+                                </div>
+                            </div>
+                        </div>
                     
                     <!-- <div class="col-md-3 col-sm-3">
                         <label>Profile Picture Image 

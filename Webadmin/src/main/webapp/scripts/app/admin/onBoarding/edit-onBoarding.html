@@ -210,11 +210,11 @@
                     </div>
                     <hr style="margin-top:10px !important; margin-bottom: 10px !important;">
                     <div class="row">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Address <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Address </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" maxlength="40" ng-model="employee.presentAddress" name="presentAddress" required />
+                                <input class="form-control" type="text" maxlength="40" ng-model="employee.presentAddress" name="presentAddress"  />
 								 <p class="help-block" ng-if="employee.presentAddress.length >=40" style="width:100%;z-index:980;background:#fff;color:maroon"
                                         >
                                          Address cannot be longer than 40 characters.
@@ -953,11 +953,11 @@
 
                 <div class="card-content">
                     <div class="row" style="margin-top: 15px">
-                        <label class=" col-sm-4 onBoarding-label-on-left">Account Number <span class="red-star">*</span> </label>
+                        <label class=" col-sm-4 onBoarding-label-on-left">Account Number  </label>
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" type="text" name="accountt" ng-disabled="!employee.newEmployee" ng-model="employee.accountNumber" required />
+                                <input class="form-control" type="text" name="accountt"  ng-model="employee.accountNumber" />
                            
                             <div ng-show="form.$submitted || form.accountt.$touched || form.accountt.$dirty">
                                     <div ng-show="form.accountt.$dirty || form.accountt.$invalid">
@@ -982,7 +982,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input class="form-control" ng-minlength="11" ng-maxlength="11" type="text" onKeyPress="if(this.value.length==11) return false;" ng-disabled="!employee.newEmployee" name = "ifscCode" ng-model="employee.ifscCode" required/>
+                                <input class="form-control" ng-minlength="11" ng-maxlength="11" type="text" onKeyPress="if(this.value.length==11) return false;" ng-disabled="!employee.newEmployee" name = "ifscCode" ng-model="employee.ifscCode" />
                                 <!-- <input class="form-control" ng-minlength="12" ng-maxlength="12" type="number" ng-disabled="!employee.newEmployee" name="adharCardNumber" ng-model="employee.adharCardNumber" required /> -->
                                  <div ng-show="form.$submitted || form.ifscCode.$touched || form.ifscCode.$dirty">
                                     <div ng-show="form.ifscCode.$dirty || form.ifscCode.$invalid">
@@ -1069,10 +1069,11 @@
                                </a> </div>
                             </div>
 
-                            <legend>Adhar Card Front Image  </legend>
+                            <legend>Adhar Card Front Image  <span class="red-star">*</span></legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
                                     <input type="file"
+                                           ng-required="!adharCardFrontUrl"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="adharCardImageFront"
                                            name="adharCardImageFront" accept="image/png, image/jpeg" tabindex="9"
@@ -1100,10 +1101,10 @@
                                </a> </div>
                             </div>
 
-                            <legend>Adhar Card Back Image  </legend>
+                            <legend>Adhar Card Back Image  <span class="red-star">*</span></legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
-                                    <input type="file"
+                                    <input type="file" ng-required="!adharCardBackUrl"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="adharCardImageBack"
                                            name="adharCardImageBack" accept="image/png, image/jpeg" tabindex="9"
@@ -1133,10 +1134,10 @@
                                </a> </div>
                             </div>
 
-                            <legend>Fingerprint Left </legend>
+                            <legend>Fingerprint Left <span class="red-star">*</span></legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
-                                    <input type="file"
+                                    <input type="file" ng-required="!fingerprintLeftUrl"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="fingerprintLeftImage"
                                            name="fingerprintLeftImage" accept="image/png, image/jpeg" tabindex="9"
@@ -1156,10 +1157,10 @@
                                </a> </div>
                             </div>
 
-                            <legend>Fingerprint Right </legend>
+                            <legend>Fingerprint Right <span class="red-star">*</span></legend>
                             <div class="form-group label-floating" >
                                 <div class="pdng-top13" >
-                                    <input type="file"
+                                    <input type="file" ng-required="!fingerprintrightUrl"
                                            class="form-control" style="opacity:100;position:relative" file-model
                                            ng-model="fingerprintRightImage"
                                            name="fingerprintRightImage" accept="image/png, image/jpeg" tabindex="9"
@@ -1241,7 +1242,29 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <div  >
+                            <div class="col-md-3 col-sm-3">
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail">
+                                        <a onClick="$('#myModal').modal()" href="javascript:void(0)" data-target="#myModal" data-dismiss="#myModal" ng-click="loadCompletedJob(pancardUrl)" >
+                                            <img ng-if="signatureImageUrl" class="attachImages" ng-src={{signatureImageUrl}} alt="...">
+                                   </a> </div>
+                                </div>
+    
+                                <legend>Signature <span class="red-star">*</span></legend>
+                                <div class="form-group label-floating" >
+                                    <div class="pdng-top13" >
+                                        <input type="file" ng-required="!signatureImage"
+                                               class="form-control" style="opacity:100;position:relative" file-model
+                                               ng-model="signatureImage"
+                                               name="signatureImage" accept="image/png, image/jpeg" tabindex="9"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
                      <!-- <div  >
                         <div class="col-md-3 col-sm-3">
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
