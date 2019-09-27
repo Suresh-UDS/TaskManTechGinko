@@ -25,6 +25,7 @@ export class onboardingUserView {
   voter_id;
   pancard;
   profilePicture;
+  employeeSignature;
 
   constructor(private navParams: NavParams, private onBoardingService: OnboardingService) {
     console.log(navParams.get('userListData'));
@@ -65,6 +66,10 @@ export class onboardingUserView {
             }
             if (response[i].docType === "profilePicture") {
               this.profilePicture = response[i].docUrl;
+            }
+
+            if (response[i].docType === "employeeSignature") {
+              this.employeeSignature = response[i].docUrl;
             }
           }
         }
