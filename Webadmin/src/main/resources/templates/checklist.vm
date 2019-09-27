@@ -87,7 +87,7 @@
   <tr>
   
        <td valign="top" style = "text-align:center">$foreach.count</td>
-       <td><p>$checklistItems.getChecklistItemName()<br/><br/> <span class="valueField">Remarks :</span></p></td>   
+       <td><p>$checklistItems.getChecklistItemName()<br/><br/> <span class="valueField">Remarks :</span> #if($checklistItems.getRemarks())$checklistItems.getRemarks()#{else}#end </p></td>    
        <td valign="top" >#if($checklistItems.isCompleted())<span class="valueField">Completed</span>#{else}Incomplete#end</td>
         
        
