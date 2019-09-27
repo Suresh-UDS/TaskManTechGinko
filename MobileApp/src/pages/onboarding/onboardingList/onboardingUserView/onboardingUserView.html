@@ -266,6 +266,11 @@
                                             <p> Finger Print Left </p>
                                             <img [src]="fingerprint_left" class="image" />
                                         </ion-slide>
+
+                                        <ion-slide item-start class="Aadhar" *ngIf="employeeSignature">
+                                            <p> Employee Signature </p>
+                                            <img [src]="employeeSignature" class="image" />
+                                        </ion-slide>
             
         </ion-slides>
 
