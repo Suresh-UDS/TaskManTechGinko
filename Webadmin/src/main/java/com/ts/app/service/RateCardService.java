@@ -407,6 +407,7 @@ public class RateCardService extends AbstractService {
 	        		quotationDto.setApprovedByUserName(currUser.getLogin());
                 request.put("approvedByUserId", quotationDto.getApprovedByUserId());
                 request.put("approvedByUserName", quotationDto.getApprovedByUserName());
+                request.put("remarks", quotationDto.getRemarks());
                 if(quotationAlertSetting != null && quotationAlertSetting.getSettingValue().equalsIgnoreCase("true")) { //send escalation emails to managers and alert emails
                 		request.put("clientEmailId", alertEmailIds);
                 }
@@ -720,7 +721,7 @@ public class RateCardService extends AbstractService {
         }
 
 //		List<RateCard> entities = new ArrayList<RateCard>();
-//		entities = rateCardRepository.findAll();
+//		entities = rateCardRepository.findAll();.
 //		return mapperUtil.toModelList(entities, RateCardDTO.class);
         return  quotationList;
     }
@@ -748,6 +749,7 @@ public class RateCardService extends AbstractService {
             JSONObject request = new JSONObject();
             request.put("_id",quotation.get_id());
             request.put("status", "Approved");
+            request.put("remarks", quotation.getRemarks());
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);
@@ -791,6 +793,7 @@ public class RateCardService extends AbstractService {
             JSONObject request = new JSONObject();
             request.put("_id",quotation.get_id());
             request.put("status","Rejected");
+            request.put("remarks", quotation.getRemarks());
 
             HttpEntity<?> requestEntity = new HttpEntity<>(request.toString(),headers);
             log.debug("Request entity rate card service"+requestEntity);

@@ -39,6 +39,8 @@ function createPdfHelper(response, quotation) {
 
 function populateQuotation(req, quotation) {
     var date = new Date();
+    console.log("quotation Remarks" );
+    console.log(req.body);
     if (req.body._id) quotation._id = req.body._id;
     if (req.body.title) quotation.title = req.body.title;
     if (req.body.description) quotation.description = req.body.description;
@@ -66,6 +68,7 @@ function populateQuotation(req, quotation) {
     if (req.body.sentToEmailId) quotation.clientEmailId = req.body.clientEmailId;
     if (req.body.grandTotal) quotation.grandTotal = req.body.grandTotal;
     if (req.body.clientAddress) quotation.clientAddress = req.body.clientAddress;
+    if (req.body.remarks) quotation.remarks = req.body.remarks;
     if (req.body.isDrafted) {
         quotation.isDrafted = true;
         quotation.processHistory.isDrafted = date;
@@ -157,7 +160,8 @@ module.exports = {
             if (err) {
 
             } else if (quotation) {
-                console.log('found quotation -' + JSON.stringify(quotation))
+                console.log('found quotation -' ); 
+                console.log(quotation);
                 quotation = populateQuotation(req, quotation);
                 console.log('values updated to quotation -' + JSON.stringify(quotation))
                 quotation.save(function(err, quotation) {
@@ -226,6 +230,7 @@ module.exports = {
                 quotation.processHistory.isApproved = date;
                 quotation.approvedDate = date;
                 quotation.lastModifiedDate = date;
+                quotation.remarks =req.body.remarks ? req.body.remarks : "";
 
                 quotation.save(function(err, quotation) {
                     if (!err) {
@@ -260,6 +265,7 @@ module.exports = {
                 quotation.processHistory.isRejected = date;
                 quotation.rejectedDate = date;
                 quotation.lastModifiedDate = date;
+                quotation.remarks =req.body.remarks ? req.body.remarks : "";
 
                 quotation.save(function(err, quotation) {
                     if (!err) {
