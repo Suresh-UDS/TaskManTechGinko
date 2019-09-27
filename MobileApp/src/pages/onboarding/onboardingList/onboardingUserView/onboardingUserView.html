@@ -22,98 +22,98 @@
     <ion-item-group>
 
         <ion-item-divider *ngIf="userData.projectCode">
-            <ion-label class="ion-text-wrap" style="text-align: right">Project Code</ion-label>
-            <ion-label class="ion-text-wrap" style="text-align: left">{{userData.projectCode}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4  " style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Project Code</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius: 0 !important">{{userData.projectCode}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.projectDescription">
-            <ion-label class="ion-text-wrap" style="text-align: right">Description</ion-label>
-            <ion-label class="ion-text-wrap" style="text-align: left">{{userData.projectDescription}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Description</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   ion-text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.projectDescription}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.wbsId">
-            <ion-label class="ion-text-wrap" style="text-align: right">WBS Id </ion-label>
-            <ion-label class="ion-text-wrap" style="text-align: left">{{userData.wbsId}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">WBS Id </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.wbsId}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.wbsDescription">
-            <ion-label class="ion-text-wrap" style="text-align: right">WBS Description </ion-label>
-            <ion-label class="ion-text-wrap" style="text-align: left">{{userData.wbsDescription}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">WBS Description </ion-label>
+            <ion-label class="ion-text-wrap control-label" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.wbsDescription}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.position">
-            <ion-label class="ion-text-wrap" style="text-align: right">Designation No. </ion-label>
-            <ion-label class="ion-text-wrap" style="text-align: left">{{userData.position}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Designation No. </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.position}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.name">
-            <ion-label style="text-align: right">Name</ion-label>
-            <ion-label style="text-align: left">{{userData.name}} {{userData.lastName}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Name</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.name}} {{userData.lastName}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.fatherName">
-            <ion-label style="text-align: right">Father Name</ion-label>
-            <ion-label style="text-align: left">{{userData.fatherName}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Father Name</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.fatherName}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.motherName">
-            <ion-label style="text-align: right">Mother Name</ion-label>
-            <ion-label style="text-align: left">{{userData.motherName}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Mother Name</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.motherName}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.gender">
-            <ion-label style="text-align: right">Gender</ion-label>
-            <ion-label style="text-align: left">{{userData.gender}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Gender</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.gender}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.maritalStatus">
-            <ion-label style="text-align: right">Marital Status</ion-label>
-            <ion-label style="text-align: left">{{userData.maritalStatus}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Marital Status</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.maritalStatus}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.dob">
-            <ion-label style="text-align: right">D.O.B</ion-label>
-            <ion-label style="text-align: left">{{userData.dob}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">D.O.B</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.dob}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.doj">
-            <ion-label style="text-align: right">D.O.J</ion-label>
-            <ion-label style="text-align: left">{{userData.doj}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">D.O.J</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.doj}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.religion">
-            <ion-label style="text-align: right">Religion </ion-label>
-            <ion-label style="text-align: left">{{userData.religion}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Religion </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.religion}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.bloodGroup">
-            <ion-label style="text-align: right">Blood Group </ion-label>
-            <ion-label style="text-align: left">{{userData.bloodGroup}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Blood Group </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.bloodGroup}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.personalIdentificationMark1">
-            <ion-label style="text-align: right">Personal Identification Mark 1</ion-label>
-            <ion-label style="text-align: left">{{userData.personalIdentificationMark1}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Personal Identification Mark 1</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.personalIdentificationMark1}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.personalIdentificationMark2">
-            <ion-label style="text-align: right">Personal Identification Mark 2	</ion-label>
-            <ion-label style="text-align: left">{{userData.personalIdentificationMark2}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Personal Identification Mark 2	</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.personalIdentificationMark2}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.educationalQulification">
-            <ion-label style="text-align: right">Education Qualification</ion-label>
-            <ion-label style="text-align: left">{{userData.educationalQulification}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Education Qualification</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.educationalQulification}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.boardInstitute">
-            <ion-label style="text-align: right">Board / Institute</ion-label>
-            <ion-label style="text-align: left">{{userData.boardInstitute}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Board / Institute</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.boardInstitute}}</ion-label>
         </ion-item-divider>
 
         <ion-item-divider *ngIf="userData.adharCardNumber">
-            <ion-label style="text-align: right">AdharCard Number </ion-label>
-            <ion-label style="text-align: left">{{userData.adharCardNumber}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">AdharCard Number </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.adharCardNumber}}</ion-label>
         </ion-item-divider>
 
        
@@ -122,43 +122,43 @@
 
     <ion-item-group *ngIf="userData.nomineeName">
         <ion-item-divider>
-            <ion-label style="text-align: right">Nominee Name</ion-label>
-            <ion-label style="text-align: left">{{userData.nomineeName}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Nominee Name</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.nomineeName}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group *ngIf="userData.nomineeRelationship">
         <ion-item-divider>
-            <ion-label style="text-align: right">Relationship </ion-label>
-            <ion-label style="text-align: left">{{userData.nomineeRelationship}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Relationship </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.nomineeRelationship}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group *ngIf="userData.percentage">
         <ion-item-divider>
-            <ion-label style="text-align: right">Percentage </ion-label>
-            <ion-label style="text-align: left">{{userData.percentage}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Percentage </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.percentage}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group *ngIf="userData.nomineeContactNumber">
         <ion-item-divider>
-            <ion-label style="text-align: right">Contact No.  </ion-label>
-            <ion-label style="text-align: left">{{userData.nomineeContactNumber}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Contact No.  </ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.nomineeContactNumber}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group *ngIf="userData.accountNumber">
         <ion-item-divider>
-            <ion-label style="text-align: right">Bank Account Number</ion-label>
-            <ion-label style="text-align: left">{{userData.accountNumber}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap"  style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Bank Account Number</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.accountNumber}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.ifscCode">
-            <ion-label style="text-align: right">IIFSC Code</ion-label>
-            <ion-label style="text-align: left">{{userData.ifscCode}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">IIFSC Code</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.ifscCode}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
@@ -166,57 +166,57 @@
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.mobile">
-            <ion-label style="text-align: right">Mobile Number</ion-label>
-            <ion-label style="text-align: left">{{userData.mobile}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Mobile Number</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.mobile}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.emergencyContactNumber">
-            <ion-label style="text-align: right">Emergency Contact No</ion-label>
-            <ion-label style="text-align: left">{{userData.emergencyContactNumber}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Emergency Contact No</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.emergencyContactNumber}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.presentAddress">
-            <ion-label style="text-align: right">Present Address</ion-label>
-            <ion-label style="text-align: left">{{userData.presentAddress}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Present Address</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.presentAddress}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.presentCity">
-            <ion-label style="text-align: right">City</ion-label>
-            <ion-label style="text-align: left">{{userData.presentCity}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">City</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.presentCity}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.presentState">
-            <ion-label style="text-align: right">State</ion-label>
-            <ion-label style="text-align: left">{{userData.presentState}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">State</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.presentState}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.permanentAddress">
-            <ion-label style="text-align: right">Permenant Address</ion-label>
-            <ion-label style="text-align: left">{{userData.permanentAddress}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Permenant Address</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.permanentAddress}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.permanentCity">
-            <ion-label style="text-align: right">City</ion-label>
-            <ion-label style="text-align: left">{{userData.permanentCity}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">City</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.permanentCity}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 
     <ion-item-group>
         <ion-item-divider *ngIf="userData.permanentState">
-            <ion-label style="text-align: right">State</ion-label>
-            <ion-label style="text-align: left">{{userData.permanentState}}</ion-label>
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">State</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.permanentState}}</ion-label>
         </ion-item-divider>
     </ion-item-group>
 

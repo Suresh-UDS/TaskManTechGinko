@@ -84,6 +84,8 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
     private boolean rejected;
 
+    private String remarks;
+
 	public String getQuotationFileName() {
 		return quotationFileName;
 	}
@@ -379,5 +381,13 @@ public class QuotationDTO extends BaseDTO implements Serializable {
 
     public void setRejected(boolean rejected) {
         this.rejected = rejected;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

@@ -48,6 +48,7 @@ var QuotationModel = function() {
         rejectedDate: Date,
         archivedDate: Date,
         status:String,
+        remarks:String,
         images:[]
     });
 
