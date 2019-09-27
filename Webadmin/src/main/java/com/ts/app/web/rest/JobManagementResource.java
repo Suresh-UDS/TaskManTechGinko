@@ -11,6 +11,7 @@ import com.ts.app.domain.ChecklistItem;
 import com.ts.app.domain.Job;
 import com.ts.app.domain.JobChecklist;
 import com.ts.app.domain.JobStatus;
+import com.ts.app.domain.Site;
 import com.ts.app.domain.User;
 import com.ts.app.repository.JobChecklistRepository;
 import com.ts.app.repository.JobRepository;
@@ -102,7 +103,9 @@ public class JobManagementResource {
 	
 	@Inject
 	private ReportService reportService;
-
+	
+	@Inject
+    private SiteService siteService;
 
 	@RequestMapping(path="/job/lookup/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public JobStatus[] getJobStatuses() {
@@ -550,6 +553,9 @@ public class JobManagementResource {
 		 * JobChecklist jobs=jobService.findJobCheckListStatus(jobId, searchCriteria);
 		 */
 		
+		User user = userService.findUser(SecurityUtils.getCurrentUserId());
+		
+		String userIdName=user.getLogin() + "-"+ user.getFirstName();
 		
 		
 		if(job !=null ) {
@@ -575,6 +581,16 @@ public class JobManagementResource {
 			context.put("jobCheckListName",job.getChecklistItems().get(0).getChecklistName()); 
 			context.put("jobCheckList", job.getChecklistItems());
 			
+		}
+		if(job.getTicketId() >0) {
+			context.put("ticketId", job.getTicketId());
+		}
+		if(job.getSiteId() >0) {
+			SiteDTO site = siteService.findOne(job.getSiteId());
+			context.put("siteName", site.getProjectName());
+		}
+		if(StringUtils.isNotEmpty(user.getLogin())) {
+			context.put("userIdName", userIdName);
 		}
 		/*
 		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {

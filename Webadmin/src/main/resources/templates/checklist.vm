@@ -38,8 +38,8 @@
 
     <img src="http://uds.in/images/logo.jpg" width="150" />
 
-    <h2>$jobCheckListName</h2>
-    <h4>Client Name : <span class="valueField">SONY</span></h4>
+    <h2>$job.getTitle()</h2>
+    <h4>Client Name : <span class="valueField">$siteName</span></h4>
 
     <table cellpadding="7" cellspacing="0" border="0">
 
@@ -47,22 +47,21 @@
         
          <td>Job Id : <span class="valueField">$job.getId()</span></td>
         
-         <td class="textRight"> Job Duration <span class="valueField"></span> </td>
+         <td class="textRight"> Job Duration : <span class="valueField">$job.getActualHours()</span> </td>
        
 
       </tr>
 
       <tr >
       
-         <td class="textLeft">Job Name : <span class="valueField">$job.getTitle()</span></td>
+         <td class="textLeft">Check List Name : <span class="valueField">$jobCheckListName</span></td>
             <td class="textRight">Start Time :<span class="valueField">$actualStartTime to $actualEndTime</span></td>
 
 
       </tr>
       
-      <tr >
-      
-         <td class="textLeft"><span class="valueField">Scheduled</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="valueField">Oncall</span></td>
+      <tr>
+      <td>Job Type : #if($ticketId>0)<span class ="valueField">On Call</span>#{else}Scheduled#end</td>
             <td class="textRight"></td>
 
 
@@ -76,7 +75,7 @@
 
 
     <tr>
-        <th style="width: 30px;" valign="top">SNo</th>
+        <th style = "text-align:center" valign="top">SNo</th>
         <th >Name </th>
         <th style="width: 100px;" valign="top">Status </th>
         
@@ -87,9 +86,9 @@
   
   <tr>
   
-       <td valign="top" class="textRight">$foreach.count</td>
-       <td><p>$checklistItems.getChecklistItemName()<br/><br/> <span class="valueField">Remarks :</span> #if($checklistItems.getRemarks())$checklistItems.getRemarks()#{else}Nill#end </p></td>   
-       <td valign="top" >#if($checklistItems.isCompleted())<span class="valueField">Completed</span>#{else}Uncompleted#end</td>
+       <td valign="top" style = "text-align:center">$foreach.count</td>
+       <td><p>$checklistItems.getChecklistItemName()<br/><br/> <span class="valueField">Remarks :</span></p></td>   
+       <td valign="top" >#if($checklistItems.isCompleted())<span class="valueField">Completed</span>#{else}Incomplete#end</td>
         
        
    </tr>
@@ -107,9 +106,8 @@
    </tr>
 
    <tr>
-     
-     <td><span class="valueField">GRE Name : </span></td>
-
+     <td>Client Spoc : <span class="valueField">$userIdName</span></td>
+     <td><span class="valueField">UDS Spoc : </span></td>
    </tr>
 
    <tr>
@@ -123,7 +121,7 @@
 
  <table width="100%" cellpadding="5" cellspacing="0" border="0" style="margin-top:25px">
    <tr>
-      <td colspan="2"><p><span class="valueField">Note</span> This is a computer-generated document</p></td>
+      <td colspan="2"><p><span class="valueField">Note</span> This is a computer-generated document hence no signature is required</p></td>
    </tr>
 
  </table>
