@@ -81,10 +81,6 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       ])
     });
 
-    this.onboardingPersonalDetailsForm.controls['dateOfBirth'].valueChanges.subscribe(value => {
-      this.setMinValidation(value);  
-    });
-   
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
         this.onboardingPersonalDetailsForm.reset();
@@ -165,9 +161,25 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
       console.log('filter date = ' + formattedMinDate);
       // this.setMinDate = formattedMinDate;
     }
+    let dateOfBirth = this.onboardingPersonalDetailsForm.get('dateOfBirth').value;
+    if (dateOfBirth < formattedMinDate) {
+      this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(new Date(value));
+      this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setErrors({ shouldMinLength: true })
+    } else {
+      this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(new Date(value));
+    }
+  }
+
+  setMinValidationDOJ(value){
+    if (value) {
+      value = new Date(value);
+      var formattedMinDate = moment(value, "YYYY-MM-DD").add(60, 'days').format('YYYY-MM-DD');
+      console.log('filter date = ' + formattedMinDate);
+    }
     let dateOfJoining = this.onboardingPersonalDetailsForm.get('dateOfJoining').value;
     if (dateOfJoining < formattedMinDate) {
-      this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue('');
+      this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(value);
+      this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setErrors({ shouldMinLength: true })
     } else {
       this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(formattedMinDate);
     }
@@ -184,7 +196,11 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
                 .setValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark'][0]);
             this.onboardingPersonalDetailsForm.controls['identificationMark2']
                 .setValue(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['identificationMark'][1]);
-            this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
+            // this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
+            // this.setMinValidationDOJ(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining']);
+            // this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(new Date(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']));
+            // this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(new Date(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining']));
+
             this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
           }else{
             this.onboardingPersonalDetailsForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]);
@@ -192,7 +208,11 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
                 .setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][0]);
             this.onboardingPersonalDetailsForm.controls['identificationMark2']
                 .setValue(localStoragedData['actionRequired'][this.storedIndex]['identificationMark'][1]);
-            this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
+            // this.onboardingPersonalDetailsForm.controls['dateOfBirth'].setValue(new Date(localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth']));
+            // this.onboardingPersonalDetailsForm.controls['dateOfJoining'].setValue(new Date(localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining']));
+            
+            // this.setMinValidation(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth']);
+            // this.setMinValidationDOJ(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining']);
             this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
           }
 

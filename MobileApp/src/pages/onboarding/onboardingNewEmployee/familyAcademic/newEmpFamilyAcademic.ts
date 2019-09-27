@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { onBoardingDataService } from '../onboarding.messageData.service';
-import { FormArray, FormGroup, FormControl, Validators, FormBuilder, NgForm } from '@angular/forms';
+import { FormArray, FormGroup, FormControl, Validators, FormBuilder, NgForm, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
 
@@ -150,6 +150,8 @@ export class newEmpFamilyAndAcademic implements OnInit {
       nominePercentage: ['', [Validators.required, Validators.max(this.remainTotal)]]
     })
     this.nomineeForms.push(nominee);
+    this.onboardingFamilyAcademicForm.setValidators([this.validateContactNumber]);
+
   }
 
   updateFormData() {
@@ -181,4 +183,23 @@ export class newEmpFamilyAndAcademic implements OnInit {
       this.relationships = relationships;
     })
   }
+
+  private validateContactNumber(): ValidatorFn {
+    console.log("Validate not equal");
+    return (group: FormGroup): ValidationErrors => {
+      const control2 = group.controls['nomineeDetail'][0]['contactNumber'];
+      if (control2.value) {
+          const srtingData = control2.value.toString();
+          if (srtingData.length !== 10) {
+            control2.setErrors({ shouldMinLength: true });
+            } else {
+              control2.setErrors(null);
+          }
+      }else{
+        control2.setErrors(null);
+      }
+      return;
+    };
+  }
+
 }

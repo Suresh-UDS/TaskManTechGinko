@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Storage} from "@ionic/storage";
@@ -43,6 +43,8 @@ export class NewEmpSiteDetails {
   positionAndGrossList:any;
   position:any;
   gross :any;
+  activity:any;
+  displayGross:any;
 
   pipe = new DatePipe('en-US');
   isNewEmployee:boolean;
@@ -69,7 +71,10 @@ export class NewEmpSiteDetails {
       if(pg.positionId === event.value.positionId){
         console.log("Gross value set");
         this.siteDetailsForm.controls['gross'].setValue(pg.grossAmount);
+        this.siteDetailsForm.controls['activity'].setValue(pg.activity);
                   this.gross = pg.grossAmount;
+                  this.activity = pg.activity;
+                  this.displayGross = pg.positionDesc+" - "+pg.positionId+" - "+pg.activity+" - "+pg.grossAmount;
                   break;
       }
     }
@@ -93,7 +98,8 @@ export class NewEmpSiteDetails {
         projectCode: ['', [Validators.required]],
         wbsId:['', [Validators.required]],
         position:['',[Validators.required]],
-        gross:['',[Validators.required]]
+        gross:['',[Validators.required]],
+        activity:['',[Validators.required]]
       });
 
       this.siteDetailsSubscription = this.siteDetailsForm.statusChanges.subscribe(status=>{
@@ -112,6 +118,7 @@ export class NewEmpSiteDetails {
           fromStatusValues['data']['wbsDescription'] = wbsDetails['element'];
           fromStatusValues['data']['position']=position['positionId'];
           fromStatusValues['data']['gross']=position['grossAmount'];
+          fromStatusValues['data']['activity']=position['activity'];
             this.storage.get('OnBoardingData').then(localStoragedData => {
               if(localStoragedData && localStoragedData['actionRequired'] && localStoragedData['actionRequired'][this.storedIndex]){
                 localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'] = fromStatusValues['data']['projectCode']  ? fromStatusValues['data']['projectCode'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode'];
@@ -120,6 +127,7 @@ export class NewEmpSiteDetails {
                 localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'] = fromStatusValues['data']['wbsDescription']  ? fromStatusValues['data']['wbsDescription']  : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'];
                 localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] =  fromStatusValues['data']['position'] ? fromStatusValues['data']['position'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'];
                 localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] =  fromStatusValues['data']['gross'] ?  fromStatusValues['data']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'];
+                localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'] =  fromStatusValues['data']['activity'] ?  fromStatusValues['data']['activity'] : localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'];
                 this.storage.set('OnBoardingData', localStoragedData);
               }
             });
@@ -165,11 +173,14 @@ export class NewEmpSiteDetails {
         }){
           this.selectedProject = event.value;
           this.selectedWBS = null;
+          this.projectCode = event.value.elementCode;
+          this.projectDescription = event.value.element;
           window.localStorage.setItem('wbsId',event.value.elementCode);
           this.onBoardingService.getWBSByProject(event.value.elementCode).subscribe(response=>{
             console.log("Getting WBS");
             console.log(response);
             this.wbsList = response;
+
           })
         }
 
@@ -178,10 +189,23 @@ export class NewEmpSiteDetails {
           value: any
         }){
           this.selectedWBS = event.value;
+          this.wbsCode = event.value.elementCode;
+          this.wbsDescription = event.value.element;
           this.onBoardingService.getPositionWithGrossByWBSId(event.value.elementCode).subscribe(response=>{
             console.log("Getting position and Gross");
             console.log(response);
+
+
+            for(let ps in response){
+
+              response[ps].text = response[ps].positionDesc + " - "
+                   + response[ps].positionId + " - "
+                   + response[ps].grossAmount;
+
+            }
+
             this.positionAndGrossList = response;
+
           })
         }
 
@@ -200,8 +224,34 @@ export class NewEmpSiteDetails {
               this.projectDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectDescription'];
               this.wbsCode = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsId'];
               this.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'];
-              this.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'];
+              this.gross = 0;
+
+              if(this.wbsCode){
+                this.onBoardingService.getPositionWithGrossByWBSId(this.wbsCode).subscribe(response=>{
+                  console.log("Getting position and Gross");
+                  console.log(response);
+                  this.positionAndGrossList = response;
+
+                  //gross read
+
+                  for (let position in this.positionAndGrossList){
+
+                    if( this.positionAndGrossList[position].positionId == localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] &&
+                        this.positionAndGrossList[position].activity == localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'] ) {
+
+                      this.gross = this.positionAndGrossList[position].grossAmount;
+                      this.displayGross = this.positionAndGrossList[position]['positionId'] + " - "+this.positionAndGrossList[position]['positionDesc']+ " - "+this.positionAndGrossList[position]['activity']+" - "+this.positionAndGrossList[position]['grossAmount'];
+
+                      this.siteDetailsForm.controls['gross']
+                          .setValue(this.gross);
+                      break;
+                    }
+
+                  }
+                })
+              }
               this.position = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'];
+              this.activity = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'];
               this.showSelectedDetails = true;
               this.siteDetailsForm.controls['projectCode']
                   .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['projectCode']);
@@ -211,7 +261,9 @@ export class NewEmpSiteDetails {
                   .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position']);
               this.siteDetailsForm.controls['gross']
                   .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross']);
-              
+                this.siteDetailsForm.controls['activity']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity']);
+
               this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
 
             }else if(localStoragedData['actionRequired'][this.storedIndex] && localStoragedData['actionRequired'][this.storedIndex]['projectCode']){
@@ -224,6 +276,32 @@ export class NewEmpSiteDetails {
                 this.projectDescription = localStoragedData['actionRequired'][this.storedIndex] ['projectDescription'];
                 this.wbsCode = localStoragedData['actionRequired'][this.storedIndex] ['wbsId'];
                 this.wbsDescription = localStoragedData['actionRequired'][this.storedIndex] ['wbsDescription'];
+                this.gross=0;
+                if(this.wbsCode){
+                  this.onBoardingService.getPositionWithGrossByWBSId(this.wbsCode).subscribe(response=>{
+                    console.log("Getting position and Gross");
+                    console.log(response);
+                    this.positionAndGrossList = response;
+
+                    //gross read
+
+                    for (let position in this.positionAndGrossList){
+
+                      if( this.positionAndGrossList[position].positionId == localStoragedData['actionRequired'][this.storedIndex]['position'] &&
+                          this.positionAndGrossList[position].activity == localStoragedData['actionRequired'][this.storedIndex]['activity'] ) {
+                        this.gross = this.positionAndGrossList[position].grossAmount;
+                        this.displayGross = this.positionAndGrossList[position]['positionId'] + " - "+this.positionAndGrossList[position]['positionDesc']+ " - "+this.positionAndGrossList[position]['activity']+" - "+this.positionAndGrossList[position]['grossAmount'];
+
+                            this.siteDetailsForm.controls['gross']
+                            .setValue(this.gross);
+                        break;
+                      }
+
+                    }
+                  })
+                }
+                this.position = localStoragedData['actionRequired'][this.storedIndex]['position'];
+                this.activity = localStoragedData['actionRequired'][this.storedIndex]['activity'];
                 this.showSelectedDetails = true;
                 this.siteDetailsForm.controls['projectCode']
                     .setValue(localStoragedData['actionRequired'][this.storedIndex] ['projectCode']);
@@ -233,6 +311,8 @@ export class NewEmpSiteDetails {
                     .setValue(localStoragedData['actionRequired'][this.storedIndex] ['position']);
                 this.siteDetailsForm.controls['gross']
                     .setValue(localStoragedData['actionRequired'][this.storedIndex] ['gross']);
+                this.siteDetailsForm.controls['activity']
+                    .setValue(localStoragedData['actionRequired'][this.storedIndex] ['activity']);
 
                 this.isNewEmployee = localStoragedData['actionRequired'][this.storedIndex]['newEmployee'];
 

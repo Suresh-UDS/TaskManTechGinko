@@ -1759,7 +1759,6 @@ ion-grid .row:before
 .p-r-30{
     padding-right:30px !important;
 }
-<<<<<<< HEAD
     .fab[mini] {
         width: 32px !important;
         height: 32px;
@@ -1767,7 +1766,6 @@ ion-grid .row:before
         margin-left: 4px !important;
     }
 
-=======
 .mrgn-auto
 {
     margin:auto !important;
@@ -1776,7 +1774,15 @@ ion-grid .row:before
 {
     width:30% !important;
 }
->>>>>>> Release-2.0-Inventory
+
+.searchable-select{
+    max-width: 70%;
+    min-width: 70%;
+}
+
+.alert-ios .alert-radio-label{ white-space: pre-line;}
+.alert-md .alert-radio-label{ white-space: pre-line;}
+.alert-wp .alert-radio-label{ white-space: pre-line;}
 }
 
 
