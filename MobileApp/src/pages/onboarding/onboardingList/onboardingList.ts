@@ -38,7 +38,6 @@ const onBoardingNewModel =  {
   fullName:'',
   gender:'',
   ifscCode:'',
-  lastName:'',
   maritalStatus:'',
   mobile:'',
   motherName:'',
@@ -514,6 +513,8 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['employeeName']=res[i].name;
               employeeData[i]['employeeCode']=res[i].empId;
               employeeData[i]['id'] = res[i].id;
+              employeeData[i]['rejected'] = res[i].rejected;
+              employeeData[i]['remarks'] = res[i].remarks;
               employeeData[i]['isSync'] = true;
               employeeData[i]['newEmployee'] = res[i].newEmployee;
               employeeData[i]['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
@@ -524,10 +525,10 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['siteDetails']['wbsDescription'] = res[i].wbsDescription;
               employeeData[i]['siteDetails']['position'] = res[i].position;
               employeeData[i]['siteDetails']['gross'] = res[i].gross;
+              employeeData[i]['siteDetails']['activity'] = res[i].activity;
               employeeData[i]['personalDetails'] = {};
               employeeData[i]['personalDetails']['employeeCode'] = res[i].empId;
               employeeData[i]['personalDetails']['employeeName'] = res[i].name;
-              employeeData[i]['personalDetails']['lastName'] = res[i].lastName;
               employeeData[i]['personalDetails']['relationshipDetails'] = [{
                 name: res[i].fatherName,
                 relationship: 'Father',
@@ -570,17 +571,17 @@ export class onboardingExistEmployee implements OnInit {
               employeeData[i]['kycDetails'] = {};
               employeeData[i]['kycDetails']['aadharNumber'] = res[i].adharCardNumber;
               employeeData[i]['kycDetails']['bankDetails'] = [{accountNo:res[i].accountNumber, ifsc:res[i].ifscCode}];
-              employeeData[i]['kycDetails']['aadharPhotoCopy'] =this.getEmployeeDocuments(res[i].documents,'aadharPhotoCopy') ;
-              employeeData[i]['kycDetails']['employeeSignature'] = this.getEmployeeDocuments(res[i].documents,'employeeSignature') ;
-              employeeData[i]['kycDetails']['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
-              employeeData[i]['kycDetails']['thumbImpressenRight'] = this.getEmployeeDocuments(res[i].documents,'thumbImpressenRight') ;
-              employeeData[i]['kycDetails']['thumbImpressenLeft'] = this.getEmployeeDocuments(res[i].documents,'thumbImpressenLeft') ;
-              employeeData[i]['kycDetails']['prePrintedStatement'] = this.getEmployeeDocuments(res[i].documents,'prePrintedStatement') ;
-              employeeData[i]['kycDetails']['addressProof'] = this.getEmployeeDocuments(res[i].documents,'addressProof') ;
-              employeeData[i]['kycDetails']['pancardCopy'] = this.getEmployeeDocuments(res[i].documents,'pancardCopy') ;
-              employeeData[i]['kycDetails']['voterId'] = this.getEmployeeDocuments(res[i].documents,'voterId') ;
-              employeeData[i]['kycDetails']['aadharPhotoCopyBack'] = this.getEmployeeDocuments(res[i].documents,'aadharPhotoCopyBack') ;
-              employeeData[i]['kycDetails']['drivingLicense'] = this.getEmployeeDocuments(res[i].documents,'drivingLicense') ;
+              employeeData[i]['aadharPhotoCopy'] =this.getEmployeeDocuments(res[i].documents,'aadharPhotoCopy') ;
+              employeeData[i]['employeeSignature'] = this.getEmployeeDocuments(res[i].documents,'employeeSignature') ;
+              employeeData[i]['profilePicture'] = this.getEmployeeDocuments(res[i].documents,'profilePicture') ;
+              employeeData[i]['thumbImpressenRight'] = this.getEmployeeDocuments(res[i].documents,'thumbImpressenRight') ;
+              employeeData[i]['thumbImpressenLeft'] = this.getEmployeeDocuments(res[i].documents,'thumbImpressenLeft') ;
+              employeeData[i]['prePrintedStatement'] = this.getEmployeeDocuments(res[i].documents,'prePrintedStatement') ;
+              employeeData[i]['addressProof'] = this.getEmployeeDocuments(res[i].documents,'addressProof') ;
+              employeeData[i]['pancardCopy'] = this.getEmployeeDocuments(res[i].documents,'pancardCopy') ;
+              employeeData[i]['voterId'] = this.getEmployeeDocuments(res[i].documents,'voterId') ;
+              employeeData[i]['aadharPhotoCopyBack'] = this.getEmployeeDocuments(res[i].documents,'aadharPhotoCopyBack') ;
+              employeeData[i]['drivingLicense'] = this.getEmployeeDocuments(res[i].documents,'drivingLicense') ;
               employeeData[i]['declaration']={};
               employeeData[i]['declaration']['agreeTermsAndConditions'] = false;
               employeeData[i]['declaration']['onboardedPlace'] = '';

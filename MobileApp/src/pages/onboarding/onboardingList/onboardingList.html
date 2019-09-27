@@ -58,7 +58,10 @@
                             <ion-list>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="person" item-start></ion-icon> -->
-                                    <h2 class="textColor">{{list['employeeName']}}</h2>
+                                    <h2 class="textColor">{{list['employeeName']}}
+                                        <ion-icon *ngIf="list['rejected']" style="color: red;" ios="ios-alert" md="md-alert"></ion-icon>
+                                    </h2>
+
                                 </ion-item>
                                 <ion-item>
                                     <!-- <ion-icon class="margin0" name="leaf" item-start></ion-icon> -->
@@ -81,12 +84,6 @@
 
                                     <ion-badge *ngIf="list['isSync'] == false" item-end color="secondary">local</ion-badge>
 
-                                    <!-- <ion-note *ngIf="list.status == '30%'" item-end>
-                                        <button (click)="syncEmployeeDetails()" small round ion-button icon-start>
-                                            <ion-icon name="sync"></ion-icon>
-                                            SYNC
-                                        </button>
-                                    </ion-note> -->
                                 </ion-item>
                             </ion-list>
                         </ion-col>

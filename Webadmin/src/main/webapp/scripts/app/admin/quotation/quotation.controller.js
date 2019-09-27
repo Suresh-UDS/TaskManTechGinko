@@ -928,9 +928,15 @@ angular
 
 					$scope.approveQuotation = function(quotation) {
 					  //console.log(quotation)
-                        $('#approveQuotationModal').modal('hide');
+						$('#approveQuotationModal').modal('hide');
+						$scope.rejectOnBoardingLoader = true;
+						$scope.quotation.remarks = $scope.remarks;
+						console.log("Remarks for approve quotation");
+						console.log($scope.quotation);
+
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
+									$scope.rejectOnBoardingLoader = false;
 									console.log(response);
 									$scope.showNotifications('top','center','success','Quotation approved Successfully');
 									//$scope.loadAllQuotations();
@@ -942,9 +948,14 @@ angular
 					}
 
 					$scope.rejectQuotation = function(quotation) {
-                        $('#rejectQuotationModal').modal('hide');
+						$('#rejectQuotationModal').modal('hide');
+						$scope.rejectOnBoardingLoader = true;
+						$scope.quotation.remarks = $scope.remarks;
+						console.log("Remarks for approve quotation");
+						console.log($scope.quotation);
 						RateCardComponent.rejectQuotation(quotation).then(
 								function(response) {
+									$scope.rejectOnBoardingLoader = false;
 									console.log(response);
 									$scope.showNotifications('top','center','success','Quotation rejected Successfully');
 									//$scope.loadAllQuotations();
