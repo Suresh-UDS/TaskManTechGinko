@@ -146,6 +146,12 @@ public class JobManagementService extends AbstractService {
 
     @Inject
     private JobChecklistRepository jobChecklistRepository;
+    
+    @Inject
+	private UserService userService;
+    
+	@Inject
+    private SiteService siteService;
 
     public void updateJobStatus(long siteId, JobStatus toBeJobStatus) {
 		//UPDATE ALL OVERDUE JOB STATUS
@@ -2222,6 +2228,9 @@ public class JobManagementService extends AbstractService {
 		 * JobChecklist jobs=jobService.findJobCheckListStatus(jobId, searchCriteria);
 		 */
 		
+        User user = userService.findUser(SecurityUtils.getCurrentUserId());
+		
+		String userIdName=user.getLogin() + "-" + user.getFirstName();
 		
 		
 		if(job !=null ) {
@@ -2248,6 +2257,18 @@ public class JobManagementService extends AbstractService {
 			context.put("jobCheckList", job.getChecklistItems());
 			
 		}
+		
+		if(job.getTicketId() >0) {
+			context.put("ticketId", job.getTicketId());
+		}
+		if(job.getSiteId() >0) {
+			SiteDTO site = siteService.findOne(job.getSiteId());
+			context.put("siteName", site.getProjectName());
+		}
+		if(!StringUtils.isEmpty(user.getLogin())) {
+			context.put("userIdName", userIdName);
+		}
+		
 		/*
 		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {
 		 * context.put("Jobstatus", "Pending"); }

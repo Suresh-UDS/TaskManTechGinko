@@ -555,7 +555,7 @@ public class JobManagementResource {
 		
 		User user = userService.findUser(SecurityUtils.getCurrentUserId());
 		
-		String userIdName=user.getLogin() + "-"+ user.getFirstName();
+		String userIdName=user.getLogin() + "-" + user.getFirstName();
 		
 		
 		if(job !=null ) {
