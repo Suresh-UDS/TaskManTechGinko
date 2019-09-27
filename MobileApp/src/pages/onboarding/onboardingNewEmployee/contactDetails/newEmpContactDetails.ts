@@ -130,19 +130,32 @@ export class newEmpContactDetails implements OnInit {
           control1.setErrors(null);
         }
       }
+
       return;
     };
   }
   private validateAreNotEqual(): ValidatorFn {
+    console.log("Validate not equal");
     return (group: FormGroup): ValidationErrors => {
       const control1 = group.controls['contactNumber'];
       const control2 = group.controls['emergencyConatctNo'];
       if (control1.value && control2.value) {
-        if (control1.value.toString() === control2.value.toString()) {
-          control2.setErrors({ notToEquivalent: true });
-        } else {
-          control2.setErrors(null);
+        if (control2.value) {
+          const srtingData = control2.value.toString();
+          if (srtingData.length !== 10) {
+            control2.setErrors({ shouldMinLength: true });
+          }else{
+            if (control1.value.toString() === control2.value.toString()) {
+              control2.setErrors({ notToEquivalent: true });
+            } else {
+              control2.setErrors(null);
+            }
+          }
         }
+        
+      }else{
+        control1.setErrors(null);
+        control2.setErrors(null);
       }
       return;
     };
@@ -151,7 +164,7 @@ export class newEmpContactDetails implements OnInit {
 
   addCommunicationAddress(): FormGroup {
     return this.fb.group({
-      address: ['', [Validators.required]],
+      address: ['', [Validators.required, Validators.maxLength(40)]],
       city: ['', [Validators.required]],
       state: ['', [Validators.required]],
     });

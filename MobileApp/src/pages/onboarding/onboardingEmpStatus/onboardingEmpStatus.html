@@ -15,11 +15,19 @@
                     {{employeeCode}}
                 </ion-note>
             </ion-item>
+            
         </ion-list>
     </ion-card>
+
 </ion-header>
 
 <ion-content>
+        <ion-item>
+                <ion-note style="color: red !important; white-space: pre-wrap !important; border-radius: 0 !important " *ngIf="rejectionStatus">
+                       Reason for Rejection: {{employeeRemarks}}
+                </ion-note>
+            </ion-item>
+    
     <div #stepperContainer padding>
         <ion-stepper #stepper>
             <!-- <ion-step label="OnBoarding" [icon]="'checkmark'" description="Status: 100% Completed">

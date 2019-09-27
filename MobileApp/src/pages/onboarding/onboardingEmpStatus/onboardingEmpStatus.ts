@@ -16,6 +16,8 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
   onboardingFormStatus;
   employeeName;
   employeeCode;
+  employeeRemarks;
+  rejectionStatus;
   constructor(private storage: Storage, private navCtrl: NavController) { }
 
   ngOnInit() {
@@ -56,6 +58,8 @@ export class onboardingEmpStatus implements OnInit, AfterViewChecked {
         //console.log(localStoragedData['actionRequired']);
         this.employeeName = localStoragedData['actionRequired'][currentIndex]['employeeName'];
         this.employeeCode = localStoragedData['actionRequired'][currentIndex]['employeeCode'];
+        this.employeeRemarks = localStoragedData['actionRequired'][currentIndex]['remarks'] ? localStoragedData['actionRequired'][currentIndex]['remarks'] : '';
+        this.rejectionStatus = localStoragedData['actionRequired'][currentIndex]['rejected'] ? localStoragedData['actionRequired'][currentIndex]['rejected'] : false;
         // for (let list in localStoragedData['actionRequired'][currentIndex]) {
         //   objDataKeys.push(list);
         //   // alert(list);

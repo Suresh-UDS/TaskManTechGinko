@@ -1861,7 +1861,7 @@ public class ImportUtil {
 					}
 					else {
 						
-						 empId = currentRow.getCell(32).getStringCellValue().substring(7);
+						 empId = currentRow.getCell(32).getStringCellValue().substring(4);
                          log.debug("Employee id not present, entering substirng - "+empId);
                          
                          employee = isSkipDuplicate(empId);

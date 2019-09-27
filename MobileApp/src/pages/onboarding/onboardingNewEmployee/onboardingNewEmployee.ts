@@ -120,6 +120,8 @@ export class onboardingNewEmployee {
             onboardedPlace:''
         }
         data.newEmployee = true;
+        data.rejected = false;
+        data.remarks = null;
         let onboardingData =  onBoardingModel;
         if (localStoragedData['actionRequired'][this.storedIndex]) {
           // if (!localStoragedData['actionRequired'][this.storedIndex].hasOwnProperty('projectId')) {
@@ -408,7 +410,6 @@ export class onboardingNewEmployee {
             fullName:null,
             gender:null,
             ifscCode:null,
-            lastName:null,
             maritalStatus:null,
             mobile:null,
             motherName:null,
@@ -439,11 +440,14 @@ export class onboardingNewEmployee {
             submitted:true,
             onboardedPlace:null,
             gross:null,
+            activity:null,
             employer:null,
             designation:null,
             newEmployee:false,
             active:'Y',
-              id:0
+            id:0,
+            rejected:false,
+            remarks:null
           };
 
           var employeeDocuments = {
@@ -467,8 +471,8 @@ export class onboardingNewEmployee {
           employeeDetails.wbsDescription = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['wbsDescription'] : localStoragedData['actionRequired'][this.storedIndex]['wbsDescription'];
           employeeDetails.position = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['position'] : localStoragedData['actionRequired'][this.storedIndex]['position'];
           employeeDetails.gross = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['gross'] : localStoragedData['actionRequired'][this.storedIndex]['gross'];
+          employeeDetails.activity = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'] : localStoragedData['actionRequired'][this.storedIndex]['activity'];
           employeeDetails.name = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName']: localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
-          employeeDetails.lastName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['lastName']: localStoragedData['actionRequired'][this.storedIndex]['lastName'];
           employeeDetails.gender = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender']: localStoragedData['actionRequired'][this.storedIndex]['gender'];
           employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus']: localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
           employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
@@ -554,11 +558,11 @@ export class onboardingNewEmployee {
           employeeDocuments.drivingLicense = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
           employeeDocuments.addressProof = localStoragedData['actionRequired'][this.storedIndex]['addressProof'];
           if(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]){
-            employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'] : localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
-            employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] ? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'] : localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
+            employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo'];
+            employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc'];
           }else if(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]){
-            employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'];
-            employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'];
+            employeeDetails.accountNumber = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo'] ;
+            employeeDetails.ifscCode = localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc'] ;
           }
           
           employeeDetails.onboardedPlace = localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace'] ? localStoragedData['actionRequired'][this.storedIndex]['declaration']['onboardedPlace']: localStoragedData['actionRequired'][this.storedIndex]['onboardedPlace'];
@@ -567,9 +571,10 @@ export class onboardingNewEmployee {
           employeeDetails.active = 'Y';
 
           let name = localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
-          employeeDetails.name = name
-          
-          employeeDetails.fullName = name + employeeDetails.lastName;
+          employeeDetails.name = name;
+
+          employeeDetails.rejected = false;
+          employeeDetails.remarks = localStoragedData['actionRequired'][this.storedIndex]['remarks'];
           
           if(localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] || localStoragedData['actionRequired'][this.storedIndex]['employeeCode']){
             employeeDetails.empId = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'];
@@ -626,7 +631,6 @@ export class onboardingNewEmployee {
 
             let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
             employeeDetails.empId = employeeDetails.empId ? employeeDetails.empId : adharNumber.toString().substring(5);
-            employeeDetails.newEmployee = true;
 
             this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
               console.log("Sucessfully saved employees");
@@ -683,9 +687,9 @@ export class onboardingNewEmployee {
       for (var i = 0; i < imageUpload.length; i++) {
         console.log("Image upload");
         console.log(imageUpload[i]);
-        console.log(array[imageUpload[i]]);
-        if(array[imageUpload[i]] && array[imageUpload[i]] != 'assets/imgs/placeholder.png'){
+        if(array[imageUpload[i]] && array[imageUpload[i]] != 'assets/imgs/placeholder.png' && !array[imageUpload[i]].includes('expenseDocuments')){
           console.log("Uploading images");
+          console.log(array[imageUpload[i]].includes('expenseDocuments'));
           this.onBoardingService.imageUpLoad(array[imageUpload[i]], imageUpload[i], id)
               .then(function (res) {
                 console.log('image upload ' + res);

@@ -1,3 +1,4 @@
+
 <div padding>
 
     <div class="row" >
@@ -7,7 +8,6 @@
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
             <label class="control-label">{{projectCode}}</label>
-
         </div>
 
         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
@@ -16,7 +16,6 @@
         </div>
         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
             <label class="control-label">{{projectDescription}}</label>
-
         </div>
 
         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
@@ -40,8 +39,17 @@
         </div>
 
         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
-            <label class="control-label">{{position}}</label>
+            <label class="control-label">{{displayGross}}</label>
         </div>
+
+<!--        <div class="col-md-6 col-sm-6 col-xs-6 padding0">-->
+<!--            <label class="control-label">Activity Id</label>-->
+<!--        </div>-->
+
+<!--        <div class="col-md-6 col-sm-6 col-xs-6 padding0">-->
+<!--            <label class="control-label">{{activity}}</label>-->
+<!--        </div>-->
+
 
         <div class="col-md-6 col-sm-6 col-xs-6 padding0">
             <label class="control-label">Gross Amount</label>
@@ -83,12 +91,13 @@
                                       itemTextField="element"
                                       [canSearch]="true"
                                       (onChange)="getWBSByProject($event)">
+
                    </select-searchable>
                </ion-item>
 
                <ion-item class="border" *ngIf="selectedProject!=null">
                    <ion-label  text-capitalize class="client-label trequired" text-left>WBS:</ion-label>
-                   <select-searchable class="searchable-select"
+                   <select-searchable class="s"
                                       item-content
                                       formControlName="wbsId"
                                       [items]="wbsList"
@@ -108,22 +117,32 @@
                     </ion-item>
                 </div> -->
 
-                <ion-item class="border" *ngIf="selectedWBS!=null">
-                    <ion-label  text-capitalize class="client-label trequired" text-left>Position:</ion-label>
-                    <select-searchable class="searchable-select"
-                                       item-content
-                                       formControlName="position"
-                                       [items]="positionAndGrossList"
-                                       itemValueField="positionId"
-                                       itemTextField="positionDesc"
-                                       [canSearch]="true"
-                                       (onChange)="pgOnChange($event)">
-                    </select-searchable>
-                </ion-item>
+<!--                <div class="col-md-12 col-sm-12 col-xs-12 padding0" *ngIf="selectedWBS!=null">-->
+<!--                    <ion-item>-->
+<!--                        <ion-label class=" label-text trequired" >Position</ion-label>-->
+<!--                        <ion-select style="max-width: 70%; min-width: 70%" interface="alert" formControlName="position">-->
+<!--                            <ion-option *ngFor="let position of positionAndGrossList;let i=index" [value]="position" (ionSelect)="pgOnChange(position)" >{{position.positionId}} {{position.positionDesc}} - {{position.activity}} - {{position.grossAmount}}</ion-option>-->
+<!--                        </ion-select>-->
+<!--                    </ion-item>-->
+<!--                </div>-->
+
+            <ion-item class="border" *ngIf="selectedWBS!=null">
+                <ion-label  text-capitalize class="client-label trequired" text-left>Position:</ion-label>
+                <select-searchable class="s"
+                                   item-content
+                                   formControlName="position"
+                                   [items]="positionAndGrossList"
+                                   itemValueField="positionId"
+                                   itemTextField="text"
+                                   [canSearch]="false"
+                                   (onChange)="pgOnChange($event)">
+                </select-searchable>
+            </ion-item>
 
                 <div class="col-md-12 col-sm-12 col-xs-12 padding0" *ngIf="selectedWBS!=null" >
                     <ion-item>
-                        <p>Gross Amount: {{gross}}</p>
+                        <ion-label class=" label-text trequired" >Gross</ion-label>
+                       <ion-label style="max-width: 70%; min-width: 70%" class="grossAmount">{{gross}}</ion-label>
                     </ion-item>
                 </div>
 

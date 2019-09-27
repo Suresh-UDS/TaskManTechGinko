@@ -535,10 +535,7 @@
                                                             Reject
                                                         </button>
 
-														<button class="btn btn-danger" type="button"
-															ng-click="cancelQuotation()" id="cancel-button">
-															<i class="material-icons">close</i> Close
-														</button>
+														
 
 													</div>
 												</div>
@@ -548,8 +545,25 @@
 
 
 								</div>
+								<div class="panel panel-default TabsContainer">
+										
+										<div class="panel-body">
+<div class='col-md-12'>
+	<div class='col-md-8'>
+		<div class="form-group">
+				<label class="control-label">Remarks</label> 
+                <p>{{quotation.remarks}}</p>
+				
+			</div>
+</div><div class='col-md-4'>
+		<button class="btn btn-danger" type="button" style='float:right; margin-top:40px'
+		ng-click="cancelQuotation()" id="cancel-button">
+		<i class="material-icons">close</i> Close
+	</button>
+</div>
+	
 
-
+</div></div></div>
 
 							</div>
 
