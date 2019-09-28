@@ -630,7 +630,7 @@ export class onboardingNewEmployee {
           }else{
 
             let adharNumber = localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']? localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber'] : localStoragedData['actionRequired'][this.storedIndex]['aadharNumber'] ;
-            employeeDetails.empId = employeeDetails.empId ? employeeDetails.empId : adharNumber.toString().substring(5);
+            employeeDetails.empId = employeeDetails.empId ? employeeDetails.empId : adharNumber.toString().substring(4);
 
             this.onBoardingService.saveOnboardingUser(employeeDetails).subscribe((res)=>{
               console.log("Sucessfully saved employees");

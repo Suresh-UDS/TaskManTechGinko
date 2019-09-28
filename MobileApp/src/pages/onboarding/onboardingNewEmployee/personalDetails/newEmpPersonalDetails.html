@@ -73,7 +73,7 @@
                                 <ion-option value="Married">Married</ion-option>
                                 <ion-option value="Widow">Widow</ion-option>
                                 <ion-option value="Divorced">Divorced</ion-option>
-                                <ion-option value="Seperated">Seperated</ion-option>
+                                <ion-option value="Separated">Separated</ion-option>
                             </ion-select>
                         </ion-item>
                         <ion-item *ngIf="onboardingPersonalDetailsForm.controls.maritalStatus.dirty && onboardingPersonalDetailsForm.controls.maritalStatus.invalid">
@@ -107,7 +107,6 @@
                             <ion-label class="label-text" stacked>Religion</ion-label>
                             <ion-select interface="popover" formControlName="religion">
                                 <ion-option *ngFor="let religion of religionList;let i=index" [value]="religion.title" > {{religion.title}}</ion-option>
-
                             </ion-select>
                         </ion-item>
 

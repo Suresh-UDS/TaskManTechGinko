@@ -348,6 +348,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
           this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['aadharNumber']);
           console.log('kyc=aadhaar2' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
           //this.onboardingKYCForm.patchValue();
+          this.onboardingKYCForm.controls['accountNo'].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['accountNo']);          
+          this.onboardingKYCForm.controls['ifsc'].setValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']['bankDetails'][0]['ifsc']);          
           this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]['kycDetails']);
           this.sendValidationMessage();
       }else{
@@ -367,6 +369,8 @@ export class newEmpKycDetails implements OnInit, AfterViewInit {
         this.userAllKYCData['drivingLicense'] = localStoragedData['actionRequired'][this.storedIndex]['drivingLicense'];
         this.onboardingKYCForm.controls['aadharNumber'].setValue(localStoragedData['actionRequired'][this.storedIndex]  ['aadharNumber']);
         console.log('kyc=aadhaar2' + this.onboardingKYCForm.controls.aadharNumber.value + ' - ' + this.onboardingKYCForm.get('aadharNumber').value);
+        this.onboardingKYCForm.controls['accountNo'].setValue(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['accountNo']);          
+          this.onboardingKYCForm.controls['ifsc'].setValue(localStoragedData['actionRequired'][this.storedIndex]['bankDetails'][0]['ifsc']);          
         //this.onboardingKYCForm.patchValue();
         this.onboardingKYCForm.patchValue(localStoragedData['actionRequired'][this.storedIndex]  );
         this.sendValidationMessage();
