@@ -928,12 +928,13 @@ angular
 
 					$scope.approveQuotation = function(quotation) {
 					  //console.log(quotation)
+
 						$('#approveQuotationModal').modal('hide');
 						$scope.rejectOnBoardingLoader = true;
 						$scope.quotation.remarks = $scope.remarks;
 						console.log("Remarks for approve quotation");
 						console.log($scope.quotation);
-
+						$scope.cancelQuotation();
 						RateCardComponent.approveQuotation(quotation).then(
 								function(response) {
 									$scope.rejectOnBoardingLoader = false;
@@ -943,7 +944,8 @@ angular
 									//$location.path('/quotation-list');
 									//$scope.refreshPage();
                                     $scope.retain = 1;
-                                    $scope.search();
+									$scope.search();
+									
 								})
 					}
 
@@ -953,6 +955,7 @@ angular
 						$scope.quotation.remarks = $scope.remarks;
 						console.log("Remarks for approve quotation");
 						console.log($scope.quotation);
+						$scope.cancelQuotation();
 						RateCardComponent.rejectQuotation(quotation).then(
 								function(response) {
 									$scope.rejectOnBoardingLoader = false;
