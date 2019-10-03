@@ -188,7 +188,7 @@
                             <td><label ng-bind="quotation.approvedDate | date:'dd-MMM-yyyy hh:mm a'"/></td> -->
                             <td >
                             <button class="btn btn-success" ng-if="quotation.isApproved">Approved</button>
-                            <button class="btn btn-success" ng-if="quotation.isRejected">Rejected</button>
+                            <button class="btn btn-success" ng-if="quotation.isRejected" style='background-color:red;'>Rejected</button>
 
                             <button class="btn btn-label"  ng-if="quotation.isArchived">Archived</button>
                             <button class="btn btn-info" ng-if="quotation.isDrafted">Pending</button>

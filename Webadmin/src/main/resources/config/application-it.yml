@@ -264,6 +264,7 @@ google:
 onBoarding:
     empServe: http://172.31.26.197:8089/
     empRetrieve: http://172.31.26.197:8087/
+    dummyUser: DO_NOT_DELETE
 # ===================================================================
 # JHipster specific properties
 # ===================================================================
