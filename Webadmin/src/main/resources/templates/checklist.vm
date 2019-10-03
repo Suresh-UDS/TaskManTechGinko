@@ -46,10 +46,9 @@
       <tr>
         
          <td>Job Id : <span class="valueField">$job.getId()</span></td>
+         
+         <td class="textRight"> Job Duration : #if($job.getActualHours()>1)<span class="valueField">$job.getActualHours() (Hrs)</span>#{else} $job.getActualHours() (Hr)#end</td>
         
-         <td class="textRight"> Job Duration : <span class="valueField">$job.getActualHours()</span> </td>
-       
-
       </tr>
 
       <tr >
