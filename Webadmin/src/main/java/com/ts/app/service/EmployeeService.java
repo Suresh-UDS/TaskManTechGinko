@@ -482,6 +482,7 @@ public class    EmployeeService extends AbstractService {
         employee.setOnboardedPlace("NIL");
         employee.setActivity("NIL");
         employee.setNonUdsEmployee(true);
+        employee.setSpouseName("NIL");
         
         List<EmployeeProjectSite> projectSites =  employee.getProjectSites();
         if(CollectionUtils.isNotEmpty(projectSites)) {
