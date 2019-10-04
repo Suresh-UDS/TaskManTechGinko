@@ -2592,6 +2592,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
     empDto.setActivity(employee.getActivity());
     empDto.setRemarks(employee.getRemarks());
     empDto.setRejected(employee.isRejected());
+    empDto.setSpouseName(employee.getSpouseName());
     return empDto;
 }
 
@@ -2667,6 +2668,7 @@ private Employee mapToModelOnBoarding(EmployeeDTO employee,Employee empDto) {
          empDto.setCreatedDate(employee.getCreatedDate());
          empDto.setRemarks(employee.getRemarks());
          empDto.setRejected(employee.isRejected());
+         empDto.setSpouseName(employee.getSpouseName());
     	return empDto;
     }
     

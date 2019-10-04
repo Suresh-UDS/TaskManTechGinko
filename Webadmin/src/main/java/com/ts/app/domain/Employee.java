@@ -114,6 +114,8 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
     
     private String motherName;
     
+    private String spouseName;
+    
     @NotNull
     @Size(max = 10)
     @Column(length = 10, nullable = true)
@@ -993,6 +995,16 @@ public class Employee extends AbstractAuditingEntity implements Serializable {
 
 	public void setRejected(boolean rejected) {
 		this.rejected = rejected;
+	}
+
+
+	public String getSpouseName() {
+		return spouseName;
+	}
+
+
+	public void setSpouseName(String spouseName) {
+		this.spouseName = spouseName;
 	}
 	
 }

@@ -122,7 +122,8 @@ public class EmployeeDTO extends BaseDTO {
     
     private String motherName;
     
-
+    private String spouseName;
+    
     private String gender;
     
 
@@ -1117,6 +1118,14 @@ public class EmployeeDTO extends BaseDTO {
 
 	public void setRejected(boolean rejected) {
 		this.rejected = rejected;
+	}
+
+	public String getSpouseName() {
+		return spouseName;
+	}
+
+	public void setSpouseName(String spouseName) {
+		this.spouseName = spouseName;
 	}
 	 
 }
