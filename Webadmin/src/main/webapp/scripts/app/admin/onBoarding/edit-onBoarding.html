@@ -555,6 +555,29 @@
                     </div>
 
                     <div class="row">
+                        <label class=" col-sm-4 onBoarding-label-on-left">Spouse Name</label>
+                        <div class=" col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label"></label>
+                                <input class="form-control" type="text" name="spouseName"  ng-model="employee.spouseName" />
+
+                                <div ng-show="form.$submitted || form.spouseName.$touched || form.spouseName.$dirty">
+                                    <div ng-show="form.spouseName.$dirty || form.spouseName.$invalid">
+                                        
+
+                                        <p class="help-block" style="width:100%;z-index:1000;background:#fff;color:maroon"
+                                           ng-show="form.spouseName.$error.pattern">
+                                            Spouse name can only contain alphabets.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
                         <label class=" col-sm-4 onBoarding-label-on-left">Gender <span class="red-star">*</span> </label>
                         <div class="col-sm-8">
                             <div class="form-group label-floating">
