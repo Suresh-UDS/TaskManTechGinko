@@ -3,6 +3,7 @@ export const onBoardingDataModel =
     id: "",
     employeeName: "",
     employeeCode: "",
+    spouseName: "",
     gender: "",
     dateOfBirth: "",
     dateOfJoining: "",

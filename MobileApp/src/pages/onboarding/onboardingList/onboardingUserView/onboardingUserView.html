@@ -61,6 +61,11 @@
             <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.motherName}}</ion-label>
         </ion-item-divider>
 
+        <ion-item-divider *ngIf="userData.spouseName">
+            <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Spouse Name</ion-label>
+            <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.spouseName}}</ion-label>
+        </ion-item-divider>
+
         <ion-item-divider *ngIf="userData.gender">
             <ion-label class="col-md-4 col-sm-4 col-xs-4   text-wrap" style="text-align: right; white-space: pre-wrap !important; border-radius:0!important">Gender</ion-label>
             <ion-label class="col-md-8 col-sm-8 col-xs-8   text-wrap" style="text-align: left; white-space: pre-wrap !important; border-radius:0!important">{{userData.gender}}</ion-label>

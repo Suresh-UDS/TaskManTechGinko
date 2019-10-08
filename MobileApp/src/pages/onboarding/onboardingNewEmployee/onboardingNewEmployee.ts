@@ -83,6 +83,7 @@ export class onboardingNewEmployee {
           employeeCode:  '',
             employeeName: '',
             relationshipDetails: [{name:'',relationship:'',contactNumber:''},{name:'',relationship:'',contactNumber:''}],
+           spouseName: '',
             gender: '',
             maritalStatus: '',
             dateOfBirth: '',
@@ -408,6 +409,7 @@ export class onboardingNewEmployee {
             empId:null,
             fatherName:null,
             fullName:null,
+            spouseName:null,
             gender:null,
             ifscCode:null,
             maritalStatus:null,
@@ -474,6 +476,8 @@ export class onboardingNewEmployee {
           employeeDetails.activity = localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'] ? localStoragedData['actionRequired'][this.storedIndex]['siteDetails']['activity'] : localStoragedData['actionRequired'][this.storedIndex]['activity'];
           employeeDetails.name = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName']: localStoragedData['actionRequired'][this.storedIndex]['employeeName'];
           employeeDetails.gender = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender']: localStoragedData['actionRequired'][this.storedIndex]['gender'];
+          employeeDetails.spouseName = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['spouseName'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['spouseName']: localStoragedData['actionRequired'][this.storedIndex]['spouseName'];
+          
           employeeDetails.maritalStatus = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus']: localStoragedData['actionRequired'][this.storedIndex]['maritalStatus'];
           employeeDetails.dob = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfBirth'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfBirth'];
           employeeDetails.doj = localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] ? localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] : localStoragedData['actionRequired'][this.storedIndex]['dateOfJoining'];

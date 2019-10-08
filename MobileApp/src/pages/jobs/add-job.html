@@ -92,7 +92,7 @@
                             <div class="form-group label-floating">
                                 <label class="control-label" *ngIf="employ">Employee</label>
                                     <ion-select [(ngModel)]="employ" [disabled]="empSelect" class="select-box padding-left0" interface="popover"  id="employ" name="employ" [placeholder]="empPlace" #emp="ngModel" required [ngClass]="{'select-error': eMsg=='employ'}">
-                                        <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.fullName}} - {{emp.designation}}</ion-option>
+                                        <ion-option  *ngFor="let emp of employee" [value]="emp.id" >{{emp.empId}} - {{emp.fullName}} {{emp.lastName}} - {{emp.designation}} </ion-option>
                                     </ion-select>
 
                                 <div *ngIf="emp.errors && (emp.dirty || emp.touched)" class="error-msg">

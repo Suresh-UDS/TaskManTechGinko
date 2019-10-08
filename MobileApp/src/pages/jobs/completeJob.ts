@@ -18,6 +18,7 @@ import {AttendancePopoverPage} from "../attendance/attendance-popover";
 import {AddInventoryTransaction} from "../add-inventory-transaction/add-inventory-transaction";
 import{AddMaterial} from "../add-material/add-material";
 
+import { AlertController } from 'ionic-angular';
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 declare  var demo;
@@ -68,7 +69,7 @@ export class CompleteJobPage {
   constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
                 private loadingCtrl:LoadingController, public camera: Camera,private geolocation:Geolocation, private jobService: JobService,
                 private attendanceService: AttendanceService,public popoverCtrl: PopoverController, private component:componentService,private transfer: FileTransfer,
-                private file: File,private modalCtrl:ModalController,imageViewerCtrl: ImageViewerController) {
+                private file: File,private modalCtrl:ModalController, public alertCtrl: AlertController, imageViewerCtrl: ImageViewerController) {
         this._imageViewerCtrl = imageViewerCtrl;
         this.spinner=true;
         this.categories = 'details';
@@ -337,6 +338,33 @@ export class CompleteJobPage {
             }
         )
     }
+//<--------suresh start------------------------->
+    formFinalSubmit(job, takenImages, material) {
+
+        const thisScope = this;
+        const confirmAlert = this.alertCtrl.create({
+          title: 'Job Complete',
+          message: 'Are you sure you want to complete the job?.',
+          buttons: [
+            {
+              text: 'Cancel',
+              handler: () => {
+                console.log('cancel clicked');
+              }
+            },
+            {
+              text: 'Submit',
+              handler: () => {
+                thisScope.completeJob(job, takenImages, material);
+                
+              }
+            }
+          ]
+        });
+        confirmAlert.present();
+      }
+
+//<--------suresh end------------------------->
 
     completeJob(job, takenImages,material){
       console.log("getJobs",job);

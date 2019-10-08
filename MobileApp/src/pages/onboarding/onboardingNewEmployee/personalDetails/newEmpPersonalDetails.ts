@@ -61,6 +61,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],
+      spouseName: [''],
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
@@ -114,6 +115,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
           localStoragedData['actionRequired'][this.storedIndex]['filtered'] = true;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] = fromStatusValues['data']['employeeCode'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] = fromStatusValues['data']['employeeName'];
+          localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['spouseName'] = fromStatusValues['data']['spouseName'];
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] =  fromStatusValues['data']['gender']  ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] = fromStatusValues['data']['maritalStatus'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] =  fromStatusValues['data']['dateOfJoining']; 

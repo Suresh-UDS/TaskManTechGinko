@@ -36,6 +36,7 @@ const onBoardingNewModel =  {
   empId:'',
   fatherName:'',
   fullName:'',
+  spouseName:'',
   gender:'',
   ifscCode:'',
   maritalStatus:'',
@@ -534,6 +535,7 @@ export class onboardingExistEmployee implements OnInit {
                 relationship: 'Father',
                 contactNumber: ''
               }, {name: res[i].motherName, relationship: 'Mother', contactNumber: ''}];
+              employeeData[i]['personalDetails']['spouseName'] = res[i].spouseName;
               employeeData[i]['personalDetails']['gender'] = res[i].gender;
               employeeData[i]['personalDetails']['maritalStatus'] = res[i].maritalStatus;
               employeeData[i]['personalDetails']['dateOfBirth'] = res[i].dob;

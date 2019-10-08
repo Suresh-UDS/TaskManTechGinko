@@ -19,6 +19,7 @@ export const onBoardingReferenceModel =  {
             employeeCode:  '',
             employeeName: '',
             relationshipDetails: [],
+            spouseName: '',
             gender: '',
             maritalStatus: '',
             dateOfBirth: '',

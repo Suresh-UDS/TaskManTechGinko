@@ -39,6 +39,20 @@
                     </div>
                     <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
                 </div>
+                
+                <div class="row form-group">
+                    <fieldset [disabled]="!isNewEmployee">
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label ">Spouse Name</label>
+                        <input class="form-control" type="text" formControlName="spouseName" >
+                      
+                    </div>
+
+                    </fieldset>
+                     </div>
+
+
+
                 <div class="row form-group">
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <ion-item>
@@ -55,15 +69,6 @@
                            
                         </ion-item>
 
-                        
-
-                        <!-- <label class="control-label">Gender</label>
-                        <div class="radioBtn" radio-group>
-                            <span>Male</span>
-                            <ion-radio formControlName="gender" value="Male" ngDefaultControl>Male</ion-radio>
-                            <span>Female</span>
-                            <ion-radio value="Female" formControlName="gender" ngDefaultControl>Female</ion-radio>
-                        </div> -->
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6 padding0">
                         <ion-item>

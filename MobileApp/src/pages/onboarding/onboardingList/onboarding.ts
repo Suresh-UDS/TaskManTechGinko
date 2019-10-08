@@ -14,6 +14,7 @@ export const onBoardingModel =  {
             employeeCode:  '',
             employeeName: '',
             relationshipDetails: [{name:'',relationship:'',contactNumber:''},{name:'',relationship:'',contactNumber:''}],
+            spouseName: '',
             gender: '',
             maritalStatus: '',
             dateOfBirth: '',
