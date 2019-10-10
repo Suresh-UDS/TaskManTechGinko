@@ -480,6 +480,7 @@ export class CompleteJobPage {
                                     })
 
                             }
+                            demo.showSwal('success-message-and-ok','Success','Job Completed Successfully ');
                             this.navCtrl.setRoot(JobsPage);
 
                         }

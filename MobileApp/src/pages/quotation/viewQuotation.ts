@@ -7,6 +7,7 @@ import {componentService} from "../service/componentService";
 import {QuotationPage} from "./quotation";
 import {QuotationService} from "../service/quotationService";
 import {AttendancePopoverPage} from "../attendance/attendance-popover";
+import { AlertController } from 'ionic-angular';
 
 @Component({
     selector: 'page-view-quotation',
@@ -20,9 +21,12 @@ export class ViewQuotationPage {
     rates:any;
     cloudFrontUrl:any;
     images:any;
+    approveRemarksError:any;
+    rejectRemarksError:any;
+
 
     constructor(public navCtrl: NavController,public popoverCtrl: PopoverController, private authService: authService,
-                private navParams: NavParams, private componentService:componentService, private quotationService: QuotationService) {
+                private navParams: NavParams, private componentService:componentService, private quotationService: QuotationService, private alertCtrl: AlertController) {
         this.quotation = this.navParams.get('quotationDetails');
         console.log(this.quotation);
         this.rates =[];
@@ -111,6 +115,70 @@ export class ViewQuotationPage {
         let popover = this.popoverCtrl.create(AttendancePopoverPage,{i:img},{cssClass:'view-img',showBackdrop:false});
         popover.present({
         });
+    }
+
+    promptRejectQuotation(quotation){
+        let alert =  this.alertCtrl.create({
+            title:"Remarks",
+            inputs:[{
+                name:'remarks',
+                placeholder:'Remarks'
+            }],
+            buttons:[{
+                text:'Cancel',
+                role:'cancel',
+                handler:data=>{
+                    console.log("Reject cancelled");
+                }
+            },{
+                text:'Reject',
+                handler:data=>{
+                    if(data){
+                        console.log("Reject quotation");
+                        quotation.remarks = data.remarks;
+                        this.rejectQuotation(quotation);
+
+                    }else{
+                        console.log("No Remarks entered");
+                        this.rejectRemarksError = "Please enter remarks to reject quotation";
+                    }
+                }
+            }]
+        });
+        alert.present();
+    }
+
+    promptApproveQuotation(quotation){
+        console.log("Prompt approve quotation");
+        let alert =  this.alertCtrl.create({
+            title:"PO Number",
+            inputs:[{
+                name:'remarks',
+                placeholder:'PO Number'
+            }],
+            buttons:[{
+                text:'Cancel',
+                role:'cancel',
+                handler:data=>{
+                    console.log("Approve cancelled");
+                }
+            },{
+                text:'Approve',
+                handler:data=>{
+                    if(data){
+                        console.log("Approve quotation");
+                        console.log(data.remarks);
+                        quotation.remarks = data.remarks;
+                        this.approveQuotation(quotation);
+
+                    }else{
+                        console.log("No Remarks entered");
+                        this.approveRemarksError = "Please enter PO Number ";
+                    }
+                }
+            }]
+        });
+        alert.present();
     }
 
     rejectQuotation(quotation){

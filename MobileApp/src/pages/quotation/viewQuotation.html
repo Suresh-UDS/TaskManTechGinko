@@ -49,6 +49,11 @@
             <p text-right>{{quotation.createdByUserName}}</p>
         </ion-col>
 
+        <ion-col col-6 *ngIf="quotation.remarks" class="label-on-left">Remarks</ion-col>
+        <ion-col col-6 *ngIf="quotation.remarks">
+            <p text-right>{{quotation.remarks}}</p>
+        </ion-col>
+
 
 
     </ion-row>
@@ -117,14 +122,14 @@
 
 <ion-footer >
     <ion-toolbar class="align-right" >
-        <button *ngIf="quotation.isSubmitted" class="btn btn-danger" (click)="rejectQuotation(quotation)"  >
+        <button *ngIf="quotation.isSubmitted" class="btn btn-danger" (click)="promptRejectQuotation(quotation)"  >
             Reject &nbsp; <ion-icon name="close"></ion-icon>
         </button>
 
         <button *ngIf="quotation.isDrafted" class="btn btn-success center pull-right" (click)="sendQuotation(quotation)">
             Send &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
-        <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="approveQuotation(quotation)">
+        <button *ngIf="quotation.isSubmitted" class="btn btn-success center pull-right" (click)="promptApproveQuotation(quotation)">
             Approve &nbsp; <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
     </ion-toolbar>

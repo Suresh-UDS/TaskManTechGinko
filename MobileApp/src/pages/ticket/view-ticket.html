@@ -58,7 +58,7 @@
         </ion-col>
         <ion-col col-6 class="label-on-left">Created At</ion-col>
         <ion-col col-6>
-            <p text-right>{{ticketDetails.createdDate | date:"longDate"}}</p>
+            <p text-right>{{ticketDetails.createdDate | date:'MMM d, y, h:mm a' }}</p>
         </ion-col>
     </ion-row>
 
@@ -71,7 +71,7 @@
         </ion-col>
         <ion-col col-6 class="label-on-left">Completed At</ion-col>
         <ion-col col-6>
-            <p text-right>{{ticketDetails.lastModifiedDate}}</p>
+            <p text-right>{{ticketDetails.lastModifiedDate | date:'MMM d, y, h:mm a' }}</p>
         </ion-col>
     </ion-row>
 

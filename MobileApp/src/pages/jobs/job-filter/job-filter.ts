@@ -20,15 +20,14 @@ declare var demo;
     templateUrl: 'job-filter.html',
 })
 export class JobFilter{
-  emp: any;
-  employeeActive: boolean;
-  empIndex: any;
-  index: any;
-  siteActive: any;
-  site: any;
-
-
-  clientList:any;
+    emp: any;
+    employeeActive: boolean;
+    empIndex: any;
+    index: any;
+    siteActive: any;
+    site: any;
+    clientList:any;
+    statusList:any;
     siteList:any;
     assetGroup:any;
     selectedProject:any;
@@ -43,24 +42,23 @@ export class JobFilter{
     employ:any;
     eMsg:any;
     empPlace:any;
-
-
     fromDate:any;
     toDate:any;
     viewButton:any;
-
     page:1;
     totalPages:0;
     pageSort:15;
     count=0;
-  chooseClient = true;
-  projectActive: any;
-  siteSpinner = false;
-  showSites = false;
-  projectindex: any;
-  chooseSite = true;
-  empSpinner=false;
-  showEmployees=false;
+    chooseClient = true;
+    projectActive: any;
+    statusActive: any;
+    siteSpinner = false;
+    showSites = false;
+    projectindex: any;
+    chooseSite = true;
+    empSpinner=false;
+    showEmployees=false;
+    selectedStatus:any;
     constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public component:componentService,
                 public siteService:SiteService, public assetService:AssetService,private jobService:JobService,private employeeService:EmployeeService,
                 private   datePicker:DatePicker) {
@@ -72,12 +70,15 @@ export class JobFilter{
         ];
         this.empPlace='Employee';
 
+        this.statusList = [
+            'OPEN','ASSIGNED','INPROGRESS', 'COMPLETED'
+        ];
         this.emp = null;
         this.selectedSite = null;
         this.selectedProject = null;
         this.fromDate = new Date();
         this.toDate = new Date();
-
+        this.selectedStatus = null;
         this.searchCriteria = {
             projectId:null,
             siteId:null,
@@ -115,6 +116,14 @@ export class JobFilter{
       /*this.fromDate = new Date();
         this.toDate = new Date();
         console.log("current date",this.fromDate);*/
+
+    }
+
+    selectStatus(status,i){
+        console.log("Status selected");
+        console.log(status);
+        this.selectedStatus = status;
+        this.statusActive=i;
 
     }
 
@@ -303,6 +312,7 @@ export class JobFilter{
         console.log(this.emp);
         console.log(this.fromDate);
         console.log(this.toDate);
+        console.log(this.selectedStatus);
         if(this.selectedProject && this.selectedProject.id>0){
             this.searchCriteria.projectId = this.selectedProject.id;
         }
@@ -311,6 +321,10 @@ export class JobFilter{
         }
         if(this.emp && this.emp.id>0){
             this.searchCriteria.employeeId = this.emp.id;
+        }
+
+        if(this.selectedStatus){
+            this.searchCriteria.jobStatus = this.selectedStatus;
         }
 
         console.log("SEarch criteria");

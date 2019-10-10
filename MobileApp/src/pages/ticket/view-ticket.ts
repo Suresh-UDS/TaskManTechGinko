@@ -79,7 +79,7 @@ export class ViewTicket {
               }else{
                   console.log(response);
                   this.cs.closeLoader();
-                  this.cs.showToastMessage('You have closed this ticket','bottom');
+                  demo.showSwal('success-message-and-ok','Success','Ticket Closed Successfully ');
                   this.navCtrl.setRoot(Ticket);
               }
 

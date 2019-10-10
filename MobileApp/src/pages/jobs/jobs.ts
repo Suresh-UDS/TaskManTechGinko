@@ -135,12 +135,16 @@ export class JobsPage {
         var searchCriteria = {};
         var msg='';
         if(this.scannedBlock && this.scannedFloor && this.scannedZone){
-
+            let currentDate = new Date();
+            currentDate.setDate(currentDate.getDate());
+            console.log("Todays job date");
+            console.log(currentDate);
             console.log("No location id present");
             console.log(this.scannedBlock);
             searchCriteria={
-                checkInDateTimeFrom:new Date(),
-                jobStatusList:[0,1,2],
+                checkInDateTimeFrom:currentDate,
+                checkInDateTimeTo:currentDate,
+                jobStatusList:[0,1,2,4],
                 siteId:this.scannedSiteId,
                 block:this.scannedBlock,
                 floor:this.scannedFloor,
@@ -154,13 +158,22 @@ export class JobsPage {
             };
             msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
         }else{
+            let currentDate = new Date();
+            currentDate.setDate(currentDate.getDate());
+            console.log("Todays job date");
+            console.log(currentDate);
             console.log("Scanned location Id or block floor zone not available");
             searchCriteria = {
-                checkInDateTimeFrom:new Date(),
-                jobStatusList:[0,1,2],
-                locationId:this.scannedLocationId,
+
+                checkInDateTimeFrom:currentDate,
+                checkInDateTimeTo:currentDate,
+                jobStatusList:[0,1,2,4],
                 siteId:this.scannedSiteId,
-                schedule:"ONCE"
+                schedule:"ONCE",
+                currPage:1,
+                columnName:"plannedStartTime",
+                sortByAsc:true,
+                sort:10
             };
             msg='Unable to fetch today\'s jobs ';
         }
@@ -383,11 +396,15 @@ export class JobsPage {
         var msg="";
 
          if(this.scannedBlock && this.scannedFloor && this.scannedZone){
-
+            let currentDate = new Date();
+            currentDate.setDate(currentDate.getDate());
+            console.log("Todays job date");
+            console.log(currentDate);
             console.log("No location id present");
             console.log(this.scannedBlock);
             searchCriteria={
-                checkInDateTimeFrom:new Date(),
+                checkInDateTimeFrom:currentDate,
+                checkInDateTimeTo:currentDate,
                 schedule:"ONCE",
 
                 siteId:this.scannedSiteId,
@@ -402,9 +419,14 @@ export class JobsPage {
             };
             msg = 'Unable to fetch jobs for the location '+this.scannedBlock+' - '+this.scannedFloor+' - '+this.scannedZone;
         }else{
+             let currentDate = new Date();
+             currentDate.setDate(currentDate.getDate());
+             console.log("Todays job date");
+             console.log(currentDate);
             console.log("Scanned location Id or block floor zone not available");
             searchCriteria = {
-                checkInDateTimeFrom:new Date(),
+                checkInDateTimeFrom:currentDate,
+                checkInDateTimeTo:currentDate,
                 schedule:"ONCE",
                 // locationId:this.scannedLocationId,
                 siteId:this.scannedSiteId,

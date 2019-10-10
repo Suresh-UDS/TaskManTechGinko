@@ -84,7 +84,6 @@ export class Ticket {
             console.log("Search criteria jobs");
             console.log(searchCriteria);
             if(searchCriteria){
-                this.cs.showLoader("Searching Jobs");
                 this.applyFilter(searchCriteria);
             }
             
