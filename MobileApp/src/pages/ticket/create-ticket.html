@@ -71,72 +71,49 @@
 
                         </ion-col>
 
-                      <ion-col col-12 *ngIf="siteName == null">
-                        <p text-center>Choose Client</p>
-                        <div class="SitesScrollCon">
-                          <ion-scroll scrollX="true">
-                            <button class="scroll-item" ion-button round *ngFor="let p of allProjects; let i of index" (click)="getSites(p.id,i)" [color]="projectActive && i==projectindex ? 'primary':'light'">
-                              <p class="siteName">{{p.name}}</p>
-                            </button>
-                          </ion-scroll>
-                        </div>
-                      </ion-col>
-
-
-
                         <ion-col col-12 *ngIf="siteName == null">
-
-                          <p text-center>Choose Site</p>
-
-                          <div padding text-center *ngIf="siteSpinner">
-                            <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
-                          </div>
-
-                          <div padding text-center *ngIf="chooseClient">
-                            <strong>Please Select Client</strong>
-                          </div>
-
-                            <div class="SitesScrollCon" *ngIf="showSites">
-                                <ion-scroll scrollX="true">
-                                    <button class="scroll-item" ion-button round  *ngFor="let site of sites;let i of index" (click)="getEmployee(site,i)" [color]="siteActive && i==index ? 'primary' : 'light'">
-                                        <p class="siteName">{{site.name}}</p>
-                                    </button>
-                                </ion-scroll>
-                            </div>
-
+                            <ion-item class="border" >
+                                <ion-label  text-capitalize class="client-label trequired" text-left>Choose Client</ion-label>
+                                <select-searchable class="searchable-select"
+                                                   item-content
+                                                   [items]="allProjects"
+                                                   itemValueField="id"
+                                                   itemTextField="name"
+                                                   [canSearch]="true"
+                                                   (onChange)="getSites($event)">
+             
+                                </select-searchable>
+                            </ion-item>
                         </ion-col>
 
-                      <ion-col col-12 *ngIf="assetDetails">
-                        <div class="SitesScrollCon">
-                          <ion-scroll scrollX="true">
-                            <button class="scroll-item" ion-button round (click)="getEmployeewithAsset(assetDetails)" [color]=" 'primary' ">
-                              <p class="siteName">{{assetDetails.siteName}}</p>
-                            </button>
-                          </ion-scroll>
-                        </div>
-                      </ion-col>
+                        <ion-col col-12 *ngIf="siteName == null">
+                            <ion-item class="border" >
+                                <ion-label  text-capitalize class="client-label trequired" text-left>Choose Site</ion-label>
+                                <select-searchable class="searchable-select"
+                                                   item-content
+                                                   [items]="sites"
+                                                   itemValueField="id"
+                                                   itemTextField="name"
+                                                   [canSearch]="true"
+                                                   (onChange)="selectSite($event)">
+             
+                                </select-searchable>
+                            </ion-item>
+                        </ion-col>
 
-                        <ion-col col-12>
-                            <p text-center>Choose Employee</p>
-                            <div padding text-center *ngIf="empSpinner">
-                                <span><ion-spinner name="bubbles"></ion-spinner> <br> Loading...</span>
-                            </div>
-
-                            <div padding text-center *ngIf="chooseSite">
-                                <strong>Please Select site</strong>
-                            </div>
-
-                            <div class="SitesScrollCon" *ngIf="showEmployees">
-                                <ion-scroll scrollX="true">
-                                  <span *ngFor="let emp of employee;let i of index">
-                                    <button class="scroll-item" *ngIf="emp.designation != 'Client'" ion-button round  (click)="activeEmployee(emp,i)" [color]="employeeActive && i==empIndex ? 'primary' : 'light'">
-                                        <p class="siteName">{{emp.fullName}} <br> <strong>{{emp.designation}}</strong></p>
-                                    </button>
-                                  </span>
-
-                                </ion-scroll>
-                            </div>
-
+                        <ion-col col-12 *ngIf="siteName == null">
+                            <ion-item class="border" >
+                                <ion-label  text-capitalize class="client-label trequired" text-left>Choose Employee</ion-label>
+                                <select-searchable class="searchable-select"
+                                                   item-content
+                                                   [items]="employee"
+                                                   itemValueField="id"
+                                                   itemTextField="showName"
+                                                   [canSearch]="true"
+                                                   (onChange)="activeEmployee($event)">
+             
+                                </select-searchable>
+                            </ion-item>
                         </ion-col>
 
                         <ion-col col-12>
