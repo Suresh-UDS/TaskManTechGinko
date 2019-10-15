@@ -555,7 +555,14 @@ public class JobManagementResource {
 		
 		User user = userService.findUser(SecurityUtils.getCurrentUserId());
 		
+		/*String lastName = user.getLastName();
+		
+		lastName = "null".replace(" ", null); */
+		
+		
+	
 		String userIdName=user.getLogin() + "-" + user.getFirstName();
+		String userIdLastName= user.getLastName();
 		
 		
 		if(job !=null ) {
@@ -591,6 +598,9 @@ public class JobManagementResource {
 		}
 		if(StringUtils.isNotEmpty(user.getLogin())) {
 			context.put("userIdName", userIdName);
+		}
+		if(StringUtils.isNotEmpty(user.getLogin())) {
+			context.put("userIdLastName", userIdLastName);
 		}
 		/*
 		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {
