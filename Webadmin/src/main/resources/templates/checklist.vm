@@ -36,10 +36,17 @@
 
   <div class="container">
 
-    <img src="https://uds.in/images/logo.jpg" width="150" />
-
+   
+ #if($item.getMultimedia("Image") && $item.getMultimedia("Image").size() > 0)
+ <img src="$baseThumbnailUrl$item.getDefaultMultimedia('https://www.uds.in/images/logo.jpg').getThumbnail(100)" alt="Updater Services (P) Limited" width="250" height="100"  />
+               
+                #else
+                 <img src="https://www.uds.in/images/logo.jpg" width="250" height="100" alt="Updater Services (P) Limited"/>
+                #end
+                
     <h2>$job.getTitle()</h2>
     <h4>Client Name : <span class="valueField">$siteName</span></h4>
+
 
     <table cellpadding="7" cellspacing="0" border="0">
 
