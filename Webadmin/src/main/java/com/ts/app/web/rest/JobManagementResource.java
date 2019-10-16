@@ -562,8 +562,7 @@ public class JobManagementResource {
 		
 	
 		String userIdName=user.getLogin() + "-" + user.getFirstName();
-		String userIdLastName= user.getLastName();
-		
+		String userIdLastName=  user.getLastName();
 		
 		if(job !=null ) {
 			
@@ -602,6 +601,10 @@ public class JobManagementResource {
 		if(StringUtils.isNotEmpty(user.getLogin())) {
 			context.put("userIdLastName", userIdLastName);
 		}
+		if(StringUtils.isNotEmpty(user.getLastName())) {
+			context.put("userIdLastName", userIdLastName);
+		}
+		
 		/*
 		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {
 		 * context.put("Jobstatus", "Pending"); }
