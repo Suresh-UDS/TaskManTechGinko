@@ -364,7 +364,7 @@ public class TicketManagementService extends AbstractService {
         if(searchCriteria != null) {
             //-----
             Pageable pageRequest = null;
-            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){
+            if(!StringUtils.isEmpty(searchCriteria.getColumnName())){	
                 Sort sort = new Sort(searchCriteria.isSortByAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, searchCriteria.getColumnName());
                 log.debug("Sorting object" +sort);
                 if(searchCriteria.isReport()) {
@@ -621,7 +621,7 @@ public class TicketManagementService extends AbstractService {
         }
         Setting ticketReportEmails = null;
         if(ticketReports != null && ticketReports.getSettingValue().equalsIgnoreCase("true")) {
-            settings = settingsRepository.findSettingByKeyAndSiteIdOrProjectId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId(), site.getProject().getId());
+            settings = settingsRepository.findSettingByKeyAndSiteId(SettingsService.EMAIL_NOTIFICATION_TICKET_EMAILS, site.getId());
             if(CollectionUtils.isNotEmpty(settings)) {
                 ticketReportEmails = settings.get(0);
             }

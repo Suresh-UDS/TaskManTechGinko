@@ -22,7 +22,7 @@ export class CreateJobPage {
     title:any;
     description:any;
     location:any;
-    startDate:any;
+   
     startTime:any;
     newJob:any;
     endDate:any;
@@ -46,7 +46,29 @@ export class CreateJobPage {
     ticket:any;
     assetDetails:any;
     category:any;
-    constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) {
+    CurrentDate;
+    today;
+  minAge;
+  maxAge;
+  maxAgedoj;
+  minAgedoj;
+  DateNow;
+  startDate:any;
+  time:any;
+ 
+
+  public date: string = new Date().toISOString();
+
+
+    constructor(public navCtrl: NavController,public component:componentService,public navParams:NavParams,public myService:authService, public authService: authService, private loadingCtrl:LoadingController, private jobService: JobService, private attendanceService: AttendanceService, private siteService: SiteService, private employeeService:EmployeeService) 
+    {
+      
+     
+        this.startDate= moment().format();
+        this.endDate= moment().format();
+
+       
+
         this.jobDetails=this.navParams.get('job');
         this.assetDetails = this.navParams.get('assetDetails')
         console.log(this.navParams.get('ticketDetails'));
@@ -66,8 +88,12 @@ export class CreateJobPage {
         )
 
         this.empPlace="Employee"
-
+        
+       
     }
+   
+   
+    
 
     ionViewDidLoad() {
         this.empSelect=true;
@@ -104,24 +130,34 @@ export class CreateJobPage {
         )
 
     }
+    
     addJob()
     {
+        
 
         if(this.title && this.description && this.siteName && this.employ && this.startDate && this.endDate)
         {
+            
+            this.startDate= moment().format();
+            this.endDate= moment().format();
+
             this.component.showLoader("Creating job");
             this.eMsg="";
             this.siteId=window.localStorage.getItem('site')
+
             var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
             var EDate = new Date(this.endDate);
 
-            this.startTime = moment(this.startDate).subtract(5,'hours').toDate();
-            this.endTime = moment(this.endDate).subtract(5,'hours').toDate();
+           
+             //this.startTime = moment(this.startDate).add(5,'hours').toDate();
+            // this.endTime = moment(this.endDate).add(5,'hours').toDate();
+            // this.plannedStartTime =moment(this.startTime).add(30,'minutes').toDate();
+            // this.plannedEndTime= moment(this.endTime).add(30,'minutes').toDate();
 
-
-            this.plannedStartTime =moment(this.startTime).subtract(30,'minutes').toDate();
-            this.plannedEndTime= moment(this.endTime).subtract(30,'minutes').toDate();
-
+            this.startTime = moment(this.startDate).toDate();
+            this.endTime = moment(this.endDate).toDate();
+            this.plannedStartTime =moment(this.startTime).toDate();
+            this.plannedEndTime= moment(this.endTime).toDate();
 
             var momentStartTime = moment(this.plannedStartTime);
             var momentEndTime = moment(this.plannedEndTime);
@@ -328,4 +364,5 @@ export class CreateJobPage {
             this.employee=[];
         }
     }
+    
 }

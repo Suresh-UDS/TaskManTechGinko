@@ -54,7 +54,7 @@ export class newEmpPersonalDetail implements OnInit, AfterViewInit {
 
    this.minAge = new Date(today.getFullYear() - minAge,  today.getMonth(), today.getDate());
    this.maxAge = new Date(today.getFullYear() - maxAge,  today.getMonth(), today.getDate());
-
+console.log("personalDetail Testing" + minAge);
   this.minAgedoj= new Date(today.getFullYear() - minAgedoj,  today.getMonth(), today.getDate());
   this.maxAgedoj = new Date(today.getFullYear(),  today.getMonth()-maxAgedoj, today.getDate());
 

@@ -9,7 +9,6 @@ import {FileTransferObject, FileTransfer, FileUploadOptions} from "@ionic-native
 import {ApplicationConfig, MY_CONFIG_TOKEN} from "../service/app-config";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {QuotationImagePopoverPage} from "../quotation/quotation-image-popover";
-import {SelectSearchableComponent} from "ionic-select-searchable";
 
 declare var demo;
 
@@ -107,78 +106,40 @@ export class CreateTicket {
     )
   }
 
-  selectProject(event:{
-    component: SelectSearchableComponent,
-    value: any
-  }){
-    console.log(event.value.id);
-    console.log("projectID",event.value.id);
-    this.siteService.findSites(event.value.id).subscribe(
-      response=>{
-        this.siteSpinner=false;
-        this.showSites = true;
-        this.showEmployees=false;
-        this.chooseSite = true;
-        console.log("response",response);
-        this.sites = response;
-      },error=>{
-      }
-    )
-  }
-
-  selectSite(event:{
-    component: SelectSearchableComponent,
-    value:any
-  }){
-    console.log(this.empSelect);
-      var searchCriteria = {
-        // currPage : 1,
-        action:"Add",
-        module:"Ticket",
-        list : true,
-        siteId:event.value.id
-      };
-      console.log("searchcriteria",searchCriteria);
-      this.employeeService.searchEmployees(searchCriteria).subscribe(
-        response=> {
-          console.log("response",response);
-          this.empSpinner=false;
-          this.showEmployees=true;
-          if(response.transactions!==0)
-          {
-            this.employee = [];
-            for(let e in response.transactions){
-              console.log("Employee count");
-              console.log(e);
-              var details = response.transactions[e];
-              details.showName = response.transactions[e].empId+" - "+response.transactions[e].fullName+" - "+response.transactions[e].designation;
-              this.employee.push(details);
-            }
-            this.empSelect=false;
-            this.empPlace="Employee";
-            this.employee=response.transactions;
-            console.log("employeeresponse",this.employee);
-          }
-          else
-          {
-            this.empSelect=true;
-            this.empPlace="No Employee";
-            this.employee=[]
-          }
-        },
-        error=>{
-          console.log(error);
-          console.log(this.employee);
-        })
-  }
-
-  getSites(event){
+  getSites(projectId,i){
       var search={
           currPage:1
       };
 
-    console.log("projectID",event.value.id);
-    this.siteService.findSites(event.value.id).subscribe(
+    this.projectActive=true;
+    this.projectindex = i;
+    this.siteSpinner= true;
+    this.chooseClient= false;
+    this.showSites = false;
+      // this.cs.showLoader('Loading Sites..');
+      /*var searchCriteria = {
+          projectId:projectId,
+          findAll:true,
+          currPage:1,
+          sort:10,
+          sortByAsc:true,
+          report:true
+      };*/
+
+      /*this.siteService.searchSites(searchCriteria).subscribe(
+          response=>{
+            this.siteSpinner=false;
+            this.showSites = true;
+            this.showEmployees=false;
+            this.chooseSite = true;
+            this.sites = response;
+              this.sites=response.transactions;
+              console.log("response",this.sites);
+          },error=>{
+          }
+      )*/
+    console.log("projectID",projectId);
+    this.siteService.findSites(projectId).subscribe(
       response=>{
         this.siteSpinner=false;
         this.showSites = true;
@@ -296,10 +257,11 @@ export class CreateTicket {
     }
   }
 
-  activeEmployee(event)
+  activeEmployee(emp,i)
   {
+    this.empIndex = i;
     this.employeeActive = true;
-    this.emp = event.value;
+    this.emp = emp;
     console.log( this.emp);
   }
   activeSeverity(s,i)

@@ -68,7 +68,6 @@
                         </ion-col>
 
                         <ion-col col-12>
-
                             <div class="form-group label-floating">
                                 <label class="control-label" *ngIf="siteName">Site</label>
                                 <ion-select [(ngModel)]="siteName" class="select-box  padding-left0  popover-con" id="siteName"  interface="popover" placeholder="Choose Site" name="siteName" #site="ngModel" required [ngClass]="{'select-error': eMsg=='siteName'}">
@@ -83,8 +82,6 @@
 
                                 </div>
                             </div>
-
-
                         </ion-col>
 
                         <ion-col col-12>
@@ -114,12 +111,24 @@
                             -->
                         </ion-col>
 
+                        <!-- <ion-col col-12>
+                                <label class="control-label" >TESTING Date</label>
+                                
+                                <ion-datetime displayFormat="h:mm a" pickerFormat="h mm a" [(ngModel)]="startTime"></ion-datetime>
+                        </ion-col> -->
+                        
+
+
                         <ion-col col-12>
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='startDate'}">
                                 <label class="control-label" *ngIf="!sDate.errors">Start Date</label>
 
-                                <ion-datetime displayFormat="MM/DD/YYYY HH:mm" class="form-control padding-left0" placeholder="Select Date" [(ngModel)]="startDate" id="startDate" name="startDate" #sDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startDate'}"></ion-datetime>
+                                            
 
+ <ion-datetime displayFormat="YYYY-MM-DD HH:mm"  class="form-control padding-left0" placeholder="Select Date" [(ngModel)]="startDate" id="startDate" name="startDate" #sDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='startDate'}"></ion-datetime>
+
+ 
+                            
                                 <div *ngIf="sDate.errors && (sDate.dirty || sDate.touched)" class="error-msg">
 
                                 </div>
