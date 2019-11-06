@@ -666,7 +666,17 @@ public class ImportUtil {
 						cellNo++;
 						Date endTime = currentRow.getCell(11).getDateCellValue();
 						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
+						
+					if(schedule.equalsIgnoreCase("ONCE")) {
+						
 						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
+					}
+					else {
+						
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
+						
+					}
+						
 						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
 						//jobDto.setPlannedHours((int)(startTime.getTime() - endTime.getTime()));
 						Date date1 = (DateUtil.convertToDateTime(startDate, startTime));
