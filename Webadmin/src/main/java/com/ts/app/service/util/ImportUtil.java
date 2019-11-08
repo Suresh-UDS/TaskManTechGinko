@@ -669,11 +669,11 @@ public class ImportUtil {
 						
 					if(schedule.equalsIgnoreCase("ONCE")) {
 						
-						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
 					}
 					else {
 						
-						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(startDate, endTime));
+						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
 						
 					}
 						
