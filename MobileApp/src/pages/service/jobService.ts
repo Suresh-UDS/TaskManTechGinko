@@ -15,9 +15,10 @@ export class JobService {
     }
 
     getJobs(searchCriteria): Observable<any>{
+        console.log("search job" +searchCriteria);
         return this.http.post(this.config.Url+'api/jobs/search',searchCriteria).map(
             response=>{
-                console.log("Getting Jobs");
+                console.log("Getting Jobs" + response.json());
                 console.log(response.status);
                 var allJobs = response.json();
                 return allJobs;
@@ -55,6 +56,32 @@ export class JobService {
 
     updateJobImages(job):Observable<any>{
         return this.http.post(this.config.Url+'api/employee/jobUpdate',job).map(
+            response=>{
+                console.log("update job images");
+                return response.json();
+            }).catch(error=>{
+                console.log("Error in updating images");
+                console.log(error);
+                return Observable.throw(error.json());
+        })
+    }
+    deletechecklistimage(job):Observable<any>{
+        console.log("service image" + job);
+        return this.http.post(this.config.Url+'api/checklist/delete', job).map(
+            response=>{
+                console.log("delete job image");
+                return response.json();
+            }
+        ).catch(error=>
+            {
+                console.log("Error in deleting images");
+                console.log(error);
+                return Observable.throw(error.json());
+            })
+    }
+
+    uploadPicture(job):Observable<any>{
+        return this.http.post(this.config.Url+'api/checklist/update',job).map(
             response=>{
                 console.log("update job images");
                 return response.json();
@@ -117,10 +144,12 @@ export class JobService {
 
     //Tickets
     searchTickets(searchCriteria):Observable<any>{
+        console.log("search criteria value" + searchCriteria);
         return this.http.post(this.config.Url+'api/tickets/search',searchCriteria).map(
             response=>{
-                console.log("Search Tickets");
+                console.log("Search Tickets" + response.json());
                 return response.json();
+               
             }).catch(error=>{
                 console.log("Error in Search Tickets");
                 console.log(error);

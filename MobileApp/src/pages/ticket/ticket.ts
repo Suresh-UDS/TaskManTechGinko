@@ -33,6 +33,7 @@ export class Ticket {
       this.tickets = [];
       this.fromDate = new Date();
       this.toDate = new Date();
+     
       this.searchCriteria = {
           siteId:0,
           projectId:0,
@@ -44,6 +45,9 @@ export class Ticket {
           sort:10,
           report:true
       }
+
+    
+
   }
 
   ionViewDidLoad() {
@@ -93,22 +97,22 @@ export class Ticket {
 
 
     applyFilter(searchCriteria){
-        this.cs.showLoader("Applying Filter");
+        //this.cs.showLoader("Applying Filter");
         console.log("filter",searchCriteria);
         this.tickets = [];
-        this.cs.showLoader("Loading Tickets..");
+        //this.cs.showLoader("Loading Tickets..");
         this.jobService.searchTickets(searchCriteria).subscribe(
             response=>{
                 this.cs.closeAll();
-                this.cs.closeLoader();
+                //this.cs.closeLoader();
                 console.log("Filtering Tickets");
                 console.log(response);
                 this.tickets=response.transactions;
                 this.page = response.currPage;
                 this.totalPages = response.totalPages;
             },error=>{
-              this.cs.closeLoader();
-                this.cs.closeAll();
+             // this.cs.closeLoader();
+               // this.cs.closeAll();
                 console.log("Error in filtering tickets");
                 console.log(error);
             }
