@@ -58,12 +58,15 @@ console.log("personalDetail Testing" + minAge);
   this.minAgedoj= new Date(today.getFullYear() - minAgedoj,  today.getMonth(), today.getDate());
   this.maxAgedoj = new Date(today.getFullYear(),  today.getMonth()-maxAgedoj, today.getDate());
 
+  
+ 
     this.onboardingPersonalDetailsForm = this.fb.group({
       employeeCode: [''],
       employeeName: ['', [Validators.required]],
-      spouseName: [''],
+     
       gender: ['', [Validators.required]],
       maritalStatus: ['', [Validators.required]],
+      spouseName: [''],
       dateOfBirth: ['', [Validators.required]],
       dateOfJoining: ['', [Validators.required]],
       religion: [''],
@@ -81,6 +84,8 @@ console.log("personalDetail Testing" + minAge);
         })
       ])
     });
+
+     
 
     this.messageService.clearMessageSource.subscribe(data => {
       if (data == 'clear') {
@@ -115,9 +120,9 @@ console.log("personalDetail Testing" + minAge);
           localStoragedData['actionRequired'][this.storedIndex]['filtered'] = true;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeCode'] = fromStatusValues['data']['employeeCode'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['employeeName'] = fromStatusValues['data']['employeeName'];
-          localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['spouseName'] = fromStatusValues['data']['spouseName'];
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['gender'] =  fromStatusValues['data']['gender']  ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['maritalStatus'] = fromStatusValues['data']['maritalStatus'] ;
+          localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['spouseName'] = fromStatusValues['data']['spouseName'];
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['dateOfJoining'] =  fromStatusValues['data']['dateOfJoining']; 
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['name'] = fromStatusValues['data']['relationshipDetails'][0]['name'] ;
           localStoragedData['actionRequired'][this.storedIndex]['personalDetails']['relationshipDetails'][0]['relationship'] =  fromStatusValues['data']['relationshipDetails'][0]['relationship'] ;
@@ -152,6 +157,7 @@ console.log("personalDetail Testing" + minAge);
 
   get pFrom() { return this.onboardingPersonalDetailsForm.controls; }
 
+  
 
   setMinValidation(value) {
     if (value) {
@@ -172,6 +178,7 @@ console.log("personalDetail Testing" + minAge);
     }
   }
 
+  
   setMinValidationDOJ(value){
     if (value) {
       value = new Date(value);

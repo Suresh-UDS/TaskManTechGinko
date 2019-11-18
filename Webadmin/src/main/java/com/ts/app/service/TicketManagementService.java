@@ -434,7 +434,13 @@ public class TicketManagementService extends AbstractService {
                             if(StringUtils.isNotEmpty(searchCriteria.getTicketStatus())) {
                                 page = ticketRepository.findByStatus(searchCriteria.getTicketStatus(), startDate, endDate, pageRequest);
                             }else {
-                                page = ticketRepository.findByDateRange(startDate, endDate, pageRequest);
+                            	
+                            	List<Long> ids= new ArrayList<Long>();
+                            	ids.add(searchCriteria.getEmployeeId());
+                            	searchCriteria.setEmpIds(ids);
+                            	page = ticketRepository.findByEmpId(searchCriteria.getEmpIds(), startDate, endDate, pageRequest);
+                            	
+                               
                             }
                         }
                     }

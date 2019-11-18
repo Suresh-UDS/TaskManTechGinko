@@ -1839,7 +1839,8 @@ public class JobManagementService extends AbstractService {
             jobChecklistDTO.setImageUrl_3(Imageurl_3);
 
         }
-
+       
+        
         JobChecklist checklist1 = jobChecklistRepository.save(checklist);
         return checklist1;
     }
@@ -2231,7 +2232,7 @@ public class JobManagementService extends AbstractService {
         User user = userService.findUser(SecurityUtils.getCurrentUserId());
 		
 		String userIdName=user.getLogin() + "-" + user.getFirstName();
-		
+		String userIdLastName=user.getLogin() + "-" + user.getLastName();
 		
 		if(job !=null ) {
 			
@@ -2267,6 +2268,7 @@ public class JobManagementService extends AbstractService {
 		}
 		if(!StringUtils.isEmpty(user.getLogin())) {
 			context.put("userIdName", userIdName);
+			context.put("UserLastName", userIdLastName);
 		}
 		
 		/*
