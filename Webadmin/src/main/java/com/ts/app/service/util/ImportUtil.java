@@ -667,7 +667,7 @@ public class ImportUtil {
 						Date endTime = currentRow.getCell(11).getDateCellValue();
 						jobDto.setPlannedStartTime(DateUtil.convertToDateTime(startDate, startTime));
 						
-					if(schedule.equalsIgnoreCase("ONCE")) {
+					if(schedule.equalsIgnoreCase("ONCE") ) {
 						
 						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
 					}
@@ -686,7 +686,13 @@ public class ImportUtil {
 						//long diffHours = diff / (24 * 60 * 60 * 1000);
 						long diffHours = diff / (60 * 60 * 1000);
 						jobDto.setPlannedHours((int)(diffHours));
+					if(schedule.equalsIgnoreCase("ONCE") ) {
 						
+						long diff1 = endTime.getTime() - startTime.getTime();
+						long diffHours1 = diff1 / (24 * 60 * 60 * 1000);
+						jobDto.setPlannedHours((int)(diffHours1));
+						
+					}
 						//jobDto.setPlannedHours((int)(endTime.getTime() - startTime.getTime()));
 						cellNo++;
 						if(currentRow.getCell(12)!=null){
