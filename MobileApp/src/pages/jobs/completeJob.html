@@ -118,6 +118,9 @@
                             <div *ngIf="list.image_2 == null" class="margin-left15" float-right="">
                                 <button class="ion-button" round (click)="viewCameraCheckList(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
                             </div>
+                            <!-- <div class="margin-left15" float-right="">
+                                <button class="ion-button" round (click)="uploadPicture(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
+                            </div> -->
                         </ion-col>
                     </ion-row>
                     <ion-row no-margin class=" margin-auto" *ngIf="list.remarks">
@@ -126,6 +129,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row class="no-margin margin-auto">
+                        
                         <ion-col col-4 class="margin-top25" *ngIf="list.imageUrl_1 ; else image1">
                             <img [src]="list.imageUrl_1" class="job-img margin-bottom25" (click)="viewImg(list.imageUrl_1)">
                         </ion-col>
@@ -151,8 +155,16 @@
                             <ion-col col-4 class="margin-top25" *ngIf="list.image_3">
                                 <img [src]="list.image_3" class="job-img margin-bottom25" (click)="viewImg(list.image_3)">
                             </ion-col>
-                        </ng-template>
-                    </ion-row>
+                        </ng-template>  
+
+                          <!-- <div class="margin-left15" float-right="">
+                                <button class="ion-button" round (click)="uploadPicture(i)" class="camera-btn1"><ion-icon name="ios-camera"></ion-icon></button>
+                            </div>   -->
+
+                    <!--
+ <ion-icon name="trash" class="deleteIcon" *ngIf="list.image_1" (click)="deletePhoto(i)"></ion-icon> 
+                   
+                    --> </ion-row>
                     <ion-row *ngIf="!list.completed">
                         <ion-item class="text-item width80 margin-auto" no-padding="" text-center="">
                             <ion-textarea placeholder="Enter Remarks here.." class="text-border padding5" [(ngModel)]="list.remarks"></ion-textarea>
@@ -219,8 +231,13 @@
     </ion-toolbar>
 
     <ion-toolbar *ngIf="categories==='checklist'" text-center class="ver-center">
-        <button class="btn btn-warning center width42" (click)="saveJob(jobDetails)">
+        <button class="btn btn-warning center pull-right" (click)="saveJob(jobDetails)">
             Save
         </button>
+
+        <!-- <button class="btn btn-success center pull-left" (click)="updatejob(jobDetails)">
+                Edit
+            </button> -->
+
     </ion-toolbar>
 </ion-footer>

@@ -245,14 +245,14 @@ public class JobManagementResource {
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
+   
     @RequestMapping(path = "/checklist/update",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateChecklist(@RequestBody JobChecklistDTO jobChecklistDTO){
         long userId = SecurityUtils.getCurrentUserId();
         JobChecklist response = jobService.updateCheckList(jobChecklistDTO);
         if(response.getId()<=0){
             jobChecklistDTO.setErrorStatus(true);
-            jobChecklistDTO.setErrorMessage("Error in saving Checklist..");
+            jobChecklistDTO.setErrorMessage("Error in updating Checklist..");
             return new ResponseEntity<Object>(jobChecklistDTO,HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response,HttpStatus.OK);
@@ -599,12 +599,19 @@ public class JobManagementResource {
 			context.put("userIdName", userIdName);
 		}
 		if(StringUtils.isNotEmpty(user.getLogin())) {
-			context.put("userIdLastName", userIdLastName);
-		}
-		if(StringUtils.isNotEmpty(user.getLastName())) {
-			context.put("userIdLastName", userIdLastName);
+			context.put("userIdLastName", (userIdLastName == null ? "" : userIdLastName ));
 		}
 		
+		  
+		  
+		  
+		  
+		/*
+		 * if(user.getLastName()==null) { context.put("userIdName",user.getLogin());
+		 * 
+		 * }
+		 */
+		 
 		/*
 		 * if(jobs.isCompleted()==true) { context.put("Jobstatus", "Done"); } else {
 		 * context.put("Jobstatus", "Pending"); }

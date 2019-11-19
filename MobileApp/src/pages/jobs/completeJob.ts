@@ -63,7 +63,9 @@ export class CompleteJobPage {
     categories:any;
   siteId:any;
   material:any;
-
+  picture:any;
+  posts:any;
+  indexnew:any;
 
 
   constructor(public navCtrl: NavController,public navParams:NavParams, public authService: authService, @Inject(MY_CONFIG_TOKEN) private config:ApplicationConfig,
@@ -187,7 +189,7 @@ export class CompleteJobPage {
             // this.takenImages.pop(data);
         })
     }
-    viewCamera(status,job) {
+    viewCamera(status,i) {
 
             const options: CameraOptions = {
                 quality: 50,
@@ -201,8 +203,7 @@ export class CompleteJobPage {
             console.log('imageData -' +imageData);
             imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/")
 
-            this.takenImages.push(imageData);
-
+           this.takenImages.push(imageData);
 
         })
 
@@ -220,6 +221,7 @@ export class CompleteJobPage {
         console.log(job);
       console.log(material);
       delete job.jobMaterials;
+       
         this.jobService.saveJob(job).subscribe(
             response=>{
                 if(response.errorStatus){
@@ -532,23 +534,115 @@ export class CompleteJobPage {
 
 
     viewCameraCheckList(i) {
-        console.log(i);
+ 
+            const options: CameraOptions = {
+                quality: 50,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                mediaType: this.camera.MediaType.PICTURE
+            };
+            this.camera.getPicture(options).then((imageData) => {
+                
+                   // imageData = 'data:image/jpeg;base64,' + imageData;
+                  //  this.checkListItems[i].image_1 = imageData;
+                 
+                //   if(this.checkListItems[i].image_1 !=null){
+                //     //this.checkListItems[i].image_1.getActiveIndex();
+                //     //this.checkListItems.splice(this.checkListItems[i].image_1,1)
+                //     this.checkListItems.pop(this.checkListItems[i].image_1);
+                    
+                //     console.log('after pop' + this.checkListItems[i].image_1);
+                //     console.log('imageData - view camera testing' +imageData);
+                //     imageData = 'data:image/jpeg;base64,' + imageData;
+                //     imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+                //     this.checkListItems[i].image_1 = imageData;
+                //     console.log("this is image set" +  this.checkListItems[i].image_1);
+                    
+                //   }
+                // else{
+                // console.log('imageData else - view camera testing' +imageData);
+                // imageData = 'data:image/jpeg;base64,' + imageData;
+                // imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+                // this.checkListItems[i].image_1 = imageData; 
+                // console.log("this is image set" +  this.checkListItems[i].image_1);
+                //    }
+                    imageData = 'data:image/jpeg;base64,' + imageData;
+                     imageData = imageData.replace("assets-library://", "cdvfile://localhost/assets-library/");
+                    // this.takenImages.push(imageData);
+                     
+                     if(this.checkListItems[i].image_1 !=null){
+                         console.log("image_1"+this.checkListItems[i].image_1);
+                         if(this.checkListItems[i].image_2 !=null){
+                             console.log("image_2"+this.checkListItems[i].image_2);
+                   
+                             if(this.checkListItems[i].image_3 !=null){
+                                 console.log("image_3"+this.checkListItems[i].image_3);
+                   
+                                 this.component.showToastMessage('Cannot add more than 3 images','bottom');
+                             }else{
+                                 console.log("No third image");
+                                 this.checkListItems[i].image_3 = imageData;
+                             }
+                         }else{
+                             console.log("No second image");
+                             //this.checkListItems[i].image_1.getActiveIndex()
+                             console.log("checklistItem" + this.checkListItems);
+                        
+                            this.checkListItems[i].image_2 = imageData;
+                         }
+                     }else{
+                         console.log("No first image");
+                         this.checkListItems[i].image_1 = imageData;
+                     }
+                   
+                    this.checkListItems[i].image_1 = imageData;
+
+                    
+            })
+    }
+
+    uploadPicture(i) {
         const options: CameraOptions = {
             quality: 50,
             destinationType: this.camera.DestinationType.DATA_URL,
             encodingType: this.camera.EncodingType.JPEG,
             mediaType: this.camera.MediaType.PICTURE
         };
-
         this.camera.getPicture(options).then((imageData) => {
-
             imageData = 'data:image/jpeg;base64,' + imageData;
             this.checkListItems[i].image_1 = imageData;
-
-
         })
-
+        console.log("updateImae" + this.checkListItems[i].image_1);
+        
+        this.jobService.uploadPicture(this.checkListItems[i].image_1)
+        .subscribe(response => {
+           this.checkListItems[i].image_1 = null;
+      location.reload();
+         });
+       
+       }
+       
+       deletePhoto(i){
+        console.log("value passing" + this.checkListItems[i].image_1);
+       this.jobService.deletechecklistimage(this.checkListItems[i].image_1).subscribe(response=>
+        {
+            this.checkListItems[i].image_1 = this.checkListItems[i].image_1;
+            return response;
+        })
+       
     }
+
+    // uploadPicture(i) {
+    //     console.log("updateImae" + this.checkListItems[i].image_1);
+        
+    //     this.jobService.uploadPicture(this.checkListItems[i].image_1)
+    //     .subscribe(response => {
+    //       this.checkListItems[i].image_1 = null;
+    //       location.reload();
+    //     });
+       
+    //   }
+
 
     resetRemarks(i,completed){
         console.log(i);

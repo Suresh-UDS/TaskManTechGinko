@@ -152,7 +152,7 @@
                             <div class="form-group label-floating" [ngClass]="{'has-error': eMsg=='all'||eMsg=='endDate'}">
                                 <label class="control-label" *ngIf="!eDate.errors">End Time</label>
 
-                                <ion-datetime displayFormat="MM/DD/YYYY HH:mm" class="form-control padding-left0" [(ngModel)]="endDate" id="endDate" placeholder="End Date" name="endDate" #eDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endDate'}"></ion-datetime>
+                                <ion-datetime displayFormat="YYYY-MM-DD HH:mm" class="form-control padding-left0" [(ngModel)]="endDate" id="endDate" placeholder="End Date" name="endDate" #eDate="ngModel" required [ngClass]="{'has-error': sDate.errors || eMsg=='all'|| eMsg=='endDate'}"></ion-datetime>
 
                                 <div *ngIf="eDate.errors && (eDate.dirty || eDate.touched)" class="error-msg">
 

@@ -47,14 +47,23 @@ export class TicketFilter {
     siteActive: any;
     site: any;
     searchCriteria:any;
+    selectedStatus:any;
+    statusList:any;
+    statusActive: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,public siteService:SiteService,public component:componentService,
               public employeeService:EmployeeService,public datePicker:DatePicker, public cs: componentService) {
       this.empPlace='Employee';
+      this.statusList = [
+        'OPEN','ASSIGNED','INPROGRESS', 'CLOSED'
+    ];
+    this.emp = null;
+    this.selectedSite = null;
+    this.selectedProject = null;
       this.fromDate = new Date();
       this.toDate = new Date();
       this.viewButton = true;
-
+      this.selectedStatus = null;
       this.searchCriteria = {
         projectId:null,
         siteId:null,
@@ -89,6 +98,8 @@ export class TicketFilter {
       )
 
   }
+
+  
 
 
   selectSite(project,i){
@@ -183,47 +194,62 @@ export class TicketFilter {
     console.log( this.emp);
   }
 
-    getEmployee(id)
+  getEmployee(id)
     {
-        if(id)
-        {
-            console.log('ionViewDidLoad Add jobs employee');
 
-            window.localStorage.setItem('site',id);
-            console.log(this.empSelect);
-            var search={
-                currPage:1,
-                siteId:id
-            }
-            this.employeeService.searchEmployees(search).subscribe(
-                response=> {
-                    console.log(response);
-                    if(response.transactions!==null)
-                    {
-                        this.empSelect=false;
-                        this.empPlace="Employee"
-                        this.employee=response.transactions;
-                        console.log(this.employee);
-                    }
-                    else
-                    {
-                        this.empSelect=true;
-                        this.empPlace="No Employee"
-                        this.employee=[]
-                    }
-                },
-                error=>{
-                    console.log(error);
-                    console.log(this.employee);
-                })
-
-        }
-        else
-        {
-            this.employee=[];
-        }
     }
 
+    //suresh modified
+    
+    // getEmployee(id)
+    // {
+    //     if(id)
+    //     {
+    //         console.log('ionViewDidLoad Add jobs employee');
+
+    //         window.localStorage.setItem('site',id);
+    //         console.log(this.empSelect);
+    //         var search={
+    //             currPage:1,
+    //             siteId:id
+    //         }
+    //         this.employeeService.searchEmployees(search).subscribe(
+    //             response=> {
+    //                 console.log(response);
+    //                 if(response.transactions!==null)
+    //                 {
+    //                     this.empSelect=false;
+    //                     this.empPlace="Employee"
+    //                     this.employee=response.transactions;
+    //                     console.log(this.employee);
+    //                 }
+    //                 else
+    //                 {
+    //                     this.empSelect=true;
+    //                     this.empPlace="No Employee"
+    //                     this.employee=[]
+    //                 }
+    //             },
+    //             error=>{
+    //                 console.log(error);
+    //                 console.log(this.employee);
+    //             })
+
+    //     }
+    //     else
+    //     {
+    //         this.employee=[];
+    //     }
+    // }
+
+    selectStatus(status,i){
+        console.log("Status selected");
+        console.log(status);
+        this.selectedStatus = status;
+        this.statusActive=i;
+
+    }
+///////////////////////////////////
     selectFromDate()
     {
         this.datePicker.show({
@@ -298,6 +324,7 @@ export class TicketFilter {
         console.log(this.emp);
         console.log(this.fromDate);
         console.log(this.toDate);
+        console.log(this.selectedStatus);
         if(this.selectedProject && this.selectedProject.id>0){
             this.searchCriteria.projectId = this.selectedProject.id;
         }
@@ -306,16 +333,18 @@ export class TicketFilter {
         }
         if(this.emp && this.emp.id>0){
             this.searchCriteria.employeeId = this.emp.id;
+            console.log("employee id" +  this.searchCriteria.employeeId);
+        }
+
+        if(this.selectedStatus){
+            this.searchCriteria.ticketStatus = this.selectedStatus;
         }
 
         console.log("SEarch criteria");
         console.log(this.searchCriteria);
-        this.searchCriteria.checkInDateTimeFrom = this.fromDate;
-        this.searchCriteria.checkInDateTimeTo = this.toDate;
+        this.searchCriteria.fromDate = this.fromDate;
+        this.searchCriteria.toDate = this.toDate;
         this.viewCtrl.dismiss(this.searchCriteria);
   }
-
-
-
 
 }

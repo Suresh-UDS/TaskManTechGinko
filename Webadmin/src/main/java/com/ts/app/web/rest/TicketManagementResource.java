@@ -115,7 +115,7 @@ public class TicketManagementResource {
 	}
 
 	@RequestMapping(value = "/ticket/export", method = RequestMethod.POST)
-	public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria) {
+	public ExportResponse exportJob(@RequestBody SearchCriteria searchCriteria ) {
 		log.debug("TICKET EXPORT STARTS HERE **********");
 		ExportResponse resp = new ExportResponse();
 		if (searchCriteria != null) {

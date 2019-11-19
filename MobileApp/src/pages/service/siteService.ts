@@ -37,7 +37,8 @@ export class SiteService {
     }
 
     findSitesByProject(projectId): Observable<any> {
-        return this.http.get(this.config.Url + 'api/project/' + projectId + '/sites').map(
+        console.log("employee search came");
+                return this.http.get(this.config.Url + 'api/project/' + projectId + '/sites').map(
             response => {
                 console.log(response.json());
                 return response.json();
@@ -82,6 +83,21 @@ export class SiteService {
                 return Observable.throw(error.json());
             })
     }
+
+    findSitesnew(projectId): Observable<any> {
+        console.log("service came");
+        console.log("projectPring"+projectId);
+        return this.http.get(this.config.Url + 'api/project/'+projectId).map(
+            response => {
+                return response.json();
+                
+            }).catch(error => {
+                console.log("error in find site");
+                console.log(error);
+                return Observable.throw(error.json());
+            })
+    }
+
 
     findBlock(siteId): Observable<any> {
         return this.http.get(this.config.Url + 'api/block/' + siteId).map(

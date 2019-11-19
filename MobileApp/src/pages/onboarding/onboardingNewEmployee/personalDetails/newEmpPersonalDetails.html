@@ -40,16 +40,7 @@
                     <p *ngIf="!isNewEmployee" style="color:red; font-size:12px !important; text-transform: none !important">Disabled for Existing Employee</p>
                 </div>
                 
-                <div class="row form-group">
-                    <fieldset [disabled]="!isNewEmployee">
-                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
-                        <label class="control-label ">Spouse Name</label>
-                        <input class="form-control" type="text" formControlName="spouseName" >
-                      
-                    </div>
-
-                    </fieldset>
-                     </div>
+                
 
 
 
@@ -87,6 +78,27 @@
 
                     </div>
                 </div>
+                <div class="row form-group">
+                    <fieldset *ngIf="onboardingPersonalDetailsForm.controls.maritalStatus.value=='Married'" >
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                        <label class="control-label ">Spouse Name</label>
+                        <input class="form-control" type="text" formControlName="spouseName">
+                      
+                    </div>
+                     </fieldset>
+                     </div>
+
+                      <!-- <div class="row form-group">
+                        <fieldset *ngIf="onboardingPersonalDetailsForm.controls.maritalStatus.value == 'Single'">
+                        <div class="col-md-12 col-sm-12 col-xs-12 form-group padding0">
+                            <label class="control-label ">Spouse Name</label>
+                            <input class="form-control" type="text" formControlName="spouseName" >
+                          
+                        </div>
+    
+                        </fieldset>
+                         </div>  -->
+
                 <div class="row form-group">
                     
                         <div class="col-md-6 col-sm-6 col-xs-6 form-group padding0">

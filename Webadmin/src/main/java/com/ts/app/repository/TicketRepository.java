@@ -44,10 +44,17 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t where t.createdDate between :startDate and :endDate")
     Page<Ticket> findByDateRange(@Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
-
+    
+	/*
+	 * @Query("SELECT t FROM Ticket t where (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds)) and t.createdDate between :startDate and :endDate"
+	 * ) Page<Ticket> findByDateRangeEmpIds(@Param("empIds") List<Long>
+	 * empIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate")
+	 * ZonedDateTime endDate);
+	 */	
     @Query("SELECT t FROM Ticket t where t.createdBy.id = :userId and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByUserId(@Param("userId") Long userId, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
+    
     @Query("SELECT t FROM Ticket t where (t.employee.id in (:empIds) or t.assignedTo.id in (:empIds)) and t.createdDate between :startDate and :endDate")
     Page<Ticket> findByEmpId(@Param("empIds") List<Long> empIds, @Param("startDate") ZonedDateTime startDate, @Param("endDate") ZonedDateTime endDate, Pageable pageRequest);
 
@@ -131,6 +138,7 @@ public interface TicketRepository extends JpaRepository<Ticket,Long>, JpaSpecifi
 
     @Query("SELECT t FROM Ticket t WHERE t.assignedTo.id =:empId and (t.status= 'Assigned' or t.status = 'In Progress' or t.status = 'Open') ")
     List<Ticket> findEmployeeUnClosedTickets(@Param("empId") long empId);
+
 
     //@Query("select sum(cnt) from (select timediff, count(id) as cnt from (SELECT datediff(now(),t.createdDate) as timediff, t.id as id from Ticket t where t.site.id IN (:siteIds) and t.status <> 'Closed'  and t.createdDate between :startDate and :endDate) as timediffresult group by timediff) as result where timediff >= :min and timediff <= :max ")
 	//long findPendingCountBySiteIdDateRangeAndGroupByDays(@Param("siteIds") List<Long> siteIds,  @Param("min") int min, @Param("max") int max, @Param("startDate") Date startDate, @Param("endDate") Date endDate);

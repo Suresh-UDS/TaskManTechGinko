@@ -53,6 +53,23 @@
                   </div>
                 </div>
 
+                <div class="card scroll-card">
+                  <div class="card-content">
+                    <ion-row>
+                      <ion-col col-12>
+                        <p class="scroll-heading" text-center>Choose Status</p>
+                        <div class="SitesScrollCon">
+                          <ion-scroll scrollX="true">
+                            <button class="scroll-item" ion-button round *ngFor="let s of statusList; let i of index" (click)="selectStatus(s,i)" [color]="statusActive && i==statusActive ? 'primary':'light'">
+                              <p class="siteName">{{s}}</p>
+                            </button>
+                          </ion-scroll>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+                
           <div class="card scroll-card">
             <div class="card-content">
               <ion-row>
