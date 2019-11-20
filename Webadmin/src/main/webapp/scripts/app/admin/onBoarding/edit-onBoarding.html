@@ -149,7 +149,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input  name="empMobile" class="form-control"  pattern="^([0-9]{1})([234789]{1})([0-9]{8})$" type="text" ng-model="employee.mobile" required  />
+                                <input  name="empMobile" class="form-control"  pattern="^([0-9]{1})([0123456789]{1})([0-9]{8})$" type="text" ng-model="employee.mobile" required  />
                                 <p class="help-block" ng-if="employee.mobile.length <= 9" style="width:100%;z-index:980;background:#fff;color:maroon">
                                         Contact Number should be 10 characters.
                                      </p> 
@@ -181,7 +181,7 @@
                         <div class=" col-sm-8">
                             <div class="form-group label-floating">
                                 <label class="control-label"></label>
-                                <input ng-maxlength="10" ng-minlength="10" class="form-control" type="text" pattern="^([0-9]{1})([234789]{1})([0-9]{8})$" name="empEmergency"  ng-pattern="onlyNumbers" onKeyPress="if(this.value.length==10) return false;"  ng-model="employee.emergencyContactNumber"  />
+                                <input ng-maxlength="10" ng-minlength="10" class="form-control" type="text" pattern="^([0-9]{1})([0123456789]{1})([0-9]{8})$" name="empEmergency"  ng-pattern="onlyNumbers" onKeyPress="if(this.value.length==10) return false;"  ng-model="employee.emergencyContactNumber"  />
                                 <p class="help-block" ng-if="employee.mobile.length <=9" style="width:100%;z-index:980;background:#fff;color:maroon">
                                         Contact Number should be 10 characters.
                                      </p> 
@@ -642,7 +642,7 @@
                                                                             
                                                                             <div class="row">
                                                                                     <label class=" col-sm-4 onBoarding-label-on-left">D.O.B <span class="red-star">*</span> </label>
-                                                                                    <div class="col-sm-5">
+                                                                                    <div class="col-sm-6">
                                                                                         <div class="form-group label-floating">
                                                                                             <label class="control-label"></label>
                                                                                             <input type="date" class="form-control" 
@@ -671,15 +671,15 @@
                                                                                         
                                                                 
                                                                                         <label class=" col-sm-4  onBoarding-label-on-left" >D.O.J <span class="red-star">*</span> </label>
-                                                                                        <div class="col-sm-5">
+                                                                                        <div class="col-sm-6">
                                                                                             <div class="form-group label-floating">
                                                                                                 <label class="control-label"></label>
                                                                                                 <input type="date" class="form-control" min="{{mindoj | date:'yyyy-MM-dd'}}" max="{{maxdoj | date:'yyyy-MM-dd'}}" name="dojj" ng-disabled="!employee.newEmployee" ng-model="employee.doj"  id="dateOfJoining" required  />
-                                                                                                
                                                                                                 <p class="help-block" style="width:100%;z-index:940;background:#fff;color:maroon"
-                                                                                               ng-if="employee.doj != mindoj | date:'yyyy-MM-dd'">
-                                                                                                Date of Joining can not be less than 2 months from current date.
-                                                                                             </p>
+                                                                                            ng-if="employee.doj < mindoj | date:'yyyy-MM-dd'">
+                                                                                             DOJ can not be less than 60 days from current date.
+                                                                                          </p>
+                                                                                                 
 
                                                                                                 <div ng-show="form.$submitted || form.dojj.$touched || form.dojj.$dirty">
                                                                                                     <div ng-show="form.dojj.$dirty || form.dojj.$invalid">
@@ -687,12 +687,15 @@
                                                                                                            ng-show="form.dojj.$error.required">
                                                                                                            Date of Join is required.
                                                                                                         </p>
+
+                                                                                                      
                                                                 
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 
                                                                                             </div>
                                                                                         </div>
+                                                                                        
                                                                 
                                                                                     </div>
 

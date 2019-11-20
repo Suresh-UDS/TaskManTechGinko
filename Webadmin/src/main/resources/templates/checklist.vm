@@ -13,6 +13,7 @@
   }
   .valueField{
     font-weight: bold;
+    
   }
   table{
     width: 100%;
@@ -30,6 +31,10 @@
   h2,h3,h4{
     text-align: center;
   }
+  .checkTittle{
+  text-transform: UPPERCASE;
+  
+  }
 </style>
 </head>
 <body> 
@@ -44,7 +49,7 @@
                  <img src="https://www.uds.in/images/logo.jpg" width="250" height="100" alt="Updater Services (P) Limited"/>
                 #end
                 
-    <h2>$job.getTitle()</h2>
+    <h2><span class="checkTittle">$job.getTitle().toUpperCase()</span> </h2>
     <h4>Client Name : <span class="valueField">$siteName</span></h4>
 
 
