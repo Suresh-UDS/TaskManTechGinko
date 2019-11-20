@@ -669,8 +669,7 @@ public class ImportUtil {
  
 						jobDto.setScheduleEndDate(DateUtil.convertToDateTime(endDate, endTime));
 						//jobDto.setPlannedHours((int)(startTime.getTime() - endTime.getTime()));
-						Date date1 = (DateUtil.convertToDateTime(startDate, startTime));
-						Date date2 = (DateUtil.convertToDateTime(endDate, endTime));
+						
 						
 					if(schedule.equalsIgnoreCase("ONCE")) {
 						
@@ -681,15 +680,14 @@ public class ImportUtil {
 					}
 					else {
  
-						
 						jobDto.setPlannedEndTime(DateUtil.convertToDateTime(endDate, endTime));
+						Date date1 = (DateUtil.convertToDateTime(startDate, startTime));
+						Date date2 = (DateUtil.convertToDateTime(endDate, endTime));
 						long diff = date2.getTime()-date1.getTime();
                 	 	long diffHours = diff / (60 * 60 * 1000);
                 	 	jobDto.setPlannedHours((int)(diffHours));
 						
-						long diff1 = endTime.getTime() - startTime.getTime();
-						long diffHours1 = diff1 / (24 * 60 * 60 * 1000);
-						jobDto.setPlannedHours((int)(diffHours1));
+					
 						
 					} 
 						
