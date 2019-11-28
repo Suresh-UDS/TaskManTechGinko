@@ -179,13 +179,16 @@ import { GetWBSListService} from '../pages/service/getWBSListService';
 import {NewEmpSiteDetails} from "../pages/onboarding/onboardingNewEmployee/new-emp-site-details/new-emp-site-details";
 
 import { NativeGeocoder} from '@ionic-native/native-geocoder';
-
+import {Kelsatest} from '../pages/kelsatest/kelsatest';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import{BrowserTab} from '@ionic-native/Browser-tab/ngx';
 // import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 // import{IonicImageViewerModule} from "ionic-img-viewer";
 
 @NgModule({
   declarations: [
+    Kelsatest,
     MyApp,
     HomePage,
     ListPage,
@@ -327,6 +330,7 @@ import { NativeGeocoder} from '@ionic-native/native-geocoder';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
+    Kelsatest,
     MyApp,
     HomePage,
     ListPage,
@@ -441,10 +445,13 @@ import { NativeGeocoder} from '@ionic-native/native-geocoder';
      declaration,
     OnBoardingEmployeeFilter,
     NewEmpSiteDetails
+    
 
 
   ],
   providers: [
+    
+    //InAppBrowser,
     StatusBar,
     SplashScreen,
     Camera,
@@ -495,8 +502,11 @@ import { NativeGeocoder} from '@ionic-native/native-geocoder';
     GetProjectService,
     GetWBSListService,
     NativeGeocoder,
+    BrowserTab,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    { provide: MY_CONFIG_TOKEN, useValue: AppConfig }
+    { provide: MY_CONFIG_TOKEN, useValue: AppConfig },
+    InAppBrowser
+    
   ]
 })
 export class AppModule { }

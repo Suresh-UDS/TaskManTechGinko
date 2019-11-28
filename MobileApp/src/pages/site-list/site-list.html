@@ -14,18 +14,20 @@
 </ion-header>
 
 <ion-content>
-    <ion-item class="border" *ngIf="siteList">
+  
+    <!-- <ion-item class="border" *ngIf="siteList">
         <ion-label  text-capitalize class="client-label" text-left>Search Site</ion-label>
         <select-searchable class="searchable-select"
                            item-content
                            [items]="siteList"
-                           itemValueField="name"
-                           itemTextField="name"
+                           itemValueField="siteList"
+                           itemTextField="siteList"
                            [canSearch]="true"
                            [canClear]="true"
                            (onChange)="gotoEmployeeList($event)">
         </select-searchable>
-      </ion-item>
+      </ion-item> -->
+
   <ion-list class="emp-list" *ngIf="siteList">
     <ion-item *ngFor="let site of siteList;let i of index" class="border-btm-dotted emp">
         <ion-icon name="ios-podium-outline" item-start class="icon-color CircleIcon"></ion-icon>

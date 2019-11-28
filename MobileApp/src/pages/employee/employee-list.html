@@ -22,6 +22,21 @@
 </ion-header>
 
 <ion-content>
+
+    <!-- <ion-item class="border" *ngIf="employeeList">
+        <ion-label  text-capitalize class="client-label" text-left>Search Employee</ion-label>
+        <select-searchable class="searchable-select"
+                           item-content
+                           [items]="employeeList"
+                           itemValueField="employeeList"
+                           itemTextField="employeeList"
+                           [canSearch]="true"
+                           [canClear]="true"
+                           (onChange)="getEmployeeAttendance($event)">
+        </select-searchable>
+      </ion-item> -->
+
+
   <ion-list *ngIf="employeeList">
     <ion-item *ngFor="let employee of employeeList;let i of index" class="bottom-border" >
 

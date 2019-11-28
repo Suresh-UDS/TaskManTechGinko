@@ -52,6 +52,8 @@ import {DashboardPage} from "../pages/dashboard/dashboard";
 import {OfflineOnlineLanding} from "../pages/Offline-Online-Landing/offline-online-landing";
 //import {Declaration} from "../pages/declaration/declaration";
 import {Storage} from "@ionic/storage";
+import {Kelsatest} from '../pages/kelsatest/kelsatest';
+
 
 
 
@@ -163,11 +165,13 @@ export class MyApp {
             // { title: 'IndentList', component: IndentList, active: false, icon: 'shopping_cart', permission: 'AttendanceList' },
            // { title: 'Declaration', component: Declaration, active: false, icon: 'person_add', permission: 'FeedbackList' },
             { title: 'Feedback', component: InitFeedbackPage, active: false, icon: 'feedback', permission: 'FeedbackList' },
-            { title: 'ChangePassword', component: ChangePassword, active: false, icon: 'lock', permission: 'FeedbackList' }
+            { title: 'ChangePassword', component: ChangePassword, active: false, icon: 'lock', permission: 'FeedbackList' },
             // {title:'Splash page', component:Splash,active:false,icon:'feedback',permission:'DashboardList'},
             // {title:'Splash logo', component:SplashLogo,active:false,icon:'feedback',permission:'DashboardList'},
             // { title: 'Reports', component: ReportsPage,active:false,icon:'trending_up'},
             // { title: 'Logout', component: LogoutPage,active:false,icon:'power_settings_new'}
+             { title: 'Kelsa', component: Kelsatest, active: false, icon: 'person_add', permission: 'FeedbackList' }
+           
         ];
 
         console.log("Employee Name");

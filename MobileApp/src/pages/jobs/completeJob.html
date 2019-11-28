@@ -225,11 +225,19 @@
         <button class="btn btn-warning center pull-left width42" (click)="saveJob(jobDetails,material)">
             Save
         </button>
-        <button class="btn btn-success center pull-right" (click)="formFinalSubmit(jobDetails,takenImages,material)">
+
+        <button class="btn btn-success center pull-right"  (click)="completeJob(jobDetails,takenImages,material)">
+                Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+            </button>
+
+        <!-- <button class="btn btn-success center pull-right" *ngIf="!jobDetails.ticketId" (click)="formFinalSubmit(jobDetails,takenImages,material)">
             Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
         </button>
+        <button class="btn btn-success center pull-right" *ngIf="jobDetails.ticketId" (click)="formFinalSubmit(jobDetails,takenImages,material)">
+                Complete <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+            </button> -->
     </ion-toolbar>
-
+    
     <ion-toolbar *ngIf="categories==='checklist'" text-center class="ver-center">
         <button class="btn btn-warning center pull-right" (click)="saveJob(jobDetails)">
             Save
