@@ -139,7 +139,7 @@ export class CreateJobPage {
         {
             
             this.startDate= moment().format();
-            this.endDate= moment().format();
+            //this.endDate= moment().format();
 
             this.component.showLoader("Creating job");
             this.eMsg="";
@@ -147,6 +147,8 @@ export class CreateJobPage {
 
             var SDate = moment(this.startDate).local().format('YYYY-MM-DD HH:mm:ss');
             var EDate = new Date(this.endDate);
+           
+           
 
            
              //this.startTime = moment(this.startDate).add(5,'hours').toDate();
@@ -158,6 +160,9 @@ export class CreateJobPage {
             this.endTime = moment(this.endDate).toDate();
             this.plannedStartTime =moment(this.startTime).toDate();
             this.plannedEndTime= moment(this.endTime).toDate();
+           // this.plannedEndTime= new Date();
+
+            console.log("tsting here" + this.plannedEndTime);
 
             var momentStartTime = moment(this.plannedStartTime);
             var momentEndTime = moment(this.plannedEndTime);

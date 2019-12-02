@@ -23,6 +23,7 @@ export class JobsPage {
 
     todaysJobs: any;
     allJobs:any;
+    ticketJobs:any;
     categories:any;
     loader:any;
     all="all";
@@ -212,6 +213,29 @@ export class JobsPage {
             this.component.showToastMessage('Unable to fetch Jobs','bottom');
             })
     }
+
+    loadTicketJobs(){
+        this.component.showLoader('Getting All Ticket Jobs');
+        var search={schedule:"ONCE"};
+        this.jobService.getTicktJobs(search).subscribe(response=>{
+            console.log("All Ticket jobs of current user");
+            console.log(response);
+            this.ticketJobs = response.transactions;
+    
+                    this.page = response.currPage;
+                    this.totalPages = response.totalPages;
+                this.component.closeLoader();
+
+            
+            
+        },
+            err=>{
+            this.component.closeLoader();
+            this.component.showToastMessage('Unable to fetch Ticket Jobs','bottom');
+            })
+    }   
+
+    
 
     addJob()
     {
