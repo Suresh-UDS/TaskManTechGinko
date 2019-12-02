@@ -1102,6 +1102,9 @@ public class JobManagementService extends AbstractService {
 		job.setEmployee(employee);
 		if(employee != null) {
 			job.setStatus(JobStatus.ASSIGNED);
+			if(employee.getLastName() == null) {
+				job.setEmployee(employee.getLastName().valueOf(null));
+			}
 		}
 		job.setSite(site);
 		job.setBlock(asset.getBlock());
