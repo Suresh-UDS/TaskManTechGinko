@@ -1,5 +1,6 @@
 package com.ts.app.service;
 
+import com.google.gson.JsonObject;
 import com.ts.app.domain.*;
 import com.ts.app.repository.*;
 import com.ts.app.security.SecurityUtils;
@@ -11,8 +12,12 @@ import com.ts.app.web.rest.dto.SearchResult;
 import com.ts.app.web.rest.dto.UserDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +26,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -68,6 +77,16 @@ public class UserService extends AbstractService {
 
 	@Inject
 	private Environment env;
+	
+	@Autowired
+	@Qualifier("kelsa")
+	private RestTemplate restTemaplte;
+	
+	@Value("${kelsa.urlPrefix}")
+	String kelsaUrl;
+	
+	@Value("${kelsa.urlUserSuffix}")
+	String kelsaUrlSuffix;
 
 	public User findUser(long userId) {
 		return userRepository.findOne(userId);
@@ -152,7 +171,7 @@ public class UserService extends AbstractService {
 		return newUser;
 	}
 
-	public UserDTO createUserInformation(UserDTO userDto) {
+	public UserDTO createUserInformation(UserDTO userDto) throws Exception {
 		User newUser = new User();
 		newUser.setClearPassword(env.getProperty("default.user.password"));
 		String encryptedPassword = null;
@@ -232,7 +251,22 @@ public class UserService extends AbstractService {
 			employee.setUser(createdUser);
 			employeeRepository.save(employee);
 		}
+
+		// user creation in kelsa
+		
+		JSONObject fields = new JSONObject();
+		
+		fields.put("email", userDto.getEmail());
+		fields.put("name", userDto.getLogin());
+		
+		JSONObject kelsaUser = new JSONObject();
+		
+		kelsaUser.put("user", fields);
+		
+		restTemaplte.postForLocation(kelsaUrl+"2851"+kelsaUrlSuffix, kelsaUser);
+		
 		userDto = mapperUtil.toModel(createdUser, UserDTO.class);
+		
 		return userDto;
 	}
 

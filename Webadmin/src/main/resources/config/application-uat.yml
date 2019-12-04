@@ -78,6 +78,13 @@ qrcode:
 locationQRCode:
     file:
         path: /opt/location/qrcode
+kelsa: 
+    urlPrefix:   https://kelsa.io/
+    login: udsfacilitymanagement@gmail.com
+    token: 1ked46-Qd7Lf2pyb_JCN
+    urlUserSuffix:   /api/v1/users
+    urlLeadSuffix:   /api/v1/leads
+               
 attendance:
     shiftStartLeadTime: 1
     shiftEndLeadTime: 1
